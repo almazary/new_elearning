@@ -69,7 +69,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']	= 'english';
+$config['language']	= 'indonesian';
 
 /*
 |--------------------------------------------------------------------------
@@ -224,7 +224,7 @@ $config['cache_path'] = '';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = 'new*(&&&&&)Eleaning#DA091^%@@@jhsujasokyeh$$312!!';
 
 /*
 |--------------------------------------------------------------------------
