@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class Model untuk resource kelas
+ * Class Model untuk resource mapel
  * 
  * @package Elearning Dokumenary
  * @link    http://www.dokumenary.net
