@@ -169,7 +169,7 @@ class Pengajar_model extends CI_Model
         $id = (int)$id;
 
         $this->db->where('id', $id);
-        $this->db->delete('pengajar', $id);
+        $this->db->delete('pengajar');
         return true;
     }
 
@@ -255,7 +255,7 @@ class Pengajar_model extends CI_Model
             'nip' => $nip,
             'nama' => $nama,
             'alamat' => $alamat,
-            'foto' => $foto
+            'foto' => $foto,
             'status_id' => $status_id
         );
         $this->db->where('id', $id);
@@ -286,7 +286,7 @@ class Pengajar_model extends CI_Model
             'nip' => $nip,
             'nama' => $nama,
             'alamat' => $alamat,
-            'foto' => $foto
+            'foto' => $foto,
             'status_id' => $status_id
         );
         $this->db->insert('pengajar', $data);
