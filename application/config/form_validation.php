@@ -40,6 +40,13 @@ $config = array(
             'label' => 'Password',
             'rules' => 'required|trim|xss_clean|alpha_numeric'
         ),
+    ),
+    'admin/kelas' => array(
+        array(
+            'field' => 'nama',
+            'label' => 'Nama Kelas',
+            'rules' => 'required|trim|xss_clean'
+        ),
     )
 
 );

@@ -7,7 +7,7 @@ class Admin extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        $this->load->model(array('login_model', 'pengajar_model'));
+        $this->load->model(array('login_model', 'pengajar_model', 'kelas_model'));
 
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
@@ -88,5 +88,85 @@ class Admin extends CI_Controller
         $this->session->set_userdata($set_session);
 
         redirect('admin/login');
+    }
+
+    function kelas($act = 'list')
+    {
+        $this->most_login();
+
+        $data = array(
+            'web_title'     => 'Manajemen Kelas | Administrator',
+            'menu_file'     => path_theme('admin_menu.php'),
+            'uri_segment_1' => $this->uri->segment(1),
+            'uri_segment_2' => $this->uri->segment(2),
+            'content_file'  => path_theme('admin_manajemen_kelas.php'),
+            'module_title'  => 'Manajemen Kelas',
+            'comp_css'      => load_comp_css(array(base_url('assets/comp/nestedSortable/nestedSortable.css'))),
+            'comp_js'       => load_comp_js(array(base_url('assets/comp/nestedSortable/jquery.mjs.nestedSortable.js')))
+        );
+
+        switch ($act) {
+            case 'add':
+                
+                $data['module_title']     = anchor('admin/kelas', 'Daftar Kelas').' / Tambah Kelas';
+                $data['sub_content_file'] = path_theme('admin_add_kelas.php');
+                break;
+            
+            default:
+            case 'list':
+                
+                $data['sub_content_file'] = path_theme('admin_add_kelas.php');
+
+                if ($this->form_validation->run() == TRUE) {
+
+                    //insert kelas
+                    $nama = $this->input->post('nama', TRUE);
+                    $this->kelas_model->create($nama);
+
+                    $this->session->set_flashdata('kelas', get_alert('success', 'Kelas berhasil di tambah'));
+                    redirect('admin/kelas');
+            
+                }
+
+                break;
+        }
+
+        $str_kelas = '';
+        $this->kelas_hirarki($str_kelas);
+        $data['kelas_hirarki'] = $str_kelas;
+
+        $data = array_merge(default_parser_item(), $data);
+        $this->parser->parse(get_active_theme().'/main_private', $data);
+    }
+
+    private function kelas_hirarki(&$str_kelas = "", $parent_id = null, $order = 0){
+        $kelas = $this->kelas_model->retrieve_all($parent_id);
+        if(count($kelas) > 0){
+            if(is_null($parent_id)){
+                $str_kelas .= '<ol class="sortable">';
+            }else{
+                $str_kelas .= '<ol>';
+            }
+        }
+        
+        foreach ($kelas as $m){
+            $order++;
+            $str_kelas .= '<li id="list_'.$m['id'].'">
+            <div>
+                <span class="disclose"><span>
+                </span></span>
+                <span class="pull-right">
+                    <a href="" title="Edit"><i class="icon icon-edit"></i>Edit</a>
+                </span>
+                <b>'.$m['nama'].'</b> 
+            </div>';
+            
+                $this->kelas_hirarki($str_kelas, $m['id'], $order);
+            $str_kelas .= '</li>';
+        }
+        
+        if(count($kelas) > 0){
+            $str_kelas .= '</ol>';
+        }
     }
 }

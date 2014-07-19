@@ -11,28 +11,15 @@ class Kelas_model extends CI_Model
     /**
      * Method untuk mengambi semua data kelas 
      * 
-     * @param  integer      $no_of_records 
-     * @param  integer      $page_no       
      * @param  null|integer $parent_id     
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
-    public function retrieve_all(
-        $no_of_records = 10, 
-        $page_no       = 1,
-        $parent_id     = null
-    ) {
-        $no_of_records = (int)$no_of_records;
-        $page_no       = (int)$page_no;
-
-        $where = array();
-        if (!is_null($parent_id)) {
-            $where['parent_id'] = array($parent_id, 'where');
-        }
-
-        $data = $this->pager->set('kelas', $no_of_records, $page_no, $where);
-
-        return $data;
+    public function retrieve_all($parent_id = null) {
+        $this->db->where('parent_id', $parent_id);
+        $this->db->order_by('urutan', 'ASC');
+        $result = $this->db->get('kelas');
+        return $result->result_array();
     }
 
     /**
@@ -85,6 +72,7 @@ class Kelas_model extends CI_Model
      * @param  nama         $nama
      * @param  integer|null $parent_id
      * @param  integer      $urutan
+     * @param  integer      $aktif         1|0
      * @return boolean      true jika berhasil
      * @author Almazari <almazary@gmail.com>
      */
@@ -92,10 +80,12 @@ class Kelas_model extends CI_Model
         $id,
         $nama,
         $parent_id = null,
-        $urutan
+        $urutan,
+        $aktif = 1
     ) {
         $id     = (int)$id;
         $urutan = (int)$urutan;
+        $aktif  = (int)$aktif;
 
         if (!is_null($parent_id)) {
             $parent_id = (int)$parent_id;
@@ -104,7 +94,8 @@ class Kelas_model extends CI_Model
         $data = array(
             'nama'      => $nama,
             'parent_id' => $parent_id,
-            'urutan'    => $urutan
+            'urutan'    => $urutan,
+            'aktif'     => $aktif
         );
         $this->db->where('id', $id);
         $this->db->update('kelas', $data);

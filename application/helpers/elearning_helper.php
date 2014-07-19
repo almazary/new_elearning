@@ -21,7 +21,9 @@ function default_parser_item($add_item = array())
         'logo_url_large'    => get_logo_url('large'),
         'base_url_theme'    => base_url_theme().'/',
         'site_name_default' => 'E-Learning System',
-        'site_name'         => 'E-Learning '.get_site_config('site_name')
+        'site_name'         => 'E-Learning '.get_site_config('site_name'),
+        'comp_css'          => '',
+        'comp_js'           => ''
     );
     if (!empty($add_item) AND is_array($add_item)) {
         $return = array_merge($return, $add_item);
@@ -29,6 +31,42 @@ function default_parser_item($add_item = array())
     return $return;
 }
 
+/**
+ * Method untuk load css komponent tambahan
+ * 
+ * @param  array  $target_href
+ * @return string
+ */
+function load_comp_css($target_href = array())
+{
+    $return = '';
+    foreach ($target_href as $value) {
+        $return .= '<link type="text/css" href="'.$value.'" rel="stylesheet">'.PHP_EOL;
+    }
+    return $return;
+}
+
+/**
+ * Method untuk load js komponent tambahan
+ * 
+ * @param  array  $target_src
+ * @return string
+ */
+function load_comp_js($target_src = array())
+{
+    $return = '';
+    foreach ($target_src as $value) {
+        $return .= '<script src="'.$value.'" type="text/javascript"></script>'.PHP_EOL;
+    }
+    return $return;
+}
+
+/**
+ * Method untuk mendapatkan data site config
+ * 
+ * @param  string $field
+ * @return string data
+ */
 function get_site_config($field)
 {
     $CI =& get_instance();
@@ -37,6 +75,12 @@ function get_site_config($field)
     return $config[$field];
 }
 
+/**
+ * Method untuk mendapatkan path ke arah template aktif
+ * 
+ * @param  string $add_link
+ * @return string link
+ */
 function path_theme($add_link = '')
 {
     return APPPATH.'views/'.get_active_theme().'/'.$add_link;
