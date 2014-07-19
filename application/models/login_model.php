@@ -51,6 +51,7 @@ class Login_model extends CI_Model
      * 
      * @param  null|integer $id          
      * @param  null|string  $username    
+     * @param  null|string  $password
      * @param  null|integer $siswa_id    
      * @param  null|integer $pengajar_id 
      * @param  null|integer $is_admin    
@@ -60,6 +61,7 @@ class Login_model extends CI_Model
     public function retrieve(
         $id          = null,
         $username    = null,
+        $password    = null,
         $siswa_id    = null,
         $pengajar_id = null,
         $is_admin    = null
@@ -70,6 +72,9 @@ class Login_model extends CI_Model
         }
         if (!is_null($username)) {
             $this->db->where('username', $username);
+        }
+        if (!is_null($password)) {
+            $this->db->where('password', $password);
         }
         if (!is_null($siswa_id)) {
             $siswa_id = (int)$siswa_id;

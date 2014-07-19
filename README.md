@@ -2,7 +2,7 @@ new_elearning
 =============
 
 New Elearning (LMS) dokumenary
-Link   : http://www.dokumenary.net
+By     : http://www.dokumenary.net
 Author : Almazari <almazary@gmail.com>
 
 
