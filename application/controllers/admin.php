@@ -7,7 +7,7 @@ class Admin extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        $this->load->model(array('login_model', 'pengajar_model', 'kelas_model'));
+        $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model'));
 
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
@@ -90,7 +90,35 @@ class Admin extends CI_Controller
         redirect('admin/login');
     }
 
-    function kelas($act = 'list')
+    function ajax_post($act = '')
+    {
+        if (!empty($act)) {
+            switch ($act) {
+                case 'hirarki_kelas':
+                    
+                    $o = 1;
+                    foreach ((array)$_POST['list'] as $id => $parent_id){
+                        if (!is_numeric($parent_id)) {
+                            $parent_id = null;
+                        }
+                        $retrieve = $this->kelas_model->retrieve($id);
+
+                        //update
+                        $this->kelas_model->update($id, $retrieve['nama'], $parent_id, $o, $retrieve['aktif']);
+
+                        $o++;
+                    }
+
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+        }
+    }
+
+    function kelas($act = 'list', $id = '')
     {
         $this->most_login();
 
@@ -106,10 +134,32 @@ class Admin extends CI_Controller
         );
 
         switch ($act) {
-            case 'add':
+            case 'edit':
                 
-                $data['module_title']     = anchor('admin/kelas', 'Daftar Kelas').' / Tambah Kelas';
-                $data['sub_content_file'] = path_theme('admin_add_kelas.php');
+                $id = (int)$id;
+
+                $kelas = $this->kelas_model->retrieve($id);
+                if (empty($kelas)) {
+                    redirect('admin/kelas');
+                }
+
+                $data['sub_content_file'] = path_theme('admin_edit_kelas.php');
+                $data['kelas'] = $kelas;
+
+                if ($this->form_validation->run('admin/kelas/edit') == TRUE) {
+                    $nama  = $this->input->post('nama', TRUE);
+                    $aktif = $this->input->post('status', TRUE);
+                    if (empty($aktif)) {
+                        $aktif = 0;
+                    }
+
+                    //update kelas
+                    $this->kelas_model->update($id, $nama, $kelas['parent_id'], $kelas['urutan'], $aktif);
+
+                    $this->session->set_flashdata('kelas', get_alert('success', $kelas['nama'].' berhasil di perbaharui'));
+                    redirect('admin/kelas');
+                }
+
                 break;
             
             default:
@@ -156,10 +206,14 @@ class Admin extends CI_Controller
                 <span class="disclose"><span>
                 </span></span>
                 <span class="pull-right">
-                    <a href="" title="Edit"><i class="icon icon-edit"></i>Edit</a>
-                </span>
-                <b>'.$m['nama'].'</b> 
-            </div>';
+                    <a href="'.site_url('admin/kelas/edit/'.$m['id']).'" title="Edit"><i class="icon icon-edit"></i>Edit</a>
+                </span>';
+                if ($m['aktif'] == 1) {
+                    $str_kelas .= '<b>'.$m['nama'].'</b>';
+                } else {
+                    $str_kelas .= '<b class="text-muted">'.$m['nama'].'</b>';
+                }
+            $str_kelas .= '</div>';
             
                 $this->kelas_hirarki($str_kelas, $m['id'], $order);
             $str_kelas .= '</li>';

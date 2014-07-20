@@ -47,6 +47,18 @@ $config = array(
             'label' => 'Nama Kelas',
             'rules' => 'required|trim|xss_clean'
         ),
+    ),
+    'admin/kelas/edit' => array(
+        array(
+            'field' => 'nama',
+            'label' => 'Nama Kelas',
+            'rules' => 'required|trim|xss_clean'
+        ),
+        array(
+            'field' => 'status',
+            'label' => 'Status',
+            'rules' => 'trim|xss_clean|numeric'
+        ),
     )
 
 );

@@ -92,5 +92,12 @@
         </div>
         <script src="{base_url_theme}scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
         <script src="{base_url_theme}bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(".alert-success").fadeTo(2000, 500).slideUp(500, function(){
+                    $(".alert-success").alert('close');
+                });
+            });
+        </script>
         {comp_js}
     </body>

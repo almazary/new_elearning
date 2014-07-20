@@ -140,7 +140,7 @@ class Materi_model extends CI_Model
         $id             = (int)$id;
         $pengajar_id    = (int)$pengajar_id;
         $siswa_id       = (int)$siswa_id;
-        $mapel_kelas_id = (int)$mapel_kelas_id,
+        $mapel_kelas_id = (int)$mapel_kelas_id;
         $publish        = (int)$publish;
 
         $data = array(
@@ -182,7 +182,7 @@ class Materi_model extends CI_Model
     ) {
         $pengajar_id    = (int)$pengajar_id;
         $siswa_id       = (int)$siswa_id;
-        $mapel_kelas_id = (int)$mapel_kelas_id,
+        $mapel_kelas_id = (int)$mapel_kelas_id;
         $publish        = (int)$publish;
 
         $data = array(

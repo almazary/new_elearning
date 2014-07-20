@@ -50,16 +50,22 @@ class Kelas_model extends CI_Model
         $nama,
         $parent_id = null
     ) {
-        $retrieve_all = $this->retrieve_all();
-
         if (!is_null($parent_id)) {
             $parent_id = (int)$parent_id;
+        }
+
+        $query = $this->db->query("SELECT MAX(urutan) AS urutan FROM kelas");
+        $row   = $query->row_array();
+        if (empty($row['urutan'])) {
+            $row['urutan'] = 1;
+        } else {
+            $row['urutan'] = $row['urutan'] + 1;
         }
 
         $data = array(
             'nama'      => $nama,
             'parent_id' => $parent_id,
-            'urutan'    => ($retrieve_all['total_record'] + 1)
+            'urutan'    => $row['urutan']
         );
         $this->db->insert('kelas', $data);
         return $this->db->insert_id();
