@@ -118,6 +118,37 @@ class Admin extends CI_Controller
         }
     }
 
+    function mapel($act = 'list')
+    {
+        $this->most_login();
+
+        $data = array(
+            'web_title'     => 'Manajemen Matapelajaran | Administrator',
+            'menu_file'     => path_theme('admin_menu.php'),
+            'content_file'  => path_theme('admin_manajemen_mapel.php'),
+            'uri_segment_1' => $this->uri->segment(1),
+            'uri_segment_2' => $this->uri->segment(2),
+        );
+
+        switch ($act) {
+            case 'add':
+                $data['module_title']     = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Tambah';
+                $data['sub_content_file'] = path_theme('admin_add_mapel.php');
+                $data['comp_js']          = get_tinymce('info');
+                break;
+            
+            default:
+            case 'list':
+                $data['module_title']     = 'Manajemen Matapelajaran';
+                $data['sub_content_file'] = path_theme('admin_list_mapel.php');
+
+                break;
+        }
+
+        $data = array_merge(default_parser_item(), $data);
+        $this->parser->parse(get_active_theme().'/main_private', $data);
+    }
+
     function kelas($act = 'list', $id = '')
     {
         $this->most_login();
