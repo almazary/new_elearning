@@ -15,7 +15,7 @@
     <ul class="widget widget-menu unstyled">
         <li><a href="{site_url}/admin/kelas"><i class="menu-icon icon-tasks"></i> Manajemen Kelas </a></li>
         <li><a href="{site_url}/admin/mapel"><i class="menu-icon icon-book"></i>Manajemen Matapelajaran </a></li>
-        <li><a href="form.html"><i class="menu-icon icon-paste"></i>Forms </a></li>
+        <li><a href="{site_url}/admin/mapel_kelas"><i class="menu-icon icon-paste"></i>Matapelajaran Kelas </a></li>
         <li><a href="table.html"><i class="menu-icon icon-table"></i>Tables </a></li>
         <li><a href="charts.html"><i class="menu-icon icon-bar-chart"></i>Charts </a></li>
     </ul>

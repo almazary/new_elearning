@@ -138,6 +138,19 @@ class Mapel_model extends CI_Model
     }
 
     /**
+     * Method untuk mendapatkan semua data kelas tanpa pagging
+     * 
+     * @return array
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_all_mapel()
+    {
+        $this->db->order_by('id', 'ASC');
+        $result = $this->db->get('mapel');
+        return $result->result_array();
+    }
+
+    /**
      * Method untuk menghapus record mapel
      * 
      * @param  integer $id

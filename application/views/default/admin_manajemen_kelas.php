@@ -31,7 +31,7 @@
                         tabSize: 25,
                         tolerance: 'pointer',
                         toleranceElement: '> div',
-                        maxLevels: 5,
+                        maxLevels: 2,
                         isTree: true,
                         expandOnHover: 700,
                         startCollapsed: true

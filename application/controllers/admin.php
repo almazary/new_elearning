@@ -127,6 +127,82 @@ class Admin extends CI_Controller
         }
     }
 
+    function mapel_kelas($act = 'list', $segment_3 = '', $segment_4 = '')
+    {
+        $this->most_login();
+
+        $data = array(
+            'web_title'     => 'Matapelajaran Kelas | Administrator',
+            'menu_file'     => path_theme('admin_menu.php'),
+            'content_file'  => path_theme('admin_manajemen_mapel_kelas.php'),
+            'uri_segment_1' => $this->uri->segment(1),
+            'uri_segment_2' => $this->uri->segment(2),
+        );
+
+        switch ($act) {
+            case 'add':
+                $parent_id = (int)$segment_3;
+                $kelas_id  = (int)$segment_4;
+
+                //ambil parent
+                $parent = $this->kelas_model->retrieve($parent_id);
+                if (empty($parent)) {
+                    redirect('admin/mapel_kelas');
+                }
+
+                $kelas = $this->kelas_model->retrieve($kelas_id);
+                if (empty($kelas)) {
+                    redirect('admin/mapel_kelas');
+                }
+
+                $data['module_title']     = anchor('admin/mapel_kelas/#parent-'.$parent_id, 'Matapelajaran Kelas').' / Atur Matapelajaran';
+                $data['sub_content_file'] = path_theme('admin_add_mapel_kelas.php');
+                $data['kelas']            = $kelas;
+                $data['parent']           = $parent;
+
+                //ambil semua matapelajaran
+                $retrieve_all = $this->mapel_model->retrieve_all_mapel();
+                $data['mapels']           = $retrieve_all;
+
+                break;
+            
+            default:
+            case 'list':
+                $data['module_title']        = 'Matapelajaran Kelas';
+                $data['sub_content_file']    = path_theme('admin_list_mapel_kelas.php');
+                $data['mapel_kelas_hirarki'] = $this->mapel_kelas_hirarki();
+                break;
+        }
+
+        $data = array_merge(default_parser_item(), $data);
+        $this->parser->parse(get_active_theme().'/main_private', $data);
+    }
+
+    private function mapel_kelas_hirarki(){
+        $parent = $this->kelas_model->retrieve_all(null);
+
+        $return = '';
+        foreach ($parent as $p) {
+            $return .= '<div class="parent-kelas" id="parent-'.$p['id'].'">'.$p['nama'].'</div>';
+            
+            $sub_kelas = $this->kelas_model->retrieve_all($p['id']);
+            foreach ($sub_kelas as $s) {
+                $return .= '<div class="panel panel-info" style="margin-left:25px;">
+                <div class="panel-heading">
+                    '.$s['nama'].'
+                    <a href="'.site_url('admin/mapel_kelas/add/'.$p['id'].'/'.$s['id']).'" class="btn pull-right" style="margin-top:-5px;"><i class="icon-plus"></i> Tambah Matapelajaran</a>
+                </div>
+                    <div class="panel-body">
+                    Panel content
+                    </div>
+                </div>';
+            }
+
+        }
+
+        return $return;
+    }
+
     function mapel($act = 'list', $segment_3 = '')
     {
         $this->most_login();
