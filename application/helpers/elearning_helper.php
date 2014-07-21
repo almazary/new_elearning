@@ -72,7 +72,9 @@ function get_site_config($field)
     $CI =& get_instance();
     $CI->load->model('config_model');
     $config = $CI->config_model->retrieve();
-    return $config[$field];
+    if (!empty($config)) {
+        return $config[$field];
+    }
 }
 
 /**
