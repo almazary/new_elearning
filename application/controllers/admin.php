@@ -12,6 +12,8 @@ class Admin extends CI_Controller
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
         $this->session_data = $this->session->userdata('admin');
+
+        session_start();
     }
 
     private function most_login()
@@ -63,6 +65,11 @@ class Admin extends CI_Controller
 
                 $this->session->set_userdata($set_session);
 
+                $_SESSION['KCFINDER'] = array();
+                $_SESSION['KCFINDER']['disabled'] = false;
+                $_SESSION['KCFINDER']['uploadURL'] = base_url('assets/uploads/');
+                $_SESSION['KCFINDER']['uploadDir'] = "";
+
                 redirect('admin');
             }
 
@@ -86,6 +93,8 @@ class Admin extends CI_Controller
         $set_session['admin'] = '';
 
         $this->session->set_userdata($set_session);
+
+        unset($_SESSION['KCFINDER']);
 
         redirect('admin/login');
     }
@@ -131,6 +140,37 @@ class Admin extends CI_Controller
         );
 
         switch ($act) {
+            case 'edit':
+                $id = (int)$segment_3;
+
+                //ambil satu
+                $retrieve = $this->mapel_model->retrieve($id);
+                if (empty($retrieve)) {
+                    redirect('admin/mapel');
+                }
+
+                $data['module_title']     = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Edit';
+                $data['sub_content_file'] = path_theme('admin_edit_mapel.php');
+                $data['mapel']            = $retrieve;
+                $data['comp_js']          = get_tinymce('info');
+
+                if ($this->form_validation->run('admin/mapel/edit') == TRUE) {
+
+                    $nama = $this->input->post('nama', TRUE);
+                    $info = $this->input->post('info', TRUE);
+                    $aktif = $this->input->post('status', TRUE);
+                    if (empty($aktif)) {
+                        $aktif = 0;
+                    }
+
+                    $this->mapel_model->update($id, $nama, $info, $aktif);
+
+                    $this->session->set_flashdata('mapel', get_alert('success', 'Matapelajaran berhasil di perbaharui'));
+                    redirect('admin/mapel');
+                }
+
+                break;
+
             case 'detail':
                 $id = (int)$segment_3;
 

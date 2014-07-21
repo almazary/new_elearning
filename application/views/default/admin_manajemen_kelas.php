@@ -9,7 +9,7 @@
             
             <?php include $sub_content_file; ?>
             
-            <p><b>NB:</b> Kelas tidak dapat di hapus namun dapat di ubah menjadi tidak aktif.</p>
+            <p class="text-warning"><b>NB:</b> Kelas tidak dapat di hapus namun dapat di ubah menjadi tidak aktif.</p>
 
             {kelas_hirarki}
             

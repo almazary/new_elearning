@@ -5,8 +5,11 @@
 </div>
 
 <div class="span8">
-    <hr>
+    
 </div>
+
+<br><br>
+<p class="text-warning"><b>NB: </b> Matapelajaran tidak dapat dihapus namun dapat di ubah menjadi tidak aktif.</p>
 
 <table class="table table-striped">
     <thead>
@@ -20,7 +23,11 @@
         <?php foreach ($mapels as $no => $v): ?>
         <tr>
             <td><?php echo $no; ?>.</td>
-            <td><?php echo $v['nama']; ?></td>
+            <td>
+                <span <?php if ($v['aktif'] != 1) { echo 'class="text-muted"'; } ?>>
+                <?php echo $v['nama']; ?>
+                </span>
+            </td>
             <td>
                 <div class="btn-group">
                   <a class="btn" href="{site_url}/admin/mapel/detail/<?php echo $v['id']; ?>"><i class="icon-zoom-in"></i> Detail</a>

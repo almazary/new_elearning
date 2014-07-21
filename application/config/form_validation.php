@@ -72,5 +72,21 @@ $config = array(
             'rules' => 'trim'
         )
     ),
-
+    'admin/mapel/edit' => array(
+        array(
+            'field' => 'nama',
+            'label' => 'Nama Matapelajaran',
+            'rules' => 'required|trim|xss_clean|min_length[2]'
+        ),
+        array(
+            'field' => 'info',
+            'label' => 'Info Matapelajaran',
+            'rules' => 'trim'
+        ),
+        array(
+            'field' => 'status',
+            'label' => 'Status',
+            'rules' => 'trim|xss_clean|numeric'
+        ),
+    ),
 );
