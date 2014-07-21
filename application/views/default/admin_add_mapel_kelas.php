@@ -15,7 +15,7 @@
             <?php if ($m['aktif'] != 1): ?>
             <span class="badge pull-right">Matapelajaran Tidak Aktif</span>
             <?php endif; ?>
-            <label><input type="checkbox" name="mapel[]" value="<?php echo $m['id']; ?>" style="margin-top:-2px;margin-right:5px;"> <?php echo $m['nama']; ?></label>
+            <label><input type="checkbox" name="mapel[]" value="<?php echo $m['id']; ?>" style="margin-top:-2px;margin-right:5px;" <?php if($m['aktif'] != 1){ echo 'disabled'; } ?>> <?php echo $m['nama']; ?></label>
         </td>
     </tr>
     <?php endforeach; ?>
