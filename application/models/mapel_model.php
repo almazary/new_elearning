@@ -162,13 +162,15 @@ class Mapel_model extends CI_Model
      * @return boolean      true jika berhasil
      * @author Almazari <almazary@gmail.com>
      */
-    public function update($id, $nama, $info = null)
+    public function update($id, $nama, $info = null, $aktif = 1)
     {
         $id = (int)$id;
+        $aktif = (int)$aktif;
 
         $data = array(
             'nama' => $nama,
-            'info' => $info
+            'info' => $info,
+            'aktif' => $aktif
         );
         $this->db->where('id', $id);
         $this->db->update('mapel', $data);

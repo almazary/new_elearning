@@ -10,6 +10,7 @@
         <link type="text/css" href="{base_url_theme}css/theme.css" rel="stylesheet">
         <link type="text/css" href="{base_url_theme}images/icons/css/font-awesome.css" rel="stylesheet">
         <link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet'>
+        <link rel="shortcut icon" type="image/x-icon" href="{favicon_url}">
         {comp_css}
         <script src="{base_url_theme}scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
     </head>

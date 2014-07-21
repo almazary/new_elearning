@@ -192,7 +192,7 @@ class Pager
     }
 
     /**
-     * Method untuk menampilkan pagination bootstrap css
+     * Method untuk menampilkan pagination bootstrap 2 css
      *
      * @param  array  $array_data
      * @param  string $url
@@ -210,12 +210,13 @@ class Pager
             $add_segment .= '/'.$value;
         }
 
-        $return = '<div class="row">
-            <div class="col-xs-5">
+        $return = '<div class="row-fluid">
+            <div class="span5">
                 '.$array_data['total_respon'].' dari '.$array_data['total_record'].' total data
             </div>
-            <div class="col-xs-7">
-                <ul class="pagination pagination-sm pull-right" style="margin-top:0px;">';
+            <div class="span7">
+                <div class="pagination pull-right" style="margin-top:0px;">
+                <ul>';
                 
                 if ($array_data['total_page'] > 1) {
 
@@ -282,6 +283,7 @@ class Pager
                 }
 
                 $return .= '</ul>
+                </div>
             </div>
         </div>';
 

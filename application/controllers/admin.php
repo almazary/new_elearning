@@ -118,7 +118,7 @@ class Admin extends CI_Controller
         }
     }
 
-    function mapel($act = 'list')
+    function mapel($act = 'list', $segment_3 = '')
     {
         $this->most_login();
 
@@ -131,16 +131,54 @@ class Admin extends CI_Controller
         );
 
         switch ($act) {
+            case 'detail':
+                $id = (int)$segment_3;
+
+                //ambil satu
+                $retrieve = $this->mapel_model->retrieve($id);
+                if (empty($retrieve)) {
+                    redirect('admin/mapel');
+                }
+
+                $data['module_title']     = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Detail';
+                $data['sub_content_file'] = path_theme('admin_detail_mapel.php');
+                $data['mapel']            = $retrieve;
+
+                break;
+
             case 'add':
                 $data['module_title']     = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Tambah';
                 $data['sub_content_file'] = path_theme('admin_add_mapel.php');
                 $data['comp_js']          = get_tinymce('info');
+
+                if ($this->form_validation->run() == TRUE) {
+                    //buat mapel
+                    $nama = $this->input->post('nama', TRUE);
+                    $info = $this->input->post('info', TRUE);
+                    $this->mapel_model->create($nama, $info);
+
+                    $this->session->set_flashdata('mapel', get_alert('success', 'Matapelajaran baru berhasil di simpan'));
+                    redirect('admin/mapel');
+                }
+
                 break;
             
             default:
             case 'list':
                 $data['module_title']     = 'Manajemen Matapelajaran';
                 $data['sub_content_file'] = path_theme('admin_list_mapel.php');
+
+                $page_no = (int)$segment_3;
+
+                if (empty($page_no)) {
+                    $page_no = 1;
+                }
+
+                //ambil semua data mepel
+                $retrieve_all = $this->mapel_model->retrieve_all(10, $page_no);
+
+                $data['mapels']     = $retrieve_all['results'];
+                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/mapel/list/');
 
                 break;
         }

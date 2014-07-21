@@ -7,4 +7,32 @@
 <div class="span8">
     <hr>
 </div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th width="8%">No</th>
+            <th>Matapelajaran</th>
+            <th width="15%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($mapels as $no => $v): ?>
+        <tr>
+            <td><?php echo $no; ?>.</td>
+            <td><?php echo $v['nama']; ?></td>
+            <td>
+                <div class="btn-group">
+                  <a class="btn" href="{site_url}/admin/mapel/detail/<?php echo $v['id']; ?>"><i class="icon-zoom-in"></i> Detail</a>
+                  <a class="btn" href="{site_url}/admin/mapel/edit/<?php echo $v['id']; ?>"><i class="icon-edit"></i> Edit</a>
+                </div>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<br>
+<?php echo $pagination; ?>
+
 </div>
