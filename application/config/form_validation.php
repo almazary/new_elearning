@@ -89,4 +89,11 @@ $config = array(
             'rules' => 'trim|xss_clean|numeric'
         ),
     ),
+    'admin/mapel_kelas/add' => array(
+        array(
+            'field' => 'mapel[]',
+            'label' => 'Mapel',
+            'rules' => 'trim|xss_clean|numeric'
+        ),
+    ),
 );

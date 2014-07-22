@@ -33,39 +33,46 @@ class Mapel_model extends CI_Model
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_kelas(
-        $no_of_records = 10, 
-        $page_no       = 1,
         $mapel_id      = null,
         $kelas_id      = null
     ) {
-        $no_of_records = (int)$no_of_records;
-        $page_no       = (int)$page_no;
-
-        $where = array();
         if (!is_null($mapel_id)) {
-            $where['mapel_id'] = array($mapel_id, 'where');
+            $mapel_id = (int)$mapel_id;
+            $this->db->where('mapel_id', $mapel_id);
         }
         if (!is_null($kelas_id)) {
-            $where['kelas_id'] = array($kelas_id, 'where');
+            $kelas_id = (int)$kelas_id;
+            $this->db->where('kelas_id', $kelas_id);
         }
 
-        $data = $this->pager->set('mapel_kelas', $no_of_records, $page_no, $where);
-
-        return $data;
+        $result = $this->db->get('mapel_kelas');
+        return $result->result_array();
     }
-
+    
     /**
      * Method untuk mendapatkan satu record mapel kelas
      * 
-     * @param  integer $id
+     * @param  null|integer $id      
+     * @param  null|integer $kelas_id
+     * @param  null|integer $mapel_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
-    public function retrieve_kelas($id)
+    public function retrieve_kelas($id = null, $kelas_id = null, $mapel_id = null)
     {
-        $id = (int)$id;
+        if (!is_null($id)) {
+            $id = (int)$id;
+            $this->db->where('id', $id);
+        }
+        if (!is_null($kelas_id)) {
+            $kelas_id = (int)$kelas_id;
+            $this->db->where('kelas_id', $kelas_id);
+        }
+        if (!is_null($mapel_id)) {
+            $mapel_id = (int)$mapel_id;
+            $this->db->where('mapel_id', $mapel_id);
+        }
 
-        $this->db->where('id', $id);
         $result = $this->db->get('mapel_kelas', 1);
         return $result->row_array();
     }
