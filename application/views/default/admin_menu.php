@@ -30,7 +30,7 @@
 
     <!--/.widget-nav-->
     <ul class="widget widget-menu unstyled">
-        <li><a href="#"><i class="menu-icon icon-signout"></i>Logout </a></li>
+        <li><a href="{site_url}/admin/logout"><i class="menu-icon icon-signout"></i>Logout </a></li>
     </ul>
 </div>
 <!--/.sidebar-->

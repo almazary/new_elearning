@@ -12,8 +12,6 @@ class Admin extends CI_Controller
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
         $this->session_data = $this->session->userdata('admin');
-
-        session_start();
     }
 
     private function most_login()
@@ -94,7 +92,7 @@ class Admin extends CI_Controller
 
         $this->session->set_userdata($set_session);
 
-        unset($_SESSION['KCFINDER']);
+        $this->session->sess_destroy();
 
         redirect('admin/login');
     }
@@ -291,7 +289,7 @@ class Admin extends CI_Controller
                             <td>
                                 '.$m['nama'].'
                                 <div class="btn-group pull-right">
-                                  <a class="btn" href="'.site_url('admin/mapel_kelas/remove/'.$p['id'].'/'.$s['id'].'/'.$v['id']).'"><i class="icon-trash"></i> Hapus</a>
+                                  <a class="btn" href="'.site_url('admin/mapel_kelas/remove/'.$p['id'].'/'.$s['id'].'/'.$v['id']).'" onclick="return confirm(\'Anda yakin ingin menghapus?\')"><i class="icon-trash"></i> Hapus</a>
                                 </div>
                             </td>
                         </tr>';

@@ -55,6 +55,7 @@ class CI_Session {
 	 */
 	public function __construct($params = array())
 	{
+		session_start();
 		log_message('debug', "Session Class Initialized");
 
 		// Set the super object to a local variable for use throughout the class
@@ -433,6 +434,8 @@ class CI_Session {
 
 		// Kill session data
 		$this->userdata = array();
+
+		unset($_SESSION['KCFINDER']);
 	}
 
 	// --------------------------------------------------------------------
