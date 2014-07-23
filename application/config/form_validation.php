@@ -96,4 +96,16 @@ $config = array(
             'rules' => 'trim|xss_clean|numeric'
         ),
     ),
+    'admin/ch_pass' => array(
+        array(
+            'field' => 'password',
+            'label' => 'Password',
+            'rules' => 'required|trim|xss_clean|alpha_numeric'
+        ),
+        array(
+            'field' => 'password2',
+            'label' => 'Confirm Password',
+            'rules' => 'required|trim|xss_clean|alpha_numeric|matches[password]'
+        ),
+    ),
 );

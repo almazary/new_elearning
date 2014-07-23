@@ -132,6 +132,12 @@ function get_alert($notif = 'success', $msg = '')
     return '<div class="alert alert-'.$notif.'"><button type="button" class="close" data-dismiss="alert">×</button> '.$msg.'</div>';
 }
 
+/**
+ * Method untuk panggil component tinymc
+ * 
+ * @param  string $element_id
+ * @return string
+ */
 function get_tinymce($element_id)
 {
     $return = '<script type="text/javascript" src="'.base_url('assets/comp/tinymce/tiny_mce.js').'"></script>'.PHP_EOL;
@@ -175,4 +181,23 @@ function get_tinymce($element_id)
         }
     </script>';
     return $return;
+}
+
+/**
+ * Method untuk mendapatkan data session
+ * 
+ * @param  string $field
+ * @return string
+ */
+function get_sess_data($field)
+{
+    $CI =& get_instance();
+    $CI->load->library('session');
+
+    $sess_admin = $CI->session->userdata('admin');
+
+    //jika admin
+    if (!empty($sess_admin)) {
+        return $sess_admin[$field];
+    }
 }

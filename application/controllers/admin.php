@@ -150,6 +150,30 @@ class Admin extends CI_Controller
         $this->parser->parse(get_active_theme().'/main_private', $data);
     }
 
+    function ch_pass()
+    {
+        $this->most_login();
+
+        $data = array(
+            'web_title'     => 'Ubah Password | Administrator',
+            'menu_file'     => path_theme('admin_menu.php'),
+            'content_file'  => path_theme('admin_akun/index.php')
+        );
+
+        if ($this->form_validation->run() == TRUE) {
+            $password = $this->input->post('password', TRUE);
+
+            //update password
+            $this->login_model->update_password($this->session_data['login']['id'], $password);
+
+            $this->session->set_flashdata('pass', get_alert('success', 'Password berhasil di perbaharui'));
+            redirect('admin/ch_pass');
+        }
+
+        $data = array_merge(default_parser_item(), $data);
+        $this->parser->parse(get_active_theme().'/main_private', $data);
+    }
+
     function mapel_kelas($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '')
     {
         $this->most_login();
@@ -157,7 +181,7 @@ class Admin extends CI_Controller
         $data = array(
             'web_title'     => 'Matapelajaran Kelas | Administrator',
             'menu_file'     => path_theme('admin_menu.php'),
-            'content_file'  => path_theme('mapel_kelas/index.php'),
+            'content_file'  => path_theme('admin_mapel_kelas/index.php'),
             'uri_segment_1' => $this->uri->segment(1),
             'uri_segment_2' => $this->uri->segment(2),
         );
@@ -203,7 +227,7 @@ class Admin extends CI_Controller
                 }
 
                 $data['module_title']     = anchor('admin/mapel_kelas/#parent-'.$parent_id, 'Matapelajaran Kelas').' / Atur Matapelajaran';
-                $data['sub_content_file'] = path_theme('mapel_kelas/add.php');
+                $data['sub_content_file'] = path_theme('admin_mapel_kelas/add.php');
                 $data['kelas']            = $kelas;
                 $data['parent']           = $parent;
 
@@ -256,7 +280,7 @@ class Admin extends CI_Controller
             default:
             case 'list':
                 $data['module_title']        = 'Matapelajaran Kelas';
-                $data['sub_content_file']    = path_theme('mapel_kelas/list.php');
+                $data['sub_content_file']    = path_theme('admin_mapel_kelas/list.php');
                 $data['mapel_kelas_hirarki'] = $this->mapel_kelas_hirarki();
                 break;
         }
@@ -312,7 +336,7 @@ class Admin extends CI_Controller
         $data = array(
             'web_title'     => 'Manajemen Matapelajaran | Administrator',
             'menu_file'     => path_theme('admin_menu.php'),
-            'content_file'  => path_theme('mapel/index.php'),
+            'content_file'  => path_theme('admin_mapel/index.php'),
             'uri_segment_1' => $this->uri->segment(1),
             'uri_segment_2' => $this->uri->segment(2),
         );
@@ -328,7 +352,7 @@ class Admin extends CI_Controller
                 }
 
                 $data['module_title']     = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Edit';
-                $data['sub_content_file'] = path_theme('mapel/edit.php');
+                $data['sub_content_file'] = path_theme('admin_mapel/edit.php');
                 $data['mapel']            = $retrieve;
                 $data['comp_js']          = get_tinymce('info');
 
@@ -359,14 +383,14 @@ class Admin extends CI_Controller
                 }
 
                 $data['module_title']     = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Detail';
-                $data['sub_content_file'] = path_theme('mapel/detail.php');
+                $data['sub_content_file'] = path_theme('admin_mapel/detail.php');
                 $data['mapel']            = $retrieve;
 
                 break;
 
             case 'add':
                 $data['module_title']     = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Tambah';
-                $data['sub_content_file'] = path_theme('mapel/add.php');
+                $data['sub_content_file'] = path_theme('admin_mapel/add.php');
                 $data['comp_js']          = get_tinymce('info');
 
                 if ($this->form_validation->run() == TRUE) {
@@ -384,7 +408,7 @@ class Admin extends CI_Controller
             default:
             case 'list':
                 $data['module_title']     = 'Manajemen Matapelajaran';
-                $data['sub_content_file'] = path_theme('mapel/list.php');
+                $data['sub_content_file'] = path_theme('admin_mapel/list.php');
 
                 $page_no = (int)$segment_3;
 
@@ -414,7 +438,7 @@ class Admin extends CI_Controller
             'menu_file'     => path_theme('admin_menu.php'),
             'uri_segment_1' => $this->uri->segment(1),
             'uri_segment_2' => $this->uri->segment(2),
-            'content_file'  => path_theme('kelas/index.php'),
+            'content_file'  => path_theme('admin_kelas/index.php'),
             'module_title'  => 'Manajemen Kelas',
             'comp_css'      => load_comp_css(array(base_url('assets/comp/nestedSortable/nestedSortable.css'))),
             'comp_js'       => load_comp_js(array(base_url('assets/comp/nestedSortable/jquery.mjs.nestedSortable.js')))
@@ -430,7 +454,7 @@ class Admin extends CI_Controller
                     redirect('admin/kelas');
                 }
 
-                $data['sub_content_file'] = path_theme('kelas/edit.php');
+                $data['sub_content_file'] = path_theme('admin_kelas/edit.php');
                 $data['kelas'] = $kelas;
 
                 if ($this->form_validation->run('admin/kelas/edit') == TRUE) {
@@ -452,7 +476,7 @@ class Admin extends CI_Controller
             default:
             case 'list':
                 
-                $data['sub_content_file'] = path_theme('kelas/add.php');
+                $data['sub_content_file'] = path_theme('admin_kelas/add.php');
 
                 if ($this->form_validation->run() == TRUE) {
 
