@@ -159,7 +159,7 @@ class Admin extends CI_Controller
         $data = array(
             'web_title'     => 'Matapelajaran Kelas | Administrator',
             'menu_file'     => path_theme('admin_menu.php'),
-            'content_file'  => path_theme('admin_manajemen_mapel_kelas.php'),
+            'content_file'  => path_theme('mapel_kelas/index.php'),
             'uri_segment_1' => $this->uri->segment(1),
             'uri_segment_2' => $this->uri->segment(2),
         );
@@ -205,7 +205,7 @@ class Admin extends CI_Controller
                 }
 
                 $data['module_title']     = anchor('admin/mapel_kelas/#parent-'.$parent_id, 'Matapelajaran Kelas').' / Atur Matapelajaran';
-                $data['sub_content_file'] = path_theme('admin_add_mapel_kelas.php');
+                $data['sub_content_file'] = path_theme('mapel_kelas/add.php');
                 $data['kelas']            = $kelas;
                 $data['parent']           = $parent;
 
@@ -258,7 +258,7 @@ class Admin extends CI_Controller
             default:
             case 'list':
                 $data['module_title']        = 'Matapelajaran Kelas';
-                $data['sub_content_file']    = path_theme('admin_list_mapel_kelas.php');
+                $data['sub_content_file']    = path_theme('mapel_kelas/list.php');
                 $data['mapel_kelas_hirarki'] = $this->mapel_kelas_hirarki();
                 break;
         }
