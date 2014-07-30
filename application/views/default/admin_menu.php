@@ -17,9 +17,9 @@
     </ul>
 
     <ul class="widget widget-menu unstyled">
-        <li><a href="{site_url}/admin/kelas"><i class="menu-icon icon-tasks"></i> Siswa </a></li>
-        <li><a href="{site_url}/admin/mapel"><i class="menu-icon icon-book"></i> Pengajar </a></li>
-        <li><a href="{site_url}/admin/mapel"><i class="menu-icon icon-book"></i> Admin </a></li>
+        <li><a href="{site_url}/admin/siswa"><i class="menu-icon icon-tasks"></i> Siswa </a></li>
+        <li><a href="{site_url}/admin/pengajar"><i class="menu-icon icon-book"></i> Pengajar </a></li>
+        <li><a href="{site_url}/admin/adm"><i class="menu-icon icon-book"></i> Admin </a></li>
     </ul>
 
     <ul class="widget widget-menu unstyled">

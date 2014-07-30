@@ -201,3 +201,24 @@ function get_sess_data($field)
         return $sess_admin[$field];
     }
 }
+
+/**
+ * Method untuk mendapatkan link gambar
+ * 
+ * @param  string $img 
+ * @param  string $size
+ * @return string
+ * 
+ */
+function get_url_image($img, $size = '')
+{
+    if (empty($size)) {
+        return base_url('assets/images/'.$img);
+    } else {
+        $pisah = explode('.', $img);
+        $ext = end($pisah);
+        $nama_file = $pisah[0];
+
+        return base_url('assets/images/'.$nama_file.'_'.$size.'.'.$ext);
+    }
+}

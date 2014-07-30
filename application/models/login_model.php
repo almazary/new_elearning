@@ -29,19 +29,27 @@ class Login_model extends CI_Model
      * 
      * @param  integer $no_of_records
      * @param  integer $page_no
+     * @param  integer $is_admin
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all(
         $no_of_records = 10, 
-        $page_no       = 1
+        $page_no       = 1,
+        $is_admin      = 0
     ) {
         $no_of_records = (int)$no_of_records;
         $page_no       = (int)$page_no;
+        $is_admin      = (int)$is_admin;
 
         $where = array();
+        if ($is_admin) {
+            $where['is_admin'] = array($is_admin, 'where');
+        }
 
-        $data = $this->pager->set('login', $no_of_records, $page_no, $where);
+        $orderby = array('id' => 'DESC');
+
+        $data = $this->pager->set('login', $no_of_records, $page_no, $where, $orderby);
 
         return $data;
     }

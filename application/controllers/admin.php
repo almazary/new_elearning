@@ -21,6 +21,19 @@ class Admin extends CI_Controller
         }
     }
 
+    private function refresh_session_data($login = null, $pengajar = null)
+    {
+        $get_login = $this->login_model->retrieve($this->session_data['login']['id']);
+        $get_pengajar = $this->pengajar_model->retrieve($this->session_data['pengajar']['id']);
+
+        $set_session['admin'] = array(
+            'login' => $get_login,
+            'pengajar' => $get_pengajar
+        );
+
+        $this->session->set_userdata($set_session);
+    }
+
     function index()
     {
         $this->most_login();
@@ -150,14 +163,198 @@ class Admin extends CI_Controller
         $this->parser->parse(get_active_theme().'/main_private', $data);
     }
 
+    function adm($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '')
+    {
+        $this->most_login();
+
+        $data = array(
+            'web_title'     => 'Data Admin | Administrator',
+            'menu_file'     => path_theme('admin_menu.php'),
+            'content_file'  => path_theme('admin_admin/index.php')
+        );
+
+        switch ($act) {
+            case 'detail':
+                $id = (int)$segment_3;
+                $data['module_title'] = anchor('admin/adm/list', 'Data Administrator').' / Detail';
+                $data['sub_content_file'] = path_theme('admin_admin/detail.php');
+
+                //retrieve user login
+                $retrieve_login = $this->login_model->retrieve($id);
+
+                //retrieve pengajar
+                $retrieve_pengajar = $this->pengajar_model->retrieve($retrieve_login['pengajar_id']);
+
+                
+
+                break;
+            
+            default:
+            case 'list':
+                $page_no = (int)$segment_3;
+
+                $data['module_title'] = 'Data Administrator';
+                $data['sub_content_file'] = path_theme('admin_admin/list.php');
+                //ambil data admin
+                $retrieve_all = $this->login_model->retrieve_all(10, $page_no, 1);
+                $data['admins'] = $retrieve_all['results'];
+                //pagination
+                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/adm/list/');
+                break;
+        }
+
+        $data = array_merge(default_parser_item(), $data);
+        $this->parser->parse(get_active_theme().'/main_private', $data);
+    }
+
+    function ch_profil()
+    {
+        $this->most_login();
+
+        $data = array(
+            'web_title'        => 'Ubah Profil | Administrator',
+            'menu_file'        => path_theme('admin_menu.php'),
+            'content_file'     => path_theme('admin_akun/index.php'),
+            'sub_content_file' => path_theme('admin_akun/ch_profil.php'),
+            'module_title'     => 'Profil',
+            'login'            => $this->session_data['login'],
+            'pengajar'         => $this->session_data['pengajar']
+        );
+
+        $config['upload_path']   = './assets/images/';
+        $config['allowed_types'] = 'jpg|jpeg|png';
+        $config['max_size']      = '0';
+        $config['max_width']     = '0';
+        $config['max_height']    = '0';
+        $config['file_name']     = 'pengajar-'.url_title($this->input->post('nama', TRUE), '-', true);
+        $this->load->library('upload', $config);
+
+        if (!empty($_FILES['userfile']['tmp_name']) AND !$this->upload->do_upload()) {
+            $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
+            $error_upload = true;
+        } else {
+            $data['error_upload'] = '';
+            $error_upload = false;
+        }
+
+        if ($this->form_validation->run() == TRUE AND !$error_upload) {
+            $username = $this->input->post('username', TRUE);
+            $nama     = $this->input->post('nama', TRUE);
+            $alamat   = $this->input->post('alamat', TRUE);
+
+            //update username
+            $this->login_model->update(
+                $this->session_data['login']['id'],
+                $username,
+                null,
+                $this->session_data['pengajar']['id'],
+                1,
+                null
+            );
+
+            if (!empty($_FILES['userfile']['tmp_name'])) {
+
+                //hapus dulu file sebelumnya
+                $pisah = explode('.', $this->session_data['pengajar']['foto']);
+                if (is_file('./assets/images/'.$this->session_data['pengajar']['foto'])) {
+                    unlink('./assets/images/'.$this->session_data['pengajar']['foto']);
+                }
+                if (is_file('./assets/images/'.$pisah[0].'_small.'.$pisah[1])) {
+                    unlink('./assets/images/'.$pisah[0].'_small.'.$pisah[1]);
+                }
+                if (is_file('./assets/images/'.$pisah[0].'_medium.'.$pisah[1])) {
+                    unlink('./assets/images/'.$pisah[0].'_medium.'.$pisah[1]);
+                }
+
+                $upload_data = $this->upload->data();
+
+                //create thumb small
+                $this->create_img_thumb(
+                    './assets/images/'.$upload_data['file_name'],
+                    '_small',
+                    '50',
+                    '50'
+                );
+
+                //create thumb medium
+                $this->create_img_thumb(
+                    './assets/images/'.$upload_data['file_name'],
+                    '_medium',
+                    '150',
+                    '150'
+                );
+
+                $foto = $upload_data['file_name'];
+
+            } else {
+                $foto = $this->session_data['pengajar']['foto'];
+            }
+
+            //update pengajar
+            $this->pengajar_model->update(
+                $this->session_data['pengajar']['id'],
+                $this->session_data['pengajar']['nip'],
+                $nama,
+                $alamat,
+                $foto,
+                $this->session_data['pengajar']['status_id']
+            );
+
+            $this->refresh_session_data();
+
+            $this->session->set_flashdata('akun', get_alert('success', 'Profil berhasil di perbaharui'));
+            redirect('admin/ch_profil');
+        }
+
+        $data = array_merge(default_parser_item(), $data);
+        $this->parser->parse(get_active_theme().'/main_private', $data);
+    }
+
+    function check_update_username($username = '')
+    {
+        if (!empty($username)) {
+            $this->db->where('id !=', $this->session_data['login']['id']);
+            $this->db->where('username', $username);
+            $result = $this->db->get('login');
+            if (empty($result)) {
+                return true;
+            } else {
+                $this->form_validation->set_message('check_username', 'Username sudah digunakan.');
+                return false;
+            }
+        } else {
+            $this->form_validation->set_message('check_username', 'Username di butuhkan.');
+            return false;
+        }
+    }
+
+    private function create_img_thumb($source_path = '', $marker = '_thumb', $width = '90', $height = '90')
+    {
+        $config['image_library']  = 'gd2';
+        $config['source_image']   = $source_path;
+        $config['create_thumb']   = TRUE;
+        $config['maintain_ratio'] = TRUE;
+        $config['width']          = $width;
+        $config['height']         = $height;
+        $config['thumb_marker']   = $marker;
+        
+        $this->image_lib->initialize($config);
+        $this->image_lib->resize();
+        $this->image_lib->clear();
+        unset($config);
+    }
+
+
     function ch_pass()
     {
         $this->most_login();
 
         $data = array(
-            'web_title'     => 'Ubah Password | Administrator',
-            'menu_file'     => path_theme('admin_menu.php'),
-            'content_file'  => path_theme('admin_akun/index.php')
+            'web_title'        => 'Ubah Password | Administrator',
+            'menu_file'        => path_theme('admin_menu.php'),
+            'content_file'     => path_theme('admin_akun/index.php'),
+            'sub_content_file' => path_theme('admin_akun/ch_pass.php'),
+            'module_title'     => 'Ubah Password'
         );
 
         if ($this->form_validation->run() == TRUE) {
@@ -166,7 +363,7 @@ class Admin extends CI_Controller
             //update password
             $this->login_model->update_password($this->session_data['login']['id'], $password);
 
-            $this->session->set_flashdata('pass', get_alert('success', 'Password berhasil di perbaharui'));
+            $this->session->set_flashdata('akun', get_alert('success', 'Password berhasil di perbaharui'));
             redirect('admin/ch_pass');
         }
 

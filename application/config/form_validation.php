@@ -108,4 +108,21 @@ $config = array(
             'rules' => 'required|trim|xss_clean|alpha_numeric|matches[password]'
         ),
     ),
+    'admin/ch_profil' => array(
+        array(
+            'field' => 'username',
+            'label' => 'Username',
+            'rules' => 'required|trim|xss_clean|valid_email|check_update_username'
+        ),
+        array(
+            'field' => 'nama',
+            'label' => 'Nama',
+            'rules' => 'required|trim|xss_clean'
+        ),
+        array(
+            'field' => 'alamat',
+            'label' => 'Alamat',
+            'rules' => 'required|trim|xss_clean'
+        ),
+    ),
 );
