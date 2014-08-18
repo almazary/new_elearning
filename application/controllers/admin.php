@@ -145,7 +145,7 @@ class Admin extends CI_Controller
         $data = array(
             'web_title'     => 'Data Siswa | Administrator',
             'menu_file'     => path_theme('admin_menu.php'),
-            'content_file'  => path_theme('siswa/index.php')
+            'content_file'  => path_theme('admin_siswa/index.php')
         );
 
         switch ($act) {
@@ -155,7 +155,20 @@ class Admin extends CI_Controller
             
             default:
             case 'list':
-                $data['sub_content_file'] = path_theme('siswa/list.php');
+                $data['module_title']     = 'Data Siswa';
+                $data['sub_content_file'] = path_theme('admin_siswa/list.php');
+
+                $page_no = (int)$segment_3;
+
+                if (empty($page_no)) {
+                    $page_no = 1;
+                }
+
+                //ambil semua data siswa
+                $retrieve_all = $this->siswa_model->retrieve_all(20, $page_no);
+
+                $data['siswas']     = $retrieve_all['results'];
+                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/siswa/list/');
                 break;
         }
 
@@ -181,11 +194,127 @@ class Admin extends CI_Controller
 
                 //retrieve user login
                 $retrieve_login = $this->login_model->retrieve($id);
+                if (empty($retrieve_login)) {
+                    redirect('admin/adm/list');
+                }
 
                 //retrieve pengajar
                 $retrieve_pengajar = $this->pengajar_model->retrieve($retrieve_login['pengajar_id']);
-
+                if (empty($retrieve_pengajar)) {
+                    redirect('admin/adm/list');
+                }
                 
+                $data['login']    = $retrieve_login;
+                $data['pengajar'] = $retrieve_pengajar;
+
+                break;
+
+            case 'edit':
+                $id = (int)$segment_3;
+                $data['module_title'] = anchor('admin/adm/list', 'Data Administrator').' / Edit';
+                $data['sub_content_file'] = path_theme('admin_admin/edit.php');
+
+                //retrieve user login
+                $retrieve_login = $this->login_model->retrieve($id);
+                if (empty($retrieve_login)) {
+                    redirect('admin/adm/list');
+                }
+
+                //retrieve pengajar
+                $retrieve_pengajar = $this->pengajar_model->retrieve($retrieve_login['pengajar_id']);
+                if (empty($retrieve_pengajar)) {
+                    redirect('admin/adm/list');
+                }
+                
+                $data['login']    = $retrieve_login;
+                $data['pengajar'] = $retrieve_pengajar;
+
+                $config['upload_path']   = './assets/images/';
+                $config['allowed_types'] = 'jpg|jpeg|png';
+                $config['max_size']      = '0';
+                $config['max_width']     = '0';
+                $config['max_height']    = '0';
+                $config['file_name']     = 'admin-'.url_title($this->input->post('nama', TRUE), '-', true);
+                $this->load->library('upload', $config);
+
+                if (!empty($_FILES['userfile']['tmp_name']) AND !$this->upload->do_upload()) {
+                    $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
+                    $error_upload = true;
+                } else {
+                    $data['error_upload'] = '';
+                    $error_upload = false;
+                }
+
+                if ($this->form_validation->run('admin/ch_profil') == TRUE AND !$error_upload) {
+                    $username = $this->input->post('username', TRUE);
+                    $nama     = $this->input->post('nama', TRUE);
+                    $alamat   = $this->input->post('alamat', TRUE);
+
+                    //update username
+                    $this->login_model->update(
+                        $retrieve_login['id'],
+                        $username,
+                        null,
+                        $retrieve_pengajar['id'],
+                        1,
+                        null
+                    );
+
+                    if (!empty($_FILES['userfile']['tmp_name'])) {
+
+                        //hapus dulu file sebelumnya
+                        $pisah = explode('.', $retrieve_pengajar['foto']);
+                        if (is_file('./assets/images/'.$retrieve_pengajar['foto'])) {
+                            unlink('./assets/images/'.$retrieve_pengajar['foto']);
+                        }
+                        if (is_file('./assets/images/'.$pisah[0].'_small.'.$pisah[1])) {
+                            unlink('./assets/images/'.$pisah[0].'_small.'.$pisah[1]);
+                        }
+                        if (is_file('./assets/images/'.$pisah[0].'_medium.'.$pisah[1])) {
+                            unlink('./assets/images/'.$pisah[0].'_medium.'.$pisah[1]);
+                        }
+
+                        $upload_data = $this->upload->data();
+
+                        //create thumb small
+                        $this->create_img_thumb(
+                            './assets/images/'.$upload_data['file_name'],
+                            '_small',
+                            '50',
+                            '50'
+                        );
+
+                        //create thumb medium
+                        $this->create_img_thumb(
+                            './assets/images/'.$upload_data['file_name'],
+                            '_medium',
+                            '150',
+                            '150'
+                        );
+
+                        $foto = $upload_data['file_name'];
+
+                    } else {
+                        $foto = $retrieve_pengajar['foto'];
+                    }
+
+                    //update pengajar
+                    $this->pengajar_model->update(
+                        $retrieve_pengajar['id'],
+                        $retrieve_pengajar['nip'],
+                        $nama,
+                        $alamat,
+                        $foto,
+                        $retrieve_pengajar['status_id']
+                    );
+
+                    if ($retrieve_login['id'] == $this->session_data['login']['id']) {
+                        $this->refresh_session_data();
+                    }
+
+                    $this->session->set_flashdata('edit', get_alert('success', 'Data berhasil di perbaharui'));
+                    redirect('admin/adm/edit/'.$id);
+                }
 
                 break;
             
@@ -226,7 +355,7 @@ class Admin extends CI_Controller
         $config['max_size']      = '0';
         $config['max_width']     = '0';
         $config['max_height']    = '0';
-        $config['file_name']     = 'pengajar-'.url_title($this->input->post('nama', TRUE), '-', true);
+        $config['file_name']     = 'admin-'.url_title($this->input->post('nama', TRUE), '-', true);
         $this->load->library('upload', $config);
 
         if (!empty($_FILES['userfile']['tmp_name']) AND !$this->upload->do_upload()) {

@@ -222,3 +222,23 @@ function get_url_image($img, $size = '')
         return base_url('assets/images/'.$nama_file.'_'.$size.'.'.$ext);
     }
 }
+
+/**
+ * Method untuk mendapatkan path image
+ * 
+ * @param  string $img
+ * @param  string $size medium|small, kalau aslinya di kosongkan
+ * @return string paht
+ */
+function get_path_image($img, $size = '')
+{
+    if (empty($size)) {
+        return './assets/images/'.$img;
+    } else {
+        $pisah = explode('.', $img);
+        $ext = end($pisah);
+        $nama_file = $pisah[0];
+
+        return './assets/images/'.$nama_file.'_'.$size.'.'.$ext;
+    }
+}
