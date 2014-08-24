@@ -182,6 +182,11 @@ $config = array(
             'rules' => 'required|trim|xss_clean|valid_email|is_unique[login.username]'
         ),
         array(
+            'field' => 'default_username',
+            'label' => 'Default Username',
+            'rules' => 'trim|xss_clean|numeric'
+        ),
+        array(
             'field' => 'password',
             'label' => 'Password',
             'rules' => 'required|trim|xss_clean|alpha_numeric'

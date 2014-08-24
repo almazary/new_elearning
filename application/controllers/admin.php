@@ -160,8 +160,83 @@ class Admin extends CI_Controller
                 $data['status_id']        = $status_id;
                 $data['kelas']            = $this->kelas_model->retrieve_all_child();
 
-                if ($this->form_validation->run('admin/siswa/add') == TRUE) {
-                    
+                $config['upload_path']   = './assets/images/';
+                $config['allowed_types'] = 'jpg|jpeg|png';
+                $config['max_size']      = '0';
+                $config['max_width']     = '0';
+                $config['max_height']    = '0';
+                $config['file_name']     = 'siswa-'.url_title($this->input->post('nis', TRUE), '-', true);
+                $this->load->library('upload', $config);
+
+                if (!empty($_FILES['userfile']['tmp_name']) AND !$this->upload->do_upload()) {
+                    $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
+                    $error_upload = true;
+                } else {
+                    $data['error_upload'] = '';
+                    $error_upload = false;
+                }
+
+                if ($this->form_validation->run('admin/siswa/add') == TRUE AND !$error_upload) {
+                    $nis           = $this->input->post('nis', TRUE);
+                    $nama          = $this->input->post('nama', TRUE);
+                    $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+                    $tahun_masuk   = $this->input->post('tahun_masuk', TRUE);
+                    $kelas_id      = $this->input->post('kelas_id', TRUE);
+                    $tempat_lahir  = $this->input->post('tempat_lahir', TRUE);
+                    $tgl_lahir     = $this->input->post('tgl_lahir', TRUE);
+                    $bln_lahir     = $this->input->post('bln_lahir', TRUE);
+                    $thn_lahir     = $this->input->post('thn_lahir', TRUE);
+                    $alamat        = $this->input->post('alamat', TRUE);
+                    $username      = $this->input->post('username', TRUE);
+                    $password      = $this->input->post('password2', TRUE);
+
+                    if (!empty($_FILES['userfile']['tmp_name'])) {
+                        $upload_data = $this->upload->data();
+
+                        //create thumb small
+                        $this->create_img_thumb(
+                            './assets/images/'.$upload_data['file_name'],
+                            '_small',
+                            '50',
+                            '50'
+                        );
+
+                        //create thumb medium
+                        $this->create_img_thumb(
+                            './assets/images/'.$upload_data['file_name'],
+                            '_medium',
+                            '150',
+                            '150'
+                        );
+
+                        $foto = $upload_data['file_name'];
+                    } else {
+                        $foto = null;
+                    }
+
+                    //simpan data siswa
+                    $siswa_id = $this->siswa_model->create(
+                        $nis,
+                        $nama,
+                        $jenis_kelamin,
+                        $tempat_lahir,
+                        $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir,
+                        $alamat,
+                        $tahun_masuk,
+                        $foto,
+                        1
+                    );
+
+                    //simpan data login
+                    $this->login_model->create(
+                        $username,
+                        $password,
+                        $siswa_id,
+                        null
+                    );
+
+                    $this->session->set_flashdata('siswa', get_alert('success', 'Data siswa berhasil di simpan'));
+                    redirect('admin/siswa/list/1');
                 }
 
                 break;

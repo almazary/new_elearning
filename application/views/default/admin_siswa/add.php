@@ -87,25 +87,19 @@
             <input type="text" id="username" name="username" class="span5" value="<?php echo set_value('username'); ?>" placeholder="example@example.sch.id">
             
             <script type="text/javascript">
-            function gen4Numbers() {
-                var numbers = [];
-                while (numbers.length < 4) {
-                    var newNr = (parseInt(Math.random() * 4))+1;
-                    if (numbers.indexOf(newNr) == -1) {
-                        numbers.push(newNr);
-                    }
-                }
-                return numbers;
-            }
             function username_default() {
-                var nis = $("#nis").val();
-                if (nis == '') {
-                    nis = new Date().getTime();
+                if (document.getElementById("default_username").checked) {
+                    var nis = $("#nis").val();
+                    if (nis == '') {
+                        nis = new Date().getTime();
+                    }
+                    $("#username").val(nis + '@example.sch.id');
+                } else {
+                    $("#username").val('');
                 }
-                $("#username").val( nis + '@example.sch.id');
             }
             </script>
-            <input type="checkbox" name="default_username" onclick="username_default()"> Gunakan default username
+            <label class="checkbox inline"><input type="checkbox" name="default_username" id="default_username" onclick="username_default()" value="1" <?php echo set_checkbox('default_username', '1'); ?>> Gunakan default username</label>
             <br><?php echo form_error('username'); ?>
         </div>
     </div>

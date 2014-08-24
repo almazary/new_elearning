@@ -59,7 +59,8 @@ class Siswa_model extends CI_Model
             $where['status_id'] = [$status_id, 'where'];
         }
 
-        $data = $this->pager->set('siswa', $no_of_records, $page_no, $where);
+        $orderby = array('id' => 'DESC');
+        $data = $this->pager->set('siswa', $no_of_records, $page_no, $where, $orderby);
 
         return $data;
     }
