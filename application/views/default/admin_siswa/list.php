@@ -1,15 +1,22 @@
 
 <div class="row-fluid">
-<div class="span4">
-    <a href="{site_url}/admin/mapel/add" class="btn btn-primary">Tambah Siswa</a>
+<div class="span8">
+    <a href="{site_url}/admin/siswa/add/<?php echo $status_id; ?>" class="btn btn-primary">Tambah Siswa</a>
 </div>
 
-<div class="span8">
-    
+<div class="span4">
+    <div class="btn-group">
+        <?php echo anchor('admin/siswa/list/1', 'Aktif', array('class' => ($status_id == 1) ? 'btn btn-info' : 'btn')); ?>
+        <?php echo anchor('admin/siswa/list/0', 'Pending', array('class' => ($status_id == 0) ? 'btn btn-info' : 'btn')); ?>
+        <?php echo anchor('admin/siswa/list/2', 'Blocking', array('class' => ($status_id == 2) ? 'btn btn-info' : 'btn')); ?>
+        <?php echo anchor('admin/siswa/list/3', 'Alumni', array('class' => ($status_id == 3) ? 'btn btn-info' : 'btn')); ?>
+    </div>
 </div>
 
 <br><br>
-<p class="text-warning"><b>NB: </b> Siswa tidak dapat dihapus namun dapat di ubah menjadi tidak aktif.</p>
+<?php if (in_array($status_id, array(1, 3))): ?>
+<p class="text-warning"><b>NB: </b> Siswa tidak dapat dihapus namun dapat di ubah menjadi blocking.</p>
+<?php endif; ?>
 
 <table class="table table-striped">
     <thead>
@@ -17,22 +24,27 @@
             <th width="8%">No</th>
             <th>Nis</th>
             <th>Nama</th>
+            <th>Jenis Kelamin</th>
             <th width="15%"></th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($mapels as $no => $v): ?>
+        <?php foreach ($siswas as $no => $v): ?>
         <tr>
             <td><?php echo $no; ?>.</td>
             <td>
-                <span <?php if ($v['aktif'] != 1) { echo 'class="text-muted"'; } ?>>
+                <?php echo $v['nis']; ?>
+            </td>
+            <td>
                 <?php echo $v['nama']; ?>
-                </span>
+            </td>
+            <td>
+                <?php echo $v['jenis_kelamin']; ?>
             </td>
             <td>
                 <div class="btn-group">
-                  <a class="btn" href="{site_url}/admin/mapel/detail/<?php echo $v['id']; ?>"><i class="icon-zoom-in"></i> Detail</a>
-                  <a class="btn" href="{site_url}/admin/mapel/edit/<?php echo $v['id']; ?>"><i class="icon-edit"></i> Edit</a>
+                  <a class="btn" href="{site_url}/admin/siswa/detail/<?php echo $v['id']; ?>"><i class="icon-zoom-in"></i> Detail</a>
+                  <a class="btn" href="{site_url}/admin/siswa/edit/<?php echo $v['id']; ?>"><i class="icon-edit"></i> Edit</a>
                 </div>
             </td>
         </tr>

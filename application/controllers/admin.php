@@ -138,7 +138,7 @@ class Admin extends CI_Controller
         }
     }
 
-    function siswa($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '')
+    function siswa($act = 'list', $segment_3 = '1', $segment_4 = '', $segment_5 = '')
     {
         $this->most_login();
 
@@ -149,8 +149,21 @@ class Admin extends CI_Controller
         );
 
         switch ($act) {
-            case 'value':
-                # code...
+            case 'add':
+                $status_id = (int)$segment_3;
+                if ($status_id < 0 OR $status_id > 3) {
+                    redirect('admin/siswa/list/1');
+                }
+
+                $data['module_title']     = anchor('admin/siswa/list/'.$status_id, 'Data Siswa').' / Tambah Siswa';
+                $data['sub_content_file'] = path_theme('admin_siswa/add.php');
+                $data['status_id']        = $status_id;
+                $data['kelas']            = $this->kelas_model->retrieve_all_child();
+
+                if ($this->form_validation->run('admin/siswa/add') == TRUE) {
+                    
+                }
+
                 break;
             
             default:
@@ -158,15 +171,20 @@ class Admin extends CI_Controller
                 $data['module_title']     = 'Data Siswa';
                 $data['sub_content_file'] = path_theme('admin_siswa/list.php');
 
-                $page_no = (int)$segment_3;
+                $status_id = (int)$segment_3;
+                if ($status_id < 0 OR $status_id > 3) {
+                    $status_id = 1;
+                }
 
+                $page_no = (int)$segment_4;
                 if (empty($page_no)) {
                     $page_no = 1;
                 }
 
                 //ambil semua data siswa
-                $retrieve_all = $this->siswa_model->retrieve_all(20, $page_no);
+                $retrieve_all = $this->siswa_model->retrieve_all(50, $page_no, null, null, $status_id);
 
+                $data['status_id']  = $status_id;
                 $data['siswas']     = $retrieve_all['results'];
                 $data['pagination'] = $this->pager->view($retrieve_all, 'admin/siswa/list/');
                 break;
@@ -558,8 +576,8 @@ class Admin extends CI_Controller
                 $data['parent']           = $parent;
 
                 //ambil semua matapelajaran
-                $retrieve_all = $this->mapel_model->retrieve_all_mapel();
-                $data['mapels']           = $retrieve_all;
+                $retrieve_all   = $this->mapel_model->retrieve_all_mapel();
+                $data['mapels'] = $retrieve_all;
 
                 //ambil matapelajaran pada kelas ini
                 $retrieve_all_kelas = $this->mapel_model->retrieve_all_kelas();

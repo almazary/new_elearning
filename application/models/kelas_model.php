@@ -22,6 +22,14 @@ class Kelas_model extends CI_Model
         return $result->result_array();
     }
 
+    public function retrieve_all_child()
+    {
+        $this->db->where('parent_id !=', '0');
+        $this->db->order_by('urutan', 'ASC');
+        $result = $this->db->get('kelas');
+        return $result->result_array();
+    }
+
     /**
      * Method untuk mengambil satu record data kelas
      * 

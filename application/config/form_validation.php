@@ -125,4 +125,71 @@ $config = array(
             'rules' => 'required|trim|xss_clean'
         ),
     ),
+    'admin/siswa/add' => array(
+        array(
+            'field' => 'nis',
+            'label' => 'NIS',
+            'rules' => 'required|trim|xss_clean'
+        ),
+        array(
+            'field' => 'nama',
+            'label' => 'Nama',
+            'rules' => 'required|trim|xss_clean'
+        ),
+        array(
+            'field' => 'jenis_kelamin',
+            'label' => 'Jenis Kelamin',
+            'rules' => 'required|trim|xss_clean'
+        ),
+        array(
+            'field' => 'tahun_masuk',
+            'label' => 'Tahun Masuk',
+            'rules' => 'required|trim|xss_clean|numeric|min_length[4]|max_length[5]'
+        ),
+        array(
+            'field' => 'kelas_id',
+            'label' => 'Kelas',
+            'rules' => 'required|trim|xss_clean|numeric'
+        ),
+        array(
+            'field' => 'tempat_lahir',
+            'label' => 'Tempat Lahir',
+            'rules' => 'trim|xss_clean'
+        ),
+        array(
+            'field' => 'tgl_lahir',
+            'label' => 'Tgl Lahir',
+            'rules' => 'trim|xss_clean|numeric'
+        ),
+        array(
+            'field' => 'bln_lahir',
+            'label' => 'Bulan Lahir',
+            'rules' => 'trim|xss_clean|numeric'
+        ),
+        array(
+            'field' => 'thn_lahir',
+            'label' => 'Tahun Lahir',
+            'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[5]'
+        ),
+        array(
+            'field' => 'alamat',
+            'label' => 'Alamat',
+            'rules' => 'trim|xss_clean'
+        ),
+        array(
+            'field' => 'username',
+            'label' => 'Username',
+            'rules' => 'required|trim|xss_clean|valid_email|is_unique[login.username]'
+        ),
+        array(
+            'field' => 'password',
+            'label' => 'Password',
+            'rules' => 'required|trim|xss_clean|alpha_numeric'
+        ),
+        array(
+            'field' => 'password2',
+            'label' => 'Ulangi Password',
+            'rules' => 'required|matches[password]'
+        ),
+    )
 );
