@@ -224,13 +224,34 @@ function get_url_image($img, $size = '')
 }
 
 /**
+ * Method untuk mendapatkan link foto siswa
+ * 
+ * @param  string $img
+ * @param  string $size
+ * @param  string $jk
+ * @return string url
+ */
+function get_url_image_siswa($img = '', $size = 'medium', $jk = 'Laki-laki') {
+    if (is_null($img) OR empty($img)) {
+        if ($jk == 'Laki-laki') {
+            $img = 'default_siswa.png';
+        } else {
+            $img = 'default_siswi.png';
+        }
+        return get_url_image($img);
+    } else {
+        return get_url_image($img, $size);
+    }
+}
+
+/**
  * Method untuk mendapatkan path image
  * 
  * @param  string $img
  * @param  string $size medium|small, kalau aslinya di kosongkan
  * @return string paht
  */
-function get_path_image($img, $size = '')
+function get_path_image($img = '', $size = '')
 {
     if (empty($size)) {
         return './assets/images/'.$img;

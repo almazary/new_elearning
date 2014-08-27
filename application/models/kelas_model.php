@@ -244,7 +244,8 @@ class Kelas_model extends CI_Model
             }
         }
 
-        $data = $this->pager->set('kelas_siswa', $no_of_records, $page_no, $where);
+        $order_by = array('id' => 'ASC');
+        $data = $this->pager->set('kelas_siswa', $no_of_records, $page_no, $where, $order_by);
 
         return $data;
     }

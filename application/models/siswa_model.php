@@ -74,6 +74,7 @@ class Siswa_model extends CI_Model
      * @param  string  $jenis_kelamin 
      * @param  string  $tempat_lahir  
      * @param  string  $tgl_lahir         tahun-bulan-tanggal
+     * @param  string  $agama
      * @param  string  $alamat        
      * @param  integer $tahun_masuk   
      * @param  string  $foto          
@@ -88,6 +89,7 @@ class Siswa_model extends CI_Model
         $jenis_kelamin,
         $tempat_lahir,
         $tgl_lahir,
+        $agama = null,
         $alamat = '',
         $tahun_masuk,
         $foto = null,
@@ -103,6 +105,7 @@ class Siswa_model extends CI_Model
             'jenis_kelamin' => $jenis_kelamin,
             'tempat_lahir'  => $tempat_lahir,
             'tgl_lahir'     => $tgl_lahir,
+            'agama'         => $agama,
             'alamat'        => $alamat,
             'tahun_masuk'   => $tahun_masuk,
             'foto'          => $foto,
@@ -143,6 +146,7 @@ class Siswa_model extends CI_Model
      * @param  string  $jenis_kelamin 
      * @param  string  $tempat_lahir  
      * @param  string  $tgl_lahir       tahun-bulan-tanggal  
+     * @param  string  $agama
      * @param  string  $alamat        
      * @param  integer $tahun_masuk   
      * @param  string  $foto          
@@ -156,6 +160,7 @@ class Siswa_model extends CI_Model
         $jenis_kelamin,
         $tempat_lahir,
         $tgl_lahir,
+        $agama = null,
         $alamat = '',
         $tahun_masuk,
         $foto = null,
@@ -170,6 +175,7 @@ class Siswa_model extends CI_Model
             'jenis_kelamin' => $jenis_kelamin,
             'tempat_lahir'  => $tempat_lahir,
             'tgl_lahir'     => $tgl_lahir,
+            'agama'         => $agama,
             'alamat'        => $alamat,
             'tahun_masuk'   => $tahun_masuk,
             'foto'          => $foto,

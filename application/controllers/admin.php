@@ -142,6 +142,8 @@ class Admin extends CI_Controller
     {
         $this->most_login();
 
+        $iframe = false;
+
         $data = array(
             'web_title'     => 'Data Siswa | Administrator',
             'menu_file'     => path_theme('admin_menu.php'),
@@ -160,7 +162,7 @@ class Admin extends CI_Controller
                 $data['status_id']        = $status_id;
                 $data['kelas']            = $this->kelas_model->retrieve_all_child();
 
-                $config['upload_path']   = './assets/images/';
+                $config['upload_path']   = get_path_image();
                 $config['allowed_types'] = 'jpg|jpeg|png';
                 $config['max_size']      = '0';
                 $config['max_width']     = '0';
@@ -186,6 +188,7 @@ class Admin extends CI_Controller
                     $tgl_lahir     = $this->input->post('tgl_lahir', TRUE);
                     $bln_lahir     = $this->input->post('bln_lahir', TRUE);
                     $thn_lahir     = $this->input->post('thn_lahir', TRUE);
+                    $agama         = $this->input->post('agama', TRUE);
                     $alamat        = $this->input->post('alamat', TRUE);
                     $username      = $this->input->post('username', TRUE);
                     $password      = $this->input->post('password2', TRUE);
@@ -195,7 +198,7 @@ class Admin extends CI_Controller
 
                         //create thumb small
                         $this->create_img_thumb(
-                            './assets/images/'.$upload_data['file_name'],
+                            get_path_image($upload_data['file_name']),
                             '_small',
                             '50',
                             '50'
@@ -203,7 +206,7 @@ class Admin extends CI_Controller
 
                         //create thumb medium
                         $this->create_img_thumb(
-                            './assets/images/'.$upload_data['file_name'],
+                            get_path_image($upload_data['file_name']),
                             '_medium',
                             '150',
                             '150'
@@ -221,6 +224,7 @@ class Admin extends CI_Controller
                         $jenis_kelamin,
                         $tempat_lahir,
                         $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir,
+                        $agama,
                         $alamat,
                         $tahun_masuk,
                         $foto,
@@ -235,10 +239,65 @@ class Admin extends CI_Controller
                         null
                     );
 
+                    //simpan kelas siswa
+                    $this->kelas_model->create_siswa(
+                        $kelas_id,
+                        $siswa_id,
+                        1
+                    );
+
                     $this->session->set_flashdata('siswa', get_alert('success', 'Data siswa berhasil di simpan'));
                     redirect('admin/siswa/list/1');
                 }
 
+                break;
+
+            case 'detail':
+                $status_id = (int)$segment_3;
+
+                $siswa_id = (int)$segment_4;
+                $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+                if (empty($retrieve_siswa)) {
+                    redirect('admin/siswa/list/1');
+                }
+
+                $retrieve_login = $this->login_model->retrieve(null, null, null, $retrieve_siswa['id']);
+                $retrieve_all_kelas = $this->kelas_model->retrieve_all_siswa(10, 1, array('siswa_id' => $retrieve_siswa['id']));
+
+                $data['module_title']     = anchor('admin/siswa/list/'.$status_id, 'Data Siswa').' / Detail Siswa';
+                $data['sub_content_file'] = path_theme('admin_siswa/detail.php');
+                $data['siswa']            = $retrieve_siswa;
+                $data['siswa_login']      = $retrieve_login;
+                $data['siswa_kelas']      = $retrieve_all_kelas;
+                $data['status_id']        = $status_id;
+                
+                //panggil colorbox
+                $html_js = load_comp_js(array(base_url('assets/comp/colorbox/jquery.colorbox-min.js')));
+                $html_js .= '<script>
+                    $(document).ready(function(){
+                        $(".iframe").colorbox({iframe:true, width:"400", height:"180", fixed:true});
+                    });
+                </script>';
+                $data['comp_js']      = $html_js;
+                $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+
+
+                break;
+
+            case 'moved_class':
+                $status_id = (int)$segment_3;
+                $siswa_id  = (int)$segment_4;
+                $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+                if (empty($retrieve_siswa)) {
+                    echo '<script>
+                            parent.jQuery.colorbox.close();
+                    </script>';
+                }
+
+                $iframe = true;
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_siswa/moved_class.php');
+                $data['kelas']        = $this->kelas_model->retrieve_all_child();
                 break;
             
             default:
@@ -266,7 +325,11 @@ class Admin extends CI_Controller
         }
 
         $data = array_merge(default_parser_item(), $data);
-        $this->parser->parse(get_active_theme().'/main_private', $data);
+        if ($iframe) {
+            $this->parser->parse(get_active_theme().'/main_iframe', $data);
+        } else {
+            $this->parser->parse(get_active_theme().'/main_private', $data);
+        }
     }
 
     function adm($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '')
@@ -322,7 +385,7 @@ class Admin extends CI_Controller
                 $data['login']    = $retrieve_login;
                 $data['pengajar'] = $retrieve_pengajar;
 
-                $config['upload_path']   = './assets/images/';
+                $config['upload_path']   = get_path_image();
                 $config['allowed_types'] = 'jpg|jpeg|png';
                 $config['max_size']      = '0';
                 $config['max_width']     = '0';
@@ -357,21 +420,21 @@ class Admin extends CI_Controller
 
                         //hapus dulu file sebelumnya
                         $pisah = explode('.', $retrieve_pengajar['foto']);
-                        if (is_file('./assets/images/'.$retrieve_pengajar['foto'])) {
-                            unlink('./assets/images/'.$retrieve_pengajar['foto']);
+                        if (is_file(get_path_image($retrieve_pengajar['foto']))) {
+                            unlink(get_path_image($retrieve_pengajar['foto']));
                         }
-                        if (is_file('./assets/images/'.$pisah[0].'_small.'.$pisah[1])) {
-                            unlink('./assets/images/'.$pisah[0].'_small.'.$pisah[1]);
+                        if (is_file(get_path_image($pisah[0].'_small.'.$pisah[1]))) {
+                            unlink(get_path_image($pisah[0].'_small.'.$pisah[1]));
                         }
-                        if (is_file('./assets/images/'.$pisah[0].'_medium.'.$pisah[1])) {
-                            unlink('./assets/images/'.$pisah[0].'_medium.'.$pisah[1]);
+                        if (is_file(get_path_image($pisah[0].'_medium.'.$pisah[1]))) {
+                            unlink(get_path_image($pisah[0].'_medium.'.$pisah[1]));
                         }
 
                         $upload_data = $this->upload->data();
 
                         //create thumb small
                         $this->create_img_thumb(
-                            './assets/images/'.$upload_data['file_name'],
+                            get_path_image($upload_data['file_name']),
                             '_small',
                             '50',
                             '50'
@@ -379,7 +442,7 @@ class Admin extends CI_Controller
 
                         //create thumb medium
                         $this->create_img_thumb(
-                            './assets/images/'.$upload_data['file_name'],
+                            get_path_image($upload_data['file_name']),
                             '_medium',
                             '150',
                             '150'
@@ -443,7 +506,7 @@ class Admin extends CI_Controller
             'pengajar'         => $this->session_data['pengajar']
         );
 
-        $config['upload_path']   = './assets/images/';
+        $config['upload_path']   = get_path_image();
         $config['allowed_types'] = 'jpg|jpeg|png';
         $config['max_size']      = '0';
         $config['max_width']     = '0';
@@ -478,21 +541,21 @@ class Admin extends CI_Controller
 
                 //hapus dulu file sebelumnya
                 $pisah = explode('.', $this->session_data['pengajar']['foto']);
-                if (is_file('./assets/images/'.$this->session_data['pengajar']['foto'])) {
-                    unlink('./assets/images/'.$this->session_data['pengajar']['foto']);
+                if (is_file(get_path_image($this->session_data['pengajar']['foto']))) {
+                    unlink(get_path_image($this->session_data['pengajar']['foto']));
                 }
-                if (is_file('./assets/images/'.$pisah[0].'_small.'.$pisah[1])) {
-                    unlink('./assets/images/'.$pisah[0].'_small.'.$pisah[1]);
+                if (is_file(get_path_image($pisah[0].'_small.'.$pisah[1]))) {
+                    unlink(get_path_image($pisah[0].'_small.'.$pisah[1]));
                 }
-                if (is_file('./assets/images/'.$pisah[0].'_medium.'.$pisah[1])) {
-                    unlink('./assets/images/'.$pisah[0].'_medium.'.$pisah[1]);
+                if (is_file(get_path_image($pisah[0].'_medium.'.$pisah[1]))) {
+                    unlink(get_path_image($pisah[0].'_medium.'.$pisah[1]));
                 }
 
                 $upload_data = $this->upload->data();
 
                 //create thumb small
                 $this->create_img_thumb(
-                    './assets/images/'.$upload_data['file_name'],
+                    get_path_image($upload_data['file_name']),
                     '_small',
                     '50',
                     '50'
@@ -500,7 +563,7 @@ class Admin extends CI_Controller
 
                 //create thumb medium
                 $this->create_img_thumb(
-                    './assets/images/'.$upload_data['file_name'],
+                    get_path_image($upload_data['file_name']),
                     '_medium',
                     '150',
                     '150'

@@ -129,7 +129,7 @@ $config = array(
         array(
             'field' => 'nis',
             'label' => 'NIS',
-            'rules' => 'required|trim|xss_clean'
+            'rules' => 'required|trim|xss_clean|is_unique[siswa.nis]'
         ),
         array(
             'field' => 'nama',
@@ -170,6 +170,11 @@ $config = array(
             'field' => 'thn_lahir',
             'label' => 'Tahun Lahir',
             'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[5]'
+        ),
+        array(
+            'field' => 'agama',
+            'label' => 'Agama',
+            'rules' => 'trim|xss_clean'
         ),
         array(
             'field' => 'alamat',

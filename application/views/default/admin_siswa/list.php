@@ -24,7 +24,7 @@
             <th width="8%">No</th>
             <th>Nis</th>
             <th>Nama</th>
-            <th>Jenis Kelamin</th>
+            <th>Kelas</th>
             <th width="15%"></th>
         </tr>
     </thead>
@@ -39,12 +39,16 @@
                 <?php echo $v['nama']; ?>
             </td>
             <td>
-                <?php echo $v['jenis_kelamin']; ?>
+                <?php 
+                $kelas_aktif = $this->kelas_model->retrieve_siswa(null, array('siswa_id' => $v['id'], 'aktif' => '1'));
+                $kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
+                echo $kelas['nama'];
+                ?>
             </td>
             <td>
                 <div class="btn-group">
-                  <a class="btn" href="{site_url}/admin/siswa/detail/<?php echo $v['id']; ?>"><i class="icon-zoom-in"></i> Detail</a>
-                  <a class="btn" href="{site_url}/admin/siswa/edit/<?php echo $v['id']; ?>"><i class="icon-edit"></i> Edit</a>
+                  <a class="btn" href="{site_url}/admin/siswa/detail/<?php echo $status_id; ?>/<?php echo $v['id']; ?>"><i class="icon-zoom-in"></i> Detail</a>
+                  <a class="btn" href="{site_url}/admin/siswa/edit/<?php echo $status_id; ?>/<?php echo $v['id']; ?>"><i class="icon-edit"></i> Edit</a>
                 </div>
             </td>
         </tr>

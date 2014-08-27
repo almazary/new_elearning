@@ -68,6 +68,20 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label">Agama</label>
+        <div class="controls">
+            <select name="agama" class="span2">
+                <option value="">--pilih--</option>
+                <option value="ISLAM" <?php echo set_select('agama', 'ISLAM'); ?>>ISLAM</option>
+                <option value="KRISTEN" <?php echo set_select('agama', 'KRISTEN'); ?>>KRISTEN</option>
+                <option value="KATOLIK" <?php echo set_select('agama', 'KATOLIK'); ?>>KATOLIK</option>
+                <option value="HINDU" <?php echo set_select('agama', 'HINDU'); ?>>HINDU</option>
+                <option value="BUDHA" <?php echo set_select('agama', 'BUDHA'); ?>>BUDHA</option>
+            </select>
+            <br><?php echo form_error('agama'); ?>
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label">Alamat</label>
         <div class="controls">
             <textarea name="alamat" class="span8"><?php echo set_value('alamat'); ?></textarea>
