@@ -1,6 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <strong>Profil Siswa</strong>
+        <?php echo anchor('admin/siswa/edit/'.$status_id.'/'.$siswa['id'], 'Edit Profil', array('class' => 'pull-right btn btn-small btn-primary', 'title' => 'Edit Profil Siswa')); ?>
     </div>
     <div class="panel-body">
         <table class="table">
@@ -61,10 +62,10 @@
 
 <div class="row-fluid">
     <div class="span6">
-        <div class="panel panel-default">
+        <div class="panel panel-default" id="riwayat-kelas">
             <div class="panel-heading">
                 <strong>Riwayat Kelas</strong>
-                <?php echo anchor('admin/siswa/moved_class/'.$status_id.'/'.$siswa['id'], 'Pindah Kelas', array('class' => 'iframe pull-right btn btn-small btn-warning', 'title' => 'Pindah siswa ke Kelas lain')); ?>
+                <?php echo anchor('admin/siswa/moved_class/'.$status_id.'/'.$siswa['id'], 'Pindah Kelas', array('class' => 'iframe pull-right btn btn-small btn-primary', 'title' => 'Pindah siswa ke Kelas lain')); ?>
             </div>
             <div class="panel-body">
                 <table class="table table-striped">

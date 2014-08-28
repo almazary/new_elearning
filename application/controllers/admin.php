@@ -289,15 +289,39 @@ class Admin extends CI_Controller
                 $siswa_id  = (int)$segment_4;
                 $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
                 if (empty($retrieve_siswa)) {
-                    echo '<script>
-                            parent.jQuery.colorbox.close();
-                    </script>';
+                    echo 'Data siswa tidak ditemukan';
+                    exit();
                 }
 
                 $iframe = true;
                 unset($data['content_file']);
                 $data['content_file'] = path_theme('admin_siswa/moved_class.php');
                 $data['kelas']        = $this->kelas_model->retrieve_all_child();
+                $data['status_id']    = $status_id;
+                $data['siswa_id']     = $siswa_id;
+
+                if ($this->form_validation->run('admin/siswa/moved_class') == TRUE) {
+                    $kelas_id = $this->input->post('kelas_id', TRUE);
+                    $get_aktif = $this->kelas_model->retrieve_siswa(null, array(
+                        'siswa_id' => $siswa_id,
+                        'aktif'    => 1
+                    ));
+                    $this->kelas_model->update_siswa($get_aktif['id'], $get_aktif['kelas_id'], $get_aktif['siswa_id'], 0);
+                        
+                    $check = $this->kelas_model->retrieve_siswa(null, array(
+                        'siswa_id' => $siswa_id,
+                        'kelas_id' => $kelas_id
+                    ));
+                    if (empty($check)) {
+                        $this->kelas_model->create_siswa($kelas_id, $siswa_id, 1);
+                    } else {
+                        $this->kelas_model->update_siswa($check['id'], $kelas_id, $siswa_id, 1);
+                    }
+                    echo '<script>
+                        parent.jQuery.colorbox.close();
+                        parent.window.location.href = "'.site_url('admin/siswa/detail/'.$status_id.'/'.$siswa_id).'"
+                    </script>';
+                }
                 break;
             
             default:

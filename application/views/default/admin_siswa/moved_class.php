@@ -1,6 +1,6 @@
 <strong>Pilih Kelas Tujuan <span class="text-error">*</span></strong>
 
-<?php echo form_open('admin/siswa/moved_class/', array('class' => 'form-horizontal row-fluid')); ?>
+<?php echo form_open('admin/siswa/moved_class/'.$status_id.'/'.$siswa_id, array('class' => 'form-horizontal row-fluid')); ?>
 <table class="table table-striped">
     <tr>
         <td>

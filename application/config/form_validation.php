@@ -201,5 +201,12 @@ $config = array(
             'label' => 'Ulangi Password',
             'rules' => 'required|matches[password]'
         ),
+    ),
+    'admin/siswa/moved_class' => array(
+        array(
+            'field' => 'kelas_id',
+            'label' => 'Kelas',
+            'rules' => 'required|trim|numeric|xss_clean'
+        )
     )
 );
