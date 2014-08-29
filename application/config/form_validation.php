@@ -112,7 +112,7 @@ $config = array(
         array(
             'field' => 'username',
             'label' => 'Username',
-            'rules' => 'required|trim|xss_clean|valid_email|check_update_username'
+            'rules' => 'required|trim|xss_clean|valid_email|callback_update_username'
         ),
         array(
             'field' => 'nama',
@@ -207,6 +207,25 @@ $config = array(
             'field' => 'kelas_id',
             'label' => 'Kelas',
             'rules' => 'required|trim|numeric|xss_clean'
+        )
+    ),
+    'admin/siswa/edit_username' => array(
+        array(
+            'field' => 'username',
+            'label' => 'Username',
+            'rules' => 'required|trim|xss_clean|valid_email|callback_update_username'
+        )
+    ),
+    'admin/siswa/edit_password' => array(
+        array(
+            'field' => 'password',
+            'label' => 'Password Baru',
+            'rules' => 'required|trim|xss_clean|alpha_numeric'
+        ),
+        array(
+            'field' => 'password2',
+            'label' => 'Ulangi Password',
+            'rules' => 'required|matches[password]'
         )
     )
 );

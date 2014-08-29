@@ -16,5 +16,8 @@
     </head>
     <body>
         <?php include $content_file; ?>
+
+        <script src="{base_url_theme}scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+        <script src="{base_url_theme}bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     </body>
 </html>

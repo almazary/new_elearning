@@ -1,3 +1,6 @@
+
+<?php echo $this->session->flashdata('class'); ?>
+
 <strong>Pilih Kelas Tujuan <span class="text-error">*</span></strong>
 
 <?php echo form_open('admin/siswa/moved_class/'.$status_id.'/'.$siswa_id, array('class' => 'form-horizontal row-fluid')); ?>

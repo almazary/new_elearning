@@ -275,13 +275,99 @@ class Admin extends CI_Controller
                 $html_js = load_comp_js(array(base_url('assets/comp/colorbox/jquery.colorbox-min.js')));
                 $html_js .= '<script>
                     $(document).ready(function(){
-                        $(".iframe").colorbox({iframe:true, width:"400", height:"180", fixed:true});
+                        $(".iframe").colorbox({
+                            iframe:true, 
+                            width:"400", 
+                            height:"200", 
+                            fixed:true,
+                            onClosed : function() {
+                                location.reload(); 
+                            }
+                        });
+                        $(".iframe-2").colorbox({
+                            iframe:true, 
+                            width:"400", 
+                            height:"205", 
+                            fixed:true,
+                            onClosed : function() {
+                                location.reload(); 
+                            }
+                        });
+                        $(".iframe-3").colorbox({
+                            iframe:true, 
+                            width:"500", 
+                            height:"305", 
+                            fixed:true,
+                            onClosed : function() {
+                                location.reload(); 
+                            }
+                        });
                     });
                 </script>';
                 $data['comp_js']      = $html_js;
                 $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+                break;
 
+            case 'edit_password':
+                $status_id = (int)$segment_3;
+                $siswa_id  = (int)$segment_4;
+                $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+                if (empty($retrieve_siswa)) {
+                    echo 'Data siswa tidak ditemukan';
+                    exit();
+                }
 
+                $iframe = true;
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_siswa/edit_password.php');
+                $data['status_id']    = $status_id;
+                $data['siswa_id']     = $siswa_id;
+
+                $retrieve_login = $this->login_model->retrieve(null, null, null, $siswa_id);
+
+                if ($this->form_validation->run('admin/siswa/edit_password') == TRUE) {
+                    $password = $this->input->post('password2', TRUE);
+                    //update password
+                    $this->login_model->update_password($retrieve_login['id'], $password);
+
+                    $this->session->set_flashdata('edit', get_alert('success', 'Password siswa berhasil di perbaharui'));
+                    redirect('admin/siswa/edit_password/'.$status_id.'/'.$siswa_id);
+                }
+                break;
+
+            case 'edit_username':
+                $status_id = (int)$segment_3;
+                $siswa_id  = (int)$segment_4;
+                $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+                if (empty($retrieve_siswa)) {
+                    echo 'Data siswa tidak ditemukan';
+                    exit();
+                }
+
+                $iframe = true;
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_siswa/edit_username.php');
+                $data['login']        = $this->login_model->retrieve(null, null, null, $siswa_id);
+                $data['status_id']    = $status_id;
+                $data['siswa_id']     = $siswa_id;
+
+                if ($this->form_validation->run('admin/siswa/edit_username') == TRUE) {
+                    $login_id = $this->input->post('login_id', TRUE);
+                    $username = $this->input->post('username', TRUE);
+
+                    //update username
+                    $this->login_model->update(
+                        $login_id,
+                        $username,
+                        $siswa_id,
+                        null,
+                        $data['login']['is_admin'],
+                        $data['login']['reset_kode']
+                    );
+
+                    $this->session->set_flashdata('edit', get_alert('success', 'Username siswa berhasil di perbaharui'));
+                    redirect('admin/siswa/edit_username/'.$status_id.'/'.$siswa_id);
+                }
                 break;
 
             case 'moved_class':
@@ -317,10 +403,9 @@ class Admin extends CI_Controller
                     } else {
                         $this->kelas_model->update_siswa($check['id'], $kelas_id, $siswa_id, 1);
                     }
-                    echo '<script>
-                        parent.jQuery.colorbox.close();
-                        parent.window.location.href = "'.site_url('admin/siswa/detail/'.$status_id.'/'.$siswa_id).'"
-                    </script>';
+
+                    $this->session->set_flashdata('class', get_alert('success', 'Kelas siswa berhasil di perbaharui'));
+                    redirect('admin/siswa/moved_class/'.$status_id.'/'.$siswa_id);
                 }
                 break;
             
@@ -619,20 +704,28 @@ class Admin extends CI_Controller
         $this->parser->parse(get_active_theme().'/main_private', $data);
     }
 
-    function check_update_username($username = '')
+    function update_username($username = '')
     {
         if (!empty($username)) {
-            $this->db->where('id !=', $this->session_data['login']['id']);
+            if ($this->uri->segment(2) == 'ch_profil') {
+                $entity_id = $this->session_data['login']['id'];
+            }
+
+            if ($this->uri->segment(2) == 'siswa') {
+                $entity_id = $this->input->post('login_id', TRUE);
+            }
+
+            $this->db->where('id !=', $entity_id);
             $this->db->where('username', $username);
             $result = $this->db->get('login');
-            if (empty($result)) {
+            if ($result->num_rows() == 0) {
                 return true;
             } else {
-                $this->form_validation->set_message('check_username', 'Username sudah digunakan.');
+                $this->form_validation->set_message('update_username', 'Username sudah digunakan.');
                 return false;
             }
         } else {
-            $this->form_validation->set_message('check_username', 'Username di butuhkan.');
+            $this->form_validation->set_message('update_username', 'Username di butuhkan.');
             return false;
         }
     }

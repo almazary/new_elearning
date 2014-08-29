@@ -1,7 +1,9 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <strong>Profil Siswa</strong>
-        <?php echo anchor('admin/siswa/edit/'.$status_id.'/'.$siswa['id'], 'Edit Profil', array('class' => 'pull-right btn btn-small btn-primary', 'title' => 'Edit Profil Siswa')); ?>
+        <div class="btn-group pull-right" style="margin-top:-4px;">
+            <?php echo anchor('admin/siswa/edit/'.$status_id.'/'.$siswa['id'], 'Edit Profil', array('class' => 'btn btn-small btn-primary', 'title' => 'Edit Profil Siswa')); ?>
+        </div>
     </div>
     <div class="panel-body">
         <table class="table">
@@ -65,7 +67,9 @@
         <div class="panel panel-default" id="riwayat-kelas">
             <div class="panel-heading">
                 <strong>Riwayat Kelas</strong>
-                <?php echo anchor('admin/siswa/moved_class/'.$status_id.'/'.$siswa['id'], 'Pindah Kelas', array('class' => 'iframe pull-right btn btn-small btn-primary', 'title' => 'Pindah siswa ke Kelas lain')); ?>
+                <div class="btn-group pull-right" style="margin-top:-4px;">
+                    <?php echo anchor('admin/siswa/moved_class/'.$status_id.'/'.$siswa['id'], 'Pindah Kelas', array('class' => 'iframe btn btn-small btn-primary', 'title' => 'Pindah siswa ke Kelas lain')); ?>
+                </div>
             </div>
             <div class="panel-body">
                 <table class="table table-striped">
@@ -101,12 +105,31 @@
         </div>
     </div>
     <div class="span6">
-        <div class="panel panel-default">
+        <div class="panel panel-default" id="akun">
             <div class="panel-heading">
                 <strong>Akun Login</strong>
+                <div class="btn-group pull-right" style="margin-top:-4px;">
+                    <?php echo anchor('admin/siswa/edit_username/'.$status_id.'/'.$siswa['id'], 'Edit Username', array('class' => 'iframe-2 btn btn-small btn-primary', 'title' => 'Edit Username Siswa')); ?>
+                    <?php echo anchor('admin/siswa/edit_password/'.$status_id.'/'.$siswa['id'], 'Edit Password', array('class' => 'iframe-3 btn btn-small btn-primary', 'title' => 'Edit Password Siswa')); ?>
+                </div>
             </div>
             <div class="panel-body">
-
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th width="30%" bgcolor="#FBFBFB">Username</th>
+                            <td>
+                                <?php echo $siswa_login['username']; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th bgcolor="#FBFBFB">Password</th>
+                            <td>
+                                *********
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
