@@ -167,8 +167,8 @@ class Admin extends CI_Controller
                 $config['max_size']      = '0';
                 $config['max_width']     = '0';
                 $config['max_height']    = '0';
-                $config['file_name']     = 'siswa-'.url_title($this->input->post('nis', TRUE), '-', true);
-                $this->load->library('upload', $config);
+                $config['file_name']     = 'siswa-'.url_title($this->input->post('nama', TRUE), '-', true).'-'.url_title($this->input->post('nis', TRUE), '-', true);
+                $this->upload->initialize($config);
 
                 if (!empty($_FILES['userfile']['tmp_name']) AND !$this->upload->do_upload()) {
                     $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
@@ -272,40 +272,141 @@ class Admin extends CI_Controller
                 $data['status_id']        = $status_id;
                 
                 //panggil colorbox
-                $html_js = load_comp_js(array(base_url('assets/comp/colorbox/jquery.colorbox-min.js')));
-                $html_js .= '<script>
-                    $(document).ready(function(){
-                        $(".iframe").colorbox({
-                            iframe:true, 
-                            width:"400", 
-                            height:"200", 
-                            fixed:true,
-                            onClosed : function() {
-                                location.reload(); 
-                            }
-                        });
-                        $(".iframe-2").colorbox({
-                            iframe:true, 
-                            width:"400", 
-                            height:"205", 
-                            fixed:true,
-                            onClosed : function() {
-                                location.reload(); 
-                            }
-                        });
-                        $(".iframe-3").colorbox({
-                            iframe:true, 
-                            width:"500", 
-                            height:"305", 
-                            fixed:true,
-                            onClosed : function() {
-                                location.reload(); 
-                            }
-                        });
-                    });
-                </script>';
+                $html_js = load_comp_js(array(
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-siswa.js')
+                ));
                 $data['comp_js']      = $html_js;
                 $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+                break;
+
+            case 'edit_picture':
+                $status_id = (int)$segment_3;
+                $siswa_id  = (int)$segment_4;
+                $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+                if (empty($retrieve_siswa)) {
+                    echo 'Data siswa tidak ditemukan';
+                    exit();
+                }
+
+                $iframe = true;
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_siswa/edit_picture.php');
+                $data['status_id']    = $status_id;
+                $data['siswa_id']     = $siswa_id;
+                $data['siswa']        = $retrieve_siswa;
+
+                $config['upload_path']   = get_path_image();
+                $config['allowed_types'] = 'jpg|jpeg|png';
+                $config['max_size']      = '0';
+                $config['max_width']     = '0';
+                $config['max_height']    = '0';
+                $config['file_name']     = 'siswa-'.url_title($retrieve_siswa['nama'], '-', true).'-'.url_title($retrieve_siswa['nis'], '-', true);
+                $this->upload->initialize($config);
+                
+                if ($this->upload->do_upload()) {
+                    
+                    if (is_file(get_path_image($retrieve_siswa['foto']))) {
+                        unlink(get_path_image($retrieve_siswa['foto']));
+                    }
+
+                    if (is_file(get_path_image($retrieve_siswa['foto'], 'medium'))) {
+                        unlink(get_path_image($retrieve_siswa['foto'], 'medium'));
+                    }
+
+                    if (is_file(get_path_image($retrieve_siswa['foto'], 'small'))) {
+                        unlink(get_path_image($retrieve_siswa['foto'], 'small'));
+                    }
+
+                    $upload_data = $this->upload->data();
+
+                    //create thumb small
+                    $this->create_img_thumb(
+                        get_path_image($upload_data['file_name']),
+                        '_small',
+                        '50',
+                        '50'
+                    );
+
+                    //create thumb medium
+                    $this->create_img_thumb(
+                        get_path_image($upload_data['file_name']),
+                        '_medium',
+                        '150',
+                        '150'
+                    );
+
+                    //update siswa
+                    $this->siswa_model->update(
+                        $siswa_id,
+                        $retrieve_siswa['nis'],
+                        $retrieve_siswa['nama'],
+                        $retrieve_siswa['jenis_kelamin'],
+                        $retrieve_siswa['tempat_lahir'],
+                        $retrieve_siswa['tgl_lahir'],
+                        $retrieve_siswa['agama'],
+                        $retrieve_siswa['alamat'],
+                        $retrieve_siswa['tahun_masuk'],
+                        $upload_data['file_name'],
+                        $retrieve_siswa['status_id']
+                    );
+
+                    $this->session->set_flashdata('edit', get_alert('success', 'Foto siswa berhasil di perbaharui'));
+                    redirect('admin/siswa/edit_picture/'.$status_id.'/'.$siswa_id);
+                } else {
+                    if (!empty($_FILES['userfile']['tmp_name'])) {
+                        $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
+                    }
+                }
+                break;
+
+            case 'edit_profile':
+                $status_id = (int)$segment_3;
+                $siswa_id  = (int)$segment_4;
+                $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+                if (empty($retrieve_siswa)) {
+                    echo 'Data siswa tidak ditemukan';
+                    exit();
+                }
+
+                $iframe = true;
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_siswa/edit_profile.php');
+                $data['status_id']    = $status_id;
+                $data['siswa_id']     = $siswa_id;
+                $data['siswa']        = $retrieve_siswa;
+
+                if ($this->form_validation->run('admin/siswa/edit_profile') == TRUE) {
+                    $nis           = $this->input->post('nis', TRUE);
+                    $nama          = $this->input->post('nama', TRUE);
+                    $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+                    $tahun_masuk   = $this->input->post('tahun_masuk', TRUE);
+                    $tempat_lahir  = $this->input->post('tempat_lahir', TRUE);
+                    $tgl_lahir     = $this->input->post('tgl_lahir', TRUE);
+                    $bln_lahir     = $this->input->post('bln_lahir', TRUE);
+                    $thn_lahir     = $this->input->post('thn_lahir', TRUE);
+                    $agama         = $this->input->post('agama', TRUE);
+                    $alamat        = $this->input->post('alamat', TRUE);
+                    $status        = $this->input->post('status_id', TRUE);
+
+                    //update siswa
+                    $this->siswa_model->update(
+                        $siswa_id,
+                        $nis,
+                        $nama,
+                        $jenis_kelamin,
+                        $tempat_lahir,
+                        $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir,
+                        $agama,
+                        $alamat,
+                        $tahun_masuk,
+                        $retrieve_siswa['foto'],
+                        $status
+                    );
+
+                    $this->session->set_flashdata('edit', get_alert('success', 'Profil siswa berhasil di perbaharui'));
+                    redirect('admin/siswa/edit_profile/'.$status_id.'/'.$siswa_id);
+                }
                 break;
 
             case 'edit_password':
@@ -430,6 +531,40 @@ class Admin extends CI_Controller
                 $data['status_id']  = $status_id;
                 $data['siswas']     = $retrieve_all['results'];
                 $data['pagination'] = $this->pager->view($retrieve_all, 'admin/siswa/list/');
+
+                //panggil colorbox
+                $html_js = load_comp_js(array(
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-siswa.js')
+                ));
+                $data['comp_js']      = $html_js;
+                $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+
+                if (isset($_POST['status_id']) AND !empty($_POST['status_id'])) {
+                    $post_status_id = $this->input->post('status_id', TRUE);
+                    $siswa_ids      = $this->input->post('siswa_id', TRUE);
+                    foreach ($siswa_ids as $siswa_id) {
+                        $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+                        if (!empty($retrieve_siswa)) {
+                            //update siswa
+                            $this->siswa_model->update(
+                                $retrieve_siswa['id'],
+                                $retrieve_siswa['nis'],
+                                $retrieve_siswa['nama'],
+                                $retrieve_siswa['jenis_kelamin'],
+                                $retrieve_siswa['tempat_lahir'],
+                                $retrieve_siswa['tgl_lahir'],
+                                $retrieve_siswa['agama'],
+                                $retrieve_siswa['alamat'],
+                                $retrieve_siswa['tahun_masuk'],
+                                $retrieve_siswa['foto'],
+                                $post_status_id
+                            );
+                        }
+                    }
+                    redirect('admin/siswa/list/'.$status_id);
+                }
+
                 break;
         }
 
@@ -726,6 +861,23 @@ class Admin extends CI_Controller
             }
         } else {
             $this->form_validation->set_message('update_username', 'Username di butuhkan.');
+            return false;
+        }
+    }
+
+    function update_nis($nis = '') {
+        if (!empty($nis)) {
+            $this->db->where('id !=', $this->input->post('siswa_id', TRUE));
+            $this->db->where('nis', $nis);
+            $result = $this->db->get('siswa');
+            if ($result->num_rows() == 0) {
+                return true;
+            } else {
+                $this->form_validation->set_message('update_nis', 'NIS sudah digunakan.');
+                return false;
+            }
+        } else {
+            $this->form_validation->set_message('update_nis', 'NIS di butuhkan.');
             return false;
         }
     }

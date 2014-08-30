@@ -133,7 +133,7 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 body [class^="icon-"], body [class*=" icon-"] {
 	font-size: 14px;
 	line-height: 20px;
-	height: 20px
+	/*height: 20px*/
 }
 .shaded {
 	color: rgba(0,0,0,0.3);
