@@ -66,6 +66,97 @@ class Siswa_model extends CI_Model
     }
 
     /**
+     * Method untuk mendapatkan siswa berdasarkan kriteria tertentu
+     * 
+     * @param  string $nis          
+     * @param  string $nama         
+     * @param  array  $jenis_kelamin
+     * @param  string $tahun_masuk  
+     * @param  string $tempat_lahir 
+     * @param  string $tgl_lahir    
+     * @param  string $alamat       
+     * @param  array  $agama        
+     * @param  array  $kelas_id     
+     * @param  array  $status_id    
+     * @param  string $username     
+     * @return array
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_all_filter(
+        $nis           = '',
+        $nama          = '',
+        $jenis_kelamin = array(),
+        $tahun_masuk   = '',
+        $tempat_lahir  = '',
+        $tgl_lahir     = '',
+        $alamat        = '',
+        $agama         = array(),
+        $kelas_id      = array(),
+        $status_id     = array(),
+        $username      = ''
+    ) {
+        $this->db->select('siswa.*');
+
+        if (!empty($nis)) {
+            $nis = (int)$nis;
+            $this->db->like('siswa.nis', $nis, 'after');
+        }
+
+        if (!empty($nama)) {
+            $nama = (string)$nama;
+            $this->db->like('siswa.nama', $nama);
+        }
+
+        if (!empty($jenis_kelamin) AND is_array($jenis_kelamin)) {
+            $this->db->where_in('siswa.jenis_kelamin', $jenis_kelamin);
+        }
+
+        if (!empty($tahun_masuk)) {
+            $tahun_masuk = (int)$tahun_masuk;
+            $this->db->where('siswa.tahun_masuk', $tahun_masuk);
+        }
+
+        if (!empty($tempat_lahir)) {
+            $tempat_lahir = (string)$tempat_lahir;
+            $this->db->like('siswa.tempat_lahir', $tempat_lahir);
+        }
+
+        if (!empty($tgl_lahir)) {
+            $tgl_lahir = (string)$tgl_lahir;
+            $this->db->where('tgl_lahir', $tgl_lahir);
+        }
+
+        if (!empty($alamat)) {
+            $alamat = (string)$alamat;
+            $this->db->like('siswa.alamat', $alamat);
+        }
+
+        if (!empty($agama) AND is_array($agama)) {
+            $this->db->where_in('siswa.agama', $agama);
+        }
+
+        if (!empty($kelas_id)) {
+            $this->db->join('kelas_siswa', 'siswa.id = kelas_siswa.siswa_id', 'inner');
+            $this->db->where('kelas_siswa.aktif', 1);
+            $this->db->where_in('kelas_siswa.kelas_id', $kelas_id);
+        }
+
+        if (!empty($status_id) AND is_array($status_id)) {
+            $this->db->where_in('siswa.status_id', $status_id);
+        }
+
+        if (!empty($username)) {
+            $username = (string)$username;
+            $this->db->join('login', 'siswa.id = login.siswa_id', 'inner');
+            $this->db->like('login.username', $username);
+        }
+
+        $this->db->order_by('siswa.nama', 'ASC');
+        $result = $this->db->get('siswa');
+        return $result->result_array();
+    }
+
+    /**
      * Method untuk memperbaharui data siswa
      * 
      * @param  integer $id            

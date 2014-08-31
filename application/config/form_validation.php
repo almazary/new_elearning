@@ -283,3 +283,60 @@ $config['admin/siswa/edit_profile'] = array(
         'rules' => 'required|trim|xss_clean|numeric'
     )
 );
+$config['admin/siswa/filter'] = array(
+    array(
+        'field' => 'nis',
+        'label' => 'NIS',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'nama',
+        'label' => 'Nama',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'jenis_kelamin[]',
+        'label' => 'Jenis Kelamin',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'tahun_masuk',
+        'label' => 'Tahun Masuk',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'tempat_lahir',
+        'label' => 'Tempat Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'tgl_lahir',
+        'label' => 'Tgl Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'alamat',
+        'label' => 'Alamat',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'agama[]',
+        'label' => 'Agama',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'kelas_id[]',
+        'label' => 'Kelas',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'status_id[]',
+        'label' => 'Status',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'username',
+        'label' => 'Username',
+        'rules' => 'trim|xss_clean'
+    ),
+);

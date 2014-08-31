@@ -509,6 +509,41 @@ class Admin extends CI_Controller
                     redirect('admin/siswa/moved_class/'.$status_id.'/'.$siswa_id);
                 }
                 break;
+
+            case 'filter':
+                $data['module_title']     = 'Data Siswa';
+                $data['sub_content_file'] = path_theme('admin_siswa/filter.php');
+                $data['kelas']            = $this->kelas_model->retrieve_all_child();
+                $data['results']          = array();
+
+                if ($this->form_validation->run('admin/siswa/filter') == TRUE) {
+                    $nis           = $this->input->post('nis', TRUE);
+                    $nama          = $this->input->post('nama', TRUE);
+                    $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+                    $tahun_masuk   = $this->input->post('tahun_masuk', TRUE);
+                    $tempat_lahir  = $this->input->post('tempat_lahir', TRUE);
+                    $tgl_lahir     = $this->input->post('tgl_lahir', TRUE);
+                    $agama         = $this->input->post('agama', TRUE);
+                    $alamat        = $this->input->post('alamat', TRUE);
+                    $status_id     = $this->input->post('status_id', TRUE);
+                    $kelas_id      = $this->input->post('kelas_id', TRUE);
+                    $username      = $this->input->post('username', TRUE);
+
+                    if (!empty($tgl_lahir)) {
+                        //check tgl lahir
+                        $pisah_tgl = explode('-', $tgl_lahir);
+                        if (!@checkdate(@$pisah_tgl[1], @$pisah_tgl[2], $pisah_tgl[0])) {
+                            $tgl_lahir = '';
+                        }
+                    }
+
+                    $data['results'] = $this->siswa_model->retrieve_all_filter(
+                        $nis, $nama, $jenis_kelamin, $tahun_masuk, $tempat_lahir, $tgl_lahir, $alamat, $agama, $kelas_id, $status_id, $username
+                    );
+
+                    echo $this->db->last_query();
+                }
+                break;
             
             default:
             case 'list':
