@@ -315,6 +315,16 @@ $config['admin/siswa/filter'] = array(
         'rules' => 'trim|xss_clean'
     ),
     array(
+        'field' => 'bln_lahir',
+        'label' => 'Bulan Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'thn_lahir',
+        'label' => 'Tahun Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
         'field' => 'alamat',
         'label' => 'Alamat',
         'rules' => 'trim|xss_clean'

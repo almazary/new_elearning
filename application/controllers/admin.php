@@ -97,15 +97,12 @@ class Admin extends CI_Controller
             $this->parser->parse(get_active_theme().'/main_public', $data);
 
         }
-    } 
+    }
 
     function logout()
     {
-        $set_session['admin'] = '';
-
-        $this->session->set_userdata($set_session);
-
-        $this->session->sess_destroy();
+        $this->session->set_userdata('admin', null);
+        $this->session->set_userdata('filter_siswa', null);
 
         redirect('admin/login');
     }
@@ -115,7 +112,7 @@ class Admin extends CI_Controller
         if (!empty($act)) {
             switch ($act) {
                 case 'hirarki_kelas':
-                    
+
                     $o = 1;
                     foreach ((array)$_POST['list'] as $id => $parent_id){
                         if (!is_numeric($parent_id)) {
@@ -130,7 +127,7 @@ class Admin extends CI_Controller
                     }
 
                     break;
-                
+
                 default:
                     # code...
                     break;
@@ -270,7 +267,7 @@ class Admin extends CI_Controller
                 $data['siswa_login']      = $retrieve_login;
                 $data['siswa_kelas']      = $retrieve_all_kelas;
                 $data['status_id']        = $status_id;
-                
+
                 //panggil colorbox
                 $html_js = load_comp_js(array(
                     base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
@@ -303,9 +300,9 @@ class Admin extends CI_Controller
                 $config['max_height']    = '0';
                 $config['file_name']     = 'siswa-'.url_title($retrieve_siswa['nama'], '-', true).'-'.url_title($retrieve_siswa['nis'], '-', true);
                 $this->upload->initialize($config);
-                
+
                 if ($this->upload->do_upload()) {
-                    
+
                     if (is_file(get_path_image($retrieve_siswa['foto']))) {
                         unlink(get_path_image($retrieve_siswa['foto']));
                     }
@@ -494,7 +491,7 @@ class Admin extends CI_Controller
                         'aktif'    => 1
                     ));
                     $this->kelas_model->update_siswa($get_aktif['id'], $get_aktif['kelas_id'], $get_aktif['siswa_id'], 0);
-                        
+
                     $check = $this->kelas_model->retrieve_siswa(null, array(
                         'siswa_id' => $siswa_id,
                         'kelas_id' => $kelas_id
@@ -514,37 +511,76 @@ class Admin extends CI_Controller
                 $data['module_title']     = 'Data Siswa';
                 $data['sub_content_file'] = path_theme('admin_siswa/filter.php');
                 $data['kelas']            = $this->kelas_model->retrieve_all_child();
-                $data['results']          = array();
+
+
+                $page_no = $segment_3;
+                if (empty($page_no)) {
+                    $page_no = 1;
+                }
 
                 if ($this->form_validation->run('admin/siswa/filter') == TRUE) {
-                    $nis           = $this->input->post('nis', TRUE);
-                    $nama          = $this->input->post('nama', TRUE);
-                    $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
-                    $tahun_masuk   = $this->input->post('tahun_masuk', TRUE);
-                    $tempat_lahir  = $this->input->post('tempat_lahir', TRUE);
-                    $tgl_lahir     = $this->input->post('tgl_lahir', TRUE);
-                    $agama         = $this->input->post('agama', TRUE);
-                    $alamat        = $this->input->post('alamat', TRUE);
-                    $status_id     = $this->input->post('status_id', TRUE);
-                    $kelas_id      = $this->input->post('kelas_id', TRUE);
-                    $username      = $this->input->post('username', TRUE);
 
-                    if (!empty($tgl_lahir)) {
-                        //check tgl lahir
-                        $pisah_tgl = explode('-', $tgl_lahir);
-                        if (!@checkdate(@$pisah_tgl[1], @$pisah_tgl[2], $pisah_tgl[0])) {
-                            $tgl_lahir = '';
-                        }
-                    }
-
-                    $data['results'] = $this->siswa_model->retrieve_all_filter(
-                        $nis, $nama, $jenis_kelamin, $tahun_masuk, $tempat_lahir, $tgl_lahir, $alamat, $agama, $kelas_id, $status_id, $username
+                    $filter = array(
+                        'nis'           => $this->input->post('nis', TRUE),
+                        'nama'          => $this->input->post('nama', TRUE),
+                        'jenis_kelamin' => (empty($this->input->post('jenis_kelamin', TRUE))) ? array() : $this->input->post('jenis_kelamin', TRUE),
+                        'tahun_masuk'   => $this->input->post('tahun_masuk', TRUE),
+                        'tempat_lahir'  => $this->input->post('tempat_lahir', TRUE),
+                        'tgl_lahir'     => (int)$this->input->post('tgl_lahir', TRUE),
+                        'bln_lahir'     => (int)$this->input->post('bln_lahir', TRUE),
+                        'thn_lahir'     => (empty((int)$this->input->post('thn_lahir', TRUE))) ? '' : (int)$this->input->post('thn_lahir', TRUE),
+                        'agama'         => (empty($this->input->post('agama', TRUE))) ? array() : $this->input->post('agama', TRUE),
+                        'alamat'        => $this->input->post('alamat', TRUE),
+                        'status_id'     => (empty($this->input->post('status_id', TRUE))) ? array() : $this->input->post('status_id', TRUE),
+                        'kelas_id'      => (empty($this->input->post('kelas_id', TRUE))) ? array() : $this->input->post('kelas_id', TRUE),
+                        'username'      => $this->input->post('username', TRUE)
                     );
 
-                    echo $this->db->last_query();
+                    $this->session->set_userdata('filter_siswa', $filter);
+
+                    redirect('admin/siswa/filter');
+
+                } elseif (!empty($this->session->userdata('filter_siswa'))) {
+
+                    $filter = $this->session->userdata('filter_siswa');
+
+                } else {
+
+                    $filter = array();
+
+                    $retrieve_all = array(
+                        'results'      => array(),
+                        'total_record' => 0,
+                        'total_respon' => 0,
+                        'current_page' => 1,
+                        'total_page'   => 0,
+                        'next_page'    => 0,
+                        'prev_page'    => 0
+                    );
+
                 }
+
+                $data['filter'] = $filter;
+
+                if (!empty($filter)) {
+                    $retrieve_all = $this->siswa_model->retrieve_all_filter(
+                        $filter['nis'], $filter['nama'], $filter['jenis_kelamin'], $filter['tahun_masuk'], $filter['tempat_lahir'], $filter['tgl_lahir'], $filter['bln_lahir'], $filter['thn_lahir'], $filter['alamat'], $filter['agama'], $filter['kelas_id'], $filter['status_id'], $filter['username'], $page_no
+                    );
+                }
+
+                //panggil colorbox
+                $html_js = load_comp_js(array(
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-siswa.js')
+                ));
+                $data['comp_js']      = $html_js;
+                $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+
+                $data['siswas']     = $retrieve_all['results'];
+                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/siswa/filter/');
+
                 break;
-            
+
             default:
             case 'list':
                 $data['module_title']     = 'Data Siswa';
@@ -638,7 +674,7 @@ class Admin extends CI_Controller
                 if (empty($retrieve_pengajar)) {
                     redirect('admin/adm/list');
                 }
-                
+
                 $data['login']    = $retrieve_login;
                 $data['pengajar'] = $retrieve_pengajar;
 
@@ -660,7 +696,7 @@ class Admin extends CI_Controller
                 if (empty($retrieve_pengajar)) {
                     redirect('admin/adm/list');
                 }
-                
+
                 $data['login']    = $retrieve_login;
                 $data['pengajar'] = $retrieve_pengajar;
 
@@ -752,7 +788,7 @@ class Admin extends CI_Controller
                 }
 
                 break;
-            
+
             default:
             case 'list':
                 $page_no = (int)$segment_3;
@@ -926,7 +962,7 @@ class Admin extends CI_Controller
         $config['width']          = $width;
         $config['height']         = $height;
         $config['thumb_marker']   = $marker;
-        
+
         $this->image_lib->initialize($config);
         $this->image_lib->resize();
         $this->image_lib->clear();
@@ -989,7 +1025,7 @@ class Admin extends CI_Controller
                     redirect('admin/mapel_kelas');
                 }
 
-                //hapus data 
+                //hapus data
                 $this->mapel_model->delete_kelas($mapel_kelas_id);
 
                 $this->session->set_flashdata('mapel', get_alert('warning', 'Matapelajaran kelas berhasil di hapus'));
@@ -1062,7 +1098,7 @@ class Admin extends CI_Controller
                 }
 
                 break;
-            
+
             default:
             case 'list':
                 $data['module_title']        = 'Matapelajaran Kelas';
@@ -1081,7 +1117,7 @@ class Admin extends CI_Controller
         $return = '';
         foreach ($parent as $p) {
             $return .= '<div class="parent-kelas" id="parent-'.$p['id'].'">'.$p['nama'].'</div>';
-            
+
             $sub_kelas = $this->kelas_model->retrieve_all($p['id']);
             foreach ($sub_kelas as $s) {
                 $return .= '<div class="panel panel-info" style="margin-left:25px;">
@@ -1094,7 +1130,7 @@ class Admin extends CI_Controller
                     $return .= '<table class="table table-striped">
                     <tbody>';
                         foreach ($retrieve_all as $v):
-                        $m = $this->mapel_model->retrieve($v['mapel_id']);  
+                        $m = $this->mapel_model->retrieve($v['mapel_id']);
                         $return .= '<tr>
                             <td>
                                 '.$m['nama'].'
@@ -1190,7 +1226,7 @@ class Admin extends CI_Controller
                 }
 
                 break;
-            
+
             default:
             case 'list':
                 $data['module_title']     = 'Manajemen Matapelajaran';
@@ -1232,7 +1268,7 @@ class Admin extends CI_Controller
 
         switch ($act) {
             case 'edit':
-                
+
                 $id = (int)$id;
 
                 $kelas = $this->kelas_model->retrieve($id);
@@ -1258,10 +1294,10 @@ class Admin extends CI_Controller
                 }
 
                 break;
-            
+
             default:
             case 'list':
-                
+
                 $data['sub_content_file'] = path_theme('admin_kelas/add.php');
 
                 if ($this->form_validation->run() == TRUE) {
@@ -1272,7 +1308,7 @@ class Admin extends CI_Controller
 
                     $this->session->set_flashdata('kelas', get_alert('success', 'Kelas berhasil di tambah'));
                     redirect('admin/kelas');
-            
+
                 }
 
                 break;
@@ -1295,7 +1331,7 @@ class Admin extends CI_Controller
                 $str_kelas .= '<ol>';
             }
         }
-        
+
         foreach ($kelas as $m){
             $order++;
             $str_kelas .= '<li id="list_'.$m['id'].'">
@@ -1311,11 +1347,11 @@ class Admin extends CI_Controller
                     $str_kelas .= '<b class="text-muted">'.$m['nama'].'</b>';
                 }
             $str_kelas .= '</div>';
-            
+
                 $this->kelas_hirarki($str_kelas, $m['id'], $order);
             $str_kelas .= '</li>';
         }
-        
+
         if(count($kelas) > 0){
             $str_kelas .= '</ol>';
         }

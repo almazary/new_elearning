@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed'); 
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Class untuk mempermudah dalam membuat pagination data
@@ -7,9 +7,9 @@ class Pager
 {
 
     /**
-     * Method untuk mempermudah dalam mengelola pagination, method ini akan mengembalikan 
+     * Method untuk mempermudah dalam mengelola pagination, method ini akan mengembalikan
      * informasi pagination yang diperlukan
-     * 
+     *
      * @param  string  $table         Nama tabel
      * @param  integer $no_of_records Jumlah record per halaman
      * @param  integer $page_no       Halaman
@@ -65,7 +65,7 @@ class Pager
         $this->init_where($where);
         $this->init_orderby($order_by);
         $result = $CI->db->get($table, $no_of_records, $offset);
-        
+
         $this->init_select($select_str);
         $this->init_where($where);
         $this->init_orderby($order_by);
@@ -124,7 +124,7 @@ class Pager
 
     /**
      * Method untuk menjalankan string select yang di berikan untuk mendukung fungsi get_pager
-     * 
+     *
      * @param  string $select_str contoh :
      * <code>
      * $select_str = 'nama, alamat, tgl_lahir';
@@ -142,7 +142,7 @@ class Pager
 
     /**
      * Method yang bertugas menjalankan parameter where untuk mendukung fungsi get_pager
-     * 
+     *
      * @param  array  $where contoh :
      * <code>
      * $where = [
@@ -163,13 +163,17 @@ class Pager
         foreach ($where as $field => $value) {
             $data = $value[0];
             $type = strtolower($value[1]);
-            $CI->db->$type($field, $data);
+            if (isset($value[2])) {
+                $CI->db->$type($field, $data, $value[2]);
+            } else {
+                $CI->db->$type($field, $data);
+            }
         }
     }
 
     /**
      * Method yang bertugas menjalankan orderby where untuk mendukung fungsi get_pager
-     * 
+     *
      * @param  array  $order_by contoh :
      * <code>
      * $order_by = [
@@ -217,7 +221,7 @@ class Pager
             <div class="span7">
                 <div class="pagination pull-right" style="margin-top:0px;">
                 <ul>';
-                
+
                 if ($array_data['total_page'] > 1) {
 
                     //first
