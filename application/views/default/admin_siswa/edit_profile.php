@@ -47,9 +47,13 @@
             <th>Tanggal Lahir</th>
             <td>
                 <?php
-                $tgl = date('d', strtotime($siswa['tgl_lahir']));
-                $bln = date('m', strtotime($siswa['tgl_lahir']));
-                $thn = date('Y', strtotime($siswa['tgl_lahir']));
+                if (empty($siswa['tgl_lahir'])) {
+                    $tgl = ''; $bln = ''; $thn = '';
+                } else {
+                    $tgl = date('d', strtotime($siswa['tgl_lahir']));
+                    $bln = date('m', strtotime($siswa['tgl_lahir']));
+                    $thn = date('Y', strtotime($siswa['tgl_lahir']));
+                }
                 ?>
                 <select class="span2" style="width: 20%;float:left;margin-right:5px;" name="tgl_lahir">
                     <option value="">--Tgl--</option>

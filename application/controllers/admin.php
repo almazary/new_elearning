@@ -190,6 +190,12 @@ class Admin extends CI_Controller
                     $username      = $this->input->post('username', TRUE);
                     $password      = $this->input->post('password2', TRUE);
 
+                    if (empty($thn_lahir)) {
+                        $tanggal_lahir = null;
+                    } else {
+                        $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
+                    }
+
                     if (!empty($_FILES['userfile']['tmp_name'])) {
                         $upload_data = $this->upload->data();
 
@@ -220,7 +226,7 @@ class Admin extends CI_Controller
                         $nama,
                         $jenis_kelamin,
                         $tempat_lahir,
-                        $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir,
+                        $tanggal_lahir,
                         $agama,
                         $alamat,
                         $tahun_masuk,
@@ -386,6 +392,12 @@ class Admin extends CI_Controller
                     $alamat        = $this->input->post('alamat', TRUE);
                     $status        = $this->input->post('status_id', TRUE);
 
+                    if (empty($thn_lahir)) {
+                        $tanggal_lahir = null;
+                    } else {
+                        $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
+                    }
+
                     //update siswa
                     $this->siswa_model->update(
                         $siswa_id,
@@ -393,7 +405,7 @@ class Admin extends CI_Controller
                         $nama,
                         $jenis_kelamin,
                         $tempat_lahir,
-                        $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir,
+                        $tanggal_lahir,
                         $agama,
                         $alamat,
                         $tahun_masuk,
@@ -512,7 +524,6 @@ class Admin extends CI_Controller
                 $data['sub_content_file'] = path_theme('admin_siswa/filter.php');
                 $data['kelas']            = $this->kelas_model->retrieve_all_child();
 
-
                 $page_no = $segment_3;
                 if (empty($page_no)) {
                     $page_no = 1;
@@ -579,6 +590,83 @@ class Admin extends CI_Controller
                 $data['siswas']     = $retrieve_all['results'];
                 $data['pagination'] = $this->pager->view($retrieve_all, 'admin/siswa/filter/');
 
+                break;
+
+            case 'filter_action':
+                if ($this->form_validation->run('admin/siswa/filter') == TRUE) {
+                    $siswa_ids = $this->input->post('siswa_id', TRUE);
+                    $status_id = (int)$this->input->post('status_id', TRUE);
+                    $kelas_id  = (int)$this->input->post('kelas_id', TRUE);
+
+                    if (!empty($siswa_ids) AND is_array($siswa_ids)) {
+
+                        if (empty($status_id) AND empty($kelas_id)) {
+                            $this->session->set_flashdata('siswa', get_alert('warning', 'Tidak ada aksi yang dipilih'));
+                            redirect('admin/siswa/filter');
+                        }
+
+                        foreach ($siswa_ids as $siswa_id) {
+                            $s = $this->siswa_model->retrieve($siswa_id);
+                            if (!empty($status_id)) {
+                                //update status siswa
+                                $this->siswa_model->update(
+                                    $siswa_id,
+                                    $s['nis'],
+                                    $s['nama'],
+                                    $s['jenis_kelamin'],
+                                    $s['tempat_lahir'],
+                                    $s['tgl_lahir'],
+                                    $s['agama'],
+                                    $s['alamat'],
+                                    $s['tahun_masuk'],
+                                    $s['foto'],
+                                    $status_id
+                                );
+                            }
+
+                            if (!empty($kelas_id)) {
+                                $get_aktif = $this->kelas_model->retrieve_siswa(null, array(
+                                    'siswa_id' => $siswa_id,
+                                    'aktif'    => 1
+                                ));
+                                $this->kelas_model->update_siswa($get_aktif['id'], $get_aktif['kelas_id'], $get_aktif['siswa_id'], 0);
+
+                                $check = $this->kelas_model->retrieve_siswa(null, array(
+                                    'siswa_id' => $siswa_id,
+                                    'kelas_id' => $kelas_id
+                                ));
+                                if (empty($check)) {
+                                    $this->kelas_model->create_siswa($kelas_id, $siswa_id, 1);
+                                } else {
+                                    $this->kelas_model->update_siswa($check['id'], $kelas_id, $siswa_id, 1);
+                                }
+                            }
+                        }
+
+                        $label = '';
+                        if (!empty($status_id)) {
+                            $label_status = array('Pending', 'Aktif', 'Blocking', 'Alumni');
+                            $label .= 'status = '.$label_status[$status_id];
+                        }
+                        if (!empty($kelas_id)) {
+                            $kelas = $this->kelas_model->retrieve($kelas_id);
+                            if (!empty($label)) {
+                                $label .= ' & ';
+                            }
+                            $label .= 'kelas = '.$kelas['nama'];
+                        }
+
+                        $this->session->set_flashdata('siswa', get_alert('success', 'Siswa berhasil di perbaharui ('.$label.')'));
+                        redirect('admin/siswa/filter');
+
+                    } else {
+                        $this->session->set_flashdata('siswa', get_alert('warning', 'Tidak ada siswa yang dipilih'));
+                        redirect('admin/siswa/filter');
+                    }
+
+                } else {
+                    redirect('admin/siswa/filter');
+                }
                 break;
 
             default:

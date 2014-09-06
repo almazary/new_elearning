@@ -33,7 +33,7 @@
             </tr>
             <tr>
                 <th bgcolor="#FBFBFB">Tanggal Lahir</th>
-                <td><?php echo date('d F Y', strtotime($siswa['tgl_lahir'])); ?></td>
+                <td><?php echo (!empty($siswa['tgl_lahir'])) ? date('d F Y', strtotime($siswa['tgl_lahir'])) : ''; ?></td>
             </tr>
             <tr>
                 <th bgcolor="#FBFBFB">Agama</th>
@@ -90,14 +90,14 @@
                     <tr>
                         <td><?php echo $no; ?>.</td>
                         <td>
-                            <?php 
+                            <?php
                             $kelas = $this->kelas_model->retrieve($v['kelas_id']);
                             echo $kelas['nama'];
                             ?>
                         </td>
                         <?php if ($status_id != 3): ?>
                         <td>
-                            <?php 
+                            <?php
                             if ($v['aktif'] == 1) {
                                 echo '<i class="icon icon-ok"></i>';
                             }

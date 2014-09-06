@@ -350,3 +350,20 @@ $config['admin/siswa/filter'] = array(
         'rules' => 'trim|xss_clean'
     ),
 );
+$config['admin/siswa/filter'] = array(
+    array(
+        'field' => 'siswa_id[]',
+        'label' => 'Siswa',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'status_id',
+        'label' => 'Update Status',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'kelas_id',
+        'label' => 'Pindah Kelas',
+        'rules' => 'trim|xss_clean'
+    ),
+);

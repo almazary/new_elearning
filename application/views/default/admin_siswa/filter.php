@@ -155,7 +155,7 @@ function ch_uch_checkbox(source){
 }
 </script>
 
-<?php echo form_open('admin/siswa/filter'); ?>
+<?php echo form_open('admin/siswa/filter_action'); ?>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -189,8 +189,8 @@ function ch_uch_checkbox(source){
             <td>
                 <?php
                 $kelas_aktif = $this->kelas_model->retrieve_siswa(null, array('siswa_id' => $v['id'], 'aktif' => '1'));
-                $kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
-                echo $kelas['nama'];
+                $k = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
+                echo $k['nama'];
                 ?>
             </td>
             <td>
@@ -231,8 +231,31 @@ function ch_uch_checkbox(source){
 <?php if (!empty($siswas)): ?>
 <br>
 <div class="row-fluid">
-    <div class="span7">
-        <hr>
+    <div class="span8">
+        <table cellpadding="5">
+            <tr>
+                <th valign="top">Aksi Terpilih</th>
+                <td valign="top">
+                    <select name="status_id" style="width:auto;">
+                        <option value="">--Update Status--</option>
+                        <option value="1">Aktif</option>
+                        <option value="2">Blocking</option>
+                        <option value="3">Alumni</option>
+                    </select>
+                </td>
+                <td valign="top">
+                    <select name="kelas_id" style="width:auto;">
+                        <option value="">--Pindah Kelas--</option>
+                        <?php foreach ($kelas as $k): ?>
+                            <option value="<?php echo $k['id']; ?>"><?php echo $k['nama']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+                <td valign="top">
+                    <button type="submit" class="btn">Update</button>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
 <?php endif; ?>
