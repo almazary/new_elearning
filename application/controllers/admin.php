@@ -34,20 +34,32 @@ class Admin extends CI_Controller
         $this->session->set_userdata($set_session);
     }
 
-    function index()
+    private function default_data_theme()
     {
-        $this->most_login();
-
         $data = array(
-            'web_title'     => 'Dashboard | Administrator',
-            'menu_file'     => path_theme('admin_menu.php'),
-            'content_file'  => path_theme('admin_dashboard.php'),
+            'top_menu'      => path_theme('admin_top_menu.html'),
+            'menu_file'     => path_theme('admin_menu.html'),
             'uri_segment_1' => $this->uri->segment(1),
             'uri_segment_2' => $this->uri->segment(2)
         );
 
+        return $data;
+    }
+
+    private function view($data)
+    {
         $data = array_merge(default_parser_item(), $data);
-        $this->parser->parse(get_active_theme().'/main_private', $data);
+        $data = array_merge($data, $this->default_data_theme());
+        $this->twig->display(path_theme('main_private.html'), $data);
+    }
+
+    function index()
+    {
+        $this->most_login();
+
+        $data['web_title']    = 'Dashboard | Administrator';
+        $data['content_file'] = path_theme('admin_dashboard.html');
+        $this->view($data);
     }
 
     function login()
@@ -88,13 +100,14 @@ class Admin extends CI_Controller
 
             $data = array(
                 'web_title'    => 'Login | Administrator',
-                'content_file' => path_theme('admin_login.php'),
+                'content_file' => path_theme('admin_login.html'),
                 'form_open'    => form_open('admin/login', array('autocomplete' => 'off', 'class' => 'form-vertical')),
                 'form_close'   => form_close()
             );
 
             $data = array_merge(default_parser_item(), $data);
-            $this->parser->parse(get_active_theme().'/main_public', $data);
+            $this->twig->display(path_theme('main_public.html'), $data);
+
 
         }
     }
@@ -143,8 +156,8 @@ class Admin extends CI_Controller
 
         $data = array(
             'web_title'     => 'Data Siswa | Administrator',
-            'menu_file'     => path_theme('admin_menu.php'),
-            'content_file'  => path_theme('admin_siswa/index.php')
+            'menu_file'     => path_theme('admin_menu.html'),
+            'content_file'  => path_theme('admin_siswa/index.html')
         );
 
         switch ($act) {
@@ -155,7 +168,7 @@ class Admin extends CI_Controller
                 }
 
                 $data['module_title']     = anchor('admin/siswa/list/'.$status_id, 'Data Siswa').' / Tambah Siswa';
-                $data['sub_content_file'] = path_theme('admin_siswa/add.php');
+                $data['sub_content_file'] = path_theme('admin_siswa/add.html');
                 $data['status_id']        = $status_id;
                 $data['kelas']            = $this->kelas_model->retrieve_all_child();
 
@@ -268,7 +281,7 @@ class Admin extends CI_Controller
                 $retrieve_all_kelas = $this->kelas_model->retrieve_all_siswa(10, 1, array('siswa_id' => $retrieve_siswa['id']));
 
                 $data['module_title']     = anchor('admin/siswa/list/'.$status_id, 'Data Siswa').' / Detail Siswa';
-                $data['sub_content_file'] = path_theme('admin_siswa/detail.php');
+                $data['sub_content_file'] = path_theme('admin_siswa/detail.html');
                 $data['siswa']            = $retrieve_siswa;
                 $data['siswa_login']      = $retrieve_login;
                 $data['siswa_kelas']      = $retrieve_all_kelas;
@@ -294,7 +307,7 @@ class Admin extends CI_Controller
 
                 $iframe = true;
                 unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_siswa/edit_picture.php');
+                $data['content_file'] = path_theme('admin_siswa/edit_picture.html');
                 $data['status_id']    = $status_id;
                 $data['siswa_id']     = $siswa_id;
                 $data['siswa']        = $retrieve_siswa;
@@ -374,7 +387,7 @@ class Admin extends CI_Controller
 
                 $iframe = true;
                 unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_siswa/edit_profile.php');
+                $data['content_file'] = path_theme('admin_siswa/edit_profile.html');
                 $data['status_id']    = $status_id;
                 $data['siswa_id']     = $siswa_id;
                 $data['siswa']        = $retrieve_siswa;
@@ -429,7 +442,7 @@ class Admin extends CI_Controller
 
                 $iframe = true;
                 unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_siswa/edit_password.php');
+                $data['content_file'] = path_theme('admin_siswa/edit_password.html');
                 $data['status_id']    = $status_id;
                 $data['siswa_id']     = $siswa_id;
 
@@ -456,7 +469,7 @@ class Admin extends CI_Controller
 
                 $iframe = true;
                 unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_siswa/edit_username.php');
+                $data['content_file'] = path_theme('admin_siswa/edit_username.html');
                 $data['login']        = $this->login_model->retrieve(null, null, null, $siswa_id);
                 $data['status_id']    = $status_id;
                 $data['siswa_id']     = $siswa_id;
@@ -491,7 +504,7 @@ class Admin extends CI_Controller
 
                 $iframe = true;
                 unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_siswa/moved_class.php');
+                $data['content_file'] = path_theme('admin_siswa/moved_class.html');
                 $data['kelas']        = $this->kelas_model->retrieve_all_child();
                 $data['status_id']    = $status_id;
                 $data['siswa_id']     = $siswa_id;
@@ -521,7 +534,7 @@ class Admin extends CI_Controller
 
             case 'filter':
                 $data['module_title']     = 'Data Siswa';
-                $data['sub_content_file'] = path_theme('admin_siswa/filter.php');
+                $data['sub_content_file'] = path_theme('admin_siswa/filter.html');
                 $data['kelas']            = $this->kelas_model->retrieve_all_child();
 
                 $page_no = $segment_3;
@@ -672,7 +685,7 @@ class Admin extends CI_Controller
             default:
             case 'list':
                 $data['module_title']     = 'Data Siswa';
-                $data['sub_content_file'] = path_theme('admin_siswa/list.php');
+                $data['sub_content_file'] = path_theme('admin_siswa/list.html');
 
                 $status_id = (int)$segment_3;
                 if ($status_id < 0 OR $status_id > 3) {
@@ -729,9 +742,9 @@ class Admin extends CI_Controller
 
         $data = array_merge(default_parser_item(), $data);
         if ($iframe) {
-            $this->parser->parse(get_active_theme().'/main_iframe', $data);
+            $this->twig->display(path_theme('main_iframe.html'), $data);
         } else {
-            $this->parser->parse(get_active_theme().'/main_private', $data);
+            $this->twig->display(path_theme('main_private.html'), $data);
         }
     }
 
@@ -741,15 +754,15 @@ class Admin extends CI_Controller
 
         $data = array(
             'web_title'     => 'Data Admin | Administrator',
-            'menu_file'     => path_theme('admin_menu.php'),
-            'content_file'  => path_theme('admin_admin/index.php')
+            'menu_file'     => path_theme('admin_menu.html'),
+            'content_file'  => path_theme('admin_admin/index.html')
         );
 
         switch ($act) {
             case 'detail':
                 $id = (int)$segment_3;
                 $data['module_title'] = anchor('admin/adm/list', 'Data Administrator').' / Detail';
-                $data['sub_content_file'] = path_theme('admin_admin/detail.php');
+                $data['sub_content_file'] = path_theme('admin_admin/detail.html');
 
                 //retrieve user login
                 $retrieve_login = $this->login_model->retrieve($id);
@@ -771,7 +784,7 @@ class Admin extends CI_Controller
             case 'edit':
                 $id = (int)$segment_3;
                 $data['module_title'] = anchor('admin/adm/list', 'Data Administrator').' / Edit';
-                $data['sub_content_file'] = path_theme('admin_admin/edit.php');
+                $data['sub_content_file'] = path_theme('admin_admin/edit.html');
 
                 //retrieve user login
                 $retrieve_login = $this->login_model->retrieve($id);
@@ -882,7 +895,7 @@ class Admin extends CI_Controller
                 $page_no = (int)$segment_3;
 
                 $data['module_title'] = 'Data Administrator';
-                $data['sub_content_file'] = path_theme('admin_admin/list.php');
+                $data['sub_content_file'] = path_theme('admin_admin/list.html');
                 //ambil data admin
                 $retrieve_all = $this->login_model->retrieve_all(10, $page_no, 1);
                 $data['admins'] = $retrieve_all['results'];
@@ -892,7 +905,7 @@ class Admin extends CI_Controller
         }
 
         $data = array_merge(default_parser_item(), $data);
-        $this->parser->parse(get_active_theme().'/main_private', $data);
+        $this->twig->display(path_theme('main_private.html'), $data);
     }
 
     function ch_profil()
@@ -901,9 +914,9 @@ class Admin extends CI_Controller
 
         $data = array(
             'web_title'        => 'Ubah Profil | Administrator',
-            'menu_file'        => path_theme('admin_menu.php'),
-            'content_file'     => path_theme('admin_akun/index.php'),
-            'sub_content_file' => path_theme('admin_akun/ch_profil.php'),
+            'menu_file'        => path_theme('admin_menu.html'),
+            'content_file'     => path_theme('admin_akun/index.html'),
+            'sub_content_file' => path_theme('admin_akun/ch_profil.html'),
             'module_title'     => 'Profil',
             'login'            => $this->session_data['login'],
             'pengajar'         => $this->session_data['pengajar']
@@ -995,7 +1008,7 @@ class Admin extends CI_Controller
         }
 
         $data = array_merge(default_parser_item(), $data);
-        $this->parser->parse(get_active_theme().'/main_private', $data);
+        $this->twig->display(path_theme('main_private.html'), $data);
     }
 
     function update_username($username = '')
@@ -1064,9 +1077,9 @@ class Admin extends CI_Controller
 
         $data = array(
             'web_title'        => 'Ubah Password | Administrator',
-            'menu_file'        => path_theme('admin_menu.php'),
-            'content_file'     => path_theme('admin_akun/index.php'),
-            'sub_content_file' => path_theme('admin_akun/ch_pass.php'),
+            'menu_file'        => path_theme('admin_menu.html'),
+            'content_file'     => path_theme('admin_akun/index.html'),
+            'sub_content_file' => path_theme('admin_akun/ch_pass.html'),
             'module_title'     => 'Ubah Password'
         );
 
@@ -1081,20 +1094,15 @@ class Admin extends CI_Controller
         }
 
         $data = array_merge(default_parser_item(), $data);
-        $this->parser->parse(get_active_theme().'/main_private', $data);
+        $this->twig->display(path_theme('main_private.html'), $data);
     }
 
     function mapel_kelas($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '')
     {
         $this->most_login();
 
-        $data = array(
-            'web_title'     => 'Matapelajaran Kelas | Administrator',
-            'menu_file'     => path_theme('admin_menu.php'),
-            'content_file'  => path_theme('admin_mapel_kelas/index.php'),
-            'uri_segment_1' => $this->uri->segment(1),
-            'uri_segment_2' => $this->uri->segment(2),
-        );
+        $data['web_title'] = 'Matapelajaran Kelas | Administrator';
+        $data['content_file'] = path_theme('admin_mapel_kelas/index.html');
 
         switch ($act) {
             case 'remove':
@@ -1137,7 +1145,7 @@ class Admin extends CI_Controller
                 }
 
                 $data['module_title']     = anchor('admin/mapel_kelas/#parent-'.$parent_id, 'Matapelajaran Kelas').' / Atur Matapelajaran';
-                $data['sub_content_file'] = path_theme('admin_mapel_kelas/add.php');
+                $data['sub_content_file'] = path_theme('admin_mapel_kelas/add.html');
                 $data['kelas']            = $kelas;
                 $data['parent']           = $parent;
 
@@ -1190,13 +1198,13 @@ class Admin extends CI_Controller
             default:
             case 'list':
                 $data['module_title']        = 'Matapelajaran Kelas';
-                $data['sub_content_file']    = path_theme('admin_mapel_kelas/list.php');
+                $data['sub_content_file']    = path_theme('admin_mapel_kelas/list.html');
                 $data['mapel_kelas_hirarki'] = $this->mapel_kelas_hirarki();
                 break;
         }
 
         $data = array_merge(default_parser_item(), $data);
-        $this->parser->parse(get_active_theme().'/main_private', $data);
+        $this->twig->display(path_theme('main_private.html'), $data);
     }
 
     private function mapel_kelas_hirarki(){
@@ -1245,8 +1253,8 @@ class Admin extends CI_Controller
 
         $data = array(
             'web_title'     => 'Manajemen Matapelajaran | Administrator',
-            'menu_file'     => path_theme('admin_menu.php'),
-            'content_file'  => path_theme('admin_mapel/index.php'),
+            'menu_file'     => path_theme('admin_menu.html'),
+            'content_file'  => path_theme('admin_mapel/index.html'),
             'uri_segment_1' => $this->uri->segment(1),
             'uri_segment_2' => $this->uri->segment(2),
         );
@@ -1262,7 +1270,7 @@ class Admin extends CI_Controller
                 }
 
                 $data['module_title']     = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Edit';
-                $data['sub_content_file'] = path_theme('admin_mapel/edit.php');
+                $data['sub_content_file'] = path_theme('admin_mapel/edit.html');
                 $data['mapel']            = $retrieve;
                 $data['comp_js']          = get_tinymce('info');
 
@@ -1293,14 +1301,14 @@ class Admin extends CI_Controller
                 }
 
                 $data['module_title']     = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Detail';
-                $data['sub_content_file'] = path_theme('admin_mapel/detail.php');
+                $data['sub_content_file'] = path_theme('admin_mapel/detail.html');
                 $data['mapel']            = $retrieve;
 
                 break;
 
             case 'add':
                 $data['module_title']     = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Tambah';
-                $data['sub_content_file'] = path_theme('admin_mapel/add.php');
+                $data['sub_content_file'] = path_theme('admin_mapel/add.html');
                 $data['comp_js']          = get_tinymce('info');
 
                 if ($this->form_validation->run() == TRUE) {
@@ -1318,7 +1326,7 @@ class Admin extends CI_Controller
             default:
             case 'list':
                 $data['module_title']     = 'Manajemen Matapelajaran';
-                $data['sub_content_file'] = path_theme('admin_mapel/list.php');
+                $data['sub_content_file'] = path_theme('admin_mapel/list.html');
 
                 $page_no = (int)$segment_3;
 
@@ -1336,7 +1344,7 @@ class Admin extends CI_Controller
         }
 
         $data = array_merge(default_parser_item(), $data);
-        $this->parser->parse(get_active_theme().'/main_private', $data);
+        $this->twig->display(path_theme('main_private.html'), $data);
     }
 
     function kelas($act = 'list', $id = '')
@@ -1345,10 +1353,10 @@ class Admin extends CI_Controller
 
         $data = array(
             'web_title'     => 'Manajemen Kelas | Administrator',
-            'menu_file'     => path_theme('admin_menu.php'),
+            'menu_file'     => path_theme('admin_menu.html'),
             'uri_segment_1' => $this->uri->segment(1),
             'uri_segment_2' => $this->uri->segment(2),
-            'content_file'  => path_theme('admin_kelas/index.php'),
+            'content_file'  => path_theme('admin_kelas/index.html'),
             'module_title'  => 'Manajemen Kelas',
             'comp_css'      => load_comp_css(array(base_url('assets/comp/nestedSortable/nestedSortable.css'))),
             'comp_js'       => load_comp_js(array(base_url('assets/comp/nestedSortable/jquery.mjs.nestedSortable.js')))
@@ -1364,7 +1372,7 @@ class Admin extends CI_Controller
                     redirect('admin/kelas');
                 }
 
-                $data['sub_content_file'] = path_theme('admin_kelas/edit.php');
+                $data['sub_content_file'] = path_theme('admin_kelas/edit.html');
                 $data['kelas'] = $kelas;
 
                 if ($this->form_validation->run('admin/kelas/edit') == TRUE) {
@@ -1386,7 +1394,7 @@ class Admin extends CI_Controller
             default:
             case 'list':
 
-                $data['sub_content_file'] = path_theme('admin_kelas/add.php');
+                $data['sub_content_file'] = path_theme('admin_kelas/add.html');
 
                 if ($this->form_validation->run() == TRUE) {
 
@@ -1407,7 +1415,7 @@ class Admin extends CI_Controller
         $data['kelas_hirarki'] = $str_kelas;
 
         $data = array_merge(default_parser_item(), $data);
-        $this->parser->parse(get_active_theme().'/main_private', $data);
+        $this->twig->display(path_theme('main_private.html'), $data);
     }
 
     private function kelas_hirarki(&$str_kelas = "", $parent_id = null, $order = 0){

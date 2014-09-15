@@ -63,10 +63,14 @@ function ch_uch_checkbox(source){
                 <?php echo $v['nama']; ?>
             </td>
             <td>
-                <?php 
-                $kelas_aktif = $this->kelas_model->retrieve_siswa(null, array('siswa_id' => $v['id'], 'aktif' => '1'));
-                $kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
-                echo $kelas['nama'];
+                <?php
+                $kelas_aktif = get_row_data('kelas_model', 'retrieve_siswa', array(
+                    null,
+                    array('siswa_id' => $v['id'], 'aktif' => '1')
+                ));
+                //$this->kelas_model->retrieve_siswa(null, array('siswa_id' => $v['id'], 'aktif' => '1'));
+                //$kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
+                echo get_row_data('kelas_model', 'retrieve', array($kelas_aktif['kelas_id']), 'nama');
                 ?>
             </td>
             <td>

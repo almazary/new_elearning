@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/new_elearning/';
+$config['base_url']	= 'http://new-elearning-da.com/';
 
 /*
 |--------------------------------------------------------------------------

@@ -1,0 +1,13 @@
+
+<ul class="nav pull-right">
+    <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        {{ get_sess_data('admin', 'pengajar', 'nama') }}
+            <img src="{{ base_url_theme }}images/user.png" class="nav-avatar" />
+        <b class="caret"></b></a>
+        <ul class="dropdown-menu">
+            <li><a href="{{ site_url('admin/ch_profil') }}">Profil</a></li>
+            <li><a href="{{ site_url('admin/ch_profil') }}">Ubah Password</a></li>
+            <li><a href="{{ site_url('admin/ch_profil') }}">Logout</a></li>
+        </ul>
+    </li>
+</ul>
