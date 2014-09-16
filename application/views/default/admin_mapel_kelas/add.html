@@ -1,0 +1,28 @@
+
+<div class="bs-callout bs-callout-info">
+<p>
+    Pilih matapelajaran yang ingin di masukkan pada <b>{{ kelas['nama'] }}</b>
+</p>
+</div>
+<br>
+
+{{ form_open('admin/mapel_kelas/add/' ~ parent['id'] ~ '/' ~ kelas['id']) | raw }}
+<table class="table table-striped">
+<tbody>
+    {% for m in mapels %}
+    {% set checked = get_row_data('mapel_model', 'retrieve_kelas', [null, kelas['id'], m.id]) %}
+    <tr>
+        <td>
+            {% if m.aktif != 1 %}
+            <span class="badge pull-right">Matapelajaran Tidak Aktif</span>
+            {% endif %}
+            <label><input type="checkbox" name="mapel[]" value="{{ m.id }}" style="margin-top:-2px;margin-right:5px;" {{ (m.aktif != 1) ? 'disabled' : '' }} {{ (checked is empty) ? '' : 'checked' }}> {{ m.nama }}</label>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+<br>
+<button type="submit" class="btn btn-primary">Simpan</button>
+<a href="{{ site_url('admin/mapel_kelas/#parent-' ~ parent['id']) }}" class="btn">Kembali</a>
+{{ form_close()|raw }}

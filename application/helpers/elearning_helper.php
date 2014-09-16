@@ -270,7 +270,7 @@ function get_row_data($model, $func, $args = array(), $field_name = '')
     $CI =& get_instance();
     $CI->load->model($model);
 
-    $retrieve = call_user_func_array($func, $args);
+    $retrieve = call_user_func_array(array($CI->$model, $func), $args);
 
     if (empty($field_name)) {
         return $retrieve;

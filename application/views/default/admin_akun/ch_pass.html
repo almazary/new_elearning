@@ -1,16 +1,17 @@
-<form class="form-horizontal row-fluid" method="post" action="{site_url}/admin/ch_pass">
+
+{{ form_open('admin/ch_pass', {'class' : 'form-horizontal row-fluid'})|raw }}
     <div class="control-group">
         <label class="control-label">Password Baru <span class="text-error">*</span></label>
         <div class="controls">
             <input type="password" name="password" class="span5">
-            <br><?php echo form_error('password'); ?>
+            <br>{{ form_error('password')|raw }}
         </div>
     </div>
     <div class="control-group">
         <label class="control-label">Confirm Password <span class="text-error">*</span></label>
         <div class="controls">
             <input type="password" name="password2" class="span5">
-            <br><?php echo form_error('password2'); ?>
+            <br>{{ form_error('password2')|raw }}
         </div>
     </div>
     <div class="control-group">
@@ -18,4 +19,4 @@
             <button type="submit" class="btn btn-primary">Update</button>
         </div>
     </div>
-</form>
+{{ form_close()|raw }}

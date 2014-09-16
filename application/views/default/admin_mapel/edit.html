@@ -1,0 +1,31 @@
+
+{{ form_open('admin/mapel/edit/' ~ mapel.id, {'class' : 'form-horizontal row-fluid'})|raw }}
+    <div class="control-group">
+        <label class="control-label">Nama <span class="text-error">*</span></label>
+        <div class="controls">
+            <input type="text" name="nama" class="span8" value="{{ set_value('nama', mapel.nama) }}">
+            <br>{{ form_error('nama')|raw }}
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Deskripsi</label>
+        <div class="controls">
+            <textarea name="info" id="info" style="height:400px;">{{ set_value('info', mapel.info)|raw }}</textarea>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Status</label>
+        <div class="controls">
+            <label class="checkbox inline">
+                <input type="checkbox" value="1" name="status" {{ set_checkbox('status', '1', (mapel.aktif == 1) ? TRUE : FALSE) }}>
+                Aktif
+            </label>
+        </div>
+    </div>
+    <div class="control-group">
+        <div class="controls">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a href="{{ site_url('admin/mapel') }}" class="btn">Batal</a>
+        </div>
+    </div>
+{{ form_close()|raw }}

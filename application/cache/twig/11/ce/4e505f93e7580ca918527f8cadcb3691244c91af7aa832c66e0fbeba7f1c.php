@@ -35,7 +35,7 @@ class __TwigTemplate_11ce4e505f93e7580ca918527f8cadcb3691244c91af7aa832c66e0fbeb
         echo "\">Profil</a></li>
             <li><a href=\"";
         // line 9
-        echo twig_escape_filter($this->env, site_url("admin/ch_profil"), "html", null, true);
+        echo twig_escape_filter($this->env, site_url("admin/ch_pass"), "html", null, true);
         echo "\">Ubah Password</a></li>
             <li><a href=\"";
         // line 10

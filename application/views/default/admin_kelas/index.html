@@ -2,20 +2,20 @@
 <div class="content">
     <div class="module">
         <div class="module-head">
-            <h3>{module_title}</h3>
+            <h3>{{ module_title|raw }}</h3>
         </div>
         <div class="module-body">
-            <?php echo $this->session->flashdata('kelas'); ?>
-            
-            <?php include $sub_content_file; ?>
-            
+            {{ get_flashdata('kelas')|raw }}
+
+            {% include sub_content_file %}
+
             <p class="text-warning"><b>NB:</b> Kelas tidak dapat di hapus namun dapat di ubah menjadi tidak aktif.</p>
 
-            {kelas_hirarki}
-            
+            {{ kelas_hirarki|raw }}
+
             <br>
             <div id="response_update"></div>
-            <button class="btn btn-primary" id="update">Update Hirarki</button> 
+            <button class="btn btn-primary" id="update">Update Hirarki</button>
 
             <script type="text/javascript">
                 $(document).ready(function(){
@@ -38,13 +38,13 @@
                     });
 
                 });
-                
+
                 $('#update').click(function(){
                     $.ajax({
                         type : "POST",
-                        url : "{site_url}/admin/ajax_post/hirarki_kelas",
+                        url : "{{ site_url('admin/ajax_post/hirarki_kelas') }}",
                         data : $('ol.sortable').nestedSortable('serialize'),
-                        success : function(data){   
+                        success : function(data){
                             $('#response_update').html('<span class="text-success pull-right"><i class="icon icon-ok"></i> Update hirarki kelas berhasil</span>');
                             setTimeout(function(){
                                 $('#response_update').html('');
@@ -52,7 +52,7 @@
                         }
                     });
                 });
-                
+
             </script>
 
         </div>

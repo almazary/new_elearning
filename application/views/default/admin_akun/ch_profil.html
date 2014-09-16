@@ -1,35 +1,36 @@
 
-<?php echo form_open_multipart('admin/ch_profil', array('class' => 'form-horizontal row-fluid')); ?>
+{{ form_open_multipart('admin/ch_profil', {'class' : 'form-horizontal row-fluid'})|raw }}
     <div class="control-group">
         <label class="control-label">Username (Email) <span class="text-error">*</span></label>
         <div class="controls">
-            <input type="text" name="username" class="span5" value="<?php echo set_value('username', $login['username']); ?>">
-            <br><?php echo form_error('username'); ?>
+            <input type="text" name="username" class="span5" value="{{ set_value('username', login.username) }}">
+            <br>{{ form_error('username')|raw }}
         </div>
     </div>
     <div class="control-group">
         <label class="control-label">Nama <span class="text-error">*</span></label>
         <div class="controls">
-            <input type="text" name="nama" class="span5" value="<?php echo set_value('nama', $pengajar['nama']); ?>">
-            <br><?php echo form_error('nama'); ?>
+            <input type="text" name="nama" class="span5" value="{{ set_value('nama', pengajar.nama) }}">
+            <br>{{ form_error('nama')|raw }}
         </div>
     </div>
     <div class="control-group">
         <label class="control-label">Alamat <span class="text-error">*</span></label>
         <div class="controls">
-            <input type="text" name="alamat" class="span9" value="<?php echo set_value('alamat', $pengajar['alamat']); ?>">
-            <br><?php echo form_error('alamat'); ?>
+            <input type="text" name="alamat" class="span9" value="{{ set_value('alamat', pengajar.alamat) }}">
+            <br>{{ form_error('alamat')|raw }}
         </div>
     </div>
     <div class="control-group">
         <label class="control-label">Foto</label>
         <div class="controls">
             <?php if (!is_null($pengajar['foto']) AND !empty($pengajar['foto'])): ?>
-            <img src="<?php echo get_url_image($pengajar['foto'], 'medium'); ?>"><br><br>
-            Ganti Foto 
-            <?php endif; ?>
-            <input type="file" name="userfile">
-            <br><?php echo $error_upload; ?>
+            {% if pengajar.foto != '' %}
+                <img src="{{ get_url_image(pengajar.foto, 'medium') }}"><br><br>
+                Ganti Foto
+            {% endif %}
+           <input type="file" name="userfile">
+           <br>{{ error_upload|raw }}
         </div>
     </div>
     <div class="control-group">
@@ -37,4 +38,4 @@
             <button type="submit" class="btn btn-primary">Update</button>
         </div>
     </div>
-</form>
+{{ form_close()|raw }}

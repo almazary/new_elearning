@@ -914,7 +914,6 @@ class Admin extends CI_Controller
 
         $data = array(
             'web_title'        => 'Ubah Profil | Administrator',
-            'menu_file'        => path_theme('admin_menu.html'),
             'content_file'     => path_theme('admin_akun/index.html'),
             'sub_content_file' => path_theme('admin_akun/ch_profil.html'),
             'module_title'     => 'Profil',
@@ -1007,8 +1006,7 @@ class Admin extends CI_Controller
             redirect('admin/ch_profil');
         }
 
-        $data = array_merge(default_parser_item(), $data);
-        $this->twig->display(path_theme('main_private.html'), $data);
+        $this->view($data);
     }
 
     function update_username($username = '')
@@ -1077,7 +1075,6 @@ class Admin extends CI_Controller
 
         $data = array(
             'web_title'        => 'Ubah Password | Administrator',
-            'menu_file'        => path_theme('admin_menu.html'),
             'content_file'     => path_theme('admin_akun/index.html'),
             'sub_content_file' => path_theme('admin_akun/ch_pass.html'),
             'module_title'     => 'Ubah Password'
@@ -1093,8 +1090,7 @@ class Admin extends CI_Controller
             redirect('admin/ch_pass');
         }
 
-        $data = array_merge(default_parser_item(), $data);
-        $this->twig->display(path_theme('main_private.html'), $data);
+        $this->view($data);
     }
 
     function mapel_kelas($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '')
@@ -1203,8 +1199,7 @@ class Admin extends CI_Controller
                 break;
         }
 
-        $data = array_merge(default_parser_item(), $data);
-        $this->twig->display(path_theme('main_private.html'), $data);
+        $this->view($data);
     }
 
     private function mapel_kelas_hirarki(){
@@ -1251,13 +1246,8 @@ class Admin extends CI_Controller
     {
         $this->most_login();
 
-        $data = array(
-            'web_title'     => 'Manajemen Matapelajaran | Administrator',
-            'menu_file'     => path_theme('admin_menu.html'),
-            'content_file'  => path_theme('admin_mapel/index.html'),
-            'uri_segment_1' => $this->uri->segment(1),
-            'uri_segment_2' => $this->uri->segment(2),
-        );
+        $data['web_title']    = 'Manajemen Matapelajaran | Administrator';
+        $data['content_file'] = path_theme('admin_mapel/index.html');
 
         switch ($act) {
             case 'edit':
@@ -1343,8 +1333,7 @@ class Admin extends CI_Controller
                 break;
         }
 
-        $data = array_merge(default_parser_item(), $data);
-        $this->twig->display(path_theme('main_private.html'), $data);
+        $this->view($data);
     }
 
     function kelas($act = 'list', $id = '')
@@ -1353,9 +1342,6 @@ class Admin extends CI_Controller
 
         $data = array(
             'web_title'     => 'Manajemen Kelas | Administrator',
-            'menu_file'     => path_theme('admin_menu.html'),
-            'uri_segment_1' => $this->uri->segment(1),
-            'uri_segment_2' => $this->uri->segment(2),
             'content_file'  => path_theme('admin_kelas/index.html'),
             'module_title'  => 'Manajemen Kelas',
             'comp_css'      => load_comp_css(array(base_url('assets/comp/nestedSortable/nestedSortable.css'))),
@@ -1414,8 +1400,7 @@ class Admin extends CI_Controller
         $this->kelas_hirarki($str_kelas);
         $data['kelas_hirarki'] = $str_kelas;
 
-        $data = array_merge(default_parser_item(), $data);
-        $this->twig->display(path_theme('main_private.html'), $data);
+        $this->view($data);
     }
 
     private function kelas_hirarki(&$str_kelas = "", $parent_id = null, $order = 0){

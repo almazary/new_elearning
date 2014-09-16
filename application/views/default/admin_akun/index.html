@@ -2,12 +2,12 @@
 <div class="content">
     <div class="module">
         <div class="module-head">
-            <h3>{module_title}</h3>
+            <h3>{{ module_title|raw }}</h3>
         </div>
         <div class="module-body">
-            <?php echo $this->session->flashdata('mapel'); ?>
+            {{ get_flashdata('akun')|raw }}
 
-            <?php include $sub_content_file; ?>
+            {% include sub_content_file %}
         </div>
     </div>
 </div>
