@@ -285,3 +285,17 @@ function get_flashdata($key) {
 
     return $CI->session->flashdata($key);
 }
+
+function get_indo_bulan($bln = '') {
+    $data = array(1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
+    if (empty($bln)) {
+        return $data;
+    } else {
+        return $data[$bln];
+    }
+}
+
+function tgl_indo($tgl) {
+    $pisah = explode('-', $tgl);
+    return $pisah[2].' '.get_indo_bulan($pisah[1]).' '.$pisah[0];
+}

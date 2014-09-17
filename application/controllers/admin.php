@@ -46,11 +46,15 @@ class Admin extends CI_Controller
         return $data;
     }
 
-    private function view($data)
+    private function view($data, $iframe = false)
     {
         $data = array_merge(default_parser_item(), $data);
         $data = array_merge($data, $this->default_data_theme());
-        $this->twig->display(path_theme('main_private.html'), $data);
+        if ($iframe) {
+            $this->twig->display(path_theme('main_iframe.html'), $data);
+        } else {
+            $this->twig->display(path_theme('main_private.html'), $data);
+        }
     }
 
     function index()
@@ -156,7 +160,6 @@ class Admin extends CI_Controller
 
         $data = array(
             'web_title'     => 'Data Siswa | Administrator',
-            'menu_file'     => path_theme('admin_menu.html'),
             'content_file'  => path_theme('admin_siswa/index.html')
         );
 
@@ -584,6 +587,8 @@ class Admin extends CI_Controller
 
                 }
 
+                print_r($filter);
+
                 $data['filter'] = $filter;
 
                 if (!empty($filter)) {
@@ -740,173 +745,168 @@ class Admin extends CI_Controller
                 break;
         }
 
-        $data = array_merge(default_parser_item(), $data);
-        if ($iframe) {
-            $this->twig->display(path_theme('main_iframe.html'), $data);
-        } else {
-            $this->twig->display(path_theme('main_private.html'), $data);
-        }
+        $this->view($data, ($iframe) ? true : false);
     }
 
-    function adm($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '')
-    {
-        $this->most_login();
+    // function adm($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '')
+    // {
+    //     $this->most_login();
 
-        $data = array(
-            'web_title'     => 'Data Admin | Administrator',
-            'menu_file'     => path_theme('admin_menu.html'),
-            'content_file'  => path_theme('admin_admin/index.html')
-        );
+    //     $data = array(
+    //         'web_title'     => 'Data Admin | Administrator',
+    //         'menu_file'     => path_theme('admin_menu.html'),
+    //         'content_file'  => path_theme('admin_admin/index.html')
+    //     );
 
-        switch ($act) {
-            case 'detail':
-                $id = (int)$segment_3;
-                $data['module_title'] = anchor('admin/adm/list', 'Data Administrator').' / Detail';
-                $data['sub_content_file'] = path_theme('admin_admin/detail.html');
+    //     switch ($act) {
+    //         case 'detail':
+    //             $id = (int)$segment_3;
+    //             $data['module_title'] = anchor('admin/adm/list', 'Data Administrator').' / Detail';
+    //             $data['sub_content_file'] = path_theme('admin_admin/detail.html');
 
-                //retrieve user login
-                $retrieve_login = $this->login_model->retrieve($id);
-                if (empty($retrieve_login)) {
-                    redirect('admin/adm/list');
-                }
+    //             //retrieve user login
+    //             $retrieve_login = $this->login_model->retrieve($id);
+    //             if (empty($retrieve_login)) {
+    //                 redirect('admin/adm/list');
+    //             }
 
-                //retrieve pengajar
-                $retrieve_pengajar = $this->pengajar_model->retrieve($retrieve_login['pengajar_id']);
-                if (empty($retrieve_pengajar)) {
-                    redirect('admin/adm/list');
-                }
+    //             //retrieve pengajar
+    //             $retrieve_pengajar = $this->pengajar_model->retrieve($retrieve_login['pengajar_id']);
+    //             if (empty($retrieve_pengajar)) {
+    //                 redirect('admin/adm/list');
+    //             }
 
-                $data['login']    = $retrieve_login;
-                $data['pengajar'] = $retrieve_pengajar;
+    //             $data['login']    = $retrieve_login;
+    //             $data['pengajar'] = $retrieve_pengajar;
 
-                break;
+    //             break;
 
-            case 'edit':
-                $id = (int)$segment_3;
-                $data['module_title'] = anchor('admin/adm/list', 'Data Administrator').' / Edit';
-                $data['sub_content_file'] = path_theme('admin_admin/edit.html');
+    //         case 'edit':
+    //             $id = (int)$segment_3;
+    //             $data['module_title'] = anchor('admin/adm/list', 'Data Administrator').' / Edit';
+    //             $data['sub_content_file'] = path_theme('admin_admin/edit.html');
 
-                //retrieve user login
-                $retrieve_login = $this->login_model->retrieve($id);
-                if (empty($retrieve_login)) {
-                    redirect('admin/adm/list');
-                }
+    //             //retrieve user login
+    //             $retrieve_login = $this->login_model->retrieve($id);
+    //             if (empty($retrieve_login)) {
+    //                 redirect('admin/adm/list');
+    //             }
 
-                //retrieve pengajar
-                $retrieve_pengajar = $this->pengajar_model->retrieve($retrieve_login['pengajar_id']);
-                if (empty($retrieve_pengajar)) {
-                    redirect('admin/adm/list');
-                }
+    //             //retrieve pengajar
+    //             $retrieve_pengajar = $this->pengajar_model->retrieve($retrieve_login['pengajar_id']);
+    //             if (empty($retrieve_pengajar)) {
+    //                 redirect('admin/adm/list');
+    //             }
 
-                $data['login']    = $retrieve_login;
-                $data['pengajar'] = $retrieve_pengajar;
+    //             $data['login']    = $retrieve_login;
+    //             $data['pengajar'] = $retrieve_pengajar;
 
-                $config['upload_path']   = get_path_image();
-                $config['allowed_types'] = 'jpg|jpeg|png';
-                $config['max_size']      = '0';
-                $config['max_width']     = '0';
-                $config['max_height']    = '0';
-                $config['file_name']     = 'admin-'.url_title($this->input->post('nama', TRUE), '-', true);
-                $this->load->library('upload', $config);
+    //             $config['upload_path']   = get_path_image();
+    //             $config['allowed_types'] = 'jpg|jpeg|png';
+    //             $config['max_size']      = '0';
+    //             $config['max_width']     = '0';
+    //             $config['max_height']    = '0';
+    //             $config['file_name']     = 'admin-'.url_title($this->input->post('nama', TRUE), '-', true);
+    //             $this->load->library('upload', $config);
 
-                if (!empty($_FILES['userfile']['tmp_name']) AND !$this->upload->do_upload()) {
-                    $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
-                    $error_upload = true;
-                } else {
-                    $data['error_upload'] = '';
-                    $error_upload = false;
-                }
+    //             if (!empty($_FILES['userfile']['tmp_name']) AND !$this->upload->do_upload()) {
+    //                 $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
+    //                 $error_upload = true;
+    //             } else {
+    //                 $data['error_upload'] = '';
+    //                 $error_upload = false;
+    //             }
 
-                if ($this->form_validation->run('admin/ch_profil') == TRUE AND !$error_upload) {
-                    $username = $this->input->post('username', TRUE);
-                    $nama     = $this->input->post('nama', TRUE);
-                    $alamat   = $this->input->post('alamat', TRUE);
+    //             if ($this->form_validation->run('admin/ch_profil') == TRUE AND !$error_upload) {
+    //                 $username = $this->input->post('username', TRUE);
+    //                 $nama     = $this->input->post('nama', TRUE);
+    //                 $alamat   = $this->input->post('alamat', TRUE);
 
-                    //update username
-                    $this->login_model->update(
-                        $retrieve_login['id'],
-                        $username,
-                        null,
-                        $retrieve_pengajar['id'],
-                        1,
-                        null
-                    );
+    //                 //update username
+    //                 $this->login_model->update(
+    //                     $retrieve_login['id'],
+    //                     $username,
+    //                     null,
+    //                     $retrieve_pengajar['id'],
+    //                     1,
+    //                     null
+    //                 );
 
-                    if (!empty($_FILES['userfile']['tmp_name'])) {
+    //                 if (!empty($_FILES['userfile']['tmp_name'])) {
 
-                        //hapus dulu file sebelumnya
-                        $pisah = explode('.', $retrieve_pengajar['foto']);
-                        if (is_file(get_path_image($retrieve_pengajar['foto']))) {
-                            unlink(get_path_image($retrieve_pengajar['foto']));
-                        }
-                        if (is_file(get_path_image($pisah[0].'_small.'.$pisah[1]))) {
-                            unlink(get_path_image($pisah[0].'_small.'.$pisah[1]));
-                        }
-                        if (is_file(get_path_image($pisah[0].'_medium.'.$pisah[1]))) {
-                            unlink(get_path_image($pisah[0].'_medium.'.$pisah[1]));
-                        }
+    //                     //hapus dulu file sebelumnya
+    //                     $pisah = explode('.', $retrieve_pengajar['foto']);
+    //                     if (is_file(get_path_image($retrieve_pengajar['foto']))) {
+    //                         unlink(get_path_image($retrieve_pengajar['foto']));
+    //                     }
+    //                     if (is_file(get_path_image($pisah[0].'_small.'.$pisah[1]))) {
+    //                         unlink(get_path_image($pisah[0].'_small.'.$pisah[1]));
+    //                     }
+    //                     if (is_file(get_path_image($pisah[0].'_medium.'.$pisah[1]))) {
+    //                         unlink(get_path_image($pisah[0].'_medium.'.$pisah[1]));
+    //                     }
 
-                        $upload_data = $this->upload->data();
+    //                     $upload_data = $this->upload->data();
 
-                        //create thumb small
-                        $this->create_img_thumb(
-                            get_path_image($upload_data['file_name']),
-                            '_small',
-                            '50',
-                            '50'
-                        );
+    //                     //create thumb small
+    //                     $this->create_img_thumb(
+    //                         get_path_image($upload_data['file_name']),
+    //                         '_small',
+    //                         '50',
+    //                         '50'
+    //                     );
 
-                        //create thumb medium
-                        $this->create_img_thumb(
-                            get_path_image($upload_data['file_name']),
-                            '_medium',
-                            '150',
-                            '150'
-                        );
+    //                     //create thumb medium
+    //                     $this->create_img_thumb(
+    //                         get_path_image($upload_data['file_name']),
+    //                         '_medium',
+    //                         '150',
+    //                         '150'
+    //                     );
 
-                        $foto = $upload_data['file_name'];
+    //                     $foto = $upload_data['file_name'];
 
-                    } else {
-                        $foto = $retrieve_pengajar['foto'];
-                    }
+    //                 } else {
+    //                     $foto = $retrieve_pengajar['foto'];
+    //                 }
 
-                    //update pengajar
-                    $this->pengajar_model->update(
-                        $retrieve_pengajar['id'],
-                        $retrieve_pengajar['nip'],
-                        $nama,
-                        $alamat,
-                        $foto,
-                        $retrieve_pengajar['status_id']
-                    );
+    //                 //update pengajar
+    //                 $this->pengajar_model->update(
+    //                     $retrieve_pengajar['id'],
+    //                     $retrieve_pengajar['nip'],
+    //                     $nama,
+    //                     $alamat,
+    //                     $foto,
+    //                     $retrieve_pengajar['status_id']
+    //                 );
 
-                    if ($retrieve_login['id'] == $this->session_data['login']['id']) {
-                        $this->refresh_session_data();
-                    }
+    //                 if ($retrieve_login['id'] == $this->session_data['login']['id']) {
+    //                     $this->refresh_session_data();
+    //                 }
 
-                    $this->session->set_flashdata('edit', get_alert('success', 'Data berhasil di perbaharui'));
-                    redirect('admin/adm/edit/'.$id);
-                }
+    //                 $this->session->set_flashdata('edit', get_alert('success', 'Data berhasil di perbaharui'));
+    //                 redirect('admin/adm/edit/'.$id);
+    //             }
 
-                break;
+    //             break;
 
-            default:
-            case 'list':
-                $page_no = (int)$segment_3;
+    //         default:
+    //         case 'list':
+    //             $page_no = (int)$segment_3;
 
-                $data['module_title'] = 'Data Administrator';
-                $data['sub_content_file'] = path_theme('admin_admin/list.html');
-                //ambil data admin
-                $retrieve_all = $this->login_model->retrieve_all(10, $page_no, 1);
-                $data['admins'] = $retrieve_all['results'];
-                //pagination
-                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/adm/list/');
-                break;
-        }
+    //             $data['module_title'] = 'Data Administrator';
+    //             $data['sub_content_file'] = path_theme('admin_admin/list.html');
+    //             //ambil data admin
+    //             $retrieve_all = $this->login_model->retrieve_all(10, $page_no, 1);
+    //             $data['admins'] = $retrieve_all['results'];
+    //             //pagination
+    //             $data['pagination'] = $this->pager->view($retrieve_all, 'admin/adm/list/');
+    //             break;
+    //     }
 
-        $data = array_merge(default_parser_item(), $data);
-        $this->twig->display(path_theme('main_private.html'), $data);
-    }
+    //     $data = array_merge(default_parser_item(), $data);
+    //     $this->twig->display(path_theme('main_private.html'), $data);
+    // }
 
     function ch_profil()
     {

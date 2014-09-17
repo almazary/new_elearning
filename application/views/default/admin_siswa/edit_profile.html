@@ -1,0 +1,109 @@
+
+<strong>Edit Profil</strong>
+{{ get_flashdata('edit')|raw }}
+
+{{ form_open('admin/siswa/edit_profile/' ~ status_id ~ '/' ~ siswa_id)|raw }}
+<input type="hidden" name="siswa_id" value="{{ siswa_id }}">
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th width="30%">NIS <span class="text-error">*</span></th>
+            <td>
+                <input type="text" id="nis" name="nis" style="width:40%;" value="{{ set_value('nis', siswa.nis) }}">
+                <br>{{ form_error('nis')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <th>Nama <span class="text-error">*</span></th>
+            <td>
+                <input type="text" name="nama" style="width:90%;" value="{{ set_value('nama', siswa.nama) }}">
+                <br>{{ form_error('nama')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <th>Jenis Kelamin <span class="text-error">*</span></th>
+            <td>
+                <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Laki-laki" {{ set_radio('jenis_kelamin', 'Laki-laki', (siswa.jenis_kelamin == 'Laki-laki') ? TRUE : FALSE) }}> Laki-laki</label>
+                <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Perempuan" {{ set_radio('jenis_kelamin', 'Perempuan', (siswa.jenis_kelamin == 'Perempuan') ? TRUE : FALSE) }}> Perempuan</label>
+                <br>{{ form_error('jenis_kelamin')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <th>Tahun Masuk <span class="text-error">*</span></th>
+            <td>
+                <input type="text" name="tahun_masuk" maxlength="4" style="width:15%;" value="{{ set_value('tahun_masuk', siswa.tahun_masuk) }}">
+                <br>{{ form_error('tahun_masuk')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <th>Tempat Lahir</th>
+            <td>
+                <input type="text" name="tempat_lahir" value="{{ set_value('tempat_lahir', siswa.tempat_lahir) }}">
+                <br>{{ form_error('tempat_lahir')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <th>Tanggal Lahir</th>
+            <td>
+                {% set tgl = (siswa.tgl_lahir is not empty) ? siswa.tgl_lahir|date('d') %}
+                {% set bln = (siswa.tgl_lahir is not empty) ? siswa.tgl_lahir|date('m') %}
+                {% set thn = (siswa.tgl_lahir is not empty) ? siswa.tgl_lahir|date('Y') %}
+                <select class="span2" style="width: 20%;float:left;margin-right:5px;" name="tgl_lahir">
+                    <option value="">--Tgl--</option>
+                    {% for i in 1..31 %}
+                        <option value="{{ i }}" {{ set_select('tgl_lahir', i, (i == tgl) ? TRUE : FALSE) }}>{{ i }}</option>
+                    {% endfor %}
+                </select>
+                <select class="span2" style="width: 35%;float:left;margin-right:5px;" name="bln_lahir">
+                    <option value="">--Bulan--</option>
+                    {% for i in 1..12 %}
+                        <option value="{{ i }}" {{ set_select('bln_lahir', i, (i == bln) ? TRUE : FALSE) }}>{{ get_indo_bulan(i) }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="thn_lahir" style="width:15%;float:left;" maxlength="4" value="{{ set_value('thn_lahir', thn) }}" placeholder="Tahun">
+                <br>{{ form_error('thn_lahir')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <th>Agama</th>
+            <td>
+                <select name="agama" style="width:30%;">
+                    <option value="">--pilih--</option>
+                    <option value="ISLAM" {{ set_select('agama', 'ISLAM', (siswa.agama == 'ISLAM') ? TRUE : FALSE) }}>ISLAM</option>
+                    <option value="KRISTEN" {{ set_select('agama', 'KRISTEN', (siswa.agama == 'KRISTEN') ? TRUE : FALSE) }}>KRISTEN</option>
+                    <option value="KATOLIK" {{ set_select('agama', 'KATOLIK', (siswa.agama == 'KATOLIK') ? TRUE : FALSE) }}>KATOLIK</option>
+                    <option value="HINDU" {{ set_select('agama', 'HINDU', (siswa.agama == 'HINDU') ? TRUE : FALSE) }}>HINDU</option>
+                    <option value="BUDHA" {{ set_select('agama', 'BUDHA', (siswa.agama == 'BUDHA') ? TRUE : FALSE) }}>BUDHA</option>
+                </select>
+                <br>{{ form_error('agama')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <th>Alamat</th>
+            <td>
+                <textarea name="alamat" style="width:90%;">{{ set_value('alamat', siswa.alamat) }}</textarea>
+                <br>{{ form_error('alamat')|raw }}
+            </td>
+        <tr>
+        {% if siswa.status_id != 3 %}
+        <tr>
+            <th>Status <span class="text-error">*</span></th>
+            <td>
+                <label class="radio inline"><input type="radio" name="status_id" value="0" {{ set_radio('status_id', '0', (siswa.status_id == '0') ? TRUE : FALSE) }}> Pending</label>
+                <label class="radio inline"><input type="radio" name="status_id" value="1" {{ set_radio('status_id', '1', (siswa.status_id == '1') ? TRUE : FALSE) }}> Aktif</label>
+                <label class="radio inline"><input type="radio" name="status_id" value="2" {{ set_radio('status_id', '2', (siswa.status_id == '2') ? TRUE : FALSE) }}> Blocking</label>
+                <label class="radio inline"><input type="radio" name="status_id" value="3" {{ set_radio('status_id', '3', (siswa.status_id == '3') ? TRUE : FALSE) }}> Alumni</label>
+                <br>{{ form_error('status_id')|raw }}
+            </td>
+        <tr>
+        {% else %}
+            <input type="hidden" name="status_id" value="3">
+        {% endif %}
+        <tr>
+            <td colspan="2">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{ form_close()|raw }}
