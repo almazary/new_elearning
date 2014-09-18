@@ -99,9 +99,11 @@ function ch_uch_checkbox(source){
                     <select name="status_id" style="width:100%;">
                         <option>--Pilih Status--</option>
                         <option value="1">Aktif</option>
-                        <?php if ($status_id == 0): ?>
+                        {% if status_id == 0 %}
                         <option value="2">Blocking</option>
-                        <?php endif; ?>
+                        {% elseif status_id == 2 %}
+                        <option value="3">Alumni</option>
+                        {% endif %}
                     </select>
                 </td>
                 <td valign="top">

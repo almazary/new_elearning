@@ -350,20 +350,71 @@ $config['admin/siswa/filter'] = array(
         'rules' => 'trim|xss_clean'
     ),
 );
-$config['admin/siswa/filter'] = array(
+
+$config['admin/pengajar/add'] = array(
     array(
-        'field' => 'siswa_id[]',
-        'label' => 'Siswa',
+        'field' => 'nis',
+        'label' => 'NIS',
+        'rules' => 'trim|xss_clean|is_unique[pengajar.nip]'
+    ),
+    array(
+        'field' => 'nama',
+        'label' => 'Nama',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'jenis_kelamin',
+        'label' => 'Jenis Kelamin',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'tempat_lahir',
+        'label' => 'Tempat Lahir',
         'rules' => 'trim|xss_clean'
     ),
     array(
-        'field' => 'status_id',
-        'label' => 'Update Status',
+        'field' => 'tgl_lahir',
+        'label' => 'Tgl Lahir',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'bln_lahir',
+        'label' => 'Bulan Lahir',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'thn_lahir',
+        'label' => 'Tahun Lahir',
+        'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[4]'
+    ),
+    array(
+        'field' => 'alamat',
+        'label' => 'Alamat',
         'rules' => 'trim|xss_clean'
     ),
     array(
-        'field' => 'kelas_id',
-        'label' => 'Pindah Kelas',
-        'rules' => 'trim|xss_clean'
+        'field' => 'username',
+        'label' => 'Username',
+        'rules' => 'required|trim|xss_clean|valid_email|is_unique[login.username]'
+    ),
+    array(
+        'field' => 'default_username',
+        'label' => 'Default Username',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'password',
+        'label' => 'Password',
+        'rules' => 'required|trim|xss_clean|alpha_numeric'
+    ),
+    array(
+        'field' => 'password2',
+        'label' => 'Ulangi Password',
+        'rules' => 'required|matches[password]'
+    ),
+    array(
+        'field' => 'is_admin',
+        'label' => 'Opsi',
+        'rules' => 'numeric'
     ),
 );

@@ -2,7 +2,7 @@
 
 /**
  * Class Model untuk resource pengajar
- * 
+ *
  * @package Elearning Dokumenary
  * @link    http://www.dokumenary.net
  */
@@ -11,7 +11,7 @@ class Pengajar_model extends CI_Model
 
     /**
      * Method untuk menghapus record mapel ajar berhasarkan idnya
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -27,16 +27,16 @@ class Pengajar_model extends CI_Model
 
     /**
      * Method untuk mendapatkan semua data mapel ajar
-     * 
-     * @param  integer          $no_of_records  
-     * @param  integer          $page_no        
-     * @param  null|integer     $pengajar_id    
-     * @param  null|integer     $mapel_kelas_id 
+     *
+     * @param  integer          $no_of_records
+     * @param  integer          $page_no
+     * @param  null|integer     $pengajar_id
+     * @param  null|integer     $mapel_kelas_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_ma(
-        $no_of_records  = 10, 
+        $no_of_records  = 10,
         $page_no        = 1,
         $pengajar_id    = null,
         $mapel_kelas_id = null
@@ -59,9 +59,9 @@ class Pengajar_model extends CI_Model
 
     /**
      * Method untuk ambil satu record mapel ajar berdasarkan id|pengajar_id|mapel_kelas_id
-     * 
-     * @param  integer|null $id            
-     * @param  integer|null $pengajar_id   
+     *
+     * @param  integer|null $id
+     * @param  integer|null $pengajar_id
      * @param  integer|null $mapel_kelas_id
      * @return array
      * @author Almazari <almazary@gmail.com>
@@ -91,10 +91,10 @@ class Pengajar_model extends CI_Model
      * Method untuk memperbaharui record mapel ajar
      *
      * @param  integer $id
-     * @param  integer $hari_id       
-     * @param  string  $jam_mulai     
-     * @param  string  $jam_selesai   
-     * @param  integer $pengajar_id   
+     * @param  integer $hari_id
+     * @param  string  $jam_mulai
+     * @param  string  $jam_selesai
+     * @param  integer $pengajar_id
      * @param  integer $mapel_kelas_id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -126,11 +126,11 @@ class Pengajar_model extends CI_Model
 
     /**
      * Method untuk menambah record mapel ajar
-     * 
-     * @param  integer $hari_id       
-     * @param  string  $jam_mulai     
-     * @param  string  $jam_selesai   
-     * @param  integer $pengajar_id   
+     *
+     * @param  integer $hari_id
+     * @param  string  $jam_mulai
+     * @param  string  $jam_selesai
+     * @param  integer $pengajar_id
      * @param  integer $mapel_kelas_id
      * @return integer last insert id
      * @author Almazari <almazary@gmail.com>
@@ -159,7 +159,7 @@ class Pengajar_model extends CI_Model
 
     /**
      * Method untuk menghapus record pengajar
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -175,7 +175,7 @@ class Pengajar_model extends CI_Model
 
     /**
      * Method untuk mendapatkan semua data pengajar
-     * 
+     *
      * @param  integer          $no_of_records
      * @param  integer          $page_no
      * @param  null|integer     $status_id
@@ -183,7 +183,7 @@ class Pengajar_model extends CI_Model
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all(
-        $no_of_records = 10, 
+        $no_of_records = 10,
         $page_no       = 1,
         $status_id     = null
     ) {
@@ -195,15 +195,17 @@ class Pengajar_model extends CI_Model
             $where['status_id'] = array($status_id, 'where');
         }
 
-        $data = $this->pager->set('pengajar', $no_of_records, $page_no, $where);
+        $orderby['pengajar.nama'] = 'ASC';
+
+        $data = $this->pager->set('pengajar', $no_of_records, $page_no, $where, $orderby);
 
         return $data;
     }
 
     /**
      * Method untuk mendapatkan satu record pengajar berdasarkan id atau nip
-     * 
-     * @param  null|integer $id 
+     *
+     * @param  null|integer $id
      * @param  null|integer $nip
      * @param  null|integer $status_id
      * @return array
@@ -232,11 +234,11 @@ class Pengajar_model extends CI_Model
      * Method untuk memperbaharui record data pengajar
      *
      * @param  integer      $id
-     * @param  null|string  $nip       
-     * @param  string       $nama      
-     * @param  string       $alamat    
-     * @param  null|string  $foto      
-     * @param  integer      $status_id 
+     * @param  null|string  $nip
+     * @param  string       $nama
+     * @param  string       $alamat
+     * @param  null|string  $foto
+     * @param  integer      $status_id
      * @return boolean      true jika berhasil
      * @author Almazari <almazary@gmail.com>
      */
@@ -264,30 +266,36 @@ class Pengajar_model extends CI_Model
     }
     /**
      * Method untuk menambah data pengajar
-     * 
-     * @param  null|string  $nip       
-     * @param  string       $nama      
-     * @param  string       $alamat    
-     * @param  null|string  $foto      
-     * @param  integer      $status_id 
+     *
+     * @param  null|string  $nip
+     * @param  string       $nama
+     * @param  string       $alamat
+     * @param  null|string  $foto
+     * @param  integer      $status_id
      * @return integer      last insert id
      * @author Almazari <almazary@gmail.com>
      */
     public function create(
-        $nip       = null,
+        $nip          = null,
         $nama,
-        $alamat,
-        $foto      = null,
-        $status_id = 0
+        $jenis_kelamin,
+        $tempat_lahir = null,
+        $tgl_lahir    = null,
+        $alamat       = null,
+        $foto         = null,
+        $status_id    = 0
     ) {
         $status_id = (int)$status_id;
 
         $data = array(
-            'nip' => $nip,
-            'nama' => $nama,
-            'alamat' => $alamat,
-            'foto' => $foto,
-            'status_id' => $status_id
+            'nip'           => $nip,
+            'nama'          => $nama,
+            'jenis_kelamin' => $jenis_kelamin,
+            'tempat_lahir'  => $tempat_lahir,
+            'tgl_lahir'     => $tgl_lahir,
+            'alamat'        => $alamat,
+            'foto'          => $foto,
+            'status_id'     => $status_id
         );
         $this->db->insert('pengajar', $data);
         return $this->db->insert_id();

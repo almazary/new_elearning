@@ -246,6 +246,27 @@ function get_url_image_siswa($img = '', $size = 'medium', $jk = 'Laki-laki') {
 }
 
 /**
+ * Method untuk mendapatkan link foto pengajar
+ *
+ * @param  string $img
+ * @param  string $size
+ * @param  string $jk
+ * @return string url
+ */
+function get_url_image_pengajar($img = '', $size = 'medium', $jk = 'Laki-laki') {
+    if (is_null($img) OR empty($img)) {
+        if ($jk == 'Laki-laki') {
+            $img = 'default_pl.png';
+        } else {
+            $img = 'default_pp.png';
+        }
+        return get_url_image($img);
+    } else {
+        return get_url_image($img, $size);
+    }
+}
+
+/**
  * Method untuk mendapatkan path image
  *
  * @param  string $img

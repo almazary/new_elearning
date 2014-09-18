@@ -211,10 +211,19 @@ function ch_uch_checkbox(source){
                     <select name=\"status_id\" style=\"width:100%;\">
                         <option>--Pilih Status--</option>
                         <option value=\"1\">Aktif</option>
-                        <?php if (\$status_id == 0): ?>
-                        <option value=\"2\">Blocking</option>
-                        <?php endif; ?>
-                    </select>
+                        ";
+            // line 102
+            if (((isset($context["status_id"]) ? $context["status_id"] : null) == 0)) {
+                // line 103
+                echo "                        <option value=\"2\">Blocking</option>
+                        ";
+            } elseif (((isset($context["status_id"]) ? $context["status_id"] : null) == 2)) {
+                // line 105
+                echo "                        <option value=\"3\">Alumni</option>
+                        ";
+            }
+            // line 107
+            echo "                    </select>
                 </td>
                 <td valign=\"top\">
                     <button type=\"submit\" class=\"btn\">Update</button>
@@ -225,16 +234,16 @@ function ch_uch_checkbox(source){
 </div>
 ";
         }
-        // line 115
+        // line 117
         echo "
 ";
-        // line 116
+        // line 118
         echo form_close();
         echo "
 
 <br>
 ";
-        // line 119
+        // line 121
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
 
@@ -254,6 +263,6 @@ function ch_uch_checkbox(source){
 
     public function getDebugInfo()
     {
-        return array (  238 => 119,  232 => 116,  229 => 115,  204 => 92,  202 => 91,  197 => 88,  184 => 81,  179 => 80,  173 => 78,  171 => 77,  167 => 76,  163 => 75,  159 => 74,  155 => 73,  150 => 71,  142 => 67,  140 => 66,  134 => 63,  128 => 60,  122 => 57,  115 => 54,  109 => 52,  107 => 51,  103 => 49,  99 => 48,  88 => 39,  84 => 37,  82 => 36,  74 => 31,  62 => 21,  58 => 19,  56 => 18,  48 => 13,  44 => 12,  40 => 11,  36 => 10,  32 => 9,  24 => 4,  19 => 1,);
+        return array (  247 => 121,  241 => 118,  238 => 117,  226 => 107,  222 => 105,  218 => 103,  216 => 102,  204 => 92,  202 => 91,  197 => 88,  184 => 81,  179 => 80,  173 => 78,  171 => 77,  167 => 76,  163 => 75,  159 => 74,  155 => 73,  150 => 71,  142 => 67,  140 => 66,  134 => 63,  128 => 60,  122 => 57,  115 => 54,  109 => 52,  107 => 51,  103 => 49,  99 => 48,  88 => 39,  84 => 37,  82 => 36,  74 => 31,  62 => 21,  58 => 19,  56 => 18,  48 => 13,  44 => 12,  40 => 11,  36 => 10,  32 => 9,  24 => 4,  19 => 1,);
     }
 }

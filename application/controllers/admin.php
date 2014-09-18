@@ -152,6 +152,150 @@ class Admin extends CI_Controller
         }
     }
 
+    function pengajar($act = 'list', $segment_4 = '1', $segment_5 = '', $segment_6 = '')
+    {
+        $this->most_login();
+
+        $iframe = false;
+
+        $data = array(
+            'web_title'     => 'Data Pengajar | Administrator',
+            'content_file'  => path_theme('admin_pengajar/index.html')
+        );
+
+        switch ($act) {
+            case 'add':
+                $status_id = (int)$segment_4;
+                if ($status_id < 0 OR $status_id > 3) {
+                    redirect('admin/pengajar/list/1');
+                }
+
+                $data['module_title']     = anchor('admin/pengajar/list/'.$status_id, 'Data Pengajar').' / Tambah Pengajar';
+                $data['sub_content_file'] = path_theme('admin_pengajar/add.html');
+                $data['status_id']        = $status_id;
+
+                $config['upload_path']   = get_path_image();
+                $config['allowed_types'] = 'jpg|jpeg|png';
+                $config['max_size']      = '0';
+                $config['max_width']     = '0';
+                $config['max_height']    = '0';
+                $config['file_name']     = 'pengajar-'.url_title($this->input->post('nama', TRUE), '-', true);
+                $this->upload->initialize($config);
+
+                if (!empty($_FILES['userfile']['tmp_name']) AND !$this->upload->do_upload()) {
+                    $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
+                    $error_upload = true;
+                } else {
+                    $data['error_upload'] = '';
+                    $error_upload = false;
+                }
+
+                if ($this->form_validation->run('admin/pengajar/add') == TRUE AND !$error_upload) {
+                    $nip           = $this->input->post('nip', TRUE);
+                    $nama          = $this->input->post('nama', TRUE);
+                    $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+                    $tempat_lahir  = $this->input->post('tempat_lahir', TRUE);
+                    $tgl_lahir     = $this->input->post('tgl_lahir', TRUE);
+                    $bln_lahir     = $this->input->post('bln_lahir', TRUE);
+                    $thn_lahir     = $this->input->post('thn_lahir', TRUE);
+                    $alamat        = $this->input->post('alamat', TRUE);
+                    $username      = $this->input->post('username', TRUE);
+                    $password      = $this->input->post('password2', TRUE);
+                    $is_admin      = $this->input->post('is_admin', TRUE);
+
+                    if (empty($thn_lahir)) {
+                        $tanggal_lahir = null;
+                    } else {
+                        $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
+                    }
+
+                    if (!empty($_FILES['userfile']['tmp_name'])) {
+                        $upload_data = $this->upload->data();
+
+                        //create thumb small
+                        $this->create_img_thumb(
+                            get_path_image($upload_data['file_name']),
+                            '_small',
+                            '50',
+                            '50'
+                        );
+
+                        //create thumb medium
+                        $this->create_img_thumb(
+                            get_path_image($upload_data['file_name']),
+                            '_medium',
+                            '150',
+                            '150'
+                        );
+
+                        $foto = $upload_data['file_name'];
+                    } else {
+                        $foto = null;
+                    }
+
+                    //simpan data siswa
+                    $pengajar_id = $this->pengajar_model->create(
+                        $nip,
+                        $nama,
+                        $jenis_kelamin,
+                        $tempat_lahir,
+                        $tanggal_lahir,
+                        $alamat,
+                        $foto,
+                        1
+                    );
+
+                    //simpan data login
+                    $this->login_model->create(
+                        $username,
+                        $password,
+                        null,
+                        $pengajar_id,
+                        $is_admin
+                    );
+
+                    $this->session->set_flashdata('pengajar', get_alert('success', 'Data Pengajar berhasil di simpan'));
+                    redirect('admin/pengajar/list/1');
+                }
+
+                break;
+
+            default:
+            case 'list':
+                $data['module_title']     = 'Data Pengajar';
+                $data['sub_content_file'] = path_theme('admin_pengajar/list.html');
+
+                $status_id = (int)$segment_4;
+                if ($status_id < 0 OR $status_id > 2) {
+                    $status_id = 1;
+                }
+
+                $page_no = (int)$segment_5;
+                if (empty($page_no)) {
+                    $page_no = 1;
+                }
+
+                //ambil semua data pengajar
+                $retrieve_all = $this->pengajar_model->retrieve_all(1, $page_no, $status_id);
+
+                $data['status_id'] = $status_id;
+                $data['pengajar']  = $retrieve_all['results'];
+                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/pengajar/list/'.$status_id.'/');
+
+                //panggil colorbox
+                $html_js = load_comp_js(array(
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-pengajar.js')
+                ));
+                $data['comp_js']      = $html_js;
+                $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+
+                break;
+        }
+
+        $this->view($data, ($iframe) ? true : false);
+    }
+
     function siswa($act = 'list', $segment_3 = '1', $segment_4 = '', $segment_5 = '')
     {
         $this->most_login();
@@ -587,8 +731,6 @@ class Admin extends CI_Controller
 
                 }
 
-                print_r($filter);
-
                 $data['filter'] = $filter;
 
                 if (!empty($filter)) {
@@ -707,7 +849,7 @@ class Admin extends CI_Controller
 
                 $data['status_id']  = $status_id;
                 $data['siswas']     = $retrieve_all['results'];
-                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/siswa/list/');
+                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/siswa/list/'.$status_id.'/');
 
                 //panggil colorbox
                 $html_js = load_comp_js(array(
