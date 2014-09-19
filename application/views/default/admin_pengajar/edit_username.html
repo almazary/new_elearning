@@ -1,0 +1,20 @@
+
+<strong>Edit Username <span class="text-error">*</span></strong>
+{{ get_flashdata('edit')|raw }}
+
+{{ form_open('admin/pengajar/edit_username/' ~ status_id ~ '/' ~ pengajar_id)|raw }}
+<input type="hidden" name="login_id" value="{{ login.id }}">
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <td>
+                <input type="text" name="username" value="{{ set_value('username', login.username) }}">
+                <br>{{ form_error('username')|raw }}
+            </td>
+            <td width="20%">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{ form_close()|raw }}

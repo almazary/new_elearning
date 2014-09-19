@@ -1,7 +1,7 @@
 <?php
 
-/* default/admin_siswa/edit_picture.html */
-class __TwigTemplate_4381b152230ff7410259c1004a6d30103d2918d87a6ef4a79ce1068876671027 extends Twig_Template
+/* default/admin_pengajar/edit_picture.html */
+class __TwigTemplate_1026bdcdc775142d5c4b7665af4c44cc0aef5d246b505740ba3c1d0ae22314f5 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -25,7 +25,7 @@ class __TwigTemplate_4381b152230ff7410259c1004a6d30103d2918d87a6ef4a79ce10688766
 
 ";
         // line 5
-        echo form_open_multipart(((("admin/siswa/edit_picture/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . (isset($context["siswa_id"]) ? $context["siswa_id"] : null)));
+        echo form_open_multipart(((("admin/pengajar/edit_picture/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . (isset($context["pengajar_id"]) ? $context["pengajar_id"] : null)));
         echo "
 <table class=\"table table-striped\">
     <tbody>
@@ -33,7 +33,7 @@ class __TwigTemplate_4381b152230ff7410259c1004a6d30103d2918d87a6ef4a79ce10688766
             <td>
                 <img class=\"img-polaroid\" src=\"";
         // line 10
-        echo twig_escape_filter($this->env, get_url_image_siswa($this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "foto"), "medium", $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "jenis_kelamin")), "html", null, true);
+        echo twig_escape_filter($this->env, get_url_image_pengajar($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "foto"), "medium", $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "jenis_kelamin")), "html", null, true);
         echo "\">
             </td>
             <td>
@@ -60,7 +60,7 @@ class __TwigTemplate_4381b152230ff7410259c1004a6d30103d2918d87a6ef4a79ce10688766
 
     public function getTemplateName()
     {
-        return "default/admin_siswa/edit_picture.html";
+        return "default/admin_pengajar/edit_picture.html";
     }
 
     public function isTraitable()

@@ -244,21 +244,27 @@ class Pengajar_model extends CI_Model
      */
     public function update(
         $id,
-        $nip       = null,
+        $nip          = null,
         $nama,
-        $alamat,
-        $foto      = null,
-        $status_id = 0
+        $jenis_kelamin,
+        $tempat_lahir = null,
+        $tgl_lahir    = null,
+        $alamat       = null,
+        $foto         = null,
+        $status_id    = 0
     ) {
         $id        = (int)$id;
         $status_id = (int)$status_id;
 
         $data = array(
-            'nip' => $nip,
-            'nama' => $nama,
-            'alamat' => $alamat,
-            'foto' => $foto,
-            'status_id' => $status_id
+            'nip'           => $nip,
+            'nama'          => $nama,
+            'jenis_kelamin' => $jenis_kelamin,
+            'tempat_lahir'  => $tempat_lahir,
+            'tgl_lahir'     => $tgl_lahir,
+            'alamat'        => $alamat,
+            'foto'          => $foto,
+            'status_id'     => $status_id
         );
         $this->db->where('id', $id);
         $this->db->update('pengajar', $data);

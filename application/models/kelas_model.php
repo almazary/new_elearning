@@ -2,16 +2,16 @@
 
 /**
  * Class Model untuk resource kelas
- * 
+ *
  * @package Elearning Dokumenary
  * @link    http://www.dokumenary.net
  */
 class Kelas_model extends CI_Model
 {
     /**
-     * Method untuk mengambi semua data kelas 
-     * 
-     * @param  null|integer $parent_id     
+     * Method untuk mengambi semua data kelas
+     *
+     * @param  null|integer $parent_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
@@ -25,6 +25,7 @@ class Kelas_model extends CI_Model
     public function retrieve_all_child()
     {
         $this->db->where('parent_id !=', '0');
+        $this->db->where('aktif', 1);
         $this->db->order_by('urutan', 'ASC');
         $result = $this->db->get('kelas');
         return $result->result_array();
@@ -32,7 +33,7 @@ class Kelas_model extends CI_Model
 
     /**
      * Method untuk mengambil satu record data kelas
-     * 
+     *
      * @param  integer $id
      * @return array
      * @author Almazari <almazary@gmail.com>
@@ -42,13 +43,14 @@ class Kelas_model extends CI_Model
         $id = (int)$id;
 
         $this->db->where('id', $id);
+        $this->db->where('aktif', 1);
         $result = $this->db->get('kelas', '1');
         return $result->row_array();
     }
 
     /**
      * Method untuk menambah data kelas
-     * 
+     *
      * @param  string       $nama
      * @param  integer|null $parent_id
      * @return integer      last insert id
@@ -81,7 +83,7 @@ class Kelas_model extends CI_Model
 
     /**
      * Method untuk memperbaharui record kelas
-     * 
+     *
      * @param  integer      $id
      * @param  nama         $nama
      * @param  integer|null $parent_id
@@ -118,7 +120,7 @@ class Kelas_model extends CI_Model
 
     /**
      * Method untuk menghapus record kelas
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -134,10 +136,10 @@ class Kelas_model extends CI_Model
 
     /**
      * Method untuk menambah data kelas siswa
-     * 
+     *
      * @param  integer  $kelas_id
      * @param  integer  $siswa_id
-     * @param  integer  $aktif   
+     * @param  integer  $aktif
      * @return integer  last insert id
      * @author Almazari <almazary@gmail.com>
      */
@@ -162,11 +164,11 @@ class Kelas_model extends CI_Model
 
     /**
      * Method untuk memperbaharui kelas siswa
-     * 
-     * @param  integer $id      
+     *
+     * @param  integer $id
      * @param  integer $kelas_id
      * @param  integer $siswa_id
-     * @param  integer $aktif   
+     * @param  integer $aktif
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
      */
@@ -193,8 +195,8 @@ class Kelas_model extends CI_Model
 
     /**
      * Method untuk mengambil satu data kelas siswa berdasarkan id atau konsisi tertentu
-     * 
-     * @param  null|integer $id          
+     *
+     * @param  null|integer $id
      * @param  null|array   $array_where contoh :
      * <code>
      * $array_where = array(
@@ -222,7 +224,7 @@ class Kelas_model extends CI_Model
 
     /**
      * Method untuk mengambil semua data kelas siswa
-     * 
+     *
      * @param  integer      $no_of_records
      * @param  integer      $page_no
      * @param  null|array   $array_where
@@ -230,7 +232,7 @@ class Kelas_model extends CI_Model
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_siswa(
-        $no_of_records = 10, 
+        $no_of_records = 10,
         $page_no       = 1,
         $array_where   = null
     ) {
@@ -252,7 +254,7 @@ class Kelas_model extends CI_Model
 
     /**
      * Method untuk menghapus kelas siswa
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>

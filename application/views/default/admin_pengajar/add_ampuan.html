@@ -1,0 +1,63 @@
+
+<strong>Tambah Mapel Ampu</strong>
+{{ get_flashdata('add')|raw }}
+
+{{ form_open('admin/pengajar/add_ampuan/' ~ status_id ~ '/' ~ pengajar_id)|raw }}
+<input type="hidden" name="pengajar_id" value="{{ pengajar_id }}">
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th width="27%">Kelas <span class="text-error">*</span></th>
+            <td>
+                <select name="kelas_id" style="width:auto;" id="kelas_id">
+                    <option value="">Pilih Kelas</option>
+                    {% for k in kelas %}
+                    <option value="{{ k.id }}">{{ k.nama }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>Mapel <span class="text-error">*</span></th>
+            <td>
+                <div id="view-mapel"></div>
+            </td>
+        </tr>
+        <tr>
+            <th>Hari <span class="text-error">*</span></th>
+            <td>
+                {% for key, hari in get_indo_hari() %}
+                <label><input type="checkbox" name="hari_id[]" value="{{ key }}" style="margin-top:-2px;"> {{ hari }}</label>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <th>Jam Mulai <span class="text-error">*</span></th>
+            <td>
+                <input type="text" name="jam_mulai" style="width:19%" placeholder="hh:mm">
+                <span class="pull-right text-muted">Contoh : 08:30</span>
+            </td>
+        </tr>
+        <tr>
+            <th>Jam Selesai <span class="text-error">*</span></th>
+            <td>
+                <input type="text" name="jam_selesai" style="width:19%" placeholder="hh:mm">
+                <span class="pull-right text-muted">Contoh : 13:30</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{ form_close()|raw }}
+
+<script type="text/javascript">
+$('#kelas_id').change(function(){
+    $.ajax({
+        type : "POST",
+        url  : "{{ site_url('admin/ajax_post/mapel_kelas') }}",
+        data : "kelas_id=" + this.value,
+        success : function(data){
+            $('#view-mapel').html(data);
+        }
+    });
+});
+</script>

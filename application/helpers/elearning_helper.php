@@ -296,7 +296,7 @@ function get_row_data($model, $func, $args = array(), $field_name = '')
     if (empty($field_name)) {
         return $retrieve;
     } else {
-        return $retrieve[$field_name];
+        return isset($retrieve[$field_name]) ? $retrieve[$field_name] : '';
     }
 }
 
@@ -313,6 +313,15 @@ function get_indo_bulan($bln = '') {
         return $data;
     } else {
         return $data[$bln];
+    }
+}
+
+function get_indo_hari($hari = '') {
+    $data = array(1 => 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu', 'Minggu');
+    if (empty($hari)) {
+        return $data;
+    } else {
+        return $data[$hari];
     }
 }
 

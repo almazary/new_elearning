@@ -2,7 +2,7 @@
 
 /**
  * Class Model untuk resource mapel
- * 
+ *
  * @package Elearning Dokumenary
  * @link    http://www.dokumenary.net
  */
@@ -10,7 +10,7 @@ class Mapel_model extends CI_Model
 {
     /**
      * Method untuk menghapus record mapel kelas
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -26,7 +26,7 @@ class Mapel_model extends CI_Model
 
     /**
      * Method untuk mendapatkan semua data mapel kelas
-     * 
+     *
      * @param  integer $no_of_records
      * @param  integer $page_no
      * @return array
@@ -48,11 +48,11 @@ class Mapel_model extends CI_Model
         $result = $this->db->get('mapel_kelas');
         return $result->result_array();
     }
-    
+
     /**
      * Method untuk mendapatkan satu record mapel kelas
-     * 
-     * @param  null|integer $id      
+     *
+     * @param  null|integer $id
      * @param  null|integer $kelas_id
      * @param  null|integer $mapel_id
      * @return array
@@ -79,8 +79,8 @@ class Mapel_model extends CI_Model
 
     /**
      * Method untuk memperbaharui record mapel kelas
-     * 
-     * @param  integer $id      
+     *
+     * @param  integer $id
      * @param  integer $kelas_id
      * @param  integer $mapel_id
      * @return boolean true jika berhasil
@@ -103,9 +103,9 @@ class Mapel_model extends CI_Model
 
     /**
      * Method untuk menambah data mapel kelas
-     * 
-     * @param  integer $kelas_id 
-     * @param  integer $mapel_id 
+     *
+     * @param  integer $kelas_id
+     * @param  integer $mapel_id
      * @return integer last insert id
      * @author Almazari <almazary@gmail.com>
      */
@@ -124,14 +124,14 @@ class Mapel_model extends CI_Model
 
     /**
      * Method untuk mengambi semua data mapel
-     * 
-     * @param  integer      $no_of_records 
+     *
+     * @param  integer      $no_of_records
      * @param  integer      $page_no
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all(
-        $no_of_records = 10, 
+        $no_of_records = 10,
         $page_no       = 1
     ) {
         $no_of_records = (int)$no_of_records;
@@ -146,7 +146,7 @@ class Mapel_model extends CI_Model
 
     /**
      * Method untuk mendapatkan semua data kelas tanpa pagging
-     * 
+     *
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
@@ -159,7 +159,7 @@ class Mapel_model extends CI_Model
 
     /**
      * Method untuk menghapus record mapel
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -175,7 +175,7 @@ class Mapel_model extends CI_Model
 
     /**
      * Method untuk memperbaharui record mapel
-     * 
+     *
      * @param  integer      $id
      * @param  string       $nama
      * @param  null|string  $info
@@ -199,7 +199,7 @@ class Mapel_model extends CI_Model
 
     /**
      * Method untuk mengambil satu record mapel
-     * 
+     *
      * @param  integer $id
      * @return array
      * @author Almazari <almazary@gmail.com>
@@ -209,13 +209,14 @@ class Mapel_model extends CI_Model
         $id = (int)$id;
 
         $this->db->where('id', $id);
+        $this->db->where('aktif', 1);
         $result = $this->db->get('mapel', 1);
         return $result->row_array();
     }
 
     /**
      * Method untuk membuat data mapel
-     * 
+     *
      * @param  string       $nama
      * @param  null|string  $info
      * @return integer      last insert id

@@ -418,3 +418,77 @@ $config['admin/pengajar/add'] = array(
         'rules' => 'numeric'
     ),
 );
+
+$config['admin/pengajar/edit_profile'] = array(
+    array(
+        'field' => 'nip',
+        'label' => 'NIP',
+        'rules' => 'trim|xss_clean|callback_update_nip'
+    ),
+    array(
+        'field' => 'nama',
+        'label' => 'Nama',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'jenis_kelamin',
+        'label' => 'Jenis Kelamin',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'tempat_lahir',
+        'label' => 'Tempat Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'tgl_lahir',
+        'label' => 'Tgl Lahir',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'bln_lahir',
+        'label' => 'Bulan Lahir',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'thn_lahir',
+        'label' => 'Tahun Lahir',
+        'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[4]'
+    ),
+    array(
+        'field' => 'alamat',
+        'label' => 'Alamat',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'status_id',
+        'label' => 'Status',
+        'rules' => 'required|trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'is_admin',
+        'label' => 'Opsi',
+        'rules' => 'numeric'
+    ),
+);
+
+$config['admin/pengajar/edit_username'] = array(
+    array(
+        'field' => 'username',
+        'label' => 'Username',
+        'rules' => 'required|trim|xss_clean|valid_email|callback_update_username'
+    )
+);
+
+$config['admin/pengajar/edit_password'] = array(
+    array(
+        'field' => 'password',
+        'label' => 'Password Baru',
+        'rules' => 'required|trim|xss_clean|alpha_numeric'
+    ),
+    array(
+        'field' => 'password2',
+        'label' => 'Ulangi Password',
+        'rules' => 'required|matches[password]'
+    )
+);

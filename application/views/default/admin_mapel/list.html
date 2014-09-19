@@ -16,6 +16,7 @@
         <tr>
             <th width="8%">No</th>
             <th>Matapelajaran</th>
+            <th>Aktif</th>
             <th width="15%"></th>
         </tr>
     </thead>
@@ -24,9 +25,14 @@
         <tr>
             <td>{{ no }}.</td>
             <td>
-                <span {{ (v.aktif != 1) ? 'class="text-muted"' : '' }}>
                 {{ v.nama }}
-                </span>
+            </td>
+            <td>
+                {% if v.aktif == 1 %}
+                <i class="icon-ok"></i>
+                {% else %}
+                <i class="icon-minus"></i>
+                {% endif %}
             </td>
             <td>
                 <div class="btn-group">

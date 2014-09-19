@@ -2,7 +2,7 @@
 
 /**
  * Class Model untuk resource Login
- * 
+ *
  * @package Elearning Dokumenary
  * @link    http://www.dokumenary.net
  */
@@ -10,10 +10,10 @@ class Login_model extends CI_Model
 {
     /**
      * Method untuk menghapus data login
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
-     * @author Almazari <almazary@gmail.com> 
+     * @author Almazari <almazary@gmail.com>
      */
     public function delete($id)
     {
@@ -26,7 +26,7 @@ class Login_model extends CI_Model
 
     /**
      * Method untuk mengambil banyak data login
-     * 
+     *
      * @param  integer $no_of_records
      * @param  integer $page_no
      * @param  integer $is_admin
@@ -34,7 +34,7 @@ class Login_model extends CI_Model
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all(
-        $no_of_records = 10, 
+        $no_of_records = 10,
         $page_no       = 1,
         $is_admin      = 0
     ) {
@@ -56,15 +56,15 @@ class Login_model extends CI_Model
 
     /**
      * Method untuk mengambil satu data login
-     * 
-     * @param  null|integer $id          
-     * @param  null|string  $username    
+     *
+     * @param  null|integer $id
+     * @param  null|string  $username
      * @param  null|string  $password
-     * @param  null|integer $siswa_id    
-     * @param  null|integer $pengajar_id 
-     * @param  null|integer $is_admin    
+     * @param  null|integer $siswa_id
+     * @param  null|integer $pengajar_id
+     * @param  null|integer $is_admin
      * @return array
-     * @author Almazari <almazary@gmail.com>     
+     * @author Almazari <almazary@gmail.com>
      */
     public function retrieve(
         $id          = null,
@@ -103,11 +103,11 @@ class Login_model extends CI_Model
 
     /**
      * Method untuk mengupdate password login
-     * 
-     * @param  integer $id      
+     *
+     * @param  integer $id
      * @param  string  $password
      * @return boolean true jika berhasil
-     * @author Almazari <almazary@gmail.com>           
+     * @author Almazari <almazary@gmail.com>
      */
     public function update_password($id, $password)
     {
@@ -124,9 +124,9 @@ class Login_model extends CI_Model
      *
      * @param  integer      $id
      * @param  string       $username
-     * @param  integer|null $siswa_id   
+     * @param  integer|null $siswa_id
      * @param  integer|null $pengajar_id
-     * @param  integer      $is_admin   
+     * @param  integer      $is_admin
      * @param  string|null  $reset_kode
      * @return boolean      true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -162,12 +162,12 @@ class Login_model extends CI_Model
 
     /**
      * Method untuk menambah data login
-     * 
+     *
      * @param  string       $username
-     * @param  string       $password   
-     * @param  integer|null $siswa_id   
+     * @param  string       $password
+     * @param  integer|null $siswa_id
      * @param  integer|null $pengajar_id
-     * @param  integer      $is_admin   
+     * @param  integer      $is_admin
      * @return integer      last insert id
      * @author Almazari <almazary@gmail.com>
      */

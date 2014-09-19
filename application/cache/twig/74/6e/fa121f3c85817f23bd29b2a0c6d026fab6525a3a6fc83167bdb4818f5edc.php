@@ -172,14 +172,10 @@ function ch_uch_checkbox(source){
             echo "</li>
                             <li>";
             // line 79
-            echo anchor(((("admin/pengajar/moved_class/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id")), "Edit Mapel Ajar", array("class" => "iframe", "title" => "Edit Mapel Ajar"));
-            echo "</li>
-                            <li>";
-            // line 80
             echo anchor(((("admin/pengajar/edit_username/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id")), "Edit Username", array("class" => "iframe-2", "title" => "Edit Username Pengajar"));
             echo "</li>
                             <li>";
-            // line 81
+            // line 80
             echo anchor(((("admin/pengajar/edit_password/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id")), "Edit Password", array("class" => "iframe-3", "title" => "Edit Password Pengajar"));
             echo "</li>
                         </ul>
@@ -192,14 +188,14 @@ function ch_uch_checkbox(source){
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['no'], $context['v'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 88
+        // line 87
         echo "    </tbody>
 </table>
 
 ";
-        // line 91
+        // line 90
         if (((!twig_test_empty((isset($context["pengajar"]) ? $context["pengajar"] : null))) && (((isset($context["status_id"]) ? $context["status_id"] : null) == 0) || ((isset($context["status_id"]) ? $context["status_id"] : null) == 2)))) {
-            // line 92
+            // line 91
             echo "<br>
 <div class=\"row-fluid\">
     <div class=\"span7\">
@@ -210,10 +206,15 @@ function ch_uch_checkbox(source){
                     <select name=\"status_id\" style=\"width:100%;\">
                         <option>--Pilih Status--</option>
                         <option value=\"1\">Aktif</option>
-                        <?php if (\$status_id == 0): ?>
-                        <option value=\"2\">Blocking</option>
-                        <?php endif; ?>
-                    </select>
+                        ";
+            // line 101
+            if (((isset($context["status_id"]) ? $context["status_id"] : null) == 0)) {
+                // line 102
+                echo "                        <option value=\"2\">Blocking</option>
+                        ";
+            }
+            // line 104
+            echo "                    </select>
                 </td>
                 <td valign=\"top\">
                     <button type=\"submit\" class=\"btn\">Update</button>
@@ -224,16 +225,16 @@ function ch_uch_checkbox(source){
 </div>
 ";
         }
-        // line 115
+        // line 114
         echo "
 ";
-        // line 116
+        // line 115
         echo form_close();
         echo "
 
 <br>
 ";
-        // line 119
+        // line 118
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
 
@@ -254,6 +255,6 @@ function ch_uch_checkbox(source){
 
     public function getDebugInfo()
     {
-        return array (  237 => 119,  231 => 116,  228 => 115,  203 => 92,  201 => 91,  196 => 88,  183 => 81,  179 => 80,  175 => 79,  171 => 78,  167 => 77,  163 => 76,  159 => 75,  154 => 73,  147 => 69,  143 => 67,  139 => 65,  136 => 64,  134 => 63,  130 => 62,  124 => 59,  118 => 56,  111 => 53,  105 => 51,  103 => 50,  99 => 48,  95 => 47,  84 => 38,  80 => 36,  78 => 35,  70 => 30,  58 => 20,  54 => 18,  52 => 17,  44 => 12,  40 => 11,  36 => 10,  32 => 9,  24 => 4,  19 => 1,);
+        return array (  238 => 118,  232 => 115,  229 => 114,  217 => 104,  213 => 102,  211 => 101,  199 => 91,  197 => 90,  192 => 87,  179 => 80,  175 => 79,  171 => 78,  167 => 77,  163 => 76,  159 => 75,  154 => 73,  147 => 69,  143 => 67,  139 => 65,  136 => 64,  134 => 63,  130 => 62,  124 => 59,  118 => 56,  111 => 53,  105 => 51,  103 => 50,  99 => 48,  95 => 47,  84 => 38,  80 => 36,  78 => 35,  70 => 30,  58 => 20,  54 => 18,  52 => 17,  44 => 12,  40 => 11,  36 => 10,  32 => 9,  24 => 4,  19 => 1,);
     }
 }

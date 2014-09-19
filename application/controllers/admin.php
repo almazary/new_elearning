@@ -126,6 +126,8 @@ class Admin extends CI_Controller
 
     function ajax_post($act = '')
     {
+        $this->most_login();
+
         if (!empty($act)) {
             switch ($act) {
                 case 'hirarki_kelas':
@@ -145,8 +147,16 @@ class Admin extends CI_Controller
 
                     break;
 
-                default:
-                    # code...
+                case 'mapel_kelas':
+                    $kelas_id = $this->input->post('kelas_id', TRUE);
+                    $retrieve_all = $this->mapel_model->retrieve_all_kelas(null, $kelas_id);
+                    foreach ($retrieve_all as $v) {
+                        $m = $this->mapel_model->retrieve($v['mapel_id']);
+                        if (empty($m)) {
+                            continue;
+                        }
+                        echo '<label><input type="checkbox" name="mapel_kelas_id[]" value="'.$v['id'].'" style="margin-top:-2px;"> '.$m['nama'].'</label>';
+                    }
                     break;
             }
         }
@@ -256,8 +266,261 @@ class Admin extends CI_Controller
 
                     $this->session->set_flashdata('pengajar', get_alert('success', 'Data Pengajar berhasil di simpan'));
                     redirect('admin/pengajar/list/1');
+
+                } else {
+                    $upload_data = $this->upload->data();
+                    if (!empty($upload_data) AND is_file(get_path_image($upload_data['file_name']))) {
+                        unlink(get_path_image($upload_data['file_name']));
+                    }
+                }
+                break;
+
+            case 'detail':
+                $status_id         = (int)$segment_4;
+                $pengajar_id       = (int)$segment_5;
+                $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+                if (empty($retrieve_pengajar)) {
+                    echo 'Data Pengajar tidak ditemukan';
+                    exit();
                 }
 
+                $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
+
+                $data['module_title']     = anchor('admin/pengajar/list/'.$status_id, 'Data Pengajar').' / Detail Pengajar';
+                $data['sub_content_file'] = path_theme('admin_pengajar/detail.html');
+                $data['pengajar']         = $retrieve_pengajar;
+                $data['pengajar_login']   = $retrieve_login;
+                $data['status_id']        = $status_id;
+
+                //panggil colorbox
+                $html_js = load_comp_js(array(
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-pengajar.js')
+                ));
+                $data['comp_js']      = $html_js;
+                $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+                break;
+
+            case 'add_ampuan':
+                $iframe            = true;
+                $status_id         = (int)$segment_4;
+                $pengajar_id       = (int)$segment_5;
+                $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+                if (empty($retrieve_pengajar)) {
+                    echo 'Data Pengajar tidak ditemukan';
+                    exit();
+                }
+
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_pengajar/add_ampuan.html');
+                $data['status_id']    = $status_id;
+                $data['pengajar_id']  = $pengajar_id;
+                $data['kelas']        = $this->kelas_model->retrieve_all_child();
+                break;
+
+            case 'edit_profile':
+                $iframe            = true;
+                $status_id         = (int)$segment_4;
+                $pengajar_id       = (int)$segment_5;
+                $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+                if (empty($retrieve_pengajar)) {
+                    echo 'Data Pengajar tidak ditemukan';
+                    exit();
+                }
+
+                $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
+                $retrieve_pengajar['is_admin'] = $retrieve_login['is_admin'];
+
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_pengajar/edit_profile.html');
+                $data['status_id']    = $status_id;
+                $data['pengajar_id']  = $pengajar_id;
+                $data['pengajar']     = $retrieve_pengajar;
+
+                if ($this->form_validation->run('admin/pengajar/edit_profile') == TRUE) {
+                    $nip           = $this->input->post('nip', TRUE);
+                    $nama          = $this->input->post('nama', TRUE);
+                    $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+                    $tempat_lahir  = $this->input->post('tempat_lahir', TRUE);
+                    $tgl_lahir     = $this->input->post('tgl_lahir', TRUE);
+                    $bln_lahir     = $this->input->post('bln_lahir', TRUE);
+                    $thn_lahir     = $this->input->post('thn_lahir', TRUE);
+                    $alamat        = $this->input->post('alamat', TRUE);
+                    $status        = $this->input->post('status_id', TRUE);
+                    $is_admin      = $this->input->post('is_admin', TRUE);
+
+                    if (empty($thn_lahir)) {
+                        $tanggal_lahir = null;
+                    } else {
+                        $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
+                    }
+
+                    //update siswa
+                    $this->pengajar_model->update(
+                        $pengajar_id,
+                        $nip,
+                        $nama,
+                        $jenis_kelamin,
+                        $tempat_lahir,
+                        $tanggal_lahir,
+                        $alamat,
+                        $retrieve_pengajar['foto'],
+                        $status
+                    );
+
+                    //update login
+                    $this->login_model->update(
+                        $retrieve_login['id'],
+                        $retrieve_login['username'],
+                        null,
+                        $pengajar_id,
+                        $is_admin,
+                        null
+                    );
+
+                    $this->session->set_flashdata('edit', get_alert('success', 'Profil pengajar berhasil di perbaharui'));
+                    redirect('admin/pengajar/edit_profile/'.$status_id.'/'.$pengajar_id);
+                }
+                break;
+
+            case 'edit_picture':
+                $iframe            = true;
+                $status_id         = (int)$segment_4;
+                $pengajar_id       = (int)$segment_5;
+                $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+                if (empty($retrieve_pengajar)) {
+                    echo 'Data Pengajar tidak ditemukan';
+                    exit();
+                }
+
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_pengajar/edit_picture.html');
+                $data['status_id']    = $status_id;
+                $data['pengajar_id']  = $pengajar_id;
+                $data['pengajar']     = $retrieve_pengajar;
+
+                $config['upload_path']   = get_path_image();
+                $config['allowed_types'] = 'jpg|jpeg|png';
+                $config['max_size']      = '0';
+                $config['max_width']     = '0';
+                $config['max_height']    = '0';
+                $config['file_name']     = 'pengajar-'.url_title($retrieve_pengajar['nama'], '-', true);
+                $this->upload->initialize($config);
+
+                if ($this->upload->do_upload()) {
+
+                    if (is_file(get_path_image($retrieve_pengajar['foto']))) {
+                        unlink(get_path_image($retrieve_pengajar['foto']));
+                    }
+
+                    if (is_file(get_path_image($retrieve_pengajar['foto'], 'medium'))) {
+                        unlink(get_path_image($retrieve_pengajar['foto'], 'medium'));
+                    }
+
+                    if (is_file(get_path_image($retrieve_pengajar['foto'], 'small'))) {
+                        unlink(get_path_image($retrieve_pengajar['foto'], 'small'));
+                    }
+
+                    $upload_data = $this->upload->data();
+
+                    //create thumb small
+                    $this->create_img_thumb(
+                        get_path_image($upload_data['file_name']),
+                        '_small',
+                        '50',
+                        '50'
+                    );
+
+                    //create thumb medium
+                    $this->create_img_thumb(
+                        get_path_image($upload_data['file_name']),
+                        '_medium',
+                        '150',
+                        '150'
+                    );
+
+                    //update pengajar
+                    $this->pengajar_model->update(
+                        $pengajar_id,
+                        $retrieve_pengajar['nip'],
+                        $retrieve_pengajar['nama'],
+                        $retrieve_pengajar['jenis_kelamin'],
+                        $retrieve_pengajar['tempat_lahir'],
+                        $retrieve_pengajar['tgl_lahir'],
+                        $retrieve_pengajar['alamat'],
+                        $upload_data['file_name'],
+                        $retrieve_pengajar['status_id']
+                    );
+
+                    $this->session->set_flashdata('edit', get_alert('success', 'Foto pengajar berhasil di perbaharui'));
+                    redirect('admin/pengajar/edit_picture/'.$status_id.'/'.$pengajar_id);
+                } else {
+                    if (!empty($_FILES['userfile']['tmp_name'])) {
+                        $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
+                    }
+                }
+                break;
+
+            case 'edit_username':
+                $iframe            = true;
+                $status_id         = (int)$segment_4;
+                $pengajar_id       = (int)$segment_5;
+                $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+                if (empty($retrieve_pengajar)) {
+                    echo 'Data Pengajar tidak ditemukan';
+                    exit();
+                }
+
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_pengajar/edit_username.html');
+                $data['status_id']    = $status_id;
+                $data['pengajar_id']  = $pengajar_id;
+                $data['login']        = $this->login_model->retrieve(null, null, null, null, $pengajar_id);
+
+                if ($this->form_validation->run('admin/pengajar/edit_username') == TRUE) {
+                    $login_id = $this->input->post('login_id', TRUE);
+                    $username = $this->input->post('username', TRUE);
+
+                    //update username
+                    $this->login_model->update(
+                        $login_id,
+                        $username,
+                        null,
+                        $pengajar_id,
+                        $data['login']['is_admin'],
+                        $data['login']['reset_kode']
+                    );
+
+                    $this->session->set_flashdata('edit', get_alert('success', 'Username pengajar berhasil di perbaharui'));
+                    redirect('admin/pengajar/edit_username/'.$status_id.'/'.$pengajar_id);
+                }
+                break;
+
+            case 'edit_password':
+                $iframe            = true;
+                $status_id         = (int)$segment_4;
+                $pengajar_id       = (int)$segment_5;
+                $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+                if (empty($retrieve_pengajar)) {
+                    echo 'Data Pengajar tidak ditemukan';
+                    exit();
+                }
+
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_pengajar/edit_password.html');
+                $data['status_id']    = $status_id;
+                $data['pengajar_id']  = $pengajar_id;
+
+                $retrieve_login = $this->login_model->retrieve(null, null, null, null, $pengajar_id);
+
+                if ($this->form_validation->run('admin/pengajar/edit_password') == TRUE) {
+                    $password = $this->input->post('password2', TRUE);
+                    //update password
+                    $this->login_model->update_password($retrieve_login['id'], $password);
+
+                    $this->session->set_flashdata('edit', get_alert('success', 'Password pengajar berhasil di perbaharui'));
+                    redirect('admin/pengajar/edit_password/'.$status_id.'/'.$pengajar_id);
+                }
                 break;
 
             default:
@@ -276,7 +539,7 @@ class Admin extends CI_Controller
                 }
 
                 //ambil semua data pengajar
-                $retrieve_all = $this->pengajar_model->retrieve_all(1, $page_no, $status_id);
+                $retrieve_all = $this->pengajar_model->retrieve_all(50, $page_no, $status_id);
 
                 $data['status_id'] = $status_id;
                 $data['pengajar']  = $retrieve_all['results'];
@@ -290,6 +553,28 @@ class Admin extends CI_Controller
                 $data['comp_js']      = $html_js;
                 $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
+                if (isset($_POST['status_id']) AND !empty($_POST['status_id'])) {
+                    $post_status_id = $this->input->post('status_id', TRUE);
+                    $pengajar_ids   = $this->input->post('pengajar_id', TRUE);
+                    foreach ($pengajar_ids as $pengajar_id) {
+                        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+                        if (!empty($retrieve_pengajar)) {
+                            //update pengajar
+                            $this->pengajar_model->update(
+                                $retrieve_pengajar['id'],
+                                $retrieve_pengajar['nip'],
+                                $retrieve_pengajar['nama'],
+                                $retrieve_pengajar['jenis_kelamin'],
+                                $retrieve_pengajar['tempat_lahir'],
+                                $retrieve_pengajar['tgl_lahir'],
+                                $retrieve_pengajar['alamat'],
+                                $retrieve_pengajar['foto'],
+                                $post_status_id
+                            );
+                        }
+                    }
+                    redirect('admin/pengajar/list/'.$status_id);
+                }
                 break;
         }
 
@@ -411,6 +696,12 @@ class Admin extends CI_Controller
 
                     $this->session->set_flashdata('siswa', get_alert('success', 'Data siswa berhasil di simpan'));
                     redirect('admin/siswa/list/1');
+
+                } else {
+                    $upload_data = $this->upload->data();
+                    if (!empty($upload_data) AND is_file(get_path_image($upload_data['file_name']))) {
+                        unlink(get_path_image($upload_data['file_name']));
+                    }
                 }
 
                 break;
@@ -1162,6 +1453,10 @@ class Admin extends CI_Controller
                 $entity_id = $this->input->post('login_id', TRUE);
             }
 
+            if ($this->uri->segment(2) == 'pengajar') {
+                $entity_id = $this->input->post('login_id', TRUE);
+            }
+
             $this->db->where('id !=', $entity_id);
             $this->db->where('username', $username);
             $result = $this->db->get('login');
@@ -1191,6 +1486,20 @@ class Admin extends CI_Controller
         } else {
             $this->form_validation->set_message('update_nis', 'NIS di butuhkan.');
             return false;
+        }
+    }
+
+    function update_nip($nip = '') {
+        if (!empty($nip)) {
+            $this->db->where('id !=', $this->input->post('pengajar_id', TRUE));
+            $this->db->where('nip', $nip);
+            $result = $this->db->get('pengajar');
+            if ($result->num_rows() == 0) {
+                return true;
+            } else {
+                $this->form_validation->set_message('update_nip', 'NIP sudah digunakan.');
+                return false;
+            }
         }
     }
 
@@ -1353,17 +1662,21 @@ class Admin extends CI_Controller
 
             $sub_kelas = $this->kelas_model->retrieve_all($p['id']);
             foreach ($sub_kelas as $s) {
-                $return .= '<div class="panel panel-info" style="margin-left:25px;">
+                $return .= '<div class="panel panel-default" style="margin-left:25px;">
                 <div class="panel-heading">
-                    '.$s['nama'].'
-                    <a href="'.site_url('admin/mapel_kelas/add/'.$p['id'].'/'.$s['id']).'" class="btn pull-right" style="margin-top:-5px;"><i class="icon-wrench"></i> Atur Matapelajaran</a>
-                </div>
-                    <div class="panel-body">';
+                    '.$s['nama'].'&nbsp;&nbsp;'.(($s['aktif'] == 0) ? '<span class="label label-warning">Kelas tidak aktif</span>' : '').'
+                    '.(($s['aktif'] == 1) ? '<a href="'.site_url('admin/mapel_kelas/add/'.$p['id'].'/'.$s['id']).'" class="btn pull-right" style="margin-top:-5px;"><i class="icon-wrench"></i> Atur Matapelajaran</a>' : '').'
+                </div>';
+                if ($s['aktif'] == 1):
+                    $return .= '<div class="panel-body">';
                     $retrieve_all = $this->mapel_model->retrieve_all_kelas(null, $s['id']);
                     $return .= '<table class="table table-striped">
                     <tbody>';
                         foreach ($retrieve_all as $v):
                         $m = $this->mapel_model->retrieve($v['mapel_id']);
+                        if (empty($m)) {
+                            continue;
+                        }
                         $return .= '<tr>
                             <td>
                                 '.$m['nama'].'
@@ -1375,8 +1688,9 @@ class Admin extends CI_Controller
                         endforeach;
                     $return .= '</tbody>
                     </table>';
-                $return .= '</div>
-                </div>';
+                    $return .= '</div>';
+                endif;
+                $return .= '</div>';
             }
 
         }

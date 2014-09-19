@@ -1,0 +1,97 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Profil pengajar</strong>
+        <div class="btn-group pull-right" style="margin-top:-4px;">
+            {{ anchor('admin/pengajar/edit_profile/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Profil', {'class' : 'iframe-4 btn btn-small btn-primary', 'title' : 'Edit Profil Pengajar'})|raw }}
+            {{ anchor('admin/pengajar/edit_picture/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Foto', {'class' : 'iframe-5 btn btn-small btn-primary', 'title' : 'Edit Foto Pengajar'})|raw }}
+        </div>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <tr>
+                <th bgcolor="#FBFBFB" width="25%">NIP</th>
+                <td>{{ pengajar.nip }}</td>
+                <td rowspan="5" width="15%">
+                    <img style="width:113px;" class="img-polaroid" src="{{ get_url_image_pengajar(pengajar.foto, 'medium', pengajar.jenis_kelamin) }}">
+                </td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">Nama</th>
+                <td>{{ pengajar.nama }}</td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">Jenis Kelamin</th>
+                <td>{{ pengajar.jenis_kelamin }}</td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">Tempat Lahir</th>
+                <td>{{ pengajar.tempat_lahir }}</td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">Tanggal Lahir</th>
+                <td>{{ (pengajar.tgl_lahir is not empty) ? tgl_indo(pengajar.tgl_lahir) }}</td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">Alamat</th>
+                <td colspan="2">{{ pengajar.alamat }}</td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">Status</th>
+                <td colspan="2">
+                    {% if pengajar.status_id == 0 %}
+                        Pending
+                    {% elseif pengajar.status_id == 1 %}
+                        Aktif
+                    {% elseif pengajar.status_id == 2 %}
+                        Blocking
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="row-fluid">
+    <div class="span7">
+        <div class="panel panel-default" id="riwayat-kelas">
+            <div class="panel-heading">
+                <strong>Mapel Ajar</strong>
+                <div class="btn-group pull-right" style="margin-top:-4px;">
+                    {{ anchor('admin/pengajar/add_ampuan/' ~ status_id ~ '/' ~ pengajar.id, 'Tambah', {'class' : 'iframe btn btn-small btn-primary', 'title' : 'Tambah Matapelajaran Ajar'})|raw }}
+                </div>
+            </div>
+            <div class="panel-body">
+
+            </div>
+        </div>
+    </div>
+    <div class="span5">
+        <div class="panel panel-default" id="akun">
+            <div class="panel-heading">
+                <strong>Akun Login</strong>
+                <div class="btn-group pull-right" style="margin-top:-4px;">
+                    {{ anchor('admin/pengajar/edit_username/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Username', {'class' : 'iframe-2 btn btn-small btn-primary', 'title' : 'Edit Username pengajar'})|raw }}
+                    {{ anchor('admin/pengajar/edit_password/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Password', {'class' : 'iframe-3 btn btn-small btn-primary', 'title' : 'Edit Password pengajar'})|raw }}
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th width="30%" bgcolor="#FBFBFB">Username</th>
+                            <td>
+                                {{ pengajar_login.username }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th bgcolor="#FBFBFB">Password</th>
+                            <td>
+                                *********
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

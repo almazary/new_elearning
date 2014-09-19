@@ -39,29 +39,36 @@ class __TwigTemplate_24edc43a3fe0110fd02326fd520662c7d3dc5f8ad71b741e248809d9594
         echo "
                 </div>
             </div>
-            <div class=\"control-group\">
+            ";
+        // line 15
+        if ((!(null === $this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "parent_id")))) {
+            // line 16
+            echo "            <div class=\"control-group\">
                 <label class=\"control-label\">Status</label>
                 <div class=\"controls\">
                     <label class=\"checkbox inline\">
                         <input type=\"checkbox\" value=\"1\" name=\"status\" ";
-        // line 19
-        echo twig_escape_filter($this->env, set_checkbox("status", "1", ((($this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "aktif") == 1)) ? (true) : (false))), "html", null, true);
-        echo ">
+            // line 20
+            echo twig_escape_filter($this->env, set_checkbox("status", "1", ((($this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "aktif") == 1)) ? (true) : (false))), "html", null, true);
+            echo ">
                         Aktif
                     </label>
                 </div>
             </div>
-            <div class=\"control-group\">
+            ";
+        }
+        // line 26
+        echo "            <div class=\"control-group\">
                 <div class=\"controls\">
                     <button type=\"submit\" class=\"btn btn-primary\">Simpan</button>
                     <a href=\"";
-        // line 27
+        // line 29
         echo twig_escape_filter($this->env, site_url("admin/kelas"), "html", null, true);
         echo "\" class=\"btn\">Batal</a>
                 </div>
             </div>
         ";
-        // line 30
+        // line 32
         echo form_close();
         echo "
     </div>
@@ -81,6 +88,6 @@ class __TwigTemplate_24edc43a3fe0110fd02326fd520662c7d3dc5f8ad71b741e248809d9594
 
     public function getDebugInfo()
     {
-        return array (  65 => 30,  59 => 27,  48 => 19,  38 => 12,  34 => 11,  27 => 7,  19 => 1,);
+        return array (  72 => 32,  66 => 29,  61 => 26,  52 => 20,  46 => 16,  44 => 15,  38 => 12,  34 => 11,  27 => 7,  19 => 1,);
     }
 }
