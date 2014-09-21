@@ -140,7 +140,7 @@ function ch_uch_checkbox(source){
             $context["kelas_aktif"] = get_row_data("kelas_model", "retrieve_siswa", array(0 => null, 1 => array("siswa_id" => $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"), "aktif" => "1")));
             // line 67
             echo "                ";
-            echo twig_escape_filter($this->env, get_row_data("kelas_model", "retrieve", array("kelas_id" => $this->getAttribute((isset($context["kelas_aktif"]) ? $context["kelas_aktif"] : null), "kelas_id")), "nama"), "html", null, true);
+            echo twig_escape_filter($this->env, get_row_data("kelas_model", "retrieve", array(0 => $this->getAttribute((isset($context["kelas_aktif"]) ? $context["kelas_aktif"] : null), "kelas_id"), 1 => true), "nama"), "html", null, true);
             echo "
             </td>
             <td>

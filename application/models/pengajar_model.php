@@ -10,6 +10,101 @@ class Pengajar_model extends CI_Model
 {
 
     /**
+     * Method untuk filter pengajar
+     *
+     * @param  string  $nip
+     * @param  string  $nama
+     * @param  array   $jenis_kelamin
+     * @param  string  $tempat_lahir
+     * @param  string  $tgl_lahir
+     * @param  string  $bln_lahir
+     * @param  string  $thn_lahir
+     * @param  string  $alamat
+     * @param  array   $status_id
+     * @param  string  $username
+     * @param  integer $page_no
+     * @return array
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_all_filter(
+        $nip           = '',
+        $nama          = '',
+        $jenis_kelamin = array(),
+        $tempat_lahir  = '',
+        $tgl_lahir     = '',
+        $bln_lahir     = '',
+        $thn_lahir     = '',
+        $alamat        = '',
+        $status_id     = array(),
+        $username      = '',
+        $is_admin      = '',
+        $page_no       = 1
+    ) {
+        $where = array();
+        $orderby['pengajar.nama'] = 'ASC';
+
+        if (!empty($nip)) {
+            $nip = (int)$nip;
+            $where['pengajar.nip'] = array($nip, 'like', 'after');
+        }
+
+        if (!empty($nama)) {
+            $nama = (string)$nama;
+            $where['pengajar.nama'] = array($nama, 'like');
+        }
+
+        if (!empty($jenis_kelamin) AND is_array($jenis_kelamin)) {
+            $where['pengajar.jenis_kelamin'] = array($jenis_kelamin, 'where_in');
+        }
+
+        if (!empty($tempat_lahir)) {
+            $tempat_lahir = (string)$tempat_lahir;
+            $where['pengajar.tempat_lahir'] = array($tempat_lahir, 'like');
+        }
+
+        if (!empty($tgl_lahir)) {
+            $tgl_lahir = (int)$tgl_lahir;
+            $where['DAY(pengajar.tgl_lahir)'] = array($tgl_lahir, 'where');
+        }
+
+        if (!empty($bln_lahir)) {
+            $bln_lahir = (int)$bln_lahir;
+            $where['MONTH(pengajar.tgl_lahir)'] = array($bln_lahir, 'where');
+        }
+
+        if (!empty($thn_lahir)) {
+            $thn_lahir = (int)$thn_lahir;
+            $where['YEAR(pengajar.tgl_lahir)'] = array($thn_lahir, 'where');
+        }
+
+        if (!empty($alamat)) {
+            $alamat = (string)$alamat;
+            $where['pengajar.alamat'] = array($alamat, 'like');
+        }
+
+        if (!empty($status_id) AND is_array($status_id)) {
+            $where['pengajar.status_id'] = array($status_id, 'where_in');
+        }
+
+        if (!empty($username)) {
+            $username                = (string)$username;
+            $where['login']          = array('pengajar.id = login.pengajar_id', 'join', 'inner');
+            $where['login.username'] = array($username, 'like');
+        }
+
+        if (!empty($is_admin)) {
+            if (empty($username)) {
+                $where['login']          = array('pengajar.id = login.pengajar_id', 'join', 'inner');
+            }
+            $where['login.is_admin'] = array($is_admin, 'where');
+        }
+
+        $data = $this->pager->set('pengajar', 50, $page_no, $where, $orderby, 'pengajar.*');
+
+        return $data;
+    }
+
+    /**
      * Method untuk menghapus record mapel ajar berhasarkan idnya
      *
      * @param  integer $id
@@ -28,33 +123,32 @@ class Pengajar_model extends CI_Model
     /**
      * Method untuk mendapatkan semua data mapel ajar
      *
-     * @param  integer          $no_of_records
-     * @param  integer          $page_no
+     * @param  null|integer     $hari_id
      * @param  null|integer     $pengajar_id
      * @param  null|integer     $mapel_kelas_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_ma(
-        $no_of_records  = 10,
-        $page_no        = 1,
+        $hari_id        = null,
         $pengajar_id    = null,
         $mapel_kelas_id = null
     ) {
-        $no_of_records = (int)$no_of_records;
-        $page_no       = (int)$page_no;
-
-        $where = array();
+        if (!is_null($hari_id)) {
+            $hari_id = (int)$hari_id;
+            $this->db->where('hari_id', $hari_id);
+        }
         if (!is_null($pengajar_id)) {
-            $where['pengajar_id'] = array($pengajar_id, 'where');
+            $pengajar_id = (int)$pengajar_id;
+            $this->db->where('pengajar_id', $pengajar_id);
         }
         if (!is_null($mapel_kelas_id)) {
-            $where['mapel_kelas_id'] = array($mapel_kelas_id, 'where');
+            $mapel_kelas_id = (int)$mapel_kelas_id;
+            $this->db->where('mapel_kelas_id', $mapel_kelas_id);
         }
-
-        $data = $this->pager->set('mapel_ajar', $no_of_records, $page_no, $where);
-
-        return $data;
+        $this->db->order_by('jam_mulai', 'ASC');
+        $result = $this->db->get('mapel_ajar');
+        return $result->result_array();
     }
 
     /**
@@ -66,7 +160,7 @@ class Pengajar_model extends CI_Model
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
-    public function retrieve_ma($id = null, $pengajar_id = null, $mapel_kelas_id = null)
+    public function retrieve_ma($id = null, $pengajar_id = null, $mapel_kelas_id = null, $hari_id = null, $jam_mulai = null, $jam_selesai = null)
     {
         if (!is_null($id)) {
             $id = (int)$id;
@@ -81,6 +175,19 @@ class Pengajar_model extends CI_Model
         if (!is_null($mapel_kelas_id)) {
             $mapel_kelas_id = (int)$mapel_kelas_id;
             $this->db->where('mapel_kelas_id', $mapel_kelas_id);
+        }
+
+        if (!is_null($hari_id)) {
+            $hari_id = (int)$hari_id;
+            $this->db->where('hari_id', $hari_id);
+        }
+
+        if (!is_null($jam_mulai)) {
+            $this->db->where('jam_mulai', $jam_mulai);
+        }
+
+        if (!is_null($jam_selesai)) {
+            $this->db->where('jam_selesai', $jam_selesai);
         }
 
         $result = $this->db->get('mapel_ajar', 1);
@@ -105,7 +212,8 @@ class Pengajar_model extends CI_Model
         $jam_mulai,
         $jam_selesai,
         $pengajar_id,
-        $mapel_kelas_id
+        $mapel_kelas_id,
+        $aktif
     ) {
         $id             = (int)$id;
         $hari_id        = (int)$hari_id;
@@ -117,7 +225,8 @@ class Pengajar_model extends CI_Model
             'jam_mulai'      => $jam_mulai,
             'jam_selesai'    => $jam_selesai,
             'pengajar_id'    => $pengajar_id,
-            'mapel_kelas_id' => $mapel_kelas_id
+            'mapel_kelas_id' => $mapel_kelas_id,
+            'aktif'          => $aktif
         );
         $this->db->where('id', $id);
         $this->db->update('mapel_ajar', $data);

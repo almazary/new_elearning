@@ -173,7 +173,7 @@ class __TwigTemplate_8149e4a583675965bab93b65c2332dbcf40163e8cca17fc1a43829041d4
                         <td>
                             ";
             // line 91
-            echo twig_escape_filter($this->env, get_row_data("kelas_model", "retrieve", array(0 => $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "kelas_id")), "nama"), "html", null, true);
+            echo twig_escape_filter($this->env, get_row_data("kelas_model", "retrieve", array(0 => $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "kelas_id"), 1 => true), "nama"), "html", null, true);
             echo "
                         </td>
                         ";

@@ -49,23 +49,19 @@ class __TwigTemplate_c90a8d80131486150f542ae7f13b0fa090bcfb3497a0bfb0246c8c7eae0
         // line 21
         echo twig_escape_filter($this->env, site_url("admin/pengajar"), "html", null, true);
         echo "\"><i class=\"menu-icon icon-book\"></i> Pengajar </a></li>
-        <li><a href=\"";
-        // line 22
-        echo twig_escape_filter($this->env, site_url("admin/adm"), "html", null, true);
-        echo "\"><i class=\"menu-icon icon-book\"></i> Admin </a></li>
     </ul>
 
     <ul class=\"widget widget-menu unstyled\">
         <li><a href=\"";
-        // line 26
+        // line 25
         echo twig_escape_filter($this->env, site_url("admin/kelas"), "html", null, true);
         echo "\"><i class=\"menu-icon icon-tasks\"></i> Manajemen Kelas </a></li>
         <li><a href=\"";
-        // line 27
+        // line 26
         echo twig_escape_filter($this->env, site_url("admin/mapel"), "html", null, true);
         echo "\"><i class=\"menu-icon icon-book\"></i>Manajemen Matapelajaran </a></li>
         <li><a href=\"";
-        // line 28
+        // line 27
         echo twig_escape_filter($this->env, site_url("admin/mapel_kelas"), "html", null, true);
         echo "\"><i class=\"menu-icon icon-paste\"></i>Matapelajaran Kelas </a></li>
     </ul>
@@ -73,7 +69,7 @@ class __TwigTemplate_c90a8d80131486150f542ae7f13b0fa090bcfb3497a0bfb0246c8c7eae0
     <!--/.widget-nav-->
     <ul class=\"widget widget-menu unstyled\">
         <li><a href=\"";
-        // line 33
+        // line 32
         echo twig_escape_filter($this->env, site_url("admin/logout"), "html", null, true);
         echo "\"><i class=\"menu-icon icon-signout\"></i>Logout </a></li>
     </ul>
@@ -94,6 +90,6 @@ class __TwigTemplate_c90a8d80131486150f542ae7f13b0fa090bcfb3497a0bfb0246c8c7eae0
 
     public function getDebugInfo()
     {
-        return array (  77 => 33,  69 => 28,  65 => 27,  61 => 26,  54 => 22,  50 => 21,  46 => 20,  39 => 16,  35 => 15,  42 => 10,  38 => 9,  34 => 8,  28 => 5,  24 => 4,  19 => 1,);
+        return array (  73 => 32,  65 => 27,  61 => 26,  57 => 25,  50 => 21,  46 => 20,  39 => 16,  35 => 15,  19 => 1,);
     }
 }

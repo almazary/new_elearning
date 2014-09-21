@@ -1,8 +1,8 @@
 $(document).ready(function(){
     $(".iframe").colorbox({
         iframe:true,
-        width:"400",
-        height:"550",
+        width:"430",
+        height:"405",
         fixed:true,
         onClosed : function() {
             location.reload();
@@ -39,6 +39,15 @@ $(document).ready(function(){
         iframe:true,
         width:"450",
         height:"340",
+        fixed:true,
+        onClosed : function() {
+            location.reload();
+        }
+    });
+    $(".iframe-6").colorbox({
+        iframe:true,
+        width:"430",
+        height:"450",
         fixed:true,
         onClosed : function() {
             location.reload();

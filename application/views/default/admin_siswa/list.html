@@ -64,7 +64,7 @@ function ch_uch_checkbox(source){
             </td>
             <td>
                 {% set kelas_aktif = get_row_data('kelas_model', 'retrieve_siswa', [null, {'siswa_id' : v.id, 'aktif' : '1'}]) %}
-                {{ get_row_data('kelas_model', 'retrieve', {'kelas_id' : kelas_aktif.kelas_id}, 'nama') }}
+                {{ get_row_data('kelas_model', 'retrieve', [kelas_aktif.kelas_id, true], 'nama') }}
             </td>
             <td>
                 <ul class="nav nav-pills" style="margin-bottom:0px;">

@@ -88,7 +88,7 @@
                     <tr>
                         <td>{{ no }}.</td>
                         <td>
-                            {{ get_row_data('kelas_model', 'retrieve', [v.kelas_id], 'nama') }}
+                            {{ get_row_data('kelas_model', 'retrieve', [v.kelas_id, true], 'nama') }}
                         </td>
                         {% if status_id != 3 %}
                         <td>

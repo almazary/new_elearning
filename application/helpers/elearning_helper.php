@@ -312,6 +312,7 @@ function get_indo_bulan($bln = '') {
     if (empty($bln)) {
         return $data;
     } else {
+        $bln = (int)$bln;
         return $data[$bln];
     }
 }
@@ -321,11 +322,18 @@ function get_indo_hari($hari = '') {
     if (empty($hari)) {
         return $data;
     } else {
+        $hari = (int)$hari;
         return $data[$hari];
     }
 }
 
-function tgl_indo($tgl) {
-    $pisah = explode('-', $tgl);
-    return $pisah[2].' '.get_indo_bulan($pisah[1]).' '.$pisah[0];
+function tgl_indo($tgl = '') {
+    if (!empty($tgl)) {
+        $pisah = explode('-', $tgl);
+        return $pisah[2].' '.get_indo_bulan($pisah[1]).' '.$pisah[0];
+    }
+}
+
+function get_post_data($key = '') {
+    return $_POST[$key];
 }

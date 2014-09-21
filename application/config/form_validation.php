@@ -492,3 +492,84 @@ $config['admin/pengajar/edit_password'] = array(
         'rules' => 'required|matches[password]'
     )
 );
+
+$config['admin/pengajar/ampuan'] = array(
+    array(
+        'field' => 'kelas_id',
+        'label' => 'Kelas',
+        'rules' => 'required|trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'mapel_kelas_id',
+        'label' => 'Matapelajaran',
+        'rules' => 'required|trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'jam_mulai',
+        'label' => 'Jam Mulai',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'jam_selesai',
+        'label' => 'Jam Selesai',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'aktif',
+        'label' => 'Aktif',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+);
+
+$config['admin/pengajar/filter'] = array(
+    array(
+        'field' => 'nip',
+        'label' => 'NIP',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'nama',
+        'label' => 'Nama',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'jenis_kelamin[]',
+        'label' => 'Jenis Kelamin',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'tempat_lahir',
+        'label' => 'Tempat Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'tgl_lahir',
+        'label' => 'Tgl Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'bln_lahir',
+        'label' => 'Bulan Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'thn_lahir',
+        'label' => 'Tahun Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'alamat',
+        'label' => 'Alamat',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'status_id[]',
+        'label' => 'Status',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'username',
+        'label' => 'Username',
+        'rules' => 'trim|xss_clean'
+    ),
+);

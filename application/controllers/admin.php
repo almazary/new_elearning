@@ -120,7 +120,8 @@ class Admin extends CI_Controller
     {
         $this->session->set_userdata('admin', null);
         $this->session->set_userdata('filter_siswa', null);
-
+        $this->session->set_userdata('filter_pengajar', null);
+        unset($_SESSION['KCFINDER']);
         redirect('admin/login');
     }
 
@@ -137,7 +138,7 @@ class Admin extends CI_Controller
                         if (!is_numeric($parent_id)) {
                             $parent_id = null;
                         }
-                        $retrieve = $this->kelas_model->retrieve($id);
+                        $retrieve = $this->kelas_model->retrieve($id, true);
 
                         //update
                         $this->kelas_model->update($id, $retrieve['nama'], $parent_id, $o, $retrieve['aktif']);
@@ -149,13 +150,14 @@ class Admin extends CI_Controller
 
                 case 'mapel_kelas':
                     $kelas_id = $this->input->post('kelas_id', TRUE);
+                    echo '<option value="">Pilih Matapelajaran</option>';
                     $retrieve_all = $this->mapel_model->retrieve_all_kelas(null, $kelas_id);
                     foreach ($retrieve_all as $v) {
                         $m = $this->mapel_model->retrieve($v['mapel_id']);
                         if (empty($m)) {
                             continue;
                         }
-                        echo '<label><input type="checkbox" name="mapel_kelas_id[]" value="'.$v['id'].'" style="margin-top:-2px;"> '.$m['nama'].'</label>';
+                        echo '<option value="'.$v['id'].'">'.$m['nama'].'</option>';
                     }
                     break;
             }
@@ -305,6 +307,11 @@ class Admin extends CI_Controller
                 $iframe            = true;
                 $status_id         = (int)$segment_4;
                 $pengajar_id       = (int)$segment_5;
+                $hari_id           = (int)$segment_6;
+                if ($hari_id < 1 OR $hari_id > 7) {
+                    echo 'Hari tidak ditemukan';
+                    exit();
+                }
                 $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
                 if (empty($retrieve_pengajar)) {
                     echo 'Data Pengajar tidak ditemukan';
@@ -315,7 +322,73 @@ class Admin extends CI_Controller
                 $data['content_file'] = path_theme('admin_pengajar/add_ampuan.html');
                 $data['status_id']    = $status_id;
                 $data['pengajar_id']  = $pengajar_id;
+                $data['hari_id']      = $hari_id;
                 $data['kelas']        = $this->kelas_model->retrieve_all_child();
+
+                if ($this->form_validation->run('admin/pengajar/ampuan') == TRUE) {
+                    $mapel_kelas_id = $this->input->post('mapel_kelas_id', TRUE);
+                    $jam_mulai      = $this->input->post('jam_mulai', TRUE);
+                    $jam_selesai    = $this->input->post('jam_selesai', TRUE);
+
+                    $this->pengajar_model->create_ma(
+                        $hari_id,
+                        $jam_mulai,
+                        $jam_selesai,
+                        $pengajar_id,
+                        $mapel_kelas_id
+                    );
+
+                    $this->session->set_flashdata('add', get_alert('success', 'Jadwal Matapelajaran berhasil di tambah'));
+                    redirect('admin/pengajar/add_ampuan/'.$status_id.'/'.$pengajar_id.'/'.$hari_id);
+                }
+                break;
+
+            case 'edit_ampuan':
+                $iframe            = true;
+                $status_id         = (int)$segment_4;
+                $pengajar_id       = (int)$segment_5;
+                $ma_id             = (int)$segment_6;
+                $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+                if (empty($retrieve_pengajar)) {
+                    echo 'Data Pengajar tidak ditemukan';
+                    exit();
+                }
+
+                $retrieve_ma = $this->pengajar_model->retrieve_ma($ma_id);
+                if (empty($retrieve_ma)) {
+                    echo 'Mapel Ajar tidak ditemukan';
+                    exit();
+                }
+
+                $retrieve_mk = $this->mapel_model->retrieve_kelas($retrieve_ma['mapel_kelas_id']);
+
+                unset($data['content_file']);
+                $data['content_file'] = path_theme('admin_pengajar/edit_ampuan.html');
+                $data['status_id']    = $status_id;
+                $data['pengajar_id']  = $pengajar_id;
+                $data['ma']           = $retrieve_ma;
+                $data['mk']           = $retrieve_mk;
+                $data['kelas']        = $this->kelas_model->retrieve_all_child();
+
+                if ($this->form_validation->run('admin/pengajar/ampuan') == TRUE) {
+                    $mapel_kelas_id = $this->input->post('mapel_kelas_id', TRUE);
+                    $jam_mulai      = $this->input->post('jam_mulai', TRUE);
+                    $jam_selesai    = $this->input->post('jam_selesai', TRUE);
+                    $aktif          = $this->input->post('aktif');
+
+                    $this->pengajar_model->update_ma(
+                        $retrieve_ma['id'],
+                        $retrieve_ma['hari_id'],
+                        $jam_mulai,
+                        $jam_selesai,
+                        $pengajar_id,
+                        $mapel_kelas_id,
+                        $aktif
+                    );
+
+                    $this->session->set_flashdata('edit', get_alert('success', 'Jadwal Ajar berhasil di perbaharui'));
+                    redirect('admin/pengajar/edit_ampuan/'.$status_id.'/'.$pengajar_id.'/'.$retrieve_ma['id']);
+                }
                 break;
 
             case 'edit_profile':
@@ -520,6 +593,125 @@ class Admin extends CI_Controller
 
                     $this->session->set_flashdata('edit', get_alert('success', 'Password pengajar berhasil di perbaharui'));
                     redirect('admin/pengajar/edit_password/'.$status_id.'/'.$pengajar_id);
+                }
+                break;
+
+            case 'filter':
+                $data['module_title']     = 'Data Pengajar';
+                $data['sub_content_file'] = path_theme('admin_pengajar/filter.html');
+
+                $page_no = $segment_4;
+                if (empty($page_no)) {
+                    $page_no = 1;
+                }
+
+                if ($this->form_validation->run('admin/pengajar/filter') == TRUE) {
+
+                    $filter = array(
+                        'nip'           => $this->input->post('nip', TRUE),
+                        'nama'          => $this->input->post('nama', TRUE),
+                        'jenis_kelamin' => (empty($this->input->post('jenis_kelamin', TRUE))) ? array() : $this->input->post('jenis_kelamin', TRUE),
+                        'tempat_lahir'  => $this->input->post('tempat_lahir', TRUE),
+                        'tgl_lahir'     => (int)$this->input->post('tgl_lahir', TRUE),
+                        'bln_lahir'     => (int)$this->input->post('bln_lahir', TRUE),
+                        'thn_lahir'     => (empty((int)$this->input->post('thn_lahir', TRUE))) ? '' : (int)$this->input->post('thn_lahir', TRUE),
+                        'alamat'        => $this->input->post('alamat', TRUE),
+                        'status_id'     => (empty($this->input->post('status_id', TRUE))) ? array() : $this->input->post('status_id', TRUE),
+                        'username'      => $this->input->post('username', TRUE),
+                        'is_admin'      => $this->input->post('is_admin', TRUE)
+                    );
+
+                    $this->session->set_userdata('filter_pengajar', $filter);
+
+                    redirect('admin/pengajar/filter');
+
+                } elseif (!empty($this->session->userdata('filter_pengajar'))) {
+
+                    $filter = $this->session->userdata('filter_pengajar');
+
+                } else {
+
+                    $filter = array();
+
+                    $retrieve_all = array(
+                        'results'      => array(),
+                        'total_record' => 0,
+                        'total_respon' => 0,
+                        'current_page' => 1,
+                        'total_page'   => 0,
+                        'next_page'    => 0,
+                        'prev_page'    => 0
+                    );
+
+                }
+
+                $data['filter'] = $filter;
+
+                if (!empty($filter)) {
+                    $retrieve_all = $this->pengajar_model->retrieve_all_filter(
+                        $filter['nip'], $filter['nama'], $filter['jenis_kelamin'], $filter['tempat_lahir'], $filter['tgl_lahir'], $filter['bln_lahir'], $filter['thn_lahir'], $filter['alamat'], $filter['status_id'], $filter['username'], $filter['is_admin'], $page_no
+                    );
+                }
+
+                //panggil colorbox
+                $html_js = load_comp_js(array(
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-siswa.js')
+                ));
+                $data['comp_js']      = $html_js;
+                $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+
+                $data['pengajars']     = $retrieve_all['results'];
+                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/pengajar/filter/');
+
+                break;
+
+            case 'filter_action':
+                if ($this->form_validation->run('admin/pengajar/filter') == TRUE) {
+                    $pengajar_ids = $this->input->post('pengajar_id', TRUE);
+                    $status_id = (int)$this->input->post('status_id', TRUE);
+
+                    if (!empty($pengajar_ids) AND is_array($pengajar_ids)) {
+
+                        if (empty($status_id)) {
+                            $this->session->set_flashdata('pengajar', get_alert('warning', 'Tidak ada aksi yang dipilih'));
+                            redirect('admin/pengajar/filter');
+                        }
+
+                        foreach ($pengajar_ids as $pengajar_id) {
+                            $p = $this->pengajar_model->retrieve($pengajar_id);
+                            if (!empty($status_id)) {
+                                //update status siswa
+                                $this->pengajar_model->update(
+                                    $pengajar_id,
+                                    $p['nip'],
+                                    $p['nama'],
+                                    $p['jenis_kelamin'],
+                                    $p['tempat_lahir'],
+                                    $p['tgl_lahir'],
+                                    $p['alamat'],
+                                    $p['foto'],
+                                    $status_id
+                                );
+                            }
+                        }
+
+                        $label = '';
+                        if (!empty($status_id)) {
+                            $label_status = array('Pending', 'Aktif', 'Blocking');
+                            $label .= 'status = '.$label_status[$status_id];
+                        }
+
+                        $this->session->set_flashdata('pengajar', get_alert('success', 'Pengajar berhasil di perbaharui ('.$label.')'));
+                        redirect('admin/pengajar/filter');
+
+                    } else {
+                        $this->session->set_flashdata('pengajar', get_alert('warning', 'Tidak ada pengajar yang dipilih'));
+                        redirect('admin/pengajar/filter');
+                    }
+
+                } else {
+                    redirect('admin/pengajar/filter');
                 }
                 break;
 
@@ -973,7 +1165,8 @@ class Admin extends CI_Controller
             case 'filter':
                 $data['module_title']     = 'Data Siswa';
                 $data['sub_content_file'] = path_theme('admin_siswa/filter.html');
-                $data['kelas']            = $this->kelas_model->retrieve_all_child();
+                $data['kelas_all']            = $this->kelas_model->retrieve_all_child(true);
+                $data['kelas']      = $this->kelas_model->retrieve_all_child();
 
                 $page_no = $segment_3;
                 if (empty($page_no)) {
@@ -1180,166 +1373,6 @@ class Admin extends CI_Controller
 
         $this->view($data, ($iframe) ? true : false);
     }
-
-    // function adm($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '')
-    // {
-    //     $this->most_login();
-
-    //     $data = array(
-    //         'web_title'     => 'Data Admin | Administrator',
-    //         'menu_file'     => path_theme('admin_menu.html'),
-    //         'content_file'  => path_theme('admin_admin/index.html')
-    //     );
-
-    //     switch ($act) {
-    //         case 'detail':
-    //             $id = (int)$segment_3;
-    //             $data['module_title'] = anchor('admin/adm/list', 'Data Administrator').' / Detail';
-    //             $data['sub_content_file'] = path_theme('admin_admin/detail.html');
-
-    //             //retrieve user login
-    //             $retrieve_login = $this->login_model->retrieve($id);
-    //             if (empty($retrieve_login)) {
-    //                 redirect('admin/adm/list');
-    //             }
-
-    //             //retrieve pengajar
-    //             $retrieve_pengajar = $this->pengajar_model->retrieve($retrieve_login['pengajar_id']);
-    //             if (empty($retrieve_pengajar)) {
-    //                 redirect('admin/adm/list');
-    //             }
-
-    //             $data['login']    = $retrieve_login;
-    //             $data['pengajar'] = $retrieve_pengajar;
-
-    //             break;
-
-    //         case 'edit':
-    //             $id = (int)$segment_3;
-    //             $data['module_title'] = anchor('admin/adm/list', 'Data Administrator').' / Edit';
-    //             $data['sub_content_file'] = path_theme('admin_admin/edit.html');
-
-    //             //retrieve user login
-    //             $retrieve_login = $this->login_model->retrieve($id);
-    //             if (empty($retrieve_login)) {
-    //                 redirect('admin/adm/list');
-    //             }
-
-    //             //retrieve pengajar
-    //             $retrieve_pengajar = $this->pengajar_model->retrieve($retrieve_login['pengajar_id']);
-    //             if (empty($retrieve_pengajar)) {
-    //                 redirect('admin/adm/list');
-    //             }
-
-    //             $data['login']    = $retrieve_login;
-    //             $data['pengajar'] = $retrieve_pengajar;
-
-    //             $config['upload_path']   = get_path_image();
-    //             $config['allowed_types'] = 'jpg|jpeg|png';
-    //             $config['max_size']      = '0';
-    //             $config['max_width']     = '0';
-    //             $config['max_height']    = '0';
-    //             $config['file_name']     = 'admin-'.url_title($this->input->post('nama', TRUE), '-', true);
-    //             $this->load->library('upload', $config);
-
-    //             if (!empty($_FILES['userfile']['tmp_name']) AND !$this->upload->do_upload()) {
-    //                 $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
-    //                 $error_upload = true;
-    //             } else {
-    //                 $data['error_upload'] = '';
-    //                 $error_upload = false;
-    //             }
-
-    //             if ($this->form_validation->run('admin/ch_profil') == TRUE AND !$error_upload) {
-    //                 $username = $this->input->post('username', TRUE);
-    //                 $nama     = $this->input->post('nama', TRUE);
-    //                 $alamat   = $this->input->post('alamat', TRUE);
-
-    //                 //update username
-    //                 $this->login_model->update(
-    //                     $retrieve_login['id'],
-    //                     $username,
-    //                     null,
-    //                     $retrieve_pengajar['id'],
-    //                     1,
-    //                     null
-    //                 );
-
-    //                 if (!empty($_FILES['userfile']['tmp_name'])) {
-
-    //                     //hapus dulu file sebelumnya
-    //                     $pisah = explode('.', $retrieve_pengajar['foto']);
-    //                     if (is_file(get_path_image($retrieve_pengajar['foto']))) {
-    //                         unlink(get_path_image($retrieve_pengajar['foto']));
-    //                     }
-    //                     if (is_file(get_path_image($pisah[0].'_small.'.$pisah[1]))) {
-    //                         unlink(get_path_image($pisah[0].'_small.'.$pisah[1]));
-    //                     }
-    //                     if (is_file(get_path_image($pisah[0].'_medium.'.$pisah[1]))) {
-    //                         unlink(get_path_image($pisah[0].'_medium.'.$pisah[1]));
-    //                     }
-
-    //                     $upload_data = $this->upload->data();
-
-    //                     //create thumb small
-    //                     $this->create_img_thumb(
-    //                         get_path_image($upload_data['file_name']),
-    //                         '_small',
-    //                         '50',
-    //                         '50'
-    //                     );
-
-    //                     //create thumb medium
-    //                     $this->create_img_thumb(
-    //                         get_path_image($upload_data['file_name']),
-    //                         '_medium',
-    //                         '150',
-    //                         '150'
-    //                     );
-
-    //                     $foto = $upload_data['file_name'];
-
-    //                 } else {
-    //                     $foto = $retrieve_pengajar['foto'];
-    //                 }
-
-    //                 //update pengajar
-    //                 $this->pengajar_model->update(
-    //                     $retrieve_pengajar['id'],
-    //                     $retrieve_pengajar['nip'],
-    //                     $nama,
-    //                     $alamat,
-    //                     $foto,
-    //                     $retrieve_pengajar['status_id']
-    //                 );
-
-    //                 if ($retrieve_login['id'] == $this->session_data['login']['id']) {
-    //                     $this->refresh_session_data();
-    //                 }
-
-    //                 $this->session->set_flashdata('edit', get_alert('success', 'Data berhasil di perbaharui'));
-    //                 redirect('admin/adm/edit/'.$id);
-    //             }
-
-    //             break;
-
-    //         default:
-    //         case 'list':
-    //             $page_no = (int)$segment_3;
-
-    //             $data['module_title'] = 'Data Administrator';
-    //             $data['sub_content_file'] = path_theme('admin_admin/list.html');
-    //             //ambil data admin
-    //             $retrieve_all = $this->login_model->retrieve_all(10, $page_no, 1);
-    //             $data['admins'] = $retrieve_all['results'];
-    //             //pagination
-    //             $data['pagination'] = $this->pager->view($retrieve_all, 'admin/adm/list/');
-    //             break;
-    //     }
-
-    //     $data = array_merge(default_parser_item(), $data);
-    //     $this->twig->display(path_theme('main_private.html'), $data);
-    // }
 
     function ch_profil()
     {
@@ -1809,7 +1842,7 @@ class Admin extends CI_Controller
 
                 $id = (int)$id;
 
-                $kelas = $this->kelas_model->retrieve($id);
+                $kelas = $this->kelas_model->retrieve($id, true);
                 if (empty($kelas)) {
                     redirect('admin/kelas');
                 }

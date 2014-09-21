@@ -22,10 +22,12 @@ class Kelas_model extends CI_Model
         return $result->result_array();
     }
 
-    public function retrieve_all_child()
+    public function retrieve_all_child($show_not_active = false)
     {
         $this->db->where('parent_id !=', '0');
-        $this->db->where('aktif', 1);
+        if (!$show_not_active) {
+            $this->db->where('aktif', 1);
+        }
         $this->db->order_by('urutan', 'ASC');
         $result = $this->db->get('kelas');
         return $result->result_array();
@@ -38,12 +40,14 @@ class Kelas_model extends CI_Model
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
-    public function retrieve($id)
+    public function retrieve($id, $show_not_active = false)
     {
         $id = (int)$id;
 
         $this->db->where('id', $id);
-        $this->db->where('aktif', 1);
+        if (!$show_not_active) {
+            $this->db->where('aktif', 1);
+        }
         $result = $this->db->get('kelas', '1');
         return $result->row_array();
     }
