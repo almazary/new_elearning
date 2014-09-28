@@ -2,7 +2,7 @@
 
 /**
  * Class Model untuk resource Materi
- * 
+ *
  * @package Elearning Dokumenary
  * @link    http://www.dokumenary.net
  */
@@ -11,10 +11,10 @@ class Materi_model extends CI_Model
 
     /**
      * Method untuk menghapus data materi
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
-     * @author Almazari <almazary@gmail.com> 
+     * @author Almazari <almazary@gmail.com>
      */
     public function delete($id)
     {
@@ -27,21 +27,21 @@ class Materi_model extends CI_Model
 
     /**
      * Method untuk mendapatkan banyak data materi
-     * 
-     * @param  integer       $no_of_records 
-     * @param  integer       $page_no       
-     * @param  integer|null  $pengajar_id   
-     * @param  integer|null  $siswa_id      
+     *
+     * @param  integer       $no_of_records
+     * @param  integer       $page_no
+     * @param  integer|null  $pengajar_id
+     * @param  integer|null  $siswa_id
      * @param  integer|null  $mapel_kelas_id
-     * @param  string|null   $judul         
-     * @param  string|null   $konten        
+     * @param  string|null   $judul
+     * @param  string|null   $konten
      * @param  string|null   $tgl_posting      2014-07-16
      * @param  integer|null  $publish          0 | 1
      * @return array
-     * @author Almazari <almazary@gmail.com>                 
+     * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all(
-        $no_of_records  = 10, 
+        $no_of_records  = 10,
         $page_no        = 1,
         $pengajar_id    = null,
         $siswa_id       = null,
@@ -92,17 +92,17 @@ class Materi_model extends CI_Model
             'id' => 'DESC'
         );
 
-        $data = $this->pager->set('materi', $no_of_records, $page_no, $where);
+        $data = $this->pager->set('materi', $no_of_records, $page_no, $where, $orderby);
 
         return $data;
     }
 
     /**
      * Method untuk mengambil satu data materi
-     * 
+     *
      * @param  integer $id
      * @return array
-     * @author Almazari <almazary@gmail.com> 
+     * @author Almazari <almazary@gmail.com>
      */
     public function retrieve($id)
     {
@@ -117,15 +117,15 @@ class Materi_model extends CI_Model
      * Method untuk memperbaharui data materi
      *
      * @param  integer  $id
-     * @param  integer  $pengajar_id    
-     * @param  integer  $siswa_id       
-     * @param  integer  $mapel_kelas_id 
-     * @param  string   $judul          
-     * @param  string   $konten         
-     * @param  string   $file           
-     * @param  integer  $publish        
+     * @param  integer  $pengajar_id
+     * @param  integer  $siswa_id
+     * @param  integer  $mapel_kelas_id
+     * @param  string   $judul
+     * @param  string   $konten
+     * @param  string   $file
+     * @param  integer  $publish
      * @return boolean  true jika berhasil
-     * @author Almazari <almazary@gmail.com> 
+     * @author Almazari <almazary@gmail.com>
      */
     public function update(
         $id,
@@ -138,8 +138,6 @@ class Materi_model extends CI_Model
         $publish = 1
     ) {
         $id             = (int)$id;
-        $pengajar_id    = (int)$pengajar_id;
-        $siswa_id       = (int)$siswa_id;
         $mapel_kelas_id = (int)$mapel_kelas_id;
         $publish        = (int)$publish;
 
@@ -160,16 +158,16 @@ class Materi_model extends CI_Model
 
     /**
      * Method untuk menambah data materi
-     * 
-     * @param  integer  $pengajar_id    
-     * @param  integer  $siswa_id       
-     * @param  integer  $mapel_kelas_id 
-     * @param  string   $judul          
-     * @param  string   $konten         
-     * @param  string   $file           
-     * @param  integer  $publish        
+     *
+     * @param  integer  $pengajar_id
+     * @param  integer  $siswa_id
+     * @param  integer  $mapel_kelas_id
+     * @param  string   $judul
+     * @param  string   $konten
+     * @param  string   $file
+     * @param  integer  $publish
      * @return integer  last insert id
-     * @author Almazari <almazary@gmail.com> 
+     * @author Almazari <almazary@gmail.com>
      */
     public function create(
         $pengajar_id = null,
@@ -180,8 +178,6 @@ class Materi_model extends CI_Model
         $file    = null,
         $publish = 1
     ) {
-        $pengajar_id    = (int)$pengajar_id;
-        $siswa_id       = (int)$siswa_id;
         $mapel_kelas_id = (int)$mapel_kelas_id;
         $publish        = (int)$publish;
 
@@ -197,6 +193,21 @@ class Materi_model extends CI_Model
         );
         $this->db->insert('materi', $data);
         return $this->db->insert_id();
+    }
+
+    /**
+     * Method untuk menghitung jumlah materi
+     *
+     * @param  integer $mapel_kelas_id
+     * @return integer
+     *
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function count_materi($mapel_kelas_id)
+    {
+        $this->db->where('mapel_kelas_id', $mapel_kelas_id);
+        $result = $this->db->get('materi');
+        return $result->num_rows();
     }
 
 }

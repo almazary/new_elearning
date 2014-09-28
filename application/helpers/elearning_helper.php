@@ -286,6 +286,11 @@ function get_path_image($img = '', $size = '')
     }
 }
 
+function get_path_file($file = '')
+{
+    return './assets/files/'.$file;
+}
+
 function get_row_data($model, $func, $args = array(), $field_name = '')
 {
     $CI =& get_instance();
@@ -331,6 +336,13 @@ function tgl_indo($tgl = '') {
     if (!empty($tgl)) {
         $pisah = explode('-', $tgl);
         return $pisah[2].' '.get_indo_bulan($pisah[1]).' '.$pisah[0];
+    }
+}
+
+function tgl_jam_indo($tgl_jam = '') {
+    if (!empty($tgl_jam)) {
+        $pisah = explode(' ', $tgl_jam);
+        return tgl_indo($pisah[0]).' '.date('H:i', strtotime($tgl_jam));
     }
 }
 

@@ -573,3 +573,35 @@ $config['admin/pengajar/filter'] = array(
         'rules' => 'trim|xss_clean'
     ),
 );
+
+$config['admin/materi/add/tertulis'] = array(
+    array(
+        'field' => 'type',
+        'label' => 'Type',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'judul',
+        'label' => 'Judul',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'konten',
+        'label' => 'Konten',
+        'rules' => 'required|trim|xss_clean'
+    ),
+);
+
+$config['admin/materi/add/file'] = array(
+    array(
+        'field' => 'type',
+        'label' => 'Type',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'judul',
+        'label' => 'Judul',
+        'rules' => 'required|trim|xss_clean'
+    ),
+);
+
