@@ -125,7 +125,7 @@ class __TwigTemplate_324b1b18401a044df1ab9419d6d343951abecd18dbe0e533d9d2926ae58
         // line 61
         echo "    <div class=\"control-group\">
         <div class=\"controls\">
-            <button type=\"submit\" class=\"btn btn-primary\">Simpan</button>
+            <button type=\"submit\" class=\"btn btn-primary\">Update</button>
             <a href=\"";
         // line 64
         echo twig_escape_filter($this->env, site_url(("admin/materi/detail/" . (isset($context["ref_param"]) ? $context["ref_param"] : null))), "html", null, true);

@@ -258,6 +258,51 @@ class Admin extends CI_Controller
                 $data['pagination'] = $this->pager->view($retrieve_all, 'admin/materi/detail/'.$data['ref_param'].'/');
                 break;
 
+            case 'delete':
+                $parent_id      = (int)$segment_4;
+                $subkelas_id    = (int)$segment_5;
+                $mapel_kelas_id = (int)$segment_6;
+                $materi_id      = (int)$segment_7;
+
+                $parent_kelas = $this->kelas_model->retrieve($parent_id);
+                if (empty($parent_kelas)) {
+                    redirect('admin/materi');
+                }
+
+                $sub_kelas = $this->kelas_model->retrieve($subkelas_id);
+                if (empty($sub_kelas)) {
+                    redirect('admin/materi');
+                }
+
+                $mapel_kelas = $this->mapel_model->retrieve_kelas($mapel_kelas_id);
+                if (empty($mapel_kelas)) {
+                    redirect('admin/materi');
+                }
+
+                $mapel = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                if (empty($mapel)) {
+                    $this->session->set_flashdata('materi', get_alert('warning', 'Matapelajaran tidak ditemukan, mungkin tidak aktif'));
+                    redirect('admin/materi');
+                }
+
+                $data['ref_param'] = $parent_id.'/'.$subkelas_id.'/'.$mapel_kelas_id;
+
+                $materi = $this->materi_model->retrieve($materi_id);
+                if (empty($materi)) {
+                    redirect('admin/materi/detail/'.$data['ref_param']);
+                }
+
+                # jika file
+                if (!empty($materi['file']) AND is_file(get_path_file($materi['file']))) {
+                    unlink(get_path_file($materi['file']));
+                }
+
+                $this->materi_model->delete($materi['id']);
+
+                $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil dihapus'));
+                redirect('admin/materi/detail/'.$data['ref_param']);
+                break;
+
             case 'edit':
                 $type           = (string)strtolower($segment_4);
                 $parent_id      = (int)$segment_5;

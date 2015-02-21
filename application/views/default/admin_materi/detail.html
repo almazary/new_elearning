@@ -45,6 +45,7 @@
                         {% set url_type = 'tertulis' %}
                     {% endif %}
                     {{ anchor('admin/materi/edit/' ~ url_type ~ '/' ~ ref_param ~ '/' ~ m.id, '<i class="icon-edit"></i> Edit', {'class' : 'btn btn-small'})|raw }}
+                    {{ anchor('admin/materi/delete/' ~ ref_param ~ '/' ~ m.id, '<i class="icon-trash"></i> Hapus', {'class' : 'btn btn-small', 'onclick' : "return confirm('Anda yakin ingin menghapus?')"})|raw }}
                 </div>
             </td>
         </tr>
