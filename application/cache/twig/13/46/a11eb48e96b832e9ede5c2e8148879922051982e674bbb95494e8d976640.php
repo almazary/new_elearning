@@ -111,20 +111,26 @@ class __TwigTemplate_1346a11eb48e96b832e9ede5c2e8148879922051982e674bbb95494e8d9
                 echo "                        ";
                 $context["url_type"] = "file";
                 // line 44
-                echo "                    ";
+                echo "                        ";
+                echo anchor(((((("admin/materi/info/" . (isset($context["url_type"]) ? $context["url_type"] : null)) . "/") . (isset($context["ref_param"]) ? $context["ref_param"] : null)) . "/") . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-zoom-in\"></i> Detail", array("class" => "btn btn-small"));
+                echo "
+                    ";
             } else {
-                // line 45
+                // line 46
                 echo "                        ";
                 $context["url_type"] = "tertulis";
-                // line 46
-                echo "                    ";
+                // line 47
+                echo "                        ";
+                echo anchor(((((("admin/materi/info/" . (isset($context["url_type"]) ? $context["url_type"] : null)) . "/") . (isset($context["ref_param"]) ? $context["ref_param"] : null)) . "/") . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-zoom-in\"></i> Detail", array("class" => "btn btn-small"));
+                echo "
+                    ";
             }
-            // line 47
+            // line 49
             echo "                    ";
             echo anchor(((((("admin/materi/edit/" . (isset($context["url_type"]) ? $context["url_type"] : null)) . "/") . (isset($context["ref_param"]) ? $context["ref_param"] : null)) . "/") . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-edit\"></i> Edit", array("class" => "btn btn-small"));
             echo "
                     ";
-            // line 48
+            // line 50
             echo anchor(((("admin/materi/delete/" . (isset($context["ref_param"]) ? $context["ref_param"] : null)) . "/") . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-trash\"></i> Hapus", array("class" => "btn btn-small", "onclick" => "return confirm('Anda yakin ingin menghapus?')"));
             echo "
                 </div>
@@ -135,12 +141,12 @@ class __TwigTemplate_1346a11eb48e96b832e9ede5c2e8148879922051982e674bbb95494e8d9
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['no'], $context['m'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 53
+        // line 55
         echo "    </tbody>
 </table>
 <br>
 ";
-        // line 56
+        // line 58
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
 ";
@@ -158,6 +164,6 @@ class __TwigTemplate_1346a11eb48e96b832e9ede5c2e8148879922051982e674bbb95494e8d9
 
     public function getDebugInfo()
     {
-        return array (  144 => 56,  139 => 53,  128 => 48,  123 => 47,  120 => 46,  117 => 45,  114 => 44,  111 => 43,  109 => 42,  103 => 39,  98 => 37,  90 => 34,  86 => 33,  81 => 31,  78 => 30,  75 => 29,  72 => 28,  69 => 27,  66 => 26,  63 => 25,  60 => 24,  57 => 23,  53 => 22,  32 => 6,  27 => 4,  23 => 3,  19 => 1,);
+        return array (  150 => 58,  145 => 55,  134 => 50,  129 => 49,  123 => 47,  120 => 46,  114 => 44,  111 => 43,  109 => 42,  103 => 39,  98 => 37,  90 => 34,  86 => 33,  81 => 31,  78 => 30,  75 => 29,  72 => 28,  69 => 27,  66 => 26,  63 => 25,  60 => 24,  57 => 23,  53 => 22,  32 => 6,  27 => 4,  23 => 3,  19 => 1,);
     }
 }

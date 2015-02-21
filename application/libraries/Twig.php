@@ -18,7 +18,7 @@ class Twig
 
         Twig_Autoloader::register();
 
-        $this->_template_dir = $this->CI->config->item('template_dir');
+        $this->_template_dir = $this->CI->config->item('template_dir').'/'.get_active_theme();
         $this->_cache_dir = $this->CI->config->item('cache_dir');
 
         $loader = new Twig_Loader_Filesystem($this->_template_dir);

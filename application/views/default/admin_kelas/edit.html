@@ -1,34 +1,54 @@
+{% extends "layout-private.html" %}
 
-<div class="panel panel-info">
-    <div class="panel-heading">
-        Edit Kelas
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ module_title|raw }}</h3>
     </div>
-    <div class="panel-body">
-        {{ form_open('admin/kelas/edit/' ~ kelas.id, {'class' : 'form-horizontal row-fluid'})|raw }}
-            <div class="control-group">
-                <label class="control-label">Nama Kelas <span class="text-error">*</span></label>
-                <div class="controls">
-                    <input type="text" name="nama" class="span5" placeholder="Nama Kelas" value="{{ set_value('nama', kelas.nama) }}">
-                    {{ form_error('nama')|raw }}
-                </div>
+    <div class="module-body">
+        {{ get_flashdata('kelas')|raw }}
+
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                Edit Kelas
             </div>
-            {% if kelas.parent_id is not null %}
-            <div class="control-group">
-                <label class="control-label">Status</label>
-                <div class="controls">
-                    <label class="checkbox inline">
-                        <input type="checkbox" value="1" name="status" {{ set_checkbox('status', '1', (kelas.aktif == 1) ? TRUE : FALSE) }}>
-                        Aktif
-                    </label>
-                </div>
+            <div class="panel-body">
+                {{ form_open('admin/kelas/edit/' ~ kelas.id, {'class' : 'form-horizontal row-fluid'})|raw }}
+                    <div class="control-group">
+                        <label class="control-label">Nama Kelas <span class="text-error">*</span></label>
+                        <div class="controls">
+                            <input type="text" name="nama" class="span5" placeholder="Nama Kelas" value="{{ set_value('nama', kelas.nama) }}">
+                            {{ form_error('nama')|raw }}
+                        </div>
+                    </div>
+                    {% if kelas.parent_id is not null %}
+                    <div class="control-group">
+                        <label class="control-label">Status</label>
+                        <div class="controls">
+                            <label class="checkbox inline">
+                                <input type="checkbox" value="1" name="status" {{ set_checkbox('status', '1', (kelas.aktif == 1) ? TRUE : FALSE) }}>
+                                Aktif
+                            </label>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <a href="{{ site_url('admin/kelas') }}" class="btn">Batal</a>
+                        </div>
+                    </div>
+                {{ form_close()|raw }}
             </div>
-            {% endif %}
-            <div class="control-group">
-                <div class="controls">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="{{ site_url('admin/kelas') }}" class="btn">Batal</a>
-                </div>
-            </div>
-        {{ form_close()|raw }}
+        </div>
+
+        <p class="text-warning"><b>NB:</b> Kelas tidak dapat di hapus namun dapat di ubah menjadi tidak aktif.</p>
+
+        {{ kelas_hirarki|raw }}
+
+        <br>
+        <div id="response_update"></div>
+        <button class="btn btn-primary" id="update-hirarki">Update Hirarki</button>
     </div>
 </div>
+{% endblock %}

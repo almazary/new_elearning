@@ -79,17 +79,6 @@ function get_site_config($field)
 }
 
 /**
- * Method untuk mendapatkan path ke arah template aktif
- *
- * @param  string $add_link
- * @return string link
- */
-function path_theme($add_link = '')
-{
-    return get_active_theme().'/'.$add_link;
-}
-
-/**
  * Method untuk mendapatkan link base url ke template yang sedang aktif
  *
  * @param  string $add_link string tambahan untuk link
