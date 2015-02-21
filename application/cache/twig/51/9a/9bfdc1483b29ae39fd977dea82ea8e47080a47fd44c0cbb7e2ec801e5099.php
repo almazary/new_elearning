@@ -109,7 +109,7 @@ class __TwigTemplate_519a9bfdc1483b29ae39fd977dea82ea8e47080a47fd44c0cbb7e2ec801
             <a href=\"";
         // line 50
         echo twig_escape_filter($this->env, site_url(("admin/materi/detail/" . (isset($context["ref_param"]) ? $context["ref_param"] : null))), "html", null, true);
-        echo "\" class=\"btn\">Batal</a>
+        echo "\" class=\"btn\">Kembali</a>
         </div>
     </div>
 ";

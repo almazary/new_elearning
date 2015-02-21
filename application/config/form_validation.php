@@ -605,3 +605,23 @@ $config['admin/materi/add/file'] = array(
     ),
 );
 
+$config['admin/materi/edit/tertulis'] = array(
+    array(
+        'field' => 'judul',
+        'label' => 'Judul',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'konten',
+        'label' => 'Konten',
+        'rules' => 'required|trim|xss_clean'
+    ),
+);
+
+$config['admin/materi/edit/file'] = array(
+    array(
+        'field' => 'judul',
+        'label' => 'Judul',
+        'rules' => 'required|trim|xss_clean'
+    ),
+);

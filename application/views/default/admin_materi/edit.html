@@ -4,13 +4,7 @@
 
 <br>
 
-<script type="text/javascript">
-    function redirect_to(form_type) {
-        location.href = "{{ site_url }}/admin/materi/edit/" + form_type + "/{{ ref_param }}/{{ materi.id }}";
-    }
-</script>
-
-{{ form_open_multipart('admin/materi/edit/' ~ type ~ '/' ~ ref_param ~ materi.id, {'class' : 'form-horizontal row-fluid'})|raw }}
+{{ form_open_multipart('admin/materi/edit/' ~ type ~ '/' ~ ref_param ~ '/' ~ materi.id, {'class' : 'form-horizontal row-fluid'})|raw }}
     <div class="control-group">
         <label class="control-label">Judul <span class="text-error">*</span></label>
         <div class="controls">
@@ -67,7 +61,7 @@
     <div class="control-group">
         <div class="controls">
             <button type="submit" class="btn btn-primary">Simpan</button>
-            <a href="{{ site_url('admin/materi/detail/' ~ ref_param) }}" class="btn">Batal</a>
+            <a href="{{ site_url('admin/materi/detail/' ~ ref_param) }}" class="btn">Kembali</a>
         </div>
     </div>
 {{ form_close()|raw }}

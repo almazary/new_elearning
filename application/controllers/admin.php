@@ -305,10 +305,86 @@ class Admin extends CI_Controller
                 $data['materi']           = $materi;
                 $data['comp_js']          = get_tinymce('konten');
                 if ($type == 'file') {
-                    $data['file_info'] = get_file_info('./assets/files/'.$materi['file']);
-                    $data['file_info']['mime'] = get_mime_by_extension('./assets/files/'.$materi['file']);
+                    $data['file_info'] = get_file_info(get_path_file($materi['file']));
+                    $data['file_info']['mime'] = get_mime_by_extension(get_path_file($materi['file']));
                 }
 
+                # post action
+                $success = false;
+                if ($type == 'tertulis') {
+                    if ($this->form_validation->run('admin/materi/edit/tertulis') == TRUE) {
+                        $judul  = $this->input->post('judul', TRUE);
+                        $konten = $this->input->post('konten', TRUE);
+
+                        $this->materi_model->update(
+                            $materi['id'],
+                            get_sess_data('admin', 'pengajar', 'id'),
+                            null,
+                            $mapel_kelas_id,
+                            $judul,
+                            $konten,
+                            null,
+                            1
+                        );
+
+                        $success = true;
+                    }
+                } elseif ($type == 'file') {
+                    $upload_success = false;
+                    $is_new_file    = false;
+                    # jika tidak ada yang diupload, file tetap sama
+                    if (empty($_FILES['userfile']['tmp_name'])) {
+                        $update_file    = $materi['file'];
+                        $upload_success = true;
+                    } else {
+                        $config['upload_path']   = get_path_file();
+                        $config['allowed_types'] = 'doc|zip|rar|txt|docx|xls|xlsx|pdf|tar|gz|jpg|jpeg|JPG|JPEG|png|ppt|pptx';
+                        $config['max_size']      = '0';
+                        $config['max_width']     = '0';
+                        $config['max_height']    = '0';
+                        $config['file_name']     = url_title($this->input->post('judul', TRUE).'_'.$mapel['nama'].'_'.$sub_kelas['nama'].'_'.time(), '_', TRUE);
+                        $this->upload->initialize($config);
+
+                        if ($this->upload->do_upload()) {
+                            $upload_data    = $this->upload->data();
+                            $update_file    = $upload_data['file_name'];
+                            $upload_success = true;
+                            $is_new_file    = true;
+                        } else {
+                            $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
+                        }
+                    }
+
+                    if ($this->form_validation->run('admin/materi/edit/file') == TRUE AND $upload_success == TRUE) {
+                        $judul = $this->input->post('judul', TRUE);
+                        $this->materi_model->update(
+                            $materi['id'],
+                            get_sess_data('admin', 'pengajar', 'id'),
+                            null,
+                            $mapel_kelas_id,
+                            $judul,
+                            null,
+                            $update_file,
+                            1
+                        );
+
+                        # hapus file sebelumnya
+                        if (is_file(get_path_file($materi['file']))) {
+                            unlink(get_path_file($materi['file']));
+                        }
+
+                        $success = true;
+                    } else {
+                        if ($is_new_file == TRUE AND is_file(get_path_file($update_file))) {
+                            unlink(get_path_file($update_file));
+                        }
+                    }
+                }
+
+                if ($success) {
+                    $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil diperbaharui'));
+                    redirect('admin/materi/edit/'.$type.'/'.$data['ref_param'].'/'.$materi['id']);
+                }
                 break;
 
             case 'add':
