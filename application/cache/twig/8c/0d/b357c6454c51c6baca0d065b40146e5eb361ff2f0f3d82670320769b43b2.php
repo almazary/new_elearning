@@ -149,7 +149,7 @@ class __TwigTemplate_8c0db357c6454c51c6baca0d065b40146e5eb361ff2f0f3d82670320769
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "bootstrap/js/bootstrap.min.js\" type=\"text/javascript\"></script>
         ";
-        // line 82
+        // line 83
         echo "
         <script type=\"text/javascript\">
             \$(document).ready(function(){{
@@ -159,12 +159,13 @@ class __TwigTemplate_8c0db357c6454c51c6baca0d065b40146e5eb361ff2f0f3d82670320769
                 \$(\".alert-warning\").fadeTo(2000, 500).slideUp(500, function(){{
                     \$(\".alert-warning\").alert('close');
                  }});
+                \$(\"#popover\").popover();
              }});
         </script>
         ";
         echo "
         ";
-        // line 83
+        // line 84
         echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
         echo "
     </body>
@@ -184,6 +185,6 @@ class __TwigTemplate_8c0db357c6454c51c6baca0d065b40146e5eb361ff2f0f3d82670320769
 
     public function getDebugInfo()
     {
-        return array (  168 => 83,  153 => 82,  149 => 70,  145 => 69,  136 => 65,  132 => 64,  120 => 54,  117 => 53,  112 => 50,  109 => 49,  95 => 37,  92 => 36,  88 => 35,  86 => 34,  72 => 25,  68 => 24,  56 => 15,  52 => 14,  48 => 13,  43 => 11,  39 => 10,  35 => 9,  31 => 8,  27 => 7,  19 => 1,);
+        return array (  169 => 84,  153 => 83,  149 => 70,  145 => 69,  136 => 65,  132 => 64,  120 => 54,  117 => 53,  112 => 50,  109 => 49,  95 => 37,  92 => 36,  88 => 35,  86 => 34,  72 => 25,  68 => 24,  56 => 15,  52 => 14,  48 => 13,  43 => 11,  39 => 10,  35 => 9,  31 => 8,  27 => 7,  19 => 1,);
     }
 }

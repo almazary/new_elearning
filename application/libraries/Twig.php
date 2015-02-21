@@ -37,12 +37,12 @@ class Twig
 
     }
 
-    public function add_function($name) 
+    public function add_function($name)
     {
         $this->_twig->addFunction($name, new Twig_Function_Function($name));
     }
 
-    public function render($template, $data = array()) 
+    public function render($template, $data = array())
     {
         $template = $this->_twig->loadTemplate($template);
         return $template->render($data);

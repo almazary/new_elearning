@@ -164,7 +164,51 @@ class Admin extends CI_Controller
         }
     }
 
-    function materi($act = 'list', $segment_4 = '', $segment_5 = '', $segment_6 = '', $segment_7 = '')
+    function tugas($act = 'list', $segment_4 = '', $segment_5 = '', $segment_6 = '', $segment_7 = '')
+    {
+        $this->most_login();
+
+        $data = array(
+            'web_title'     => 'Tugas | Administrator',
+            'content_file'  => path_theme('admin_tugas/index.html')
+        );
+
+        switch ($act) {
+            case 'add':
+                
+                break;
+            
+            default:
+            case 'list':
+                $data['module_title'] = 'Tugas';
+                $data['sub_content_file'] = path_theme('admin_tugas/list.html');
+                
+                # tugas type
+                $type_id = (int)$segment_4;
+                $type_id = empty($type_id) ? null : $type_id;
+
+                if (!is_null($type_id)) {
+                    $type_id =  ($type_id > 3) ? null : $type_id;
+                }
+
+                $type_url = is_null($type_id) ? '0' : $type_id;
+
+                $page_no = $segment_5;
+                $page_no = empty($page_no) ? 1 : $page_no;
+
+                # ambil semua tugas
+                $retrieve_all = $this->tugas_model->retrieve_all(50, $page_no, null, $type_id);
+
+                $data['type_id']    = $type_url;
+                $data['tugas']      = $retrieve_all['results'];
+                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/tugas/list/'.$type_url.'/');
+                break;
+        }
+
+        $this->view($data, false);
+    }
+
+    function materi($act = 'list', $segment_4 = '', $segment_5 = '', $segment_6 = '', $segment_7 = '', $segment_8 = '')
     {
         $this->most_login();
 
@@ -212,6 +256,59 @@ class Admin extends CI_Controller
                 $retrieve_all       = $this->materi_model->retrieve_all(20, $page_no, null, null, $mapel_kelas_id, null, null, null, 1);
                 $data['materis']    = $retrieve_all['results'];
                 $data['pagination'] = $this->pager->view($retrieve_all, 'admin/materi/detail/'.$data['ref_param'].'/');
+                break;
+
+            case 'edit':
+                $type           = (string)strtolower($segment_4);
+                $parent_id      = (int)$segment_5;
+                $subkelas_id    = (int)$segment_6;
+                $mapel_kelas_id = (int)$segment_7;
+                $materi_id      = (int)$segment_8;
+
+                $parent_kelas = $this->kelas_model->retrieve($parent_id);
+                if (empty($parent_kelas)) {
+                    redirect('admin/materi');
+                }
+
+                $sub_kelas = $this->kelas_model->retrieve($subkelas_id);
+                if (empty($sub_kelas)) {
+                    redirect('admin/materi');
+                }
+
+                $mapel_kelas = $this->mapel_model->retrieve_kelas($mapel_kelas_id);
+                if (empty($mapel_kelas)) {
+                    redirect('admin/materi');
+                }
+
+                $mapel = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                if (empty($mapel)) {
+                    $this->session->set_flashdata('materi', get_alert('warning', 'Matapelajaran tidak ditemukan, mungkin tidak aktif'));
+                    redirect('admin/materi');
+                }
+
+                $data['ref_param'] = $parent_id.'/'.$subkelas_id.'/'.$mapel_kelas_id;
+
+                if (!in_array($type, array('file', 'tertulis'))) {
+                    redirect('admin/materi/detail/'.$data['ref_param']);
+                }
+
+                $materi = $this->materi_model->retrieve($materi_id);
+                if (empty($materi)) {
+                    redirect('admin/materi/detail/'.$data['ref_param']);
+                }
+
+                $data['module_title']     = anchor('admin/materi/#subkelas-'.$subkelas_id, 'Materi').' / '.anchor('admin/materi/detail/'.$data['ref_param'], 'List Materi').' / Edit Materi';
+                $data['sub_content_file'] = path_theme('admin_materi/edit.html');
+                $data['type']             = $type;
+                $data['kelas']            = $sub_kelas;
+                $data['mapel']            = $mapel;
+                $data['materi']           = $materi;
+                $data['comp_js']          = get_tinymce('konten');
+                if ($type == 'file') {
+                    $data['file_info'] = get_file_info('./assets/files/'.$materi['file']);
+                    $data['file_info']['mime'] = get_mime_by_extension('./assets/files/'.$materi['file']);
+                }
+
                 break;
 
             case 'add':
@@ -1824,8 +1921,10 @@ class Admin extends CI_Controller
                             //ambil data
                             $retrieve = $this->mapel_model->retrieve_kelas(null, $kelas_id, $mapel_id);
 
-                            //hapus
-                            $this->mapel_model->delete_kelas($retrieve['id']);
+                            if (!empty($retrieve)) {
+                                //hapus
+                                $this->mapel_model->delete_kelas($retrieve['id']);
+                            }
                         }
                     }
 
@@ -1856,14 +1955,15 @@ class Admin extends CI_Controller
 
             $sub_kelas = $this->kelas_model->retrieve_all($p['id']);
             foreach ($sub_kelas as $s) {
-                $return .= '<div class="panel panel-default" style="margin-left:25px;">';
+                $return .= '<div class="panel panel-default" style="margin-left:25px;margin-bottom:5px;">';
 
                 switch ($view) {
                     case 'materi':
                         $return .= '<div class="panel-heading" id="subkelas-'.$s['id'].'">
-                            '.$s['nama'].'&nbsp;&nbsp;'.(($s['aktif'] == 0) ? '<span class="label label-warning">Kelas tidak aktif</span>' : '').'
+                            <a href="javascript:void(0)" data-toggle="collapse" data-target="#collapse'.$s['id'].'">'.$s['nama'].'</a> &nbsp;&nbsp;'.(($s['aktif'] == 0) ? '<span class="label label-warning">Kelas tidak aktif</span>' : '').'
                         </div>';
                         if ($s['aktif'] == 1) {
+                            $return .= '<div id="collapse'.$s['id'].'" class="collapse">';
                             $return .= '<div class="panel-body">';
                             $retrieve_all = $this->mapel_model->retrieve_all_kelas(null, $s['id']);
                             $return .= '<table class="table table-striped">
@@ -1884,6 +1984,7 @@ class Admin extends CI_Controller
                                 endforeach;
                             $return .= '</tbody>
                             </table>';
+                            $return .= '</div>';
                             $return .= '</div>';
                         }
                         break;

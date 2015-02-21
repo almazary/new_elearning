@@ -170,28 +170,30 @@ class __TwigTemplate_1662e280cca736ccfe28821e0f401b5cbd44ca24ee31ae02da93ecc6619
                     $context["m"] = get_row_data("mapel_model", "retrieve", array(0 => $this->getAttribute((isset($context["mk"]) ? $context["mk"] : null), "mapel_id")));
                     // line 88
                     echo "                                        <tr ";
-                    echo ((($this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "aktif") == 0)) ? ("class=\"text-muted\"") : ("class=\"info text-info\""));
+                    echo ((($this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "aktif") == 0)) ? ("class=\"error text-muted\"") : ("class=\"info text-info\""));
                     echo ">
-                                            <td width=\"10%\"><i class=\"icon-time\"></i> ";
+                                            <td width=\"15%\">";
                     // line 89
                     echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "jam_mulai"), "H:i"), "html", null, true);
-                    echo "</td>
-                                            <td width=\"10%\"><i class=\"icon-time\"></i> ";
-                    // line 90
+                    echo " - ";
                     echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "jam_selesai"), "H:i"), "html", null, true);
                     echo "</td>
                                             <td>";
-                    // line 91
+                    // line 90
                     echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "nama"), "html", null, true);
                     echo "</td>
                                             <td width=\"20%\">";
-                    // line 92
+                    // line 91
                     echo twig_escape_filter($this->env, $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "nama"), "html", null, true);
                     echo "</td>
-                                            <td width=\"5%\">
+                                            <td width=\"17%\">
+                                                ";
+                    // line 93
+                    echo anchor(((((("admin/pengajar/edit_ampuan/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "id")), "<i class=\"icon-edit\"></i> Edit", array("title" => "Edit Jadwal Ajar", "class" => "iframe-6"));
+                    echo " 
                                                 ";
                     // line 94
-                    echo anchor(((((("admin/pengajar/edit_ampuan/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "id")), "<i class=\"icon-edit\"></i>", array("title" => "Edit Jadwal Ajar", "class" => "iframe-6"));
+                    echo anchor(("admin/tugas/add/" . $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "id")), "<i class=\"icon-tasks\"></i> Tugas");
                     echo "
                                             </td>
                                         </tr>
@@ -274,6 +276,6 @@ class __TwigTemplate_1662e280cca736ccfe28821e0f401b5cbd44ca24ee31ae02da93ecc6619
 
     public function getDebugInfo()
     {
-        return array (  246 => 125,  234 => 116,  230 => 115,  216 => 103,  208 => 100,  204 => 98,  194 => 94,  189 => 92,  185 => 91,  181 => 90,  177 => 89,  172 => 88,  169 => 87,  166 => 86,  163 => 85,  159 => 84,  156 => 83,  153 => 82,  151 => 81,  147 => 80,  142 => 78,  139 => 77,  135 => 76,  119 => 63,  102 => 48,  98 => 46,  94 => 44,  90 => 42,  88 => 41,  80 => 36,  73 => 32,  66 => 28,  59 => 24,  52 => 20,  44 => 15,  39 => 13,  29 => 6,  25 => 5,  19 => 1,);
+        return array (  248 => 125,  236 => 116,  232 => 115,  218 => 103,  210 => 100,  206 => 98,  196 => 94,  192 => 93,  187 => 91,  183 => 90,  177 => 89,  172 => 88,  169 => 87,  166 => 86,  163 => 85,  159 => 84,  156 => 83,  153 => 82,  151 => 81,  147 => 80,  142 => 78,  139 => 77,  135 => 76,  119 => 63,  102 => 48,  98 => 46,  94 => 44,  90 => 42,  88 => 41,  80 => 36,  73 => 32,  66 => 28,  59 => 24,  52 => 20,  44 => 15,  39 => 13,  29 => 6,  25 => 5,  19 => 1,);
     }
 }

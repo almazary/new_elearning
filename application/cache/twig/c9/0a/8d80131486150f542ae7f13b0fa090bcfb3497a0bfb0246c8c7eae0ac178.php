@@ -32,7 +32,7 @@ class __TwigTemplate_c90a8d80131486150f542ae7f13b0fa090bcfb3497a0bfb0246c8c7eae0
     <ul class=\"widget widget-menu unstyled\">
         <li><a href=\"";
         // line 15
-        echo twig_escape_filter($this->env, site_url("admin/kelas"), "html", null, true);
+        echo twig_escape_filter($this->env, site_url("admin/tugas"), "html", null, true);
         echo "\"><i class=\"menu-icon icon-tasks\"></i> Tugas </a></li>
         <li><a href=\"";
         // line 16

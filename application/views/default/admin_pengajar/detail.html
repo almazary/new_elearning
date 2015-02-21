@@ -85,13 +85,13 @@
                                         {% set mk = get_row_data('mapel_model', 'retrieve_kelas', [ma.mapel_kelas_id]) %}
                                         {% set k  = get_row_data('kelas_model', 'retrieve', [mk.kelas_id]) %}
                                         {% set m  = get_row_data('mapel_model', 'retrieve', [mk.mapel_id]) %}
-                                        <tr {{ (ma.aktif == 0) ? 'class="text-muted"' : 'class="info text-info"' }}>
-                                            <td width="10%"><i class="icon-time"></i> {{ ma.jam_mulai|date('H:i') }}</td>
-                                            <td width="10%"><i class="icon-time"></i> {{ ma.jam_selesai|date('H:i') }}</td>
+                                        <tr {{ (ma.aktif == 0) ? 'class="error text-muted"' : 'class="info text-info"' }}>
+                                            <td width="15%">{{ ma.jam_mulai|date('H:i') }} - {{ ma.jam_selesai|date('H:i') }}</td>
                                             <td>{{ m.nama }}</td>
                                             <td width="20%">{{ k.nama }}</td>
-                                            <td width="5%">
-                                                {{ anchor('admin/pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ ma.id, '<i class="icon-edit"></i>', {'title' : 'Edit Jadwal Ajar', 'class' : 'iframe-6'})|raw }}
+                                            <td width="17%">
+                                                {{ anchor('admin/pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ ma.id, '<i class="icon-edit"></i> Edit', {'title' : 'Edit Jadwal Ajar', 'class' : 'iframe-6'})|raw }} 
+                                                {{ anchor('admin/tugas/add/' ~ ma.id, '<i class="icon-tasks"></i> Tugas')|raw }}
                                             </td>
                                         </tr>
                                     {% endfor %}

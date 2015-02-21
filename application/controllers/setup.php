@@ -43,11 +43,14 @@ class Setup extends CI_Controller
 
             //insert pengajar sebagai admin
             $pengajar_id = $this->pengajar_model->create(
-                null,
-                'Administrator',
-                $alamat,
-                null,
-                1
+                $nip           = null,
+                $nama          = 'Administrator',
+                $jenis_kelamin = 'Laki-laki',
+                $tempat_lahir  = '',
+                $tgl_lahir     = null,
+                $alamat        = '',
+                $foto          = null,
+                $status_id     = 1
             );
 
             //insert login
