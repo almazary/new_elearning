@@ -1,24 +1,130 @@
+{% extends "layout-private.html" %}
 
-<div class="row-fluid">
-<div class="span8">
-    <a href="{{ site_url('admin/pengajar/add/' ~ status_id) }}" class="btn btn-primary">Tambah Pengajar</a>
-</div>
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ module_title|raw }}</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('pengajar')|raw }}
 
-<div class="span4">
-    <div class="btn-group">
-        {{ anchor('admin/pengajar/list/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn'})|raw }}
-        {{ anchor('admin/pengajar/list/0', 'Pending', {'class' : (status_id == 0) ? 'btn btn-info' : 'btn'})|raw }}
-        {{ anchor('admin/pengajar/list/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn'})|raw }}
-        {{ anchor('admin/pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn'})|raw }}
+        <div class="row-fluid">
+            <div class="span8">
+                <a href="{{ site_url('admin/pengajar/add/' ~ status_id) }}" class="btn btn-primary">Tambah Pengajar</a>
+            </div>
+
+            <div class="span4">
+                <div class="btn-group">
+                    {{ anchor('admin/pengajar/list/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn'})|raw }}
+                    {{ anchor('admin/pengajar/list/0', 'Pending', {'class' : (status_id == 0) ? 'btn btn-info' : 'btn'})|raw }}
+                    {{ anchor('admin/pengajar/list/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn'})|raw }}
+                    {{ anchor('admin/pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn'})|raw }}
+                </div>
+            </div>
+        </div>
+
+        <br>
+        {% if status_id == 1 %}
+        <p class="text-warning"><b>NB: </b> Pengajar tidak dapat dihapus namun dapat di ubah menjadi blocking.</p>
+        {% endif %}
+
+        {{ form_open('admin/pengajar/list' ~ status_id)|raw }}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th width="7%">
+                        {% if status_id == 0 or status_id == 2 %}
+                            <input type="checkbox" style="margin-top:-2px;" onclick="ch_uch_checkbox(this)">
+                        {% endif %}
+                        No
+                    </th>
+                    <th colspan="2">Nip</th>
+                    <th>Nama</th>
+                    <th>Jenis Kelamin</th>
+                    <th width="22%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for no, v in pengajar %}
+                <tr>
+                    <td>
+                        {% if status_id == 0 or status_id == 2 %}
+                            <input type="checkbox" name="pengajar_id[]" value="{{ v.id }}" style="margin-top:-2px;">
+                        {% endif %}
+                        {{ no }}.
+                    </td>
+                    <td width="5%">
+                        <img style="height:30px;width:27px;" class="img-polaroid" src="{{ get_url_image_pengajar(v.foto, 'small', v.jenis_kelamin) }}">
+                    </td>
+                    <td>
+                        {{ v.nip }}
+                    </td>
+                    <td>
+                        {{ v.nama }}
+                        {% set is_admin =  get_row_data('login_model', 'retrieve', [null, null, null, null, v.id], 'is_admin') %}
+                        {% if is_admin == 1 %}
+                            <br><span class="label label-warning">Admin</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ v.jenis_kelamin }}
+                    </td>
+                    <td>
+                        <ul class="nav nav-pills" style="margin-bottom:0px;">
+                            <li><a class="btn btn-small" href="{{ site_url('admin/pengajar/detail/' ~ status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            <li class="dropdown">
+                                <a class="btn btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
+                                    <li>{{ anchor('admin/pengajar/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('admin/pengajar/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('admin/pengajar/edit_username/' ~ status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('admin/pengajar/edit_password/' ~ status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if pengajar is not empty and (status_id == 0 or status_id == 2) %}
+        <br>
+        <div class="row-fluid">
+            <div class="span7">
+                <table cellpadding="5">
+                    <tr>
+                        <th valign="top">Update Status Terpilih</th>
+                        <td valign="top">
+                            <select name="status_id" style="width:100%;">
+                                <option>--Pilih Status--</option>
+                                <option value="1">Aktif</option>
+                                {% if status_id == 0 %}
+                                <option value="2">Blocking</option>
+                                {% endif %}
+                            </select>
+                        </td>
+                        <td valign="top">
+                            <button type="submit" class="btn">Update</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        {{ form_close()|raw }}
+
+        <br>
+        {{ pagination|raw }}
+
     </div>
 </div>
+{% endblock %}
 
-<br><br>
-{% if status_id == 1 %}
-<p class="text-warning"><b>NB: </b> Pengajar tidak dapat dihapus namun dapat di ubah menjadi blocking.</p>
-{% endif %}
-
-<script>
+{% block js %}
+{{ parent() }}
+<script type="text/javascript">
 function ch_uch_checkbox(source){
     checkboxes = document.getElementsByName('pengajar_id[]');
     for(var i=0, n=checkboxes.length;i<n;i++) {
@@ -26,96 +132,4 @@ function ch_uch_checkbox(source){
     }
 }
 </script>
-
-{{ form_open('admin/pengajar/list' ~ status_id)|raw }}
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th width="7%">
-                {% if status_id == 0 or status_id == 2 %}
-                    <input type="checkbox" style="margin-top:-2px;" onclick="ch_uch_checkbox(this)">
-                {% endif %}
-                No
-            </th>
-            <th colspan="2">Nip</th>
-            <th>Nama</th>
-            <th>Jenis Kelamin</th>
-            <th width="22%"></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for no, v in pengajar %}
-        <tr>
-            <td>
-                {% if status_id == 0 or status_id == 2 %}
-                    <input type="checkbox" name="pengajar_id[]" value="{{ v.id }}" style="margin-top:-2px;">
-                {% endif %}
-                {{ no }}.
-            </td>
-            <td width="5%">
-                <img style="height:30px;width:27px;" class="img-polaroid" src="{{ get_url_image_pengajar(v.foto, 'small', v.jenis_kelamin) }}">
-            </td>
-            <td>
-                {{ v.nip }}
-            </td>
-            <td>
-                {{ v.nama }}
-                {% set is_admin =  get_row_data('login_model', 'retrieve', [null, null, null, null, v.id], 'is_admin') %}
-                {% if is_admin == 1 %}
-                    <br><span class="label label-warning">Admin</span>
-                {% endif %}
-            </td>
-            <td>
-                {{ v.jenis_kelamin }}
-            </td>
-            <td>
-                <ul class="nav nav-pills" style="margin-bottom:0px;">
-                    <li><a class="btn btn-small" href="{{ site_url('admin/pengajar/detail/' ~ status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
-                    <li class="dropdown">
-                        <a class="btn btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
-                            <li>{{ anchor('admin/pengajar/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
-                            <li>{{ anchor('admin/pengajar/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>
-                            <li>{{ anchor('admin/pengajar/edit_username/' ~ status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Pengajar'})|raw }}</li>
-                            <li>{{ anchor('admin/pengajar/edit_password/' ~ status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
-                        </ul>
-                    </li>
-                </ul>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-{% if pengajar is not empty and (status_id == 0 or status_id == 2) %}
-<br>
-<div class="row-fluid">
-    <div class="span7">
-        <table cellpadding="5">
-            <tr>
-                <th valign="top">Update Status Terpilih</th>
-                <td valign="top">
-                    <select name="status_id" style="width:100%;">
-                        <option>--Pilih Status--</option>
-                        <option value="1">Aktif</option>
-                        {% if status_id == 0 %}
-                        <option value="2">Blocking</option>
-                        {% endif %}
-                    </select>
-                </td>
-                <td valign="top">
-                    <button type="submit" class="btn">Update</button>
-                </td>
-            </tr>
-        </table>
-    </div>
-</div>
-{% endif %}
-
-{{ form_close()|raw }}
-
-<br>
-{{ pagination|raw }}
-
-</div>
-
+{% endblock %}

@@ -523,23 +523,18 @@ class Admin extends CI_Controller
     {
         $this->most_login();
 
-        $iframe = false;
-
-        $data = array(
-            'web_title'     => 'Data Pengajar | Administrator',
-            'content_file'  => path_theme('admin_pengajar/index.html')
-        );
+        $data['web_title'] = 'Data Pengajar | Administrator';
 
         switch ($act) {
             case 'add':
-                $status_id = (int)$segment_4;
+                $content_file = 'admin_pengajar/add.html';
+                $status_id    = (int)$segment_4;
                 if ($status_id < 0 OR $status_id > 3) {
                     redirect('admin/pengajar/list/1');
                 }
 
-                $data['module_title']     = anchor('admin/pengajar/list/'.$status_id, 'Data Pengajar').' / Tambah Pengajar';
-                $data['sub_content_file'] = path_theme('admin_pengajar/add.html');
-                $data['status_id']        = $status_id;
+                $data['module_title'] = anchor('admin/pengajar/list/'.$status_id, 'Data Pengajar').' / Tambah Pengajar';
+                $data['status_id']    = $status_id;
 
                 $config['upload_path']   = get_path_image();
                 $config['allowed_types'] = 'jpg|jpeg|png';
@@ -633,6 +628,7 @@ class Admin extends CI_Controller
                 break;
 
             case 'detail':
+                $content_file      = 'admin_pengajar/detail.html';
                 $status_id         = (int)$segment_4;
                 $pengajar_id       = (int)$segment_5;
                 $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
@@ -644,7 +640,6 @@ class Admin extends CI_Controller
                 $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
 
                 $data['module_title']     = anchor('admin/pengajar/list/'.$status_id, 'Data Pengajar').' / Detail Pengajar';
-                $data['sub_content_file'] = path_theme('admin_pengajar/detail.html');
                 $data['pengajar']         = $retrieve_pengajar;
                 $data['pengajar_login']   = $retrieve_login;
                 $data['status_id']        = $status_id;
@@ -659,10 +654,10 @@ class Admin extends CI_Controller
                 break;
 
             case 'add_ampuan':
-                $iframe            = true;
-                $status_id         = (int)$segment_4;
-                $pengajar_id       = (int)$segment_5;
-                $hari_id           = (int)$segment_6;
+                $content_file = 'admin_pengajar/add_ampuan.html';
+                $status_id    = (int)$segment_4;
+                $pengajar_id  = (int)$segment_5;
+                $hari_id      = (int)$segment_6;
                 if ($hari_id < 1 OR $hari_id > 7) {
                     echo 'Hari tidak ditemukan';
                     exit();
@@ -673,8 +668,6 @@ class Admin extends CI_Controller
                     exit();
                 }
 
-                unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_pengajar/add_ampuan.html');
                 $data['status_id']    = $status_id;
                 $data['pengajar_id']  = $pengajar_id;
                 $data['hari_id']      = $hari_id;
@@ -699,7 +692,7 @@ class Admin extends CI_Controller
                 break;
 
             case 'edit_ampuan':
-                $iframe            = true;
+                $content_file      = 'admin_pengajar/edit_ampuan.html';
                 $status_id         = (int)$segment_4;
                 $pengajar_id       = (int)$segment_5;
                 $ma_id             = (int)$segment_6;
@@ -717,8 +710,6 @@ class Admin extends CI_Controller
 
                 $retrieve_mk = $this->mapel_model->retrieve_kelas($retrieve_ma['mapel_kelas_id']);
 
-                unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_pengajar/edit_ampuan.html');
                 $data['status_id']    = $status_id;
                 $data['pengajar_id']  = $pengajar_id;
                 $data['ma']           = $retrieve_ma;
@@ -747,7 +738,7 @@ class Admin extends CI_Controller
                 break;
 
             case 'edit_profile':
-                $iframe            = true;
+                $content_file      = 'admin_pengajar/edit_profile.html';
                 $status_id         = (int)$segment_4;
                 $pengajar_id       = (int)$segment_5;
                 $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
@@ -759,8 +750,6 @@ class Admin extends CI_Controller
                 $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
                 $retrieve_pengajar['is_admin'] = $retrieve_login['is_admin'];
 
-                unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_pengajar/edit_profile.html');
                 $data['status_id']    = $status_id;
                 $data['pengajar_id']  = $pengajar_id;
                 $data['pengajar']     = $retrieve_pengajar;
@@ -812,7 +801,7 @@ class Admin extends CI_Controller
                 break;
 
             case 'edit_picture':
-                $iframe            = true;
+                $content_file      = 'admin_pengajar/edit_picture.html';
                 $status_id         = (int)$segment_4;
                 $pengajar_id       = (int)$segment_5;
                 $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
@@ -821,8 +810,6 @@ class Admin extends CI_Controller
                     exit();
                 }
 
-                unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_pengajar/edit_picture.html');
                 $data['status_id']    = $status_id;
                 $data['pengajar_id']  = $pengajar_id;
                 $data['pengajar']     = $retrieve_pengajar;
@@ -890,7 +877,7 @@ class Admin extends CI_Controller
                 break;
 
             case 'edit_username':
-                $iframe            = true;
+                $content_file      = 'admin_pengajar/edit_username.html';
                 $status_id         = (int)$segment_4;
                 $pengajar_id       = (int)$segment_5;
                 $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
@@ -899,8 +886,6 @@ class Admin extends CI_Controller
                     exit();
                 }
 
-                unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_pengajar/edit_username.html');
                 $data['status_id']    = $status_id;
                 $data['pengajar_id']  = $pengajar_id;
                 $data['login']        = $this->login_model->retrieve(null, null, null, null, $pengajar_id);
@@ -925,7 +910,7 @@ class Admin extends CI_Controller
                 break;
 
             case 'edit_password':
-                $iframe            = true;
+                $content_file      = 'admin_pengajar/edit_password.html';
                 $status_id         = (int)$segment_4;
                 $pengajar_id       = (int)$segment_5;
                 $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
@@ -934,8 +919,6 @@ class Admin extends CI_Controller
                     exit();
                 }
 
-                unset($data['content_file']);
-                $data['content_file'] = path_theme('admin_pengajar/edit_password.html');
                 $data['status_id']    = $status_id;
                 $data['pengajar_id']  = $pengajar_id;
 
@@ -952,8 +935,8 @@ class Admin extends CI_Controller
                 break;
 
             case 'filter':
-                $data['module_title']     = 'Data Pengajar';
-                $data['sub_content_file'] = path_theme('admin_pengajar/filter.html');
+                $content_file         = 'admin_pengajar/filter.html';
+                $data['module_title'] = 'Data Pengajar';
 
                 $page_no = $segment_4;
                 if (empty($page_no)) {
@@ -1016,7 +999,7 @@ class Admin extends CI_Controller
                 $data['comp_js']      = $html_js;
                 $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
-                $data['pengajars']     = $retrieve_all['results'];
+                $data['pengajars']  = $retrieve_all['results'];
                 $data['pagination'] = $this->pager->view($retrieve_all, 'admin/pengajar/filter/');
 
                 break;
@@ -1072,8 +1055,8 @@ class Admin extends CI_Controller
 
             default:
             case 'list':
-                $data['module_title']     = 'Data Pengajar';
-                $data['sub_content_file'] = path_theme('admin_pengajar/list.html');
+                $content_file         = 'admin_pengajar/list.html';
+                $data['module_title'] = 'Data Pengajar';
 
                 $status_id = (int)$segment_4;
                 if ($status_id < 0 OR $status_id > 2) {
@@ -1125,7 +1108,8 @@ class Admin extends CI_Controller
                 break;
         }
 
-        $this->view($data, ($iframe) ? true : false);
+        $data = array_merge(default_parser_item(), $data);
+        $this->twig->display($content_file, $data);
     }
 
     function siswa($act = 'list', $segment_3 = '1', $segment_4 = '', $segment_5 = '')

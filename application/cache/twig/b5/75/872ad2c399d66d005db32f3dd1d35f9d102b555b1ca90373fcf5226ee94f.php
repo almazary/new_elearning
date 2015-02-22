@@ -1,34 +1,45 @@
 <?php
 
-/* default/admin_pengajar/edit_profile.html */
+/* admin_pengajar/edit_profile.html */
 class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226ee94f extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
         parent::__construct($env);
 
-        $this->parent = false;
+        $this->parent = $this->env->loadTemplate("layout-iframe.html");
 
         $this->blocks = array(
+            'content' => array($this, 'block_content'),
         );
+    }
+
+    protected function doGetParent(array $context)
+    {
+        return "layout-iframe.html";
     }
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        // line 1
-        echo "
-<strong>Edit Profil</strong>
+        $this->parent->display($context, array_merge($this->blocks, $blocks));
+    }
+
+    // line 3
+    public function block_content($context, array $blocks = array())
+    {
+        // line 4
+        echo "<strong>Edit Profil</strong>
 ";
-        // line 3
+        // line 5
         echo get_flashdata("edit");
         echo "
 
 ";
-        // line 5
+        // line 7
         echo form_open(((("admin/pengajar/edit_profile/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . (isset($context["pengajar_id"]) ? $context["pengajar_id"] : null)));
         echo "
 <input type=\"hidden\" name=\"pengajar_id\" value=\"";
-        // line 6
+        // line 8
         echo twig_escape_filter($this->env, (isset($context["pengajar_id"]) ? $context["pengajar_id"] : null), "html", null, true);
         echo "\">
 <table class=\"table table-striped\">
@@ -37,11 +48,11 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
             <th width=\"30%\">NIP</th>
             <td>
                 <input type=\"text\" id=\"nip\" name=\"nip\" style=\"width:40%;\" value=\"";
-        // line 12
+        // line 14
         echo twig_escape_filter($this->env, set_value("nip", $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "nip")), "html", null, true);
         echo "\">
                 <br>";
-        // line 13
+        // line 15
         echo form_error("nip");
         echo "
             </td>
@@ -50,11 +61,11 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
             <th>Nama <span class=\"text-error\">*</span></th>
             <td>
                 <input type=\"text\" name=\"nama\" style=\"width:90%;\" value=\"";
-        // line 19
+        // line 21
         echo twig_escape_filter($this->env, set_value("nama", $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "nama")), "html", null, true);
         echo "\">
                 <br>";
-        // line 20
+        // line 22
         echo form_error("nama");
         echo "
             </td>
@@ -63,15 +74,15 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
             <th>Jenis Kelamin <span class=\"text-error\">*</span></th>
             <td>
                 <label class=\"radio inline\"><input type=\"radio\" name=\"jenis_kelamin\" value=\"Laki-laki\" ";
-        // line 26
+        // line 28
         echo twig_escape_filter($this->env, set_radio("jenis_kelamin", "Laki-laki", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "jenis_kelamin") == "Laki-laki")) ? (true) : (false))), "html", null, true);
         echo "> Laki-laki</label>
                 <label class=\"radio inline\"><input type=\"radio\" name=\"jenis_kelamin\" value=\"Perempuan\" ";
-        // line 27
+        // line 29
         echo twig_escape_filter($this->env, set_radio("jenis_kelamin", "Perempuan", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "jenis_kelamin") == "Perempuan")) ? (true) : (false))), "html", null, true);
         echo "> Perempuan</label>
                 <br>";
-        // line 28
+        // line 30
         echo form_error("jenis_kelamin");
         echo "
             </td>
@@ -80,11 +91,11 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
             <th>Tempat Lahir</th>
             <td>
                 <input type=\"text\" name=\"tempat_lahir\" value=\"";
-        // line 34
+        // line 36
         echo twig_escape_filter($this->env, set_value("tempat_lahir", $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "tempat_lahir")), "html", null, true);
         echo "\">
                 <br>";
-        // line 35
+        // line 37
         echo form_error("tempat_lahir");
         echo "
             </td>
@@ -93,23 +104,23 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
             <th>Tanggal Lahir</th>
             <td>
                 ";
-        // line 41
+        // line 43
         $context["tgl"] = (((!twig_test_empty($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "tgl_lahir")))) ? (twig_date_format_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "tgl_lahir"), "d")) : (""));
-        // line 42
+        // line 44
         echo "                ";
         $context["bln"] = (((!twig_test_empty($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "tgl_lahir")))) ? (twig_date_format_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "tgl_lahir"), "m")) : (""));
-        // line 43
+        // line 45
         echo "                ";
         $context["thn"] = (((!twig_test_empty($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "tgl_lahir")))) ? (twig_date_format_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "tgl_lahir"), "Y")) : (""));
-        // line 44
+        // line 46
         echo "                <select class=\"span2\" style=\"width: 20%;float:left;margin-right:5px;\" name=\"tgl_lahir\">
                     <option value=\"\">--Tgl--</option>
                     ";
-        // line 46
+        // line 48
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable(range(1, 31));
         foreach ($context['_seq'] as $context["_key"] => $context["i"]) {
-            // line 47
+            // line 49
             echo "                        <option value=\"";
             echo twig_escape_filter($this->env, (isset($context["i"]) ? $context["i"] : null), "html", null, true);
             echo "\" ";
@@ -122,16 +133,16 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['i'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 49
+        // line 51
         echo "                </select>
                 <select class=\"span2\" style=\"width: 35%;float:left;margin-right:5px;\" name=\"bln_lahir\">
                     <option value=\"\">--Bulan--</option>
                     ";
-        // line 52
+        // line 54
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable(range(1, 12));
         foreach ($context['_seq'] as $context["_key"] => $context["i"]) {
-            // line 53
+            // line 55
             echo "                        <option value=\"";
             echo twig_escape_filter($this->env, (isset($context["i"]) ? $context["i"] : null), "html", null, true);
             echo "\" ";
@@ -144,14 +155,14 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['i'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 55
+        // line 57
         echo "                </select>
                 <input type=\"text\" name=\"thn_lahir\" style=\"width:15%;float:left;\" maxlength=\"4\" value=\"";
-        // line 56
+        // line 58
         echo twig_escape_filter($this->env, set_value("thn_lahir", (isset($context["thn"]) ? $context["thn"] : null)), "html", null, true);
         echo "\" placeholder=\"Tahun\">
                 <br>";
-        // line 57
+        // line 59
         echo form_error("thn_lahir");
         echo "
             </td>
@@ -160,11 +171,11 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
             <th>Alamat</th>
             <td>
                 <textarea name=\"alamat\" style=\"width:90%;\">";
-        // line 63
+        // line 65
         echo twig_escape_filter($this->env, set_value("alamat", $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "alamat")), "html", null, true);
         echo "</textarea>
                 <br>";
-        // line 64
+        // line 66
         echo form_error("alamat");
         echo "
             </td>
@@ -173,24 +184,24 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
             <th>Status <span class=\"text-error\">*</span></th>
             <td>
                 ";
-        // line 70
+        // line 72
         if (($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == 0)) {
-            // line 71
+            // line 73
             echo "                <label class=\"radio inline\"><input type=\"radio\" name=\"status_id\" value=\"0\" ";
             echo twig_escape_filter($this->env, set_radio("status_id", "0", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == "0")) ? (true) : (false))), "html", null, true);
             echo "> Pending</label>
                 ";
         }
-        // line 73
+        // line 75
         echo "                <label class=\"radio inline\"><input type=\"radio\" name=\"status_id\" value=\"1\" ";
         echo twig_escape_filter($this->env, set_radio("status_id", "1", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == "1")) ? (true) : (false))), "html", null, true);
         echo "> Aktif</label>
                 <label class=\"radio inline\"><input type=\"radio\" name=\"status_id\" value=\"2\" ";
-        // line 74
+        // line 76
         echo twig_escape_filter($this->env, set_radio("status_id", "2", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == "2")) ? (true) : (false))), "html", null, true);
         echo "> Blocking</label>
                 <br>";
-        // line 75
+        // line 77
         echo form_error("status_id");
         echo "
             </td>
@@ -199,11 +210,11 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
             <th>Opsi</th>
             <td>
                 <label class=\"checkbox\"><input type=\"checkbox\" name=\"is_admin\" value=\"1\" ";
-        // line 81
+        // line 83
         echo twig_escape_filter($this->env, set_checkbox("is_admin", "1", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "is_admin") == 1)) ? (true) : (false))), "html", null, true);
         echo "> Jadikan pengajar admin website</label>
                 <br>";
-        // line 82
+        // line 84
         echo form_error("is_admin");
         echo "
             </td>
@@ -216,7 +227,7 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
     </tbody>
 </table>
 ";
-        // line 92
+        // line 94
         echo form_close();
         echo "
 ";
@@ -224,7 +235,7 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
 
     public function getTemplateName()
     {
-        return "default/admin_pengajar/edit_profile.html";
+        return "admin_pengajar/edit_profile.html";
     }
 
     public function isTraitable()
@@ -234,6 +245,6 @@ class __TwigTemplate_b575872ad2c399d66d005db32f3dd1d35f9d102b555b1ca90373fcf5226
 
     public function getDebugInfo()
     {
-        return array (  220 => 92,  207 => 82,  203 => 81,  194 => 75,  190 => 74,  185 => 73,  179 => 71,  177 => 70,  168 => 64,  164 => 63,  155 => 57,  151 => 56,  148 => 55,  135 => 53,  131 => 52,  126 => 49,  113 => 47,  109 => 46,  105 => 44,  102 => 43,  99 => 42,  97 => 41,  88 => 35,  84 => 34,  75 => 28,  71 => 27,  67 => 26,  58 => 20,  54 => 19,  45 => 13,  41 => 12,  32 => 6,  28 => 5,  23 => 3,  19 => 1,);
+        return array (  231 => 94,  218 => 84,  214 => 83,  205 => 77,  201 => 76,  196 => 75,  190 => 73,  188 => 72,  179 => 66,  175 => 65,  166 => 59,  162 => 58,  159 => 57,  146 => 55,  142 => 54,  137 => 51,  124 => 49,  120 => 48,  116 => 46,  113 => 45,  110 => 44,  108 => 43,  99 => 37,  95 => 36,  86 => 30,  82 => 29,  78 => 28,  69 => 22,  65 => 21,  56 => 15,  52 => 14,  43 => 8,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
     }
 }

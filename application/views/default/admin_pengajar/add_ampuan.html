@@ -1,4 +1,6 @@
+{% extends "layout-iframe.html" %}
 
+{% block content %}
 <strong>Tambah Jadwal Mengajar Hari {{ get_indo_hari(hari_id) }}</strong>
 {{ get_flashdata('add')|raw }}
 
@@ -60,7 +62,10 @@
     </tbody>
 </table>
 {{ form_close()|raw }}
+{% endblock %}
 
+{% block js %}
+{{ parent() }}
 <script type="text/javascript">
 $('#kelas_id').change(function(){
     $.ajax({
@@ -73,3 +78,4 @@ $('#kelas_id').change(function(){
     });
 });
 </script>
+{% endblock %}

@@ -1,4 +1,6 @@
+{% extends "layout-iframe.html" %}
 
+{% block content %}
 <strong>Edit Jadwal Ajar</strong>
 {{ get_flashdata('edit')|raw }}
 
@@ -70,7 +72,10 @@
     </tbody>
 </table>
 {{ form_close()|raw }}
+{% endblock %}
 
+{% block js %}
+{{ parent() }}
 <script type="text/javascript">
 $('#kelas_id').change(function(){
     $.ajax({
@@ -83,3 +88,4 @@ $('#kelas_id').change(function(){
     });
 });
 </script>
+{% endblock %}

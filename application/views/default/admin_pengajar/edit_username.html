@@ -1,4 +1,6 @@
+{% extends "layout-iframe.html" %}
 
+{% block content %}
 <strong>Edit Username <span class="text-error">*</span></strong>
 {{ get_flashdata('edit')|raw }}
 
@@ -18,3 +20,4 @@
     </tbody>
 </table>
 {{ form_close()|raw }}
+{% endblock %}
