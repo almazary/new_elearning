@@ -9,6 +9,25 @@
 class Siswa_model extends CI_Model
 {
 
+    public function count($by, $param = array())
+    {
+        switch ($by) {
+            case 'kelas':
+                $kelas_id = $param['kelas_id'];
+
+                $this->db->join('siswa', 'kelas_siswa.siswa_id = siswa.id');
+                $this->db->where('kelas_siswa.kelas_id', $kelas_id);
+                $this->db->where('siswa.status_id', 1);
+                $result = $this->db->get('kelas_siswa');
+                return $result->num_rows();
+                break;
+            
+            default:
+                return 0;
+                break;
+        }
+    }
+
     /**
      * Method untuk menghapus data siswa berdasarkan id
      *

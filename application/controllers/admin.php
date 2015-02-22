@@ -148,6 +148,29 @@ class Admin extends CI_Controller
 
         switch ($act) {
             case 'add':
+                $content_file   = 'admin_tugas/add.html';
+                $mapel_ajar_id = (int)$segment_4;
+                if (empty($mapel_ajar_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $mapel_ajar = $this->pengajar_model->retrieve_ma($mapel_ajar_id);
+                if (empty($mapel_ajar) OR empty($mapel_ajar['aktif'])) {
+                    redirect('admin/tugas');
+                }
+
+                $mapel_kelas             = $this->mapel_model->retrieve_kelas($mapel_ajar['mapel_kelas_id']);
+                $pengajar                = $this->pengajar_model->retrieve($mapel_ajar['pengajar_id']);
+                $pengajar['link_foto']   = get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin']);
+                $pengajar['link_profil'] = site_url('admin/pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+
+                $data['module_title']          = anchor('admin/tugas', 'Tugas').' / Tambah Tugas';
+                $data['comp_js']               = get_tinymce('info', 'simple');
+                $data['kelas']                 = $this->kelas_model->retrieve($mapel_kelas['kelas_id']);
+                $data['kelas']['jumlah_siswa'] = $this->siswa_model->count('kelas', array('kelas_id' => $mapel_kelas['kelas_id']));
+                $data['mapel']                 = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                $data['mapel_ajar']            = $mapel_ajar;
+                $data['pengajar']              = $pengajar;
                 
                 break;
             

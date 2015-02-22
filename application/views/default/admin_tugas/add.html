@@ -1,0 +1,67 @@
+{% extends "layout-private.html" %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ module_title|raw }}</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('tugas')|raw }}
+
+        <div class="bs-callout bs-callout-info">
+            <img src="{{ pengajar.link_foto }}" class="pull-right img-circle img-polaroid img-profile-top">
+            Pengajar : <b><a href="{{ pengajar.link_profil }}">{{ pengajar.nama }}</a></b>
+            <ul class="inline unstyle" style="margin-left: -5px;margin-bottom: 0px;">
+                <li>Matapelajaran :</li>
+                <li><b>{{ mapel.nama }}</b></li>
+                <li>Hari : <b>{{ get_indo_hari(mapel_ajar.hari_id) }}</b></li>
+                <li>Jam : <b>{{ mapel_ajar.jam_mulai|date('H:i') }}</b> - <b>{{ mapel_ajar.jam_selesai|date('H:i') }}</b></li>
+                <li><b>{{ kelas.nama }}</b> ( {{ kelas.jumlah_siswa }} siswa)</li>
+            </ul>
+        </div>
+
+        <br>
+        {{ form_open_multipart('admin/tugas/add/' ~ mapel_ajar.id, {'class' : 'form-horizontal row-fluid'})|raw }}
+        <div class="control-group">
+            <label class="control-label">Type Soal <span class="text-error">*</span></label>
+            <div class="controls">
+                <select name="type" class="span2">
+                    <option value="">--pilih--</option>
+                    <option value="1" {{ set_select('type', '1') }}>Upload</option>
+                    <option value="2" {{ set_select('type', '2') }}>Essay</option>
+                    <option value="3" {{ set_select('type', '3') }}>Ganda</option>
+                </select>
+                <br>{{ form_error('type')|raw }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Judul Tugas <span class="text-error">*</span></label>
+            <div class="controls">
+                <input type="text" name="judul" class="span12" value="{{ set_value('judul') }}">
+                <br>{{ form_error('judul')|raw }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Durasi <span class="text-error">*</span></label>
+            <div class="controls">
+                <input type="text" name="durasi" value="{{ set_value('durasi') }}" class="span2" placeholder="Dalam Menit">
+                {{ form_error('info')|raw }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Info</label>
+            <div class="controls">
+                <textarea name="info" id="info" style="height:150px;width:100%;">{{ set_value('info') }}</textarea>
+                {{ form_error('info')|raw }}
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <a href="{{ pengajar.link_profil }}" class="btn">Batal</a>
+            </div>
+        </div>
+        {{ form_close()|raw }}
+    </div>
+</div>
+{% endblock %}

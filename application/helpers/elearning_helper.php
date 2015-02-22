@@ -128,13 +128,13 @@ function get_alert($notif = 'success', $msg = '')
  * @param  string $element_id
  * @return string
  */
-function get_tinymce($element_id)
+function get_tinymce($element_id, $theme = 'advanced')
 {
     $return = '<script type="text/javascript" src="'.base_url('assets/comp/tinymce/tiny_mce.js').'"></script>'.PHP_EOL;
     $return .= '<script type="text/javascript">
         tinyMCE.init({
             selector: "textarea#'.$element_id.'",
-            theme : "advanced",
+            theme : "'.$theme.'",
             skin : "o2k7",
             plugins : "youtubeIframe,emotions,syntaxhl,wordcount,pagebreak,style,layer,table,save,advhr,advimage,advlink,insertdatetime,preview,searchreplace,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,inlinepopups,autosave,print,media,youtubeIframe,syntaxhl",
 
