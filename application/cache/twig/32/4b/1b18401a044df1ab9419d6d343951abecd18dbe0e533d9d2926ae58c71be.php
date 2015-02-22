@@ -78,7 +78,7 @@ class __TwigTemplate_324b1b18401a044df1ab9419d6d343951abecd18dbe0e533d9d2926ae58
                 <div class=\"controls\">
                     <textarea name=\"konten\" id=\"konten\" style=\"height:500px;width:100%;\">";
             // line 29
-            echo set_value("konten", $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "konten"));
+            echo set_value("konten", html_entity_decode($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "konten")));
             echo "</textarea>
                     ";
             // line 30

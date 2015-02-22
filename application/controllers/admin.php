@@ -189,6 +189,64 @@ class Admin extends CI_Controller
         $data['web_title'] = 'Materi | Administrator';
 
         switch ($act) {
+            case 'read':
+                $content_file = 'admin_materi/read.html';
+                $materi_id    = (int)$segment_4;
+
+                if (empty($materi_id)) {
+                    $data['error'] = "Materi tidak ditemukan";
+                }
+
+                $materi = $this->materi_model->retrieve($materi_id);
+                if (empty($materi) OR empty($materi['publish'])) {
+                    $data['error'] = "Materi tidak ditemukan";
+                }
+
+                if (!isset($data['error'])) {
+
+                    $data['materi'] = $materi;
+
+                    # cari tipenya
+                    if (empty($materi['file'])) {
+                        $type = 'tertulis';
+                    } else {
+                        $type = 'file';
+                        $data['materi']['file_info']         = get_file_info(get_path_file($materi['file']));
+                        $data['materi']['file_info']['mime'] = get_mime_by_extension(get_path_file($materi['file']));
+                    }
+
+                    $data['type'] = $type;
+
+                    $mapel_kelas = $this->mapel_model->retrieve_kelas($materi['mapel_kelas_id']);
+                    $mapel       = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                    $sub_kelas   = $this->kelas_model->retrieve($mapel_kelas['kelas_id']);
+                    $data['materi']['mapel'] = $mapel;
+                    $data['materi']['kelas'] = $sub_kelas;
+                    
+                    # cari pembuatnya
+                    if (!empty($materi['pengajar_id'])) {
+                        $pengajar = $this->pengajar_model->retrieve($materi['pengajar_id']);
+                        $data['materi']['pembuat'] = array(
+                            'nama'         => $pengajar['nama'],
+                            'link_profil'  => site_url('admin/pengajar/'.$pengajar['status_id'].'/'.$pengajar['id']),
+                            'link_foto'    => get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin'])
+                        );
+                    }
+
+                    if (!empty($materi['siswa_id'])) {
+                        $siswa = $this->siswa_model->retrieve($materi['siswa_id']);
+                        $data['materi']['pembuat'] = array(
+                            'nama'        => $siswa['nama'],
+                            'link_profil' => site_url('admin/siswa/'.$siswa['status_id'].'/'.$siswa['id']),
+                            'link_foto'   => get_url_image_siswa($siswa['foto'], 'medium', $siswa['jenis_kelamin'])
+                        );
+                    }
+
+                } else {
+                    $data['materi'] = array();
+                }
+                break;
+
             case 'detail':
                 $content_file   = 'admin_materi/detail.html';
                 $parent_id      = (int)$segment_4;

@@ -137,7 +137,7 @@ class __TwigTemplate_1346a11eb48e96b832e9ede5c2e8148879922051982e674bbb95494e8d9
                 $context["url_type"] = "file";
                 // line 54
                 echo "                                ";
-                echo anchor(((((("admin/materi/info/" . (isset($context["url_type"]) ? $context["url_type"] : null)) . "/") . (isset($context["ref_param"]) ? $context["ref_param"] : null)) . "/") . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-zoom-in\"></i> Detail", array("class" => "btn btn-small"));
+                echo anchor(("admin/materi/read/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-zoom-in\"></i> Detail", array("class" => "btn btn-small", "target" => "_blank"));
                 echo "
                             ";
             } else {
@@ -146,7 +146,7 @@ class __TwigTemplate_1346a11eb48e96b832e9ede5c2e8148879922051982e674bbb95494e8d9
                 $context["url_type"] = "tertulis";
                 // line 57
                 echo "                                ";
-                echo anchor(((((("admin/materi/info/" . (isset($context["url_type"]) ? $context["url_type"] : null)) . "/") . (isset($context["ref_param"]) ? $context["ref_param"] : null)) . "/") . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-zoom-in\"></i> Detail", array("class" => "btn btn-small"));
+                echo anchor(("admin/materi/read/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-zoom-in\"></i> Detail", array("class" => "btn btn-small", "target" => "_blank"));
                 echo "
                             ";
             }

@@ -1,0 +1,66 @@
+html,
+body {
+    height: 100%;
+    background-color: rgb(245, 239, 230);
+    font-family: "ProximaNova","Helvetica Neue",helvetica,arial,sans-serif;
+    font-size: 15px;
+    line-height: 21px;
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+}
+
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+.container {
+    width: 1000px;
+}
+.credit {
+    margin: 20px 0;
+}
+.content {
+    background-color: white;
+    padding: 20px 25px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border:1px solid #DDD;
+    margin-bottom: 20px;
+    color:#282928;
+    /*-webkit-box-shadow: 0px 5px 7px 1px rgba(173,170,173,1);
+    -moz-box-shadow: 0px 5px 7px 1px rgba(173,170,173,1);
+    box-shadow: 0px 5px 7px 1px rgba(173,170,173,1);*/
+}
+a {
+    color: #1C5C76;
+}
+h1.title {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    font-size: 27px;
+    line-height: 35px;
+}
+.title-info {
+    color:#900;
+}
+hr.hr-top {
+    border:none;
+    /*border-top:1px solid #ECECEC;*/
+    margin-top: 5px;
+    margin-bottom: 0px;
+    border-top:5px solid #000;
+}
+ul.ul-top {
+    margin-left:-5px;
+}
+.wrap-content {
+    padding-right:10px;
+    padding-left: 10px;
+}

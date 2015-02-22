@@ -151,6 +151,7 @@ function get_tinymce($element_id)
             file_browser_callback : "openKCFinder",
             theme_advanced_resizing : false,
             content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
+            convert_urls: false
         });
 
         function openKCFinder(field_name, url, type, win) {
