@@ -1,41 +1,54 @@
+{% extends "layout-private.html" %}
 
-{{ form_open_multipart('admin/ch_profil', {'class' : 'form-horizontal row-fluid'})|raw }}
-    <div class="control-group">
-        <label class="control-label">Username (Email) <span class="text-error">*</span></label>
-        <div class="controls">
-            <input type="text" name="username" class="span5" value="{{ set_value('username', login.username) }}">
-            <br>{{ form_error('username')|raw }}
-        </div>
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ module_title|raw }}</h3>
     </div>
-    <div class="control-group">
-        <label class="control-label">Nama <span class="text-error">*</span></label>
-        <div class="controls">
-            <input type="text" name="nama" class="span5" value="{{ set_value('nama', pengajar.nama) }}">
-            <br>{{ form_error('nama')|raw }}
-        </div>
+    <div class="module-body">
+        {{ get_flashdata('akun')|raw }}
+
+        {{ form_open_multipart('admin/ch_profil', {'class' : 'form-horizontal row-fluid'})|raw }}
+            <div class="control-group">
+                <label class="control-label">Username (Email) <span class="text-error">*</span></label>
+                <div class="controls">
+                    <input type="text" name="username" class="span5" value="{{ set_value('username', login.username) }}">
+                    <br>{{ form_error('username')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Nama <span class="text-error">*</span></label>
+                <div class="controls">
+                    <input type="text" name="nama" class="span5" value="{{ set_value('nama', pengajar.nama) }}">
+                    <br>{{ form_error('nama')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Alamat <span class="text-error">*</span></label>
+                <div class="controls">
+                    <input type="text" name="alamat" class="span9" value="{{ set_value('alamat', pengajar.alamat) }}">
+                    <br>{{ form_error('alamat')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Foto</label>
+                <div class="controls">
+                    <?php if (!is_null($pengajar['foto']) AND !empty($pengajar['foto'])): ?>
+                    {% if pengajar.foto != '' %}
+                        <img src="{{ get_url_image(pengajar.foto, 'medium') }}"><br><br>
+                        Ganti Foto
+                    {% endif %}
+                   <input type="file" name="userfile">
+                   <br>{{ error_upload|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        {{ form_close()|raw }}
+
     </div>
-    <div class="control-group">
-        <label class="control-label">Alamat <span class="text-error">*</span></label>
-        <div class="controls">
-            <input type="text" name="alamat" class="span9" value="{{ set_value('alamat', pengajar.alamat) }}">
-            <br>{{ form_error('alamat')|raw }}
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">Foto</label>
-        <div class="controls">
-            <?php if (!is_null($pengajar['foto']) AND !empty($pengajar['foto'])): ?>
-            {% if pengajar.foto != '' %}
-                <img src="{{ get_url_image(pengajar.foto, 'medium') }}"><br><br>
-                Ganti Foto
-            {% endif %}
-           <input type="file" name="userfile">
-           <br>{{ error_upload|raw }}
-        </div>
-    </div>
-    <div class="control-group">
-        <div class="controls">
-            <button type="submit" class="btn btn-primary">Update</button>
-        </div>
-    </div>
-{{ form_close()|raw }}
+</div>
+{% endblock %}

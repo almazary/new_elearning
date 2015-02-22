@@ -1,34 +1,45 @@
 <?php
 
-/* default/admin_siswa/edit_username.html */
+/* admin_siswa/edit_username.html */
 class __TwigTemplate_b1025416c5a9821434829c829e4ca3013bdb9d48ad447a1463647db1a23f539e extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
         parent::__construct($env);
 
-        $this->parent = false;
+        $this->parent = $this->env->loadTemplate("layout-iframe.html");
 
         $this->blocks = array(
+            'content' => array($this, 'block_content'),
         );
+    }
+
+    protected function doGetParent(array $context)
+    {
+        return "layout-iframe.html";
     }
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        // line 1
-        echo "
-<strong>Edit Username <span class=\"text-error\">*</span></strong>
+        $this->parent->display($context, array_merge($this->blocks, $blocks));
+    }
+
+    // line 3
+    public function block_content($context, array $blocks = array())
+    {
+        // line 4
+        echo "<strong>Edit Username <span class=\"text-error\">*</span></strong>
 ";
-        // line 3
+        // line 5
         echo get_flashdata("edit");
         echo "
 
 ";
-        // line 5
+        // line 7
         echo form_open(((("admin/siswa/edit_username/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . (isset($context["siswa_id"]) ? $context["siswa_id"] : null)));
         echo "
 <input type=\"hidden\" name=\"login_id\" value=\"";
-        // line 6
+        // line 8
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["login"]) ? $context["login"] : null), "id"), "html", null, true);
         echo "\">
 <table class=\"table table-striped\">
@@ -36,11 +47,11 @@ class __TwigTemplate_b1025416c5a9821434829c829e4ca3013bdb9d48ad447a1463647db1a23
         <tr>
             <td>
                 <input type=\"text\" name=\"username\" value=\"";
-        // line 11
+        // line 13
         echo twig_escape_filter($this->env, set_value("username", $this->getAttribute((isset($context["login"]) ? $context["login"] : null), "username")), "html", null, true);
         echo "\">
                 <br>";
-        // line 12
+        // line 14
         echo form_error("username");
         echo "
             </td>
@@ -51,7 +62,7 @@ class __TwigTemplate_b1025416c5a9821434829c829e4ca3013bdb9d48ad447a1463647db1a23
     </tbody>
 </table>
 ";
-        // line 20
+        // line 22
         echo form_close();
         echo "
 ";
@@ -59,7 +70,7 @@ class __TwigTemplate_b1025416c5a9821434829c829e4ca3013bdb9d48ad447a1463647db1a23
 
     public function getTemplateName()
     {
-        return "default/admin_siswa/edit_username.html";
+        return "admin_siswa/edit_username.html";
     }
 
     public function isTraitable()
@@ -69,6 +80,6 @@ class __TwigTemplate_b1025416c5a9821434829c829e4ca3013bdb9d48ad447a1463647db1a23
 
     public function getDebugInfo()
     {
-        return array (  55 => 20,  44 => 12,  40 => 11,  32 => 6,  28 => 5,  23 => 3,  19 => 1,);
+        return array (  66 => 22,  55 => 14,  51 => 13,  43 => 8,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
     }
 }

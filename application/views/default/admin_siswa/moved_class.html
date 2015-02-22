@@ -1,4 +1,6 @@
+{% extends "layout-iframe.html" %}
 
+{% block content %}
 <strong>Pilih Kelas Tujuan <span class="text-error">*</span></strong>
 {{ get_flashdata('class')|raw }}
 
@@ -20,3 +22,4 @@
     </tr>
 </table>
 {{ form_close()|raw }}
+{% endblock %}

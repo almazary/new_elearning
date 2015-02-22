@@ -444,7 +444,7 @@ function ch_uch_checkbox(source){
     }
     ";
         // line 233
-        if (array_key_exists("filter", $context)) {
+        if ((!twig_test_empty((isset($context["filter"]) ? $context["filter"] : null)))) {
             // line 234
             echo "    view_form_search();
     ";

@@ -1,32 +1,46 @@
-<div class="row-fluid">
-    <div class="span8">
-        <button class="btn btn-primary" id="popover" data-html="true" data-title="Cara Tambah Tugas" data-content="Masuk ke detail profil <b>Pengajar</b>. Tugas dapat diatur pada <b>Matapelajaran</b> yang diajar.<br>
-        <br>{{ anchor('admin/pengajar/filter', 'Cari Pengajar', {'class':'btn btn-small btn-primary'}) }}" data-toggle="popover">Tambah Tugas</button>
-    </div>
+{% extends "layout-private.html" %}
 
-    <div class="span4">
-        <div class="btn-group">
-            {{ anchor('admin/tugas/list/0', 'Semua', {'class' : (type_id == 0) ? 'btn btn-info' : 'btn'})|raw }}
-            {{ anchor('admin/tugas/list/1', 'Upload', {'class' : (type_id == 1) ? 'btn btn-info' : 'btn'})|raw }}
-            {{ anchor('admin/tugas/list/2', 'Essay', {'class' : (type_id == 2) ? 'btn btn-info' : 'btn'})|raw }}
-            {{ anchor('admin/tugas/list/3', 'Ganda', {'class' : (type_id == 3) ? 'btn btn-info' : 'btn'})|raw }}
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ module_title|raw }}</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('tugas')|raw }}
+
+        <div class="row-fluid">
+            <div class="span8">
+                <button class="btn btn-primary" id="popover" data-html="true" data-title="Cara Tambah Tugas" data-content="Masuk ke detail profil <b>Pengajar</b>. Tugas dapat diatur pada <b>Matapelajaran</b> yang diajar.<br>
+                <br>{{ anchor('admin/pengajar/filter', 'Cari Pengajar', {'class':'btn btn-small btn-primary'}) }}" data-toggle="popover">Tambah Tugas</button>
+            </div>
+
+            <div class="span4">
+                <div class="btn-group">
+                    {{ anchor('admin/tugas/list/0', 'Semua', {'class' : (type_id == 0) ? 'btn btn-info' : 'btn'})|raw }}
+                    {{ anchor('admin/tugas/list/1', 'Upload', {'class' : (type_id == 1) ? 'btn btn-info' : 'btn'})|raw }}
+                    {{ anchor('admin/tugas/list/2', 'Essay', {'class' : (type_id == 2) ? 'btn btn-info' : 'btn'})|raw }}
+                    {{ anchor('admin/tugas/list/3', 'Ganda', {'class' : (type_id == 3) ? 'btn btn-info' : 'btn'})|raw }}
+                </div>
+            </div>
         </div>
+
+        <br>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th width="7%">No</th>
+                    <th>Kelas</th>
+                    <th>Judul</th>
+                    <th>Waktu</th>
+                    <th width="22%"></th>
+                </tr>
+            </thead>
+
+        </table>
+
+        <br>
+        {{ pagination|raw }}
+
     </div>
 </div>
-
-<br>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th width="7%">No</th>
-            <th>Kelas</th>
-            <th>Judul</th>
-            <th>Waktu</th>
-            <th width="22%"></th>
-        </tr>
-    </thead>
-
-</table>
-
-<br>
-{{ pagination|raw }}
+{% endblock %}

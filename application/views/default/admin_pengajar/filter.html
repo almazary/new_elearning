@@ -230,7 +230,7 @@ $(function() {
     function view_form_search() {
         $( "#form-search" ).toggle();
     }
-    {% if filter is defined %}
+    {% if filter is not empty %}
     view_form_search();
     {% endif %}
     $( "#button" ).click(function() {

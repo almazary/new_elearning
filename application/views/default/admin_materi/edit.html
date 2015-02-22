@@ -1,67 +1,81 @@
-<div class="bs-callout bs-callout-info">
-    <p><b>Matapelajaran :</b> {{ mapel.nama }} <b>Kelas : </b>{{ kelas.nama }}</p>
+{% extends "layout-private.html" %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ module_title|raw }}</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('materi')|raw }}
+
+        <div class="bs-callout bs-callout-info">
+            <p><b>Matapelajaran :</b> {{ mapel.nama }} <b>Kelas : </b>{{ kelas.nama }}</p>
+        </div>
+
+        <br>
+
+        {{ form_open_multipart('admin/materi/edit/' ~ type ~ '/' ~ ref_param ~ '/' ~ materi.id, {'class' : 'form-horizontal row-fluid'})|raw }}
+            <div class="control-group">
+                <label class="control-label">Judul <span class="text-error">*</span></label>
+                <div class="controls">
+                    <input type="text" name="judul" class="span12" value="{{ set_value('judul', materi.judul) }}">
+                    <br>{{ form_error('judul')|raw }}
+                </div>
+            </div>
+            {% if type == 'tertulis' %}
+            <div class="control-group">
+                <label class="control-label">Konten <span class="text-error">*</span></label>
+                <div class="controls">
+                    <textarea name="konten" id="konten" style="height:500px;width:100%;">{{ set_value('konten', materi.konten)|raw }}</textarea>
+                    {{ form_error('konten')|raw }}
+                </div>
+            </div>
+            {% elseif type == 'file' %}
+            <div class="control-group">
+                <label class="control-label">Info File</label>
+                <div class="controls">
+                    <table class="table table-condensed table-striped">
+                        <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <td><a href="{{ base_url('assets/files/' ~ file_info.name) }}" target="_blank">{{ file_info.name }}</a></td>
+                            </tr>
+                            <tr>
+                                <th>Server Path</th>
+                                <td>{{ file_info.server_path }}</td>
+                            </tr>
+                            <tr>
+                                <th>Size</th>
+                                <td>{{ byte_format(file_info.size) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Modified</th>
+                                <td>{{ mdate('%d %F %Y %H:%i', file_info.date) }}</td>
+                            </tr>
+                            <tr>
+                                <th>Mime</th>
+                                <td>{{ file_info.mime }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Ganti File</label>
+                <div class="controls">
+                    <input type="file" name="userfile">
+                    <br>{{ (error_upload is not empty) ? error_upload|raw }}
+                </div>
+            </div>
+            {% endif %}
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ site_url('admin/materi/detail/' ~ ref_param) }}" class="btn">Kembali</a>
+                </div>
+            </div>
+        {{ form_close()|raw }}
+
+    </div>
 </div>
-
-<br>
-
-{{ form_open_multipart('admin/materi/edit/' ~ type ~ '/' ~ ref_param ~ '/' ~ materi.id, {'class' : 'form-horizontal row-fluid'})|raw }}
-    <div class="control-group">
-        <label class="control-label">Judul <span class="text-error">*</span></label>
-        <div class="controls">
-            <input type="text" name="judul" class="span8" value="{{ set_value('judul', materi.judul) }}">
-            <br>{{ form_error('judul')|raw }}
-        </div>
-    </div>
-    {% if type == 'tertulis' %}
-    <div class="control-group">
-        <label class="control-label">Konten <span class="text-error">*</span></label>
-        <div class="controls">
-            <textarea name="konten" id="konten" style="height:500px;">{{ set_value('konten', materi.konten)|raw }}</textarea>
-            {{ form_error('konten')|raw }}
-        </div>
-    </div>
-    {% elseif type == 'file' %}
-    <div class="control-group">
-        <label class="control-label">Info File</label>
-        <div class="controls">
-            <table class="table table-condensed table-striped">
-                <tbody>
-                    <tr>
-                        <th>Name</th>
-                        <td><a href="{{ base_url('assets/files/' ~ file_info.name) }}" target="_blank">{{ file_info.name }}</a></td>
-                    </tr>
-                    <tr>
-                        <th>Server Path</th>
-                        <td>{{ file_info.server_path }}</td>
-                    </tr>
-                    <tr>
-                        <th>Size</th>
-                        <td>{{ byte_format(file_info.size) }}</td>
-                    </tr>
-                    <tr>
-                        <th>Modified</th>
-                        <td>{{ mdate('%d %F %Y %H:%i', file_info.date) }}</td>
-                    </tr>
-                    <tr>
-                        <th>Mime</th>
-                        <td>{{ file_info.mime }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">Ganti File</label>
-        <div class="controls">
-            <input type="file" name="userfile">
-            <br>{{ (error_upload is not empty) ? error_upload|raw }}
-        </div>
-    </div>
-    {% endif %}
-    <div class="control-group">
-        <div class="controls">
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ site_url('admin/materi/detail/' ~ ref_param) }}" class="btn">Kembali</a>
-        </div>
-    </div>
-{{ form_close()|raw }}
+{% endblock %}

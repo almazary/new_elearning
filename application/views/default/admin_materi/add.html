@@ -1,53 +1,69 @@
-<div class="bs-callout bs-callout-info">
-    <p><b>Matapelajaran :</b> {{ mapel.nama }} <b>Kelas : </b>{{ kelas.nama }}</p>
+{% extends "layout-private.html" %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ module_title|raw }}</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('materi')|raw }}
+
+        <div class="bs-callout bs-callout-info">
+            <p><b>Matapelajaran :</b> {{ mapel.nama }} <b>Kelas : </b>{{ kelas.nama }}</p>
+        </div>
+
+        <br>
+        {{ form_open_multipart('admin/materi/add/' ~ type ~ '/' ~ ref_param, {'class' : 'form-horizontal row-fluid'})|raw }}
+            <div class="control-group">
+                <label class="control-label">Type <span class="text-error">*</span></label>
+                <div class="controls">
+                    <select name="type" class="span2">
+                        <option value="tertulis" onclick="redirect_to('tertulis')" {{ set_select('type', 'tertulis', (type == 'tertulis') ? TRUE : FALSE) }}>Tertulis</option>
+                        <option value="file" onclick="redirect_to('file')" {{ set_select('type', 'file', (type == 'file') ? TRUE : FALSE) }}>File</option>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Judul <span class="text-error">*</span></label>
+                <div class="controls">
+                    <input type="text" name="judul" class="span12" value="{{ set_value('judul') }}">
+                    <br>{{ form_error('judul')|raw }}
+                </div>
+            </div>
+            {% if type == 'tertulis' %}
+            <div class="control-group">
+                <label class="control-label">Konten <span class="text-error">*</span></label>
+                <div class="controls">
+                    <textarea name="konten" id="konten" style="height:500px;width:100%;">{{ set_value('konten') }}</textarea>
+                    {{ form_error('konten')|raw }}
+                </div>
+            </div>
+            {% elseif type == 'file' %}
+            <div class="control-group">
+                <label class="control-label">File <span class="text-error">*</span></label>
+                <div class="controls">
+                    <input type="file" name="userfile">
+                    <br>{{ (error_upload is not empty) ? error_upload|raw }}
+                </div>
+            </div>
+            {% endif %}
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ site_url('admin/materi/detail/' ~ ref_param) }}" class="btn">Kembali</a>
+                </div>
+            </div>
+        {{ form_close()|raw }}
+
+    </div>
 </div>
+{% endblock %}
 
-<br>
-
+{% block js %}
+{{ parent() }}
 <script type="text/javascript">
     function redirect_to(form_type) {
         location.href = "{{ site_url }}/admin/materi/add/" + form_type + "/{{ ref_param }}";
     }
 </script>
-
-{{ form_open_multipart('admin/materi/add/' ~ type ~ '/' ~ ref_param, {'class' : 'form-horizontal row-fluid'})|raw }}
-    <div class="control-group">
-        <label class="control-label">Type <span class="text-error">*</span></label>
-        <div class="controls">
-            <select name="type" class="span2">
-                <option value="tertulis" onclick="redirect_to('tertulis')" {{ set_select('type', 'tertulis', (type == 'tertulis') ? TRUE : FALSE) }}>Tertulis</option>
-                <option value="file" onclick="redirect_to('file')" {{ set_select('type', 'file', (type == 'file') ? TRUE : FALSE) }}>File</option>
-            </select>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">Judul <span class="text-error">*</span></label>
-        <div class="controls">
-            <input type="text" name="judul" class="span8" value="{{ set_value('judul') }}">
-            <br>{{ form_error('judul')|raw }}
-        </div>
-    </div>
-    {% if type == 'tertulis' %}
-    <div class="control-group">
-        <label class="control-label">Konten <span class="text-error">*</span></label>
-        <div class="controls">
-            <textarea name="konten" id="konten" style="height:500px;">{{ set_value('konten') }}</textarea>
-            {{ form_error('konten')|raw }}
-        </div>
-    </div>
-    {% elseif type == 'file' %}
-    <div class="control-group">
-        <label class="control-label">File <span class="text-error">*</span></label>
-        <div class="controls">
-            <input type="file" name="userfile">
-            <br>{{ (error_upload is not empty) ? error_upload|raw }}
-        </div>
-    </div>
-    {% endif %}
-    <div class="control-group">
-        <div class="controls">
-            <button type="submit" class="btn btn-primary">Simpan</button>
-            <a href="{{ site_url('admin/materi/detail/' ~ ref_param) }}" class="btn">Kembali</a>
-        </div>
-    </div>
-{{ form_close()|raw }}
+{% endblock %}

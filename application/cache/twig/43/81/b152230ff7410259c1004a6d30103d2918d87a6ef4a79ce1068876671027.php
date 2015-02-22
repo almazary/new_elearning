@@ -1,30 +1,41 @@
 <?php
 
-/* default/admin_siswa/edit_picture.html */
+/* admin_siswa/edit_picture.html */
 class __TwigTemplate_4381b152230ff7410259c1004a6d30103d2918d87a6ef4a79ce1068876671027 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
         parent::__construct($env);
 
-        $this->parent = false;
+        $this->parent = $this->env->loadTemplate("layout-iframe.html");
 
         $this->blocks = array(
+            'content' => array($this, 'block_content'),
         );
+    }
+
+    protected function doGetParent(array $context)
+    {
+        return "layout-iframe.html";
     }
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        // line 1
-        echo "
-<strong>Edit Foto <span class=\"text-error\">*</span></strong>
+        $this->parent->display($context, array_merge($this->blocks, $blocks));
+    }
+
+    // line 3
+    public function block_content($context, array $blocks = array())
+    {
+        // line 4
+        echo "<strong>Edit Foto <span class=\"text-error\">*</span></strong>
 ";
-        // line 3
+        // line 5
         echo get_flashdata("edit");
         echo "
 
 ";
-        // line 5
+        // line 7
         echo form_open_multipart(((("admin/siswa/edit_picture/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . (isset($context["siswa_id"]) ? $context["siswa_id"] : null)));
         echo "
 <table class=\"table table-striped\">
@@ -32,14 +43,14 @@ class __TwigTemplate_4381b152230ff7410259c1004a6d30103d2918d87a6ef4a79ce10688766
         <tr>
             <td>
                 <img class=\"img-polaroid\" src=\"";
-        // line 10
+        // line 12
         echo twig_escape_filter($this->env, get_url_image_siswa($this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "foto"), "medium", $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "jenis_kelamin")), "html", null, true);
         echo "\">
             </td>
             <td>
                 <input type=\"file\" name=\"userfile\" class=\"btn btn-small\" style=\"max-width:190px;\">
                 ";
-        // line 14
+        // line 16
         echo (((!twig_test_empty((isset($context["error_upload"]) ? $context["error_upload"] : null)))) ? ((isset($context["error_upload"]) ? $context["error_upload"] : null)) : (""));
         echo "
             </td>
@@ -52,7 +63,7 @@ class __TwigTemplate_4381b152230ff7410259c1004a6d30103d2918d87a6ef4a79ce10688766
     </tbody>
 </table>
 ";
-        // line 24
+        // line 26
         echo form_close();
         echo "
 ";
@@ -60,7 +71,7 @@ class __TwigTemplate_4381b152230ff7410259c1004a6d30103d2918d87a6ef4a79ce10688766
 
     public function getTemplateName()
     {
-        return "default/admin_siswa/edit_picture.html";
+        return "admin_siswa/edit_picture.html";
     }
 
     public function isTraitable()
@@ -70,6 +81,6 @@ class __TwigTemplate_4381b152230ff7410259c1004a6d30103d2918d87a6ef4a79ce10688766
 
     public function getDebugInfo()
     {
-        return array (  56 => 24,  43 => 14,  36 => 10,  28 => 5,  23 => 3,  19 => 1,);
+        return array (  67 => 26,  54 => 16,  47 => 12,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
     }
 }
