@@ -104,22 +104,27 @@ class __TwigTemplate_fa15792c9873a3f43d6939c4efe78a4aac07e4c2009156b89cc412fc36c
                 // line 32
                 echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "file_info"), "mime"), "html", null, true);
                 echo "</dd>
+                            <dt></dt>
+                            <dd><br><a href=\"";
+                // line 34
+                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "download_link"), "html", null, true);
+                echo "\" class=\"btn btn-warning\"><i class=\"icon-download\"></i> Download File</a></dd>
                         </dl>
                     ";
             }
-            // line 35
+            // line 37
             echo "                ";
         } else {
-            // line 36
+            // line 38
             echo "                    <div class=\"alert alert-danger\">
                         <h3>";
-            // line 37
+            // line 39
             echo twig_escape_filter($this->env, (isset($context["error"]) ? $context["error"] : null), "html", null, true);
             echo "</h3>
                     </div>
                 ";
         }
-        // line 40
+        // line 42
         echo "            </div>
         </div>
     </div>
@@ -139,6 +144,6 @@ class __TwigTemplate_fa15792c9873a3f43d6939c4efe78a4aac07e4c2009156b89cc412fc36c
 
     public function getDebugInfo()
     {
-        return array (  123 => 40,  117 => 37,  114 => 36,  111 => 35,  105 => 32,  100 => 30,  95 => 28,  90 => 26,  86 => 24,  80 => 22,  77 => 21,  75 => 20,  69 => 16,  63 => 13,  57 => 12,  51 => 11,  48 => 10,  46 => 9,  42 => 8,  38 => 6,  35 => 5,  29 => 3,);
+        return array (  128 => 42,  122 => 39,  119 => 38,  116 => 37,  110 => 34,  105 => 32,  100 => 30,  95 => 28,  90 => 26,  86 => 24,  80 => 22,  77 => 21,  75 => 20,  69 => 16,  63 => 13,  57 => 12,  51 => 11,  48 => 10,  46 => 9,  42 => 8,  38 => 6,  35 => 5,  29 => 3,);
     }
 }

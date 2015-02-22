@@ -30,6 +30,8 @@
                             <dd>{{ tgl_jam_indo(mdate('%Y-%m-%d %H:%i:%s', materifile_info.date)) }}</dd>
                             <dt>Mime</dt>
                             <dd>{{ materi.file_info.mime }}</dd>
+                            <dt></dt>
+                            <dd><br><a href="{{ materi.download_link }}" class="btn btn-warning"><i class="icon-download"></i> Download File</a></dd>
                         </dl>
                     {% endif %}
                 {% else %}
