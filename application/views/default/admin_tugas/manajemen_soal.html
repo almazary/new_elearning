@@ -1,0 +1,44 @@
+{% extends "layout-private.html" %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ module_title|raw }}</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('tugas')|raw }}
+
+        <div class="bs-callout bs-callout-info">
+            <img src="{{ pengajar.link_foto }}" class="pull-right img-circle img-polaroid img-profile-top">
+            <h2>{{ tugas.judul }}</h2>
+            <div class="btn-group pull-right">
+                <a class="btn btn-primary btn-mini"><i class="icon-edit"></i> Edit Tugas</a>
+                <a class="btn btn-primary btn-mini"><i class="icon-ok"></i> Terbitkan Tugas</a>
+            </div>
+            <label class="label label-info">Tipe : {{ tugas.type }}</label>
+            <label class="label label-info">Durasi : {{ tugas.durasi }} Menit</label>
+            <table class="table table-condensed table-striped">
+                <thead>
+                    <tr>
+                        <th>Pengajar</th>
+                        <th>Matapelajaran</th>
+                        <th>Hari</th>
+                        <th>Jam</th>
+                        <th>Kelas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><a href="{{ pengajar.link_profil }}">{{ pengajar.nama }}</a></td>
+                        <td>{{ mapel.nama }}</td>
+                        <td>{{ get_indo_hari(mapel_ajar.hari_id) }}</td>
+                        <td>{{ mapel_ajar.jam_mulai|date('H:i') }} - {{ mapel_ajar.jam_selesai|date('H:i') }}</td>
+                        <td>{{ kelas.nama }} <span class="badge badge-info">{{ kelas.jumlah_siswa }} siswa</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

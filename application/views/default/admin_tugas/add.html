@@ -9,29 +9,47 @@
         {{ get_flashdata('tugas')|raw }}
 
         <div class="bs-callout bs-callout-info">
-            <img src="{{ pengajar.link_foto }}" class="pull-right img-circle img-polaroid img-profile-top">
-            Pengajar : <b><a href="{{ pengajar.link_profil }}">{{ pengajar.nama }}</a></b>
-            <ul class="inline unstyle" style="margin-left: -5px;margin-bottom: 0px;">
-                <li>Matapelajaran :</li>
-                <li><b>{{ mapel.nama }}</b></li>
-                <li>Hari : <b>{{ get_indo_hari(mapel_ajar.hari_id) }}</b></li>
-                <li>Jam : <b>{{ mapel_ajar.jam_mulai|date('H:i') }}</b> - <b>{{ mapel_ajar.jam_selesai|date('H:i') }}</b></li>
-                <li><b>{{ kelas.nama }}</b> ( {{ kelas.jumlah_siswa }} siswa)</li>
-            </ul>
+            <div class="row-fluid">
+                <div class="span11">
+                    <table class="table table-condensed table-striped">
+                        <thead>
+                            <tr>
+                                <th>Pengajar</th>
+                                <th>Matapelajaran</th>
+                                <th>Hari</th>
+                                <th>Jam</th>
+                                <th>Kelas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href="{{ pengajar.link_profil }}">{{ pengajar.nama }}</a></td>
+                                <td>{{ mapel.nama }}</td>
+                                <td>{{ get_indo_hari(mapel_ajar.hari_id) }}</td>
+                                <td>{{ mapel_ajar.jam_mulai|date('H:i') }} - {{ mapel_ajar.jam_selesai|date('H:i') }}</td>
+                                <td>{{ kelas.nama }} <b>( {{ kelas.jumlah_siswa }} siswa)</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="span1">
+                    <img src="{{ pengajar.link_foto }}" class="pull-right img-circle img-polaroid img-profile-top">
+                </div>
+            </div>
         </div>
 
         <br>
         {{ form_open_multipart('admin/tugas/add/' ~ mapel_ajar.id, {'class' : 'form-horizontal row-fluid'})|raw }}
         <div class="control-group">
-            <label class="control-label">Type Soal <span class="text-error">*</span></label>
+            <label class="control-label">Tipe Soal <span class="text-error">*</span></label>
             <div class="controls">
-                <select name="type" class="span2">
+                <select name="type_id" class="span2">
                     <option value="">--pilih--</option>
-                    <option value="1" {{ set_select('type', '1') }}>Upload</option>
-                    <option value="2" {{ set_select('type', '2') }}>Essay</option>
-                    <option value="3" {{ set_select('type', '3') }}>Ganda</option>
+                    <option value="1" {{ set_select('type_id', '1') }}>Upload</option>
+                    <option value="2" {{ set_select('type_id', '2') }}>Essay</option>
+                    <option value="3" {{ set_select('type_id', '3') }}>Ganda</option>
                 </select>
-                <br>{{ form_error('type')|raw }}
+                <br>{{ form_error('type_id')|raw }}
             </div>
         </div>
         <div class="control-group">
@@ -42,10 +60,11 @@
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label">Durasi <span class="text-error">*</span></label>
+            <label class="control-label">Durasi</label>
             <div class="controls">
                 <input type="text" name="durasi" value="{{ set_value('durasi') }}" class="span2" placeholder="Dalam Menit">
-                {{ form_error('info')|raw }}
+                <br><span class="text-muted">Kusus untuk tipe soal <b>Pilihan Ganda</b> dan <b>Essay</b></span>
+                <br>{{ form_error('durasi')|raw }}
             </div>
         </div>
         <div class="control-group">

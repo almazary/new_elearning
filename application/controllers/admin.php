@@ -147,8 +147,58 @@ class Admin extends CI_Controller
         $data['web_title'] = 'Tugas | Administrator';
 
         switch ($act) {
+            case 'soal':
+                $content_file  = 'admin_tugas/manajemen_soal.html';
+                $mapel_ajar_id = (int)$segment_4;
+                $tugas_id      = (int)$segment_5;
+                if (empty($mapel_ajar_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $mapel_ajar = $this->pengajar_model->retrieve_ma($mapel_ajar_id);
+                if (empty($mapel_ajar) OR empty($mapel_ajar['aktif'])) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Matapelajaran ajar tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                if (empty($tugas_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $tugas = $this->tugas_model->retrieve($tugas_id);
+                if (empty($tugas)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                # cek tipenya, jika upload gagalkan
+                if ($tugas['type_id'] == 1) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas bukan Pilihan Ganda atau Essay'));
+                    redirect('admin/tugas');
+                }
+
+                if ($tugas['type_id'] == 2) {
+                    $tugas['type'] = 'Essay';
+                } elseif ($tugas['type_id'] == 3) {
+                    $tugas['type'] = 'Pilihan Ganda';
+                }
+
+                $mapel_kelas             = $this->mapel_model->retrieve_kelas($mapel_ajar['mapel_kelas_id']);
+                $pengajar                = $this->pengajar_model->retrieve($mapel_ajar['pengajar_id']);
+                $pengajar['link_foto']   = get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin']);
+                $pengajar['link_profil'] = site_url('admin/pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+
+                $data['module_title']          = anchor('admin/tugas', 'Tugas').' / Manajemen Soal';
+                $data['kelas']                 = $this->kelas_model->retrieve($mapel_kelas['kelas_id']);
+                $data['kelas']['jumlah_siswa'] = $this->siswa_model->count('kelas', array('kelas_id' => $mapel_kelas['kelas_id']));
+                $data['mapel']                 = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                $data['mapel_ajar']            = $mapel_ajar;
+                $data['pengajar']              = $pengajar;
+                $data['tugas']                 = $tugas;
+                break;
+
             case 'add':
-                $content_file   = 'admin_tugas/add.html';
+                $content_file  = 'admin_tugas/add.html';
                 $mapel_ajar_id = (int)$segment_4;
                 if (empty($mapel_ajar_id)) {
                     redirect('admin/tugas');
@@ -156,6 +206,7 @@ class Admin extends CI_Controller
 
                 $mapel_ajar = $this->pengajar_model->retrieve_ma($mapel_ajar_id);
                 if (empty($mapel_ajar) OR empty($mapel_ajar['aktif'])) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Matapelajaran ajar tidak ditemukan'));
                     redirect('admin/tugas');
                 }
 
@@ -172,6 +223,24 @@ class Admin extends CI_Controller
                 $data['mapel_ajar']            = $mapel_ajar;
                 $data['pengajar']              = $pengajar;
                 
+                if ($this->form_validation->run('admin/tugas/add') == TRUE) {
+                    $type_id = $this->input->post('type_id', true);
+                    $judul   = $this->input->post('judul', true);
+                    $durasi  = (int)$this->input->post('durasi', true);
+                    $info    = $this->input->post('info', true);
+
+                    # simpan
+                    $tugas_id = $this->tugas_model->create($mapel_ajar['id'], $type_id, $judul, $durasi, $info);
+
+                    # alihkan sesuai tipe
+                    if ($type_id == 1) {
+                        $this->session->set_flashdata('tugas', get_alert('success', 'Tugas berhasil dibuat.'));
+                        redirect('admin/tugas');
+                    } else {
+                        $this->session->set_flashdata('tugas', get_alert('success', 'Manajemen soal tugas.'));
+                        redirect('admin/tugas/soal/'.$mapel_ajar['id'].'/'.$tugas_id);
+                    }
+                }
                 break;
             
             default:

@@ -42,67 +42,85 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
         echo "
 
         <div class=\"bs-callout bs-callout-info\">
-            <img src=\"";
-        // line 12
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "link_foto"), "html", null, true);
-        echo "\" class=\"pull-right img-circle img-polaroid img-profile-top\">
-            Pengajar : <b><a href=\"";
-        // line 13
+            <div class=\"row-fluid\">
+                <div class=\"span11\">
+                    <table class=\"table table-condensed table-striped\">
+                        <thead>
+                            <tr>
+                                <th>Pengajar</th>
+                                <th>Matapelajaran</th>
+                                <th>Hari</th>
+                                <th>Jam</th>
+                                <th>Kelas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><a href=\"";
+        // line 26
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "link_profil"), "html", null, true);
         echo "\">";
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "nama"), "html", null, true);
-        echo "</a></b>
-            <ul class=\"inline unstyle\" style=\"margin-left: -5px;margin-bottom: 0px;\">
-                <li>Matapelajaran :</li>
-                <li><b>";
-        // line 16
+        echo "</a></td>
+                                <td>";
+        // line 27
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["mapel"]) ? $context["mapel"] : null), "nama"), "html", null, true);
-        echo "</b></li>
-                <li>Hari : <b>";
-        // line 17
+        echo "</td>
+                                <td>";
+        // line 28
         echo twig_escape_filter($this->env, get_indo_hari($this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "hari_id")), "html", null, true);
-        echo "</b></li>
-                <li>Jam : <b>";
-        // line 18
+        echo "</td>
+                                <td>";
+        // line 29
         echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "jam_mulai"), "H:i"), "html", null, true);
-        echo "</b> - <b>";
+        echo " - ";
         echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "jam_selesai"), "H:i"), "html", null, true);
-        echo "</b></li>
-                <li><b>";
-        // line 19
+        echo "</td>
+                                <td>";
+        // line 30
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "nama"), "html", null, true);
-        echo "</b> ( ";
+        echo " <b>( ";
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "jumlah_siswa"), "html", null, true);
-        echo " siswa)</li>
-            </ul>
+        echo " siswa)</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class=\"span1\">
+                    <img src=\"";
+        // line 36
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "link_foto"), "html", null, true);
+        echo "\" class=\"pull-right img-circle img-polaroid img-profile-top\">
+                </div>
+            </div>
         </div>
 
         <br>
         ";
-        // line 24
+        // line 42
         echo form_open_multipart(("admin/tugas/add/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")), array("class" => "form-horizontal row-fluid"));
         echo "
         <div class=\"control-group\">
-            <label class=\"control-label\">Type Soal <span class=\"text-error\">*</span></label>
+            <label class=\"control-label\">Tipe Soal <span class=\"text-error\">*</span></label>
             <div class=\"controls\">
-                <select name=\"type\" class=\"span2\">
+                <select name=\"type_id\" class=\"span2\">
                     <option value=\"\">--pilih--</option>
                     <option value=\"1\" ";
-        // line 30
-        echo twig_escape_filter($this->env, set_select("type", "1"), "html", null, true);
+        // line 48
+        echo twig_escape_filter($this->env, set_select("type_id", "1"), "html", null, true);
         echo ">Upload</option>
                     <option value=\"2\" ";
-        // line 31
-        echo twig_escape_filter($this->env, set_select("type", "2"), "html", null, true);
+        // line 49
+        echo twig_escape_filter($this->env, set_select("type_id", "2"), "html", null, true);
         echo ">Essay</option>
                     <option value=\"3\" ";
-        // line 32
-        echo twig_escape_filter($this->env, set_select("type", "3"), "html", null, true);
+        // line 50
+        echo twig_escape_filter($this->env, set_select("type_id", "3"), "html", null, true);
         echo ">Ganda</option>
                 </select>
                 <br>";
-        // line 34
-        echo form_error("type");
+        // line 52
+        echo form_error("type_id");
         echo "
             </div>
         </div>
@@ -110,25 +128,26 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
             <label class=\"control-label\">Judul Tugas <span class=\"text-error\">*</span></label>
             <div class=\"controls\">
                 <input type=\"text\" name=\"judul\" class=\"span12\" value=\"";
-        // line 40
+        // line 58
         echo twig_escape_filter($this->env, set_value("judul"), "html", null, true);
         echo "\">
                 <br>";
-        // line 41
+        // line 59
         echo form_error("judul");
         echo "
             </div>
         </div>
         <div class=\"control-group\">
-            <label class=\"control-label\">Durasi <span class=\"text-error\">*</span></label>
+            <label class=\"control-label\">Durasi</label>
             <div class=\"controls\">
                 <input type=\"text\" name=\"durasi\" value=\"";
-        // line 47
+        // line 65
         echo twig_escape_filter($this->env, set_value("durasi"), "html", null, true);
         echo "\" class=\"span2\" placeholder=\"Dalam Menit\">
-                ";
-        // line 48
-        echo form_error("info");
+                <br><span class=\"text-muted\">Kusus untuk tipe soal <b>Pilihan Ganda</b> dan <b>Essay</b></span>
+                <br>";
+        // line 67
+        echo form_error("durasi");
         echo "
             </div>
         </div>
@@ -136,11 +155,11 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
             <label class=\"control-label\">Info</label>
             <div class=\"controls\">
                 <textarea name=\"info\" id=\"info\" style=\"height:150px;width:100%;\">";
-        // line 54
+        // line 73
         echo twig_escape_filter($this->env, set_value("info"), "html", null, true);
         echo "</textarea>
                 ";
-        // line 55
+        // line 74
         echo form_error("info");
         echo "
             </div>
@@ -149,13 +168,13 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
             <div class=\"controls\">
                 <button type=\"submit\" class=\"btn btn-primary\">Simpan</button>
                 <a href=\"";
-        // line 61
+        // line 80
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "link_profil"), "html", null, true);
         echo "\" class=\"btn\">Batal</a>
             </div>
         </div>
         ";
-        // line 64
+        // line 83
         echo form_close();
         echo "
     </div>
@@ -175,6 +194,6 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
 
     public function getDebugInfo()
     {
-        return array (  159 => 64,  153 => 61,  144 => 55,  140 => 54,  131 => 48,  127 => 47,  118 => 41,  114 => 40,  105 => 34,  100 => 32,  96 => 31,  92 => 30,  83 => 24,  73 => 19,  67 => 18,  63 => 17,  59 => 16,  51 => 13,  47 => 12,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
+        return array (  178 => 83,  172 => 80,  163 => 74,  159 => 73,  150 => 67,  145 => 65,  136 => 59,  132 => 58,  123 => 52,  118 => 50,  114 => 49,  110 => 48,  101 => 42,  92 => 36,  81 => 30,  75 => 29,  71 => 28,  67 => 27,  61 => 26,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
     }
 }

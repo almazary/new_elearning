@@ -625,3 +625,21 @@ $config['admin/materi/edit/file'] = array(
         'rules' => 'required|trim|xss_clean'
     ),
 );
+
+$config['admin/tugas/add'] = array(
+    array(
+        'field' => 'type_id',
+        'label' => 'Tipe Soal',
+        'rules' => 'required|trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'judul',
+        'label' => 'Judul Tugas',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'durasi',
+        'label' => 'Judul Tugas',
+        'rules' => 'numeric|trim|xss_clean'
+    ),
+);

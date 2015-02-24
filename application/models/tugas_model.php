@@ -748,10 +748,9 @@ class Tugas_model extends CI_Model
         $mapel_ajar_id,
         $type_id,
         $judul,
-        $info      = '',
-        $tgl_buka  = null,
-        $tgl_tutup = null,
-        $durasi    = null
+        $durasi = null,
+        $info   = '',
+        $aktif  = 0
     ) {
         $id            = (int)$id;
         $mapel_ajar_id = (int)$mapel_ajar_id;
@@ -762,12 +761,26 @@ class Tugas_model extends CI_Model
             'type_id'       => $type_id,
             'judul'         => $judul,
             'info'          => $info,
-            'tgl_buka'      => $tgl_buka,
-            'tgl_tutup'     => $tgl_tutup,
-            'durasi'        => $durasi
+            'durasi'        => $durasi,
+            'aktif'         => $aktif
         );
         $this->db->where('id', $id);
         $this->db->update('tugas', $data);
+        return true;
+    }
+
+    /** 
+     * Method untuk ubah status tugas jadi aktif
+     * 
+     * @param  integer $id
+     * @return boolean true
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function update_to_active($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('tugas', array('aktif' => 1));
         return true;
     }
 
@@ -778,8 +791,6 @@ class Tugas_model extends CI_Model
      * @param  integer $type_id      
      * @param  string  $judul        
      * @param  string  $info         
-     * @param  string  $tgl_buka     
-     * @param  string  $tgl_tutup    
      * @param  integer $durasi       
      * @return integer last insert id
      * @author Almazari <almazary@gmail.com>               
@@ -788,10 +799,8 @@ class Tugas_model extends CI_Model
         $mapel_ajar_id,
         $type_id,
         $judul,
-        $info      = '',
-        $tgl_buka  = null,
-        $tgl_tutup = null,
-        $durasi    = null
+        $durasi = null,
+        $info   = ''
     ) {
         $mapel_ajar_id = (int)$mapel_ajar_id;
         $type_id       = (int)$type_id;
@@ -801,9 +810,8 @@ class Tugas_model extends CI_Model
             'type_id'       => $type_id,
             'judul'         => $judul,
             'info'          => $info,
-            'tgl_buka'      => $tgl_buka,
-            'tgl_tutup'     => $tgl_tutup,
-            'durasi'        => $durasi
+            'durasi'        => $durasi,
+            'aktif'         => 0
         );
         $this->db->insert('tugas', $data);
         return $this->db->insert_id();
