@@ -9,12 +9,12 @@
         {{ get_flashdata('tugas')|raw }}
 
         <div class="bs-callout bs-callout-info">
-            <img src="{{ pengajar.link_foto }}" class="pull-right img-circle img-polaroid img-profile-top">
-            <h2>{{ tugas.judul }}</h2>
             <div class="btn-group pull-right">
                 <a class="btn btn-default" href="{{ site_url('admin/tugas/edit/' ~ mapel_ajar.id ~ '/' ~ tugas.id) }}"><i class="icon-edit"></i> Edit Tugas</a>
                 <a class="btn btn-default"><i class="icon-ok"></i> Terbitkan Tugas</a>
             </div>
+            <h2 style="line-height: 25px;margin-bottom: 15px;text-decoration: underline;" data-toggle="collapse" data-target="#demo">{{ tugas.judul }}</h2>
+            <div id="demo" class="collapse">
             <label class="label label-warning">Tipe : {{ tugas.type }}</label>
             <label class="label label-info">Durasi : {{ tugas.durasi }} Menit</label>
             <table class="table table-condensed table-striped">
@@ -37,6 +37,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
     </div>

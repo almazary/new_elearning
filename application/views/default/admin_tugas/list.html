@@ -41,6 +41,7 @@
                 {% endif %}
                 <li class="label label-info"><a href="{{ t.pengajar.link_profil }}" style="color:white;text-decoration: underline;">{{ t.pengajar.nama }}</a></li>
                 <li class="label label-info">{{ t.mapel.nama }}</li>
+                <li class="label label-info">{{ get_indo_hari(t.mapel_ajar.hari_id) }}</li>
                 <li class="label label-info">{{ t.mapel_ajar.jam_mulai|date('H:i') }} - {{ t.mapel_ajar.jam_selesai|date('H:i') }}</li>
                 <li class="label label-info">{{ t.kelas.nama }}</li>
                 <li class="label label-info">{{ t.kelas.jumlah_siswa }} siswa</li>

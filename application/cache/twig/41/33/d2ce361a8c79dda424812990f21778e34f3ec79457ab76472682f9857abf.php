@@ -42,21 +42,18 @@ class __TwigTemplate_4133d2ce361a8c79dda424812990f21778e34f3ec79457ab76472682f98
         echo "
 
         <div class=\"bs-callout bs-callout-info\">
-            <img src=\"";
-        // line 12
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "link_foto"), "html", null, true);
-        echo "\" class=\"pull-right img-circle img-polaroid img-profile-top\">
-            <h2>";
-        // line 13
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "judul"), "html", null, true);
-        echo "</h2>
             <div class=\"btn-group pull-right\">
                 <a class=\"btn btn-default\" href=\"";
-        // line 15
+        // line 13
         echo twig_escape_filter($this->env, site_url(((("admin/tugas/edit/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id"))), "html", null, true);
         echo "\"><i class=\"icon-edit\"></i> Edit Tugas</a>
                 <a class=\"btn btn-default\"><i class=\"icon-ok\"></i> Terbitkan Tugas</a>
             </div>
+            <h2 style=\"line-height: 25px;margin-bottom: 15px;text-decoration: underline;\" data-toggle=\"collapse\" data-target=\"#demo\">";
+        // line 16
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "judul"), "html", null, true);
+        echo "</h2>
+            <div id=\"demo\" class=\"collapse\">
             <label class=\"label label-warning\">Tipe : ";
         // line 18
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "type"), "html", null, true);
@@ -106,6 +103,7 @@ class __TwigTemplate_4133d2ce361a8c79dda424812990f21778e34f3ec79457ab76472682f98
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
 
     </div>
@@ -125,6 +123,6 @@ class __TwigTemplate_4133d2ce361a8c79dda424812990f21778e34f3ec79457ab76472682f98
 
     public function getDebugInfo()
     {
-        return array (  102 => 36,  96 => 35,  92 => 34,  88 => 33,  82 => 32,  66 => 19,  62 => 18,  56 => 15,  51 => 13,  47 => 12,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
+        return array (  99 => 36,  93 => 35,  89 => 34,  85 => 33,  79 => 32,  63 => 19,  59 => 18,  54 => 16,  48 => 13,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
     }
 }
