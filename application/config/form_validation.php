@@ -643,3 +643,16 @@ $config['admin/tugas/add'] = array(
         'rules' => 'numeric|trim|xss_clean'
     ),
 );
+
+$config['admin/tugas/edit'] = array(
+    array(
+        'field' => 'judul',
+        'label' => 'Judul Tugas',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'durasi',
+        'label' => 'Judul Tugas',
+        'rules' => 'numeric|trim|xss_clean'
+    ),
+);

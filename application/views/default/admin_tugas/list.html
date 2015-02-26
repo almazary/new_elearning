@@ -15,7 +15,7 @@
             </div>
 
             <div class="span4">
-                <div class="btn-group">
+                <div class="btn-group pull-right">
                     {{ anchor('admin/tugas/list/0', 'Semua', {'class' : (type_id == 0) ? 'btn btn-info' : 'btn'})|raw }}
                     {{ anchor('admin/tugas/list/1', 'Upload', {'class' : (type_id == 1) ? 'btn btn-info' : 'btn'})|raw }}
                     {{ anchor('admin/tugas/list/2', 'Essay', {'class' : (type_id == 2) ? 'btn btn-info' : 'btn'})|raw }}
@@ -25,18 +25,29 @@
         </div>
 
         <br>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th width="7%">No</th>
-                    <th>Kelas</th>
-                    <th>Judul</th>
-                    <th>Waktu</th>
-                    <th width="22%"></th>
-                </tr>
-            </thead>
-
-        </table>
+        {% for t in tugas %}
+        <div class="well well-small" style="box-shadow: none;border-radius: 0px;">
+            <div class="btn-group pull-right" style="margin-bottom: 0px;">
+                {% if (t.type_id != 1) %}
+                <a class="btn btn-default" href="{{ site_url('admin/tugas/soal/' ~ t.mapel_ajar.id ~ '/' ~ t.id) }}"><i class="icon-align-justify"></i> Soal</a>
+                {% endif %}
+                <a class="btn btn-default"><i class="icon-ok"></i> Terbitkan</a>
+            </div>
+            <h3 style="line-height: 25px;">{{ t.judul }}</h3>
+            <ul class="unstyled inline" style="margin-bottom: 5px;margin-top: 5px;">
+                <li class="label label-success">{{ t.type }}</li>
+                {% if (t.type_id == 2 or t.type_id == 3) %}
+                <li class="label label-success">{{ t.durasi }} menit</li>
+                {% endif %}
+                <li class="label label-info"><a href="{{ t.pengajar.link_profil }}" style="color:white;text-decoration: underline;">{{ t.pengajar.nama }}</a></li>
+                <li class="label label-info">{{ t.mapel.nama }}</li>
+                <li class="label label-info">{{ t.mapel_ajar.jam_mulai|date('H:i') }} - {{ t.mapel_ajar.jam_selesai|date('H:i') }}</li>
+                <li class="label label-info">{{ t.kelas.nama }}</li>
+                <li class="label label-info">{{ t.kelas.jumlah_siswa }} siswa</li>
+            </ul>
+            {{ t.info|raw }}
+        </div>
+        {% endfor %}
 
         <br>
         {{ pagination|raw }}

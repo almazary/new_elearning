@@ -1,7 +1,7 @@
 <?php
 
-/* admin_tugas/add.html */
-class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92966c9 extends Twig_Template
+/* admin_tugas/edit.html */
+class __TwigTemplate_35e908351934e4f5000ec1788d02cabe196213251bdd851e9c340f97ebd9a0d2 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -98,41 +98,17 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
         <br>
         ";
         // line 42
-        echo form_open_multipart(("admin/tugas/add/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")), array("class" => "form-horizontal row-fluid"));
+        echo form_open_multipart(((("admin/tugas/edit/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")), array("class" => "form-horizontal row-fluid"));
         echo "
-        <div class=\"control-group\">
-            <label class=\"control-label\">Tipe Soal <span class=\"text-error\">*</span></label>
-            <div class=\"controls\">
-                <select name=\"type_id\" class=\"span2\">
-                    <option value=\"\">--pilih--</option>
-                    <option value=\"1\" ";
-        // line 48
-        echo twig_escape_filter($this->env, set_select("type_id", "1"), "html", null, true);
-        echo ">Upload</option>
-                    <option value=\"2\" ";
-        // line 49
-        echo twig_escape_filter($this->env, set_select("type_id", "2"), "html", null, true);
-        echo ">Essay</option>
-                    <option value=\"3\" ";
-        // line 50
-        echo twig_escape_filter($this->env, set_select("type_id", "3"), "html", null, true);
-        echo ">Ganda</option>
-                </select>
-                <br>";
-        // line 52
-        echo form_error("type_id");
-        echo "
-            </div>
-        </div>
         <div class=\"control-group\">
             <label class=\"control-label\">Judul Tugas <span class=\"text-error\">*</span></label>
             <div class=\"controls\">
                 <input type=\"text\" name=\"judul\" class=\"span12\" value=\"";
-        // line 58
-        echo twig_escape_filter($this->env, set_value("judul"), "html", null, true);
+        // line 46
+        echo twig_escape_filter($this->env, set_value("judul", $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "judul")), "html", null, true);
         echo "\">
                 <br>";
-        // line 59
+        // line 47
         echo form_error("judul");
         echo "
             </div>
@@ -141,12 +117,12 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
             <label class=\"control-label\">Durasi</label>
             <div class=\"controls\">
                 <input type=\"text\" name=\"durasi\" value=\"";
-        // line 65
-        echo twig_escape_filter($this->env, set_value("durasi"), "html", null, true);
+        // line 53
+        echo twig_escape_filter($this->env, set_value("durasi", $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "durasi")), "html", null, true);
         echo "\" class=\"span2\" placeholder=\"Dalam Menit\">
                 <br><span class=\"text-muted\">Kusus untuk tipe soal <b>Pilihan Ganda</b> dan <b>Essay</b></span>
                 <br>";
-        // line 67
+        // line 55
         echo form_error("durasi");
         echo "
             </div>
@@ -155,26 +131,26 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
             <label class=\"control-label\">Info</label>
             <div class=\"controls\">
                 <textarea name=\"info\" id=\"info\" style=\"height:150px;width:100%;\">";
-        // line 73
-        echo twig_escape_filter($this->env, set_value("info"), "html", null, true);
+        // line 61
+        echo set_value("info", $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info"));
         echo "</textarea>
                 ";
-        // line 74
+        // line 62
         echo form_error("info");
         echo "
             </div>
         </div>
         <div class=\"control-group\">
             <div class=\"controls\">
-                <button type=\"submit\" class=\"btn btn-primary\">Simpan</button>
+                <button type=\"submit\" class=\"btn btn-primary\">Update</button>
                 <a href=\"";
-        // line 80
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "link_profil"), "html", null, true);
+        // line 68
+        echo twig_escape_filter($this->env, site_url(((("admin/tugas/soal/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id"))), "html", null, true);
         echo "\" class=\"btn\">Kembali</a>
             </div>
         </div>
         ";
-        // line 83
+        // line 71
         echo form_close();
         echo "
     </div>
@@ -184,7 +160,7 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
 
     public function getTemplateName()
     {
-        return "admin_tugas/add.html";
+        return "admin_tugas/edit.html";
     }
 
     public function isTraitable()
@@ -194,6 +170,6 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
 
     public function getDebugInfo()
     {
-        return array (  178 => 83,  172 => 80,  163 => 74,  159 => 73,  150 => 67,  145 => 65,  136 => 59,  132 => 58,  123 => 52,  118 => 50,  114 => 49,  110 => 48,  101 => 42,  92 => 36,  81 => 30,  75 => 29,  71 => 28,  67 => 27,  61 => 26,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
+        return array (  154 => 71,  148 => 68,  139 => 62,  135 => 61,  126 => 55,  121 => 53,  112 => 47,  108 => 46,  101 => 42,  92 => 36,  81 => 30,  75 => 29,  71 => 28,  67 => 27,  61 => 26,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
     }
 }

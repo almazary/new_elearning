@@ -197,6 +197,66 @@ class Admin extends CI_Controller
                 $data['tugas']                 = $tugas;
                 break;
 
+            case 'edit':
+                $content_file  = 'admin_tugas/edit.html';
+                $mapel_ajar_id = (int)$segment_4;
+                $tugas_id      = (int)$segment_5;
+                if (empty($mapel_ajar_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $mapel_ajar = $this->pengajar_model->retrieve_ma($mapel_ajar_id);
+                if (empty($mapel_ajar) OR empty($mapel_ajar['aktif'])) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Matapelajaran ajar tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                $mapel_kelas             = $this->mapel_model->retrieve_kelas($mapel_ajar['mapel_kelas_id']);
+                $pengajar                = $this->pengajar_model->retrieve($mapel_ajar['pengajar_id']);
+                $pengajar['link_foto']   = get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin']);
+                $pengajar['link_profil'] = site_url('admin/pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+
+                $tugas = $this->tugas_model->retrieve($tugas_id);
+                if (empty($tugas)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                $mapel_kelas             = $this->mapel_model->retrieve_kelas($mapel_ajar['mapel_kelas_id']);
+                $pengajar                = $this->pengajar_model->retrieve($mapel_ajar['pengajar_id']);
+                $pengajar['link_foto']   = get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin']);
+                $pengajar['link_profil'] = site_url('admin/pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+
+                $data['module_title']          = anchor('admin/tugas', 'Tugas').' / '.anchor('admin/tugas/soal/'.$mapel_ajar['id'].'/'.$tugas['id'], 'Manajemen Soal').' / Edit Tugas';
+                $data['comp_js']               = get_tinymce('info', 'simple');
+                $data['kelas']                 = $this->kelas_model->retrieve($mapel_kelas['kelas_id']);
+                $data['kelas']['jumlah_siswa'] = $this->siswa_model->count('kelas', array('kelas_id' => $mapel_kelas['kelas_id']));
+                $data['mapel']                 = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                $data['mapel_ajar']            = $mapel_ajar;
+                $data['pengajar']              = $pengajar;
+                $data['tugas']                 = $tugas;
+
+                if ($this->form_validation->run('admin/tugas/edit') == TRUE) {
+                    $judul  = $this->input->post('judul', true);
+                    $durasi = $this->input->post('durasi', true);
+                    $durasi = empty($durasi) ? null : $durasi;
+                    $info   = $this->input->post('info', true);
+
+                    $this->tugas_model->update(
+                        $tugas['id'],
+                        $tugas['mapel_ajar_id'],
+                        $tugas['type_id'],
+                        $judul,
+                        $durasi,
+                        $info,
+                        $tugas['aktif']
+                    );
+
+                    $this->session->set_flashdata('tugas', get_alert('success', 'Tugas berhasil diperbaharui'));
+                    redirect('admin/tugas/edit/'.$tugas['mapel_ajar_id'].'/'.$tugas_id);
+                }
+                break;
+
             case 'add':
                 $content_file  = 'admin_tugas/add.html';
                 $mapel_ajar_id = (int)$segment_4;
@@ -262,10 +322,36 @@ class Admin extends CI_Controller
                 $page_no = empty($page_no) ? 1 : $page_no;
 
                 # ambil semua tugas
-                $retrieve_all = $this->tugas_model->retrieve_all(50, $page_no, null, $type_id);
+                $retrieve_all = $this->tugas_model->retrieve_all(20, $page_no, null, $type_id);
+                $list_tugas   = array();
+                foreach ($retrieve_all['results'] as $no => $tugas) {
+                    if ($tugas['type_id'] == 1) {
+                        $tugas['type'] = 'Upload';
+                    }
+                    if ($tugas['type_id'] == 2) {
+                        $tugas['type'] = 'Essay';
+                    }
+                    if ($tugas['type_id'] == 3) {
+                        $tugas['type'] = 'Pilihan Ganda';
+                    }
+
+                    $mapel_ajar              = $this->pengajar_model->retrieve_ma($tugas['mapel_ajar_id']);
+                    $mapel_kelas             = $this->mapel_model->retrieve_kelas($mapel_ajar['mapel_kelas_id']);
+                    $pengajar                = $this->pengajar_model->retrieve($mapel_ajar['pengajar_id']);
+                    $pengajar['link_foto']   = get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin']);
+                    $pengajar['link_profil'] = site_url('admin/pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+
+                    $tugas['kelas']                 = $this->kelas_model->retrieve($mapel_kelas['kelas_id']);
+                    $tugas['kelas']['jumlah_siswa'] = $this->siswa_model->count('kelas', array('kelas_id' => $mapel_kelas['kelas_id']));
+                    $tugas['mapel']                 = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                    $tugas['mapel_ajar']            = $mapel_ajar;
+                    $tugas['pengajar']              = $pengajar;
+
+                    $list_tugas[$no] = $tugas;
+                }
 
                 $data['type_id']    = $type_url;
-                $data['tugas']      = $retrieve_all['results'];
+                $data['tugas']      = $list_tugas;
                 $data['pagination'] = $this->pager->view($retrieve_all, 'admin/tugas/list/'.$type_url.'/');
                 break;
         }

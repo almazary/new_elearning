@@ -51,7 +51,7 @@ class __TwigTemplate_cb47f6a8bbc9d4510b0e2462c45ac033b1c50e4c57a49a0d2bcb629993d
             </div>
 
             <div class=\"span4\">
-                <div class=\"btn-group\">
+                <div class=\"btn-group pull-right\">
                     ";
         // line 19
         echo anchor("admin/tugas/list/0", "Semua", array("class" => ((((isset($context["type_id"]) ? $context["type_id"] : null) == 0)) ? ("btn btn-info") : ("btn"))));
@@ -73,22 +73,84 @@ class __TwigTemplate_cb47f6a8bbc9d4510b0e2462c45ac033b1c50e4c57a49a0d2bcb629993d
         </div>
 
         <br>
-        <table class=\"table table-striped\">
-            <thead>
-                <tr>
-                    <th width=\"7%\">No</th>
-                    <th>Kelas</th>
-                    <th>Judul</th>
-                    <th>Waktu</th>
-                    <th width=\"22%\"></th>
-                </tr>
-            </thead>
-
-        </table>
-
+        ";
+        // line 28
+        $context['_parent'] = (array) $context;
+        $context['_seq'] = twig_ensure_traversable((isset($context["tugas"]) ? $context["tugas"] : null));
+        foreach ($context['_seq'] as $context["_key"] => $context["t"]) {
+            // line 29
+            echo "        <div class=\"well well-small\" style=\"box-shadow: none;border-radius: 0px;\">
+            <div class=\"btn-group pull-right\" style=\"margin-bottom: 0px;\">
+                ";
+            // line 31
+            if (($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "type_id") != 1)) {
+                // line 32
+                echo "                <a class=\"btn btn-default\" href=\"";
+                echo twig_escape_filter($this->env, site_url(((("admin/tugas/soal/" . $this->getAttribute($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "mapel_ajar"), "id")) . "/") . $this->getAttribute((isset($context["t"]) ? $context["t"] : null), "id"))), "html", null, true);
+                echo "\"><i class=\"icon-align-justify\"></i> Soal</a>
+                ";
+            }
+            // line 34
+            echo "                <a class=\"btn btn-default\"><i class=\"icon-ok\"></i> Terbitkan</a>
+            </div>
+            <h3 style=\"line-height: 25px;\">";
+            // line 36
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["t"]) ? $context["t"] : null), "judul"), "html", null, true);
+            echo "</h3>
+            <ul class=\"unstyled inline\" style=\"margin-bottom: 5px;margin-top: 5px;\">
+                <li class=\"label label-success\">";
+            // line 38
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["t"]) ? $context["t"] : null), "type"), "html", null, true);
+            echo "</li>
+                ";
+            // line 39
+            if ((($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "type_id") == 2) || ($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "type_id") == 3))) {
+                // line 40
+                echo "                <li class=\"label label-success\">";
+                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["t"]) ? $context["t"] : null), "durasi"), "html", null, true);
+                echo " menit</li>
+                ";
+            }
+            // line 42
+            echo "                <li class=\"label label-info\"><a href=\"";
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "pengajar"), "link_profil"), "html", null, true);
+            echo "\" style=\"color:white;text-decoration: underline;\">";
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "pengajar"), "nama"), "html", null, true);
+            echo "</a></li>
+                <li class=\"label label-info\">";
+            // line 43
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "mapel"), "nama"), "html", null, true);
+            echo "</li>
+                <li class=\"label label-info\">";
+            // line 44
+            echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "mapel_ajar"), "jam_mulai"), "H:i"), "html", null, true);
+            echo " - ";
+            echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "mapel_ajar"), "jam_selesai"), "H:i"), "html", null, true);
+            echo "</li>
+                <li class=\"label label-info\">";
+            // line 45
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "kelas"), "nama"), "html", null, true);
+            echo "</li>
+                <li class=\"label label-info\">";
+            // line 46
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "kelas"), "jumlah_siswa"), "html", null, true);
+            echo " siswa</li>
+            </ul>
+            ";
+            // line 48
+            echo $this->getAttribute((isset($context["t"]) ? $context["t"] : null), "info");
+            echo "
+        </div>
+        ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['t'], $context['_parent'], $context['loop']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 51
+        echo "
         <br>
         ";
-        // line 42
+        // line 53
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
 
@@ -109,6 +171,6 @@ class __TwigTemplate_cb47f6a8bbc9d4510b0e2462c45ac033b1c50e4c57a49a0d2bcb629993d
 
     public function getDebugInfo()
     {
-        return array (  92 => 42,  69 => 22,  65 => 21,  61 => 20,  57 => 19,  49 => 14,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
+        return array (  154 => 53,  150 => 51,  141 => 48,  136 => 46,  132 => 45,  126 => 44,  122 => 43,  115 => 42,  109 => 40,  107 => 39,  103 => 38,  98 => 36,  94 => 34,  88 => 32,  86 => 31,  82 => 29,  78 => 28,  69 => 22,  65 => 21,  61 => 20,  57 => 19,  49 => 14,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
     }
 }

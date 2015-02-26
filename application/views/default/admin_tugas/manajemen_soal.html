@@ -12,10 +12,10 @@
             <img src="{{ pengajar.link_foto }}" class="pull-right img-circle img-polaroid img-profile-top">
             <h2>{{ tugas.judul }}</h2>
             <div class="btn-group pull-right">
-                <a class="btn btn-primary btn-mini"><i class="icon-edit"></i> Edit Tugas</a>
-                <a class="btn btn-primary btn-mini"><i class="icon-ok"></i> Terbitkan Tugas</a>
+                <a class="btn btn-default" href="{{ site_url('admin/tugas/edit/' ~ mapel_ajar.id ~ '/' ~ tugas.id) }}"><i class="icon-edit"></i> Edit Tugas</a>
+                <a class="btn btn-default"><i class="icon-ok"></i> Terbitkan Tugas</a>
             </div>
-            <label class="label label-info">Tipe : {{ tugas.type }}</label>
+            <label class="label label-warning">Tipe : {{ tugas.type }}</label>
             <label class="label label-info">Durasi : {{ tugas.durasi }} Menit</label>
             <table class="table table-condensed table-striped">
                 <thead>

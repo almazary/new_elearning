@@ -39,30 +39,18 @@
         </div>
 
         <br>
-        {{ form_open_multipart('admin/tugas/add/' ~ mapel_ajar.id, {'class' : 'form-horizontal row-fluid'})|raw }}
-        <div class="control-group">
-            <label class="control-label">Tipe Soal <span class="text-error">*</span></label>
-            <div class="controls">
-                <select name="type_id" class="span2">
-                    <option value="">--pilih--</option>
-                    <option value="1" {{ set_select('type_id', '1') }}>Upload</option>
-                    <option value="2" {{ set_select('type_id', '2') }}>Essay</option>
-                    <option value="3" {{ set_select('type_id', '3') }}>Ganda</option>
-                </select>
-                <br>{{ form_error('type_id')|raw }}
-            </div>
-        </div>
+        {{ form_open_multipart('admin/tugas/edit/' ~ mapel_ajar.id ~ '/' ~ tugas.id, {'class' : 'form-horizontal row-fluid'})|raw }}
         <div class="control-group">
             <label class="control-label">Judul Tugas <span class="text-error">*</span></label>
             <div class="controls">
-                <input type="text" name="judul" class="span12" value="{{ set_value('judul') }}">
+                <input type="text" name="judul" class="span12" value="{{ set_value('judul', tugas.judul) }}">
                 <br>{{ form_error('judul')|raw }}
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">Durasi</label>
             <div class="controls">
-                <input type="text" name="durasi" value="{{ set_value('durasi') }}" class="span2" placeholder="Dalam Menit">
+                <input type="text" name="durasi" value="{{ set_value('durasi', tugas.durasi) }}" class="span2" placeholder="Dalam Menit">
                 <br><span class="text-muted">Kusus untuk tipe soal <b>Pilihan Ganda</b> dan <b>Essay</b></span>
                 <br>{{ form_error('durasi')|raw }}
             </div>
@@ -70,14 +58,14 @@
         <div class="control-group">
             <label class="control-label">Info</label>
             <div class="controls">
-                <textarea name="info" id="info" style="height:150px;width:100%;">{{ set_value('info') }}</textarea>
+                <textarea name="info" id="info" style="height:150px;width:100%;">{{ set_value('info', tugas.info)|raw }}</textarea>
                 {{ form_error('info')|raw }}
             </div>
         </div>
         <div class="control-group">
             <div class="controls">
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ pengajar.link_profil }}" class="btn">Kembali</a>
+                <button type="submit" class="btn btn-primary">Update</button>
+                <a href="{{ site_url('admin/tugas/soal/' ~ mapel_ajar.id ~ '/' ~ tugas.id) }}" class="btn">Kembali</a>
             </div>
         </div>
         {{ form_close()|raw }}
