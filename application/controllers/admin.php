@@ -12,6 +12,13 @@ class Admin extends CI_Controller
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
         $this->session_data = $this->session->userdata('admin');
+
+        # cek session kcfinder
+        if (!empty($this->session_data)) {
+            if (empty($_SESSION['KCFINDER'])) {
+                $this->logout();
+            }
+        }
     }
 
     private function most_login()
@@ -107,6 +114,98 @@ class Admin extends CI_Controller
 
         if (!empty($act)) {
             switch ($act) {
+                case 'question_remove_option_form':
+                    $key = $this->input->post('key');
+                    if (empty($key) OR $key == 1) {
+                        exit();
+                    }
+
+                    $session_option = $this->session->userdata('question_options');
+                    unset($session_option[$key]);
+                    $this->session->set_userdata('question_options', $session_option);
+                    break;
+
+                case 'question_add_option_form':
+                    # cek di session sudah ada belum
+                    $session_option = $this->session->userdata('question_options');
+                    if (empty($session_option)) {
+                        $new_session_option['question_options'] = array(
+                            1 => array(
+                                'element_id'   => time(),
+                                'allow_remove' => false
+                            )
+                        );
+                        $this->session->set_userdata($new_session_option);
+                        $session_option = $this->session->userdata('question_options');
+                    }
+                    # cari key tertinggi + 1
+                    $next_key = max(array_keys($session_option)) + 1;
+                    $session_option[$next_key] = array(
+                        'element_id'   => time(),
+                        'allow_remove' => true
+                    );
+
+                    $this->session->set_userdata('question_options', $session_option);
+
+                    $key = $next_key;
+                    $val = $session_option[$key];
+
+                    $form_option = '<div class="options" id="option-'.$key.'">';
+                    $form_option .= '<div class="pull-right">';
+                    $form_option .= '<ul class="inline unstyle">';
+                        $form_option .= '<li><a href="javascript:void(0)" onclick="option_up('.$key.')"><i class="icon-chevron-up"></i></a></li>';
+                        $form_option .= '<li><a href="javascript:void(0)" onclick="option_down('.$key.')"><i class="icon-chevron-down"></i></a></li>';
+                        if ($val['allow_remove']) {
+                            $form_option .= '<li><a href="javascript:void(0)" onclick="option_remove('.$key.')"><i class="icon-trash"></i></a></li>';
+                        }
+                        $form_option .= '<li><a href="javascript:void(0)" onclick="option_key('.$key.')"><i class="icon-star"></i> Jadikan Kunci</a></li>';
+                    $form_option .= '</ul>';
+                    $form_option .= '</div>';
+                    $form_option .= '<b>Pilihan '.$key.'</b>';
+                    $form_option .= '<textarea id="'.$val['element_id'].'" name="option[]" style="width:100%;height:150px;"></textarea>';
+                    $form_option .= '<script>tinyMCE.execCommand("mceAddEditor", false, "'.$val['element_id'].'"); </script>';
+                    $form_option .= '<br>';
+                    $form_option .= '</div>';
+
+                    echo $form_option;
+                    break;
+
+                case 'question_option_form':
+                    # cek di session sudah ada belum
+                    $session_option = $this->session->userdata('question_options');
+                    if (empty($session_option)) {
+                        $new_session_option['question_options'] = array(
+                            1 => array(
+                                'element_id'   => time(),
+                                'allow_remove' => false
+                            )
+                        );
+                        $this->session->set_userdata($new_session_option);
+                        $session_option = $this->session->userdata('question_options');
+                    }
+
+                    $form_option = '';
+                    foreach ($session_option as $key => $val) {
+                        $form_option .= '<div class="options" id="option-'.$key.'">';
+                        $form_option .= '<div class="pull-right">';
+                        $form_option .= '<ul class="inline unstyle">';
+                            $form_option .= '<li><a href="javascript:void(0)" onclick="option_up('.$key.')"><i class="icon-chevron-up"></i></a></li>';
+                            $form_option .= '<li><a href="javascript:void(0)" onclick="option_down('.$key.')"><i class="icon-chevron-down"></i></a></li>';
+                            if ($val['allow_remove']) {
+                                $form_option .= '<li><a href="javascript:void(0)" onclick="option_remove('.$key.')"><i class="icon-trash"></i></a></li>';
+                            }
+                            $form_option .= '<li><a href="javascript:void(0)" onclick="option_key('.$key.')"><i class="icon-star"></i> Jadikan Kunci</a></li>';
+                        $form_option .= '</ul>';
+                        $form_option .= '</div>';
+                        $form_option .= '<b>Pilihan '.$key.'</b>';
+                        $form_option .= '<textarea id="'.$val['element_id'].'" name="option[]" style="width:100%;height:150px;"></textarea>';
+                        $form_option .= '<script>tinyMCE.execCommand("mceAddEditor", false, "'.$val['element_id'].'"); </script>';
+                        $form_option .= '<br>';
+                        $form_option .= '</div>';
+                    }
+                    echo $form_option;
+                    break;
+
                 case 'hirarki_kelas':
 
                     $o = 1;
@@ -149,7 +248,18 @@ class Admin extends CI_Controller
         switch ($act) {
             case 'add_question':
                 $content_file = 'admin_tugas/tambah_soal.html';
-                $tugas_id     = (int)$segment_4;
+                $mapel_ajar_id = (int)$segment_4;
+                $tugas_id      = (int)$segment_5;
+                if (empty($mapel_ajar_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $mapel_ajar = $this->pengajar_model->retrieve_ma($mapel_ajar_id);
+                if (empty($mapel_ajar) OR empty($mapel_ajar['aktif'])) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Matapelajaran ajar tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
                 if (empty($tugas_id)) {
                     redirect('admin/tugas');
                 }
@@ -160,13 +270,32 @@ class Admin extends CI_Controller
                     redirect('admin/tugas');
                 }
 
-                # cek type tugas, upload tidak
+                # cek tipenya, jika upload gagalkan
                 if ($tugas['type_id'] == 1) {
                     $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas bukan Pilihan Ganda atau Essay'));
                     redirect('admin/tugas');
                 }
 
-                $data['comp_js'] = get_tinymce('question', 'advanced', array('autosave'));
+                if ($tugas['type_id'] == 2) {
+                    $tugas['type'] = 'Essay';
+                } elseif ($tugas['type_id'] == 3) {
+                    $tugas['type'] = 'Pilihan Ganda';
+                }
+
+                $mapel_kelas             = $this->mapel_model->retrieve_kelas($mapel_ajar['mapel_kelas_id']);
+                $pengajar                = $this->pengajar_model->retrieve($mapel_ajar['pengajar_id']);
+                $pengajar['link_foto']   = get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin']);
+                $pengajar['link_profil'] = site_url('admin/pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+
+                $data['module_title']          = anchor('admin/tugas', 'Tugas').' / '.anchor('admin/tugas/soal/'.$mapel_ajar_id.'/'.$tugas_id, 'Manajemen Soal').' / Tambah Soal';
+                $data['kelas']                 = $this->kelas_model->retrieve($mapel_kelas['kelas_id']);
+                $data['kelas']['jumlah_siswa'] = $this->siswa_model->count('kelas', array('kelas_id' => $mapel_kelas['kelas_id']));
+                $data['mapel']                 = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                $data['mapel_ajar']            = $mapel_ajar;
+                $data['pengajar']              = $pengajar;
+                $data['tugas']                 = $tugas;
+
+                $data['comp_js']  = get_tinymce('question');
                 break;
 
             case 'soal':
@@ -198,6 +327,9 @@ class Admin extends CI_Controller
                     $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas bukan Pilihan Ganda atau Essay'));
                     redirect('admin/tugas');
                 }
+
+                # ini untuk remove session add question
+                $this->session->set_userdata('question_options', null);
 
                 if ($tugas['type_id'] == 2) {
                     $tugas['type'] = 'Essay';
@@ -2463,7 +2595,12 @@ class Admin extends CI_Controller
             'web_title'     => 'Manajemen Kelas | Administrator',
             'module_title'  => 'Manajemen Kelas',
             'comp_css'      => load_comp_css(array(base_url('assets/comp/nestedSortable/nestedSortable.css'))),
-            'comp_js'       => load_comp_js(array(base_url('assets/comp/nestedSortable/jquery.mjs.nestedSortable.js')))
+            'comp_js'       => load_comp_js(
+                array(
+                    base_url('assets/comp/nestedSortable/jquery.mjs.nestedSortable.js'),
+                    base_url('assets/comp/nestedSortable/kelas.js'),
+                )
+            )
         );
 
         switch ($act) {
@@ -2522,7 +2659,7 @@ class Admin extends CI_Controller
         $kelas = $this->kelas_model->retrieve_all($parent_id);
         if(count($kelas) > 0){
             if(is_null($parent_id)){
-                $str_kelas .= '<ol class="sortable">';
+                $str_kelas .= '<ol class="sortable" id="kelas">';
             }else{
                 $str_kelas .= '<ol>';
             }
@@ -2532,7 +2669,7 @@ class Admin extends CI_Controller
             $order++;
             $str_kelas .= '<li id="list_'.$m['id'].'">
             <div>
-                <span class="disclose"><span>
+                <span class="disclose" id="kelas"><span>
                 </span></span>
                 <span class="pull-right">
                     <a href="'.site_url('admin/kelas/edit/'.$m['id']).'" title="Edit"><i class="icon icon-edit"></i>Edit</a>

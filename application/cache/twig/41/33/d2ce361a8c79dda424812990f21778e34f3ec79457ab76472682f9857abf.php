@@ -109,8 +109,8 @@ class __TwigTemplate_4133d2ce361a8c79dda424812990f21778e34f3ec79457ab76472682f98
         <br>
         <a href=\"";
         // line 44
-        echo twig_escape_filter($this->env, site_url(("admin/tugas/add_question/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id"))), "html", null, true);
-        echo "\" class=\"btn btn-primary add-question\">Tambah Soal</a>
+        echo twig_escape_filter($this->env, site_url(((("admin/tugas/add_question/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id"))), "html", null, true);
+        echo "\" class=\"btn btn-primary\">Tambah Soal</a>
 
     </div>
 </div>

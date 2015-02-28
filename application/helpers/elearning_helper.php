@@ -139,6 +139,7 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
         }
         $tiny_plugins = array_values($combine);
     }
+
     $return = '<script type="text/javascript" src="'.base_url('assets/comp/tinymce/tiny_mce.js').'"></script>'.PHP_EOL;
     $return .= '<script type="text/javascript">
         tinyMCE.init({
@@ -160,7 +161,7 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
             file_browser_callback : "openKCFinder",
             theme_advanced_resizing : false,
             content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
-            convert_urls: false
+            convert_urls: false,
         });
 
         function openKCFinder(field_name, url, type, win) {

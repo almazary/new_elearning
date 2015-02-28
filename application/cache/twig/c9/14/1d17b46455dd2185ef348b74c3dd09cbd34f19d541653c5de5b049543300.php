@@ -200,13 +200,8 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
         ";
         // line 115
         $this->displayBlock('js', $context, $blocks);
-        // line 125
-        echo "
-        ";
         // line 126
-        echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
-        echo "
-    </body>
+        echo "    </body>
 </html>
 ";
     }
@@ -271,8 +266,12 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
         // line 122
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "bootstrap/js/bootstrap.min.js\" type=\"text/javascript\"></script>
-        <script src=\"";
+        ";
         // line 123
+        echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
+        echo "
+        <script src=\"";
+        // line 124
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/script.js\" type=\"text/javascript\"></script>
         ";
@@ -290,6 +289,6 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
 
     public function getDebugInfo()
     {
-        return array (  276 => 123,  272 => 122,  268 => 121,  264 => 120,  259 => 118,  255 => 117,  252 => 116,  249 => 115,  244 => 98,  237 => 12,  233 => 11,  229 => 10,  224 => 9,  221 => 8,  215 => 7,  207 => 126,  204 => 125,  202 => 115,  193 => 111,  189 => 110,  176 => 99,  174 => 98,  163 => 90,  155 => 85,  151 => 84,  147 => 83,  140 => 79,  136 => 78,  129 => 74,  125 => 73,  92 => 43,  88 => 42,  84 => 41,  78 => 38,  74 => 37,  58 => 26,  54 => 25,  42 => 16,  37 => 15,  35 => 8,  31 => 7,  23 => 1,);
+        return array (  275 => 124,  271 => 123,  267 => 122,  263 => 121,  259 => 120,  254 => 118,  250 => 117,  247 => 116,  244 => 115,  239 => 98,  232 => 12,  228 => 11,  224 => 10,  219 => 9,  216 => 8,  210 => 7,  204 => 126,  202 => 115,  193 => 111,  189 => 110,  176 => 99,  174 => 98,  163 => 90,  155 => 85,  151 => 84,  147 => 83,  140 => 79,  136 => 78,  129 => 74,  125 => 73,  92 => 43,  88 => 42,  84 => 41,  78 => 38,  74 => 37,  58 => 26,  54 => 25,  42 => 16,  37 => 15,  35 => 8,  31 => 7,  23 => 1,);
     }
 }
