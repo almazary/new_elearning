@@ -147,6 +147,28 @@ class Admin extends CI_Controller
         $data['web_title'] = 'Tugas | Administrator';
 
         switch ($act) {
+            case 'add_question':
+                $content_file = 'admin_tugas/tambah_soal.html';
+                $tugas_id     = (int)$segment_4;
+                if (empty($tugas_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $tugas = $this->tugas_model->retrieve($tugas_id);
+                if (empty($tugas)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                # cek type tugas, upload tidak
+                if ($tugas['type_id'] == 1) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas bukan Pilihan Ganda atau Essay'));
+                    redirect('admin/tugas');
+                }
+
+                $data['comp_js'] = get_tinymce('question', 'advanced', array('autosave'));
+                break;
+
             case 'soal':
                 $content_file  = 'admin_tugas/manajemen_soal.html';
                 $mapel_ajar_id = (int)$segment_4;
@@ -195,6 +217,14 @@ class Admin extends CI_Controller
                 $data['mapel_ajar']            = $mapel_ajar;
                 $data['pengajar']              = $pengajar;
                 $data['tugas']                 = $tugas;
+
+                //panggil colorbox
+                $html_js = load_comp_js(array(
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-tugas.js')
+                ));
+                $data['comp_js']      = $html_js;
+                $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
                 break;
 
             case 'edit':
@@ -418,7 +448,7 @@ class Admin extends CI_Controller
                                 $pengajar = $this->pengajar_model->retrieve($materi['pengajar_id']);
                                 $data['materi']['pembuat'] = array(
                                     'nama'         => $pengajar['nama'],
-                                    'link_profil'  => site_url('admin/pengajar/'.$pengajar['status_id'].'/'.$pengajar['id']),
+                                    'link_profil'  => site_url('admin/pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']),
                                     'link_foto'    => get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin'])
                                 );
                             }

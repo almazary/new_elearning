@@ -106,6 +106,12 @@ class __TwigTemplate_4133d2ce361a8c79dda424812990f21778e34f3ec79457ab76472682f98
             </div>
         </div>
 
+        <br>
+        <a href=\"";
+        // line 44
+        echo twig_escape_filter($this->env, site_url(("admin/tugas/add_question/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id"))), "html", null, true);
+        echo "\" class=\"btn btn-primary add-question\">Tambah Soal</a>
+
     </div>
 </div>
 ";
@@ -123,6 +129,6 @@ class __TwigTemplate_4133d2ce361a8c79dda424812990f21778e34f3ec79457ab76472682f98
 
     public function getDebugInfo()
     {
-        return array (  99 => 36,  93 => 35,  89 => 34,  85 => 33,  79 => 32,  63 => 19,  59 => 18,  54 => 16,  48 => 13,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
+        return array (  112 => 44,  99 => 36,  93 => 35,  89 => 34,  85 => 33,  79 => 32,  63 => 19,  59 => 18,  54 => 16,  48 => 13,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
     }
 }

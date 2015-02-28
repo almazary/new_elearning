@@ -128,26 +128,35 @@ function get_alert($notif = 'success', $msg = '')
  * @param  string $element_id
  * @return string
  */
-function get_tinymce($element_id, $theme = 'advanced')
+function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array())
 {
+    $tiny_plugins = array('pdw','emotions','syntaxhl','wordcount','pagebreak','style','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','searchreplace','contextmenu','paste','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
+    if (!empty($remove_plugins)) {
+        $copy_tiny_plugins = $tiny_plugins;
+        $combine           = array_combine($tiny_plugins, $copy_tiny_plugins);
+        foreach ($remove_plugins as $rm) {
+            unset($combine[$rm]);
+        }
+        $tiny_plugins = array_values($combine);
+    }
     $return = '<script type="text/javascript" src="'.base_url('assets/comp/tinymce/tiny_mce.js').'"></script>'.PHP_EOL;
     $return .= '<script type="text/javascript">
         tinyMCE.init({
             selector: "textarea#'.$element_id.'",
             theme : "'.$theme.'",
-            skin : "o2k7",
-            plugins : "youtubeIframe,emotions,syntaxhl,wordcount,pagebreak,style,layer,table,save,advhr,advimage,advlink,insertdatetime,preview,searchreplace,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,inlinepopups,autosave,print,media,youtubeIframe,syntaxhl",
+            plugins : "'.implode(',', $tiny_plugins).'",
 
             // Theme options
-            theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-            theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
-            theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
-            theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,restoredraft,visualblocks,|,youtubeIframe,|,syntaxhl",
+            theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,advhr,hr,|,link,unlink,|,sub,sup,charmap,tiny_mce_wiris_formulaEditor,|,code,|,pdw_toggle",
+            theme_advanced_buttons2 : "forecolor,backcolor,|,undo,redo,|,search,replace,outdent,indent,ltr,rtl,blockquote,|,emotions,image,media,youtubeIframe,syntaxhl,|,print,preview,fullscreen",
+            theme_advanced_buttons3 : "",
             theme_advanced_toolbar_location : "top",
             valid_children : "+body[style],+body[div],p[strong|a|#text]",
             valid_elements : "*[*]",
             theme_advanced_toolbar_align : "left",
             theme_advanced_statusbar_location : "bottom",
+            pdw_toggle_on : 1,
+            pdw_toggle_toolbars : "2,3",
             file_browser_callback : "openKCFinder",
             theme_advanced_resizing : false,
             content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
