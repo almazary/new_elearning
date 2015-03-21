@@ -330,31 +330,22 @@ class Tugas_model extends CI_Model
     /**
      * Method untuk mengambail banyak data pilihan
      * 
-     * @param  integer $no_of_records
-     * @param  integer $page_no      
-     * @param  integer|null  $pertanyaan_id
+     * @param  integer  $pertanyaan_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_pilihan(
-        $no_of_records = 10, 
-        $page_no       = 1,
         $pertanyaan_id
     ) {
-        $no_of_records = (int)$no_of_records;
-        $page_no       = (int)$page_no;
-
-        $where = array();
-        if (!is_null($pertanyaan_id)) {
-            $pertanyaan_id = (int)$pertanyaan_id;
-            $where['pertanyaan_id'] = array($pertanyaan_id, 'where');
+        $this->db->where('pertanyaan_id', $pertanyaan_id);
+        $result = $this->db->get('pilihan');
+        if ($result->num_rows() > 0) {
+            $result = $result->result_array();
+            # reindex agar dimulai dari 1
+            return array_combine(range(1, count($result)), array_values($result));
+        } else {
+            return array();
         }
-
-        $orderby = array('urutan' => 'ASC');
-
-        $data = $this->pager->set('pilihan', $no_of_records, $page_no, $where, $orderby);
-
-        return $data;
     }
 
     /**
@@ -481,11 +472,25 @@ class Tugas_model extends CI_Model
             $where['tugas_id'] = array($tugas_id, 'where');
         }
 
-        $orderby = array('urutan', 'ASC');
+        $orderby = array('urutan' => 'ASC');
 
         $data = $this->pager->set('tugas_pertanyaan', $no_of_records, $page_no, $where, $orderby);
 
         return $data;
+    }
+
+    /**
+     * Method untuk menghitung jumlah total pertanyaan berdasarkan tugas_id
+     * 
+     * @param  integer $tugas_id
+     * @return integer
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function count_pertanyaan($tugas_id)
+    {
+        $this->db->where('tugas_id', $tugas_id);
+        $result = $this->db->get('tugas_pertanyaan');
+        return $result->num_rows();
     }
 
     /**

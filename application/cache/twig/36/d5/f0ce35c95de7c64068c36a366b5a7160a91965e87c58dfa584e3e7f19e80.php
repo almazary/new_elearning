@@ -1,7 +1,7 @@
 <?php
 
-/* admin_tugas/tambah_soal.html */
-class __TwigTemplate_46c167e3da52a21d786d44ebdda9bc4b8be632a0657be050a51a749fbff17e51 extends Twig_Template
+/* admin_tugas/edit_soal.html */
+class __TwigTemplate_36d5f0ce35c95de7c64068c36a366b5a7160a91965e87c58dfa584e3e7f19e80 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -44,7 +44,7 @@ class __TwigTemplate_46c167e3da52a21d786d44ebdda9bc4b8be632a0657be050a51a749fbff
         <div>
             ";
         // line 12
-        echo form_open(((("admin/tugas/add_question/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")));
+        echo form_open(((((("admin/tugas/edit_question/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["pertanyaan"]) ? $context["pertanyaan"] : null), "id")));
         echo "
             <input type=\"hidden\" name=\"jumlah_pilihan\" value=\"4\">
             <table class=\"table table-bordered table-hover\">
@@ -149,98 +149,82 @@ class __TwigTemplate_46c167e3da52a21d786d44ebdda9bc4b8be632a0657be050a51a749fbff
                     </tr>
                     <tr>
                         <td>
-                            <h3>Pertanyaan Soal Ke ";
+                            ";
         // line 67
-        echo twig_escape_filter($this->env, ($this->getAttribute((isset($context["retrieve_all_pertanyaan"]) ? $context["retrieve_all_pertanyaan"] : null), "total_record") + 1), "html", null, true);
-        echo " <span class=\"text-error\">*</span> ";
+        echo anchor(((("admin/tugas/add_question/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")), "Tambah Soal", array("class" => "pull-right btn btn-primary"));
+        echo "
+                            <h3>Edit Pertanyaan <span class=\"text-error\">*</span> ";
+        // line 68
         echo form_error("pertanyaan");
         echo "</h3>
                             <textarea id=\"question\" name=\"pertanyaan\" style=\"width:100%;height:200px;\">";
-        // line 68
-        echo set_value("pertanyaan");
+        // line 69
+        echo set_value("pertanyaan", $this->getAttribute((isset($context["pertanyaan"]) ? $context["pertanyaan"] : null), "pertanyaan"));
         echo "</textarea>
                         </td>
                     </tr>
                     ";
-        // line 71
+        // line 72
         if (($this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "type_id") == 3)) {
-            // line 72
-            echo "                    <tr>
+            // line 73
+            echo "
+                    ";
+            // line 74
+            $context['_parent'] = (array) $context;
+            $context['_seq'] = twig_ensure_traversable(range(1, 4));
+            foreach ($context['_seq'] as $context["_key"] => $context["i"]) {
+                // line 75
+                echo "                    <tr>
                         <td>
+                            <input type=\"hidden\" name=\"pilihan_";
+                // line 77
+                echo twig_escape_filter($this->env, (isset($context["i"]) ? $context["i"] : null), "html", null, true);
+                echo "_id\" value=\"";
+                echo twig_escape_filter($this->env, get_data_array((isset($context["pilihan"]) ? $context["pilihan"] : null), (isset($context["i"]) ? $context["i"] : null), "id"), "html", null, true);
+                echo "\">
                             <div class=\"pull-right controls\">
-                                <label class=\"radio inline\"><input type=\"radio\" name=\"kunci\" value=\"pilihan_1\" ";
-            // line 75
-            echo twig_escape_filter($this->env, set_radio("kunci", "pilihan_1", (((get_post_data("kunci") == "")) ? (true) : (""))), "html", null, true);
-            echo "> <b class=\"text-warning\">Jadikan Kunci</b></label>
+                                <label class=\"radio inline\"><input type=\"radio\" name=\"kunci\" value=\"pilihan_";
+                // line 79
+                echo twig_escape_filter($this->env, (isset($context["i"]) ? $context["i"] : null), "html", null, true);
+                echo "\" ";
+                echo twig_escape_filter($this->env, set_radio("kunci", ("pilihan_" . (isset($context["i"]) ? $context["i"] : null)), (((get_data_array((isset($context["pilihan"]) ? $context["pilihan"] : null), (isset($context["i"]) ? $context["i"] : null), "kunci") == 1)) ? (true) : (""))), "html", null, true);
+                echo "> <b class=\"text-warning\">Jadikan Kunci</b></label>
                             </div>
-                            <h3>Pilihan A</h3>
-                            <textarea class=\"tiny_options\" name=\"pilihan_1\" style=\"width:100%;height:200px;\">";
-            // line 78
-            echo set_value("pilihan_1");
-            echo "</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class=\"pull-right controls\">
-                                <label class=\"radio inline\"><input type=\"radio\" name=\"kunci\" value=\"pilihan_2\" ";
-            // line 84
-            echo twig_escape_filter($this->env, set_radio("kunci", "pilihan_2"), "html", null, true);
-            echo "> <b class=\"text-warning\">Jadikan Kunci</b></label>
-                            </div>
-                            <h3>Pilihan B</h3>
-                            <textarea class=\"tiny_options\" name=\"pilihan_2\" style=\"width:100%;height:200px;\">";
-            // line 87
-            echo set_value("pilihan_2");
-            echo "</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class=\"pull-right controls\">
-                                <label class=\"radio inline\"><input type=\"radio\" name=\"kunci\" value=\"pilihan_3\" ";
-            // line 93
-            echo twig_escape_filter($this->env, set_radio("kunci", "pilihan_3"), "html", null, true);
-            echo "> <b class=\"text-warning\">Jadikan Kunci</b></label>
-                            </div>
-                            <h3>Pilihan C</h3>
-                            <textarea class=\"tiny_options\" name=\"pilihan_3\" style=\"width:100%;height:200px;\">";
-            // line 96
-            echo set_value("pilihan_3");
-            echo "</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class=\"pull-right controls\">
-                                <label class=\"radio inline\"><input type=\"radio\" name=\"kunci\" value=\"pilihan_4\" ";
-            // line 102
-            echo twig_escape_filter($this->env, set_radio("kunci", "pilihan_4"), "html", null, true);
-            echo "> <b class=\"text-warning\">Jadikan Kunci</b></label>
-                            </div>
-                            <h3>Pilihan D</h3>
-                            <textarea class=\"tiny_options\" name=\"pilihan_4\" style=\"width:100%;height:200px;\">";
-            // line 105
-            echo set_value("pilihan_4");
-            echo "</textarea>
+                            <h3>Edit Pilihan ";
+                // line 81
+                echo twig_escape_filter($this->env, get_abjad((isset($context["i"]) ? $context["i"] : null)), "html", null, true);
+                echo "</h3>
+                            <textarea class=\"tiny_options\" name=\"pilihan_";
+                // line 82
+                echo twig_escape_filter($this->env, (isset($context["i"]) ? $context["i"] : null), "html", null, true);
+                echo "\" style=\"width:100%;height:200px;\">";
+                echo set_value(("pilihan_" . (isset($context["i"]) ? $context["i"] : null)), get_data_array((isset($context["pilihan"]) ? $context["pilihan"] : null), (isset($context["i"]) ? $context["i"] : null), "konten"));
+                echo "</textarea>
                         </td>
                     </tr>
                     ";
+            }
+            $_parent = $context['_parent'];
+            unset($context['_seq'], $context['_iterated'], $context['_key'], $context['i'], $context['_parent'], $context['loop']);
+            $context = array_intersect_key($context, $_parent) + $_parent;
+            // line 86
+            echo "                    
+                    ";
         }
-        // line 109
+        // line 88
         echo "                    <tr>
                         <td>
-                            <button class=\"btn btn-primary\" type=\"submit\">Simpan</button>
+                            <button class=\"btn btn-primary\" type=\"submit\">Update</button>
                             <a class=\"btn btn-default\" href=\"";
-        // line 112
+        // line 91
         echo twig_escape_filter($this->env, site_url(((("admin/tugas/soal/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id"))), "html", null, true);
-        echo "\">Batal</a>
+        echo "\">Kembali</a>
                         </td>
                     </tr>
                 </tbody>
             </table>
             ";
-        // line 117
+        // line 96
         echo form_close();
         echo "
         </div>
@@ -251,7 +235,7 @@ class __TwigTemplate_46c167e3da52a21d786d44ebdda9bc4b8be632a0657be050a51a749fbff
 
     public function getTemplateName()
     {
-        return "admin_tugas/tambah_soal.html";
+        return "admin_tugas/edit_soal.html";
     }
 
     public function isTraitable()
@@ -261,6 +245,6 @@ class __TwigTemplate_46c167e3da52a21d786d44ebdda9bc4b8be632a0657be050a51a749fbff
 
     public function getDebugInfo()
     {
-        return array (  244 => 117,  236 => 112,  231 => 109,  224 => 105,  218 => 102,  209 => 96,  203 => 93,  194 => 87,  188 => 84,  179 => 78,  173 => 75,  168 => 72,  166 => 71,  160 => 68,  154 => 67,  146 => 62,  143 => 61,  134 => 58,  131 => 57,  127 => 56,  109 => 43,  103 => 42,  99 => 41,  95 => 40,  89 => 39,  73 => 26,  69 => 25,  64 => 23,  58 => 20,  47 => 12,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
+        return array (  228 => 96,  220 => 91,  215 => 88,  211 => 86,  199 => 82,  195 => 81,  188 => 79,  181 => 77,  177 => 75,  173 => 74,  170 => 73,  168 => 72,  162 => 69,  158 => 68,  154 => 67,  146 => 62,  143 => 61,  134 => 58,  131 => 57,  127 => 56,  109 => 43,  103 => 42,  99 => 41,  95 => 40,  89 => 39,  73 => 26,  69 => 25,  64 => 23,  58 => 20,  47 => 12,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
     }
 }

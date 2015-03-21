@@ -1,30 +1,41 @@
 <?php
 
-/* default/admin_siswa/edit_password.html */
+/* admin_siswa/edit_password.html */
 class __TwigTemplate_febd66df959d0ca4f419ad5a7ade703e818eb8c857feb48580199e6db1c7a9d6 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
         parent::__construct($env);
 
-        $this->parent = false;
+        $this->parent = $this->env->loadTemplate("layout-iframe.html");
 
         $this->blocks = array(
+            'content' => array($this, 'block_content'),
         );
+    }
+
+    protected function doGetParent(array $context)
+    {
+        return "layout-iframe.html";
     }
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        // line 1
-        echo "
-<strong>Edit Password</strong>
+        $this->parent->display($context, array_merge($this->blocks, $blocks));
+    }
+
+    // line 3
+    public function block_content($context, array $blocks = array())
+    {
+        // line 4
+        echo "<strong>Edit Password</strong>
 ";
-        // line 3
+        // line 5
         echo get_flashdata("edit");
         echo "
 
 ";
-        // line 5
+        // line 7
         echo form_open(((("admin/siswa/edit_password/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . (isset($context["siswa_id"]) ? $context["siswa_id"] : null)));
         echo "
 <table class=\"table table-striped\">
@@ -34,7 +45,7 @@ class __TwigTemplate_febd66df959d0ca4f419ad5a7ade703e818eb8c857feb48580199e6db1c
             <td>
                 <input type=\"password\" name=\"password\">
                 <br>";
-        // line 12
+        // line 14
         echo form_error("password");
         echo "
             </td>
@@ -44,7 +55,7 @@ class __TwigTemplate_febd66df959d0ca4f419ad5a7ade703e818eb8c857feb48580199e6db1c
             <td>
                 <input type=\"password\" name=\"password2\">
                 <br>";
-        // line 19
+        // line 21
         echo form_error("password2");
         echo "
             </td>
@@ -57,7 +68,7 @@ class __TwigTemplate_febd66df959d0ca4f419ad5a7ade703e818eb8c857feb48580199e6db1c
     </tbody>
 </table>
 ";
-        // line 29
+        // line 31
         echo form_close();
         echo "
 ";
@@ -65,7 +76,7 @@ class __TwigTemplate_febd66df959d0ca4f419ad5a7ade703e818eb8c857feb48580199e6db1c
 
     public function getTemplateName()
     {
-        return "default/admin_siswa/edit_password.html";
+        return "admin_siswa/edit_password.html";
     }
 
     public function isTraitable()
@@ -75,6 +86,6 @@ class __TwigTemplate_febd66df959d0ca4f419ad5a7ade703e818eb8c857feb48580199e6db1c
 
     public function getDebugInfo()
     {
-        return array (  61 => 29,  48 => 19,  38 => 12,  28 => 5,  23 => 3,  19 => 1,);
+        return array (  72 => 31,  59 => 21,  49 => 14,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
     }
 }

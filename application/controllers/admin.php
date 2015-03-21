@@ -114,98 +114,6 @@ class Admin extends CI_Controller
 
         if (!empty($act)) {
             switch ($act) {
-                case 'question_remove_option_form':
-                    $key = $this->input->post('key');
-                    if (empty($key) OR $key == 1) {
-                        exit();
-                    }
-
-                    $session_option = $this->session->userdata('question_options');
-                    unset($session_option[$key]);
-                    $this->session->set_userdata('question_options', $session_option);
-                    break;
-
-                case 'question_add_option_form':
-                    # cek di session sudah ada belum
-                    $session_option = $this->session->userdata('question_options');
-                    if (empty($session_option)) {
-                        $new_session_option['question_options'] = array(
-                            1 => array(
-                                'element_id'   => time(),
-                                'allow_remove' => false
-                            )
-                        );
-                        $this->session->set_userdata($new_session_option);
-                        $session_option = $this->session->userdata('question_options');
-                    }
-                    # cari key tertinggi + 1
-                    $next_key = max(array_keys($session_option)) + 1;
-                    $session_option[$next_key] = array(
-                        'element_id'   => time(),
-                        'allow_remove' => true
-                    );
-
-                    $this->session->set_userdata('question_options', $session_option);
-
-                    $key = $next_key;
-                    $val = $session_option[$key];
-
-                    $form_option = '<div class="options" id="option-'.$key.'">';
-                    $form_option .= '<div class="pull-right">';
-                    $form_option .= '<ul class="inline unstyle">';
-                        $form_option .= '<li><a href="javascript:void(0)" onclick="option_up('.$key.')"><i class="icon-chevron-up"></i></a></li>';
-                        $form_option .= '<li><a href="javascript:void(0)" onclick="option_down('.$key.')"><i class="icon-chevron-down"></i></a></li>';
-                        if ($val['allow_remove']) {
-                            $form_option .= '<li><a href="javascript:void(0)" onclick="option_remove('.$key.')"><i class="icon-trash"></i></a></li>';
-                        }
-                        $form_option .= '<li><a href="javascript:void(0)" onclick="option_key('.$key.')"><i class="icon-star"></i> Jadikan Kunci</a></li>';
-                    $form_option .= '</ul>';
-                    $form_option .= '</div>';
-                    $form_option .= '<b>Pilihan '.$key.'</b>';
-                    $form_option .= '<textarea id="'.$val['element_id'].'" name="option[]" style="width:100%;height:150px;"></textarea>';
-                    $form_option .= '<script>tinyMCE.execCommand("mceAddEditor", false, "'.$val['element_id'].'"); </script>';
-                    $form_option .= '<br>';
-                    $form_option .= '</div>';
-
-                    echo $form_option;
-                    break;
-
-                case 'question_option_form':
-                    # cek di session sudah ada belum
-                    $session_option = $this->session->userdata('question_options');
-                    if (empty($session_option)) {
-                        $new_session_option['question_options'] = array(
-                            1 => array(
-                                'element_id'   => time(),
-                                'allow_remove' => false
-                            )
-                        );
-                        $this->session->set_userdata($new_session_option);
-                        $session_option = $this->session->userdata('question_options');
-                    }
-
-                    $form_option = '';
-                    foreach ($session_option as $key => $val) {
-                        $form_option .= '<div class="options" id="option-'.$key.'">';
-                        $form_option .= '<div class="pull-right">';
-                        $form_option .= '<ul class="inline unstyle">';
-                            $form_option .= '<li><a href="javascript:void(0)" onclick="option_up('.$key.')"><i class="icon-chevron-up"></i></a></li>';
-                            $form_option .= '<li><a href="javascript:void(0)" onclick="option_down('.$key.')"><i class="icon-chevron-down"></i></a></li>';
-                            if ($val['allow_remove']) {
-                                $form_option .= '<li><a href="javascript:void(0)" onclick="option_remove('.$key.')"><i class="icon-trash"></i></a></li>';
-                            }
-                            $form_option .= '<li><a href="javascript:void(0)" onclick="option_key('.$key.')"><i class="icon-star"></i> Jadikan Kunci</a></li>';
-                        $form_option .= '</ul>';
-                        $form_option .= '</div>';
-                        $form_option .= '<b>Pilihan '.$key.'</b>';
-                        $form_option .= '<textarea id="'.$val['element_id'].'" name="option[]" style="width:100%;height:150px;"></textarea>';
-                        $form_option .= '<script>tinyMCE.execCommand("mceAddEditor", false, "'.$val['element_id'].'"); </script>';
-                        $form_option .= '<br>';
-                        $form_option .= '</div>';
-                    }
-                    echo $form_option;
-                    break;
-
                 case 'hirarki_kelas':
 
                     $o = 1;
@@ -246,6 +154,143 @@ class Admin extends CI_Controller
         $data['web_title'] = 'Tugas | Administrator';
 
         switch ($act) {
+            case 'edit_question':
+                $content_file = 'admin_tugas/edit_soal.html';
+                $mapel_ajar_id = (int)$segment_4;
+                $tugas_id      = (int)$segment_5;
+                $pertanyaan_id = (int)$segment_6;
+                if (empty($mapel_ajar_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $mapel_ajar = $this->pengajar_model->retrieve_ma($mapel_ajar_id);
+                if (empty($mapel_ajar) OR empty($mapel_ajar['aktif'])) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Matapelajaran ajar tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                if (empty($tugas_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $tugas = $this->tugas_model->retrieve($tugas_id);
+                if (empty($tugas)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                # cek tipenya, jika upload gagalkan
+                if ($tugas['type_id'] == 1) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas bukan Pilihan Ganda atau Essay'));
+                    redirect('admin/tugas');
+                }
+
+                if ($tugas['type_id'] == 2) {
+                    $tugas['type'] = 'Essay';
+                } elseif ($tugas['type_id'] == 3) {
+                    $tugas['type'] = 'Pilihan Ganda';
+                }
+
+                # ambil pertanyaannya
+                if (empty($pertanyaan_id)) {
+                    redirect('admin/tugas/soal/'.$mapel_ajar['id'].'/'.$tugas['id']);
+                }
+
+                $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
+                if (empty($pertanyaan)) {
+                    redirect('admin/tugas/soal/'.$mapel_ajar['id'].'/'.$tugas['id']);
+                }
+                $data['pertanyaan'] = $pertanyaan;
+
+                # ambil pilihan jika ganda
+                if ($tugas['type_id'] == 3) {
+                    $data['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+                }
+
+                $mapel_kelas             = $this->mapel_model->retrieve_kelas($mapel_ajar['mapel_kelas_id']);
+                $pengajar                = $this->pengajar_model->retrieve($mapel_ajar['pengajar_id']);
+                $pengajar['link_foto']   = get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin']);
+                $pengajar['link_profil'] = site_url('admin/pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+
+                $data['module_title']          = anchor('admin/tugas', 'Tugas').' / '.anchor('admin/tugas/soal/'.$mapel_ajar_id.'/'.$tugas_id, 'Manajemen Soal').' / Edit Soal';
+                $data['kelas']                 = $this->kelas_model->retrieve($mapel_kelas['kelas_id']);
+                $data['kelas']['jumlah_siswa'] = $this->siswa_model->count('kelas', array('kelas_id' => $mapel_kelas['kelas_id']));
+                $data['mapel']                 = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                $data['mapel_ajar']            = $mapel_ajar;
+                $data['pengajar']              = $pengajar;
+                $data['tugas']                 = $tugas;
+
+                $data['comp_js']  = get_tinymce('question, .tiny_options');
+                
+                # ambil semua list pertanyaan + pilihan
+                $jumlah_total_soal = $this->tugas_model->count_pertanyaan($tugas['id']);
+                $retrieve_all_pertanyaan = $this->tugas_model->retrieve_all_pertanyaan($jumlah_total_soal, 1, $tugas['id']);
+                foreach ($retrieve_all_pertanyaan['results'] as $key_p => $val_p) {
+                    $retrieve_all_pilihan = $this->tugas_model->retrieve_all_pilihan($val_p['id']);
+                    $retrieve_all_pertanyaan['results'][$key_p]['pilihan'] = $retrieve_all_pilihan;
+                
+                    # cari kunci pada pilihan
+                    $kunci_index   = '';
+                    $pilihan_kunci = array();
+                    foreach ($retrieve_all_pilihan as $key_o => $val_o) {
+                        if ($val_o['kunci']) {
+                            $pilihan_kunci[$key_o] = $val_o;
+                            $kunci_index = $key_o;
+                        }
+                    }
+
+                    $retrieve_all_pertanyaan['results'][$key_p]['pilihan_kunci'] = $pilihan_kunci;
+                    $retrieve_all_pertanyaan['results'][$key_p]['kunci_index']   = $kunci_index;
+                }
+
+                $data['retrieve_all_pertanyaan'] = $retrieve_all_pertanyaan;
+
+                $save_success = 0;
+
+                # aksi update pilihan ganda
+                if ($tugas['type_id'] == 3) {
+                    if ($this->form_validation->run('admin/tugas/ganda') == true) {
+                        $post_pertanyaan = $this->input->post('pertanyaan', true);
+                        $kunci           = $this->input->post('kunci', true);
+
+                        # update pertanyaan
+                        $this->tugas_model->update_pertanyaan($pertanyaan['id'], $post_pertanyaan, $pertanyaan['urutan'], $tugas['id']);
+
+                        # update pilihan
+                        $jml_pilihan = $this->input->post('jumlah_pilihan', true);
+                        for ($i = 1; $i <= $jml_pilihan; $i++) {
+                            $label      = 'pilihan_';
+                            $pilihan    = $this->input->post($label.$i, true);
+                            $is_kunci   = ($kunci == $label.$i) ? 1 : 0;
+                            $pilihan_id = $this->input->post($label.$i.'_id', true);
+
+                            $old_pilihan_data = $this->tugas_model->retrieve_pilihan($pilihan_id);
+
+                            $this->tugas_model->update_pilihan($pilihan_id, $pertanyaan_id, $pilihan, $is_kunci, $old_pilihan_data['urutan']);
+                        }
+
+                        $save_success = 1;
+                    }
+                } 
+
+                # update essay
+                elseif ($tugas['type_id'] == 2) {
+                    if ($this->form_validation->run('admin/tugas/essay') == true) {
+                        $post_pertanyaan = $this->input->post('pertanyaan', true);
+
+                        # update
+                        $this->tugas_model->create_pertanyaan($pertanyaan['id'], $post_pertanyaan, $pertanyaan['urutan'], $tugas['id']);
+                    
+                        $save_success = 1;
+                    }
+                }
+
+                if ($save_success) {
+                    $this->session->set_flashdata('tugas', get_alert('success', 'Soal berhasil diperbaharui.'));
+                    redirect('admin/tugas/edit_question/'.$mapel_ajar['id'].'/'.$tugas['id'].'/'.$pertanyaan_id);
+                }
+                break;
+
             case 'add_question':
                 $content_file = 'admin_tugas/tambah_soal.html';
                 $mapel_ajar_id = (int)$segment_4;
@@ -295,7 +340,73 @@ class Admin extends CI_Controller
                 $data['pengajar']              = $pengajar;
                 $data['tugas']                 = $tugas;
 
-                $data['comp_js']  = get_tinymce('question');
+                $data['comp_js']  = get_tinymce('question, .tiny_options');
+                
+                # ambil semua list pertanyaan + pilihan
+                $jumlah_total_soal = $this->tugas_model->count_pertanyaan($tugas['id']);
+                $retrieve_all_pertanyaan = $this->tugas_model->retrieve_all_pertanyaan($jumlah_total_soal, 1, $tugas['id']);
+                foreach ($retrieve_all_pertanyaan['results'] as $key_p => $val_p) {
+                    $retrieve_all_pilihan = $this->tugas_model->retrieve_all_pilihan($val_p['id']);
+                    $retrieve_all_pertanyaan['results'][$key_p]['pilihan'] = $retrieve_all_pilihan;
+                
+                    # cari kunci pada pilihan
+                    $kunci_index   = '';
+                    $pilihan_kunci = array();
+                    foreach ($retrieve_all_pilihan as $key_o => $val_o) {
+                        if ($val_o['kunci']) {
+                            $pilihan_kunci[$key_o] = $val_o;
+                            $kunci_index = $key_o;
+                        }
+                    }
+
+                    $retrieve_all_pertanyaan['results'][$key_p]['pilihan_kunci'] = $pilihan_kunci;
+                    $retrieve_all_pertanyaan['results'][$key_p]['kunci_index']   = $kunci_index;
+                }
+
+                $data['retrieve_all_pertanyaan'] = $retrieve_all_pertanyaan;
+
+                $save_success = 0;
+
+                # aksi simpan pilihan ganda
+                if ($tugas['type_id'] == 3) {
+                    if ($this->form_validation->run('admin/tugas/ganda') == true) {
+                        $pertanyaan = $this->input->post('pertanyaan', true);
+                        $kunci      = $this->input->post('kunci', true);
+
+                        # simpan pertanyaan
+                        $pertanyaan_id = $this->tugas_model->create_pertanyaan($pertanyaan, $tugas['id']);
+
+                        # simpan pilihan
+                        $jml_pilihan = $this->input->post('jumlah_pilihan', true);
+                        for ($i = 1; $i <= $jml_pilihan; $i++) {
+                            $label    = 'pilihan_';
+                            $pilihan  = $this->input->post($label.$i, true);
+                            $is_kunci = ($kunci == $label.$i) ? 1 : 0;
+
+                            $this->tugas_model->create_pilihan($pertanyaan_id, $pilihan, $is_kunci);
+                        }
+
+                        $save_success = 1;
+                    }
+                } 
+
+                # simpan essay
+                elseif ($tugas['type_id'] == 2) {
+                    if ($this->form_validation->run('admin/tugas/essay') == true) {
+                        $pertanyaan = $this->input->post('pertanyaan', true);
+
+                        # simpan
+                        $pertanyaan_id = $this->tugas_model->create_pertanyaan($pertanyaan, $tugas['id']);
+                    
+                        $save_success = 1;
+                    }
+                }
+
+                if ($save_success) {
+                    $this->session->set_flashdata('tugas', get_alert('success', 'Soal berhasil ditambah.'));
+                    redirect('admin/tugas/edit_question/'.$mapel_ajar['id'].'/'.$tugas['id'].'/'.$pertanyaan_id);
+                }
+
                 break;
 
             case 'soal':

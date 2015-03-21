@@ -49,7 +49,7 @@ class __TwigTemplate_4133d2ce361a8c79dda424812990f21778e34f3ec79457ab76472682f98
         echo "\"><i class=\"icon-edit\"></i> Edit Tugas</a>
                 <a class=\"btn btn-default\"><i class=\"icon-ok\"></i> Terbitkan Tugas</a>
             </div>
-            <h2 style=\"line-height: 25px;margin-bottom: 15px;text-decoration: underline;\" data-toggle=\"collapse\" data-target=\"#demo\">";
+            <h2 class=\"title-info\" data-toggle=\"collapse\" data-target=\"#demo\">";
         // line 16
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "judul"), "html", null, true);
         echo "</h2>

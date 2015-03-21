@@ -347,5 +347,22 @@ function tgl_jam_indo($tgl_jam = '') {
 }
 
 function get_post_data($key = '') {
-    return $_POST[$key];
+    if (!empty($_POST)) {
+        return $_POST[$key];
+    }
+}
+
+function get_abjad($index) {
+    $abjad = array(1 => 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+    return $abjad[$index];
+}
+
+function pr($array) {
+    echo '<pre>';
+    print_r($array);
+    echo '</pre>';
+}
+
+function get_data_array($array, $index1, $index2) {
+    return $array[$index1][$index2];
 }

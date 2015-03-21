@@ -9,7 +9,7 @@
         {{ get_flashdata('tugas')|raw }}
 
         <div>
-            {{ form_open('admin/tugas/add_question/' ~ mapel_ajar.id ~ '/' ~ tugas.id)|raw }}
+            {{ form_open('admin/tugas/edit_question/' ~ mapel_ajar.id ~ '/' ~ tugas.id ~ '/' ~ pertanyaan.id)|raw }}
             <input type="hidden" name="jumlah_pilihan" value="4">
             <table class="table table-bordered table-hover">
                 <thead>
@@ -64,52 +64,31 @@
                     </tr>
                     <tr>
                         <td>
-                            <h3>Pertanyaan Soal Ke {{ retrieve_all_pertanyaan.total_record + 1 }} <span class="text-error">*</span> {{ form_error('pertanyaan')|raw }}</h3>
-                            <textarea id="question" name="pertanyaan" style="width:100%;height:200px;">{{ set_value('pertanyaan')|raw }}</textarea>
+                            {{ anchor('admin/tugas/add_question/' ~ mapel_ajar.id ~ '/' ~ tugas.id, 'Tambah Soal', {class: 'pull-right btn btn-primary'})|raw }}
+                            <h3>Edit Pertanyaan <span class="text-error">*</span> {{ form_error('pertanyaan')|raw }}</h3>
+                            <textarea id="question" name="pertanyaan" style="width:100%;height:200px;">{{ set_value('pertanyaan', pertanyaan.pertanyaan)|raw }}</textarea>
                         </td>
                     </tr>
                     {% if tugas.type_id == 3 %}
+
+                    {% for i in 1..4 %}
                     <tr>
                         <td>
+                            <input type="hidden" name="pilihan_{{ i }}_id" value="{{ get_data_array(pilihan, i, 'id') }}">
                             <div class="pull-right controls">
-                                <label class="radio inline"><input type="radio" name="kunci" value="pilihan_1" {{ set_radio('kunci', 'pilihan_1', (get_post_data('kunci') == '') ? TRUE) }}> <b class="text-warning">Jadikan Kunci</b></label>
+                                <label class="radio inline"><input type="radio" name="kunci" value="pilihan_{{ i }}" {{ set_radio('kunci', 'pilihan_' ~ i, (get_data_array(pilihan, i, 'kunci') == 1) ? TRUE) }}> <b class="text-warning">Jadikan Kunci</b></label>
                             </div>
-                            <h3>Pilihan A</h3>
-                            <textarea class="tiny_options" name="pilihan_1" style="width:100%;height:200px;">{{ set_value('pilihan_1')|raw }}</textarea>
+                            <h3>Edit Pilihan {{ get_abjad(i) }}</h3>
+                            <textarea class="tiny_options" name="pilihan_{{ i }}" style="width:100%;height:200px;">{{ set_value('pilihan_' ~ i, get_data_array(pilihan, i, 'konten'))|raw }}</textarea>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <div class="pull-right controls">
-                                <label class="radio inline"><input type="radio" name="kunci" value="pilihan_2" {{ set_radio('kunci', 'pilihan_2') }}> <b class="text-warning">Jadikan Kunci</b></label>
-                            </div>
-                            <h3>Pilihan B</h3>
-                            <textarea class="tiny_options" name="pilihan_2" style="width:100%;height:200px;">{{ set_value('pilihan_2')|raw }}</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="pull-right controls">
-                                <label class="radio inline"><input type="radio" name="kunci" value="pilihan_3" {{ set_radio('kunci', 'pilihan_3') }}> <b class="text-warning">Jadikan Kunci</b></label>
-                            </div>
-                            <h3>Pilihan C</h3>
-                            <textarea class="tiny_options" name="pilihan_3" style="width:100%;height:200px;">{{ set_value('pilihan_3')|raw }}</textarea>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="pull-right controls">
-                                <label class="radio inline"><input type="radio" name="kunci" value="pilihan_4" {{ set_radio('kunci', 'pilihan_4') }}> <b class="text-warning">Jadikan Kunci</b></label>
-                            </div>
-                            <h3>Pilihan D</h3>
-                            <textarea class="tiny_options" name="pilihan_4" style="width:100%;height:200px;">{{ set_value('pilihan_4')|raw }}</textarea>
-                        </td>
-                    </tr>
+                    {% endfor %}
+                    
                     {% endif %}
                     <tr>
                         <td>
-                            <button class="btn btn-primary" type="submit">Simpan</button>
-                            <a class="btn btn-default" href="{{ site_url('admin/tugas/soal/' ~ mapel_ajar.id ~ '/' ~ tugas.id) }}">Batal</a>
+                            <button class="btn btn-primary" type="submit">Update</button>
+                            <a class="btn btn-default" href="{{ site_url('admin/tugas/soal/' ~ mapel_ajar.id ~ '/' ~ tugas.id) }}">Kembali</a>
                         </td>
                     </tr>
                 </tbody>

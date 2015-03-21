@@ -14,15 +14,7 @@
 
         <br>
         {{ form_open_multipart('admin/materi/add/' ~ type ~ '/' ~ ref_param, {'class' : 'form-horizontal row-fluid'})|raw }}
-            <div class="control-group">
-                <label class="control-label">Type <span class="text-error">*</span></label>
-                <div class="controls">
-                    <select name="type" class="span2">
-                        <option value="tertulis" onclick="redirect_to('tertulis')" {{ set_select('type', 'tertulis', (type == 'tertulis') ? TRUE : FALSE) }}>Tertulis</option>
-                        <option value="file" onclick="redirect_to('file')" {{ set_select('type', 'file', (type == 'file') ? TRUE : FALSE) }}>File</option>
-                    </select>
-                </div>
-            </div>
+            <input type="hidden" name="type" value="{{ type }}">
             <div class="control-group">
                 <label class="control-label">Judul <span class="text-error">*</span></label>
                 <div class="controls">
@@ -57,13 +49,4 @@
 
     </div>
 </div>
-{% endblock %}
-
-{% block js %}
-{{ parent() }}
-<script type="text/javascript">
-    function redirect_to(form_type) {
-        location.href = "{{ site_url }}/admin/materi/add/" + form_type + "/{{ ref_param }}";
-    }
-</script>
 {% endblock %}

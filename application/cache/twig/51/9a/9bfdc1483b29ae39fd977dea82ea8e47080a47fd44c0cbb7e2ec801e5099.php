@@ -11,7 +11,6 @@ class __TwigTemplate_519a9bfdc1483b29ae39fd977dea82ea8e47080a47fd44c0cbb7e2ec801
 
         $this->blocks = array(
             'content' => array($this, 'block_content'),
-            'js' => array($this, 'block_js'),
         );
     }
 
@@ -56,102 +55,72 @@ class __TwigTemplate_519a9bfdc1483b29ae39fd977dea82ea8e47080a47fd44c0cbb7e2ec801
         // line 16
         echo form_open_multipart(((("admin/materi/add/" . (isset($context["type"]) ? $context["type"] : null)) . "/") . (isset($context["ref_param"]) ? $context["ref_param"] : null)), array("class" => "form-horizontal row-fluid"));
         echo "
-            <div class=\"control-group\">
-                <label class=\"control-label\">Type <span class=\"text-error\">*</span></label>
-                <div class=\"controls\">
-                    <select name=\"type\" class=\"span2\">
-                        <option value=\"tertulis\" onclick=\"redirect_to('tertulis')\" ";
-        // line 21
-        echo twig_escape_filter($this->env, set_select("type", "tertulis", ((((isset($context["type"]) ? $context["type"] : null) == "tertulis")) ? (true) : (false))), "html", null, true);
-        echo ">Tertulis</option>
-                        <option value=\"file\" onclick=\"redirect_to('file')\" ";
-        // line 22
-        echo twig_escape_filter($this->env, set_select("type", "file", ((((isset($context["type"]) ? $context["type"] : null) == "file")) ? (true) : (false))), "html", null, true);
-        echo ">File</option>
-                    </select>
-                </div>
-            </div>
+            <input type=\"hidden\" name=\"type\" value=\"";
+        // line 17
+        echo twig_escape_filter($this->env, (isset($context["type"]) ? $context["type"] : null), "html", null, true);
+        echo "\">
             <div class=\"control-group\">
                 <label class=\"control-label\">Judul <span class=\"text-error\">*</span></label>
                 <div class=\"controls\">
                     <input type=\"text\" name=\"judul\" class=\"span12\" value=\"";
-        // line 29
+        // line 21
         echo twig_escape_filter($this->env, set_value("judul"), "html", null, true);
         echo "\">
                     <br>";
-        // line 30
+        // line 22
         echo form_error("judul");
         echo "
                 </div>
             </div>
             ";
-        // line 33
+        // line 25
         if (((isset($context["type"]) ? $context["type"] : null) == "tertulis")) {
-            // line 34
+            // line 26
             echo "            <div class=\"control-group\">
                 <label class=\"control-label\">Konten <span class=\"text-error\">*</span></label>
                 <div class=\"controls\">
                     <textarea name=\"konten\" id=\"konten\" style=\"height:500px;width:100%;\">";
-            // line 37
+            // line 29
             echo twig_escape_filter($this->env, set_value("konten"), "html", null, true);
             echo "</textarea>
                     ";
-            // line 38
+            // line 30
             echo form_error("konten");
             echo "
                 </div>
             </div>
             ";
         } elseif (((isset($context["type"]) ? $context["type"] : null) == "file")) {
-            // line 42
+            // line 34
             echo "            <div class=\"control-group\">
                 <label class=\"control-label\">File <span class=\"text-error\">*</span></label>
                 <div class=\"controls\">
                     <input type=\"file\" name=\"userfile\">
                     <br>";
-            // line 46
+            // line 38
             echo (((!twig_test_empty((isset($context["error_upload"]) ? $context["error_upload"] : null)))) ? ((isset($context["error_upload"]) ? $context["error_upload"] : null)) : (""));
             echo "
                 </div>
             </div>
             ";
         }
-        // line 50
+        // line 42
         echo "            <div class=\"control-group\">
                 <div class=\"controls\">
                     <button type=\"submit\" class=\"btn btn-primary\">Simpan</button>
                     <a href=\"";
-        // line 53
+        // line 45
         echo twig_escape_filter($this->env, site_url(("admin/materi/detail/" . (isset($context["ref_param"]) ? $context["ref_param"] : null))), "html", null, true);
         echo "\" class=\"btn\">Kembali</a>
                 </div>
             </div>
         ";
-        // line 56
+        // line 48
         echo form_close();
         echo "
 
     </div>
 </div>
-";
-    }
-
-    // line 62
-    public function block_js($context, array $blocks = array())
-    {
-        // line 63
-        $this->displayParentBlock("js", $context, $blocks);
-        echo "
-<script type=\"text/javascript\">
-    function redirect_to(form_type) {
-        location.href = \"";
-        // line 66
-        echo twig_escape_filter($this->env, (isset($context["site_url"]) ? $context["site_url"] : null), "html", null, true);
-        echo "/admin/materi/add/\" + form_type + \"/";
-        echo twig_escape_filter($this->env, (isset($context["ref_param"]) ? $context["ref_param"] : null), "html", null, true);
-        echo "\";
-    }
-</script>
 ";
     }
 
@@ -167,6 +136,6 @@ class __TwigTemplate_519a9bfdc1483b29ae39fd977dea82ea8e47080a47fd44c0cbb7e2ec801
 
     public function getDebugInfo()
     {
-        return array (  149 => 66,  143 => 63,  140 => 62,  131 => 56,  125 => 53,  120 => 50,  113 => 46,  107 => 42,  100 => 38,  96 => 37,  91 => 34,  89 => 33,  83 => 30,  79 => 29,  69 => 22,  65 => 21,  57 => 16,  48 => 12,  42 => 9,  36 => 6,  32 => 4,  29 => 3,);
+        return array (  119 => 48,  113 => 45,  108 => 42,  101 => 38,  95 => 34,  88 => 30,  84 => 29,  79 => 26,  77 => 25,  71 => 22,  67 => 21,  60 => 17,  56 => 16,  47 => 12,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
     }
 }

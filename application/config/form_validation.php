@@ -656,3 +656,29 @@ $config['admin/tugas/edit'] = array(
         'rules' => 'numeric|trim|xss_clean'
     ),
 );
+
+$config['admin/tugas/ganda'] = array(
+    array(
+        'field' => 'pertanyaan',
+        'label' => 'Pertanyaan',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'kunci',
+        'label' => 'Kunci',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'jumlah_pilihan',
+        'label' => 'Jumlah Pilihan',
+        'rules' => 'required|trim|numeric|xss_clean'
+    ),
+);
+
+$config['admin/tugas/essay'] = array(
+    array(
+        'field' => 'pertanyaan',
+        'label' => 'Pertanyaan',
+        'rules' => 'required|trim|xss_clean'
+    )
+);
