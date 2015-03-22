@@ -31,7 +31,12 @@
                 {% if (t.type_id != 1) %}
                 <a class="btn btn-default" href="{{ site_url('admin/tugas/soal/' ~ t.mapel_ajar.id ~ '/' ~ t.id) }}"><i class="icon-align-justify"></i> Soal</a>
                 {% endif %}
-                <a class="btn btn-default"><i class="icon-ok"></i> Terbitkan</a>
+
+                {% if t.aktif == 0 %}
+                    {{ anchor('admin/tugas/tampilkan/' ~ t.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-ok"></i> Tampilkan</a>', {class: 'btn btn-default', 'data-toggle': 'tooltip', title: 'Tampilkan agar siswa dapat <br>mengerjakan tugas'})|raw }}
+                {% else %}
+                    {{ anchor('admin/tugas/sembunyikan/' ~ t.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-ok"></i> Sembunyikan</a>', {class: 'btn btn-success', 'data-toggle': 'tooltip', title: 'Sembunyikan agar siswa sudah <br>tidak dapat mengerjakan tugas'})|raw }}
+                {% endif %}
             </div>
             <h3 style="line-height: 25px;">{{ t.judul }}</h3>
             <ul class="unstyled inline" style="margin-bottom: 5px;margin-top: 5px;">

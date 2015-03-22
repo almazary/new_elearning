@@ -41,7 +41,7 @@ class __TwigTemplate_35e908351934e4f5000ec1788d02cabe196213251bdd851e9c340f97ebd
         echo get_flashdata("tugas");
         echo "
 
-        <div class=\"bs-callout bs-callout-info\">
+        <div class=\"bs-callout bs-callout-info bs-callout-noborder\">
             <div class=\"row-fluid\">
                 <div class=\"span11\">
                     <table class=\"table table-condensed table-striped\">
@@ -98,7 +98,7 @@ class __TwigTemplate_35e908351934e4f5000ec1788d02cabe196213251bdd851e9c340f97ebd
         <br>
         ";
         // line 42
-        echo form_open_multipart(((("admin/tugas/edit/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")), array("class" => "form-horizontal row-fluid"));
+        echo form_open_multipart(((((("admin/tugas/edit/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . enurl_redirect((isset($context["uri_back"]) ? $context["uri_back"] : null))), array("class" => "form-horizontal row-fluid"));
         echo "
         <div class=\"control-group\">
             <label class=\"control-label\">Judul Tugas <span class=\"text-error\">*</span></label>
@@ -143,10 +143,10 @@ class __TwigTemplate_35e908351934e4f5000ec1788d02cabe196213251bdd851e9c340f97ebd
         <div class=\"control-group\">
             <div class=\"controls\">
                 <button type=\"submit\" class=\"btn btn-primary\">Update</button>
-                <a href=\"";
+                ";
         // line 68
-        echo twig_escape_filter($this->env, site_url(((("admin/tugas/soal/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id"))), "html", null, true);
-        echo "\" class=\"btn\">Kembali</a>
+        echo anchor((isset($context["uri_back"]) ? $context["uri_back"] : null), "Kembali", array("class" => "btn"));
+        echo "
             </div>
         </div>
         ";

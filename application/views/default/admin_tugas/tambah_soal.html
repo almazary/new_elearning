@@ -15,10 +15,14 @@
                 <thead>
                     <tr>
                         <th>
-                            <div class="bs-callout bs-callout-info">
+                            <div class="bs-callout bs-callout-info bs-callout-noborder">
                                 <div class="btn-group pull-right">
-                                    <a class="btn btn-default" href="{{ site_url('admin/tugas/edit/' ~ mapel_ajar.id ~ '/' ~ tugas.id) }}"><i class="icon-edit"></i> Edit Tugas</a>
-                                    <a class="btn btn-default"><i class="icon-ok"></i> Terbitkan Tugas</a>
+                                    <a class="btn btn-default" href="{{ site_url('admin/tugas/edit/' ~ mapel_ajar.id ~ '/' ~ tugas.id ~ '/' ~ enurl_redirect(current_url())) }}"><i class="icon-edit"></i> Edit Tugas</a>
+                                    {% if tugas.aktif == 0 %}
+                                        {{ anchor('admin/tugas/tampilkan/' ~ tugas.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-ok"></i> Tampilkan</a>', {class: 'btn btn-default', 'data-toggle': 'tooltip', title: 'Tampilkan agar siswa dapat <br>mengerjakan tugas'})|raw }}
+                                    {% else %}
+                                        {{ anchor('admin/tugas/sembunyikan/' ~ tugas.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-ok"></i> Sembunyikan</a>', {class: 'btn btn-success', 'data-toggle': 'tooltip', title: 'Sembunyikan agar siswa sudah <br>tidak dapat mengerjakan tugas'})|raw }}
+                                    {% endif %}
                                 </div>
                                 <h2 class="title-info" data-toggle="collapse" data-target="#demo">{{ tugas.judul }}</h2>
                                 <div id="demo" class="collapse">
@@ -55,7 +59,12 @@
                             <ul class="unstyled inline">
                                 {% for s_key, s in retrieve_all_pertanyaan.results %}
                                 <li>
-                                    {{ anchor('admin/tugas/edit_question/' ~ mapel_ajar.id ~ '/' ~ tugas.id ~ '/' ~ s.id, s_key ~ '. ' ~ get_abjad(s.kunci_index), {class: 'badge badge-info', 'data-toggle': "tooltip", title: strip_tags(s.pertanyaan)})|raw }}
+                                    {% if s.kunci_index is not empty %}
+                                        {% set kunci_index = get_abjad(s.kunci_index) %}
+                                    {% else %}
+                                        {% set kunci_index = '' %}
+                                    {% endif %}
+                                    {{ anchor('admin/tugas/edit_question/' ~ mapel_ajar.id ~ '/' ~ tugas.id ~ '/' ~ s.id, s_key ~ '. ' ~ kunci_index, {class: 'badge badge-info', 'data-toggle': "tooltip", title: word_limiter(strip_tags(s.pertanyaan), 50)})|raw }}
                                 </li>
                                 {% endfor %}
                             </ul>

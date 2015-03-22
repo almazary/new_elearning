@@ -41,7 +41,7 @@ class __TwigTemplate_afb2867de802d96998704f9dce1c05dc918a173fdc111b56897bbe72c92
         echo get_flashdata("tugas");
         echo "
 
-        <div class=\"bs-callout bs-callout-info\">
+        <div class=\"bs-callout bs-callout-info bs-callout-noborder\">
             <div class=\"row-fluid\">
                 <div class=\"span11\">
                     <table class=\"table table-condensed table-striped\">

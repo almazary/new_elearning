@@ -154,6 +154,84 @@ class Admin extends CI_Controller
         $data['web_title'] = 'Tugas | Administrator';
 
         switch ($act) {
+            case 'delete_question':
+                $content_file = 'admin_tugas/edit_soal.html';
+                $mapel_ajar_id = (int)$segment_4;
+                $tugas_id      = (int)$segment_5;
+                $pertanyaan_id = (int)$segment_6;
+                if (empty($mapel_ajar_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $mapel_ajar = $this->pengajar_model->retrieve_ma($mapel_ajar_id);
+                if (empty($mapel_ajar) OR empty($mapel_ajar['aktif'])) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Matapelajaran ajar tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                if (empty($tugas_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $tugas = $this->tugas_model->retrieve($tugas_id);
+                if (empty($tugas)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                # cek tipenya, jika upload gagalkan
+                if ($tugas['type_id'] == 1) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas bukan Pilihan Ganda atau Essay'));
+                    redirect('admin/tugas');
+                }
+
+                if ($tugas['type_id'] == 2) {
+                    $tugas['type'] = 'Essay';
+                } elseif ($tugas['type_id'] == 3) {
+                    $tugas['type'] = 'Pilihan Ganda';
+                }
+
+                # ambil pertanyaannya
+                if (empty($pertanyaan_id)) {
+                    redirect('admin/tugas/soal/'.$mapel_ajar['id'].'/'.$tugas['id']);
+                }
+
+                $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
+                if (empty($pertanyaan)) {
+                    redirect('admin/tugas/soal/'.$mapel_ajar['id'].'/'.$tugas['id']);
+                }
+
+                $is_success       = 1;
+                $array_pilihan_id = array();
+
+                # ambil pilihan jika ganda dan hapus
+                if ($tugas['type_id'] == 3) {
+                    $pilihan = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+                    foreach ($pilihan as $r) {
+                        # coba cari sudah ada jawaban belum, kalo sudah tidak bisa di hapus
+                        $check = $this->tugas_model->retrieve_ganda(null, $r['id']);
+                        if (!empty($check)) {
+                            $is_success = 0;
+                        }
+                        $array_pilihan_id[] = $r['id'];
+                    }
+                }
+
+                if ($is_success) {
+                    foreach ($array_pilihan_id as $pilihan_id) {
+                        $this->tugas_model->delete_pilihan($pilihan_id);
+                    }
+
+                    # hapus pertanyaan
+                    $this->tugas_model->delete_pertanyaan($pertanyaan['id']);
+                    $this->session->set_flashdata('tugas', get_alert('success', 'Soal berhasil dihapus.'));
+                } else {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Soal tidak berhasil dihapus, karna sudah ada jawaban.'));
+                }
+
+                redirect('admin/tugas/soal/'.$mapel_ajar['id'].'/'.$tugas['id']);
+                break;
+
             case 'edit_question':
                 $content_file = 'admin_tugas/edit_soal.html';
                 $mapel_ajar_id = (int)$segment_4;
@@ -225,22 +303,26 @@ class Admin extends CI_Controller
                 # ambil semua list pertanyaan + pilihan
                 $jumlah_total_soal = $this->tugas_model->count_pertanyaan($tugas['id']);
                 $retrieve_all_pertanyaan = $this->tugas_model->retrieve_all_pertanyaan($jumlah_total_soal, 1, $tugas['id']);
-                foreach ($retrieve_all_pertanyaan['results'] as $key_p => $val_p) {
-                    $retrieve_all_pilihan = $this->tugas_model->retrieve_all_pilihan($val_p['id']);
-                    $retrieve_all_pertanyaan['results'][$key_p]['pilihan'] = $retrieve_all_pilihan;
                 
-                    # cari kunci pada pilihan
-                    $kunci_index   = '';
-                    $pilihan_kunci = array();
-                    foreach ($retrieve_all_pilihan as $key_o => $val_o) {
-                        if ($val_o['kunci']) {
-                            $pilihan_kunci[$key_o] = $val_o;
-                            $kunci_index = $key_o;
+                # jika pilihan ganda
+                if ($tugas['type_id'] == 3) {
+                    foreach ($retrieve_all_pertanyaan['results'] as $key_p => $val_p) {
+                        $retrieve_all_pilihan = $this->tugas_model->retrieve_all_pilihan($val_p['id']);
+                        $retrieve_all_pertanyaan['results'][$key_p]['pilihan'] = $retrieve_all_pilihan;
+                    
+                        # cari kunci pada pilihan
+                        $kunci_index   = '';
+                        $pilihan_kunci = array();
+                        foreach ($retrieve_all_pilihan as $key_o => $val_o) {
+                            if ($val_o['kunci']) {
+                                $pilihan_kunci[$key_o] = $val_o;
+                                $kunci_index = $key_o;
+                            }
                         }
-                    }
 
-                    $retrieve_all_pertanyaan['results'][$key_p]['pilihan_kunci'] = $pilihan_kunci;
-                    $retrieve_all_pertanyaan['results'][$key_p]['kunci_index']   = $kunci_index;
+                        $retrieve_all_pertanyaan['results'][$key_p]['pilihan_kunci'] = $pilihan_kunci;
+                        $retrieve_all_pertanyaan['results'][$key_p]['kunci_index']   = $kunci_index;
+                    }
                 }
 
                 $data['retrieve_all_pertanyaan'] = $retrieve_all_pertanyaan;
@@ -278,8 +360,8 @@ class Admin extends CI_Controller
                     if ($this->form_validation->run('admin/tugas/essay') == true) {
                         $post_pertanyaan = $this->input->post('pertanyaan', true);
 
-                        # update
-                        $this->tugas_model->create_pertanyaan($pertanyaan['id'], $post_pertanyaan, $pertanyaan['urutan'], $tugas['id']);
+                        # update pertanyaan
+                        $this->tugas_model->update_pertanyaan($pertanyaan['id'], $post_pertanyaan, $pertanyaan['urutan'], $tugas['id']);
                     
                         $save_success = 1;
                     }
@@ -345,22 +427,26 @@ class Admin extends CI_Controller
                 # ambil semua list pertanyaan + pilihan
                 $jumlah_total_soal = $this->tugas_model->count_pertanyaan($tugas['id']);
                 $retrieve_all_pertanyaan = $this->tugas_model->retrieve_all_pertanyaan($jumlah_total_soal, 1, $tugas['id']);
-                foreach ($retrieve_all_pertanyaan['results'] as $key_p => $val_p) {
-                    $retrieve_all_pilihan = $this->tugas_model->retrieve_all_pilihan($val_p['id']);
-                    $retrieve_all_pertanyaan['results'][$key_p]['pilihan'] = $retrieve_all_pilihan;
                 
-                    # cari kunci pada pilihan
-                    $kunci_index   = '';
-                    $pilihan_kunci = array();
-                    foreach ($retrieve_all_pilihan as $key_o => $val_o) {
-                        if ($val_o['kunci']) {
-                            $pilihan_kunci[$key_o] = $val_o;
-                            $kunci_index = $key_o;
+                # jika pilihan ganda
+                if ($tugas['type_id'] == 3) {
+                    foreach ($retrieve_all_pertanyaan['results'] as $key_p => $val_p) {
+                        $retrieve_all_pilihan = $this->tugas_model->retrieve_all_pilihan($val_p['id']);
+                        $retrieve_all_pertanyaan['results'][$key_p]['pilihan'] = $retrieve_all_pilihan;
+                    
+                        # cari kunci pada pilihan
+                        $kunci_index   = '';
+                        $pilihan_kunci = array();
+                        foreach ($retrieve_all_pilihan as $key_o => $val_o) {
+                            if ($val_o['kunci']) {
+                                $pilihan_kunci[$key_o] = $val_o;
+                                $kunci_index = $key_o;
+                            }
                         }
-                    }
 
-                    $retrieve_all_pertanyaan['results'][$key_p]['pilihan_kunci'] = $pilihan_kunci;
-                    $retrieve_all_pertanyaan['results'][$key_p]['kunci_index']   = $kunci_index;
+                        $retrieve_all_pertanyaan['results'][$key_p]['pilihan_kunci'] = $pilihan_kunci;
+                        $retrieve_all_pertanyaan['results'][$key_p]['kunci_index']   = $kunci_index;
+                    }
                 }
 
                 $data['retrieve_all_pertanyaan'] = $retrieve_all_pertanyaan;
@@ -461,19 +547,102 @@ class Admin extends CI_Controller
                 $data['pengajar']              = $pengajar;
                 $data['tugas']                 = $tugas;
 
-                //panggil colorbox
-                $html_js = load_comp_js(array(
-                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                    base_url('assets/comp/colorbox/act-tugas.js')
-                ));
-                $data['comp_js']      = $html_js;
-                $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+                # ambil semua list pertanyaan + pilihan
+                $jumlah_total_soal = $this->tugas_model->count_pertanyaan($tugas['id']);
+                $retrieve_all_pertanyaan = $this->tugas_model->retrieve_all_pertanyaan($jumlah_total_soal, 1, $tugas['id']);
+                
+                # jika pilihan ganda
+                if ($tugas['type_id'] == 3) {
+                    foreach ($retrieve_all_pertanyaan['results'] as $key_p => $val_p) {
+                        $retrieve_all_pilihan = $this->tugas_model->retrieve_all_pilihan($val_p['id']);
+                        $retrieve_all_pertanyaan['results'][$key_p]['pilihan'] = $retrieve_all_pilihan;
+                    
+                        # cari kunci pada pilihan
+                        $kunci_index   = '';
+                        $pilihan_kunci = array();
+                        foreach ($retrieve_all_pilihan as $key_o => $val_o) {
+                            if ($val_o['kunci']) {
+                                $pilihan_kunci[$key_o] = $val_o;
+                                $kunci_index = $key_o;
+                            }
+                        }
+
+                        $retrieve_all_pertanyaan['results'][$key_p]['pilihan_kunci'] = $pilihan_kunci;
+                        $retrieve_all_pertanyaan['results'][$key_p]['kunci_index']   = $kunci_index;
+                    }
+                }
+
+                $data['retrieve_all_pertanyaan'] = $retrieve_all_pertanyaan;
+                $data['pagination'] = $this->pager->view($retrieve_all_pertanyaan, 'admin/tugas/soal/'.$mapel_ajar['id'].'/'.$tugas['id'].'/');
+                break;
+
+            case 'sembunyikan':
+                $tugas_id = (int)$segment_4;
+                if (empty($tugas_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $tugas = $this->tugas_model->retrieve($tugas_id);
+                if (empty($tugas)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                # tampilkan tugas
+                $this->tugas_model->update(
+                    $tugas['id'],
+                    $tugas['mapel_ajar_id'],
+                    $tugas['type_id'],
+                    $tugas['judul'],
+                    $tugas['durasi'],
+                    $tugas['info'],
+                    0
+                );
+
+                $this->session->set_flashdata('tugas', get_alert('success', 'Tugas '.$tugas['judul'].' berhasil disembunyikan.'));
+                if (!empty($segment_5)) {
+                    redirect(deurl_redirect($segment_5));
+                } else {
+                    redirect('admin/tugas');
+                }
+                break;
+
+            case 'tampilkan':
+                $tugas_id = (int)$segment_4;
+                if (empty($tugas_id)) {
+                    redirect('admin/tugas');
+                }
+
+                $tugas = $this->tugas_model->retrieve($tugas_id);
+                if (empty($tugas)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas tidak ditemukan'));
+                    redirect('admin/tugas');
+                }
+
+                # tampilkan tugas
+                $this->tugas_model->update(
+                    $tugas['id'],
+                    $tugas['mapel_ajar_id'],
+                    $tugas['type_id'],
+                    $tugas['judul'],
+                    $tugas['durasi'],
+                    $tugas['info'],
+                    1
+                );
+
+                $this->session->set_flashdata('tugas', get_alert('success', 'Tugas '.$tugas['judul'].' berhasil ditampilkan.'));
+                if (!empty($segment_5)) {
+                    redirect(deurl_redirect($segment_5));
+                } else {
+                    redirect('admin/tugas');
+                }
                 break;
 
             case 'edit':
                 $content_file  = 'admin_tugas/edit.html';
                 $mapel_ajar_id = (int)$segment_4;
                 $tugas_id      = (int)$segment_5;
+                $uri_back      = (string)$segment_6;
                 if (empty($mapel_ajar_id)) {
                     redirect('admin/tugas');
                 }
@@ -495,12 +664,20 @@ class Admin extends CI_Controller
                     redirect('admin/tugas');
                 }
 
+                # ini agar bisa kembali ke halaman sebelumnya
+                if (empty($uri_back)) {
+                    $uri_back = site_url('admin/tugas/soal/'.$mapel_ajar['id'].'/'.$tugas['id']);
+                } else {
+                    $uri_back = deurl_redirect($uri_back);
+                }
+                $data['uri_back'] = $uri_back;
+
                 $mapel_kelas             = $this->mapel_model->retrieve_kelas($mapel_ajar['mapel_kelas_id']);
                 $pengajar                = $this->pengajar_model->retrieve($mapel_ajar['pengajar_id']);
                 $pengajar['link_foto']   = get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin']);
                 $pengajar['link_profil'] = site_url('admin/pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
 
-                $data['module_title']          = anchor('admin/tugas', 'Tugas').' / '.anchor('admin/tugas/soal/'.$mapel_ajar['id'].'/'.$tugas['id'], 'Manajemen Soal').' / Edit Tugas';
+                $data['module_title']          = anchor('admin/tugas', 'Tugas').' / '.anchor($uri_back, 'Manajemen Soal').' / Edit Tugas';
                 $data['comp_js']               = get_tinymce('info', 'simple');
                 $data['kelas']                 = $this->kelas_model->retrieve($mapel_kelas['kelas_id']);
                 $data['kelas']['jumlah_siswa'] = $this->siswa_model->count('kelas', array('kelas_id' => $mapel_kelas['kelas_id']));
@@ -526,7 +703,7 @@ class Admin extends CI_Controller
                     );
 
                     $this->session->set_flashdata('tugas', get_alert('success', 'Tugas berhasil diperbaharui'));
-                    redirect('admin/tugas/edit/'.$tugas['mapel_ajar_id'].'/'.$tugas_id);
+                    redirect($uri_back);
                 }
                 break;
 

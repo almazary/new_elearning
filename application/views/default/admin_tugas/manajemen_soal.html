@@ -8,10 +8,14 @@
     <div class="module-body">
         {{ get_flashdata('tugas')|raw }}
 
-        <div class="bs-callout bs-callout-info">
+        <div class="bs-callout bs-callout-info bs-callout-noborder">
             <div class="btn-group pull-right">
-                <a class="btn btn-default" href="{{ site_url('admin/tugas/edit/' ~ mapel_ajar.id ~ '/' ~ tugas.id) }}"><i class="icon-edit"></i> Edit Tugas</a>
-                <a class="btn btn-default"><i class="icon-ok"></i> Terbitkan Tugas</a>
+                <a class="btn btn-default" href="{{ site_url('admin/tugas/edit/' ~ mapel_ajar.id ~ '/' ~ tugas.id ~ '/' ~ enurl_redirect(current_url())) }}"><i class="icon-edit"></i> Edit Tugas</a>
+                {% if tugas.aktif == 0 %}
+                    {{ anchor('admin/tugas/tampilkan/' ~ tugas.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-ok"></i> Tampilkan</a>', {class: 'btn btn-default', 'data-toggle': 'tooltip', title: 'Tampilkan agar siswa dapat <br>mengerjakan tugas'})|raw }}
+                {% else %}
+                    {{ anchor('admin/tugas/sembunyikan/' ~ tugas.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-ok"></i> Sembunyikan</a>', {class: 'btn btn-success', 'data-toggle': 'tooltip', title: 'Sembunyikan agar siswa sudah <br>tidak dapat mengerjakan tugas'})|raw }}
+                {% endif %}
             </div>
             <h2 class="title-info" data-toggle="collapse" data-target="#demo">{{ tugas.judul }}</h2>
             <div id="demo" class="collapse">
@@ -42,7 +46,41 @@
 
         <br>
         <a href="{{ site_url('admin/tugas/add_question/' ~ mapel_ajar.id ~ '/' ~ tugas.id) }}" class="btn btn-primary">Tambah Soal</a>
+        <br><br>
 
+        {% for s_key, s in retrieve_all_pertanyaan.results %}
+            <div class="well well-small" style="box-shadow: none;border-radius: 0px;">
+            <table class="table table-condensed table-soal">
+                <tbody>
+                    <tr>
+                        <td width="5%" valign="top"><span style="font-size:15px;font-size: bold;">{{ s_key }}.</span></td>
+                        <td colspan="2">
+                            {{ s.pertanyaan|raw }}
+                        </td>
+                        <td width="10%">
+                            <div class="btn-group pull-right">
+                                {{ anchor('admin/tugas/edit_question/' ~ mapel_ajar.id ~ '/' ~ tugas.id ~ '/' ~ s.id, '<i class="icon-edit"></i>', {class: 'btn', 'data-toggle': 'tooltip', title: 'Edit Soal'})|raw }}
+                                {{ anchor('admin/tugas/delete_question/' ~ mapel_ajar.id ~ '/' ~ tugas.id ~ '/' ~ s.id, '<i class="icon-trash"></i>', {class: 'btn', 'data-toggle': 'tooltip', title: 'Hapus Soal', onclick:"return confirm('Anda yakin ingin menghapus soal?')"})|raw }}
+                            </div>
+                        </td>
+                    </tr>
+                    {% if s.pilihan is not empty %}
+                        {% for p_key, p in s.pilihan %}
+                        <tr>
+                            <td></td>
+                            <td width="3%"><b class="{{ (p.kunci == 1) ? 'badge badge-success' : 'badge' }}">{{ get_abjad(p_key) }}.</b></td>
+                            <td>{{ p.konten|raw }}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+            </div>
+        {% endfor %}
+
+        <br>
+        {{ pagination|raw }}
     </div>
 </div>
 {% endblock %}

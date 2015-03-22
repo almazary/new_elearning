@@ -2077,3 +2077,15 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', end
 }
 
 .title-info { line-height: 25px;margin-bottom: 15px;text-decoration: underline;cursor: pointer; }
+
+
+.table-soal th, .table-soal td {
+	border-top: none;
+} 
+
+.bs-callout-noborder {
+	border-left: none;
+}
+.badge, .label {
+	padding-bottom: 4px;
+}

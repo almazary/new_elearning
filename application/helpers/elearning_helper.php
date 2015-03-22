@@ -366,3 +366,11 @@ function pr($array) {
 function get_data_array($array, $index1, $index2) {
     return $array[$index1][$index2];
 }
+
+function enurl_redirect($current_url) {
+    return str_replace(array("%2F","%5C"), array("%252F","%255C"), urlencode($current_url));
+}
+
+function deurl_redirect($url) {
+    return urldecode(urldecode($url));
+}
