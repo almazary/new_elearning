@@ -48,7 +48,7 @@ class __TwigTemplate_2f84e77bfcb44e01e83cd758d3bf076b694ee0546ba32e73d1a1f758f2d
             <div class=\"control-group\">
                 <label class=\"control-label\">Nama <span class=\"text-error\">*</span></label>
                 <div class=\"controls\">
-                    <input type=\"text\" name=\"nama\" class=\"span12\" value=\"";
+                    <input type=\"text\" name=\"nama\" class=\"span8\" value=\"";
         // line 15
         echo twig_escape_filter($this->env, set_value("nama"), "html", null, true);
         echo "\">
@@ -61,7 +61,7 @@ class __TwigTemplate_2f84e77bfcb44e01e83cd758d3bf076b694ee0546ba32e73d1a1f758f2d
             <div class=\"control-group\">
                 <label class=\"control-label\">Deskripsi</label>
                 <div class=\"controls\">
-                    <textarea name=\"info\" id=\"info\" style=\"height:400px;width:100%;\">";
+                    <textarea name=\"info\" class=\"span12\" rows=\"5\">";
         // line 22
         echo set_value("info");
         echo "</textarea>

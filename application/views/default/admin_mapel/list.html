@@ -9,11 +9,12 @@
         {{ get_flashdata('mapel')|raw }}
 
         <div class="row-fluid">
-            <div class="span4">
+            <div class="span2">
                 <a href="{{ site_url('admin/mapel/add') }}" class="btn btn-primary">Tambah Mapel</a>
             </div>
-            <div class="span8">
-                <p class="text-warning"><b>NB: </b> Matapelajaran tidak dapat dihapus namun dapat di ubah menjadi tidak aktif.</p>
+            <div class="span10">
+                Atur matapelajaran yang ada di sekolah<br>
+                <b>Note: </b> Matapelajaran tidak dapat dihapus namun dapat di ubah menjadi tidak aktif
             </div>
         </div>
 
@@ -21,7 +22,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th width="8%">No</th>
+                    <th width="5%">No</th>
                     <th>Matapelajaran</th>
                     <th>Aktif</th>
                     <th width="15%"></th>
@@ -33,6 +34,7 @@
                     <td>{{ no }}.</td>
                     <td>
                         {{ v.nama }}
+                        <br><small>{{ v.info|nl2br }}</small>
                     </td>
                     <td>
                         {% if v.aktif == 1 %}
@@ -42,10 +44,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <div class="btn-group">
-                          <a class="btn" href="{{ site_url('admin/mapel/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a>
-                          <a class="btn" href="{{ site_url('admin/mapel/edit/' ~ v.id) }}"><i class="icon-edit"></i> Edit</a>
-                        </div>
+                        <a class="btn btn-default" href="{{ site_url('admin/mapel/edit/' ~ v.id ~ '/' ~ enurl_redirect(current_url())) }}"><i class="icon-edit"></i> Edit</a>
                     </td>
                 </tr>
                 {% endfor %}

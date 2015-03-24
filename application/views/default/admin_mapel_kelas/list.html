@@ -8,11 +8,57 @@
     <div class="module-body">
         {{ get_flashdata('mapel')|raw }}
 
-        <div class="bs-callout bs-callout-info">
-        <p><b>Matapelajaran Kelas</b> digunakan untuk mengatur matapelajaran yang ada pada masing - masing kelas</p>
+        <div class="row-fluid">
+            <div class="span6">
+                <div class="panel panel-default">
+                    <div class="panel-heading as-link" data-toggle="collapse" data-target="#form-filter">
+                        <b><i class="icon-search"></i> Filter Kelas</b>
+                    </div>
+                    <div id="form-filter" class="collapse">
+                    <div class="panel-body">
+                        <form class="form-horizontal row-fluid" method="post" action="{{ site_url('admin/mapel_kelas/list') }}">
+                            <table class="table table-form table-condensed">
+                                <tr>
+                                    <td class="pull-right">Parent Kelas</td>
+                                    <td>
+                                        <select name="parent_kelas" id="parent-kelas">
+                                            <option>--pilih--</option>
+                                            {% for pk in parent_kelas %}
+                                            <option value="{{ pk.id }}" {{ (filter.parent_id == pk.id) ? 'selected' }}>{{ pk.nama }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="pull-right">Sub Kelas</td>
+                                    <td>
+                                        <select name="sub_kelas" id="sub-kelas">
+                                            <option>--pilih--</option>
+                                            {% if sub_kelas is not empty %}
+                                                {% for sk in sub_kelas %}
+                                                <option value="{{ sk.id }}" {{ (filter.sub_id == sk.id) ? 'selected' }}>{{ sk.nama }}</option>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <button class="btn btn-small btn-primary" type="submit">Submit</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <div class="span6">
+                Atur matapelajaran yang ada pada masing - masing kelas
+            </div>
         </div>
 
-        <br>
         {{ mapel_kelas_hirarki|raw }}
 
     </div>

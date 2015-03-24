@@ -15,7 +15,7 @@
         </div>
         <br>
 
-        {{ form_open('admin/mapel_kelas/add/' ~ parent['id'] ~ '/' ~ kelas['id']) | raw }}
+        {{ form_open('admin/mapel_kelas/add/' ~ parent['id'] ~ '/' ~ kelas['id'] ~ '/' ~ enurl_redirect(uri_back)) | raw }}
         <table class="table table-striped">
         <tbody>
             {% for m in mapels %}
@@ -23,9 +23,10 @@
             <tr>
                 <td>
                     {% if m.aktif != 1 %}
-                    <span class="badge pull-right">Matapelajaran Tidak Aktif</span>
+                    <span class="badge badge-warning pull-right">Matapelajaran Tidak Aktif</span>
                     {% endif %}
                     <label><input type="checkbox" name="mapel[]" value="{{ m.id }}" style="margin-top:-2px;margin-right:5px;" {{ (m.aktif != 1) ? 'disabled' : '' }} {{ (checked is empty) ? '' : 'checked' }}> {{ m.nama }}</label>
+                    <small>{{ m.info|nl2br }}</small>
                 </td>
             </tr>
             {% endfor %}
@@ -33,7 +34,7 @@
         </table>
         <br>
         <button type="submit" class="btn btn-primary">Simpan</button>
-        <a href="{{ site_url('admin/mapel_kelas/#parent-' ~ parent['id']) }}" class="btn">Kembali</a>
+        <a href="{{ uri_back }}" class="btn btn-default">Kembali</a>
         {{ form_close()|raw }}
 
     </div>

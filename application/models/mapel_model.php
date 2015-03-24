@@ -209,7 +209,6 @@ class Mapel_model extends CI_Model
         $id = (int)$id;
 
         $this->db->where('id', $id);
-        $this->db->where('aktif', 1);
         $result = $this->db->get('mapel', 1);
         return $result->row_array();
     }

@@ -43,7 +43,7 @@ class __TwigTemplate_35bb815802a5180dd7c8e97f6c0c40a1eabb2b4db23228355d8eabfd1a8
 
         ";
         // line 11
-        echo form_open(("admin/mapel/edit/" . $this->getAttribute((isset($context["mapel"]) ? $context["mapel"] : null), "id")), array("class" => "form-horizontal row-fluid"));
+        echo form_open(((("admin/mapel/edit/" . $this->getAttribute((isset($context["mapel"]) ? $context["mapel"] : null), "id")) . "/") . enurl_redirect((isset($context["uri_back"]) ? $context["uri_back"] : null))), array("class" => "form-horizontal row-fluid"));
         echo "
             <div class=\"control-group\">
                 <label class=\"control-label\">Nama <span class=\"text-error\">*</span></label>
@@ -61,7 +61,7 @@ class __TwigTemplate_35bb815802a5180dd7c8e97f6c0c40a1eabb2b4db23228355d8eabfd1a8
             <div class=\"control-group\">
                 <label class=\"control-label\">Deskripsi</label>
                 <div class=\"controls\">
-                    <textarea name=\"info\" id=\"info\" style=\"height:400px;\">";
+                    <textarea name=\"info\" class=\"span12\" rows=\"5\">";
         // line 22
         echo set_value("info", $this->getAttribute((isset($context["mapel"]) ? $context["mapel"] : null), "info"));
         echo "</textarea>
@@ -84,7 +84,7 @@ class __TwigTemplate_35bb815802a5180dd7c8e97f6c0c40a1eabb2b4db23228355d8eabfd1a8
                     <button type=\"submit\" class=\"btn btn-primary\">Update</button>
                     <a href=\"";
         // line 37
-        echo twig_escape_filter($this->env, site_url("admin/mapel"), "html", null, true);
+        echo twig_escape_filter($this->env, (isset($context["uri_back"]) ? $context["uri_back"] : null), "html", null, true);
         echo "\" class=\"btn\">Batal</a>
                 </div>
             </div>

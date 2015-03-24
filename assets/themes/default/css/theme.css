@@ -2087,5 +2087,14 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', end
 	border-left: none;
 }
 .badge, .label {
-	padding-bottom: 4px;
+	padding-bottom: 3px;
+}
+.label {
+	border-radius: 2px;
+}
+.table-form th, .table-form td {
+	border-top: none;
+}
+.as-link {
+	cursor: pointer;
 }

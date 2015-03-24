@@ -12,11 +12,17 @@ class Kelas_model extends CI_Model
      * Method untuk mengambi semua data kelas
      *
      * @param  null|integer $parent_id
+     * @param  array        $array_where
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
-    public function retrieve_all($parent_id = null) {
+    public function retrieve_all($parent_id = null, $array_where = array()) {
         $this->db->where('parent_id', $parent_id);
+
+        foreach ($array_where as $key => $value) {
+            $this->db->where($key, $value);
+        }
+
         $this->db->order_by('urutan', 'ASC');
         $result = $this->db->get('kelas');
         return $result->result_array();

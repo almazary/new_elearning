@@ -71,7 +71,7 @@ class __TwigTemplate_5e9be21e79c49e313b4c30919792b145d76ccb359710f0fc8fdd1add284
             </div>
         </div>
 
-        <p class=\"text-warning\"><b>NB:</b> Kelas tidak dapat di hapus namun dapat di ubah menjadi tidak aktif.</p>
+        <p><b>Note:</b> Kelas tidak dapat di hapus namun dapat di ubah menjadi tidak aktif</p>
 
         ";
         // line 31

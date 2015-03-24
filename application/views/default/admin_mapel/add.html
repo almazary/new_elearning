@@ -12,14 +12,14 @@
             <div class="control-group">
                 <label class="control-label">Nama <span class="text-error">*</span></label>
                 <div class="controls">
-                    <input type="text" name="nama" class="span12" value="{{ set_value('nama') }}">
+                    <input type="text" name="nama" class="span8" value="{{ set_value('nama') }}">
                     <br>{{ form_error('nama')|raw }}
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Deskripsi</label>
                 <div class="controls">
-                    <textarea name="info" id="info" style="height:400px;width:100%;">{{ set_value('info')|raw }}</textarea>
+                    <textarea name="info" class="span12" rows="5">{{ set_value('info')|raw }}</textarea>
                 </div>
             </div>
             <div class="control-group">

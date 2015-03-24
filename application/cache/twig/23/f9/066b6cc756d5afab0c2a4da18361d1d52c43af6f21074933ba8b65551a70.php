@@ -42,14 +42,15 @@ class __TwigTemplate_23f9066b6cc756d5afab0c2a4da18361d1d52c43af6f21074933ba8b655
         echo "
 
         <div class=\"row-fluid\">
-            <div class=\"span4\">
+            <div class=\"span2\">
                 <a href=\"";
         // line 13
         echo twig_escape_filter($this->env, site_url("admin/mapel/add"), "html", null, true);
         echo "\" class=\"btn btn-primary\">Tambah Mapel</a>
             </div>
-            <div class=\"span8\">
-                <p class=\"text-warning\"><b>NB: </b> Matapelajaran tidak dapat dihapus namun dapat di ubah menjadi tidak aktif.</p>
+            <div class=\"span10\">
+                Atur matapelajaran yang ada di sekolah<br>
+                <b>Note: </b> Matapelajaran tidak dapat dihapus namun dapat di ubah menjadi tidak aktif
             </div>
         </div>
 
@@ -57,7 +58,7 @@ class __TwigTemplate_23f9066b6cc756d5afab0c2a4da18361d1d52c43af6f21074933ba8b655
         <table class=\"table table-striped\">
             <thead>
                 <tr>
-                    <th width=\"8%\">No</th>
+                    <th width=\"5%\">No</th>
                     <th>Matapelajaran</th>
                     <th>Aktif</th>
                     <th width=\"15%\"></th>
@@ -65,47 +66,45 @@ class __TwigTemplate_23f9066b6cc756d5afab0c2a4da18361d1d52c43af6f21074933ba8b655
             </thead>
             <tbody>
                 ";
-        // line 31
+        // line 32
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["mapels"]) ? $context["mapels"] : null));
         foreach ($context['_seq'] as $context["no"] => $context["v"]) {
-            // line 32
+            // line 33
             echo "                <tr>
                     <td>";
-            // line 33
+            // line 34
             echo twig_escape_filter($this->env, (isset($context["no"]) ? $context["no"] : null), "html", null, true);
             echo ".</td>
                     <td>
                         ";
-            // line 35
+            // line 36
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "nama"), "html", null, true);
             echo "
+                        <br><small>";
+            // line 37
+            echo nl2br(twig_escape_filter($this->env, $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "info"), "html", null, true));
+            echo "</small>
                     </td>
                     <td>
                         ";
-            // line 38
+            // line 40
             if (($this->getAttribute((isset($context["v"]) ? $context["v"] : null), "aktif") == 1)) {
-                // line 39
+                // line 41
                 echo "                        <i class=\"icon-ok\"></i>
                         ";
             } else {
-                // line 41
+                // line 43
                 echo "                        <i class=\"icon-minus\"></i>
                         ";
             }
-            // line 43
+            // line 45
             echo "                    </td>
                     <td>
-                        <div class=\"btn-group\">
-                          <a class=\"btn\" href=\"";
-            // line 46
-            echo twig_escape_filter($this->env, site_url(("admin/mapel/detail/" . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"))), "html", null, true);
-            echo "\"><i class=\"icon-zoom-in\"></i> Detail</a>
-                          <a class=\"btn\" href=\"";
+                        <a class=\"btn btn-default\" href=\"";
             // line 47
-            echo twig_escape_filter($this->env, site_url(("admin/mapel/edit/" . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"))), "html", null, true);
+            echo twig_escape_filter($this->env, site_url(((("admin/mapel/edit/" . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id")) . "/") . enurl_redirect(current_url()))), "html", null, true);
             echo "\"><i class=\"icon-edit\"></i> Edit</a>
-                        </div>
                     </td>
                 </tr>
                 ";
@@ -113,13 +112,13 @@ class __TwigTemplate_23f9066b6cc756d5afab0c2a4da18361d1d52c43af6f21074933ba8b655
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['no'], $context['v'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 52
+        // line 51
         echo "            </tbody>
         </table>
 
         <br>
         ";
-        // line 56
+        // line 55
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
     </div>
@@ -139,6 +138,6 @@ class __TwigTemplate_23f9066b6cc756d5afab0c2a4da18361d1d52c43af6f21074933ba8b655
 
     public function getDebugInfo()
     {
-        return array (  123 => 56,  117 => 52,  106 => 47,  102 => 46,  97 => 43,  93 => 41,  89 => 39,  87 => 38,  81 => 35,  76 => 33,  73 => 32,  69 => 31,  48 => 13,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
+        return array (  122 => 55,  116 => 51,  106 => 47,  102 => 45,  98 => 43,  94 => 41,  92 => 40,  86 => 37,  82 => 36,  77 => 34,  74 => 33,  70 => 32,  48 => 13,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
     }
 }

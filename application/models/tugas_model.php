@@ -816,7 +816,8 @@ class Tugas_model extends CI_Model
             'judul'         => $judul,
             'info'          => $info,
             'durasi'        => $durasi,
-            'aktif'         => 0
+            'aktif'         => 0,
+            'tgl_buat'      => date('Y-m-d H:i:s')
         );
         $this->db->insert('tugas', $data);
         return $this->db->insert_id();

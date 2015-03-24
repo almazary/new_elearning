@@ -53,7 +53,7 @@ class __TwigTemplate_42ef813f03298479b9687cd34aa10558e4466f8b977b329b1ee7db708d9
 
         ";
         // line 18
-        echo form_open(((("admin/mapel_kelas/add/" . $this->getAttribute((isset($context["parent"]) ? $context["parent"] : null), "id", array(), "array")) . "/") . $this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "id", array(), "array")));
+        echo form_open(((((("admin/mapel_kelas/add/" . $this->getAttribute((isset($context["parent"]) ? $context["parent"] : null), "id", array(), "array")) . "/") . $this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "id", array(), "array")) . "/") . enurl_redirect((isset($context["uri_back"]) ? $context["uri_back"] : null))));
         echo "
         <table class=\"table table-striped\">
         <tbody>
@@ -72,7 +72,7 @@ class __TwigTemplate_42ef813f03298479b9687cd34aa10558e4466f8b977b329b1ee7db708d9
             // line 25
             if (($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "aktif") != 1)) {
                 // line 26
-                echo "                    <span class=\"badge pull-right\">Matapelajaran Tidak Aktif</span>
+                echo "                    <span class=\"badge badge-warning pull-right\">Matapelajaran Tidak Aktif</span>
                     ";
             }
             // line 28
@@ -85,6 +85,10 @@ class __TwigTemplate_42ef813f03298479b9687cd34aa10558e4466f8b977b329b1ee7db708d9
             echo "> ";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "nama"), "html", null, true);
             echo "</label>
+                    <small>";
+            // line 29
+            echo nl2br(twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "info"), "html", null, true));
+            echo "</small>
                 </td>
             </tr>
             ";
@@ -92,17 +96,17 @@ class __TwigTemplate_42ef813f03298479b9687cd34aa10558e4466f8b977b329b1ee7db708d9
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['m'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 32
+        // line 33
         echo "        </tbody>
         </table>
         <br>
         <button type=\"submit\" class=\"btn btn-primary\">Simpan</button>
         <a href=\"";
-        // line 36
-        echo twig_escape_filter($this->env, site_url(("admin/mapel_kelas/#parent-" . $this->getAttribute((isset($context["parent"]) ? $context["parent"] : null), "id", array(), "array"))), "html", null, true);
-        echo "\" class=\"btn\">Kembali</a>
-        ";
         // line 37
+        echo twig_escape_filter($this->env, (isset($context["uri_back"]) ? $context["uri_back"] : null), "html", null, true);
+        echo "\" class=\"btn btn-default\">Kembali</a>
+        ";
+        // line 38
         echo form_close();
         echo "
 
@@ -123,6 +127,6 @@ class __TwigTemplate_42ef813f03298479b9687cd34aa10558e4466f8b977b329b1ee7db708d9
 
     public function getDebugInfo()
     {
-        return array (  106 => 37,  102 => 36,  96 => 32,  79 => 28,  75 => 26,  73 => 25,  69 => 23,  66 => 22,  62 => 21,  56 => 18,  48 => 13,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
+        return array (  110 => 38,  106 => 37,  100 => 33,  90 => 29,  79 => 28,  75 => 26,  73 => 25,  69 => 23,  66 => 22,  62 => 21,  56 => 18,  48 => 13,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
     }
 }

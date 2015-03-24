@@ -143,6 +143,17 @@ class Admin extends CI_Controller
                         echo '<option value="'.$v['id'].'">'.$m['nama'].'</option>';
                     }
                     break;
+
+                case 'get_subkelas':
+                    $parent_id = $this->input->post('parent_kelas_id', true);
+                    if (!empty($parent_id)) {
+                        echo '<option value="">--pilih--</option>';
+                        $subkelas = $this->kelas_model->retrieve_all($parent_id, array('aktif' => 1));
+                        foreach ($subkelas as $sub) {
+                            echo '<option value="'.$sub['id'].'">'.$sub['nama'].'</option>';
+                        }
+                    }
+                    break;
             }
         }
     }
@@ -2597,17 +2608,21 @@ class Admin extends CI_Controller
         $this->twig->display($content_file, $data);
     }
 
-    function mapel_kelas($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '')
+    function mapel_kelas($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '', $segment_6 = '')
     {
         $this->most_login();
 
         $data['web_title'] = 'Matapelajaran Kelas | Administrator';
+        $data['comp_js']   = load_comp_js(array(
+            base_url('assets/comp/jquery/ajax.js')
+        ));
 
         switch ($act) {
             case 'remove':
                 $parent_id      = (int)$segment_3;
                 $kelas_id       = (int)$segment_4;
                 $mapel_kelas_id = (int)$segment_5;
+                $uri_back       = (string)$segment_6;
 
                 //ambil parent
                 $parent = $this->kelas_model->retrieve($parent_id);
@@ -2618,18 +2633,27 @@ class Admin extends CI_Controller
                 $kelas = $this->kelas_model->retrieve($kelas_id);
                 if (empty($kelas)) {
                     redirect('admin/mapel_kelas');
+                }
+
+                if (empty($uri_back)) {
+                    $uri_back = ('admin/mapel_kelas/#subkelas-'.$kelas_id);
+                } else {
+                    $uri_back = deurl_redirect($uri_back);
+                    $uri_back = rtrim($uri_back, '/');
+                    $uri_back = $uri_back.'/#subkelas-'.$kelas_id;
                 }
 
                 //hapus data
                 $this->mapel_model->delete_kelas($mapel_kelas_id);
 
-                $this->session->set_flashdata('mapel', get_alert('warning', 'Matapelajaran kelas berhasil di hapus'));
-                redirect('admin/mapel_kelas/#parent-'.$parent_id);
+                $this->session->set_flashdata('mapel', get_alert('warning', 'Matapelajaran kelas berhasil dihapus.'));
+                redirect($uri_back);
                 break;
 
             case 'add':
                 $parent_id = (int)$segment_3;
                 $kelas_id  = (int)$segment_4;
+                $uri_back  = (string)$segment_5;
 
                 //ambil parent
                 $parent = $this->kelas_model->retrieve($parent_id);
@@ -2642,8 +2666,15 @@ class Admin extends CI_Controller
                     redirect('admin/mapel_kelas');
                 }
 
+                if (empty($uri_back)) {
+                    $uri_back = site_url('admin/mapel_kelas/add/'.$parent_id.'/'.$kelas_id);
+                } else {
+                    $uri_back = deurl_redirect($uri_back);
+                }
+                $data['uri_back'] = $uri_back;
+
                 $content_file         = 'admin_mapel_kelas/add.html';
-                $data['module_title'] = anchor('admin/mapel_kelas/#parent-'.$parent_id, 'Matapelajaran Kelas').' / Atur Matapelajaran';
+                $data['module_title'] = anchor($uri_back, 'Matapelajaran Kelas').' / Atur Matapelajaran';
                 $data['kelas']        = $kelas;
                 $data['parent']       = $parent;
 
@@ -2689,16 +2720,47 @@ class Admin extends CI_Controller
                     }
 
                     $this->session->set_flashdata('mapel', get_alert('success', 'Matapelajaran kelas berhasil di atur'));
-                    redirect('admin/mapel_kelas/add/'.$parent_id.'/'.$kelas_id);
+                    redirect('admin/mapel_kelas/add/'.$parent_id.'/'.$kelas_id.'/'.enurl_redirect($uri_back));
 
                 }
                 break;
 
             default:
             case 'list':
-                $content_file                = 'admin_mapel_kelas/list.html';
+                # detect post
+                if (!empty($_POST)) {
+                    $post_parent_id = (int)$this->input->post('parent_kelas', true);
+                    $post_sub_id    = (int)$this->input->post('sub_kelas', true);
+                    redirect('admin/mapel_kelas/list/'.$post_parent_id.'/'.$post_sub_id);
+                }
+
+                $content_file    = 'admin_mapel_kelas/list.html';
+                $parent_kelas_id = (int)$segment_3;
+                $sub_kelas_id    = (int)$segment_4;
+
+                $data['filter']['parent_id'] = $parent_kelas_id;
+                $data['filter']['sub_id']    = $sub_kelas_id;
+
+                if (!empty($parent_kelas_id)) {
+                    $data['filter']['result']['parent'] = $this->kelas_model->retrieve($parent_kelas_id);
+                    $data['sub_kelas'] = $this->kelas_model->retrieve_all($parent_kelas_id, array('aktif' => 1));
+                }
+
+                if (!empty($sub_kelas_id)) {
+                    $data['filter']['result']['sub'] = $this->kelas_model->retrieve($sub_kelas_id);
+                }
+
                 $data['module_title']        = 'Matapelajaran Kelas';
-                $data['mapel_kelas_hirarki'] = $this->mapel_kelas_hirarki();
+                $data['mapel_kelas_hirarki'] = $this->mapel_kelas_hirarki('', array('parent_id' => $parent_kelas_id, 'sub_id' => $sub_kelas_id));
+                $data['parent_kelas']        = $this->kelas_model->retrieve_all(null, array('aktif' => 1));
+                
+                # panggil colorbox
+                $html_js = load_comp_js(array(
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-mapel-kelas.js')
+                ));
+                $data['comp_js']      = $html_js;
+                $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
                 break;
         }
 
@@ -2706,16 +2768,16 @@ class Admin extends CI_Controller
         $this->twig->display($content_file, $data);
     }
 
-    private function mapel_kelas_hirarki($view = ''){
-        $parent = $this->kelas_model->retrieve_all(null);
+    private function mapel_kelas_hirarki($view = '', $params = array()){
+        $parent = $this->kelas_model->retrieve_all(null, !empty($params['parent_id']) ? array('id' => $params['parent_id']) : array());
 
         $return = '';
         foreach ($parent as $p) {
             $return .= '<div class="parent-kelas" id="parent-'.$p['id'].'">'.$p['nama'].'</div>';
 
-            $sub_kelas = $this->kelas_model->retrieve_all($p['id']);
+            $sub_kelas = $this->kelas_model->retrieve_all($p['id'], !empty($params['sub_id']) ? array('id' => $params['sub_id']) : array());
             foreach ($sub_kelas as $s) {
-                $return .= '<div class="panel panel-default" style="margin-left:25px;margin-bottom:5px;">';
+                $return .= '<div class="panel panel-info" id="subkelas-'.$s['id'].'" style="margin-left:25px;margin-bottom:5px;">';
 
                 switch ($view) {
                     case 'materi':
@@ -2735,7 +2797,8 @@ class Admin extends CI_Controller
                                 }
                                 $return .= '<tr>
                                     <td>
-                                        '.$m['nama'].'
+                                        '.$m['nama'].'<br>
+                                        <small>'.nl2br($m['info']).'</small>
                                         <div class="btn-group pull-right">
                                           <a class="btn" href="'.site_url('admin/materi/detail/'.$p['id'].'/'.$s['id'].'/'.$v['id']).'"><i class="icon-zoom-in"></i> Materi ('.$this->materi_model->count_materi($v['id']).')</a>
                                         </div>
@@ -2752,12 +2815,12 @@ class Admin extends CI_Controller
                     default:
                         $return .= '<div class="panel-heading">
                             '.$s['nama'].'&nbsp;&nbsp;'.(($s['aktif'] == 0) ? '<span class="label label-warning">Kelas tidak aktif</span>' : '').'
-                            '.(($s['aktif'] == 1) ? '<a href="'.site_url('admin/mapel_kelas/add/'.$p['id'].'/'.$s['id']).'" class="btn pull-right" style="margin-top:-5px;"><i class="icon-wrench"></i> Atur Matapelajaran</a>' : '').'
+                            '.(($s['aktif'] == 1) ? '<a href="'.site_url('admin/mapel_kelas/add/'.$p['id'].'/'.$s['id'].'/'.enurl_redirect(current_url())).'" class="btn btn-info pull-right" style="margin-top:-5px;"><i class="icon-wrench"></i> Atur Matapelajaran</a>' : '').'
                         </div>';
                         if ($s['aktif'] == 1) {
                             $return .= '<div class="panel-body">';
                             $retrieve_all = $this->mapel_model->retrieve_all_kelas(null, $s['id']);
-                            $return .= '<table class="table table-striped">
+                            $return .= '<table class="table table-striped table-condensed">
                             <tbody>';
                                 foreach ($retrieve_all as $v):
                                 $m = $this->mapel_model->retrieve($v['mapel_id']);
@@ -2766,10 +2829,11 @@ class Admin extends CI_Controller
                                 }
                                 $return .= '<tr>
                                     <td>
-                                        '.$m['nama'].'
                                         <div class="btn-group pull-right">
-                                          <a class="btn" href="'.site_url('admin/mapel_kelas/remove/'.$p['id'].'/'.$s['id'].'/'.$v['id']).'" onclick="return confirm(\'Anda yakin ingin menghapus?\')"><i class="icon-trash"></i> Hapus</a>
+                                            <a class="btn btn-default" href="'.site_url('admin/mapel_kelas/remove/'.$p['id'].'/'.$s['id'].'/'.$v['id'].'/'.enurl_redirect(current_url())).'" onclick="return confirm(\'Anda yakin ingin menghapus?\')"><i class="icon-trash"></i> Hapus</a>
                                         </div>
+                                        '.$m['nama'].'<br>
+                                        <small>'.nl2br($m['info']).'</small>
                                     </td>
                                 </tr>';
                                 endforeach;
@@ -2788,7 +2852,7 @@ class Admin extends CI_Controller
         return $return;
     }
 
-    function mapel($act = 'list', $segment_3 = '')
+    function mapel($act = 'list', $segment_4 = '', $segment_5 = '')
     {
         $this->most_login();
 
@@ -2797,7 +2861,8 @@ class Admin extends CI_Controller
         switch ($act) {
             case 'edit':
                 $content_file = 'admin_mapel/edit.html';
-                $id = (int)$segment_3;
+                $id           = (int)$segment_4;
+                $uri_back     = (string)$segment_5;
 
                 //ambil satu
                 $retrieve = $this->mapel_model->retrieve($id);
@@ -2805,12 +2870,17 @@ class Admin extends CI_Controller
                     redirect('admin/mapel');
                 }
 
-                $data['module_title'] = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Edit';
+                if (!empty($uri_back)) {
+                    $uri_back = deurl_redirect($uri_back);
+                } else {
+                    $uri_back = site_url('admin/mapel');
+                }
+
+                $data['uri_back']     = $uri_back;
+                $data['module_title'] = anchor($uri_back, 'Manajemen Matapelajaran').' / Edit';
                 $data['mapel']        = $retrieve;
-                $data['comp_js']      = get_tinymce('info');
 
                 if ($this->form_validation->run('admin/mapel/edit') == TRUE) {
-
                     $nama = $this->input->post('nama', TRUE);
                     $info = $this->input->post('info', TRUE);
                     $aktif = $this->input->post('status', TRUE);
@@ -2820,29 +2890,14 @@ class Admin extends CI_Controller
 
                     $this->mapel_model->update($id, $nama, $info, $aktif);
 
-                    $this->session->set_flashdata('mapel', get_alert('success', 'Matapelajaran berhasil di perbaharui'));
-                    redirect('admin/mapel');
+                    $this->session->set_flashdata('mapel', get_alert('success', 'Matapelajaran berhasil di perbaharui.'));
+                    redirect($uri_back);
                 }
-                break;
-
-            case 'detail':
-                $content_file = 'admin_mapel/detail.html';
-                $id = (int)$segment_3;
-
-                //ambil satu
-                $retrieve = $this->mapel_model->retrieve($id);
-                if (empty($retrieve)) {
-                    redirect('admin/mapel');
-                }
-
-                $data['module_title'] = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Detail';
-                $data['mapel']        = $retrieve;
                 break;
 
             case 'add':
                 $content_file         = 'admin_mapel/add.html';
                 $data['module_title'] = anchor('admin/mapel', 'Manajemen Matapelajaran').' / Tambah';
-                $data['comp_js']      = get_tinymce('info');
 
                 if ($this->form_validation->run() == TRUE) {
                     //buat mapel
@@ -2850,7 +2905,7 @@ class Admin extends CI_Controller
                     $info = $this->input->post('info', TRUE);
                     $this->mapel_model->create($nama, $info);
 
-                    $this->session->set_flashdata('mapel', get_alert('success', 'Matapelajaran baru berhasil di simpan'));
+                    $this->session->set_flashdata('mapel', get_alert('success', 'Matapelajaran baru berhasil disimpan.'));
                     redirect('admin/mapel');
                 }
                 break;
@@ -2860,7 +2915,7 @@ class Admin extends CI_Controller
                 $content_file         = 'admin_mapel/list.html';
                 $data['module_title'] = 'Manajemen Matapelajaran';
 
-                $page_no = (int)$segment_3;
+                $page_no = (int)$segment_4;
                 $page_no = empty($page_no) ? 1 : $page_no;
 
                 //ambil semua data mepel
