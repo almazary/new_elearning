@@ -106,11 +106,11 @@
                 <tr>
                     <th>Kelas</th>
                     <td>
-                        <p style="margin-top:0px; margin-bottom:5px;">
+                        <ul class="unstyled inline" style="margin-left: -5px;">
                             {% for k in kelas_all %}
-                                <label class="checkbox inline"><input type="checkbox" name="kelas_id[]" value="{{ k.id }}" {{ set_checkbox('kelas_id[]', k.id, (filter.kelas_id is defined and k.id in filter.kelas_id) ? TRUE : FALSE) }}>{{ k.nama }}</label>
+                                <li><label class="checkbox inline"><input type="checkbox" name="kelas_id[]" value="{{ k.id }}" {{ set_checkbox('kelas_id[]', k.id, (filter.kelas_id is defined and k.id in filter.kelas_id) ? TRUE : FALSE) }}>{{ k.nama }}</label></li>
                             {% endfor %}
-                        </p>
+                        </ul>
                     </td>
                 <tr>
                 <tr>
@@ -190,9 +190,9 @@
                     </td>
                     <td>
                         <ul class="nav nav-pills" style="margin-bottom:0px;">
-                            <li><a class="btn btn-small" href="{{ site_url('admin/siswa/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('admin/siswa/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
                             <li class="dropdown">
-                                <a class="btn btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
+                                <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
                                     <li>{{ anchor('admin/siswa/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
                                     <li>{{ anchor('admin/siswa/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>

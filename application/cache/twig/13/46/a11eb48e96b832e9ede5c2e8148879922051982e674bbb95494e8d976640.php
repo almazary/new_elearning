@@ -7,16 +7,17 @@ class __TwigTemplate_1346a11eb48e96b832e9ede5c2e8148879922051982e674bbb95494e8d9
     {
         parent::__construct($env);
 
-        $this->parent = $this->env->loadTemplate("layout-private.html");
+        $this->parent = $this->env->loadTemplate("layout-detail-materi.html");
 
         $this->blocks = array(
+            'title' => array($this, 'block_title'),
             'content' => array($this, 'block_content'),
         );
     }
 
     protected function doGetParent(array $context)
     {
-        return "layout-private.html";
+        return "layout-detail-materi.html";
     }
 
     protected function doDisplay(array $context, array $blocks = array())
@@ -25,156 +26,119 @@ class __TwigTemplate_1346a11eb48e96b832e9ede5c2e8148879922051982e674bbb95494e8d9
     }
 
     // line 3
+    public function block_title($context, array $blocks = array())
+    {
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "judul"), "html", null, true);
+    }
+
+    // line 5
     public function block_content($context, array $blocks = array())
     {
-        // line 4
-        echo "<div class=\"module\">
-    <div class=\"module-head\">
-        <h3>";
         // line 6
-        echo (isset($context["module_title"]) ? $context["module_title"] : null);
-        echo "</h3>
-    </div>
-    <div class=\"module-body\">
+        echo "<div id=\"wrap\">
+    <div class=\"container\">
+        <h1 class=\"title\">";
+        // line 8
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "judul"), "html", null, true);
+        echo "</h1>
         ";
         // line 9
-        echo get_flashdata("materi");
-        echo "
-
-        <div class=\"bs-callout bs-callout-info\">
-            <div class=\"btn-group pull-right\" style=\"margin-top:-5px;\">
+        if ((!array_key_exists("error", $context))) {
+            // line 10
+            echo "        <ul class=\"unstyled inline ul-top\">
+            <li><b class=\"title-info\">";
+            // line 11
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "mapel"), "nama"), "html", null, true);
+            echo "</b> </li>
+            ";
+            // line 12
+            $context['_parent'] = (array) $context;
+            $context['_seq'] = twig_ensure_traversable($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "materi_kelas"));
+            foreach ($context['_seq'] as $context["_key"] => $context["mk"]) {
+                // line 13
+                echo "                <li>";
+                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["mk"]) ? $context["mk"] : null), "nama"), "html", null, true);
+                echo "</li>
+            ";
+            }
+            $_parent = $context['_parent'];
+            unset($context['_seq'], $context['_iterated'], $context['_key'], $context['mk'], $context['_parent'], $context['loop']);
+            $context = array_intersect_key($context, $_parent) + $_parent;
+            // line 15
+            echo "            <li>Diposting oleh <a href=\"";
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "pembuat"), "link_profil"), "html", null, true);
+            echo "\">";
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "pembuat"), "nama"), "html", null, true);
+            echo "</a></li>
+            <li>";
+            // line 16
+            echo twig_escape_filter($this->env, tgl_jam_indo($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "tgl_posting")), "html", null, true);
+            echo "</li>
+        </ul>
+        ";
+        }
+        // line 19
+        echo "        
+        <hr class=\"hr-top\">
+        <div class=\"wrap-content\">
+            <div class=\"content\">
                 ";
-        // line 13
-        echo anchor(("admin/materi/add/tertulis/" . (isset($context["ref_param"]) ? $context["ref_param"] : null)), "Tambah Materi Tertulis", array("class" => "btn btn-primary"));
-        echo "
-                ";
-        // line 14
-        echo anchor(("admin/materi/add/file/" . (isset($context["ref_param"]) ? $context["ref_param"] : null)), "Tambah Materi File", array("class" => "btn btn-primary"));
-        echo "
-            </div>
-            <b>Matapelajaran :</b> ";
-        // line 16
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["mapel"]) ? $context["mapel"] : null), "nama"), "html", null, true);
-        echo " <b>Kelas : </b>";
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "nama"), "html", null, true);
-        echo "
-        </div>
-
-        <br>
-
-        <table class=\"table table-striped\">
-            <thead>
-                <tr>
-                    <th width=\"7%\">No</th>
-                    <th>Judul</th>
-                    <th width=\"15%\">Type</th>
-                    <th width=\"10%\">View</th>
-                    <th width=\"15%\"></th>
-                </tr>
-            </thead>
-            <tbody>
-                ";
-        // line 32
-        $context['_parent'] = (array) $context;
-        $context['_seq'] = twig_ensure_traversable((isset($context["materis"]) ? $context["materis"] : null));
-        foreach ($context['_seq'] as $context["no"] => $context["m"]) {
-            // line 33
-            echo "                ";
-            if ((!(null === $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "pengajar_id")))) {
-                // line 34
-                echo "                    ";
-                $context["p"] = get_row_data("pengajar_model", "retrieve", array(0 => $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "pengajar_id")));
+        // line 23
+        if ((!array_key_exists("error", $context))) {
+            // line 24
+            echo "                    ";
+            if (((isset($context["type"]) ? $context["type"] : null) == "tertulis")) {
+                // line 25
+                echo "                        ";
+                echo html_entity_decode($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "konten"));
+                echo "
+                    ";
+            } elseif (((isset($context["type"]) ? $context["type"] : null) == "file")) {
+                // line 27
+                echo "                        <dl class=\"dl-horizontal\">
+                            <dt>Name</dt>
+                            <dd>";
+                // line 29
+                echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "file_info"), "name"), "html", null, true);
+                echo "</dd>
+                            <dt>Size</dt>
+                            <dd>";
+                // line 31
+                echo twig_escape_filter($this->env, byte_format($this->getAttribute($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "file_info"), "size")), "html", null, true);
+                echo "</dd>
+                            <dt>Modified</dt>
+                            <dd>";
+                // line 33
+                echo twig_escape_filter($this->env, tgl_jam_indo(mdate("%Y-%m-%d %H:%i:%s", $this->getAttribute((isset($context["materifile_info"]) ? $context["materifile_info"] : null), "date"))), "html", null, true);
+                echo "</dd>
+                            <dt>Mime</dt>
+                            <dd>";
                 // line 35
-                echo "                    ";
-                $context["link"] = ((("admin/pengajar/detail/" . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "status_id")) . "/") . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"));
-                // line 36
-                echo "                ";
-            } elseif ((!(null === $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "siswa_id")))) {
+                echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "file_info"), "mime"), "html", null, true);
+                echo "</dd>
+                            <dt></dt>
+                            <dd><br><a href=\"";
                 // line 37
-                echo "                    ";
-                $context["p"] = get_row_data("siswa_model", "retrieve", array(0 => $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "siswa_id")));
-                // line 38
-                echo "                    ";
-                $context["link"] = ((("admin/siswa/detail/" . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "status_id")) . "/") . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"));
-                // line 39
-                echo "                ";
+                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "download_link"), "html", null, true);
+                echo "\" class=\"btn btn-warning\"><i class=\"icon-download\"></i> Download File</a></dd>
+                        </dl>
+                    ";
             }
             // line 40
-            echo "                <tr>
-                    <td>";
+            echo "                ";
+        } else {
             // line 41
-            echo twig_escape_filter($this->env, (isset($context["no"]) ? $context["no"] : null), "html", null, true);
-            echo ".</td>
-                    <td>
-                        ";
-            // line 43
-            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "judul"), "html", null, true);
-            echo "
-                        <br><small><b>Pembuat : </b> ";
-            // line 44
-            echo anchor((isset($context["link"]) ? $context["link"] : null), $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "nama"));
-            echo ", ";
-            echo twig_escape_filter($this->env, tgl_jam_indo($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "tgl_posting")), "html", null, true);
-            echo "</small>
-                    </td>
-                    <td>
-                        ";
-            // line 47
-            echo (((!twig_test_empty($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "file")))) ? ("<span class=\"label label-info\">File</span>") : ("<span class=\"label label-success\">Tertulis</span>"));
-            echo "
-                    </td>
-                    <td>";
-            // line 49
-            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "views"), "html", null, true);
-            echo "</td>
-                    <td>
-                        <div class=\"btn-group\">
-                            ";
-            // line 52
-            if ((!twig_test_empty($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "file")))) {
-                // line 53
-                echo "                                ";
-                $context["url_type"] = "file";
-                // line 54
-                echo "                                ";
-                echo anchor(("admin/materi/read/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-zoom-in\"></i> Detail", array("class" => "btn btn-small", "target" => "_blank"));
-                echo "
-                            ";
-            } else {
-                // line 56
-                echo "                                ";
-                $context["url_type"] = "tertulis";
-                // line 57
-                echo "                                ";
-                echo anchor(("admin/materi/read/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-zoom-in\"></i> Detail", array("class" => "btn btn-small", "target" => "_blank"));
-                echo "
-                            ";
-            }
-            // line 59
-            echo "                            ";
-            echo anchor(((((("admin/materi/edit/" . (isset($context["url_type"]) ? $context["url_type"] : null)) . "/") . (isset($context["ref_param"]) ? $context["ref_param"] : null)) . "/") . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-edit\"></i> Edit", array("class" => "btn btn-small"));
-            echo "
-                            ";
-            // line 60
-            echo anchor(((("admin/materi/delete/" . (isset($context["ref_param"]) ? $context["ref_param"] : null)) . "/") . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-trash\"></i> Hapus", array("class" => "btn btn-small", "onclick" => "return confirm('Anda yakin ingin menghapus?')"));
-            echo "
-                        </div>
-                    </td>
-                </tr>
+            echo "                    <div class=\"alert alert-danger\">
+                        <h3>";
+            // line 42
+            echo twig_escape_filter($this->env, (isset($context["error"]) ? $context["error"] : null), "html", null, true);
+            echo "</h3>
+                    </div>
                 ";
         }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['_iterated'], $context['no'], $context['m'], $context['_parent'], $context['loop']);
-        $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 65
-        echo "            </tbody>
-        </table>
-        <br>
-        ";
-        // line 68
-        echo (isset($context["pagination"]) ? $context["pagination"] : null);
-        echo "
-
+        // line 45
+        echo "            </div>
+        </div>
     </div>
 </div>
 ";
@@ -192,6 +156,6 @@ class __TwigTemplate_1346a11eb48e96b832e9ede5c2e8148879922051982e674bbb95494e8d9
 
     public function getDebugInfo()
     {
-        return array (  175 => 68,  170 => 65,  159 => 60,  154 => 59,  148 => 57,  145 => 56,  139 => 54,  136 => 53,  134 => 52,  128 => 49,  123 => 47,  115 => 44,  111 => 43,  106 => 41,  103 => 40,  100 => 39,  97 => 38,  94 => 37,  91 => 36,  88 => 35,  85 => 34,  82 => 33,  78 => 32,  57 => 16,  52 => 14,  48 => 13,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
+        return array (  140 => 45,  134 => 42,  131 => 41,  128 => 40,  122 => 37,  117 => 35,  112 => 33,  107 => 31,  102 => 29,  98 => 27,  92 => 25,  89 => 24,  87 => 23,  81 => 19,  75 => 16,  68 => 15,  59 => 13,  55 => 12,  51 => 11,  48 => 10,  46 => 9,  42 => 8,  38 => 6,  35 => 5,  29 => 3,);
     }
 }

@@ -576,9 +576,14 @@ $config['admin/pengajar/filter'] = array(
 
 $config['admin/materi/add/tertulis'] = array(
     array(
-        'field' => 'type',
-        'label' => 'Type',
-        'rules' => 'required|trim|xss_clean'
+        'field' => 'mapel_id',
+        'label' => 'Matapelajaran',
+        'rules' => 'required|trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'kelas_id[]',
+        'label' => 'Kelas',
+        'rules' => 'required|xss_clean'
     ),
     array(
         'field' => 'judul',
@@ -594,9 +599,14 @@ $config['admin/materi/add/tertulis'] = array(
 
 $config['admin/materi/add/file'] = array(
     array(
-        'field' => 'type',
-        'label' => 'Type',
-        'rules' => 'required|trim|xss_clean'
+        'field' => 'mapel_id',
+        'label' => 'Matapelajaran',
+        'rules' => 'required|trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'kelas_id[]',
+        'label' => 'Kelas',
+        'rules' => 'required|xss_clean'
     ),
     array(
         'field' => 'judul',
@@ -606,6 +616,16 @@ $config['admin/materi/add/file'] = array(
 );
 
 $config['admin/materi/edit/tertulis'] = array(
+    array(
+        'field' => 'mapel_id',
+        'label' => 'Matapelajaran',
+        'rules' => 'required|trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'kelas_id[]',
+        'label' => 'Kelas',
+        'rules' => 'required|xss_clean'
+    ),
     array(
         'field' => 'judul',
         'label' => 'Judul',
@@ -619,6 +639,16 @@ $config['admin/materi/edit/tertulis'] = array(
 );
 
 $config['admin/materi/edit/file'] = array(
+    array(
+        'field' => 'mapel_id',
+        'label' => 'Matapelajaran',
+        'rules' => 'required|trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'kelas_id[]',
+        'label' => 'Kelas',
+        'rules' => 'required|xss_clean'
+    ),
     array(
         'field' => 'judul',
         'label' => 'Judul',

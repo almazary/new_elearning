@@ -77,7 +77,7 @@ class __TwigTemplate_746efa121f3c85817f23bd29b2a0c6d026fab6525a3a6fc83167bdb4818
         // line 27
         if (((isset($context["status_id"]) ? $context["status_id"] : null) == 1)) {
             // line 28
-            echo "        <p class=\"text-warning\"><b>NB: </b> Pengajar tidak dapat dihapus namun dapat di ubah menjadi blocking.</p>
+            echo "        <p><b>Note: </b> Pengajar tidak dapat dihapus namun dapat di ubah menjadi blocking.</p>
         ";
         }
         // line 30
@@ -166,12 +166,12 @@ class __TwigTemplate_746efa121f3c85817f23bd29b2a0c6d026fab6525a3a6fc83167bdb4818
                     </td>
                     <td>
                         <ul class=\"nav nav-pills\" style=\"margin-bottom:0px;\">
-                            <li><a class=\"btn btn-small\" href=\"";
+                            <li><a class=\"btn btn-default btn-small\" href=\"";
             // line 74
             echo twig_escape_filter($this->env, site_url(((("admin/pengajar/detail/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"))), "html", null, true);
             echo "\"><i class=\"icon-zoom-in\"></i> Detail</a></li>
                             <li class=\"dropdown\">
-                                <a class=\"btn btn-small\" href=\"#\" id=\"act-";
+                                <a class=\"btn btn-default btn-small\" href=\"#\" id=\"act-";
             // line 76
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"), "html", null, true);
             echo "\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i class=\"icon-edit\"></i> Edit <b class=\"caret\" style=\"margin-top:5px;\"></b></a>

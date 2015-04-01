@@ -1,72 +1,49 @@
-{% extends "layout-private.html" %}
+{% extends "layout-detail-materi.html" %}
+
+{% block title %}{{ materi.judul }}{% endblock %}
 
 {% block content %}
-<div class="module">
-    <div class="module-head">
-        <h3>{{ module_title|raw }}</h3>
-    </div>
-    <div class="module-body">
-        {{ get_flashdata('materi')|raw }}
-
-        <div class="bs-callout bs-callout-info">
-            <div class="btn-group pull-right" style="margin-top:-5px;">
-                {{ anchor('admin/materi/add/tertulis/' ~ ref_param, 'Tambah Materi Tertulis', {'class' : 'btn btn-primary'})|raw }}
-                {{ anchor('admin/materi/add/file/' ~ ref_param, 'Tambah Materi File', {'class' : 'btn btn-primary'})|raw }}
-            </div>
-            <b>Matapelajaran :</b> {{ mapel.nama }} <b>Kelas : </b>{{ kelas.nama }}
-        </div>
-
-        <br>
-
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th width="7%">No</th>
-                    <th>Judul</th>
-                    <th width="15%">Type</th>
-                    <th width="10%">View</th>
-                    <th width="15%"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for no, m in materis %}
-                {% if m.pengajar_id is not null %}
-                    {% set p = get_row_data('pengajar_model', 'retrieve', [m.pengajar_id]) %}
-                    {% set link = 'admin/pengajar/detail/' ~ p.status_id ~ '/' ~ p.id %}
-                {% elseif m.siswa_id is not null %}
-                    {% set p = get_row_data('siswa_model', 'retrieve', [m.siswa_id]) %}
-                    {% set link = 'admin/siswa/detail/' ~ p.status_id ~ '/' ~ p.id %}
+<div id="wrap">
+    <div class="container">
+        <h1 class="title">{{ materi.judul }}</h1>
+        {% if error is not defined %}
+        <ul class="unstyled inline ul-top">
+            <li><b class="title-info">{{ materi.mapel.nama }}</b> </li>
+            {% for mk in materi.materi_kelas %}
+                <li>{{ mk.nama }}</li>
+            {% endfor %}
+            <li>Diposting oleh <a href="{{ materi.pembuat.link_profil }}">{{ materi.pembuat.nama }}</a></li>
+            <li>{{ tgl_jam_indo(materi.tgl_posting) }}</li>
+        </ul>
+        {% endif %}
+        
+        <hr class="hr-top">
+        <div class="wrap-content">
+            <div class="content">
+                {% if error is not defined %}
+                    {% if type == 'tertulis' %}
+                        {{ html_entity_decode(materi.konten)|raw }}
+                    {% elseif type == 'file' %}
+                        <dl class="dl-horizontal">
+                            <dt>Name</dt>
+                            <dd>{{ materi.file_info.name }}</dd>
+                            <dt>Size</dt>
+                            <dd>{{ byte_format(materi.file_info.size) }}</dd>
+                            <dt>Modified</dt>
+                            <dd>{{ tgl_jam_indo(mdate('%Y-%m-%d %H:%i:%s', materifile_info.date)) }}</dd>
+                            <dt>Mime</dt>
+                            <dd>{{ materi.file_info.mime }}</dd>
+                            <dt></dt>
+                            <dd><br><a href="{{ materi.download_link }}" class="btn btn-warning"><i class="icon-download"></i> Download File</a></dd>
+                        </dl>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-danger">
+                        <h3>{{ error }}</h3>
+                    </div>
                 {% endif %}
-                <tr>
-                    <td>{{ no }}.</td>
-                    <td>
-                        {{ m.judul }}
-                        <br><small><b>Pembuat : </b> {{ anchor(link, p.nama)|raw }}, {{ tgl_jam_indo(m.tgl_posting) }}</small>
-                    </td>
-                    <td>
-                        {{ (m.file is not empty) ? '<span class="label label-info">File</span>' : '<span class="label label-success">Tertulis</span>' }}
-                    </td>
-                    <td>{{ m.views }}</td>
-                    <td>
-                        <div class="btn-group">
-                            {% if m.file is not empty %}
-                                {% set url_type = 'file' %}
-                                {{ anchor('admin/materi/read/' ~ m.id, '<i class="icon-zoom-in"></i> Detail', {'class' : 'btn btn-small', 'target' : '_blank'})|raw }}
-                            {% else %}
-                                {% set url_type = 'tertulis' %}
-                                {{ anchor('admin/materi/read/' ~ m.id, '<i class="icon-zoom-in"></i> Detail', {'class' : 'btn btn-small', 'target' : '_blank'})|raw }}
-                            {% endif %}
-                            {{ anchor('admin/materi/edit/' ~ url_type ~ '/' ~ ref_param ~ '/' ~ m.id, '<i class="icon-edit"></i> Edit', {'class' : 'btn btn-small'})|raw }}
-                            {{ anchor('admin/materi/delete/' ~ ref_param ~ '/' ~ m.id, '<i class="icon-trash"></i> Hapus', {'class' : 'btn btn-small', 'onclick' : "return confirm('Anda yakin ingin menghapus?')"})|raw }}
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <br>
-        {{ pagination|raw }}
-
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

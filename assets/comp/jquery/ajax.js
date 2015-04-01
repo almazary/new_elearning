@@ -1,5 +1,5 @@
 $(function() {
-    $('#parent-kelas').change(function(){
+    $('#parent-kelas').on('change', function() {
         $.ajax({
             type : "POST",
             url  : site_url + "/admin/ajax_post/get_subkelas",

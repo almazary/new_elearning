@@ -672,10 +672,10 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 	margin: 0;
 	text-shadow: 1px 1px 2px #ddd, 0 0 0 #000, 0 0 1px #fff
 }
-.modal-backdrop, .modal-backdrop.fade.in {
+/*.modal-backdrop, .modal-backdrop.fade.in {
 	background: #fff;
 	opacity: .9
-}
+}*/
 .accordion-group {
 	background: #fff;
 	-webkit-border-radius: 3px;

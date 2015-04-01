@@ -232,27 +232,27 @@ class __TwigTemplate_7b3cbf36dc4e4b0d28e93d25ee709e3e5296d9210004e6bd6c7e2822044
                 <tr>
                     <th>Kelas</th>
                     <td>
-                        <p style=\"margin-top:0px; margin-bottom:5px;\">
+                        <ul class=\"unstyled inline\" style=\"margin-left: -5px;\">
                             ";
         // line 110
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["kelas_all"]) ? $context["kelas_all"] : null));
         foreach ($context['_seq'] as $context["_key"] => $context["k"]) {
             // line 111
-            echo "                                <label class=\"checkbox inline\"><input type=\"checkbox\" name=\"kelas_id[]\" value=\"";
+            echo "                                <li><label class=\"checkbox inline\"><input type=\"checkbox\" name=\"kelas_id[]\" value=\"";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"), "html", null, true);
             echo "\" ";
             echo twig_escape_filter($this->env, set_checkbox("kelas_id[]", $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"), ((($this->getAttribute((isset($context["filter"]) ? $context["filter"] : null), "kelas_id", array(), "any", true, true) && twig_in_filter($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"), $this->getAttribute((isset($context["filter"]) ? $context["filter"] : null), "kelas_id")))) ? (true) : (false))), "html", null, true);
             echo ">";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "nama"), "html", null, true);
-            echo "</label>
+            echo "</label></li>
                             ";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['k'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
         // line 113
-        echo "                        </p>
+        echo "                        </ul>
                     </td>
                 <tr>
                 <tr>
@@ -391,12 +391,12 @@ class __TwigTemplate_7b3cbf36dc4e4b0d28e93d25ee709e3e5296d9210004e6bd6c7e2822044
             echo "                    </td>
                     <td>
                         <ul class=\"nav nav-pills\" style=\"margin-bottom:0px;\">
-                            <li><a class=\"btn btn-small\" href=\"";
+                            <li><a class=\"btn btn-default btn-small\" href=\"";
             // line 193
             echo twig_escape_filter($this->env, site_url(((("admin/siswa/detail/" . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "status_id")) . "/") . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"))), "html", null, true);
             echo "\"><i class=\"icon-zoom-in\"></i> Detail</a></li>
                             <li class=\"dropdown\">
-                                <a class=\"btn btn-small\" href=\"#\" id=\"act-";
+                                <a class=\"btn btn-default btn-small\" href=\"#\" id=\"act-";
             // line 195
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"), "html", null, true);
             echo "\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i class=\"icon-edit\"></i> Edit <b class=\"caret\" style=\"margin-top:5px;\"></b></a>

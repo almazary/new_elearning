@@ -145,7 +145,7 @@ class Mapel_model extends CI_Model
     }
 
     /**
-     * Method untuk mendapatkan semua data kelas tanpa pagging
+     * Method untuk mendapatkan semua data mapel tanpa pagging
      *
      * @return array
      * @author Almazari <almazary@gmail.com>

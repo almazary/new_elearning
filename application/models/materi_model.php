@@ -10,6 +10,91 @@ class Materi_model extends CI_Model
 {
 
     /**
+     * Method untuk menghapus kelas materi
+     * 
+     * @param  integer $id
+     * @return boolean 
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function delete_kelas($id) 
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('materi_kelas');
+        return true;
+    }
+
+    /** 
+     * Method untuk mendapatkan satu record kelas materi
+     * 
+     * @param  integer|null $id       
+     * @param  integer|null $materi_id
+     * @param  integer|null $kelas_id 
+     * @return array
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_kelas(
+        $id        = null,
+        $materi_id = null, 
+        $kelas_id  = null
+    ) {
+        if ($id == null && $materi_id == null && $kelas_id == null) {
+            return array();
+        }
+
+        if (!is_null($id)) {
+            $this->db->where('id', $id);
+        }
+        if (!is_null($materi_id)) {
+            $this->db->where('materi_id', $materi_id);
+        }
+        if (!is_null($kelas_id)) {
+            $this->db->where('kelas_id', $kelas_id);
+        }
+        $result = $this->db->get('materi_kelas', 1);
+        return $result->row_array();
+    }
+
+    /**
+     * Method untuk mendapatkan semua kelas materi
+     * 
+     * @param  integer $materi_id
+     * @return array
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_all_kelas($materi_id)
+    {
+        $this->db->where('materi_id', $materi_id);
+        $result = $this->db->get('materi_kelas');
+        return $result->result_array();
+    }
+
+    /**
+     * Method untuk menambah materi kelas
+     * 
+     * @param  integer $materi_id
+     * @param  integer $kelas_id 
+     * @return integer
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function create_kelas(
+        $materi_id,
+        $kelas_id
+    ) {
+        $materi_id = (int)$materi_id;
+        $kelas_id  = (int)$kelas_id;
+
+        $this->db->insert('materi_kelas', array(
+            'materi_id' => $materi_id,
+            'kelas_id'  => $kelas_id
+        ));
+        return $this->db->insert_id();
+    }
+
+    /**
      * Method untuk menghapus data materi
      *
      * @param  integer $id
@@ -32,24 +117,26 @@ class Materi_model extends CI_Model
      * @param  integer       $page_no
      * @param  integer|null  $pengajar_id
      * @param  integer|null  $siswa_id
-     * @param  integer|null  $mapel_kelas_id
+     * @param  integer|null  $mapel_id
      * @param  string|null   $judul
      * @param  string|null   $konten
      * @param  string|null   $tgl_posting      2014-07-16
      * @param  integer|null  $publish          0 | 1
+     * @param  array         $kelas_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all(
-        $no_of_records  = 10,
-        $page_no        = 1,
-        $pengajar_id    = null,
-        $siswa_id       = null,
-        $mapel_kelas_id = null,
-        $judul          = null,
-        $konten         = null,
-        $tgl_posting    = null,
-        $publish        = null
+        $no_of_records = 10,
+        $page_no       = 1,
+        $pengajar_id   = null,
+        $siswa_id      = null,
+        $mapel_id      = null,
+        $judul         = null,
+        $konten        = null,
+        $tgl_posting   = null,
+        $publish       = null,
+        $kelas_id      = array()
     ) {
         $no_of_records = (int)$no_of_records;
         $page_no       = (int)$page_no;
@@ -63,9 +150,9 @@ class Materi_model extends CI_Model
             $siswa_id = (int)$siswa_id;
             $where['siswa_id'] = array($siswa_id, 'where');
         }
-        if (!is_null($mapel_kelas_id)) {
-            $mapel_kelas_id = (int)$mapel_kelas_id;
-            $where['mapel_kelas_id'] = array($mapel_kelas_id, 'where');
+        if (!is_null($mapel_id)) {
+            $mapel_id = (int)$mapel_id;
+            $where['mapel_id'] = array($mapel_id, 'where');
         }
         $like = 0;
         if (!is_null($judul)) {
@@ -86,6 +173,10 @@ class Materi_model extends CI_Model
         if (!is_null($publish)) {
             $publish = (int)$publish;
             $where['publish'] = array($publish, 'where');
+        }
+        if (!empty($kelas_id)) {
+            $where['materi_kelas']          = array('materi.id = materi_kelas.materi_id', 'join', 'inner');
+            $where['materi_kelas.kelas_id'] = array($kelas_id, 'where_in');
         }
 
         $orderby = array(
@@ -119,7 +210,7 @@ class Materi_model extends CI_Model
      * @param  integer  $id
      * @param  integer  $pengajar_id
      * @param  integer  $siswa_id
-     * @param  integer  $mapel_kelas_id
+     * @param  integer  $mapel_id
      * @param  string   $judul
      * @param  string   $konten
      * @param  string   $file
@@ -131,25 +222,25 @@ class Materi_model extends CI_Model
         $id,
         $pengajar_id = null,
         $siswa_id    = null,
-        $mapel_kelas_id,
+        $mapel_id,
         $judul,
         $konten  = null,
         $file    = null,
         $publish = 1
     ) {
         $id             = (int)$id;
-        $mapel_kelas_id = (int)$mapel_kelas_id;
+        $mapel_id = (int)$mapel_id;
         $publish        = (int)$publish;
 
         $data = array(
-            'pengajar_id'    => $pengajar_id,
-            'siswa_id'       => $siswa_id,
-            'mapel_kelas_id' => $mapel_kelas_id,
-            'judul'          => $judul,
-            'konten'         => $konten,
-            'file'           => $file,
-            'tgl_posting'    => date('Y-m-d H:i:s'),
-            'publish'        => $publish
+            'pengajar_id' => $pengajar_id,
+            'siswa_id'    => $siswa_id,
+            'mapel_id'    => $mapel_id,
+            'judul'       => $judul,
+            'konten'      => $konten,
+            'file'        => $file,
+            'tgl_posting' => date('Y-m-d H:i:s'),
+            'publish'     => $publish
         );
         $this->db->where('id', $id);
         $this->db->update('materi', $data);
@@ -161,7 +252,7 @@ class Materi_model extends CI_Model
      *
      * @param  integer  $pengajar_id
      * @param  integer  $siswa_id
-     * @param  integer  $mapel_kelas_id
+     * @param  integer  $mapel_id
      * @param  string   $judul
      * @param  string   $konten
      * @param  string   $file
@@ -172,42 +263,27 @@ class Materi_model extends CI_Model
     public function create(
         $pengajar_id = null,
         $siswa_id    = null,
-        $mapel_kelas_id,
+        $mapel_id,
         $judul,
         $konten  = null,
         $file    = null,
         $publish = 1
     ) {
-        $mapel_kelas_id = (int)$mapel_kelas_id;
+        $mapel_id = (int)$mapel_id;
         $publish        = (int)$publish;
 
         $data = array(
-            'pengajar_id'    => $pengajar_id,
-            'siswa_id'       => $siswa_id,
-            'mapel_kelas_id' => $mapel_kelas_id,
-            'judul'          => $judul,
-            'konten'         => $konten,
-            'file'           => $file,
-            'tgl_posting'    => date('Y-m-d H:i:s'),
-            'publish'        => $publish
+            'pengajar_id' => $pengajar_id,
+            'siswa_id'    => $siswa_id,
+            'mapel_id'    => $mapel_id,
+            'judul'       => $judul,
+            'konten'      => $konten,
+            'file'        => $file,
+            'tgl_posting' => date('Y-m-d H:i:s'),
+            'publish'     => $publish
         );
         $this->db->insert('materi', $data);
         return $this->db->insert_id();
-    }
-
-    /**
-     * Method untuk menghitung jumlah materi
-     *
-     * @param  integer $mapel_kelas_id
-     * @return integer
-     *
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function count_materi($mapel_kelas_id)
-    {
-        $this->db->where('mapel_kelas_id', $mapel_kelas_id);
-        $result = $this->db->get('materi');
-        return $result->num_rows();
     }
 
 }

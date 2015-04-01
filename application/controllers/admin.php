@@ -828,8 +828,8 @@ class Admin extends CI_Controller
         $data['web_title'] = 'Materi | Administrator';
 
         switch ($act) {
-            case 'read':
-                $content_file = 'admin_materi/read.html';
+            case 'detail':
+                $content_file = 'admin_materi/detail.html';
                 $materi_id    = (int)$segment_4;
 
                 if (empty($materi_id)) {
@@ -855,7 +855,7 @@ class Admin extends CI_Controller
                         if (!isset($data['error'])) {
 
                             $data['materi'] = $materi;
-                            $data['materi']['download_link'] = site_url('admin/materi/read/'.$materi['id'].'/download');
+                            $data['materi']['download_link'] = site_url('admin/materi/detail/'.$materi['id'].'/download');
 
                             # cari tipenya
                             if (empty($materi['file'])) {
@@ -867,12 +867,14 @@ class Admin extends CI_Controller
                             }
 
                             $data['type'] = $type;
-
-                            $mapel_kelas = $this->mapel_model->retrieve_kelas($materi['mapel_kelas_id']);
-                            $mapel       = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
-                            $sub_kelas   = $this->kelas_model->retrieve($mapel_kelas['kelas_id']);
-                            $data['materi']['mapel'] = $mapel;
-                            $data['materi']['kelas'] = $sub_kelas;
+                            $data['materi']['mapel'] = $this->mapel_model->retrieve($materi['mapel_id']);
+                            
+                            # cari materi kelas
+                            $materi_kelas = $this->materi_model->retrieve_all_kelas($materi['id']);
+                            foreach ($materi_kelas as $mk) {
+                                $kelas = $this->kelas_model->retrieve($mk['kelas_id']);
+                                $data['materi']['materi_kelas'][] = $kelas;
+                            }
                             
                             # cari pembuatnya
                             if (!empty($materi['pengajar_id'])) {
@@ -900,78 +902,19 @@ class Admin extends CI_Controller
                 }
                 break;
 
-            case 'detail':
-                $content_file   = 'admin_materi/detail.html';
-                $parent_id      = (int)$segment_4;
-                $subkelas_id    = (int)$segment_5;
-                $mapel_kelas_id = (int)$segment_6;
-
-                $parent_kelas = $this->kelas_model->retrieve($parent_id);
-                if (empty($parent_kelas)) {
-                    redirect('admin/materi');
-                }
-
-                $sub_kelas = $this->kelas_model->retrieve($subkelas_id);
-                if (empty($sub_kelas)) {
-                    redirect('admin/materi');
-                }
-
-                $mapel_kelas = $this->mapel_model->retrieve_kelas($mapel_kelas_id);
-                if (empty($mapel_kelas)) {
-                    redirect('admin/materi');
-                }
-
-                $mapel = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
-                if (empty($mapel)) {
-                    $this->session->set_flashdata('materi', get_alert('warning', 'Matapelajaran tidak ditemukan, mungkin tidak aktif'));
-                    redirect('admin/materi');
-                }
-
-                $data['module_title']     = anchor('admin/materi/#subkelas-'.$subkelas_id, 'Materi').' / List Materi';
-                $data['kelas']            = $sub_kelas;
-                $data['mapel']            = $mapel;
-                $data['ref_param']        = $parent_id.'/'.$subkelas_id.'/'.$mapel_kelas_id;
-
-                $page_no = (int)$segment_7;
-                $page_no = (empty($page_no)) ? 1 : $page_no;
-
-                $retrieve_all       = $this->materi_model->retrieve_all(20, $page_no, null, null, $mapel_kelas_id, null, null, null, 1);
-                $data['materis']    = $retrieve_all['results'];
-                $data['pagination'] = $this->pager->view($retrieve_all, 'admin/materi/detail/'.$data['ref_param'].'/');
-                break;
-
             case 'delete':
-                $parent_id      = (int)$segment_4;
-                $subkelas_id    = (int)$segment_5;
-                $mapel_kelas_id = (int)$segment_6;
-                $materi_id      = (int)$segment_7;
+                $materi_id = (int)$segment_4;
+                $uri_back  = (string)$segment_5;
 
-                $parent_kelas = $this->kelas_model->retrieve($parent_id);
-                if (empty($parent_kelas)) {
-                    redirect('admin/materi');
+                if (empty($uri_back)) {
+                    $uri_back = site_url('admin/materi');
+                } else {
+                    $uri_back = deurl_redirect($uri_back);
                 }
-
-                $sub_kelas = $this->kelas_model->retrieve($subkelas_id);
-                if (empty($sub_kelas)) {
-                    redirect('admin/materi');
-                }
-
-                $mapel_kelas = $this->mapel_model->retrieve_kelas($mapel_kelas_id);
-                if (empty($mapel_kelas)) {
-                    redirect('admin/materi');
-                }
-
-                $mapel = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
-                if (empty($mapel)) {
-                    $this->session->set_flashdata('materi', get_alert('warning', 'Matapelajaran tidak ditemukan, mungkin tidak aktif'));
-                    redirect('admin/materi');
-                }
-
-                $data['ref_param'] = $parent_id.'/'.$subkelas_id.'/'.$mapel_kelas_id;
 
                 $materi = $this->materi_model->retrieve($materi_id);
                 if (empty($materi)) {
-                    redirect('admin/materi/detail/'.$data['ref_param']);
+                    redirect($uri_back);
                 }
 
                 # jika file
@@ -982,54 +925,44 @@ class Admin extends CI_Controller
                 $this->materi_model->delete($materi['id']);
 
                 $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil dihapus'));
-                redirect('admin/materi/detail/'.$data['ref_param']);
+                redirect($uri_back);
                 break;
 
             case 'edit':
-                $type           = (string)strtolower($segment_4);
-                $parent_id      = (int)$segment_5;
-                $subkelas_id    = (int)$segment_6;
-                $mapel_kelas_id = (int)$segment_7;
-                $materi_id      = (int)$segment_8;
+                $type      = (string)strtolower($segment_4);
+                $materi_id = (int)$segment_5;
+                $uri_back  = (string)$segment_6;
 
-                $parent_kelas = $this->kelas_model->retrieve($parent_id);
-                if (empty($parent_kelas)) {
-                    redirect('admin/materi');
+                if (empty($uri_back)) {
+                    $uri_back = redirect('admin/materi');
+                } else {
+                    $uri_back = deurl_redirect($uri_back);
                 }
-
-                $sub_kelas = $this->kelas_model->retrieve($subkelas_id);
-                if (empty($sub_kelas)) {
-                    redirect('admin/materi');
-                }
-
-                $mapel_kelas = $this->mapel_model->retrieve_kelas($mapel_kelas_id);
-                if (empty($mapel_kelas)) {
-                    redirect('admin/materi');
-                }
-
-                $mapel = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
-                if (empty($mapel)) {
-                    $this->session->set_flashdata('materi', get_alert('warning', 'Matapelajaran tidak ditemukan, mungkin tidak aktif'));
-                    redirect('admin/materi');
-                }
-
-                $data['ref_param'] = $parent_id.'/'.$subkelas_id.'/'.$mapel_kelas_id;
+                $data['uri_back'] = $uri_back;
 
                 if (!in_array($type, array('file', 'tertulis'))) {
-                    redirect('admin/materi/detail/'.$data['ref_param']);
+                    redirect($uri_back);
                 }
 
                 $materi = $this->materi_model->retrieve($materi_id);
                 if (empty($materi)) {
-                    redirect('admin/materi/detail/'.$data['ref_param']);
+                    redirect($uri_back);
+                }
+
+                # hanya ambil kelas_idnya
+                $materi_kelas    = $this->materi_model->retrieve_all_kelas($materi['id']);
+                $materi_kelas_id = array();
+                foreach ($materi_kelas as $r) {
+                    $materi_kelas_id[] = $r['kelas_id'];
                 }
 
                 $content_file         = 'admin_materi/edit.html';
-                $data['module_title'] = anchor('admin/materi/#subkelas-'.$subkelas_id, 'Materi').' / '.anchor('admin/materi/detail/'.$data['ref_param'], 'List Materi').' / Edit Materi';
+                $data['module_title'] = anchor($uri_back, 'Materi').' / Edit Materi '.$type;
                 $data['type']         = $type;
-                $data['kelas']        = $sub_kelas;
-                $data['mapel']        = $mapel;
                 $data['materi']       = $materi;
+                $data['mapel']        = $this->mapel_model->retrieve_all_mapel();
+                $data['kelas']        = $this->kelas_model->retrieve_all(null, array('aktif' => 1));
+                $data['materi_kelas'] = $materi_kelas_id;
                 $data['comp_js']      = get_tinymce('konten');
                 if ($type == 'file') {
                     $data['file_info'] = get_file_info(get_path_file($materi['file']));
@@ -1040,14 +973,15 @@ class Admin extends CI_Controller
                 $success = false;
                 if ($type == 'tertulis') {
                     if ($this->form_validation->run('admin/materi/edit/tertulis') == TRUE) {
-                        $judul  = $this->input->post('judul', TRUE);
-                        $konten = $this->input->post('konten', TRUE);
+                        $mapel_id = $this->input->post('mapel_id', TRUE);
+                        $judul    = $this->input->post('judul', TRUE);
+                        $konten   = $this->input->post('konten', TRUE);
 
                         $this->materi_model->update(
                             $materi['id'],
                             get_sess_data('admin', 'pengajar', 'id'),
                             null,
-                            $mapel_kelas_id,
+                            $mapel_id,
                             $judul,
                             $konten,
                             null,
@@ -1069,7 +1003,7 @@ class Admin extends CI_Controller
                         $config['max_size']      = '0';
                         $config['max_width']     = '0';
                         $config['max_height']    = '0';
-                        $config['file_name']     = url_title($this->input->post('judul', TRUE).'_'.$mapel['nama'].'_'.$sub_kelas['nama'].'_'.time(), '_', TRUE);
+                        $config['file_name']     = url_title($this->input->post('judul', TRUE).'_'.time(), '_', TRUE);
                         $this->upload->initialize($config);
 
                         if ($this->upload->do_upload()) {
@@ -1083,21 +1017,25 @@ class Admin extends CI_Controller
                     }
 
                     if ($this->form_validation->run('admin/materi/edit/file') == TRUE AND $upload_success == TRUE) {
-                        $judul = $this->input->post('judul', TRUE);
+                        $mapel_id = $this->input->post('mapel_id', TRUE);
+                        $judul    = $this->input->post('judul', TRUE);
+
                         $this->materi_model->update(
                             $materi['id'],
                             get_sess_data('admin', 'pengajar', 'id'),
                             null,
-                            $mapel_kelas_id,
+                            $mapel_id,
                             $judul,
                             null,
                             $update_file,
                             1
                         );
 
-                        # hapus file sebelumnya
-                        if (is_file(get_path_file($materi['file']))) {
-                            unlink(get_path_file($materi['file']));
+                        if ($is_new_file) {
+                            # hapus file sebelumnya
+                            if (is_file(get_path_file($materi['file']))) {
+                                unlink(get_path_file($materi['file']));
+                            }
                         }
 
                         $success = true;
@@ -1109,62 +1047,61 @@ class Admin extends CI_Controller
                 }
 
                 if ($success) {
+                    # cari kelas materi mana yang harus ditambah / dihapus
+                    $kelas_id      = $this->input->post('kelas_id', TRUE);
+                    $kelas_post_id = array();
+                    foreach ($kelas_id as $post_kelas_id) {
+                        $post_kelas_id = (int)$post_kelas_id;
+                        if (!empty($post_kelas_id)) {
+                            $check = $this->materi_model->retrieve_kelas(null, $materi['id'], $post_kelas_id);
+                            if (empty($check)) {
+                                # tambahkan
+                                $this->materi_model->create_kelas($materi['id'], $post_kelas_id);
+                            }
+                            $kelas_post_id[] = $post_kelas_id;
+                        }
+                    }
+
+                    if (count($materi_kelas_id) > count($kelas_post_id)) {
+                        $diff_kelas = array_diff($materi_kelas_id, $kelas_post_id);
+                        foreach ($diff_kelas as $diff_kelas_id) {
+                            $retrieve = $this->materi_model->retrieve_kelas(null, $materi['id'], $diff_kelas_id);
+                            # hapus
+                            if (!empty($retrieve)) {
+                                $this->materi_model->delete_kelas($retrieve['id']);
+                            }
+                        }
+                    }
+
                     $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil diperbaharui'));
-                    redirect('admin/materi/edit/'.$type.'/'.$data['ref_param'].'/'.$materi['id']);
+                    redirect($uri_back);
                 }
                 break;
 
             case 'add':
-                $type           = (string)strtolower($segment_4);
-                $parent_id      = (int)$segment_5;
-                $subkelas_id    = (int)$segment_6;
-                $mapel_kelas_id = (int)$segment_7;
-
-                $parent_kelas = $this->kelas_model->retrieve($parent_id);
-                if (empty($parent_kelas)) {
-                    redirect('admin/materi');
-                }
-
-                $sub_kelas = $this->kelas_model->retrieve($subkelas_id);
-                if (empty($sub_kelas)) {
-                    redirect('admin/materi');
-                }
-
-                $mapel_kelas = $this->mapel_model->retrieve_kelas($mapel_kelas_id);
-                if (empty($mapel_kelas)) {
-                    redirect('admin/materi');
-                }
-
-                $mapel = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
-                if (empty($mapel)) {
-                    $this->session->set_flashdata('materi', get_alert('warning', 'Matapelajaran tidak ditemukan, mungkin tidak aktif'));
-                    redirect('admin/materi');
-                }
-
-                $data['ref_param'] = $parent_id.'/'.$subkelas_id.'/'.$mapel_kelas_id;
-
+                $type = (string)strtolower($segment_4);
                 if (!in_array($type, array('file', 'tertulis'))) {
-                    redirect('admin/materi/detail/'.$data['ref_param']);
+                    redirect('admin/materi');
                 }
 
                 $content_file         = 'admin_materi/add.html';
-                $data['module_title'] = anchor('admin/materi/#subkelas-'.$subkelas_id, 'Materi').' / '.anchor('admin/materi/detail/'.$data['ref_param'], 'List Materi').' / Tambah Materi';
+                $data['module_title'] = anchor('admin/materi', 'Materi').' / Tambah Materi '.$type;
                 $data['type']         = $type;
-                $data['kelas']        = $sub_kelas;
-                $data['mapel']        = $mapel;
+                $data['mapel']        = $this->mapel_model->retrieve_all_mapel();
+                $data['kelas']        = $this->kelas_model->retrieve_all(null, array('aktif' => 1));
                 $data['comp_js']      = get_tinymce('konten');
 
                 $success = false;
                 if ($type == 'tertulis') {
                     if ($this->form_validation->run('admin/materi/add/tertulis') == TRUE) {
-                        $type   = $this->input->post('type', TRUE);
-                        $judul  = $this->input->post('judul', TRUE);
-                        $konten = $this->input->post('konten', TRUE);
+                        $mapel_id = $this->input->post('mapel_id', TRUE);
+                        $judul    = $this->input->post('judul', TRUE);
+                        $konten   = $this->input->post('konten', TRUE);
 
-                        $this->materi_model->create(
+                        $materi_id = $this->materi_model->create(
                             get_sess_data('admin', 'pengajar', 'id'),
                             null,
-                            $mapel_kelas_id,
+                            $mapel_id,
                             $judul,
                             $konten,
                             null,
@@ -1179,19 +1116,19 @@ class Admin extends CI_Controller
                     $config['max_size']      = '0';
                     $config['max_width']     = '0';
                     $config['max_height']    = '0';
-                    $config['file_name']     = url_title($this->input->post('judul', TRUE).'_'.$mapel['nama'].'_'.$sub_kelas['nama'], '_', TRUE);
+                    $config['file_name']     = url_title($this->input->post('judul', TRUE).'_'.time(), '_', TRUE);
                     $this->upload->initialize($config);
 
                     if ($this->form_validation->run('admin/materi/add/file') == TRUE AND $this->upload->do_upload()) {
-                        $type        = $this->input->post('type', TRUE);
+                        $mapel_id    = $this->input->post('mapel_id', TRUE);
                         $judul       = $this->input->post('judul', TRUE);
                         $upload_data = $this->upload->data();
                         $file        = $upload_data['file_name'];
 
-                        $this->materi_model->create(
+                        $materi_id = $this->materi_model->create(
                             get_sess_data('admin', 'pengajar', 'id'),
                             null,
-                            $mapel_kelas_id,
+                            $mapel_id,
                             $judul,
                             null,
                             $file,
@@ -1209,16 +1146,95 @@ class Admin extends CI_Controller
                 }
 
                 if ($success) {
+                    # simpan kelas materi
+                    $kelas_id = $this->input->post('kelas_id', TRUE);
+                    foreach ($kelas_id as $materi_kelas_id) {
+                        $this->materi_model->create_kelas($materi_id, $materi_kelas_id);
+                    }
+
                     $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil ditambah'));
-                    redirect('admin/materi/detail/'.$data['ref_param']);
+                    if (!empty($materi_id)) {
+                        redirect('admin/materi/edit/'.$type.'/'.$materi_id);
+                    } else {
+                        redirect('admin/materi');
+                    }
                 }
                 break;
 
             default:
             case 'list':
-                $content_file                = 'admin_materi/list.html';
-                $data['module_title']        = 'Materi';
-                $data['mapel_kelas_hirarki'] = $this->mapel_kelas_hirarki('materi');
+                $content_file         = 'admin_materi/list.html';
+                $data['module_title'] = 'Materi';
+                
+                $page_no = (int)$segment_4;
+                if (empty($page_no)) {
+                    $page_no = 1;
+                }
+
+                # default value
+                $pengajar_id = null;
+                $siswa_id    = null;
+                $mapel_id    = null;
+                $judul       = null;
+                $konten      = null;
+                $tgl_posting = null;
+                $publish     = 1;
+
+                # bagian search
+                $str_search = (string)$segment_5;
+                if (!empty($str_search)) {
+                    $allow_search = array('pengajar_id', 'siswa_id', 'mapel_id', 'judul', 'konten', 'tgl_posting');
+                    parse_str($str_search, $keyword);
+                    foreach ($keyword as $key_search => $val_search) {
+                        if (in_array($key_search, $allow_search)) {
+                            ${"$key_search"} = (string)$val_search;
+                        }
+                    }
+                }
+
+                # ambil semua data materi
+                $retrieve_all_materi = $this->materi_model->retrieve_all(
+                    20, 
+                    $page_no,
+                    $pengajar_id,
+                    $siswa_id,
+                    $mapel_id,
+                    $judul,
+                    $konten,
+                    $tgl_posting,
+                    $publish
+                );
+
+                # format array data
+                $results = array();
+                foreach ($retrieve_all_materi['results'] as $key => $val) {
+                    # cari pembuatnya
+                    if (!empty($val['pengajar_id'])) {
+                        $pengajar = $this->pengajar_model->retrieve($val['pengajar_id']);
+                        $val['pembuat'] = $pengajar;
+                        $val['pembuat']['link_profil'] = site_url('admin/pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+                    }
+                    if (!empty($val['siswa_id'])) {
+                        $siswa = $this->siswa_model->retrieve($val['siswa_id']);
+                        $val['pembuat'] = $siswa;
+                        $val['pembuat']['link_profil'] = site_url('admin/siswa/detail/'.$siswa['status_id'].'/'.$siswa['id']);
+                    }
+
+                    # cari materi kelas
+                    $materi_kelas = $this->materi_model->retrieve_all_kelas($val['id']);
+                    foreach ($materi_kelas as $mk) {
+                        $kelas = $this->kelas_model->retrieve($mk['kelas_id']);
+                        $val['materi_kelas'][] = $kelas;
+                    }
+
+                    # cari matapelajarannya
+                    $val['mapel'] = $this->mapel_model->retrieve($val['mapel_id']);
+
+                    $results[$key] = $val;
+                }
+
+                $data['materi']      = $results;
+                $data['pagination']  = $this->pager->view($retrieve_all_materi, 'admin/materi/list/'.$page_no.'/');
                 break;
         }
 
@@ -2636,7 +2652,7 @@ class Admin extends CI_Controller
                 }
 
                 if (empty($uri_back)) {
-                    $uri_back = ('admin/mapel_kelas/#subkelas-'.$kelas_id);
+                    $uri_back = site_url('admin/mapel_kelas/#subkelas-'.$kelas_id);
                 } else {
                     $uri_back = deurl_redirect($uri_back);
                     $uri_back = rtrim($uri_back, '/');
@@ -2754,13 +2770,6 @@ class Admin extends CI_Controller
                 $data['mapel_kelas_hirarki'] = $this->mapel_kelas_hirarki('', array('parent_id' => $parent_kelas_id, 'sub_id' => $sub_kelas_id));
                 $data['parent_kelas']        = $this->kelas_model->retrieve_all(null, array('aktif' => 1));
                 
-                # panggil colorbox
-                $html_js = load_comp_js(array(
-                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                    base_url('assets/comp/colorbox/act-mapel-kelas.js')
-                ));
-                $data['comp_js']      = $html_js;
-                $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
                 break;
         }
 
@@ -2780,38 +2789,6 @@ class Admin extends CI_Controller
                 $return .= '<div class="panel panel-info" id="subkelas-'.$s['id'].'" style="margin-left:25px;margin-bottom:5px;">';
 
                 switch ($view) {
-                    case 'materi':
-                        $return .= '<div class="panel-heading" id="subkelas-'.$s['id'].'">
-                            <a href="javascript:void(0)" data-toggle="collapse" data-target="#collapse'.$s['id'].'">'.$s['nama'].'</a> &nbsp;&nbsp;'.(($s['aktif'] == 0) ? '<span class="label label-warning">Kelas tidak aktif</span>' : '').'
-                        </div>';
-                        if ($s['aktif'] == 1) {
-                            $return .= '<div id="collapse'.$s['id'].'" class="collapse">';
-                            $return .= '<div class="panel-body">';
-                            $retrieve_all = $this->mapel_model->retrieve_all_kelas(null, $s['id']);
-                            $return .= '<table class="table table-striped">
-                            <tbody>';
-                                foreach ($retrieve_all as $v):
-                                $m = $this->mapel_model->retrieve($v['mapel_id']);
-                                if (empty($m)) {
-                                    continue;
-                                }
-                                $return .= '<tr>
-                                    <td>
-                                        '.$m['nama'].'<br>
-                                        <small>'.nl2br($m['info']).'</small>
-                                        <div class="btn-group pull-right">
-                                          <a class="btn" href="'.site_url('admin/materi/detail/'.$p['id'].'/'.$s['id'].'/'.$v['id']).'"><i class="icon-zoom-in"></i> Materi ('.$this->materi_model->count_materi($v['id']).')</a>
-                                        </div>
-                                    </td>
-                                </tr>';
-                                endforeach;
-                            $return .= '</tbody>
-                            </table>';
-                            $return .= '</div>';
-                            $return .= '</div>';
-                        }
-                        break;
-
                     default:
                         $return .= '<div class="panel-heading">
                             '.$s['nama'].'&nbsp;&nbsp;'.(($s['aktif'] == 0) ? '<span class="label label-warning">Kelas tidak aktif</span>' : '').'
@@ -2830,10 +2807,28 @@ class Admin extends CI_Controller
                                 $return .= '<tr>
                                     <td>
                                         <div class="btn-group pull-right">
-                                            <a class="btn btn-default" href="'.site_url('admin/mapel_kelas/remove/'.$p['id'].'/'.$s['id'].'/'.$v['id'].'/'.enurl_redirect(current_url())).'" onclick="return confirm(\'Anda yakin ingin menghapus?\')"><i class="icon-trash"></i> Hapus</a>
+                                            <a class="btn btn-default" href="#modal-'.$v['id'].'" data-toggle="modal"><i class="icon-trash"></i> Hapus</a>
                                         </div>
                                         '.$m['nama'].'<br>
                                         <small>'.nl2br($m['info']).'</small>
+
+                                        <div id="modal-'.$v['id'].'" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                <h3 id="myModalLabel">Konfirmasi</h3>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Menghapus matapelajaran kelas akan menghapus data - data yang berkaitan yaitu :</p>
+                                                <ol>
+                                                    <li>Jadwal Mengajar Pengajar</li>
+                                                    <li>Tugas pada jadwal mengajar no. 1</li>
+                                                </ol>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Batal</button>
+                                                <a class="btn btn-danger" href="'.site_url('admin/mapel_kelas/remove/'.$p['id'].'/'.$s['id'].'/'.$v['id'].'/'.enurl_redirect(current_url())).'">Tetap Hapus</a>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>';
                                 endforeach;

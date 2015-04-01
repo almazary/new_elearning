@@ -41,54 +41,109 @@ class __TwigTemplate_324b1b18401a044df1ab9419d6d343951abecd18dbe0e533d9d2926ae58
         echo get_flashdata("materi");
         echo "
 
-        <div class=\"bs-callout bs-callout-info\">
-            <p><b>Matapelajaran :</b> ";
-        // line 12
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["mapel"]) ? $context["mapel"] : null), "nama"), "html", null, true);
-        echo " <b>Kelas : </b>";
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "nama"), "html", null, true);
-        echo "</p>
-        </div>
-
-        <br>
-
         ";
-        // line 17
-        echo form_open_multipart(((((("admin/materi/edit/" . (isset($context["type"]) ? $context["type"] : null)) . "/") . (isset($context["ref_param"]) ? $context["ref_param"] : null)) . "/") . $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "id")), array("class" => "form-horizontal row-fluid"));
+        // line 11
+        echo form_open_multipart(((((("admin/materi/edit/" . (isset($context["type"]) ? $context["type"] : null)) . "/") . $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "id")) . "/") . enurl_redirect((isset($context["uri_back"]) ? $context["uri_back"] : null))), array("class" => "form-horizontal row-fluid"));
         echo "
             <div class=\"control-group\">
                 <label class=\"control-label\">Judul <span class=\"text-error\">*</span></label>
                 <div class=\"controls\">
                     <input type=\"text\" name=\"judul\" class=\"span12\" value=\"";
-        // line 21
+        // line 15
         echo twig_escape_filter($this->env, set_value("judul", $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "judul")), "html", null, true);
         echo "\">
                     <br>";
-        // line 22
+        // line 16
         echo form_error("judul");
         echo "
                 </div>
             </div>
+            <div class=\"control-group\">
+                <label class=\"control-label\">Matapelajaran <span class=\"text-error\">*</span></label>
+                <div class=\"controls\">
+                    <select name=\"mapel_id\">
+                        <option value=\"\">--pilih--</option>
+                        ";
+        // line 24
+        $context['_parent'] = (array) $context;
+        $context['_seq'] = twig_ensure_traversable((isset($context["mapel"]) ? $context["mapel"] : null));
+        foreach ($context['_seq'] as $context["_key"] => $context["m"]) {
+            // line 25
+            echo "                        <option value=\"";
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id"), "html", null, true);
+            echo "\" ";
+            echo twig_escape_filter($this->env, set_select("mapel_id", $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id"), ((($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id") == $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "mapel_id"))) ? (true) : (""))), "html", null, true);
+            echo ">";
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "nama"), "html", null, true);
+            echo "</option>
+                        ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['m'], $context['_parent'], $context['loop']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 27
+        echo "                    </select>
+                    <br>";
+        // line 28
+        echo form_error("mapel_id");
+        echo "
+                </div>
+            </div>
+            <div class=\"control-group\">
+                <label class=\"control-label\">Kelas <span class=\"text-error\">*</span></label>
+                <div class=\"controls\">
+                    <ul class=\"unstyled inline\" style=\"margin-left: -5px;\">
+                        ";
+        // line 35
+        $context['_parent'] = (array) $context;
+        $context['_seq'] = twig_ensure_traversable((isset($context["kelas"]) ? $context["kelas"] : null));
+        foreach ($context['_seq'] as $context["_key"] => $context["k"]) {
+            // line 36
+            echo "                        <li>
+                            <label class=\"checkbox inline\">
+                                <input type=\"checkbox\" name=\"kelas_id[]\" value=\"";
+            // line 38
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"), "html", null, true);
+            echo "\" ";
+            echo twig_escape_filter($this->env, set_checkbox("kelas_id[]", $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"), ((in_array($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"), (isset($context["materi_kelas"]) ? $context["materi_kelas"] : null))) ? (true) : (""))), "html", null, true);
+            echo "> ";
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "nama"), "html", null, true);
+            echo "
+                            </label>
+                        </li>
+                        ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['k'], $context['_parent'], $context['loop']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 42
+        echo "                    </ul>
+                    ";
+        // line 43
+        echo form_error("kelas_id[]");
+        echo "
+                </div>
+            </div>
             ";
-        // line 25
+        // line 46
         if (((isset($context["type"]) ? $context["type"] : null) == "tertulis")) {
-            // line 26
+            // line 47
             echo "            <div class=\"control-group\">
                 <label class=\"control-label\">Konten <span class=\"text-error\">*</span></label>
                 <div class=\"controls\">
                     <textarea name=\"konten\" id=\"konten\" style=\"height:500px;width:100%;\">";
-            // line 29
+            // line 50
             echo set_value("konten", html_entity_decode($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "konten")));
             echo "</textarea>
                     ";
-            // line 30
+            // line 51
             echo form_error("konten");
             echo "
                 </div>
             </div>
             ";
         } elseif (((isset($context["type"]) ? $context["type"] : null) == "file")) {
-            // line 34
+            // line 55
             echo "            <div class=\"control-group\">
                 <label class=\"control-label\">Info File</label>
                 <div class=\"controls\">
@@ -97,7 +152,7 @@ class __TwigTemplate_324b1b18401a044df1ab9419d6d343951abecd18dbe0e533d9d2926ae58
                             <tr>
                                 <th>Name</th>
                                 <td><a href=\"";
-            // line 41
+            // line 62
             echo twig_escape_filter($this->env, base_url(("assets/files/" . $this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "name"))), "html", null, true);
             echo "\" target=\"_blank\">";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "name"), "html", null, true);
@@ -106,28 +161,28 @@ class __TwigTemplate_324b1b18401a044df1ab9419d6d343951abecd18dbe0e533d9d2926ae58
                             <tr>
                                 <th>Server Path</th>
                                 <td>";
-            // line 45
+            // line 66
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "server_path"), "html", null, true);
             echo "</td>
                             </tr>
                             <tr>
                                 <th>Size</th>
                                 <td>";
-            // line 49
+            // line 70
             echo twig_escape_filter($this->env, byte_format($this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "size")), "html", null, true);
             echo "</td>
                             </tr>
                             <tr>
                                 <th>Modified</th>
                                 <td>";
-            // line 53
+            // line 74
             echo twig_escape_filter($this->env, mdate("%d %F %Y %H:%i", $this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "date")), "html", null, true);
             echo "</td>
                             </tr>
                             <tr>
                                 <th>Mime</th>
                                 <td>";
-            // line 57
+            // line 78
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "mime"), "html", null, true);
             echo "</td>
                             </tr>
@@ -140,25 +195,25 @@ class __TwigTemplate_324b1b18401a044df1ab9419d6d343951abecd18dbe0e533d9d2926ae58
                 <div class=\"controls\">
                     <input type=\"file\" name=\"userfile\">
                     <br>";
-            // line 67
+            // line 88
             echo (((!twig_test_empty((isset($context["error_upload"]) ? $context["error_upload"] : null)))) ? ((isset($context["error_upload"]) ? $context["error_upload"] : null)) : (""));
             echo "
                 </div>
             </div>
             ";
         }
-        // line 71
+        // line 92
         echo "            <div class=\"control-group\">
                 <div class=\"controls\">
                     <button type=\"submit\" class=\"btn btn-primary\">Update</button>
                     <a href=\"";
-        // line 74
-        echo twig_escape_filter($this->env, site_url(("admin/materi/detail/" . (isset($context["ref_param"]) ? $context["ref_param"] : null))), "html", null, true);
-        echo "\" class=\"btn\">Kembali</a>
+        // line 95
+        echo twig_escape_filter($this->env, (isset($context["uri_back"]) ? $context["uri_back"] : null), "html", null, true);
+        echo "\" class=\"btn btn-default\">Kembali</a>
                 </div>
             </div>
         ";
-        // line 77
+        // line 98
         echo form_close();
         echo "
 
@@ -179,6 +234,6 @@ class __TwigTemplate_324b1b18401a044df1ab9419d6d343951abecd18dbe0e533d9d2926ae58
 
     public function getDebugInfo()
     {
-        return array (  162 => 77,  156 => 74,  151 => 71,  144 => 67,  131 => 57,  124 => 53,  117 => 49,  110 => 45,  101 => 41,  92 => 34,  85 => 30,  81 => 29,  76 => 26,  74 => 25,  68 => 22,  64 => 21,  57 => 17,  47 => 12,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
+        return array (  217 => 98,  211 => 95,  206 => 92,  199 => 88,  186 => 78,  179 => 74,  172 => 70,  165 => 66,  156 => 62,  147 => 55,  140 => 51,  136 => 50,  131 => 47,  129 => 46,  123 => 43,  120 => 42,  106 => 38,  102 => 36,  98 => 35,  88 => 28,  85 => 27,  72 => 25,  68 => 24,  57 => 16,  53 => 15,  46 => 11,  41 => 9,  35 => 6,  31 => 4,  28 => 3,);
     }
 }

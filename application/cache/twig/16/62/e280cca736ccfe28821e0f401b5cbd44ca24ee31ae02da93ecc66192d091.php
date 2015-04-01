@@ -143,7 +143,7 @@ class __TwigTemplate_1662e280cca736ccfe28821e0f401b5cbd44ca24ee31ae02da93ecc6619
         // line 73
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "nama"), "html", null, true);
         echo "</b>.
-                                <br><b>NB:</b> Jadwal tidak dapat di hapus, namun dapat di ubah menjadi tidak aktif.
+                                <br><b>Note:</b> Jadwal tidak dapat di hapus, namun dapat di ubah menjadi tidak aktif.
                             </p>
                         </div>
                         <br>

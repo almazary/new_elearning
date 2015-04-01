@@ -136,7 +136,7 @@ class __TwigTemplate_46c167e3da52a21d786d44ebdda9bc4b8be632a0657be050a51a749fbff
                 <tbody>
                     <tr class=\"info\">
                         <td>
-                            <ul class=\"unstyled inline\">
+                            <ul class=\"unstyled inline\" style=\"margin-left: -5px;\">
                                 ";
         // line 60
         $context['_parent'] = (array) $context;
@@ -161,7 +161,7 @@ class __TwigTemplate_46c167e3da52a21d786d44ebdda9bc4b8be632a0657be050a51a749fbff
             }
             // line 67
             echo "                                    ";
-            echo anchor(((((("admin/tugas/edit_question/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["s"]) ? $context["s"] : null), "id")), (((isset($context["s_key"]) ? $context["s_key"] : null) . ". ") . (isset($context["kunci_index"]) ? $context["kunci_index"] : null)), array("class" => "badge badge-info", "data-toggle" => "tooltip", "title" => word_limiter(strip_tags($this->getAttribute((isset($context["s"]) ? $context["s"] : null), "pertanyaan")), 50)));
+            echo anchor(((((("admin/tugas/edit_question/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["s"]) ? $context["s"] : null), "id")), (((isset($context["s_key"]) ? $context["s_key"] : null) . ". ") . (isset($context["kunci_index"]) ? $context["kunci_index"] : null)), array("class" => "label label-info", "data-toggle" => "tooltip", "title" => word_limiter(strip_tags($this->getAttribute((isset($context["s"]) ? $context["s"] : null), "pertanyaan")), 50)));
             echo "
                                 </li>
                                 ";

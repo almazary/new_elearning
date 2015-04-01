@@ -337,12 +337,12 @@ class __TwigTemplate_3a8e8d4f3d7754c2c67bfbc0ecd8fab33864f0a87138ec9f5a4eab1eacc
             echo "                    </td>
                     <td>
                         <ul class=\"nav nav-pills\" style=\"margin-bottom:0px;\">
-                            <li><a class=\"btn btn-small\" href=\"";
+                            <li><a class=\"btn btn-default btn-small\" href=\"";
             // line 170
             echo twig_escape_filter($this->env, site_url(((("admin/pengajar/detail/" . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "status_id")) . "/") . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"))), "html", null, true);
             echo "\"><i class=\"icon-zoom-in\"></i> Detail</a></li>
                             <li class=\"dropdown\">
-                                <a class=\"btn btn-small\" href=\"#\" id=\"act-";
+                                <a class=\"btn btn-default btn-small\" href=\"#\" id=\"act-";
             // line 172
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"), "html", null, true);
             echo "\" class=\"dropdown-toggle\" data-toggle=\"dropdown\"><i class=\"icon-edit\"></i> Edit <b class=\"caret\" style=\"margin-top:5px;\"></b></a>

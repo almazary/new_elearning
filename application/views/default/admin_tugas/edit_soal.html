@@ -58,7 +58,7 @@
                         <td>
                             <div class="row-fluid">
                                 <div class="span10">
-                                    <ul class="unstyled inline">
+                                    <ul class="unstyled inline" style="margin-left: -5px;">
                                         {% for s_key, s in retrieve_all_pertanyaan.results %}
                                         <li>
                                             {% if s.kunci_index is not empty %}
@@ -66,7 +66,7 @@
                                             {% else %}
                                                 {% set kunci_index = '' %}
                                             {% endif %}
-                                            {{ anchor('admin/tugas/edit_question/' ~ mapel_ajar.id ~ '/' ~ tugas.id ~ '/' ~ s.id, s_key ~ '. ' ~ kunci_index, {class: 'badge badge-info', 'data-toggle': "tooltip", title: word_limiter(strip_tags(s.pertanyaan), 50)})|raw }}
+                                            {{ anchor('admin/tugas/edit_question/' ~ mapel_ajar.id ~ '/' ~ tugas.id ~ '/' ~ s.id, s_key ~ '. ' ~ kunci_index, {class: 'label label-info', 'data-toggle': "tooltip", title: word_limiter(strip_tags(s.pertanyaan), 50)})|raw }}
                                         </li>
                                         {% endfor %}
                                     </ul>

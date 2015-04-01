@@ -8,18 +8,39 @@
     <div class="module-body">
         {{ get_flashdata('materi')|raw }}
 
-        <div class="bs-callout bs-callout-info">
-            <p><b>Matapelajaran :</b> {{ mapel.nama }} <b>Kelas : </b>{{ kelas.nama }}</p>
-        </div>
-
-        <br>
-        {{ form_open_multipart('admin/materi/add/' ~ type ~ '/' ~ ref_param, {'class' : 'form-horizontal row-fluid'})|raw }}
-            <input type="hidden" name="type" value="{{ type }}">
+        {{ form_open_multipart('admin/materi/add/' ~ type, {'class' : 'form-horizontal row-fluid'})|raw }}
             <div class="control-group">
                 <label class="control-label">Judul <span class="text-error">*</span></label>
                 <div class="controls">
                     <input type="text" name="judul" class="span12" value="{{ set_value('judul') }}">
                     <br>{{ form_error('judul')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Matapelajaran <span class="text-error">*</span></label>
+                <div class="controls">
+                    <select name="mapel_id">
+                        <option value="">--pilih--</option>
+                        {% for m in mapel %}
+                        <option value="{{ m.id }}" {{ set_select('mapel_id', m.id) }}>{{ m.nama }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>{{ form_error('mapel_id')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Kelas <span class="text-error">*</span></label>
+                <div class="controls">
+                    <ul class="unstyled inline" style="margin-left: -5px;">
+                        {% for k in kelas %}
+                        <li>
+                            <label class="checkbox inline">
+                                <input type="checkbox" name="kelas_id[]" value="{{ k.id }}" {{ set_checkbox('kelas_id[]', k.id) }}> {{ k.nama }}
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {{ form_error('kelas_id[]')|raw }}
                 </div>
             </div>
             {% if type == 'tertulis' %}
@@ -42,7 +63,7 @@
             <div class="control-group">
                 <div class="controls">
                     <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="{{ site_url('admin/materi/detail/' ~ ref_param) }}" class="btn">Kembali</a>
+                    <a href="{{ site_url('admin/materi') }}" class="btn btn-default">Kembali</a>
                 </div>
             </div>
         {{ form_close()|raw }}

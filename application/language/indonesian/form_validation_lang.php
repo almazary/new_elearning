@@ -1,6 +1,6 @@
 <?php
 
-$lang['required']           = '%s di butuhkan.';
+$lang['required']           = '%s dibutuhkan.';
 $lang['isset']              = '%s harus memilik isi.';
 $lang['valid_email']        = '%s harus memuat alamat email yang valid.';
 $lang['valid_emails']       = '%s harus memuat alamat-alamat email yang valid.';

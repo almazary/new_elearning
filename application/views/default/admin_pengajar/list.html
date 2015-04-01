@@ -25,7 +25,7 @@
 
         <br>
         {% if status_id == 1 %}
-        <p class="text-warning"><b>NB: </b> Pengajar tidak dapat dihapus namun dapat di ubah menjadi blocking.</p>
+        <p><b>Note: </b> Pengajar tidak dapat dihapus namun dapat di ubah menjadi blocking.</p>
         {% endif %}
 
         {{ form_open('admin/pengajar/list' ~ status_id)|raw }}
@@ -71,9 +71,9 @@
                     </td>
                     <td>
                         <ul class="nav nav-pills" style="margin-bottom:0px;">
-                            <li><a class="btn btn-small" href="{{ site_url('admin/pengajar/detail/' ~ status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('admin/pengajar/detail/' ~ status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
                             <li class="dropdown">
-                                <a class="btn btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
+                                <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
                                     <li>{{ anchor('admin/pengajar/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
                                     <li>{{ anchor('admin/pengajar/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>

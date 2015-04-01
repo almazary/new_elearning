@@ -163,7 +163,7 @@ class __TwigTemplate_36d5f0ce35c95de7c64068c36a366b5a7160a91965e87c58dfa584e3e7f
             }
             // line 69
             echo "                                            ";
-            echo anchor(((((("admin/tugas/edit_question/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["s"]) ? $context["s"] : null), "id")), (((isset($context["s_key"]) ? $context["s_key"] : null) . ". ") . (isset($context["kunci_index"]) ? $context["kunci_index"] : null)), array("class" => "badge badge-info", "data-toggle" => "tooltip", "title" => word_limiter(strip_tags($this->getAttribute((isset($context["s"]) ? $context["s"] : null), "pertanyaan")), 50)));
+            echo anchor(((((("admin/tugas/edit_question/" . $this->getAttribute((isset($context["mapel_ajar"]) ? $context["mapel_ajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["s"]) ? $context["s"] : null), "id")), (((isset($context["s_key"]) ? $context["s_key"] : null) . ". ") . (isset($context["kunci_index"]) ? $context["kunci_index"] : null)), array("class" => "label label-info", "data-toggle" => "tooltip", "title" => word_limiter(strip_tags($this->getAttribute((isset($context["s"]) ? $context["s"] : null), "pertanyaan")), 50)));
             echo "
                                         </li>
                                         ";
