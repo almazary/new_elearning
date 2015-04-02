@@ -54,19 +54,19 @@ class __TwigTemplate_746efa121f3c85817f23bd29b2a0c6d026fab6525a3a6fc83167bdb4818
                 <div class=\"btn-group\">
                     ";
         // line 18
-        echo anchor("admin/pengajar/list/1", "Aktif", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 1)) ? ("btn btn-info") : ("btn"))));
+        echo anchor("admin/pengajar/list/1", "Aktif", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 1)) ? ("btn btn-info") : ("btn btn-default"))));
         echo "
                     ";
         // line 19
-        echo anchor("admin/pengajar/list/0", "Pending", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 0)) ? ("btn btn-info") : ("btn"))));
+        echo anchor("admin/pengajar/list/0", "Pending", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 0)) ? ("btn btn-info") : ("btn btn-default"))));
         echo "
                     ";
         // line 20
-        echo anchor("admin/pengajar/list/2", "Blocking", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 2)) ? ("btn btn-info") : ("btn"))));
+        echo anchor("admin/pengajar/list/2", "Blocking", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 2)) ? ("btn btn-info") : ("btn btn-default"))));
         echo "
                     ";
         // line 21
-        echo anchor("admin/pengajar/filter", "<i class=\"icon-search\" style=\"line-height: 0px;\"></i> Filter", array("class" => "btn"));
+        echo anchor("admin/pengajar/filter", "<i class=\"icon-search\" style=\"line-height: 0px;\"></i> Filter", array("class" => "btn btn-default"));
         echo "
                 </div>
             </div>

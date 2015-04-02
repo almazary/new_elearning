@@ -13,7 +13,90 @@
                 {{ anchor('admin/materi/add/tertulis', 'Tambah Materi Tertulis', {'class' : 'btn btn-primary'})|raw }}
                 {{ anchor('admin/materi/add/file', 'Tambah Materi File', {'class' : 'btn btn-primary'})|raw }}
             </div>
-            <b>Matapelajaran :</b> {{ mapel.nama }} <b>Kelas : </b>{{ kelas.nama }}
+            <a class="as-link" data-toggle="collapse" data-target="#form-filter"><i class="icon-search" style="line-height: 0px;"></i> Filter</a>
+
+            <div id="form-filter" class="collapse" style="margin-top: 3px;">
+                {{ form_open('admin/materi')|raw }}
+                    <table class="table table-condensed">
+                        <tr>
+                            <th style="border-top: none;" width="15%">Judul</th>
+                            <td style="border-top: none;">
+                                <input type="text" name="judul" class="span4" value="{{ set_value('judul', filter.judul) }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Konten</th>
+                            <td>
+                                <input type="text" name="konten" class="span5" value="{{ set_value('konten', filter.konten) }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Pengajar</th>
+                            <td>
+                                <input type="text" name="pengajar" class="span4" value="{{ set_value('pengajar', filter.pengajar) }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Siswa</th>
+                            <td>
+                                <input type="text" name="siswa" class="span4" value="{{ set_value('siswa', filter.siswa) }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Mapel</th>
+                            <td>
+                                <ul class="unstyled inline" style="margin-left: -5px;">
+                                    {% for m in mapel %}
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="mapel_id[]" value="{{ m.id }}" {{ set_checkbox('mapel_id[]', m.id, (filter.mapel_id is not empty and in_array(m.id, filter.mapel_id)) ? true) }}> {{ m.nama }}
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Kelas</th>
+                            <td>
+                                <ul class="unstyled inline" style="margin-left: -5px;">
+                                    {% for k in kelas %}
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="kelas_id[]" value="{{ k.id }}" {{ set_checkbox('kelas_id[]', k.id, (filter.kelas_id is not empty and in_array(k.id, filter.kelas_id)) ? true) }}> {{ k.nama }}
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Tipe</th>
+                            <td>
+                                <ul class="unstyled inline" style="margin-left: -5px;">
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="type[]" value="tertulis" {{ set_checkbox('type[]', 'tertulis', (filter.type is not empty and in_array('tertulis', filter.type)) ? true) }}> Tertulis
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="type[]" value="file" {{ set_checkbox('type[]', 'file', (filter.type is not empty and in_array('file', filter.type)) ? true) }}> File
+                                        </label>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+
         </div>
 
         <br>
@@ -23,7 +106,7 @@
                 <tr>
                     <th width="7%">No</th>
                     <th>Materi</th>
-                    <th width="15%">Type</th>
+                    <th width="15%">Tipe</th>
                     <th width="10%">View</th>
                     <th width="15%"></th>
                 </tr>

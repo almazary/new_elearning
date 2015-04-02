@@ -15,10 +15,10 @@
 
             <div class="span4">
                 <div class="btn-group">
-                    {{ anchor('admin/pengajar/list/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn'})|raw }}
-                    {{ anchor('admin/pengajar/list/0', 'Pending', {'class' : (status_id == 0) ? 'btn btn-info' : 'btn'})|raw }}
-                    {{ anchor('admin/pengajar/list/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn'})|raw }}
-                    {{ anchor('admin/pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn'})|raw }}
+                    {{ anchor('admin/pengajar/list/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('admin/pengajar/list/0', 'Pending', {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('admin/pengajar/list/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('admin/pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-default'})|raw }}
                 </div>
             </div>
         </div>

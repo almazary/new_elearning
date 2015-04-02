@@ -19,6 +19,8 @@ class Admin extends CI_Controller
                 $this->logout();
             }
         }
+
+        $this->output->enable_profiler(TRUE);
     }
 
     private function most_login()
@@ -1171,38 +1173,71 @@ class Admin extends CI_Controller
                     $page_no = 1;
                 }
 
-                # default value
-                $pengajar_id = null;
-                $siswa_id    = null;
-                $mapel_id    = null;
-                $judul       = null;
-                $konten      = null;
-                $tgl_posting = null;
-                $publish     = 1;
+                # jika ada post filter
+                if ($this->form_validation->run('admin/materi/filter') == true) {
+                    $pengajar = $this->input->post('pengajar', TRUE);
+                    $siswa    = $this->input->post('siswa', TRUE);
 
-                # bagian search
-                $str_search = (string)$segment_5;
-                if (!empty($str_search)) {
-                    $allow_search = array('pengajar_id', 'siswa_id', 'mapel_id', 'judul', 'konten', 'tgl_posting');
-                    parse_str($str_search, $keyword);
-                    foreach ($keyword as $key_search => $val_search) {
-                        if (in_array($key_search, $allow_search)) {
-                            ${"$key_search"} = (string)$val_search;
+                    # cari id pengajar
+                    $pengajar_id = array();
+                    if (!empty($pengajar)) {
+                        foreach ($this->pengajar_model->retrieve_all_by_name($pengajar) as $val) {
+                            $pengajar_id[] = $val['id'];
                         }
                     }
+
+                    # cari id siswa
+                    $siswa_id = array();
+                    if (!empty($siswa)) {
+                        foreach ($this->siswa_model->retrieve_all_by_name($siswa) as $val) {
+                            $siswa_id[] = $val['id'];
+                        }
+                    }
+
+                    $filter = array(
+                        'judul'       => $this->input->post('judul', true),
+                        'konten'      => $this->input->post('konten', true),
+                        'pengajar_id' => $pengajar_id,
+                        'pengajar'    => $pengajar,
+                        'siswa_id'    => $siswa_id,
+                        'siswa'       => $siswa,
+                        'mapel_id'    => $this->input->post('mapel_id', true),
+                        'kelas_id'    => $this->input->post('kelas_id', true),
+                        'type'        => $this->input->post('type', true),
+                    );
+
+                    $this->session->set_userdata('filter_materi', $filter);
                 }
+
+                $filter = $this->session->userdata('filter_materi');
+                if (empty($filter)) {
+                    $filter = array(
+                        'judul'       => '',
+                        'konten'      => '',
+                        'pengajar_id' => array(),
+                        'pengajar'    => '',
+                        'siswa_id'    => array(),
+                        'siswa'       => '',
+                        'mapel_id'    => array(),
+                        'kelas_id'    => array(),
+                        'type'        => array()
+                    );
+                }
+                $data['filter'] = $filter;
 
                 # ambil semua data materi
                 $retrieve_all_materi = $this->materi_model->retrieve_all(
-                    20, 
+                    50, 
                     $page_no,
-                    $pengajar_id,
-                    $siswa_id,
-                    $mapel_id,
-                    $judul,
-                    $konten,
-                    $tgl_posting,
-                    $publish
+                    $filter['pengajar_id'],
+                    $filter['siswa_id'],
+                    $filter['mapel_id'],
+                    $filter['judul'],
+                    $filter['konten'],
+                    $tgl_posting = null,
+                    $publish = 1,
+                    $filter['kelas_id'],
+                    $filter['type']
                 );
 
                 # format array data
@@ -1235,6 +1270,8 @@ class Admin extends CI_Controller
 
                 $data['materi']      = $results;
                 $data['pagination']  = $this->pager->view($retrieve_all_materi, 'admin/materi/list/'.$page_no.'/');
+                $data['kelas']       = $this->kelas_model->retrieve_all(null, array('aktif' => 1));
+                $data['mapel']       = $this->mapel_model->retrieve_all_mapel();
                 break;
         }
 

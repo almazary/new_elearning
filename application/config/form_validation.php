@@ -712,3 +712,41 @@ $config['admin/tugas/essay'] = array(
         'rules' => 'required|trim|xss_clean'
     )
 );
+
+$config['admin/materi/filter'] = array(
+    array(
+        'field' => 'judul',
+        'label' => 'Judul',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'konten',
+        'label' => 'Konten',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'pengajar',
+        'label' => 'Pengajar',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'siswa',
+        'label' => 'Siswa',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'mapel_id[]',
+        'label' => 'Matapelajaran',
+        'rules' => 'xss_clean'
+    ),
+    array(
+        'field' => 'kelas_id[]',
+        'label' => 'Kelas',
+        'rules' => 'xss_clean'
+    ),
+    array(
+        'field' => 'type[]',
+        'label' => 'Type',
+        'rules' => 'xss_clean'
+    ),
+);

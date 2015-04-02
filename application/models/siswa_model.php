@@ -85,6 +85,36 @@ class Siswa_model extends CI_Model
     }
 
     /**
+     * Method untuk mendapatkan semua siswa berhasarkan nama
+     * 
+     * @param  string $nama
+     * @return array
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_all_by_name($nama)
+    {
+        $search_result = $this->retrieve_all_filter(
+            $nis           = '',
+            $nama,
+            $jenis_kelamin = array(),
+            $tahun_masuk   = '',
+            $tempat_lahir  = '',
+            $tgl_lahir     = '',
+            $bln_lahir     = '',
+            $thn_lahir     = '',
+            $alamat        = '',
+            $agama         = array(),
+            $kelas_id      = array(),
+            $status_id     = array(),
+            $username      = '',
+            $page_no       = 1,
+            $pagination    = false
+        );
+        return $search_result;
+    }
+
+    /**
      * Method untuk mendapatkan siswa berdasarkan kriteria tertentu
      *
      * @param  string $nis
@@ -101,6 +131,7 @@ class Siswa_model extends CI_Model
      * @param  array  $status_id
      * @param  string $username
      * @param  integer $page_no
+     * @param  boolean $pagination
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
@@ -118,7 +149,8 @@ class Siswa_model extends CI_Model
         $kelas_id      = array(),
         $status_id     = array(),
         $username      = '',
-        $page_no       = 1
+        $page_no       = 1,
+        $pagination    = true
     ) {
         $where = array();
         $orderby['siswa.nama'] = 'ASC';
@@ -188,7 +220,13 @@ class Siswa_model extends CI_Model
             $where['login.username'] = array($username, 'like');
         }
 
-        $data = $this->pager->set('siswa', 50, $page_no, $where, $orderby, 'siswa.*');
+        if ($pagination) {
+            $data = $this->pager->set('siswa', 50, $page_no, $where, $orderby, 'siswa.*');
+        } else {
+            $no_of_records = $this->db->count_all('siswa');
+            $search_all    = $this->pager->set('siswa', $no_of_records, 1, $where, $orderby, 'siswa.*');
+            $data          = $search_all['results'];
+        }
 
         return $data;
     }

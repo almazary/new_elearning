@@ -54,23 +54,23 @@ class __TwigTemplate_48db95a090a0d73f645b1ed695b7669fd08705bd3f45aa14781fcdafacf
                 <div class=\"btn-group\">
                     ";
         // line 18
-        echo anchor("admin/siswa/list/1", "Aktif", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 1)) ? ("btn btn-info") : ("btn"))));
+        echo anchor("admin/siswa/list/1", "Aktif", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 1)) ? ("btn btn-info") : ("btn btn-default"))));
         echo "
                     ";
         // line 19
-        echo anchor("admin/siswa/list/0", "Pending", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 0)) ? ("btn btn-info") : ("btn"))));
+        echo anchor("admin/siswa/list/0", "Pending", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 0)) ? ("btn btn-info") : ("btn btn-default"))));
         echo "
                     ";
         // line 20
-        echo anchor("admin/siswa/list/2", "Blocking", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 2)) ? ("btn btn-info") : ("btn"))));
+        echo anchor("admin/siswa/list/2", "Blocking", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 2)) ? ("btn btn-info") : ("btn btn-default"))));
         echo "
                     ";
         // line 21
-        echo anchor("admin/siswa/list/3", "Alumni", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 3)) ? ("btn btn-info") : ("btn"))));
+        echo anchor("admin/siswa/list/3", "Alumni", array("class" => ((((isset($context["status_id"]) ? $context["status_id"] : null) == 3)) ? ("btn btn-info") : ("btn btn-default"))));
         echo "
                     ";
         // line 22
-        echo anchor("admin/siswa/filter", "<i class=\"icon-search\" style=\"line-height: 0px;\"></i> Filter", array("class" => "btn"));
+        echo anchor("admin/siswa/filter", "<i class=\"icon-search\" style=\"line-height: 0px;\"></i> Filter", array("class" => "btn btn-default"));
         echo "
                 </div>
             </div>

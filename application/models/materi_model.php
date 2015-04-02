@@ -115,75 +115,85 @@ class Materi_model extends CI_Model
      *
      * @param  integer       $no_of_records
      * @param  integer       $page_no
-     * @param  integer|null  $pengajar_id
-     * @param  integer|null  $siswa_id
-     * @param  integer|null  $mapel_id
+     * @param  array|null    $pengajar_id
+     * @param  array|null    $siswa_id
+     * @param  array|null    $mapel_id
      * @param  string|null   $judul
      * @param  string|null   $konten
      * @param  string|null   $tgl_posting      2014-07-16
      * @param  integer|null  $publish          0 | 1
      * @param  array         $kelas_id
+     * @param  array         $type
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all(
         $no_of_records = 10,
         $page_no       = 1,
-        $pengajar_id   = null,
-        $siswa_id      = null,
-        $mapel_id      = null,
+        $pengajar_id   = array(),
+        $siswa_id      = array(),
+        $mapel_id      = array(),
         $judul         = null,
         $konten        = null,
         $tgl_posting   = null,
         $publish       = null,
-        $kelas_id      = array()
+        $kelas_id      = array(),
+        $type          = array()
     ) {
         $no_of_records = (int)$no_of_records;
         $page_no       = (int)$page_no;
 
-        $where = array();
-        if (!is_null($pengajar_id)) {
-            $pengajar_id = (int)$pengajar_id;
-            $where['pengajar_id'] = array($pengajar_id, 'where');
+        $where    = array();
+        $group_by = array();
+        if (!empty($pengajar_id)) {
+            $where['materi.pengajar_id'] = array($pengajar_id, 'where_in');
         }
-        if (!is_null($siswa_id)) {
-            $siswa_id = (int)$siswa_id;
-            $where['siswa_id'] = array($siswa_id, 'where');
+        if (!empty($siswa_id)) {
+            $where['materi.siswa_id'] = array($siswa_id, 'where_in');
         }
-        if (!is_null($mapel_id)) {
-            $mapel_id = (int)$mapel_id;
-            $where['mapel_id'] = array($mapel_id, 'where');
+        if (!empty($mapel_id)) {
+            $where['materi.mapel_id'] = array($mapel_id, 'where_in');
         }
         $like = 0;
-        if (!is_null($judul)) {
-            $where['judul'] = array($judul, 'like');
+        if (!empty($judul)) {
+            $where['materi.judul'] = array($judul, 'like');
             $like = 1;
         }
-        if (!is_null($konten)) {
+        if (!empty($konten)) {
             if ($like) {
                 $value = array($like, 'or_like');
             } else {
                 $value = array($like, 'like');
             }
-            $where['konten'] = $value;
+            $where['materi.konten'] = array($like, 'like');
         }
-        if (!is_null($tgl_posting)) {
-            $where['DATE(tgl_posting)'] = array($tgl_posting, 'where');
+        if (!empty($tgl_posting)) {
+            $where['DATE(materi.tgl_posting)'] = array($tgl_posting, 'where');
         }
         if (!is_null($publish)) {
             $publish = (int)$publish;
-            $where['publish'] = array($publish, 'where');
+            $where['materi.publish'] = array($publish, 'where');
         }
         if (!empty($kelas_id)) {
             $where['materi_kelas']          = array('materi.id = materi_kelas.materi_id', 'join', 'inner');
             $where['materi_kelas.kelas_id'] = array($kelas_id, 'where_in');
+            $group_by[] = 'materi.id';
+        }
+        if (!empty($type)) {
+            if (count($type) == 1) {
+                if ($type[0] == 'tertulis') {
+                    $where['materi.konten !='] = array("", 'where');
+                } elseif ($type[0] == 'file') {
+                    $where['materi.file !='] = array("", 'where');
+                }
+            }
         }
 
         $orderby = array(
             'id' => 'DESC'
         );
 
-        $data = $this->pager->set('materi', $no_of_records, $page_no, $where, $orderby);
+        $data = $this->pager->set('materi', $no_of_records, $page_no, $where, $orderby, 'materi.*', $group_by);
 
         return $data;
     }

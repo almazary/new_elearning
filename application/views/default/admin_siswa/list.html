@@ -15,11 +15,11 @@
 
             <div class="span5">
                 <div class="btn-group">
-                    {{ anchor('admin/siswa/list/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn'})|raw }}
-                    {{ anchor('admin/siswa/list/0', 'Pending', {'class' : (status_id == 0) ? 'btn btn-info' : 'btn'})|raw }}
-                    {{ anchor('admin/siswa/list/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn'})|raw }}
-                    {{ anchor('admin/siswa/list/3', 'Alumni', {'class' : (status_id == 3) ? 'btn btn-info' : 'btn'})|raw }}
-                    {{ anchor('admin/siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn'})|raw }}
+                    {{ anchor('admin/siswa/list/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('admin/siswa/list/0', 'Pending', {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('admin/siswa/list/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('admin/siswa/list/3', 'Alumni', {'class' : (status_id == 3) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('admin/siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-default'})|raw }}
                 </div>
             </div>
         </div>

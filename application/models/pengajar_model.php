@@ -10,6 +10,34 @@ class Pengajar_model extends CI_Model
 {
 
     /**
+     * Method untuk mendapatkan semua pengajar berhasarkan nama
+     * 
+     * @param  string $nama
+     * @return array
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_all_by_name($nama)
+    {
+        $search_result = $this->retrieve_all_filter(
+            $nip           = '',
+            $nama,
+            $jenis_kelamin = array(),
+            $tempat_lahir  = '',
+            $tgl_lahir     = '',
+            $bln_lahir     = '',
+            $thn_lahir     = '',
+            $alamat        = '',
+            $status_id     = array(),
+            $username      = '',
+            $is_admin      = '',
+            $page_no       = 1,
+            $pagination    = false
+        );
+        return $search_result;
+    }
+
+    /**
      * Method untuk filter pengajar
      *
      * @param  string  $nip
@@ -23,6 +51,7 @@ class Pengajar_model extends CI_Model
      * @param  array   $status_id
      * @param  string  $username
      * @param  integer $page_no
+     * @param  boolean $pagination
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
@@ -38,7 +67,8 @@ class Pengajar_model extends CI_Model
         $status_id     = array(),
         $username      = '',
         $is_admin      = '',
-        $page_no       = 1
+        $page_no       = 1,
+        $pagination    = true
     ) {
         $where = array();
         $orderby['pengajar.nama'] = 'ASC';
@@ -94,12 +124,19 @@ class Pengajar_model extends CI_Model
 
         if (!empty($is_admin)) {
             if (empty($username)) {
-                $where['login']          = array('pengajar.id = login.pengajar_id', 'join', 'inner');
+                $where['login'] = array('pengajar.id = login.pengajar_id', 'join', 'inner');
             }
             $where['login.is_admin'] = array($is_admin, 'where');
         }
 
-        $data = $this->pager->set('pengajar', 50, $page_no, $where, $orderby, 'pengajar.*');
+        if ($pagination) {
+            $data = $this->pager->set('pengajar', 50, $page_no, $where, $orderby, 'pengajar.*');
+        } else {
+            # cari jumlah semua pengajar
+            $no_of_records = $this->db->count_all('pengajar');
+            $search_all    = $this->pager->set('pengajar', $no_of_records, 1, $where, $orderby, 'pengajar.*');
+            $data          = $search_all['results'];
+        }
 
         return $data;
     }

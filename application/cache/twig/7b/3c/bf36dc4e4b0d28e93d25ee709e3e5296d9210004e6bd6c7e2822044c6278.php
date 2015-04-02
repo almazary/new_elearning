@@ -54,19 +54,19 @@ class __TwigTemplate_7b3cbf36dc4e4b0d28e93d25ee709e3e5296d9210004e6bd6c7e2822044
             <div class=\"btn-group\">
                 ";
         // line 18
-        echo anchor("admin/siswa/list/1", "Aktif", array("class" => "btn"));
+        echo anchor("admin/siswa/list/1", "Aktif", array("class" => "btn btn-default"));
         echo "
                 ";
         // line 19
-        echo anchor("admin/siswa/list/0", "Pending", array("class" => "btn"));
+        echo anchor("admin/siswa/list/0", "Pending", array("class" => "btn btn-default"));
         echo "
                 ";
         // line 20
-        echo anchor("admin/siswa/list/2", "Blocking", array("class" => "btn"));
+        echo anchor("admin/siswa/list/2", "Blocking", array("class" => "btn btn-default"));
         echo "
                 ";
         // line 21
-        echo anchor("admin/siswa/list/3", "Alumni", array("class" => "btn"));
+        echo anchor("admin/siswa/list/3", "Alumni", array("class" => "btn btn-default"));
         echo "
                 ";
         // line 22
@@ -484,7 +484,7 @@ class __TwigTemplate_7b3cbf36dc4e4b0d28e93d25ee709e3e5296d9210004e6bd6c7e2822044
             echo "                            </select>
                         </td>
                         <td valign=\"top\">
-                            <button type=\"submit\" class=\"btn\">Update</button>
+                            <button type=\"submit\" class=\"btn btn-primary\">Update</button>
                         </td>
                     </tr>
                 </table>

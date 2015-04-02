@@ -54,15 +54,15 @@ class __TwigTemplate_3a8e8d4f3d7754c2c67bfbc0ecd8fab33864f0a87138ec9f5a4eab1eacc
             <div class=\"btn-group\">
                 ";
         // line 18
-        echo anchor("admin/pengajar/list/1", "Aktif", array("class" => "btn"));
+        echo anchor("admin/pengajar/list/1", "Aktif", array("class" => "btn btn-default"));
         echo "
                 ";
         // line 19
-        echo anchor("admin/pengajar/list/0", "Pending", array("class" => "btn"));
+        echo anchor("admin/pengajar/list/0", "Pending", array("class" => "btn btn-default"));
         echo "
                 ";
         // line 20
-        echo anchor("admin/pengajar/list/2", "Blocking", array("class" => "btn"));
+        echo anchor("admin/pengajar/list/2", "Blocking", array("class" => "btn btn-default"));
         echo "
                 ";
         // line 21
@@ -398,7 +398,7 @@ class __TwigTemplate_3a8e8d4f3d7754c2c67bfbc0ecd8fab33864f0a87138ec9f5a4eab1eacc
                             </select>
                         </td>
                         <td valign=\"top\">
-                            <button type=\"submit\" class=\"btn\">Update</button>
+                            <button type=\"submit\" class=\"btn btn-primary\">Update</button>
                         </td>
                     </tr>
                 </table>

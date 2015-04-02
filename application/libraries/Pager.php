@@ -42,7 +42,7 @@ class Pager
      * </code>
      * @author Almazari <almazary@gmail.com>
      */
-    public function set($table, $no_of_records, $page_no, $where = array(), $order_by = array(), $select_str = '')
+    public function set($table, $no_of_records, $page_no, $where = array(), $order_by = array(), $select_str = '', $group_by = array())
     {
         $CI =& get_instance();
         $no_of_records = (int)$no_of_records;
@@ -64,11 +64,13 @@ class Pager
         $this->init_select($select_str);
         $this->init_where($where);
         $this->init_orderby($order_by);
+        $this->init_groupby($group_by);
         $result = $CI->db->get($table, $no_of_records, $offset);
 
         $this->init_select($select_str);
         $this->init_where($where);
         $this->init_orderby($order_by);
+        $this->init_groupby($group_by);
         $result_all = $CI->db->get($table);
         $count_all  = $result_all->num_rows();
 
@@ -79,6 +81,7 @@ class Pager
         $this->init_select($select_str);
         $this->init_where($where);
         $this->init_orderby($order_by);
+        $this->init_groupby($group_by);
         $result_next = $CI->db->get($table, $no_of_records, $offset);
         if ($result_next->num_rows() > 0) {
             $next_page = $page_no_plus;
@@ -92,6 +95,7 @@ class Pager
             $this->init_select($select_str);
             $this->init_where($where);
             $this->init_orderby($order_by);
+            $this->init_groupby($group_by);
             $result_prev = $CI->db->get($table, $no_of_records, $offset);
             if ($result_prev->num_rows() > 0) {
                 $prev_page = $page_no_min;
@@ -168,6 +172,25 @@ class Pager
             } else {
                 $CI->db->$type($field, $data);
             }
+        }
+    }
+
+    /**
+     * Method yang bertugas menjalankan groupby untuk mendukung fungsi get_pager
+     * 
+     * @param  array  $group_by
+     * <code>
+     * $group_by = [
+     *     'title', 'id'
+     * ];
+     * </code>
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function init_groupby($group_by = array())
+    {
+        if (!empty($group_by)) {
+            $CI =& get_instance();
+            $CI->db->group_by($group_by);
         }
     }
 
