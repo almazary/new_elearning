@@ -210,7 +210,7 @@ class Pengajar extends MY_Controller
                 $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
             }
 
-            # update siswa
+            # update pengajar
             $this->pengajar_model->update(
                 $pengajar_id,
                 $nip,
@@ -238,5 +238,174 @@ class Pengajar extends MY_Controller
         }
 
         $this->twig->display('edit-pengajar-profile.html', $data);
+    }
+
+    function edit_picture($segment_3 = '', $segment_4 = '')
+    {
+        $status_id         = (int)$segment_3;
+        $pengajar_id       = (int)$segment_4;
+        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        if (empty($retrieve_pengajar)) {
+            exit('Data Pengajar tidak ditemukan');
+        }
+
+        $data['status_id']    = $status_id;
+        $data['pengajar_id']  = $pengajar_id;
+        $data['pengajar']     = $retrieve_pengajar;
+
+        $config['upload_path']   = get_path_image();
+        $config['allowed_types'] = 'jpg|jpeg|png';
+        $config['max_size']      = '0';
+        $config['max_width']     = '0';
+        $config['max_height']    = '0';
+        $config['file_name']     = 'pengajar-'.url_title($retrieve_pengajar['nama'], '-', true);
+        $this->upload->initialize($config);
+
+        if ($this->upload->do_upload()) {
+
+            if (is_file(get_path_image($retrieve_pengajar['foto']))) {
+                unlink(get_path_image($retrieve_pengajar['foto']));
+            }
+
+            if (is_file(get_path_image($retrieve_pengajar['foto'], 'medium'))) {
+                unlink(get_path_image($retrieve_pengajar['foto'], 'medium'));
+            }
+
+            if (is_file(get_path_image($retrieve_pengajar['foto'], 'small'))) {
+                unlink(get_path_image($retrieve_pengajar['foto'], 'small'));
+            }
+
+            $upload_data = $this->upload->data();
+
+            # create thumb small
+            $this->create_img_thumb(
+                get_path_image($upload_data['file_name']),
+                '_small',
+                '50',
+                '50'
+            );
+
+            # create thumb medium
+            $this->create_img_thumb(
+                get_path_image($upload_data['file_name']),
+                '_medium',
+                '150',
+                '150'
+            );
+
+            # update pengajar
+            $this->pengajar_model->update(
+                $pengajar_id,
+                $retrieve_pengajar['nip'],
+                $retrieve_pengajar['nama'],
+                $retrieve_pengajar['jenis_kelamin'],
+                $retrieve_pengajar['tempat_lahir'],
+                $retrieve_pengajar['tgl_lahir'],
+                $retrieve_pengajar['alamat'],
+                $upload_data['file_name'],
+                $retrieve_pengajar['status_id']
+            );
+
+            $this->session->set_flashdata('edit', get_alert('success', 'Foto pengajar berhasil diperbaharui.'));
+            redirect('pengajar/edit_picture/'.$status_id.'/'.$pengajar_id);
+        } else {
+            if (!empty($_FILES['userfile']['tmp_name'])) {
+                $data['error_upload'] = '<span class="text-error">'.$this->upload->display_errors().'</span>';
+            }
+        }
+
+        $this->twig->display('edit-pengajar-picture.html', $data);
+    }
+
+    function edit_username($segment_3 = '', $segment_4 = '')
+    {
+        $status_id         = (int)$segment_3;
+        $pengajar_id       = (int)$segment_4;
+        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        if (empty($retrieve_pengajar)) {
+            exit('Data Pengajar tidak ditemukan');
+        }
+
+        $data['status_id']    = $status_id;
+        $data['pengajar_id']  = $pengajar_id;
+        $data['login']        = $this->login_model->retrieve(null, null, null, null, $pengajar_id);
+
+        if ($this->form_validation->run('pengajar/edit_username') == TRUE) {
+            $login_id = $this->input->post('login_id', TRUE);
+            $username = $this->input->post('username', TRUE);
+
+            try {
+                # update username
+                $this->login_model->update(
+                    $login_id,
+                    $username,
+                    null,
+                    $pengajar_id,
+                    $data['login']['is_admin'],
+                    $data['login']['reset_kode']
+                );
+            } catch (Exception $e) {
+                $this->session->set_flashdata('edit', get_alert('warning', $e->getMessage()));
+                redirect('pengajar/edit_username/'.$status_id.'/'.$pengajar_id);
+            }
+
+            $this->session->set_flashdata('edit', get_alert('success', 'Username pengajar berhasil diperbaharui.'));
+            redirect('pengajar/edit_username/'.$status_id.'/'.$pengajar_id);
+        }
+
+        $this->twig->display('edit-pengajar-username.html', $data);
+    }
+
+    function edit_password($segment_3 = '', $segment_4 = '')
+    {
+        $status_id         = (int)$segment_3;
+        $pengajar_id       = (int)$segment_4;
+        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        if (empty($retrieve_pengajar)) {
+            exit('Data Pengajar tidak ditemukan');
+        }
+
+        $data['status_id']    = $status_id;
+        $data['pengajar_id']  = $pengajar_id;
+
+        $retrieve_login = $this->login_model->retrieve(null, null, null, null, $pengajar_id);
+
+        if ($this->form_validation->run('pengajar/edit_password') == TRUE) {
+            $password = $this->input->post('password2', TRUE);
+            
+            # update password
+            $this->login_model->update_password($retrieve_login['id'], $password);
+
+            $this->session->set_flashdata('edit', get_alert('success', 'Password pengajar berhasil diperbaharui.'));
+            redirect('pengajar/edit_password/'.$status_id.'/'.$pengajar_id);
+        }
+
+        $this->twig->display('edit-pengajar-password.html', $data);
+    }
+
+    function detail($segment_3 = '', $segment_4 = '')
+    {
+        $status_id         = (int)$segment_3;
+        $pengajar_id       = (int)$segment_4;
+        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        if (empty($retrieve_pengajar)) {
+            exit('Data Pengajar tidak ditemukan');
+        }
+
+        $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
+
+        $data['pengajar']       = $retrieve_pengajar;
+        $data['pengajar_login'] = $retrieve_login;
+        $data['status_id']      = $status_id;
+
+        //panggil colorbox
+        $html_js = load_comp_js(array(
+            base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+            base_url('assets/comp/colorbox/act-pengajar.js')
+        ));
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+
+        $this->twig->display('detail-pengajar.html', $data);
     }
 }

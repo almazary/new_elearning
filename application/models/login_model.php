@@ -148,6 +148,15 @@ class Login_model extends CI_Model
         }
         $is_admin = (int)$is_admin;
 
+        # cek username
+        $this->db->where('id !=', $id);
+        $this->db->where('username', $username);
+        $result = $this->db->get('login');
+        $check  = $result->row_array();
+        if (!empty($check)) {
+            throw new Exception("Username sudah digunakan.");
+        }
+
         $data = array(
             'username'    => $username,
             'siswa_id'    => $siswa_id,
