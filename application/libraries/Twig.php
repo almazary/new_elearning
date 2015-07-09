@@ -50,6 +50,9 @@ class Twig
 
     public function display($template, $data = array())
     {
+        # merge array data dengan default data
+        $data = default_parser_item($data);
+
         $template = $this->_twig->loadTemplate($template);
         $this->CI->output->set_output($template->render($data));
     }

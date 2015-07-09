@@ -10,47 +10,53 @@ class Config_model extends CI_Model
 {
 
     /**
-     * Method untuk mendapatkan informasi site config
+     * Method untuk mendapatkan informasi pengaturan
+     * 
+     * @param  string $id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
-    public function retrieve()
+    public function retrieve($id)
     {
-        $result = $this->db->get('site_config', 1);
+        $this->db->where('id', $id);
+        $result = $this->db->get('pengaturan', 1);
         return $result->row_array();
     }
 
     /**
-     * Method untuk menambah atau memperbaharui informasi site config
+     * Method untuk nambah pengaturan
      * 
-     * @param  string|null $site_name  
-     * @param  string|null $address    
-     * @param  string|null $telp       
-     * @param  string|null $date_format
-     * @return boolan      true jika berhasil
+     * @param  string $id    
+     * @param  string $nama  
+     * @param  string $value 
+     * @return boolean
+     * 
      * @author Almazari <almazary@gmail.com>
      */
-    public function create_update(
-        $site_name   = null,
-        $address     = null,
-        $telp        = null,
-        $date_format = null
-    ) {
-        $count = $this->db->count_all('site_config');
+    public function create($id, $nama = null, $value = null)
+    {
+        $this->db->insert('pengaturan', array(
+            'id'    => $id,
+            'nama'  => $nama,
+            'value' => $value
+        ));
 
-        $data = array(
-            'site_name' => $site_name,
-            'address' => $address,
-            'telp' => $telp,
-            'date_format' => (is_null($date_format)) ? 'F j, Y' : $date_format 
-        );
+        return true;
+    }
 
-        //insert
-        if (empty($count)) {
-            $this->db->insert('site_config', $data);
-        } else {
-            $this->db->update('site_config', $data);
-        }
+    /**
+     * Method untuk update pengaturan
+     * 
+     * @param  string $id   
+     * @param  string $nama 
+     * @param  string $value
+     * @return boolean
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function update($id, $nama = null, $value = null)
+    {
+        $this->db->update('pengaturan', array('nama' => $nama, 'value' => $value), array('id' => $id));
         return true;
     }
 

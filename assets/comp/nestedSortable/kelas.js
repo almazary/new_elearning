@@ -19,7 +19,7 @@ $(function() {
     $('#update-hirarki').click(function(){
         $.ajax({
             type : "POST",
-            url : site_url + "/admin/ajax_post/hirarki_kelas",
+            url : site_url + "/ajax/post_data/hirarki_kelas",
             data : $('ol.sortable').nestedSortable('serialize'),
             success : function(data){
                 $('#response_update').html('<span class="text-success pull-right"><i class="icon icon-ok"></i> Update hirarki kelas berhasil</span>');

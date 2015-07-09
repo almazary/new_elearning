@@ -13,7 +13,7 @@ function default_parser_item($add_item = array())
         'site_url'          => site_url(),
         'favicon_url'       => base_url('assets/images/favicon.ico'),
         'copyright_setup'   => 'Copyright &copy; 2014 Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
-        'copyright'         => 'Copyright &copy; 2014 '.get_site_config('site_name').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
+        'copyright'         => 'Copyright &copy; 2014 '.get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
         'version'           => '<a href="https://github.com/almazary/new_elearning">@dev version</a>',
         'current_url'       => current_url(),
         'logo_url_small'    => get_logo_url(),
@@ -21,11 +21,12 @@ function default_parser_item($add_item = array())
         'logo_url_large'    => get_logo_url('large'),
         'base_url_theme'    => base_url_theme().'/',
         'site_name_default' => 'E-Learning System',
-        'site_name'         => 'E-Learning '.get_site_config('site_name'),
+        'site_name'         => 'E-Learning '.get_pengaturan('nama-sekolah', 'value'),
         'comp_css'          => '',
         'comp_js'           => '',
         ''
     );
+
     if (!empty($add_item) AND is_array($add_item)) {
         $return = array_merge($return, $add_item);
     }
@@ -63,19 +64,38 @@ function load_comp_js($target_src = array())
 }
 
 /**
- * Method untuk mendapatkan data site config
- *
- * @param  string $field
- * @return string data
+ * Fungsi yang berguna untuk mendapatkan data tertentu dari model tertentu
+ * 
+ * @param  string $model     
+ * @param  string $func      
+ * @param  array  $args      
+ * @param  string $field_name
+ * @return array|string
  */
-function get_site_config($field)
+function get_row_data($model, $func, $args = array(), $field_name = '')
 {
     $CI =& get_instance();
-    $CI->load->model('config_model');
-    $config = $CI->config_model->retrieve();
-    if (!empty($config)) {
-        return $config[$field];
+    $CI->load->model($model);
+
+    $retrieve = call_user_func_array(array($CI->$model, $func), $args);
+
+    if (empty($field_name)) {
+        return $retrieve;
+    } else {
+        return isset($retrieve[$field_name]) ? $retrieve[$field_name] : '';
     }
+}
+
+/**
+ * Method untuk mendapatkan data site config
+ *
+ * @param  string $id
+ * @param  string $get   nama atau value
+ * @return string data
+ */
+function get_pengaturan($id, $get = null)
+{
+    return get_row_data('config_model', 'retrieve', array($id), $get);
 }
 
 /**
@@ -185,22 +205,140 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
 }
 
 /**
- * Method untuk mendapatkan data session
- *
- * @param  string $field
- * @return string
+ * Method untuk ngecek apakah sudah login atau belum
+ * 
+ * @return boolean
  */
-function get_sess_data($idx1, $idx2, $idx3)
+function is_login()
 {
     $CI =& get_instance();
     $CI->load->library('session');
 
-    $sess_admin = $CI->session->userdata($idx1);
-
-    //jika admin
-    if (!empty($sess_admin)) {
-        return $sess_admin[$idx2][$idx3];
+    $sess_data = $CI->session->userdata('login_' . APP_PREFIX);
+    if (!empty($sess_data)) {
+        return true;
     }
+
+    return false;
+}
+
+/**
+ * Fungsi yang bertugas redirect jika belum login
+ */
+function must_login()
+{
+    if (!is_login()) {
+        redirect('login');
+        die;
+    }
+}
+
+/**
+ * Method untuk ngecek apakah yang login itu admin atau bukan
+ * @return boolean
+ */
+function is_admin()
+{
+    if (!is_login()) {
+        return false;
+    }
+
+    $CI =& get_instance();
+    $CI->load->library('session');
+
+    $sess = $CI->session->userdata('login_' . APP_PREFIX);
+    if (!empty($sess['admin'])) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Method untuk ngecek apakah yang login itu pengajar atau bukan
+ * @return boolean
+ */
+function is_pengajar()
+{
+    if (!is_login()) {
+        return false;
+    }
+
+    $CI =& get_instance();
+    $CI->load->library('session');
+
+    $sess = $CI->session->userdata('login_' . APP_PREFIX);
+    if (!empty($sess['pengajar'])) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Method untuk ngecek apakah yang login itu siswa atau bukan
+ * @return boolean
+ */
+function is_siswa()
+{
+    if (!is_login()) {
+        return false;
+    }
+
+    $CI =& get_instance();
+    $CI->load->library('session');
+
+    $sess = $CI->session->userdata('login_' . APP_PREFIX);
+    if (!empty($sess['siswa'])) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Method untuk mendapatkan data session
+ *
+ * @param  string $key1
+ * @param  string $key2
+ * @return array
+ */
+function get_sess_data($key1, $key2)
+{
+    $CI =& get_instance();
+    $CI->load->library('session');
+
+    $sess_data = $CI->session->userdata('login_' . APP_PREFIX);
+    if (!empty($sess_data)) {
+        $type = '';
+        if (is_admin()) {
+            $type = 'admin';
+        }
+        if (is_pengajar()) {
+            $type = 'pengajar';
+        }
+        if (is_siswa()) {
+            $type = 'siswa';
+        }
+
+        if (!empty($type)) {
+            return $sess_data[$type][$key1][$key2];
+        }
+    }
+}
+
+/**
+ * Method untuk ngecek yang request ajax bukan
+ * 
+ * @return boolean
+ */
+function is_ajax() 
+{
+    /* AJAX check  */
+    if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -286,25 +424,24 @@ function get_path_image($img = '', $size = '')
     }
 }
 
+/**
+ * Deklarasi path file
+ * 
+ * @param  string $file
+ * @return string
+ */
 function get_path_file($file = '')
 {
     return './assets/files/'.$file;
 }
 
-function get_row_data($model, $func, $args = array(), $field_name = '')
-{
-    $CI =& get_instance();
-    $CI->load->model($model);
 
-    $retrieve = call_user_func_array(array($CI->$model, $func), $args);
-
-    if (empty($field_name)) {
-        return $retrieve;
-    } else {
-        return isset($retrieve[$field_name]) ? $retrieve[$field_name] : '';
-    }
-}
-
+/**
+ * Method untuk mendapatkan flashdata
+ * 
+ * @param  string $key
+ * @return string
+ */
 function get_flashdata($key) {
     $CI =& get_instance();
     $CI->load->library('session');
@@ -312,6 +449,12 @@ function get_flashdata($key) {
     return $CI->session->flashdata($key);
 }
 
+/**
+ * Fungsi untuk mendapatkan bulan dengan nama indonesia
+ * 
+ * @param  string $bln
+ * @return string
+ */
 function get_indo_bulan($bln = '') {
     $data = array(1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
     if (empty($bln)) {
@@ -322,6 +465,12 @@ function get_indo_bulan($bln = '') {
     }
 }
 
+/**
+ * Fungsi untuk mendapatkan nama hari indonesia
+ * 
+ * @param  string $hari
+ * @return string
+ */
 function get_indo_hari($hari = '') {
     $data = array(1 => 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu', 'Minggu');
     if (empty($hari)) {
@@ -332,6 +481,12 @@ function get_indo_hari($hari = '') {
     }
 }
 
+/**
+ * Method untuk memformat tanggal ke indonesia
+ * 
+ * @param  string $tgl
+ * @return string
+ */
 function tgl_indo($tgl = '') {
     if (!empty($tgl)) {
         $pisah = explode('-', $tgl);
@@ -339,6 +494,12 @@ function tgl_indo($tgl = '') {
     }
 }
 
+/**
+ * Method untuk memformat tanggal dan jam ke format indonesia
+ * 
+ * @param  string $tgl_jam
+ * @return string
+ */
 function tgl_jam_indo($tgl_jam = '') {
     if (!empty($tgl_jam)) {
         $pisah = explode(' ', $tgl_jam);
@@ -346,15 +507,47 @@ function tgl_jam_indo($tgl_jam = '') {
     }
 }
 
+/**
+ * Metho untuk mendapatkan array post
+ * 
+ * @param  string $key
+ * @return string
+ */
 function get_post_data($key = '') {
     if (!empty($_POST)) {
         return $_POST[$key];
     }
 }
 
+/**
+ * Method untuk mendapatkan huruf berdasarkan nomornya
+ * 
+ * @param  integer $index
+ * @return string
+ */
 function get_abjad($index) {
     $abjad = array(1 => 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
     return $abjad[$index];
+}
+
+/**
+ * Method untuk enkripsi url
+ * 
+ * @param  string $current_url
+ * @return string
+ */
+function enurl_redirect($current_url) {
+    return str_replace(array("%2F","%5C"), array("%252F","%255C"), urlencode($current_url));
+}
+
+/**
+ * Method untuk deskripsi url
+ * 
+ * @param  string $url
+ * @return string
+ */
+function deurl_redirect($url) {
+    return urldecode(urldecode($url));
 }
 
 function pr($array) {
@@ -367,10 +560,3 @@ function get_data_array($array, $index1, $index2) {
     return $array[$index1][$index2];
 }
 
-function enurl_redirect($current_url) {
-    return str_replace(array("%2F","%5C"), array("%252F","%255C"), urlencode($current_url));
-}
-
-function deurl_redirect($url) {
-    return urldecode(urldecode($url));
-}

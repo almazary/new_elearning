@@ -54,7 +54,7 @@ class __TwigTemplate_062a1a7d35c457bc26bf25eed85567bb62d32e43efcfe0d524dbec8d464
             </div>
             <a class=\"as-link\" data-toggle=\"collapse\" data-target=\"#form-filter\"><i class=\"icon-search\" style=\"line-height: 0px;\"></i> Filter</a>
 
-            <div id=\"form-filter\" class=\"collapse\" style=\"margin-top: 3px;\">
+            <div id=\"form-filter\" class=\"collapse\" style=\"margin-top: 5px;\">
                 ";
         // line 19
         echo form_open("admin/materi");

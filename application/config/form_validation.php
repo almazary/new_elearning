@@ -27,7 +27,7 @@ $config['setup/index'] = array(
         'rules' => 'required|trim|xss_clean|alpha_numeric|matches[password]'
     ),
 );
-$config['admin/login'] = array(
+$config['login'] = array(
     array(
         'field' => 'email',
         'label' => 'Username (Email)',
@@ -39,26 +39,7 @@ $config['admin/login'] = array(
         'rules' => 'required|trim|xss_clean|alpha_numeric'
     ),
 );
-$config['admin/kelas'] = array(
-    array(
-        'field' => 'nama',
-        'label' => 'Nama Kelas',
-        'rules' => 'required|trim|xss_clean'
-    ),
-);
-$config['admin/kelas/edit'] = array(
-    array(
-        'field' => 'nama',
-        'label' => 'Nama Kelas',
-        'rules' => 'required|trim|xss_clean'
-    ),
-    array(
-        'field' => 'status',
-        'label' => 'Status',
-        'rules' => 'trim|xss_clean|numeric'
-    ),
-);
-$config['admin/mapel/add'] = array(
+$config['mapel/add'] = array(
     array(
         'field' => 'nama',
         'label' => 'Nama Matapelajaran',
@@ -70,7 +51,8 @@ $config['admin/mapel/add'] = array(
         'rules' => 'trim'
     )
 );
-$config['admin/mapel/edit'] = array(
+
+$config['mapel/edit'] = array(
     array(
         'field' => 'nama',
         'label' => 'Nama Matapelajaran',
@@ -87,14 +69,38 @@ $config['admin/mapel/edit'] = array(
         'rules' => 'trim|xss_clean|numeric'
     ),
 );
-$config['admin/mapel_kelas/add'] = array(
+
+$config['kelas/index'] = array(
+    array(
+        'field' => 'nama',
+        'label' => 'Nama Kelas',
+        'rules' => 'required|trim|xss_clean'
+    ),
+);
+
+$config['kelas/edit'] = array(
+    array(
+        'field' => 'nama',
+        'label' => 'Nama Kelas',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'status',
+        'label' => 'Status',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+);
+
+
+$config['kelas/mapel_kelas/add'] = array(
     array(
         'field' => 'mapel[]',
         'label' => 'Mapel',
         'rules' => 'trim|xss_clean|numeric'
     ),
 );
-$config['admin/ch_pass'] = array(
+
+$config['ch_pass'] = array(
     array(
         'field' => 'password',
         'label' => 'Password',
@@ -106,7 +112,7 @@ $config['admin/ch_pass'] = array(
         'rules' => 'required|trim|xss_clean|alpha_numeric|matches[password]'
     ),
 );
-$config['admin/ch_profil'] = array(
+$config['ch_profil'] = array(
     array(
         'field' => 'username',
         'label' => 'Username',
@@ -123,7 +129,7 @@ $config['admin/ch_profil'] = array(
         'rules' => 'required|trim|xss_clean'
     ),
 );
-$config['admin/siswa/add'] = array(
+$config['siswa/add'] = array(
     array(
         'field' => 'nis',
         'label' => 'NIS',
@@ -200,21 +206,21 @@ $config['admin/siswa/add'] = array(
         'rules' => 'required|matches[password]'
     ),
 );
-$config['admin/siswa/moved_class'] = array(
+$config['siswa/moved_class'] = array(
     array(
         'field' => 'kelas_id',
         'label' => 'Kelas',
         'rules' => 'required|trim|numeric|xss_clean'
     )
 );
-$config['admin/siswa/edit_username'] = array(
+$config['siswa/edit_username'] = array(
     array(
         'field' => 'username',
         'label' => 'Username',
         'rules' => 'required|trim|xss_clean|valid_email|callback_update_username'
     )
 );
-$config['admin/siswa/edit_password'] = array(
+$config['siswa/edit_password'] = array(
     array(
         'field' => 'password',
         'label' => 'Password Baru',
@@ -226,7 +232,7 @@ $config['admin/siswa/edit_password'] = array(
         'rules' => 'required|matches[password]'
     )
 );
-$config['admin/siswa/edit_profile'] = array(
+$config['siswa/edit_profile'] = array(
     array(
         'field' => 'nis',
         'label' => 'NIS',
@@ -283,7 +289,7 @@ $config['admin/siswa/edit_profile'] = array(
         'rules' => 'required|trim|xss_clean|numeric'
     )
 );
-$config['admin/siswa/filter'] = array(
+$config['siswa/filter'] = array(
     array(
         'field' => 'nis',
         'label' => 'NIS',
@@ -351,7 +357,7 @@ $config['admin/siswa/filter'] = array(
     ),
 );
 
-$config['admin/pengajar/add'] = array(
+$config['pengajar/add'] = array(
     array(
         'field' => 'nis',
         'label' => 'NIS',
@@ -419,7 +425,7 @@ $config['admin/pengajar/add'] = array(
     ),
 );
 
-$config['admin/pengajar/edit_profile'] = array(
+$config['pengajar/edit_profile'] = array(
     array(
         'field' => 'nip',
         'label' => 'NIP',
@@ -472,7 +478,7 @@ $config['admin/pengajar/edit_profile'] = array(
     ),
 );
 
-$config['admin/pengajar/edit_username'] = array(
+$config['pengajar/edit_username'] = array(
     array(
         'field' => 'username',
         'label' => 'Username',
@@ -480,7 +486,7 @@ $config['admin/pengajar/edit_username'] = array(
     )
 );
 
-$config['admin/pengajar/edit_password'] = array(
+$config['pengajar/edit_password'] = array(
     array(
         'field' => 'password',
         'label' => 'Password Baru',
@@ -493,7 +499,7 @@ $config['admin/pengajar/edit_password'] = array(
     )
 );
 
-$config['admin/pengajar/ampuan'] = array(
+$config['pengajar/ampuan'] = array(
     array(
         'field' => 'kelas_id',
         'label' => 'Kelas',
@@ -521,7 +527,7 @@ $config['admin/pengajar/ampuan'] = array(
     ),
 );
 
-$config['admin/pengajar/filter'] = array(
+$config['pengajar/filter'] = array(
     array(
         'field' => 'nip',
         'label' => 'NIP',
@@ -574,7 +580,7 @@ $config['admin/pengajar/filter'] = array(
     ),
 );
 
-$config['admin/materi/add/tertulis'] = array(
+$config['materi/add/tertulis'] = array(
     array(
         'field' => 'mapel_id',
         'label' => 'Matapelajaran',
@@ -597,7 +603,7 @@ $config['admin/materi/add/tertulis'] = array(
     ),
 );
 
-$config['admin/materi/add/file'] = array(
+$config['materi/add/file'] = array(
     array(
         'field' => 'mapel_id',
         'label' => 'Matapelajaran',
@@ -615,7 +621,7 @@ $config['admin/materi/add/file'] = array(
     ),
 );
 
-$config['admin/materi/edit/tertulis'] = array(
+$config['materi/edit/tertulis'] = array(
     array(
         'field' => 'mapel_id',
         'label' => 'Matapelajaran',
@@ -638,7 +644,7 @@ $config['admin/materi/edit/tertulis'] = array(
     ),
 );
 
-$config['admin/materi/edit/file'] = array(
+$config['materi/edit/file'] = array(
     array(
         'field' => 'mapel_id',
         'label' => 'Matapelajaran',
@@ -656,7 +662,7 @@ $config['admin/materi/edit/file'] = array(
     ),
 );
 
-$config['admin/tugas/add'] = array(
+$config['tugas/add'] = array(
     array(
         'field' => 'type_id',
         'label' => 'Tipe Soal',
@@ -674,7 +680,7 @@ $config['admin/tugas/add'] = array(
     ),
 );
 
-$config['admin/tugas/edit'] = array(
+$config['tugas/edit'] = array(
     array(
         'field' => 'judul',
         'label' => 'Judul Tugas',
@@ -687,7 +693,7 @@ $config['admin/tugas/edit'] = array(
     ),
 );
 
-$config['admin/tugas/ganda'] = array(
+$config['tugas/ganda'] = array(
     array(
         'field' => 'pertanyaan',
         'label' => 'Pertanyaan',
@@ -705,7 +711,7 @@ $config['admin/tugas/ganda'] = array(
     ),
 );
 
-$config['admin/tugas/essay'] = array(
+$config['tugas/essay'] = array(
     array(
         'field' => 'pertanyaan',
         'label' => 'Pertanyaan',
@@ -713,7 +719,7 @@ $config['admin/tugas/essay'] = array(
     )
 );
 
-$config['admin/materi/filter'] = array(
+$config['materi/filter'] = array(
     array(
         'field' => 'judul',
         'label' => 'Judul',

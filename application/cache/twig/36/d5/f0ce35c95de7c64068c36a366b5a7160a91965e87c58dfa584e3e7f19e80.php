@@ -138,7 +138,7 @@ class __TwigTemplate_36d5f0ce35c95de7c64068c36a366b5a7160a91965e87c58dfa584e3e7f
                         <td>
                             <div class=\"row-fluid\">
                                 <div class=\"span10\">
-                                    <ul class=\"unstyled inline\">
+                                    <ul class=\"unstyled inline\" style=\"margin-left: -5px;\">
                                         ";
         // line 62
         $context['_parent'] = (array) $context;

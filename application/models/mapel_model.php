@@ -18,9 +18,7 @@ class Mapel_model extends CI_Model
     public function delete_kelas($id)
     {
         $id = (int)$id;
-
-        $this->db->where('id', $id);
-        $this->db->delete('mapel_kelas');
+        $this->db->update('mapel_kelas', array('aktif' => 0), array('id' => $id));
         return true;
     }
 
@@ -83,10 +81,11 @@ class Mapel_model extends CI_Model
      * @param  integer $id
      * @param  integer $kelas_id
      * @param  integer $mapel_id
+     * @param  integer $aktif
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
      */
-    public function update_kelas($id, $kelas_id, $mapel_id)
+    public function update_kelas($id, $kelas_id, $mapel_id, $aktif)
     {
         $id = (int)$id;
         $kelas_id = (int)$kelas_id;
@@ -94,7 +93,8 @@ class Mapel_model extends CI_Model
 
         $data = array(
             'kelas_id' => $kelas_id,
-            'mapel_id' => $mapel_id
+            'mapel_id' => $mapel_id,
+            'aktif'    => $aktif
         );
         $this->db->where('id', $id);
         $this->db->update('mapel_kelas', $data);

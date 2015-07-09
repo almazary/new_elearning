@@ -20,10 +20,10 @@ class Admin extends CI_Controller
             }
         }
 
-        $this->output->enable_profiler(TRUE);
+        // $this->output->enable_profiler(TRUE);
     }
 
-    private function most_login()
+    private function must_login()
     {
         if (empty($this->session_data)) {
             redirect('admin/login');
@@ -45,7 +45,7 @@ class Admin extends CI_Controller
 
     function index()
     {
-        $this->most_login();
+        $this->must_login();
 
         $data['web_title'] = 'Dashboard | Administrator';
 
@@ -112,7 +112,7 @@ class Admin extends CI_Controller
 
     function ajax_post($act = '')
     {
-        $this->most_login();
+        $this->must_login();
 
         if (!empty($act)) {
             switch ($act) {
@@ -162,7 +162,7 @@ class Admin extends CI_Controller
 
     function tugas($act = 'list', $segment_4 = '', $segment_5 = '', $segment_6 = '', $segment_7 = '')
     {
-        $this->most_login();
+        $this->must_login();
 
         $data['web_title'] = 'Tugas | Administrator';
 
@@ -825,7 +825,7 @@ class Admin extends CI_Controller
 
     function materi($act = 'list', $segment_4 = '', $segment_5 = '', $segment_6 = '', $segment_7 = '', $segment_8 = '')
     {
-        $this->most_login();
+        $this->must_login();
 
         $data['web_title'] = 'Materi | Administrator';
 
@@ -1281,7 +1281,7 @@ class Admin extends CI_Controller
 
     function pengajar($act = 'list', $segment_4 = '1', $segment_5 = '', $segment_6 = '')
     {
-        $this->most_login();
+        $this->must_login();
 
         $data['web_title'] = 'Data Pengajar | Administrator';
 
@@ -1874,7 +1874,7 @@ class Admin extends CI_Controller
 
     function siswa($act = 'list', $segment_3 = '1', $segment_4 = '', $segment_5 = '')
     {
-        $this->most_login();
+        $this->must_login();
 
         $data['web_title'] = 'Data Siswa | Administrator';
 
@@ -2460,7 +2460,7 @@ class Admin extends CI_Controller
 
     function ch_profil()
     {
-        $this->most_login();
+        $this->must_login();
 
         $content_file = 'admin_akun/ch_profil.html';
         $data = array(
@@ -2639,7 +2639,7 @@ class Admin extends CI_Controller
 
     function ch_pass()
     {
-        $this->most_login();
+        $this->must_login();
 
         $content_file = 'admin_akun/ch_pass.html';
         $data = array(
@@ -2663,7 +2663,7 @@ class Admin extends CI_Controller
 
     function mapel_kelas($act = 'list', $segment_3 = '', $segment_4 = '', $segment_5 = '', $segment_6 = '')
     {
-        $this->most_login();
+        $this->must_login();
 
         $data['web_title'] = 'Matapelajaran Kelas | Administrator';
         $data['comp_js']   = load_comp_js(array(
@@ -2886,7 +2886,7 @@ class Admin extends CI_Controller
 
     function mapel($act = 'list', $segment_4 = '', $segment_5 = '')
     {
-        $this->most_login();
+        $this->must_login();
 
         $data['web_title'] = 'Manajemen Matapelajaran | Administrator';
 
@@ -2964,7 +2964,7 @@ class Admin extends CI_Controller
 
     function kelas($act = 'list', $id = '')
     {
-        $this->most_login();
+        $this->must_login();
 
         $data = array(
             'web_title'     => 'Manajemen Kelas | Administrator',

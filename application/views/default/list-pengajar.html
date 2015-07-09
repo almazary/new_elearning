@@ -1,0 +1,125 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Data Pengajar - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Data Pengajar</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('pengajar')|raw }}
+
+        <div class="row-fluid">
+            <div class="span8">
+                <a href="{{ site_url('pengajar/add/' ~ status_id) }}" class="btn btn-primary">Tambah Pengajar</a>
+            </div>
+
+            <div class="span4">
+                <div class="btn-group">
+                    {{ anchor('pengajar/index/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('pengajar/index/0', 'Pending', {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('pengajar/index/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-default'})|raw }}
+                </div>
+            </div>
+        </div>
+        <br>
+
+        {{ form_open('pengajar/index/' ~ status_id)|raw }}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th width="7%">
+                        {% if status_id == 0 or status_id == 2 %}
+                            <input type="checkbox" style="margin-top:-2px;" onclick="ch_uch_checkbox(this)">
+                        {% endif %}
+                        ID
+                    </th>
+                    <th>Informasi Pengajar</th>
+                    <th width="22%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for no, v in pengajar %}
+                <tr>
+                    <td>
+                        {% if status_id == 0 or status_id == 2 %}
+                            <input type="checkbox" name="pengajar_id[]" value="{{ v.id }}" style="margin-top:-2px;">
+                        {% endif %}
+                        <b>{{ v.id }}</b>
+                    </td>
+                    <td>
+                        <img style="height:40px;width:40px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_pengajar(v.foto, 'medium', v.jenis_kelamin) }}">
+                        <b>{{ v.nama }} {{ ((v.nip is not empty) ? '<span class="text-muted">(' ~ v.nip ~ ')</span>')|raw }}</b>
+                        {% set is_admin =  get_row_data('login_model', 'retrieve', [null, null, null, null, v.id], 'is_admin') %}
+                        {% if is_admin == 1 %}
+                            <span class="label label-warning">Admin</span>
+                        {% endif %}
+                        <br><b>Alamat :</b> {{ v.alamat }}
+                    </td>
+                    <td>
+                        <ul class="nav nav-pills" style="margin-bottom:0px;">
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            <li class="dropdown">
+                                <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
+                                    <li>{{ anchor('pengajar/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_username/' ~ status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_password/' ~ status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if pengajar is not empty and (status_id == 0 or status_id == 2) %}
+        <br>
+        <div class="row-fluid">
+            <div class="span7">
+                <table cellpadding="5">
+                    <tr>
+                        <th valign="top">Update Status Terpilih</th>
+                        <td valign="top">
+                            <select name="status_id" style="width:100%;">
+                                <option>--Pilih Status--</option>
+                                <option value="1">Aktif</option>
+                                {% if status_id == 0 %}
+                                <option value="2">Blocking</option>
+                                {% endif %}
+                            </select>
+                        </td>
+                        <td valign="top">
+                            <button type="submit" class="btn">Update</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+
+        {{ form_close()|raw }}
+
+        <br>
+        {{ pagination|raw }}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+function ch_uch_checkbox(source){
+    checkboxes = document.getElementsByName('pengajar_id[]');
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = source.checked;
+    }
+}
+</script>
+{% endblock %}
