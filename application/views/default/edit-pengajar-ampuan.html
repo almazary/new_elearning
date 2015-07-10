@@ -1,0 +1,75 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<h4>Edit Jadwal Ajar</h4>
+{{ get_flashdata('edit')|raw }}
+
+{{ form_open('pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar_id ~ '/' ~ ma.id)|raw }}
+<input type="hidden" name="pengajar_id" value="{{ pengajar_id }}">
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th width="27%">Kelas <span class="text-error">*</span></th>
+            <td>
+                <select name="kelas_id" style="width:auto;" id="kelas_id">
+                    {% for k in kelas %}
+                    <option value="{{ k.id }}" {{ set_select('kelas_id', k.id, (k.id == mk.kelas_id) ? TRUE : FALSE) }}>{{ k.nama }}</option>
+                    {% endfor %}
+                </select>
+                <br>{{ form_error('kelas_id')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <th>Mapel <span class="text-error">*</span></th>
+            <td>
+                <select name="mapel_kelas_id" style="width:auto" id="mapel_kelas_id">
+                    {% if get_post_data('kelas_id') is not empty %}
+                        {% set select_option = get_post_data('mapel_kelas_id') %}
+                        {% set post_kelas_id = get_post_data('kelas_id') %}
+                        {% set mapel_kelas = get_row_data('mapel_model', 'retrieve_all_kelas', [null, post_kelas_id]) %}
+                    {% else %}
+                        {% set select_option = ma.mapel_kelas_id %}
+                        {% set mapel_kelas = get_row_data('mapel_model', 'retrieve_all_kelas', [null, mk.kelas_id]) %}
+                    {% endif %}
+
+                    {% for mak in mapel_kelas %}
+                        {% set m = get_row_data('mapel_model', 'retrieve', [mak.mapel_id]) %}
+                        {% if m is not empty %}
+                        <option value="{{ mak.id }}" {{ (select_option == mak.id) ? 'selected' }}>{{ m.nama }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <br><span class="text-muted">Pilih kelas terlebih dahulu</span>
+                <br>{{ form_error('mapel_kelas_id')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <th>Jam Mulai <span class="text-error">*</span></th>
+            <td>
+                <input type="text" name="jam_mulai" style="width:19%" placeholder="hh:mm" value="{{ set_value('jam_mulai', ma.jam_mulai|date('H:i')) }}">
+                <span class="pull-right text-muted">Contoh : 08:30</span>
+                <br>{{ form_error('jam_mulai')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <th>Jam Selesai <span class="text-error">*</span></th>
+            <td>
+                <input type="text" name="jam_selesai" style="width:19%" placeholder="hh:mm" value="{{ set_value('jam_selesai', ma.jam_selesai|date('H:i')) }}">
+                <span class="pull-right text-muted">Contoh : 13:30</span>
+                <br>{{ form_error('jam_selesai')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>
+                <label class="checkbox"><input type="checkbox" name="aktif" value="1" {{ set_checkbox('aktif', '1', (ma.aktif == 1) ? TRUE : FALSE) }}> Aktif</label>
+                <br>{{ form_error('aktif')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><button type="submit" class="btn btn-primary">Simpan</button></td>
+        </tr>
+    </tbody>
+</table>
+{{ form_close()|raw }}
+{% endblock %}

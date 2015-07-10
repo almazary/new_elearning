@@ -44,7 +44,7 @@ class Pengajar extends MY_Controller
         if (isset($_POST['status_id']) AND !empty($_POST['status_id'])) {
             $post_status_id = $this->input->post('status_id', TRUE);
             $pengajar_ids   = $this->input->post('pengajar_id', TRUE);
-            
+
             foreach ($pengajar_ids as $pengajar_id) {
                 $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
                 if (!empty($retrieve_pengajar)) {
@@ -62,7 +62,7 @@ class Pengajar extends MY_Controller
                     );
                 }
             }
-            
+
             redirect('pengajar/index/'.$status_id);
         }
 
@@ -372,7 +372,7 @@ class Pengajar extends MY_Controller
 
         if ($this->form_validation->run('pengajar/edit_password') == TRUE) {
             $password = $this->input->post('password2', TRUE);
-            
+
             # update password
             $this->login_model->update_password($retrieve_login['id'], $password);
 
@@ -407,5 +407,98 @@ class Pengajar extends MY_Controller
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
         $this->twig->display('detail-pengajar.html', $data);
+    }
+
+    function add_ampuan($segment_3 = '', $segment_4 = '', $segment_5 = '')
+    {
+        $status_id    = (int)$segment_3;
+        $pengajar_id  = (int)$segment_4;
+        $hari_id      = (int)$segment_5;
+        if ($hari_id < 1 OR $hari_id > 7) {
+            exit('Hari tidak ditemukan');
+        }
+
+        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        if (empty($retrieve_pengajar)) {
+            exit('Data Pengajar tidak ditemukan');
+        }
+
+        $data['comp_js'] = load_comp_js(array(
+            base_url('assets/comp/jquery/ajax.js')
+        ));
+
+        $data['status_id']   = $status_id;
+        $data['pengajar_id'] = $pengajar_id;
+        $data['hari_id']     = $hari_id;
+        $data['kelas']       = $this->kelas_model->retrieve_all_child();
+
+        if ($this->form_validation->run('pengajar/ampuan') == TRUE) {
+            $mapel_kelas_id = $this->input->post('mapel_kelas_id', TRUE);
+            $jam_mulai      = $this->input->post('jam_mulai', TRUE);
+            $jam_selesai    = $this->input->post('jam_selesai', TRUE);
+
+            $this->pengajar_model->create_ma(
+                $hari_id,
+                $jam_mulai,
+                $jam_selesai,
+                $pengajar_id,
+                $mapel_kelas_id
+            );
+
+            $this->session->set_flashdata('add', get_alert('success', 'Jadwal Matapelajaran berhasil disimpan.'));
+            redirect('pengajar/add_ampuan/'.$status_id.'/'.$pengajar_id.'/'.$hari_id);
+        }
+
+        $this->twig->display('tambah-pengajar-ampuan.html', $data);
+    }
+
+    function edit_ampuan($segment_3 = '', $segment_4 = '', $segment_5 = '')
+    {
+        $status_id         = (int)$segment_3;
+        $pengajar_id       = (int)$segment_4;
+        $ma_id             = (int)$segment_5;
+        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        if (empty($retrieve_pengajar)) {
+            exit('Data Pengajar tidak ditemukan');
+        }
+
+        $retrieve_ma = $this->pengajar_model->retrieve_ma($ma_id);
+        if (empty($retrieve_ma)) {
+            exit('Mapel Ajar tidak ditemukan');
+        }
+
+        $retrieve_mk = $this->mapel_model->retrieve_kelas($retrieve_ma['mapel_kelas_id']);
+
+        $data['comp_js'] = load_comp_js(array(
+            base_url('assets/comp/jquery/ajax.js')
+        ));
+
+        $data['status_id']    = $status_id;
+        $data['pengajar_id']  = $pengajar_id;
+        $data['ma']           = $retrieve_ma;
+        $data['mk']           = $retrieve_mk;
+        $data['kelas']        = $this->kelas_model->retrieve_all_child();
+
+        if ($this->form_validation->run('pengajar/ampuan') == TRUE) {
+            $mapel_kelas_id = $this->input->post('mapel_kelas_id', TRUE);
+            $jam_mulai      = $this->input->post('jam_mulai', TRUE);
+            $jam_selesai    = $this->input->post('jam_selesai', TRUE);
+            $aktif          = $this->input->post('aktif');
+
+            $this->pengajar_model->update_ma(
+                $retrieve_ma['id'],
+                $retrieve_ma['hari_id'],
+                $jam_mulai,
+                $jam_selesai,
+                $pengajar_id,
+                $mapel_kelas_id,
+                $aktif
+            );
+
+            $this->session->set_flashdata('edit', get_alert('success', 'Jadwal Ajar berhasil diperbaharui.'));
+            redirect('pengajar/edit_ampuan/'.$status_id.'/'.$pengajar_id.'/'.$retrieve_ma['id']);
+        }
+
+        $this->twig->display('edit-pengajar-ampuan.html', $data);
     }
 }

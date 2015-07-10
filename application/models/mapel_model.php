@@ -25,14 +25,16 @@ class Mapel_model extends CI_Model
     /**
      * Method untuk mendapatkan semua data mapel kelas
      *
-     * @param  integer $no_of_records
-     * @param  integer $page_no
+     * @param  integer $mapel_id
+     * @param  integer $kelas_id
+     * @param  integer $aktif
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_kelas(
-        $mapel_id      = null,
-        $kelas_id      = null
+        $mapel_id = null,
+        $kelas_id = null,
+        $aktif    = null
     ) {
         if (!is_null($mapel_id)) {
             $mapel_id = (int)$mapel_id;
@@ -41,6 +43,10 @@ class Mapel_model extends CI_Model
         if (!is_null($kelas_id)) {
             $kelas_id = (int)$kelas_id;
             $this->db->where('kelas_id', $kelas_id);
+        }
+        if (!is_null($aktif)) {
+            $aktif = (int)$aktif;
+            $this->db->where('aktif', $aktif);
         }
 
         $result = $this->db->get('mapel_kelas');

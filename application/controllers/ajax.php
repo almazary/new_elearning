@@ -45,6 +45,19 @@ class Ajax extends MY_Controller
                     }
                 }
             break;
+
+            case 'mapel_kelas':
+                $kelas_id = $this->input->post('kelas_id', TRUE);
+                echo '<option value="">Pilih Matapelajaran</option>';
+                $retrieve_all = $this->mapel_model->retrieve_all_kelas(null, $kelas_id, 1);
+                foreach ($retrieve_all as $v) {
+                    $m = $this->mapel_model->retrieve($v['mapel_id']);
+                    if (empty($m)) {
+                        continue;
+                    }
+                    echo '<option value="'.$v['id'].'">'.$m['nama'].'</option>';
+                }
+            break;
         }
     }
 

@@ -1,0 +1,65 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<h4>Tambah Jadwal Mengajar Hari {{ get_indo_hari(hari_id) }}</h4>
+{{ get_flashdata('add')|raw }}
+
+{{ form_open('pengajar/add_ampuan/' ~ status_id ~ '/' ~ pengajar_id ~ '/' ~ hari_id)|raw }}
+<input type="hidden" name="pengajar_id" value="{{ pengajar_id }}">
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th width="27%">Kelas <span class="text-error">*</span></th>
+            <td>
+                <select name="kelas_id" style="width:auto;" id="kelas_id">
+                    <option value="">Pilih Kelas</option>
+                    {% for k in kelas %}
+                    <option value="{{ k.id }}" {{ set_select('kelas_id', k.id) }}>{{ k.nama }}</option>
+                    {% endfor %}
+                </select>
+                <br>{{ form_error('kelas_id')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <th>Mapel <span class="text-error">*</span></th>
+            <td>
+                <select name="mapel_kelas_id" style="width:auto" id="mapel_kelas_id">
+                    <option value="">Pilih Matapelajaran</option>
+                    {% if get_post_data('kelas_id') is not empty %}
+                        {% set post_kelas_id = get_post_data('kelas_id') %}
+                        {% set mapel_kelas = get_row_data('mapel_model', 'retrieve_all_kelas', [null, post_kelas_id]) %}
+                        {% for mk in mapel_kelas %}
+                            {% set m = get_row_data('mapel_model', 'retrieve', [mk.mapel_id]) %}
+                            {% if m is not empty %}
+                            <option value="{{ mk.id }}" {{ (get_post_data('mapel_kelas_id') == mk.id) ? 'selected' }}>{{ m.nama }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </select>
+                <br><span class="text-muted">Pilih kelas terlebih dahulu</span>
+                <br>{{ form_error('mapel_kelas_id')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <th>Jam Mulai <span class="text-error">*</span></th>
+            <td>
+                <input type="text" name="jam_mulai" style="width:19%" placeholder="hh:mm" value="{{ set_value('jam_mulai') }}">
+                <span class="pull-right text-muted">Contoh : 08:30</span>
+                <br>{{ form_error('jam_mulai')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <th>Jam Selesai <span class="text-error">*</span></th>
+            <td>
+                <input type="text" name="jam_selesai" style="width:19%" placeholder="hh:mm" value="{{ set_value('jam_selesai') }}">
+                <span class="pull-right text-muted">Contoh : 13:30</span>
+                <br>{{ form_error('jam_selesai')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><button type="submit" class="btn btn-primary">Simpan</button></td>
+        </tr>
+    </tbody>
+</table>
+{{ form_close()|raw }}
+{% endblock %}
