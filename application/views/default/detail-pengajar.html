@@ -72,13 +72,6 @@ Detail Pengajar - {{ parent() }}
                         <strong>Jadwal Matapelajaran Ajar</strong>
                     </div>
                     <div class="panel-body">
-                        <div class="bs-callout bs-callout-info">
-                            <p>
-                                Atur matapelajaran dan jadwal mengajar <b>{{ pengajar.nama }}</b>.
-                                <br><b>Note:</b> Jadwal tidak dapat di hapus, namun dapat di ubah menjadi tidak aktif.
-                            </p>
-                        </div>
-                        <br>
                         <table class="table">
                             <thead>
                                 <tr bgcolor="#fbfbfb">
@@ -103,9 +96,8 @@ Detail Pengajar - {{ parent() }}
                                                     <td width="15%">{{ ma.jam_mulai|date('H:i') }} - {{ ma.jam_selesai|date('H:i') }}</td>
                                                     <td>{{ m.nama }}</td>
                                                     <td width="20%">{{ k.nama }}</td>
-                                                    <td width="17%">
+                                                    <td width="10%">
                                                         {{ anchor('pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ ma.id, '<i class="icon-edit"></i> Edit', {'title' : 'Edit Jadwal Ajar', 'class' : 'iframe-6'})|raw }} 
-                                                        {{ anchor('tugas/add/' ~ ma.id, '<i class="icon-tasks"></i> Tugas')|raw }}
                                                     </td>
                                                 </tr>
                                             {% endfor %}

@@ -8,6 +8,16 @@
  */
 function default_parser_item($add_item = array())
 {
+    $CI =& get_instance();
+
+    $url_referrer = '';
+    if ($CI->agent->is_referral()) {
+        $url_referrer = $CI->agent->referrer();
+    } else {
+        # kalo kosong diisi dengan segment 
+        $url_referrer = site_url($CI->uri->segment(1));
+    }
+
     $return = array(
         'base_url'          => base_url(),
         'site_url'          => site_url(),
@@ -24,7 +34,7 @@ function default_parser_item($add_item = array())
         'site_name'         => 'E-Learning '.get_pengaturan('nama-sekolah', 'value'),
         'comp_css'          => '',
         'comp_js'           => '',
-        ''
+        'url_referrer'      => $url_referrer
     );
 
     if (!empty($add_item) AND is_array($add_item)) {

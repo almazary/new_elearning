@@ -148,16 +148,6 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
                         <strong>Jadwal Matapelajaran Ajar</strong>
                     </div>
                     <div class=\"panel-body\">
-                        <div class=\"bs-callout bs-callout-info\">
-                            <p>
-                                Atur matapelajaran dan jadwal mengajar <b>";
-        // line 77
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "nama"), "html", null, true);
-        echo "</b>.
-                                <br><b>Note:</b> Jadwal tidak dapat di hapus, namun dapat di ubah menjadi tidak aktif.
-                            </p>
-                        </div>
-                        <br>
                         <table class=\"table\">
                             <thead>
                                 <tr bgcolor=\"#fbfbfb\">
@@ -167,70 +157,66 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
                             </thead>
                             <tbody>
                                 ";
-        // line 90
+        // line 83
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable(get_indo_hari());
         foreach ($context['_seq'] as $context["hari_id"] => $context["h"]) {
-            // line 91
+            // line 84
             echo "                                <tr>
                                     <th width=\"15%\">";
-            // line 92
+            // line 85
             echo twig_escape_filter($this->env, (isset($context["h"]) ? $context["h"] : null), "html", null, true);
             echo "</th>
                                     <td>
                                         ";
-            // line 94
+            // line 87
             echo anchor(((((("pengajar/add_ampuan/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "id")) . "/") . (isset($context["hari_id"]) ? $context["hari_id"] : null)), "Tambah", array("class" => "iframe btn btn-small btn-primary", "title" => ("Tambah jadwal hari " . (isset($context["h"]) ? $context["h"] : null))));
             echo "
                                         ";
-            // line 95
+            // line 88
             $context["retrieve_all_ma"] = get_row_data("pengajar_model", "retrieve_all_ma", array(0 => (isset($context["hari_id"]) ? $context["hari_id"] : null), 1 => $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "id"), 2 => null));
-            // line 96
+            // line 89
             echo "                                        ";
             if ((!twig_test_empty((isset($context["retrieve_all_ma"]) ? $context["retrieve_all_ma"] : null)))) {
-                // line 97
+                // line 90
                 echo "                                        <table style=\"margin-top:10px;\" class=\"table table-condensed\">
                                             ";
-                // line 98
+                // line 91
                 $context['_parent'] = (array) $context;
                 $context['_seq'] = twig_ensure_traversable((isset($context["retrieve_all_ma"]) ? $context["retrieve_all_ma"] : null));
                 foreach ($context['_seq'] as $context["_key"] => $context["ma"]) {
-                    // line 99
+                    // line 92
                     echo "                                                ";
                     $context["mk"] = get_row_data("mapel_model", "retrieve_kelas", array(0 => $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "mapel_kelas_id")));
-                    // line 100
+                    // line 93
                     echo "                                                ";
                     $context["k"] = get_row_data("kelas_model", "retrieve", array(0 => $this->getAttribute((isset($context["mk"]) ? $context["mk"] : null), "kelas_id")));
-                    // line 101
+                    // line 94
                     echo "                                                ";
                     $context["m"] = get_row_data("mapel_model", "retrieve", array(0 => $this->getAttribute((isset($context["mk"]) ? $context["mk"] : null), "mapel_id")));
-                    // line 102
+                    // line 95
                     echo "                                                <tr ";
                     echo ((($this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "aktif") == 0)) ? ("class=\"error text-muted\"") : ("class=\"info text-info\""));
                     echo ">
                                                     <td width=\"15%\">";
-                    // line 103
+                    // line 96
                     echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "jam_mulai"), "H:i"), "html", null, true);
                     echo " - ";
                     echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "jam_selesai"), "H:i"), "html", null, true);
                     echo "</td>
                                                     <td>";
-                    // line 104
+                    // line 97
                     echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "nama"), "html", null, true);
                     echo "</td>
                                                     <td width=\"20%\">";
-                    // line 105
+                    // line 98
                     echo twig_escape_filter($this->env, $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "nama"), "html", null, true);
                     echo "</td>
-                                                    <td width=\"17%\">
+                                                    <td width=\"10%\">
                                                         ";
-                    // line 107
+                    // line 100
                     echo anchor(((((("pengajar/edit_ampuan/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "id")), "<i class=\"icon-edit\"></i> Edit", array("title" => "Edit Jadwal Ajar", "class" => "iframe-6"));
                     echo " 
-                                                        ";
-                    // line 108
-                    echo anchor(("tugas/add/" . $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "id")), "<i class=\"icon-tasks\"></i> Tugas");
-                    echo "
                                                     </td>
                                                 </tr>
                                             ";
@@ -238,11 +224,11 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
                 $_parent = $context['_parent'];
                 unset($context['_seq'], $context['_iterated'], $context['_key'], $context['ma'], $context['_parent'], $context['loop']);
                 $context = array_intersect_key($context, $_parent) + $_parent;
-                // line 112
+                // line 104
                 echo "                                        </table>
                                         ";
             }
-            // line 114
+            // line 106
             echo "                                    </td>
                                 </tr>
                                 ";
@@ -250,7 +236,7 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['hari_id'], $context['h'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 117
+        // line 109
         echo "                            </tbody>
                         </table>
                     </div>
@@ -264,11 +250,11 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
                         <strong>Akun Login</strong>
                         <div class=\"btn-group pull-right\" style=\"margin-top:-4px;\">
                             ";
-        // line 129
+        // line 121
         echo anchor(((("pengajar/edit_username/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "id")), "Edit Username", array("class" => "iframe-2 btn btn-small btn-primary", "title" => "Edit Username pengajar"));
         echo "
                             ";
-        // line 130
+        // line 122
         echo anchor(((("pengajar/edit_password/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "id")), "Edit Password", array("class" => "iframe-3 btn btn-small btn-primary", "title" => "Edit Password pengajar"));
         echo "
                         </div>
@@ -280,7 +266,7 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
                                     <th width=\"30%\" bgcolor=\"#FBFBFB\">Username</th>
                                     <td>
                                         ";
-        // line 139
+        // line 131
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar_login"]) ? $context["pengajar_login"] : null), "username"), "html", null, true);
         echo "
                                     </td>
@@ -315,6 +301,6 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
 
     public function getDebugInfo()
     {
-        return array (  284 => 139,  272 => 130,  268 => 129,  254 => 117,  246 => 114,  242 => 112,  232 => 108,  228 => 107,  223 => 105,  219 => 104,  213 => 103,  208 => 102,  205 => 101,  202 => 100,  199 => 99,  195 => 98,  192 => 97,  189 => 96,  187 => 95,  183 => 94,  178 => 92,  175 => 91,  171 => 90,  155 => 77,  138 => 62,  134 => 60,  130 => 58,  126 => 56,  124 => 55,  116 => 50,  109 => 46,  102 => 42,  95 => 38,  88 => 34,  80 => 29,  75 => 27,  65 => 20,  61 => 19,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  270 => 131,  258 => 122,  254 => 121,  240 => 109,  232 => 106,  228 => 104,  218 => 100,  213 => 98,  209 => 97,  203 => 96,  198 => 95,  195 => 94,  192 => 93,  189 => 92,  185 => 91,  182 => 90,  179 => 89,  177 => 88,  173 => 87,  168 => 85,  165 => 84,  161 => 83,  138 => 62,  134 => 60,  130 => 58,  126 => 56,  124 => 55,  116 => 50,  109 => 46,  102 => 42,  95 => 38,  88 => 34,  80 => 29,  75 => 27,  65 => 20,  61 => 19,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

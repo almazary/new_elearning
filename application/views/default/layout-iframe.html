@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}{{ web_title }}{% endblock %}</title>
+        <title>{% block title %}{{ site_name }}{% endblock %}</title>
         <link type="text/css" href="{{ base_url_theme }}bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link type="text/css" href="{{ base_url_theme }}bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link type="text/css" href="{{ base_url_theme }}css/theme.css" rel="stylesheet">
@@ -12,14 +12,36 @@
         <link rel="shortcut icon" type="image/x-icon" href="{{ favicon_url }}">
         {{ comp_css|raw }}
     </head>
-    <body>
+    <body onload="inIframe()">
 
-        {% block content %}{% endblock %}
+        <div id="body-content">
+            {% block content %}{% endblock %}
+        </div>
 
+        <script type="text/javascript">
+            var site_url = "{{ site_url() }}";
+            var base_url = "{{ base_url() }}";
+        </script>
         <script src="{{ base_url_theme }}scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
         <script src="{{ base_url_theme }}scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
         <script src="{{ base_url_theme }}bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="{{ base_url_theme }}scripts/script.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            function inIframe () 
+            {
+                var is_iframe = true;
+                try {
+                    is_iframe = window.self !== window.top;
+                } catch (e) {
+                    is_iframe = true;
+                }
+
+                if (!is_iframe) {
+                    $("#body-content").html('redirect...');
+                    window.location.replace("{{ url_referrer }}")
+                }
+            }
+        </script>
         {% block js %}{% endblock %}
 
         {{ comp_js|raw }}

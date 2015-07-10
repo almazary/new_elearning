@@ -398,7 +398,7 @@ class Pengajar extends MY_Controller
         $data['pengajar_login'] = $retrieve_login;
         $data['status_id']      = $status_id;
 
-        //panggil colorbox
+        # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
             base_url('assets/comp/colorbox/act-pengajar.js')
@@ -500,5 +500,124 @@ class Pengajar extends MY_Controller
         }
 
         $this->twig->display('edit-pengajar-ampuan.html', $data);
+    }
+
+    function filter($segment_3 = '')
+    {
+        $page_no = $segment_3;
+        if (empty($page_no)) {
+            $page_no = 1;
+        }
+
+        if ($this->form_validation->run('pengajar/filter') == TRUE) {
+
+            $filter = array(
+                'nip'           => $this->input->post('nip', TRUE),
+                'nama'          => $this->input->post('nama', TRUE),
+                'jenis_kelamin' => (empty($this->input->post('jenis_kelamin', TRUE))) ? array() : $this->input->post('jenis_kelamin', TRUE),
+                'tempat_lahir'  => $this->input->post('tempat_lahir', TRUE),
+                'tgl_lahir'     => (int)$this->input->post('tgl_lahir', TRUE),
+                'bln_lahir'     => (int)$this->input->post('bln_lahir', TRUE),
+                'thn_lahir'     => (empty((int)$this->input->post('thn_lahir', TRUE))) ? '' : (int)$this->input->post('thn_lahir', TRUE),
+                'alamat'        => $this->input->post('alamat', TRUE),
+                'status_id'     => (empty($this->input->post('status_id', TRUE))) ? array() : $this->input->post('status_id', TRUE),
+                'username'      => $this->input->post('username', TRUE),
+                'is_admin'      => $this->input->post('is_admin', TRUE)
+            );
+
+            $this->session->set_userdata('filter_pengajar', $filter);
+
+            redirect('pengajar/filter');
+
+        } elseif (!empty($this->session->userdata('filter_pengajar'))) {
+
+            $filter = $this->session->userdata('filter_pengajar');
+
+        } else {
+
+            $filter = array();
+
+            $retrieve_all = array(
+                'results'      => array(),
+                'total_record' => 0,
+                'total_respon' => 0,
+                'current_page' => 1,
+                'total_page'   => 0,
+                'next_page'    => 0,
+                'prev_page'    => 0
+            );
+
+        }
+
+        $data['filter'] = $filter;
+
+        if (!empty($filter)) {
+            $retrieve_all = $this->pengajar_model->retrieve_all_filter(
+                $filter['nip'], $filter['nama'], $filter['jenis_kelamin'], $filter['tempat_lahir'], $filter['tgl_lahir'], $filter['bln_lahir'], $filter['thn_lahir'], $filter['alamat'], $filter['status_id'], $filter['username'], $filter['is_admin'], $page_no
+            );
+        }
+
+        # panggil colorbox
+        $html_js = load_comp_js(array(
+            base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+            base_url('assets/comp/colorbox/act-siswa.js')
+        ));
+        $data['comp_js']      = $html_js;
+        $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+
+        $data['pengajars']  = $retrieve_all['results'];
+        $data['pagination'] = $this->pager->view($retrieve_all, 'pengajar/filter/');
+
+        $this->twig->display('filter-pengajar.html', $data);
+    }
+
+    function filter_action()
+    {
+        if ($this->form_validation->run('pengajar/filter') == TRUE) {
+            $pengajar_ids = $this->input->post('pengajar_id', TRUE);
+            $status_id    = (int)$this->input->post('status_id', TRUE);
+
+            if (!empty($pengajar_ids) AND is_array($pengajar_ids)) {
+
+                if (empty($status_id)) {
+                    $this->session->set_flashdata('pengajar', get_alert('warning', 'Tidak ada aksi yang dipilih.'));
+                    redirect('pengajar/filter');
+                }
+
+                foreach ($pengajar_ids as $pengajar_id) {
+                    $p = $this->pengajar_model->retrieve($pengajar_id);
+                    if (!empty($status_id)) {
+                        //update status siswa
+                        $this->pengajar_model->update(
+                            $pengajar_id,
+                            $p['nip'],
+                            $p['nama'],
+                            $p['jenis_kelamin'],
+                            $p['tempat_lahir'],
+                            $p['tgl_lahir'],
+                            $p['alamat'],
+                            $p['foto'],
+                            $status_id
+                        );
+                    }
+                }
+
+                $label = '';
+                if (!empty($status_id)) {
+                    $label_status = array('Pending', 'Aktif', 'Blocking');
+                    $label .= 'status = '.$label_status[$status_id];
+                }
+
+                $this->session->set_flashdata('pengajar', get_alert('success', 'Pengajar berhasil diperbaharui ('.$label.').'));
+                redirect('pengajar/filter');
+
+            } else {
+                $this->session->set_flashdata('pengajar', get_alert('warning', 'Tidak ada pengajar yang dipilih.'));
+                redirect('pengajar/filter');
+            }
+
+        } else {
+            redirect('pengajar/filter');
+        }
     }
 }

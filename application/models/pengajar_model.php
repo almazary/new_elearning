@@ -181,9 +181,13 @@ class Pengajar_model extends CI_Model
         }
         if (!is_null($mapel_kelas_id)) {
             $mapel_kelas_id = (int)$mapel_kelas_id;
-            $this->db->where('mapel_kelas_id', $mapel_kelas_id);
+            $this->db->where('mapel_ajar.mapel_kelas_id', $mapel_kelas_id);
         }
-        $this->db->order_by('jam_mulai', 'ASC');
+
+        $this->db->select('mapel_ajar.*');
+        $this->db->join('mapel_kelas', 'mapel_ajar.mapel_kelas_id = mapel_kelas.id', 'join');
+        $this->db->where('mapel_kelas.aktif', 1);
+        $this->db->order_by('mapel_ajar.jam_mulai', 'ASC');
         $result = $this->db->get('mapel_ajar');
         return $result->result_array();
     }

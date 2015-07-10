@@ -57,36 +57,67 @@ class __TwigTemplate_18d708353966a113828069dbf63b3aef96e9f839ae96f120a03a47e7d4d
         echo (isset($context["comp_css"]) ? $context["comp_css"] : null);
         echo "
     </head>
-    <body>
+    <body onload=\"inIframe()\">
 
-        ";
-        // line 17
-        $this->displayBlock('content', $context, $blocks);
+        <div id=\"body-content\">
+            ";
         // line 18
-        echo "
-        <script src=\"";
+        $this->displayBlock('content', $context, $blocks);
         // line 19
+        echo "        </div>
+
+        <script type=\"text/javascript\">
+            var site_url = \"";
+        // line 22
+        echo twig_escape_filter($this->env, site_url(), "html", null, true);
+        echo "\";
+            var base_url = \"";
+        // line 23
+        echo twig_escape_filter($this->env, base_url(), "html", null, true);
+        echo "\";
+        </script>
+        <script src=\"";
+        // line 25
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 20
+        // line 26
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-ui-1.10.1.custom.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 21
+        // line 27
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "bootstrap/js/bootstrap.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 22
+        // line 28
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/script.js\" type=\"text/javascript\"></script>
+        <script type=\"text/javascript\">
+            function inIframe () 
+            {
+                var is_iframe = true;
+                try {
+                    is_iframe = window.self !== window.top;
+                } catch (e) {
+                    is_iframe = true;
+                }
+
+                if (!is_iframe) {
+                    \$(\"#body-content\").html('redirect...');
+                    window.location.replace(\"";
+        // line 41
+        echo twig_escape_filter($this->env, (isset($context["url_referrer"]) ? $context["url_referrer"] : null), "html", null, true);
+        echo "\")
+                }
+            }
+        </script>
         ";
-        // line 23
+        // line 45
         $this->displayBlock('js', $context, $blocks);
-        // line 24
+        // line 46
         echo "
         ";
-        // line 25
+        // line 47
         echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
         echo "
     </body>
@@ -97,7 +128,7 @@ class __TwigTemplate_18d708353966a113828069dbf63b3aef96e9f839ae96f120a03a47e7d4d
     // line 6
     public function block_title($context, array $blocks = array())
     {
-        echo twig_escape_filter($this->env, (isset($context["web_title"]) ? $context["web_title"] : null), "html", null, true);
+        echo twig_escape_filter($this->env, (isset($context["site_name"]) ? $context["site_name"] : null), "html", null, true);
     }
 
     // line 11
@@ -105,12 +136,12 @@ class __TwigTemplate_18d708353966a113828069dbf63b3aef96e9f839ae96f120a03a47e7d4d
     {
     }
 
-    // line 17
+    // line 18
     public function block_content($context, array $blocks = array())
     {
     }
 
-    // line 23
+    // line 45
     public function block_js($context, array $blocks = array())
     {
     }
@@ -127,6 +158,6 @@ class __TwigTemplate_18d708353966a113828069dbf63b3aef96e9f839ae96f120a03a47e7d4d
 
     public function getDebugInfo()
     {
-        return array (  114 => 23,  109 => 17,  104 => 11,  98 => 6,  90 => 25,  87 => 24,  85 => 23,  81 => 22,  77 => 21,  73 => 20,  66 => 18,  64 => 17,  57 => 13,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  30 => 6,  23 => 1,  231 => 94,  218 => 84,  214 => 83,  205 => 77,  201 => 76,  196 => 75,  190 => 73,  188 => 72,  179 => 66,  175 => 65,  166 => 59,  162 => 58,  159 => 57,  146 => 55,  142 => 54,  137 => 51,  124 => 49,  120 => 48,  116 => 46,  113 => 45,  110 => 44,  108 => 43,  99 => 37,  95 => 36,  86 => 30,  82 => 29,  78 => 28,  69 => 19,  65 => 21,  56 => 15,  52 => 12,  43 => 8,  39 => 7,  34 => 7,  31 => 4,  28 => 3,);
+        return array (  145 => 45,  140 => 18,  135 => 11,  129 => 6,  121 => 47,  118 => 46,  116 => 45,  109 => 41,  93 => 28,  89 => 27,  85 => 26,  81 => 25,  76 => 23,  72 => 22,  67 => 19,  65 => 18,  57 => 13,  52 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
     }
 }
