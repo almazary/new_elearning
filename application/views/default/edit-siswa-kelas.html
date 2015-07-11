@@ -1,0 +1,25 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<h4>Edit Kelas Aktif</h4>
+{{ get_flashdata('class')|raw }}
+
+{{ form_open('siswa/moved_class/' ~ status_id ~ '/' ~ siswa_id, {'class' : 'form-horizontal row-fluid'})|raw }}
+<table class="table table-striped">
+    <tr>
+        <td>
+            <select class="span2" name="kelas_id">
+                <option value="">--pilih--</option>
+                {% for k in kelas %}
+                    <option value="{{ k.id }}" {{ (k.id == get_aktif.kelas_id) ? 'selected' }}>{{ k.nama }}</option>
+                {% endfor %}
+            </select>
+            <br>{{ form_error('kelas_id')|raw }}
+        </td>
+        <td>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </td>
+    </tr>
+</table>
+{{ form_close()|raw }}
+{% endblock %}

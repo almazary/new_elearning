@@ -45,11 +45,10 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
         // line 10
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "images/icons/css/font-awesome.css\" rel=\"stylesheet\">
-    <link type=\"text/css\" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet'>
     ";
-        // line 12
+        // line 11
         $this->displayBlock('css', $context, $blocks);
-        // line 13
+        // line 12
         echo "    <link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"";
         echo twig_escape_filter($this->env, (isset($context["favicon_url"]) ? $context["favicon_url"] : null), "html", null, true);
         echo "\">
@@ -64,11 +63,11 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
                 </a>
 
                 <a class=\"brand\" href=\"";
-        // line 24
+        // line 23
         echo twig_escape_filter($this->env, (isset($context["current_url"]) ? $context["current_url"] : null), "html", null, true);
         echo "\">
                     <img src=\"";
-        // line 25
+        // line 24
         echo twig_escape_filter($this->env, (isset($context["logo_url_medium"]) ? $context["logo_url_medium"] : null), "html", null, true);
         echo "\"> ";
         echo twig_escape_filter($this->env, (isset($context["site_name"]) ? $context["site_name"] : null), "html", null, true);
@@ -83,9 +82,9 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
         <div class=\"container\">
 
             ";
-        // line 35
+        // line 34
         $this->displayBlock('content', $context, $blocks);
-        // line 36
+        // line 35
         echo "
         </div>
     </div><!--/.wrapper-->
@@ -94,11 +93,11 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
         <div class=\"container\">
             <center>
                 <b class=\"copyright\">";
-        // line 43
+        // line 42
         echo (isset($context["copyright"]) ? $context["copyright"] : null);
         echo " </b> All rights reserved.<br>
                 ";
-        // line 44
+        // line 43
         echo (isset($context["version"]) ? $context["version"] : null);
         echo " | Page loaded in ";
         echo twig_escape_filter($this->env, (isset($context["elapsed_time"]) ? $context["elapsed_time"] : null), "html", null, true);
@@ -107,9 +106,9 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
         </div>
     </div>
     ";
-        // line 48
+        // line 47
         $this->displayBlock('js', $context, $blocks);
-        // line 53
+        // line 52
         echo "</body>
 ";
     }
@@ -120,29 +119,29 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
         echo twig_escape_filter($this->env, (isset($context["site_name"]) ? $context["site_name"] : null), "html", null, true);
     }
 
-    // line 12
+    // line 11
     public function block_css($context, array $blocks = array())
     {
     }
 
-    // line 35
+    // line 34
     public function block_content($context, array $blocks = array())
     {
     }
 
-    // line 48
+    // line 47
     public function block_js($context, array $blocks = array())
     {
-        // line 49
+        // line 48
         echo "    <script src=\"";
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>
     <script src=\"";
-        // line 50
+        // line 49
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-ui-1.10.1.custom.min.js\" type=\"text/javascript\"></script>
     <script src=\"";
-        // line 51
+        // line 50
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "bootstrap/js/bootstrap.min.js\" type=\"text/javascript\"></script>
     ";
@@ -160,6 +159,6 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
 
     public function getDebugInfo()
     {
-        return array (  146 => 51,  142 => 50,  137 => 49,  134 => 48,  129 => 35,  124 => 12,  118 => 6,  113 => 53,  111 => 48,  102 => 44,  98 => 43,  89 => 36,  87 => 35,  72 => 25,  68 => 24,  53 => 13,  51 => 12,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
+        return array (  145 => 50,  141 => 49,  136 => 48,  133 => 47,  128 => 34,  123 => 11,  117 => 6,  112 => 52,  110 => 47,  101 => 43,  97 => 42,  88 => 35,  86 => 34,  71 => 24,  67 => 23,  52 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
     }
 }

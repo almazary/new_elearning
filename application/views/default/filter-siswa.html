@@ -1,28 +1,29 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Filter Pengajar - {{ parent() }}
+Filter Siswa - {{ parent() }}
 {% endblock %}
 
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>Filter Pengajar</h3>
+        <h3>Filter Siswa</h3>
     </div>
     <div class="module-body">
-        {{ get_flashdata('pengajar')|raw }}
+        {{ get_flashdata('siswa')|raw }}
 
         <div class="row-fluid">
-        <div class="span8">
-            <a href="{{ site_url('pengajar/add/1') }}" class="btn btn-primary">Tambah Pengajar</a>
+        <div class="span7">
+            <a href="{{ site_url('siswa/add/1') }}" class="btn btn-primary">Tambah Siswa</a>
         </div>
 
-        <div class="span4">
+        <div class="span5">
             <div class="btn-group">
-                {{ anchor('pengajar/index/1', 'Aktif', {'class' : 'btn btn-default'})|raw }}
-                {{ anchor('pengajar/index/0', 'Pending', {'class' : 'btn btn-default'})|raw }}
-                {{ anchor('pengajar/index/2', 'Blocking', {'class' : 'btn btn-default'})|raw }}
-                {{ anchor('pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-info'})|raw }}
+                {{ anchor('siswa/index/1', 'Aktif', {'class' : 'btn btn-default'})|raw }}
+                {{ anchor('siswa/index/0', 'Pending', {'class' : 'btn btn-default'})|raw }}
+                {{ anchor('siswa/index/2', 'Blocking', {'class' : 'btn btn-default'})|raw }}
+                {{ anchor('siswa/index/3', 'Alumni', {'class' : 'btn btn-default'})|raw }}
+                {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-info'})|raw }}
             </div>
         </div>
         </div>
@@ -31,12 +32,12 @@ Filter Pengajar - {{ parent() }}
 
         <div class="bs-callout bs-callout-info">
             <b><a id="button" href="javascript:void(0)">PARAMETER PENCARIAN</a></b>
-            {{ form_open('pengajar/filter')|raw }}
+            {{ form_open('siswa/filter')|raw }}
             <table class="table table-condensed" id="form-search">
                 <tr>
                     <th width="20%">NIS</th>
                     <td>
-                        <input type="text" name="nip" class="span2" style="margin-bottom:0px;" value="{{ set_value('nip', (filter.nip is defined) ? filter.nip) }}">
+                        <input type="text" name="nis" class="span2" style="margin-bottom:0px;" value="{{ set_value('nis', (filter.nis is defined) ? filter.nis) }}">
                     </td>
                 </tr>
                 <tr>
@@ -56,6 +57,12 @@ Filter Pengajar - {{ parent() }}
                             <input type="checkbox" name="jenis_kelamin[]" value="Perempuan" {{ set_checkbox('jenis_kelamin[]', 'Perempuan', (filter.jenis_kelamin is defined and 'Perempuan' in filter.jenis_kelamin) ? TRUE : FALSE) }}> Perempuan
                         </label>
                         </p>
+                    </td>
+                <tr>
+                <tr>
+                    <th>Tahun Masuk</th>
+                    <td>
+                        <input type="text" name="tahun_masuk" maxlength="4" style="width:15%;margin-bottom:0px;" value="{{ set_value('tahun_masuk', (filter.tahun_masuk is defined) ? filter.tahun_masuk) }}">
                     </td>
                 <tr>
                 <tr>
@@ -89,12 +96,35 @@ Filter Pengajar - {{ parent() }}
                     </td>
                 <tr>
                 <tr>
+                    <th>Agama</th>
+                    <td>
+                        <p style="margin-top:0px; margin-bottom:5px;">
+                            <label class="checkbox inline"><input type="checkbox" name="agama[]" value="ISLAM" {{ set_checkbox('agama[]', 'ISLAM', (filter.agama is defined and 'ISLAM' in filter.agama) ? TRUE : FALSE) }}>ISLAM</label>
+                            <label class="checkbox inline"><input type="checkbox" name="agama[]" value="KRISTEN" {{ set_checkbox('agama[]', 'KRISTEN', (filter.agama is defined and 'KRISTEN' in filter.agama) ? TRUE : FALSE) }}>KRISTEN</label>
+                            <label class="checkbox inline"><input type="checkbox" name="agama[]" value="KATOLIK" {{ set_checkbox('agama[]', 'KATOLIK', (filter.agama is defined and 'KATOLIK' in filter.agama) ? TRUE : FALSE) }}>KATOLIK</label>
+                            <label class="checkbox inline"><input type="checkbox" name="agama[]" value="HINDU" {{ set_checkbox('agama[]', 'HINDU', (filter.agama is defined and 'HINDU' in filter.agama) ? TRUE : FALSE) }}>HINDU</label>
+                            <label class="checkbox inline"><input type="checkbox" name="agama[]" value="BUDHA" {{ set_checkbox('agama[]', 'BUDHA', (filter.agama is defined and 'BUDHA' in filter.agama) ? TRUE : FALSE) }}>BUDHA</label>
+                        </p>
+                    </td>
+                <tr>
+                <tr>
+                    <th>Kelas</th>
+                    <td>
+                        <ul class="unstyled inline" style="margin-left: -5px;">
+                            {% for k in kelas_all %}
+                                <li><label class="checkbox inline"><input type="checkbox" name="kelas_id[]" value="{{ k.id }}" {{ set_checkbox('kelas_id[]', k.id, (filter.kelas_id is defined and k.id in filter.kelas_id) ? TRUE : FALSE) }}>{{ k.nama }}</label></li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                <tr>
+                <tr>
                     <th>Status</th>
                     <td>
                         <p style="margin-top:0px; margin-bottom:5px;">
                             <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="0" {{ set_checkbox('status_id[]', '0', (filter.status_id is defined and 0 in filter.status_id) ? TRUE : FALSE) }}> Pending</label>
                             <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="1" {{ set_checkbox('status_id[]', '1', (filter.status_id is defined and 1 in filter.status_id) ? TRUE : FALSE) }}> Aktif</label>
                             <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="2" {{ set_checkbox('status_id[]', '2', (filter.status_id is defined and 2 in filter.status_id) ? TRUE : FALSE) }}> Blocking</label>
+                            <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="3" {{ set_checkbox('status_id[]', '3', (filter.status_id is defined and 3 in filter.status_id) ? TRUE : FALSE) }}> Alumni</label>
                         </p>
                     </td>
                 <tr>
@@ -102,12 +132,6 @@ Filter Pengajar - {{ parent() }}
                     <th>Username</th>
                     <td>
                         <input type="text" name="username" class="span3" style="margin-bottom:0px;" value="{{ set_value('username', (filter.username is defined) ? filter.username) }}">
-                    </td>
-                </tr>
-                <tr>
-                    <th>Opsi</th>
-                    <td>
-                        <label><input type="checkbox" name="is_admin" value="1" style="margin-top:-2px;" {{ set_checkbox('is_admin', '1', (filter.is_admin is defined and filter.is_admin == 1) ? TRUE : FALSE) }}> Administrator</label>
                     </td>
                 </tr>
                 <tr>
@@ -122,7 +146,7 @@ Filter Pengajar - {{ parent() }}
 
         <br>
 
-        {{ form_open('pengajar/filter_action')|raw }}
+        {{ form_open('siswa/filter_action')|raw }}
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -132,38 +156,35 @@ Filter Pengajar - {{ parent() }}
                         {% endif %}
                         ID
                     </th>
-                    <th>Informasi Pengajar</th>
+                    <th>Informasi Siswa</th>
                     <th width="22%"></th>
                 </tr>
             </thead>
             <tbody>
-                {% for no, v in pengajars %}
+                {% for no, v in siswas %}
                 <tr>
                     <td>
-                        {% if status_id == 0 or status_id == 2 %}
-                            <input type="checkbox" name="pengajar_id[]" value="{{ v.id }}" style="margin-top:-2px;">
-                        {% endif %}
+                        <input type="checkbox" name="siswa_id[]" value="{{ v.id }}" style="margin-top:-2px;" {{ (v.status_id == 3) ? 'disabled' }}>
                         <b>{{ v.id }}</b>
                     </td>
                     <td>
-                        <img style="height:40px;width:40px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_pengajar(v.foto, 'medium', v.jenis_kelamin) }}">
-                        <b>{{ v.nama }} {{ ((v.nip is not empty) ? '<span class="text-muted">(' ~ v.nip ~ ')</span>')|raw }}</b>
-                        {% set is_admin =  get_row_data('login_model', 'retrieve', [null, null, null, null, v.id], 'is_admin') %}
-                        {% if is_admin == 1 %}
-                            <span class="label label-warning">Administrator</span>
-                        {% endif %}
-                        <br><b>Alamat :</b> {{ v.alamat }}
+                        <img style="height:40px;width:40px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(v.foto, 'medium', v.jenis_kelamin) }}">
+                        <b>{{ v.nama }} {{ ((v.nis is not empty) ? '<span class="text-muted">(' ~ v.nis ~ ')</span>')|raw }}</b>
+                        <br>{{ v.kelas_aktif.nama }} , {{ v.jenis_kelamin }} , {{ v.agama }}
                     </td>
                     <td>
                         <ul class="nav nav-pills" style="margin-bottom:0px;">
-                            <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
                             <li class="dropdown">
                                 <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
-                                    <li>{{ anchor('pengajar/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
-                                    <li>{{ anchor('pengajar/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>
-                                    <li>{{ anchor('pengajar/edit_username/' ~ v.status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Pengajar'})|raw }}</li>
-                                    <li>{{ anchor('pengajar/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>
+                                    {% if v.status_id != 3 %}
+                                    <li>{{ anchor('siswa/moved_class/' ~ v.status_id ~ '/' ~ v.id, 'Edit Kelas Aktif', {'class' : 'iframe', 'title' : 'Edit Kelas Aktif'})|raw }}</li>
+                                    {% endif %}
+                                    <li>{{ anchor('siswa/edit_username/' ~ v.status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Siswa'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
                                 </ul>
                             </li>
                         </ul>
@@ -173,7 +194,7 @@ Filter Pengajar - {{ parent() }}
             </tbody>
         </table>
 
-        {% if pengajars is not empty %}
+        {% if siswas is not empty %}
         <br>
         <div class="row-fluid">
             <div class="span8">
@@ -185,6 +206,15 @@ Filter Pengajar - {{ parent() }}
                                 <option value="">--Update Status--</option>
                                 <option value="1">Aktif</option>
                                 <option value="2">Blocking</option>
+                                <option value="3">Alumni</option>
+                            </select>
+                        </td>
+                        <td valign="top">
+                            <select name="kelas_id" style="width:auto;">
+                                <option value="">--Pindah Kelas--</option>
+                                {% for k in kelas %}
+                                    <option value="{{ k.id }}">{{ k.nama }}</option>
+                                {% endfor %}
                             </select>
                         </td>
                         <td valign="top">
@@ -207,16 +237,9 @@ Filter Pengajar - {{ parent() }}
 
 {% block js %}
 <script type="text/javascript">
-function ch_uch_checkbox(source){
-    checkboxes = document.getElementsByName('pengajar_id[]');
-    for(var i=0, n=checkboxes.length;i<n;i++) {
-      checkboxes[i].checked = source.checked;
-    }
-}
-
 $(function() {
     function view_form_search() {
-        $( "#form-search" ).toggle();
+        $("#form-search").toggle();
     }
     {% if filter is not empty %}
     view_form_search();
@@ -225,5 +248,12 @@ $(function() {
     view_form_search();
     });
 });
+
+function ch_uch_checkbox(source){
+    checkboxes = document.getElementsByName('siswa_id[]');
+    for(var i=0, n=checkboxes.length;i<n;i++) {
+      checkboxes[i].checked = source.checked;
+    }
+}
 </script>
 {% endblock %}

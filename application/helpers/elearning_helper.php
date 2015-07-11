@@ -192,6 +192,8 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
             theme_advanced_resizing : false,
             content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
             convert_urls: false,
+            force_br_newlines : false,
+            force_p_newlines : false,
         });
 
         function openKCFinder(field_name, url, type, win) {
@@ -568,5 +570,16 @@ function pr($array) {
 
 function get_data_array($array, $index1, $index2) {
     return $array[$index1][$index2];
+}
+
+/**
+ * Fungsi untuk mendapatkan nama panggilan
+ * 
+ * @param  string $str_nama
+ * @return string
+ */
+function nama_panggilan($str_nama) {
+    $split = explode(" ", $str_nama);
+    return $split[0];
 }
 

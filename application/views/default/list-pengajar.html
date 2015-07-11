@@ -56,7 +56,7 @@ Data Pengajar - {{ parent() }}
                         <b>{{ v.nama }} {{ ((v.nip is not empty) ? '<span class="text-muted">(' ~ v.nip ~ ')</span>')|raw }}</b>
                         {% set is_admin =  get_row_data('login_model', 'retrieve', [null, null, null, null, v.id], 'is_admin') %}
                         {% if is_admin == 1 %}
-                            <span class="label label-warning">Admin</span>
+                            <span class="label label-warning">Administrator</span>
                         {% endif %}
                         <br><b>Alamat :</b> {{ v.alamat }}
                     </td>

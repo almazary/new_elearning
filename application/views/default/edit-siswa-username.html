@@ -1,0 +1,23 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<h4>Edit Username</h4>
+{{ get_flashdata('edit')|raw }}
+
+{{ form_open('siswa/edit_username/' ~ status_id ~ '/' ~ siswa_id)|raw }}
+<input type="hidden" name="login_id" value="{{ login.id }}">
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <td>
+                <input type="text" name="username" value="{{ set_value('username', login.username) }}">
+                <br>{{ form_error('username')|raw }}
+            </td>
+            <td width="20%">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{ form_close()|raw }}
+{% endblock %}

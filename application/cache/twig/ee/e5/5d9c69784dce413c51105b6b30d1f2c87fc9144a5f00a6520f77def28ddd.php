@@ -54,7 +54,10 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
 
         <div class=\"panel panel-default\">
             <div class=\"panel-heading\">
-                <strong>Profil pengajar</strong>
+                <strong>Profil pengajar ";
+        // line 17
+        echo ((($this->getAttribute((isset($context["pengajar_login"]) ? $context["pengajar_login"] : null), "is_admin") == 1)) ? ("<label class=\"label label-warning\">Administrator</label>") : (""));
+        echo "</strong>
                 <div class=\"btn-group pull-right\" style=\"margin-top:-4px;\">
                     ";
         // line 19
@@ -301,6 +304,6 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
 
     public function getDebugInfo()
     {
-        return array (  270 => 131,  258 => 122,  254 => 121,  240 => 109,  232 => 106,  228 => 104,  218 => 100,  213 => 98,  209 => 97,  203 => 96,  198 => 95,  195 => 94,  192 => 93,  189 => 92,  185 => 91,  182 => 90,  179 => 89,  177 => 88,  173 => 87,  168 => 85,  165 => 84,  161 => 83,  138 => 62,  134 => 60,  130 => 58,  126 => 56,  124 => 55,  116 => 50,  109 => 46,  102 => 42,  95 => 38,  88 => 34,  80 => 29,  75 => 27,  65 => 20,  61 => 19,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  273 => 131,  261 => 122,  257 => 121,  243 => 109,  235 => 106,  231 => 104,  221 => 100,  216 => 98,  212 => 97,  206 => 96,  201 => 95,  198 => 94,  195 => 93,  192 => 92,  188 => 91,  185 => 90,  182 => 89,  180 => 88,  176 => 87,  171 => 85,  168 => 84,  164 => 83,  141 => 62,  137 => 60,  133 => 58,  129 => 56,  127 => 55,  119 => 50,  112 => 46,  105 => 42,  98 => 38,  91 => 34,  83 => 29,  78 => 27,  68 => 20,  64 => 19,  59 => 17,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

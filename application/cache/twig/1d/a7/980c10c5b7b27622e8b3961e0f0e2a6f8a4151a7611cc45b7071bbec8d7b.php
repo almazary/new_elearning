@@ -144,7 +144,7 @@ class __TwigTemplate_1da7980c10c5b7b27622e8b3961e0f0e2a6f8a4151a7611cc45b7071bbe
             echo "                        ";
             if (((isset($context["is_admin"]) ? $context["is_admin"] : null) == 1)) {
                 // line 59
-                echo "                            <span class=\"label label-warning\">Admin</span>
+                echo "                            <span class=\"label label-warning\">Administrator</span>
                         ";
             }
             // line 61

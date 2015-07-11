@@ -8,7 +8,6 @@
         <link type="text/css" href="{{ base_url_theme }}bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link type="text/css" href="{{ base_url_theme }}css/theme.css" rel="stylesheet">
         <link type="text/css" href="{{ base_url_theme }}images/icons/css/font-awesome.css" rel="stylesheet">
-        <link type="text/css" href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600' rel='stylesheet'>
         {% block css %}{% endblock %}
         {{ comp_css|raw }}
         <link rel="shortcut icon" type="image/x-icon" href="{{ favicon_url }}">
@@ -32,12 +31,17 @@
                         </form>
                         <ul class="nav pull-right">
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                {{ get_sess_data('user', 'nama') }}
-                                    <img src="{{ base_url_theme }}images/user.png" class="nav-avatar" />
+                                {{ nama_panggilan(get_sess_data('user', 'nama')) }}
+                                    
+                                {% if is_admin() %}
+                                <img src="{{ get_url_image_pengajar(get_sess_data('user', 'foto'), 'medium', get_sess_data('user', 'jenis_kelamin')) }}" class="nav-avatar img-polaroid" />
+                                {% endif %}
+
                                 <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="{{ site_url('ch_profil') }}">Profil</a></li>
-                                    <li><a href="{{ site_url('ch_pass') }}">Ubah Password</a></li>
+                                    {% if is_admin() %}
+                                    <li>{{ anchor('pengajar/detail/'~ get_sess_data('user', 'status_id') ~'/' ~ get_sess_data('user', 'id'), 'Detail Profil', {'title' : 'Detail Profil'})|raw }}</li>
+                                    {% endif %}
                                     <li><a href="{{ site_url('login/logout') }}">Logout</a></li>
                                 </ul>
                             </li>

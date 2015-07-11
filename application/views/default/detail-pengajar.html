@@ -14,7 +14,7 @@ Detail Pengajar - {{ parent() }}
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                <strong>Profil pengajar</strong>
+                <strong>Profil pengajar {{ ((pengajar_login.is_admin == 1) ? '<label class="label label-warning">Administrator</label>')|raw }}</strong>
                 <div class="btn-group pull-right" style="margin-top:-4px;">
                     {{ anchor('pengajar/edit_profile/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Profil', {'class' : 'iframe-4 btn btn-small btn-primary', 'title' : 'Edit Profil Pengajar'})|raw }}
                     {{ anchor('pengajar/edit_picture/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Foto', {'class' : 'iframe-5 btn btn-small btn-primary', 'title' : 'Edit Foto Pengajar'})|raw }}
