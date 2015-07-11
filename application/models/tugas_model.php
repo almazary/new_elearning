@@ -677,7 +677,7 @@ class Tugas_model extends CI_Model
      * 
      * @param  integer       $no_of_records
      * @param  integer       $page_no      
-     * @param  integer|null  $mapel_ajar_id
+     * @param  integer|null  $mapel_id
      * @param  integer|null  $type_id      
      * @return array
      * @author Almazari <almazary@gmail.com>
@@ -685,16 +685,16 @@ class Tugas_model extends CI_Model
     public function retrieve_all(
         $no_of_records = 10, 
         $page_no       = 1,
-        $mapel_ajar_id = null,
+        $mapel_id = null,
         $type_id       = null
     ) {
         $no_of_records = (int)$no_of_records;
         $page_no       = (int)$page_no;
 
         $where = array();
-        if (!is_null($mapel_ajar_id)) {
-            $mapel_ajar_id = (int)$mapel_ajar_id;
-            $where['mapel_ajar_id'] = array($mapel_ajar_id, 'where');
+        if (!is_null($mapel_id)) {
+            $mapel_id = (int)$mapel_id;
+            $where['mapel_id'] = array($mapel_id, 'where');
         }
         if (!is_null($type_id)) {
             $type_id = (int)$type_id;
@@ -712,17 +712,17 @@ class Tugas_model extends CI_Model
      * Method untuk mendapatkan satu record tugas
      * 
      * @param  integer $id           
-     * @param  integer $mapel_ajar_id
+     * @param  integer $mepal_id
      * @param  integer $type_id      
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
-    public function retrieve($id, $mapel_ajar_id = null, $type_id = null)
+    public function retrieve($id, $mapel_id = null, $type_id = null)
     {
         $id = (int)$id;
-        if (!is_null($mapel_ajar_id)) {
-            $mapel_ajar_id = (int)$mapel_ajar_id;
-            $this->db->where('mapel_ajar_id', $mapel_ajar_id);
+        if (!is_null($mapel_id)) {
+            $mapel_id = (int)$mapel_id;
+            $this->db->where('mapel_id', $mapel_id);
         }
         if (!is_null($type_id)) {
             $type_id = (int)$type_id;
@@ -735,10 +735,102 @@ class Tugas_model extends CI_Model
     }
 
     /**
+     * Method untuk mendapatkan kelas tugas
+     * 
+     * @param  integer $tugas_id
+     * @param  integer $kelas_id
+     * @return array
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_all_kelas($tugas_id = null, $kelas_id = null)
+    {
+        if (empty($tugas_id)) {
+            $this->db->where('tugas_id', $tugas_id);
+        }
+
+        if (empty($kelas_id)) {
+            $this->db->where('kelas_id', $kelas_id);
+        }
+
+        $result = $this->db->get('tugas_kelas');
+        return $results->result_array();
+    }
+
+    /**
+     * Method untuk mendapatkan satu data kelas tugas
+     * 
+     * @param  integer|null $id      
+     * @param  integer|null $tugas_id
+     * @param  integer|null $kelas_id
+     * @return array
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_kelas($id = null, $tugas_id = null, $kelas_id = null)
+    {
+        if (empty($id)) {
+            $this->db->where('id', $id);
+        }
+
+        if (empty($tugas_id)) {
+            $this->db->where('tugas_id', $tugas_id);
+        }
+
+        if (empty($kelas_id)) {
+            $this->db->where('kelas_id', $kelas_id);
+        }
+
+        $result = $this->db->get('tugas_kelas', 1);
+        return $results->row_array();
+    }
+
+    /**
+     * Method untuk update kelas tugas
+     * 
+     * @param  integer $id      
+     * @param  integer $tugas_id
+     * @param  integer $kelas_id
+     * @return boolean
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function update_kelas($id, $tugas_id, $kelas_id)
+    {
+        $this->db->update('tugas_kelas', array(
+            'tugas_id' => $tugas_id,
+            'kelas_id' => $kelas_id
+        ), array(
+            'id' => $id
+        ));
+
+        return true;
+    }
+
+    /**
+     * Method untuk menambah tugas kelas
+     * 
+     * @param  integer $tugas_id
+     * @param  integer $kelas_id
+     * @return integer last insert id
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function create_kelas($tugas_id, $kelas_id)
+    {
+        $this->db->insert('tugas_kelas', array(
+            'tugas_id' => $tugas_id,
+            'kelas_id' => $kelas_id
+        ));
+
+        return $this->db->insert_id();
+    }
+
+    /**
      * Method untuk memperbaharui tugas
      *
      * @param  integer $id
-     * @param  integer $mapel_ajar_id
+     * @param  integer $mapel_id
+     * @param  integer $pengajar_id
      * @param  integer $type_id      
      * @param  string  $judul        
      * @param  string  $info         
@@ -750,24 +842,27 @@ class Tugas_model extends CI_Model
      */
     public function update(
         $id,
-        $mapel_ajar_id,
+        $mapel_id,
+        $pengajar_id,
         $type_id,
         $judul,
         $durasi = null,
         $info   = '',
         $aktif  = 0
     ) {
-        $id            = (int)$id;
-        $mapel_ajar_id = (int)$mapel_ajar_id;
-        $type_id       = (int)$type_id;
+        $id          = (int)$id;
+        $mapel_id    = (int)$mapel_id;
+        $type_id     = (int)$type_id;
+        $pengajar_id = (int)$pengajar_id;
 
         $data = array(
-            'mapel_ajar_id' => $mapel_ajar_id,
-            'type_id'       => $type_id,
-            'judul'         => $judul,
-            'info'          => $info,
-            'durasi'        => $durasi,
-            'aktif'         => $aktif
+            'mapel_id'    => $mapel_id,
+            'pengajar_id' => $pengajar_id,
+            'type_id'     => $type_id,
+            'judul'       => $judul,
+            'info'        => $info,
+            'durasi'      => $durasi,
+            'aktif'       => $aktif
         );
         $this->db->where('id', $id);
         $this->db->update('tugas', $data);
@@ -792,32 +887,36 @@ class Tugas_model extends CI_Model
     /**
      * Method untuk menambah tugas
      * 
-     * @param  integer $mapel_ajar_id
+     * @param  integer $mapel_id
+     * @param  integer $pengajar_id
      * @param  integer $type_id      
      * @param  string  $judul        
      * @param  string  $info         
      * @param  integer $durasi       
      * @return integer last insert id
-     * @author Almazari <almazary@gmail.com>               
+     * @author Almazari <almazary@gmail.com>
      */
     public function create(
-        $mapel_ajar_id,
+        $mapel_id,
+        $pengajar_id,
         $type_id,
         $judul,
         $durasi = null,
         $info   = ''
     ) {
-        $mapel_ajar_id = (int)$mapel_ajar_id;
-        $type_id       = (int)$type_id;
+        $mapel_id    = (int)$mapel_id;
+        $type_id     = (int)$type_id;
+        $pengajar_id = (int)$pengajar_id;
 
         $data = array(
-            'mapel_ajar_id' => $mapel_ajar_id,
-            'type_id'       => $type_id,
-            'judul'         => $judul,
-            'info'          => $info,
-            'durasi'        => $durasi,
-            'aktif'         => 0,
-            'tgl_buat'      => date('Y-m-d H:i:s')
+            'mapel_id'    => $mapel_id,
+            'pengajar_id' => $pengajar_id,
+            'type_id'     => $type_id,
+            'judul'       => $judul,
+            'info'        => $info,
+            'durasi'      => $durasi,
+            'aktif'       => 0,
+            'tgl_buat'    => date('Y-m-d H:i:s')
         );
         $this->db->insert('tugas', $data);
         return $this->db->insert_id();

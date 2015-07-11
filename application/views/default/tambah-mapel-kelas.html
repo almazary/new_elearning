@@ -26,9 +26,6 @@ Matapelajaran Kelas - {{ parent() }}
             {% set checked = get_row_data('mapel_model', 'retrieve_kelas', [null, kelas['id'], m.id]) %}
             <tr>
                 <td>
-                    {% if m.aktif != 1 %}
-                    <span class="badge badge-warning pull-right">Matapelajaran Tidak Aktif</span>
-                    {% endif %}
                     <label><input type="checkbox" name="mapel[]" value="{{ m.id }}" style="margin-top:-2px;margin-right:5px;" {{ (m.aktif != 1) ? 'disabled' : '' }} {{ (checked is empty or checked.aktif == 0) ? '' : 'checked' }}> <b>{{ m.nama }}</b></label>
                     <small>{{ m.info|nl2br }}</small>
                 </td>

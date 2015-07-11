@@ -36,18 +36,23 @@ class Mapel_model extends CI_Model
         $kelas_id = null,
         $aktif    = null
     ) {
+        $this->db->select('mapel_kelas.*');
         if (!is_null($mapel_id)) {
             $mapel_id = (int)$mapel_id;
-            $this->db->where('mapel_id', $mapel_id);
+            $this->db->where('mapel_kelas.mapel_id', $mapel_id);
         }
         if (!is_null($kelas_id)) {
             $kelas_id = (int)$kelas_id;
-            $this->db->where('kelas_id', $kelas_id);
+            $this->db->where('mapel_kelas.kelas_id', $kelas_id);
         }
         if (!is_null($aktif)) {
             $aktif = (int)$aktif;
-            $this->db->where('aktif', $aktif);
+            $this->db->where('mapel_kelas.aktif', $aktif);
         }
+
+        # tambah hanya yang mapelnya aktif
+        $this->db->join('mapel', 'mapel_kelas.mapel_id = mapel.id', 'inner');
+        $this->db->where('mapel.aktif' , 1);
 
         $result = $this->db->get('mapel_kelas');
         return $result->result_array();
@@ -158,6 +163,7 @@ class Mapel_model extends CI_Model
      */
     public function retrieve_all_mapel()
     {
+        $this->db->where('aktif' , 1);
         $this->db->order_by('id', 'ASC');
         $result = $this->db->get('mapel');
         return $result->result_array();

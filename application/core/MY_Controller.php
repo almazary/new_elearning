@@ -18,6 +18,8 @@ class MY_Controller extends CI_Controller
                 redirect('login/logout');
             }
         }
+
+        $this->output->enable_profiler(TRUE);
     }
 
     function update_nis($nis = '') {

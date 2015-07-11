@@ -79,15 +79,8 @@ class __TwigTemplate_d32da46c1fbf25e38c2c5554d64c3e67b8dcbd78f0003e2ad8b748a6752
             // line 27
             echo "            <tr>
                 <td>
-                    ";
+                    <label><input type=\"checkbox\" name=\"mapel[]\" value=\"";
             // line 29
-            if (($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "aktif") != 1)) {
-                // line 30
-                echo "                    <span class=\"badge badge-warning pull-right\">Matapelajaran Tidak Aktif</span>
-                    ";
-            }
-            // line 32
-            echo "                    <label><input type=\"checkbox\" name=\"mapel[]\" value=\"";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id"), "html", null, true);
             echo "\" style=\"margin-top:-2px;margin-right:5px;\" ";
             echo ((($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "aktif") != 1)) ? ("disabled") : (""));
@@ -97,7 +90,7 @@ class __TwigTemplate_d32da46c1fbf25e38c2c5554d64c3e67b8dcbd78f0003e2ad8b748a6752
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "nama"), "html", null, true);
             echo "</b></label>
                     <small>";
-            // line 33
+            // line 30
             echo nl2br(twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "info"), "html", null, true));
             echo "</small>
                 </td>
@@ -107,17 +100,17 @@ class __TwigTemplate_d32da46c1fbf25e38c2c5554d64c3e67b8dcbd78f0003e2ad8b748a6752
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['m'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 37
+        // line 34
         echo "        </tbody>
         </table>
         <br>
         <button type=\"submit\" class=\"btn btn-primary\">Simpan</button>
         <a href=\"";
-        // line 41
+        // line 38
         echo twig_escape_filter($this->env, (isset($context["uri_back"]) ? $context["uri_back"] : null), "html", null, true);
         echo "\" class=\"btn btn-default\">Kembali</a>
         ";
-        // line 42
+        // line 39
         echo form_close();
         echo "
 
@@ -138,6 +131,6 @@ class __TwigTemplate_d32da46c1fbf25e38c2c5554d64c3e67b8dcbd78f0003e2ad8b748a6752
 
     public function getDebugInfo()
     {
-        return array (  121 => 42,  117 => 41,  111 => 37,  101 => 33,  90 => 32,  86 => 30,  84 => 29,  80 => 27,  77 => 26,  73 => 25,  67 => 22,  59 => 17,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  114 => 39,  110 => 38,  104 => 34,  94 => 30,  84 => 29,  80 => 27,  77 => 26,  73 => 25,  67 => 22,  59 => 17,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

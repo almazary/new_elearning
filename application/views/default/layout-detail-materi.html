@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{{ site_name }}{% endblock %}</title>
+        <link type="text/css" href="{{ base_url_theme }}bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link type="text/css" href="{{ base_url_theme }}bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link type="text/css" href="{{ base_url_theme }}css/read.css" rel="stylesheet">
+        {% block css %}{% endblock %}
+        <link rel="shortcut icon" type="image/x-icon" href="{{ favicon_url }}">
+    </head>
+    <body>
+
+        {% block content %}{% endblock %}
+
+        <script src="{{ base_url_theme }}scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
+        <script src="{{ base_url_theme }}scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
+        <script src="{{ base_url_theme }}bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        {% block js %}{% endblock %}
+    </body>
+</html>

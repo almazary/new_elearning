@@ -182,8 +182,6 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
             theme_advanced_buttons2 : "forecolor,backcolor,|,undo,redo,|,search,replace,outdent,indent,ltr,rtl,blockquote,|,emotions,image,media,youtubeIframe,syntaxhl,|,print,preview,fullscreen",
             theme_advanced_buttons3 : "",
             theme_advanced_toolbar_location : "top",
-            valid_children : "+body[style],+body[div],p[strong|a|#text]",
-            valid_elements : "*[*]",
             theme_advanced_toolbar_align : "left",
             theme_advanced_statusbar_location : "bottom",
             pdw_toggle_on : 1,

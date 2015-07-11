@@ -8,6 +8,23 @@
  */
 class Materi_model extends CI_Model
 {
+    /**
+     * Method untuk menambah views materi
+     * 
+     * @param  integer $materi_id
+     * @return boolean
+     * 
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function plus_views($materi_id)
+    {
+        $retrieve = $this->retrieve($materi_id);
+        if (!empty($retrieve)) {
+            $this->db->update('materi', array('views' => $retrieve['views'] + 1), array('id' => $retrieve['id']));
+        }
+
+        return true;
+    }
 
     /**
      * Method untuk menghapus kelas materi
@@ -189,8 +206,12 @@ class Materi_model extends CI_Model
             }
         }
 
+        # cari yang mapelnya berstatus aktif yang ditampilkan
+        $where['mapel'] = array('materi.mapel_id = mapel.id', 'join', 'inner');
+        $where['mapel.aktif'] = array('1', 'where');
+
         $orderby = array(
-            'id' => 'DESC'
+            'materi.id' => 'DESC'
         );
 
         $data = $this->pager->set('materi', $no_of_records, $page_no, $where, $orderby, 'materi.*', $group_by);
