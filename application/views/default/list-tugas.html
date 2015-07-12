@@ -1,0 +1,168 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Tugas - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Tugas</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('tugas')|raw }}
+
+        <div class="bs-callout bs-callout-info">
+            <div class="btn-group pull-right" style="margin-top:-5px;">
+                {{ anchor('tugas/add/3', 'Tambah Tugas Ganda', {'class' : 'btn btn-primary'})|raw }}
+                {{ anchor('tugas/add/2', 'Tambah Tugas Essay', {'class' : 'btn btn-primary'})|raw }}
+                {{ anchor('tugas/add/1', 'Tambah Tugas Upload', {'class' : 'btn btn-primary'})|raw }}
+            </div>
+            <b><a class="as-link" data-toggle="collapse" data-target="#form-filter"><i class="icon-search" style="line-height: 0px;"></i> Filter</a></b>
+
+            <div id="form-filter" class="collapse" style="margin-top: 5px;">
+                {{ form_open('tugas')|raw }}
+                    <table class="table table-condensed">
+                        <tr>
+                            <th  style="border-top: none;">Mapel</th>
+                            <td  style="border-top: none;">
+                                <ul class="unstyled inline" style="margin-left: -5px;">
+                                    {% for m in mapel %}
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="mapel_id[]" value="{{ m.id }}" {{ set_checkbox('mapel_id[]', m.id, (filter.mapel_id is not empty and in_array(m.id, filter.mapel_id)) ? true) }}> {{ m.nama }}
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Kelas</th>
+                            <td>
+                                <ul class="unstyled inline" style="margin-left: -5px;">
+                                    {% for k in kelas %}
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="kelas_id[]" value="{{ k.id }}" {{ set_checkbox('kelas_id[]', k.id, (filter.kelas_id is not empty and in_array(k.id, filter.kelas_id)) ? true) }}> {{ k.nama }}
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Tipe</th>
+                            <td>
+                                <ul class="unstyled inline" style="margin-left: -5px;">
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="type[]" value="3" {{ set_checkbox('type[]', '3', (filter.type is not empty and in_array('3', filter.type)) ? true) }}> Ganda
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="type[]" value="2" {{ set_checkbox('type[]', '2', (filter.type is not empty and in_array('2', filter.type)) ? true) }}> Essay
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="type[]" value="1" {{ set_checkbox('type[]', '1', (filter.type is not empty and in_array('1', filter.type)) ? true) }}> Upload
+                                        </label>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th width="15%">Judul</th>
+                            <td>
+                                <input type="text" name="judul" class="span4" value="{{ set_value('judul', filter.judul) }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Info</th>
+                            <td>
+                                <input type="text" name="info" class="span5" value="{{ set_value('info', filter.info) }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Pembuat</th>
+                            <td>
+                                <input type="text" name="pembuat" class="span4" value="{{ set_value('pembuat', filter.pembuat) }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+
+        </div>
+
+        <br>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th width="7%">ID</th>
+                    <th>Informasi Tugas</th>
+                    <th width="15%">Tipe Tugas</th>
+                    <th width="15%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for no, m in tugas %}
+                <tr>
+                    <td><b>{{ m.id }}</b></td>
+                    <td>
+                        <strong class="text-warning">{{ m.judul }}</strong>
+                        <br><small><b>{{ m.mapel.nama }}</b>
+
+                        {% for mk in m.tugas_kelas %}
+                            , {{ mk.nama }}
+                        {% endfor %}
+
+                        {% if m.type_label == 'Ganda' or m.type_label == 'Essay' %}
+                            , {{ m.durasi }} Menit
+                        {% endif %}
+
+                        </small>
+                        <br><small><b>Pembuat : </b> <a href="{{ m.pembuat.link_profil }}">{{ m.pembuat.nama }}</a>, {{ tgl_jam_indo(m.tgl_buat) }}</small>
+                    </td>
+                    <td>
+                        {% if m.type_label == 'Ganda' %}
+                            <span class="label label-success">Ganda</span>
+                        {% elseif m.type_label == 'Essay' %}
+                            <span class="label label-info">Essay</span>
+                        {% elseif m.type_label == 'Upload' %}
+                            <span class="label label-warning">Upload</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            {% if m.type_label == 'Ganda' or m.type_label == 'Essay' %}
+                                {{ anchor('tugas/manajemen_soal/' ~ m.id, '<i class="icon icon-tasks"></i> Manajemen Soal', {'class' : 'btn btn-primary btn-small'})|raw }}
+                            {% endif %}
+                            {% if m.aktif == 0 %}
+                                {{ anchor('tugas/terbitkan/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-ok"></i> Terbitkan', {'class' : 'btn btn-success btn-small'})|raw }}
+                            {% elseif m.aktif == 1 %}
+                                {{ anchor('tugas/tutup/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-minus"></i> Tutup', {'class' : 'btn btn-danger btn-small'})|raw }}
+                            {% endif %}
+
+                            {{ anchor('tugas/edit/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-edit"></i> Edit', {'class' : 'btn btn-default btn-small'})|raw }}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        {{ pagination|raw }}
+
+    </div>
+</div>
+{% endblock %}

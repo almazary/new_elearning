@@ -6,10 +6,7 @@ class Materi extends MY_Controller
     {
         parent::__construct();
 
-        # jika belum login die
-        if (!is_login()) {
-            exit('Maaf anda harus login.');
-        }
+        must_login();
     }
 
     private function formatData($val)
@@ -65,7 +62,7 @@ class Materi extends MY_Controller
                 foreach ($this->siswa_model->retrieve_all_by_name($pembuat) as $val) {
                     $siswa_id[] = $val['id'];
                 }
-            
+
                 if (empty($pengajar_id) AND empty($siswa_id)) {
                     $pengajar_id[] = 0;
                     $siswa_id[]    = 0;
@@ -103,7 +100,7 @@ class Materi extends MY_Controller
 
         # ambil semua data materi
         $retrieve_all_materi = $this->materi_model->retrieve_all(
-            20, 
+            20,
             $page_no,
             $filter['pengajar_id'],
             $filter['siswa_id'],
@@ -221,7 +218,7 @@ class Materi extends MY_Controller
         $uri_back  = (string)$segment_5;
 
         if (empty($uri_back)) {
-            $uri_back = redirect('materi');
+            $uri_back = site_url('materi');
         } else {
             $uri_back = deurl_redirect($uri_back);
         }
@@ -435,7 +432,7 @@ class Materi extends MY_Controller
 
                     $this->materi_model->plus_views($materi['id']);
 
-                    force_download($name_file, $data_file); 
+                    force_download($name_file, $data_file);
                 }
 
                 if (!isset($data['error'])) {
@@ -454,14 +451,14 @@ class Materi extends MY_Controller
 
                     $data['type'] = $type;
                     $data['materi']['mapel'] = $this->mapel_model->retrieve($materi['mapel_id']);
-                    
+
                     # cari materi kelas
                     $materi_kelas = $this->materi_model->retrieve_all_kelas($materi['id']);
                     foreach ($materi_kelas as $mk) {
                         $kelas = $this->kelas_model->retrieve($mk['kelas_id']);
                         $data['materi']['materi_kelas'][] = $kelas;
                     }
-                    
+
                     # cari pembuatnya
                     if (!empty($materi['pengajar_id'])) {
                         $pengajar = $this->pengajar_model->retrieve($materi['pengajar_id']);

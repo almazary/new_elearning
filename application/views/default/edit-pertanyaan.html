@@ -1,0 +1,24 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<h4>Edit Pertanyaan ke {{ no_pertanyaan }}</h4>
+{{ get_flashdata('tugas')|raw }}
+
+{{ form_open('tugas/edit_soal/' ~ tugas.id ~ '/' ~ pertanyaan.id)|raw }}
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <td>
+                <textarea name="pertanyaan" id="pertanyaan" style="height:400px;width:100%;">{{ set_value('pertanyaan', pertanyaan.pertanyaan)|raw }}</textarea>
+                {{ form_error('pertanyaan')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{ form_close()|raw }}
+{% endblock %}

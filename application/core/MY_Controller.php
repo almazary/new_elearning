@@ -11,7 +11,7 @@ class MY_Controller extends CI_Controller
 
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
-    
+
         if (is_login()) {
             # cek session kcfindernya ada atau tidak
             if (empty($_SESSION['E-LEARNING']['KCFINDER'])) {

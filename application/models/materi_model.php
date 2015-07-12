@@ -10,10 +10,10 @@ class Materi_model extends CI_Model
 {
     /**
      * Method untuk menambah views materi
-     * 
+     *
      * @param  integer $materi_id
      * @return boolean
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function plus_views($materi_id)
@@ -28,32 +28,32 @@ class Materi_model extends CI_Model
 
     /**
      * Method untuk menghapus kelas materi
-     * 
+     *
      * @param  integer $id
-     * @return boolean 
-     * 
+     * @return boolean
+     *
      * @author Almazari <almazary@gmail.com>
      */
-    public function delete_kelas($id) 
+    public function delete_kelas($id)
     {
         $this->db->where('id', $id);
         $this->db->delete('materi_kelas');
         return true;
     }
 
-    /** 
+    /**
      * Method untuk mendapatkan satu record kelas materi
-     * 
-     * @param  integer|null $id       
+     *
+     * @param  integer|null $id
      * @param  integer|null $materi_id
-     * @param  integer|null $kelas_id 
+     * @param  integer|null $kelas_id
      * @return array
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_kelas(
         $id        = null,
-        $materi_id = null, 
+        $materi_id = null,
         $kelas_id  = null
     ) {
         if ($id == null && $materi_id == null && $kelas_id == null) {
@@ -75,10 +75,10 @@ class Materi_model extends CI_Model
 
     /**
      * Method untuk mendapatkan semua kelas materi
-     * 
+     *
      * @param  integer $materi_id
      * @return array
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_kelas($materi_id)
@@ -90,11 +90,11 @@ class Materi_model extends CI_Model
 
     /**
      * Method untuk menambah materi kelas
-     * 
+     *
      * @param  integer $materi_id
-     * @param  integer $kelas_id 
+     * @param  integer $kelas_id
      * @return integer
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function create_kelas(

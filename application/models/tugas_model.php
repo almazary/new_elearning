@@ -2,25 +2,25 @@
 
 /**
  * Class Model untuk resource Tugas
- * 
+ *
  * @package Elearning Dokumenary
  * @link    http://www.dokumenary.net
  */
 class Tugas_model extends CI_Model
-{   
+{
 
     /**
      * Method untuk mendapatkan banyak data nilai
-     * 
+     *
      * @param  integer      $no_of_records
-     * @param  integer      $page_no      
+     * @param  integer      $page_no
      * @param  null|integer $tugas_id
      * @param  null|integer $siswa_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_nilai(
-        $no_of_records = 10, 
+        $no_of_records = 10,
         $page_no       = 1,
         $tugas_id      = null,
         $siswa_id      = null
@@ -47,8 +47,8 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk mendapatkan satu nilai tugas
-     * 
-     * @param  null|integer $id      
+     *
+     * @param  null|integer $id
      * @param  null|integer $tugas_id
      * @param  null|integer $siswa_id
      * @return array
@@ -77,9 +77,9 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk memperbaharui nilai tugas
-     * 
-     * @param  integer $id      
-     * @param  float   $nilai   
+     *
+     * @param  integer $id
+     * @param  float   $nilai
      * @param  integer $tugas_id
      * @param  integer $siswa_id
      * @return boolean true jika berhasil
@@ -108,12 +108,12 @@ class Tugas_model extends CI_Model
 
     /**
      * method untuk menambah nilai tugas
-     * 
-     * @param  float   $nilai   
+     *
+     * @param  float   $nilai
      * @param  integer $tugas_id
      * @param  integer $siswa_id
      * @return integer last insert id
-     * @author Almazari <almazary@gmail.com>        
+     * @author Almazari <almazary@gmail.com>
      */
     public function create_nilai(
         $nilai,
@@ -135,10 +135,10 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk mendapatkan satu jawaban ganda
-     * 
-     * @param  null|integer $id        
+     *
+     * @param  null|integer $id
      * @param  null|integer $pilihan_id
-     * @param  null|integer $siswa_id  
+     * @param  null|integer $siswa_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
@@ -159,7 +159,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menghapus jawaban ganda
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -175,10 +175,10 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk memperbaharui jawaban ganda
-     * 
-     * @param  integer $id        
+     *
+     * @param  integer $id
      * @param  integer $pilihan_id
-     * @param  integer $siswa_id  
+     * @param  integer $siswa_id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
      */
@@ -202,9 +202,9 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menambah jawaban ganda
-     * 
+     *
      * @param  integer $pilihan_id
-     * @param  integer $siswa_id  
+     * @param  integer $siswa_id
      * @return integer last insert id
      * @author Almazari <almazary@gmail.com>
      */
@@ -225,7 +225,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menghapus jawaban essay
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -241,7 +241,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk mendapatkan satu record jawaban essay
-     * 
+     *
      * @param  integer $id
      * @return array
      * @author Almazari <almazary@gmail.com>
@@ -257,11 +257,11 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk update jawaban essay
-     * 
-     * @param  integer $id           
-     * @param  string  $jawaban      
+     *
+     * @param  integer $id
+     * @param  string  $jawaban
      * @param  integer $pertanyaan_id
-     * @param  integer $siswa_id     
+     * @param  integer $siswa_id
      * @return boolan  true jika berhasil
      * @author Almazari <almazary@gmail.com>
      */
@@ -287,10 +287,10 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menambah jawaban essay
-     * 
-     * @param  string  $jawaban       
-     * @param  integer $pertanyaan_id 
-     * @param  integer $siswa_id      
+     *
+     * @param  string  $jawaban
+     * @param  integer $pertanyaan_id
+     * @param  integer $siswa_id
      * @return integer last insert id
      * @author Almazari <almazary@gmail.com>
      */
@@ -313,7 +313,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menghapus data pilihan
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -329,7 +329,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk mengambail banyak data pilihan
-     * 
+     *
      * @param  integer  $pertanyaan_id
      * @return array
      * @author Almazari <almazary@gmail.com>
@@ -350,7 +350,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk mendapatkan satu data pilihan
-     * 
+     *
      * @param  integer $id
      * @return array
      * @author Almazari <almazary@gmail.com>
@@ -366,12 +366,12 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk memperbaharui data pilihan
-     * 
-     * @param  integer $id           
+     *
+     * @param  integer $id
      * @param  integer $pertanyaan_id
-     * @param  string  $konten       
-     * @param  integer $kunci        
-     * @param  integer $urutan       
+     * @param  string  $konten
+     * @param  integer $kunci
+     * @param  integer $urutan
      * @return boolan true jika berhasil
      * @author Almazari <almazary@gmail.com>
      */
@@ -400,12 +400,12 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk manambah pilihan pada petanyaan
-     * 
+     *
      * @param  integer $pertanyaan_id
-     * @param  string  $konten       
-     * @param  integer $kunci        
+     * @param  string  $konten
+     * @param  integer $kunci
      * @return array   last insert id
-     * @author Almazari <almazary@gmail.com>              
+     * @author Almazari <almazary@gmail.com>
      */
     public function create_pilihan(
         $pertanyaan_id,
@@ -435,7 +435,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menghapus data pertanyaan
-     * 
+     *
      * @param  integer $id
      * @return boolan  true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -451,17 +451,18 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk mendapatkan banyak data pertanyaan
-     * 
+     *
      * @param  integer      $no_of_records
-     * @param  integer      $page_no      
-     * @param  integer|null $tugas_id     
+     * @param  integer      $page_no
+     * @param  integer|null $tugas_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_pertanyaan(
-        $no_of_records = 10, 
+        $no_of_records = 10,
         $page_no       = 1,
-        $tugas_id      = null
+        $tugas_id      = null,
+        $sort          = 'ASC'
     ) {
         $no_of_records = (int)$no_of_records;
         $page_no       = (int)$page_no;
@@ -472,7 +473,7 @@ class Tugas_model extends CI_Model
             $where['tugas_id'] = array($tugas_id, 'where');
         }
 
-        $orderby = array('urutan' => 'ASC');
+        $orderby = array('urutan' => $sort);
 
         $data = $this->pager->set('tugas_pertanyaan', $no_of_records, $page_no, $where, $orderby);
 
@@ -481,7 +482,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menghitung jumlah total pertanyaan berdasarkan tugas_id
-     * 
+     *
      * @param  integer $tugas_id
      * @return integer
      * @author Almazari <almazary@gmail.com>
@@ -495,7 +496,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk mendapatkan satu data pertanyaan
-     * 
+     *
      * @param  integer $id
      * @return array
      * @author Almazari <almazary@gmail.com>
@@ -511,13 +512,13 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk memperbaharui pertanyaan
-     * 
-     * @param  integer $id        
+     *
+     * @param  integer $id
      * @param  string  $pertanyaan
-     * @param  integer $urutan    
-     * @param  integer $tugas_id  
+     * @param  integer $urutan
+     * @param  integer $tugas_id
      * @return boolean true jika berhasil
-     * @author Almazari <almazary@gmail.com>            
+     * @author Almazari <almazary@gmail.com>
      */
     public function update_pertanyaan(
         $id,
@@ -541,29 +542,33 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menambah pertanyaan
-     * 
+     *
      * @param  string  $pertanyaan
-     * @param  integer $tugas_id  
+     * @param  integer $tugas_id
      * @return integer last insert id
      * @author Almazari <almazary@gmail.com>
      */
     public function create_pertanyaan(
         $pertanyaan,
-        $tugas_id
+        $tugas_id,
+        $urutan = null
     ) {
         $tugas_id = (int)$tugas_id;
 
-        $query = $this->db->query("SELECT MAX(urutan) AS max FROM tugas_pertanyaan WHERE tugas_id = $tugas_id");
-        $row = $query->row_array();
-        if (!isset($row['max']) OR empty($row['max'])) {
-            $row['max'] = 1;
-        } else {
-            $row['max'] = $row['max'] + 1;
+        if (empty($urutan)) {
+            $query = $this->db->query("SELECT MAX(urutan) AS max FROM tugas_pertanyaan WHERE tugas_id = $tugas_id");
+            $row = $query->row_array();
+            if (!isset($row['max']) OR empty($row['max'])) {
+                $row['max'] = 1;
+            } else {
+                $row['max'] = $row['max'] + 1;
+            }
+            $urutan = $row['max'];
         }
 
         $data = array(
             'pertanyaan' => $pertanyaan,
-            'urutan'     => $row['max'],
+            'urutan'     => $urutan,
             'tugas_id'   => $tugas_id
         );
         $this->db->insert('tugas_pertanyaan', $data);
@@ -571,17 +576,17 @@ class Tugas_model extends CI_Model
     }
 
     /**
-     * Method untuk mengambil banyak data jawaban upload 
-     * 
+     * Method untuk mengambil banyak data jawaban upload
+     *
      * @param  integer       $no_of_records
-     * @param  integer       $page_no      
-     * @param  integer|null  $tugas_id     
-     * @param  integer|null  $siswa_id     
+     * @param  integer       $page_no
+     * @param  integer|null  $tugas_id
+     * @param  integer|null  $siswa_id
      * @return array
-     * @author Almazari <almazary@gmail.com>               
+     * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_upload(
-        $no_of_records = 10, 
+        $no_of_records = 10,
         $page_no       = 1,
         $tugas_id      = null,
         $siswa_id      = null
@@ -607,10 +612,10 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk mendapatkan satu record jawaban upload
-     * 
+     *
      * @param  integer $id
      * @return array
-     * @author Almazari <almazary@gmail.com> 
+     * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_upload($id, $tugas_id = null, $siswa_id = null)
     {
@@ -631,12 +636,12 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk insert data jawaban upload
-     * 
-     * @param  string  $file    
+     *
+     * @param  string  $file
      * @param  integer $tugas_id
      * @param  integer $siswa_id
      * @return integer last insert id
-     * @author Almazari <almazary@gmail.com>        
+     * @author Almazari <almazary@gmail.com>
      */
     public function create_upload(
         $file,
@@ -658,7 +663,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menghapus tugas
-     * 
+     *
      * @param  integer $id
      * @return boolean true jika berhasil
      * @author Almazari <almazary@gmail.com>
@@ -673,47 +678,84 @@ class Tugas_model extends CI_Model
     }
 
     /**
-     * Method untuk mengambil banyak data tugas
-     * 
-     * @param  integer       $no_of_records
-     * @param  integer       $page_no      
-     * @param  integer|null  $mapel_id
-     * @param  integer|null  $type_id      
+     * Method untuk mendapatkan banyak data materi
+     *
+     * @param  integer $no_of_records
+     * @param  integer $page_no
+     * @param  array   $mapel_id
+     * @param  array   $pengajar_id
+     * @param  array   $type_id
+     * @param  array   $kelas_id
+     * @param  string  $judul
+     * @param  string  $info
+     * @param  array   $aktif
      * @return array
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all(
-        $no_of_records = 10, 
+        $no_of_records = 10,
         $page_no       = 1,
-        $mapel_id = null,
-        $type_id       = null
+        $mapel_id      = array(),
+        $pengajar_id   = array(),
+        $type_id       = array(),
+        $kelas_id      = array(),
+        $judul         = null,
+        $info          = null,
+        $aktif         = array()
     ) {
         $no_of_records = (int)$no_of_records;
         $page_no       = (int)$page_no;
 
-        $where = array();
-        if (!is_null($mapel_id)) {
-            $mapel_id = (int)$mapel_id;
-            $where['mapel_id'] = array($mapel_id, 'where');
+        $where    = array();
+        $group_by = array();
+        if (!empty($pengajar_id)) {
+            $where['tugas.pengajar_id'] = array($pengajar_id, 'where_in');
         }
-        if (!is_null($type_id)) {
-            $type_id = (int)$type_id;
-            $where['type_id'] = array($type_id, 'where');
+        if (!empty($siswa_id)) {
+            $where['tugas.siswa_id'] = array($siswa_id, 'where_in');
+        }
+        if (!empty($mapel_id)) {
+            $where['tugas.mapel_id'] = array($mapel_id, 'where_in');
+        }
+        if (!empty($kelas_id)) {
+            $where['tugas_kelas']          = array('tugas.id = tugas_kelas.tugas_id', 'join', 'inner');
+            $where['tugas_kelas.kelas_id'] = array($kelas_id, 'where_in');
+            $group_by[] = 'tugas.id';
+        }
+        if (!empty($type_id)) {
+            $where['tugas.type_id'] = array($type_id, 'where_in');
+        }
+        $like = 0;
+        if (!empty($judul)) {
+            $where['tugas.judul'] = array($judul, 'like');
+            $like = 1;
+        }
+        if (!empty($info)) {
+            if ($like) {
+                $value = array($like, 'or_like');
+            } else {
+                $value = array($like, 'like');
+            }
+            $where['tugas.info'] = array($like, 'like');
+        }
+        if (!empty($aktif)) {
+            $where['tugas.aktif'] = array($aktif, 'where_in');
         }
 
         $orderby = array('id' => 'DESC');
 
-        $data = $this->pager->set('tugas', $no_of_records, $page_no, $where, $orderby);
+        $data = $this->pager->set('tugas', $no_of_records, $page_no, $where, $orderby, 'tugas.*', $group_by);
 
         return $data;
     }
 
     /**
      * Method untuk mendapatkan satu record tugas
-     * 
-     * @param  integer $id           
+     *
+     * @param  integer $id
      * @param  integer $mepal_id
-     * @param  integer $type_id      
+     * @param  integer $type_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
@@ -728,7 +770,7 @@ class Tugas_model extends CI_Model
             $type_id = (int)$type_id;
             $this->db->where('type_id', $type_id);
         }
-        
+
         $this->db->where('id', $id);
         $result = $this->db->get('tugas', 1);
         return $result->row_array();
@@ -736,63 +778,76 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk mendapatkan kelas tugas
-     * 
+     *
      * @param  integer $tugas_id
      * @param  integer $kelas_id
      * @return array
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_kelas($tugas_id = null, $kelas_id = null)
     {
-        if (empty($tugas_id)) {
+        if (!empty($tugas_id)) {
             $this->db->where('tugas_id', $tugas_id);
         }
 
-        if (empty($kelas_id)) {
+        if (!empty($kelas_id)) {
             $this->db->where('kelas_id', $kelas_id);
         }
 
         $result = $this->db->get('tugas_kelas');
-        return $results->result_array();
+        return $result->result_array();
     }
 
     /**
      * Method untuk mendapatkan satu data kelas tugas
-     * 
-     * @param  integer|null $id      
+     *
+     * @param  integer|null $id
      * @param  integer|null $tugas_id
      * @param  integer|null $kelas_id
      * @return array
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_kelas($id = null, $tugas_id = null, $kelas_id = null)
     {
-        if (empty($id)) {
+        if (!empty($id)) {
             $this->db->where('id', $id);
         }
-
-        if (empty($tugas_id)) {
+        if (!empty($tugas_id)) {
             $this->db->where('tugas_id', $tugas_id);
         }
-
-        if (empty($kelas_id)) {
+        if (!empty($kelas_id)) {
             $this->db->where('kelas_id', $kelas_id);
         }
 
-        $result = $this->db->get('tugas_kelas', 1);
-        return $results->row_array();
+        $result = $this->db->get('tugas_kelas');
+        return $result->row_array();
+    }
+
+    /**
+     * Method untuk mengapus kelas tugas
+     *
+     * @param  integer $id
+     * @return boolean
+     *
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function delete_kelas($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('tugas_kelas');
+        return true;
     }
 
     /**
      * Method untuk update kelas tugas
-     * 
-     * @param  integer $id      
+     *
+     * @param  integer $id
      * @param  integer $tugas_id
      * @param  integer $kelas_id
      * @return boolean
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function update_kelas($id, $tugas_id, $kelas_id)
@@ -809,7 +864,7 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menambah tugas kelas
-     * 
+     *
      * @param  integer $tugas_id
      * @param  integer $kelas_id
      * @return integer last insert id
@@ -831,14 +886,14 @@ class Tugas_model extends CI_Model
      * @param  integer $id
      * @param  integer $mapel_id
      * @param  integer $pengajar_id
-     * @param  integer $type_id      
-     * @param  string  $judul        
-     * @param  string  $info         
-     * @param  string  $tgl_buka     
-     * @param  string  $tgl_tutup    
-     * @param  integer $durasi       
+     * @param  integer $type_id
+     * @param  string  $judul
+     * @param  string  $info
+     * @param  string  $tgl_buka
+     * @param  string  $tgl_tutup
+     * @param  integer $durasi
      * @return boolean true jika berhasil
-     * @author Almazari <almazary@gmail.com>  
+     * @author Almazari <almazary@gmail.com>
      */
     public function update(
         $id,
@@ -869,12 +924,12 @@ class Tugas_model extends CI_Model
         return true;
     }
 
-    /** 
+    /**
      * Method untuk ubah status tugas jadi aktif
-     * 
+     *
      * @param  integer $id
      * @return boolean true
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function update_to_active($id)
@@ -886,13 +941,13 @@ class Tugas_model extends CI_Model
 
     /**
      * Method untuk menambah tugas
-     * 
+     *
      * @param  integer $mapel_id
      * @param  integer $pengajar_id
-     * @param  integer $type_id      
-     * @param  string  $judul        
-     * @param  string  $info         
-     * @param  integer $durasi       
+     * @param  integer $type_id
+     * @param  string  $judul
+     * @param  string  $info
+     * @param  integer $durasi
      * @return integer last insert id
      * @author Almazari <almazary@gmail.com>
      */

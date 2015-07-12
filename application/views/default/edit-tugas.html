@@ -1,0 +1,76 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Edit Tugas {{ type_label }} - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ anchor(uri_back, 'Tugas')|raw }} / Edit Tugas {{ type_label }}</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('tugas')|raw }}
+
+        {{ form_open_multipart('tugas/edit/' ~ tugas.id ~ '/' ~ enurl_redirect(uri_back), {'class' : 'form-horizontal row-fluid'})|raw }}
+            <div class="control-group">
+                <label class="control-label">Judul <span class="text-error">*</span></label>
+                <div class="controls">
+                    <input type="text" name="judul" class="span12" value="{{ set_value('judul', tugas.judul) }}">
+                    <br>{{ form_error('judul')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Matapelajaran <span class="text-error">*</span></label>
+                <div class="controls">
+                    <select name="mapel_id">
+                        <option value="">--pilih--</option>
+                        {% for m in mapel %}
+                        <option value="{{ m.id }}" {{ set_select('mapel_id', m.id, (m.id == tugas.mapel_id) ? true) }}>{{ m.nama }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>{{ form_error('mapel_id')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Kelas <span class="text-error">*</span></label>
+                <div class="controls">
+                    <ul class="unstyled inline" style="margin-left: -5px;">
+                        {% for k in kelas %}
+                        <li>
+                            <label class="checkbox inline">
+                                <input type="checkbox" name="kelas_id[]" value="{{ k.id }}" {{ set_checkbox('kelas_id[]', k.id, (in_array(k.id, tugas_kelas)) ? true) }}> {{ k.nama }}
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {{ form_error('kelas_id[]')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Info</label>
+                <div class="controls">
+                    <textarea name="info" class="span10">{{ set_value('info', tugas.info) }}</textarea>
+                    {{ form_error('info')|raw }}
+                </div>
+            </div>
+            {% if tugas.type_id != 1 %}
+            <div class="control-group">
+                <label class="control-label">Durasi <span class="text-error">*</span></label>
+                <div class="controls">
+                    <input type="text" name="durasi" class="span2" value="{{ set_value('durasi', tugas.durasi) }}" placeholder="Dalam menit">
+                    <br>{{ form_error('durasi')|raw }}
+                </div>
+            </div>
+            {% endif %}
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ uri_back }}" class="btn btn-default">Kembali</a>
+                </div>
+            </div>
+        {{ form_close()|raw }}
+
+    </div>
+</div>
+{% endblock %}

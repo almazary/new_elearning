@@ -60,6 +60,6 @@ class Login extends MY_Controller
         unset($_SESSION['E-LEARNING']);
         $this->session->set_userdata('login_' . APP_PREFIX, null);
 
-        redirect('login');
+        redirect('login/index');
     }
 }

@@ -21,7 +21,7 @@ class Siswa_model extends CI_Model
                 $result = $this->db->get('kelas_siswa');
                 return $result->num_rows();
                 break;
-            
+
             default:
                 return 0;
                 break;
@@ -86,10 +86,10 @@ class Siswa_model extends CI_Model
 
     /**
      * Method untuk mendapatkan semua siswa berhasarkan nama
-     * 
+     *
      * @param  string $nama
      * @return array
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_by_name($nama)

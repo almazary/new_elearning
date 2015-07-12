@@ -1,0 +1,24 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<h4>Pertanyaan ke {{ no_pertanyaan }}</h4>
+{{ get_flashdata('tugas')|raw }}
+
+{{ form_open('tugas/tambah_soal/' ~ tugas.id)|raw }}
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <td>
+                <textarea name="pertanyaan" id="pertanyaan" style="height:400px;width:100%;">{{ set_value('pertanyaan') }}</textarea>
+                {{ form_error('pertanyaan')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{ form_close()|raw }}
+{% endblock %}

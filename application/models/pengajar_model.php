@@ -11,10 +11,10 @@ class Pengajar_model extends CI_Model
 
     /**
      * Method untuk mendapatkan semua pengajar berhasarkan nama
-     * 
+     *
      * @param  string $nama
      * @return array
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_by_name($nama)

@@ -2,7 +2,7 @@
 
 /**
  * Class Model untuk Config
- * 
+ *
  * @package Elearning Dokumenary
  * @link    http://www.dokumenary.net
  */
@@ -11,7 +11,7 @@ class Config_model extends CI_Model
 
     /**
      * Method untuk mendapatkan informasi pengaturan
-     * 
+     *
      * @param  string $id
      * @return array
      * @author Almazari <almazary@gmail.com>
@@ -25,12 +25,12 @@ class Config_model extends CI_Model
 
     /**
      * Method untuk nambah pengaturan
-     * 
-     * @param  string $id    
-     * @param  string $nama  
-     * @param  string $value 
+     *
+     * @param  string $id
+     * @param  string $nama
+     * @param  string $value
      * @return boolean
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function create($id, $nama = null, $value = null)
@@ -46,12 +46,12 @@ class Config_model extends CI_Model
 
     /**
      * Method untuk update pengaturan
-     * 
-     * @param  string $id   
-     * @param  string $nama 
+     *
+     * @param  string $id
+     * @param  string $nama
      * @param  string $value
      * @return boolean
-     * 
+     *
      * @author Almazari <almazary@gmail.com>
      */
     public function update($id, $nama = null, $value = null)

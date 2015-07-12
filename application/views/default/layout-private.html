@@ -32,7 +32,7 @@
                         <ul class="nav pull-right">
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 {{ nama_panggilan(get_sess_data('user', 'nama')) }}
-                                    
+
                                 {% if is_admin() %}
                                 <img src="{{ get_url_image_pengajar(get_sess_data('user', 'foto'), 'medium', get_sess_data('user', 'jenis_kelamin')) }}" class="nav-avatar img-polaroid" />
                                 {% endif %}
@@ -72,7 +72,7 @@
                             <!--/.widget-nav-->
 
                             <ul class="widget widget-menu unstyled">
-                                <li><a href="{{ site_url('tugas') }}"><i class="menu-icon icon-tasks"></i> Tugas </a></li>
+                                <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i> Tugas </a></li>
                                 <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i> Materi </a></li>
                             </ul>
 
