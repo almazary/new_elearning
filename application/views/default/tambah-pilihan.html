@@ -1,0 +1,38 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<h4>Tambah Pilihan</h4>
+{{ get_flashdata('tugas')|raw }}
+
+{{ form_open('tugas/tambah_pilihan/' ~ tugas.id ~ '/' ~ pertanyaan.id)|raw }}
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th width="15%">Pilihan <span class="text-error">*</span></th>
+            <td>
+                <select name="pilihan" style="width:auto;">
+                    <option value="">--Pilih--</option>
+                    <option value="1" {{ set_select('pilihan', '1') }}>A</option>
+                    <option value="2" {{ set_select('pilihan', '2') }}>B</option>
+                    <option value="3" {{ set_select('pilihan', '3') }}>C</option>
+                    <option value="4" {{ set_select('pilihan', '4') }}>D</option>
+                    <option value="5" {{ set_select('pilihan', '5') }}>E</option>
+                </select>
+                {{ form_error('pilihan')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea name="konten" id="konten" style="height:350px;width:100%;">{{ set_value('konten') }}</textarea>
+                {{ form_error('konten')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{ form_close()|raw }}
+{% endblock %}

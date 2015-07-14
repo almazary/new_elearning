@@ -1,0 +1,42 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<div class="btn-group pull-right">
+    <a class="btn btn-primary btn-small" href="{{ site_url('tugas/tambah_pilihan/' ~ tugas.id ~ '/' ~ pertanyaan.id) }}">Tambah Pilihan</a>
+</div>
+
+<h4>Edit Pilihan</h4>
+{{ get_flashdata('tugas')|raw }}
+
+{{ form_open('tugas/edit_pilihan/' ~ tugas.id ~ '/' ~ pertanyaan.id ~ '/' ~ pilihan.id)|raw }}
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th width="15%">Pilihan <span class="text-error">*</span></th>
+            <td>
+                <select name="pilihan" style="width:auto;">
+                    <option value="">--Pilih--</option>
+                    <option value="1" {{ set_select('pilihan', '1', (pilihan.urutan == 1) ? true : false) }}>A</option>
+                    <option value="2" {{ set_select('pilihan', '2', (pilihan.urutan == 2) ? true : false) }}>B</option>
+                    <option value="3" {{ set_select('pilihan', '3', (pilihan.urutan == 3) ? true : false) }}>C</option>
+                    <option value="4" {{ set_select('pilihan', '4', (pilihan.urutan == 4) ? true : false) }}>D</option>
+                    <option value="5" {{ set_select('pilihan', '5', (pilihan.urutan == 5) ? true : false) }}>E</option>
+                </select>
+                {{ form_error('pilihan')|raw }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <textarea name="konten" id="konten" style="height:350px;width:100%;">{{ set_value('konten', pilihan.konten)|raw }}</textarea>
+                {{ form_error('konten')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{ form_close()|raw }}
+{% endblock %}

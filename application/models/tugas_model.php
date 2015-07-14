@@ -323,7 +323,7 @@ class Tugas_model extends CI_Model
         $id = (int)$id;
 
         $this->db->where('id', $id);
-        $this->db->delete('pilihan');
+        $this->db->update('pilihan', array('aktif' => 0));
         return true;
     }
 
@@ -337,6 +337,8 @@ class Tugas_model extends CI_Model
     public function retrieve_all_pilihan(
         $pertanyaan_id
     ) {
+        $this->db->order_by('urutan', 'ASC');
+        $this->db->where('aktif', 1);
         $this->db->where('pertanyaan_id', $pertanyaan_id);
         $result = $this->db->get('pilihan');
         if ($result->num_rows() > 0) {
@@ -355,9 +357,13 @@ class Tugas_model extends CI_Model
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
-    public function retrieve_pilihan($id)
+    public function retrieve_pilihan($id, $pertanyaan_id = null)
     {
         $id = (int)$id;
+
+        if (!empty($pertanyaan_id)) {
+            $this->db->where('pertanyaan_id', $pertanyaan_id);
+        }
 
         $this->db->where('id', $id);
         $result = $this->db->get('pilihan', 1);
@@ -410,24 +416,28 @@ class Tugas_model extends CI_Model
     public function create_pilihan(
         $pertanyaan_id,
         $konten,
-        $kunci
+        $kunci,
+        $urutan = null
     ) {
         $pertanyaan_id = (int)$pertanyaan_id;
         $kunci         = (int)$kunci;
 
-        $query = $this->db->query("SELECT MAX(urutan) AS max FROM pilihan WHERE pertanyaan_id = $pertanyaan_id");
-        $row = $query->row_array();
-        if (!isset($row['max']) OR empty($row['max'])) {
-            $row['max'] = 1;
-        } else {
-            $row['max'] = $row['max'] + 1;
+        if (empty($urutan)) {
+            $query = $this->db->query("SELECT MAX(urutan) AS max FROM pilihan WHERE pertanyaan_id = $pertanyaan_id");
+            $row = $query->row_array();
+            if (!isset($row['max']) OR empty($row['max'])) {
+                $row['max'] = 1;
+            } else {
+                $row['max'] = $row['max'] + 1;
+            }
+            $urutan = $row['max'];
         }
 
         $data = array(
             'pertanyaan_id' => $pertanyaan_id,
             'konten'        => $konten,
             'kunci'         => $kunci,
-            'urutan'        => $row['max']
+            'urutan'        => $urutan
         );
         $this->db->insert('pilihan', $data);
         return $this->db->insert_id();
@@ -445,7 +455,41 @@ class Tugas_model extends CI_Model
         $id = (int)$id;
 
         $this->db->where('id', $id);
-        $this->db->delete('tugas_pertanyaan');
+        $this->db->update('tugas_pertanyaan', array('aktif' => 0));
+
+        $pertanyaan = $this->retrieve_pertanyaan($id);
+
+        # reorder
+        $this->reorder_pertanyaan($pertanyaan['tugas_id']);
+    }
+
+    /**
+     * Method untuk mengurutkan kembali urutan pertanyaan
+     *
+     * @param  integer $tugas_id
+     * @return boolan  true jika berhasil
+     * @author Almazari <almazary@gmail.com>
+     */
+    private function reorder_pertanyaan($tugas_id)
+    {
+        # ambil semua pertanyaan yang aktif
+        $this->db->where('aktif' , 1);
+        $this->db->where('tugas_id', $tugas_id);
+        $this->db->order_by('urutan', 'ASC');
+        $result = $this->db->get('tugas_pertanyaan');
+        $result = $result->result_array();
+
+        $o = 1;
+        foreach ($result as $p) {
+            # update
+            $this->db->where('id', $p['id']);
+            $this->db->update('tugas_pertanyaan', array(
+                'urutan' => $o
+            ));
+
+            $o++;
+        }
+
         return true;
     }
 
@@ -473,6 +517,9 @@ class Tugas_model extends CI_Model
             $where['tugas_id'] = array($tugas_id, 'where');
         }
 
+        # tampilkan hanya yang aktif saja
+        $where['aktif'] = array(1, 'where');
+
         $orderby = array('urutan' => $sort);
 
         $data = $this->pager->set('tugas_pertanyaan', $no_of_records, $page_no, $where, $orderby);
@@ -489,6 +536,7 @@ class Tugas_model extends CI_Model
      */
     public function count_pertanyaan($tugas_id)
     {
+        $this->db->where('aktif' , 1);
         $this->db->where('tugas_id', $tugas_id);
         $result = $this->db->get('tugas_pertanyaan');
         return $result->num_rows();

@@ -1,11 +1,16 @@
 {% extends "layout-iframe.html" %}
 
 {% block content %}
+<div class="btn-group pull-right">
+    <a class="btn btn-primary btn-small" href="{{ site_url('tugas/tambah_soal/' ~ tugas.id) }}">Tambah Pertanyaan</a>
+    <a class="btn btn-primary btn-small" href="{{ site_url('tugas/tambah_pilihan/' ~ tugas.id ~ '/' ~ pertanyaan.id) }}">Tambah Pilihan</a>
+</div>
+
 <h4>Edit Pertanyaan ke {{ no_pertanyaan }}</h4>
 {{ get_flashdata('tugas')|raw }}
 
 {{ form_open('tugas/edit_soal/' ~ tugas.id ~ '/' ~ pertanyaan.id)|raw }}
-<table class="table table-striped">
+<table class="table table-striped" style="margin-top:20px;">
     <tbody>
         <tr>
             <td>

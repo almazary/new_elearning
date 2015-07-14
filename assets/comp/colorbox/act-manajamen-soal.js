@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $(".iframe-pertanyaan").colorbox({
+    $(".iframe-pertanyaan, .iframe-pilihan").colorbox({
         iframe:true,
         width:"800",
         height:"600",

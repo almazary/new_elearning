@@ -156,7 +156,7 @@ class Tugas extends MY_Controller
             $info     = $this->input->post('info', TRUE);
             $durasi   = null;
             if ($type != 1) {
-                $durasi = $this->input->post('durasi', POST);
+                $durasi = $this->input->post('durasi', TRUE);
             }
 
             $tugas_id = $this->tugas_model->create(
@@ -241,7 +241,7 @@ class Tugas extends MY_Controller
             $info     = $this->input->post('info', TRUE);
             $durasi   = null;
             if ($tugas['type_id'] != 1) {
-                $durasi = $this->input->post('durasi', POST);
+                $durasi = $this->input->post('durasi', TRUE);
             }
 
             $this->tugas_model->update(
@@ -355,7 +355,7 @@ class Tugas extends MY_Controller
             );
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Pertanyaan berhasil disimpan.'));
-            redirect('tugas/tambah_soal/' . $tugas['id']);
+            redirect('tugas/edit_soal/' . $tugas['id'] . '/' . $pertanyaan_id);
         }
 
         $this->twig->display('tambah-pertanyaan.html', $data);
@@ -396,5 +396,116 @@ class Tugas extends MY_Controller
         }
 
         $this->twig->display('edit-pertanyaan.html', $data);
+    }
+
+    function hapus_soal($segment_3 = '', $segment_4 = '', $segment_5 = '')
+    {
+        $tugas_id      = (int)$segment_3;
+        $pertanyaan_id = (int)$segment_4;
+        $uri_back      = (string)$segment_5;
+
+        $tugas = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas) OR $tugas['type_id'] == 1) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
+        if (empty($pertanyaan)) {
+            exit("Pertanyaan tidak ditemukan");
+        }
+
+        if (empty($uri_back)) {
+            $uri_back = site_url('tugas/manajemen_soal/' . $tugas['id']);
+        } else {
+            $uri_back = deurl_redirect($uri_back);
+        }
+
+        # hapus pertanyaan
+        $this->tugas_model->delete_pertanyaan($pertanyaan['id']);
+
+        $this->session->set_flashdata('tugas', get_alert('warning', 'Pertanyaan berhasil dihapus.'));
+        redirect($uri_back);
+    }
+
+    function tambah_pilihan($segment_3 = '', $segment_4 = '')
+    {
+        $tugas_id      = (int)$segment_3;
+        $pertanyaan_id = (int)$segment_4;
+
+        $tugas = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas) OR $tugas['type_id'] != 3) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
+        if (empty($pertanyaan)) {
+            exit("Pertanyaan tidak ditemukan");
+        }
+
+        $data['pertanyaan']    = $pertanyaan;
+        $data['tugas']         = $tugas;
+        $data['comp_js']       = get_tinymce('konten', 'advanced', array('autosave'));
+
+        if ($this->form_validation->run('tugas/pilihan') == TRUE) {
+            $post_pilihan = $this->input->post('pilihan', true);
+            $post_konten  = $this->input->post('konten', true);
+
+            $pilihan_id = $this->tugas_model->create_pilihan(
+                $pertanyaan['id'],
+                $post_konten,
+                0,
+                $post_pilihan
+            );
+
+            $this->session->set_flashdata('tugas', get_alert('success', 'Pilihan berhasil disimpan.'));
+            redirect('tugas/edit_pilihan/' . $tugas['id'] . '/' . $pertanyaan['id'] . '/' . $pilihan_id);
+        }
+
+        $this->twig->display('tambah-pilihan.html', $data);
+    }
+
+    function edit_pilihan($segment_3 = '', $segment_4 = '', $segment_5 = '')
+    {
+        $tugas_id      = (int)$segment_3;
+        $pertanyaan_id = (int)$segment_4;
+        $pilihan_id    = (int)$segment_5;
+
+        $tugas = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas) OR $tugas['type_id'] != 3) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
+        if (empty($pertanyaan)) {
+            exit("Pertanyaan tidak ditemukan");
+        }
+
+        $pilihan = $this->tugas_model->retrieve_pilihan($pilihan_id, $pertanyaan['id']);
+        if (empty($pilihan)) {
+            exit("Pilihan tidak ditemukan");
+        }
+
+        $data['pilihan']    = $pilihan;
+        $data['pertanyaan'] = $pertanyaan;
+        $data['tugas']      = $tugas;
+        $data['comp_js']    = get_tinymce('konten', 'advanced', array('autosave'));
+
+        if ($this->form_validation->run('tugas/pilihan') == TRUE) {
+            $post_pilihan = $this->input->post('pilihan', true);
+            $post_konten  = $this->input->post('konten', true);
+
+            $this->tugas_model->update_pilihan(
+                $pilihan['id'],
+                $pertanyaan['id'],
+                $post_konten,
+                $pilihan['kunci'],
+                $post_pilihan
+            );
+
+            $this->session->set_flashdata('tugas', get_alert('success', 'Pilihan berhasil diperbaharui.'));
+            redirect('tugas/edit_pilihan/' . $tugas['id'] . '/' . $pertanyaan['id'] . '/' . $pilihan_id);
+        }
+
+        $this->twig->display('edit-pilihan.html', $data);
     }
 }

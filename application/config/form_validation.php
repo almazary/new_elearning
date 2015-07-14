@@ -724,6 +724,19 @@ $config['tugas/pertanyaan'] = array(
     )
 );
 
+$config['tugas/pilihan'] = array(
+    array(
+        'field' => 'pilihan',
+        'label' => 'Pilihan',
+        'rules' => 'required|trim|numeric|xss_clean'
+    ),
+    array(
+        'field' => 'konten',
+        'label' => 'Konten',
+        'rules' => 'required|trim|xss_clean'
+    )
+);
+
 $config['materi/filter'] = array(
     array(
         'field' => 'judul',
