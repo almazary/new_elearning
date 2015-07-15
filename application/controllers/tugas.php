@@ -149,6 +149,7 @@ class Tugas extends MY_Controller
         $data['type']    = $type;
         $data['mapel']   = $this->mapel_model->retrieve_all_mapel();
         $data['kelas']   = $this->kelas_model->retrieve_all_child();
+        $data['comp_js'] = get_tinymce('info');
 
         if ($this->form_validation->run($form_validation) == TRUE) {
             $mapel_id = $this->input->post('mapel_id', TRUE);
@@ -234,6 +235,7 @@ class Tugas extends MY_Controller
         $data['tugas_kelas'] = $tugas_kelas_id;
         $data['mapel']       = $this->mapel_model->retrieve_all_mapel();
         $data['kelas']       = $this->kelas_model->retrieve_all_child();
+        $data['comp_js']     = get_tinymce('info');
 
         if ($this->form_validation->run($form_validation) == TRUE) {
             $mapel_id = $this->input->post('mapel_id', TRUE);
@@ -286,6 +288,60 @@ class Tugas extends MY_Controller
         }
 
         $this->twig->display('edit-tugas.html', $data);
+    }
+
+    function terbitkan($segment_3 = '', $segment_4 = '')
+    {
+        $tugas_id = (int)$segment_3;
+        $uri_back = (string)$segment_4;
+
+        if (empty($uri_back)) {
+            $uri_back = site_url('tugas');
+        } else {
+            $uri_back = deurl_redirect($uri_back);
+        }
+
+        if (empty($tugas_id)) {
+            redirect($uri_back);
+        }
+
+        $tugas = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas)) {
+            redirect($uri_back);
+        }
+
+        # terbitkan tugas
+        $this->tugas_model->terbitkan($tugas['id']);
+
+        $this->session->set_flashdata('tugas', get_alert('success', 'Tugas berhasil diterbitkan.'));
+        redirect($uri_back);
+    }
+
+    function tutup($segment_3 = '', $segment_4 = '')
+    {
+        $tugas_id = (int)$segment_3;
+        $uri_back = (string)$segment_4;
+
+        if (empty($uri_back)) {
+            $uri_back = site_url('tugas');
+        } else {
+            $uri_back = deurl_redirect($uri_back);
+        }
+
+        if (empty($tugas_id)) {
+            redirect($uri_back);
+        }
+
+        $tugas = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas)) {
+            redirect($uri_back);
+        }
+
+        # tutup tugas
+        $this->tugas_model->tutup($tugas['id']);
+
+        $this->session->set_flashdata('tugas', get_alert('success', 'Tugas berhasil ditutup.'));
+        redirect($uri_back);
     }
 
     function manajemen_soal($segment_3 = '', $segment_4 = '')
@@ -507,5 +563,71 @@ class Tugas extends MY_Controller
         }
 
         $this->twig->display('edit-pilihan.html', $data);
+    }
+
+    function kunci_pilihan($segment_3 = '', $segment_4 = '', $segment_5 = '', $segment_6 = '')
+    {
+        $tugas_id      = (int)$segment_3;
+        $pertanyaan_id = (int)$segment_4;
+        $pilihan_id    = (int)$segment_5;
+        $uri_back      = (string)$segment_6;
+
+        $tugas = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas) OR $tugas['type_id'] != 3) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
+        if (empty($pertanyaan)) {
+            exit("Pertanyaan tidak ditemukan");
+        }
+
+        $pilihan = $this->tugas_model->retrieve_pilihan($pilihan_id, $pertanyaan['id']);
+        if (empty($pilihan)) {
+            exit("Pilihan tidak ditemukan");
+        }
+
+        if (empty($uri_back)) {
+            $uri_back = site_url('tugas/manajemen_soal/' . $tugas['id']);
+        } else {
+            $uri_back = deurl_redirect($uri_back);
+        }
+
+        $this->tugas_model->create_kunci($pertanyaan['id'], $pilihan['id']);
+
+        redirect($uri_back . '#pilihan-' . $pertanyaan['id']);
+    }
+
+    function hapus_pilihan($segment_3 = '', $segment_4 = '', $segment_5 = '', $segment_6 = '')
+    {
+        $tugas_id      = (int)$segment_3;
+        $pertanyaan_id = (int)$segment_4;
+        $pilihan_id    = (int)$segment_5;
+        $uri_back      = (string)$segment_6;
+
+        $tugas = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas) OR $tugas['type_id'] != 3) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
+        if (empty($pertanyaan)) {
+            exit("Pertanyaan tidak ditemukan");
+        }
+
+        $pilihan = $this->tugas_model->retrieve_pilihan($pilihan_id, $pertanyaan['id']);
+        if (empty($pilihan)) {
+            exit("Pilihan tidak ditemukan");
+        }
+
+        if (empty($uri_back)) {
+            $uri_back = site_url('tugas/manajemen_soal/' . $tugas['id']);
+        } else {
+            $uri_back = deurl_redirect($uri_back);
+        }
+
+        $this->tugas_model->delete_pilihan($pilihan['id']);
+
+        redirect($uri_back . '#pilihan-' . $pertanyaan['id']);
     }
 }

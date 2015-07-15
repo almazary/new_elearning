@@ -142,9 +142,9 @@ class __TwigTemplate_045657689dba883f075b276acce32184b173a84ad4b62dc066e0c2718de
             <div class=\"control-group\">
                 <label class=\"control-label\">Info</label>
                 <div class=\"controls\">
-                    <textarea name=\"info\" class=\"span10\">";
+                    <textarea name=\"info\" id=\"info\" style=\"width:100%; height:300px;\">";
         // line 53
-        echo twig_escape_filter($this->env, set_value("info", $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info")), "html", null, true);
+        echo set_value("info", html_entity_decode($this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info")));
         echo "</textarea>
                     ";
         // line 54

@@ -129,7 +129,7 @@ class __TwigTemplate_7a536c140678820f92a9bd036d430ad0b4a158cc409334292dedc2b448a
                         <th>Info</th>
                         <td>";
         // line 52
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info"), "html", null, true);
+        echo $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info");
         echo "</td>
                     </tr>
                     <tr>
@@ -186,22 +186,22 @@ class __TwigTemplate_7a536c140678820f92a9bd036d430ad0b4a158cc409334292dedc2b448a
                 // line 84
                 echo "                                <a href=\"";
                 echo twig_escape_filter($this->env, site_url(((("tugas/tambah_pilihan/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"))), "html", null, true);
-                echo "\" class=\"btn btn-small btn-default iframe-pilihan\"><i class=\"icon-tasks\"></i> Tambah Pilihan</a>
+                echo "\" class=\"btn btn-small btn-default iframe-pilihan\" data-toggle=\"tooltip\" title=\"Tambah Pilihan\"><i class=\"icon-tasks\"></i></a>
                                 ";
             }
             // line 86
             echo "                                <a href=\"";
             echo twig_escape_filter($this->env, site_url(((("tugas/edit_soal/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"))), "html", null, true);
-            echo "\" class=\"btn btn-small btn-default iframe-pertanyaan\"><i class=\"icon-edit\"></i> Edit</a>
+            echo "\" class=\"btn btn-small btn-default iframe-pertanyaan\" data-toggle=\"tooltip\" title=\"Edit Pertanyaan\"><i class=\"icon-edit\"></i></a>
                                 <a onclick=\"return confirm('Anda yakin ingin menghapus?')\" href=\"";
             // line 87
             echo twig_escape_filter($this->env, site_url(((((("tugas/hapus_soal/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id")) . "/") . enurl_redirect(current_url()))), "html", null, true);
-            echo "\" class=\"btn btn-small btn-default\"><i class=\"icon-trash\"></i> Hapus</a>
+            echo "\" class=\"btn btn-small btn-default\" data-toggle=\"tooltip\" title=\"Hapus Pertanyaan\"><i class=\"icon-trash\"></i></a>
                             </div>
 
                             ";
             // line 90
-            echo $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan");
+            echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan"));
             echo "
                         </div>
 
@@ -209,7 +209,7 @@ class __TwigTemplate_7a536c140678820f92a9bd036d430ad0b4a158cc409334292dedc2b448a
             // line 93
             if (($this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "type_id") == 3)) {
                 // line 94
-                echo "                        <div class=\"pilihan-";
+                echo "                        <div id=\"pilihan-";
                 echo twig_escape_filter($this->env, $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"), "html", null, true);
                 echo "\">
                             <table class=\"table table-condensed table-striped\">
@@ -220,7 +220,9 @@ class __TwigTemplate_7a536c140678820f92a9bd036d430ad0b4a158cc409334292dedc2b448a
                 $context['_seq'] = twig_ensure_traversable($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan"));
                 foreach ($context['_seq'] as $context["_key"] => $context["pil"]) {
                     // line 98
-                    echo "                                    <tr>
+                    echo "                                    <tr ";
+                    echo ((($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "kunci") == 1)) ? ("class=\"success\"") : (""));
+                    echo ">
                                         <td width=\"3%\"><b>(";
                     // line 99
                     echo twig_escape_filter($this->env, get_abjad($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "urutan")), "html", null, true);
@@ -233,40 +235,45 @@ class __TwigTemplate_7a536c140678820f92a9bd036d430ad0b4a158cc409334292dedc2b448a
                         // line 103
                         echo "                                                    <a href=\"";
                         echo twig_escape_filter($this->env, site_url(((((((("tugas/kunci_pilihan/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id")) . "/") . $this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "id")) . "/") . enurl_redirect(current_url()))), "html", null, true);
-                        echo "\" class=\"btn btn-small btn-default\"><i class=\"icon-ok\"></i> Jadikan Kunci</a>
-                                                ";
-                    } elseif (($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "kunci") == 1)) {
-                        // line 105
-                        echo "                                                    <a href=\"#\" class=\"btn btn-small btn-default\"><i class=\"icon-star\"></i> Kunci</a>
+                        echo "\" class=\"btn btn-small btn-default\" data-toggle=\"tooltip\" title=\"Jadikan Kunci\"><i class=\"icon-ok\"></i></a>
                                                 ";
                     }
-                    // line 107
+                    // line 105
                     echo "                                                <a href=\"";
                     echo twig_escape_filter($this->env, site_url(((((("tugas/edit_pilihan/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id")) . "/") . $this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "id"))), "html", null, true);
-                    echo "\" class=\"btn btn-small btn-default iframe-pilihan\"><i class=\"icon-edit\"></i> Edit</a>
-                                                <a href=\"";
-                    // line 108
+                    echo "\" class=\"btn btn-small btn-default iframe-pilihan\" data-toggle=\"tooltip\" title=\"Edit Pilihan\"><i class=\"icon-edit\"></i></a>
+                                                <a onclick=\"return confirm('Anda yakin ingin menghapus?')\" href=\"";
+                    // line 106
                     echo twig_escape_filter($this->env, site_url(((((((("tugas/hapus_pilihan/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id")) . "/") . $this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "id")) . "/") . enurl_redirect(current_url()))), "html", null, true);
-                    echo "\" class=\"btn btn-small btn-default\"><i class=\"icon-trash\"></i> Hapus</a>
+                    echo "\" class=\"btn btn-small btn-default\" data-toggle=\"tooltip\" title=\"Hapus Pilihan\"><i class=\"icon-trash\"></i></a>
                                             </div>
                                             ";
-                    // line 110
-                    echo $this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "konten");
+                    // line 108
+                    echo html_entity_decode($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "konten"));
                     echo "
-                                        </td>
+
+                                            ";
+                    // line 110
+                    if (($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "kunci") == 1)) {
+                        // line 111
+                        echo "                                            <b class=\"text-warning\"><i class=\"icon-star\"></i> Kunci Jawaban</b>
+                                            ";
+                    }
+                    // line 113
+                    echo "                                        </td>
                                     </tr>
                                     ";
                 }
                 $_parent = $context['_parent'];
                 unset($context['_seq'], $context['_iterated'], $context['_key'], $context['pil'], $context['_parent'], $context['loop']);
                 $context = array_intersect_key($context, $_parent) + $_parent;
-                // line 114
+                // line 116
                 echo "                                </tbody>
                             </table>
                         </div>
                         ";
             }
-            // line 118
+            // line 120
             echo "
                     </td>
                 </tr>
@@ -276,12 +283,12 @@ class __TwigTemplate_7a536c140678820f92a9bd036d430ad0b4a158cc409334292dedc2b448a
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['p'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 123
+        // line 125
         echo "            </tbody>
         </table>
         <br>
         ";
-        // line 126
+        // line 128
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
 
@@ -302,6 +309,6 @@ class __TwigTemplate_7a536c140678820f92a9bd036d430ad0b4a158cc409334292dedc2b448a
 
     public function getDebugInfo()
     {
-        return array (  285 => 126,  280 => 123,  270 => 118,  264 => 114,  254 => 110,  249 => 108,  244 => 107,  240 => 105,  234 => 103,  232 => 102,  226 => 99,  223 => 98,  219 => 97,  212 => 94,  210 => 93,  204 => 90,  198 => 87,  193 => 86,  187 => 84,  185 => 83,  178 => 79,  173 => 78,  169 => 77,  162 => 73,  151 => 65,  139 => 56,  132 => 52,  125 => 47,  116 => 45,  112 => 44,  103 => 38,  96 => 34,  89 => 30,  80 => 24,  77 => 23,  71 => 21,  65 => 19,  63 => 18,  59 => 17,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  292 => 128,  287 => 125,  277 => 120,  271 => 116,  263 => 113,  259 => 111,  257 => 110,  252 => 108,  247 => 106,  242 => 105,  236 => 103,  234 => 102,  228 => 99,  223 => 98,  219 => 97,  212 => 94,  210 => 93,  204 => 90,  198 => 87,  193 => 86,  187 => 84,  185 => 83,  178 => 79,  173 => 78,  169 => 77,  162 => 73,  151 => 65,  139 => 56,  132 => 52,  125 => 47,  116 => 45,  112 => 44,  103 => 38,  96 => 34,  89 => 30,  80 => 24,  77 => 23,  71 => 21,  65 => 19,  63 => 18,  59 => 17,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

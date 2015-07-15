@@ -33,23 +33,29 @@ class __TwigTemplate_9ed671d49f7a78df3c2ae25b319519e77a446f8d21fcf0672fd1a09ecb8
         // line 5
         echo twig_escape_filter($this->env, site_url(("tugas/tambah_soal/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id"))), "html", null, true);
         echo "\">Tambah Pertanyaan</a>
-    <a class=\"btn btn-primary btn-small\" href=\"";
+    ";
         // line 6
-        echo twig_escape_filter($this->env, site_url(((("tugas/tambah_pilihan/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["pertanyaan"]) ? $context["pertanyaan"] : null), "id"))), "html", null, true);
-        echo "\">Tambah Pilihan</a>
-</div>
+        if (($this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "type_id") == 3)) {
+            // line 7
+            echo "    <a class=\"btn btn-primary btn-small\" href=\"";
+            echo twig_escape_filter($this->env, site_url(((("tugas/tambah_pilihan/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["pertanyaan"]) ? $context["pertanyaan"] : null), "id"))), "html", null, true);
+            echo "\">Tambah Pilihan</a>
+    ";
+        }
+        // line 9
+        echo "</div>
 
 <h4>Edit Pertanyaan ke ";
-        // line 9
+        // line 11
         echo twig_escape_filter($this->env, (isset($context["no_pertanyaan"]) ? $context["no_pertanyaan"] : null), "html", null, true);
         echo "</h4>
 ";
-        // line 10
+        // line 12
         echo get_flashdata("tugas");
         echo "
 
 ";
-        // line 12
+        // line 14
         echo form_open(((("tugas/edit_soal/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["pertanyaan"]) ? $context["pertanyaan"] : null), "id")));
         echo "
 <table class=\"table table-striped\" style=\"margin-top:20px;\">
@@ -57,11 +63,11 @@ class __TwigTemplate_9ed671d49f7a78df3c2ae25b319519e77a446f8d21fcf0672fd1a09ecb8
         <tr>
             <td>
                 <textarea name=\"pertanyaan\" id=\"pertanyaan\" style=\"height:400px;width:100%;\">";
-        // line 17
-        echo set_value("pertanyaan", $this->getAttribute((isset($context["pertanyaan"]) ? $context["pertanyaan"] : null), "pertanyaan"));
+        // line 19
+        echo set_value("pertanyaan", html_entity_decode($this->getAttribute((isset($context["pertanyaan"]) ? $context["pertanyaan"] : null), "pertanyaan")));
         echo "</textarea>
                 ";
-        // line 18
+        // line 20
         echo form_error("pertanyaan");
         echo "
             </td>
@@ -74,7 +80,7 @@ class __TwigTemplate_9ed671d49f7a78df3c2ae25b319519e77a446f8d21fcf0672fd1a09ecb8
     </tbody>
 </table>
 ";
-        // line 28
+        // line 30
         echo form_close();
         echo "
 ";
@@ -92,6 +98,6 @@ class __TwigTemplate_9ed671d49f7a78df3c2ae25b319519e77a446f8d21fcf0672fd1a09ecb8
 
     public function getDebugInfo()
     {
-        return array (  78 => 28,  65 => 18,  61 => 17,  53 => 12,  48 => 10,  44 => 9,  38 => 6,  34 => 5,  31 => 4,  28 => 3,);
+        return array (  84 => 30,  71 => 20,  67 => 19,  59 => 14,  54 => 12,  50 => 11,  46 => 9,  40 => 7,  38 => 6,  34 => 5,  31 => 4,  28 => 3,);
     }
 }

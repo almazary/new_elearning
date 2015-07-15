@@ -49,7 +49,7 @@ Manajemen Soal Tugas - {{ parent() }}
                     </tr>
                     <tr>
                         <th>Info</th>
-                        <td>{{ tugas.info }}</td>
+                        <td>{{ tugas.info|raw }}</td>
                     </tr>
                     <tr>
                         <th>Durasi</th>
@@ -81,33 +81,35 @@ Manajemen Soal Tugas - {{ parent() }}
                         <div class="pertanyaan">
                             <div class="btn-group pull-right" style="margin-left:10px;">
                                 {% if tugas.type_id == 3 %}
-                                <a href="{{ site_url('tugas/tambah_pilihan/' ~ tugas.id ~ '/' ~ p.id) }}" class="btn btn-small btn-default iframe-pilihan"><i class="icon-tasks"></i> Tambah Pilihan</a>
+                                <a href="{{ site_url('tugas/tambah_pilihan/' ~ tugas.id ~ '/' ~ p.id) }}" class="btn btn-small btn-default iframe-pilihan" data-toggle="tooltip" title="Tambah Pilihan"><i class="icon-tasks"></i></a>
                                 {% endif %}
-                                <a href="{{ site_url('tugas/edit_soal/' ~ tugas.id ~ '/' ~ p.id) }}" class="btn btn-small btn-default iframe-pertanyaan"><i class="icon-edit"></i> Edit</a>
-                                <a onclick="return confirm('Anda yakin ingin menghapus?')" href="{{ site_url('tugas/hapus_soal/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ enurl_redirect(current_url())) }}" class="btn btn-small btn-default"><i class="icon-trash"></i> Hapus</a>
+                                <a href="{{ site_url('tugas/edit_soal/' ~ tugas.id ~ '/' ~ p.id) }}" class="btn btn-small btn-default iframe-pertanyaan" data-toggle="tooltip" title="Edit Pertanyaan"><i class="icon-edit"></i></a>
+                                <a onclick="return confirm('Anda yakin ingin menghapus?')" href="{{ site_url('tugas/hapus_soal/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ enurl_redirect(current_url())) }}" class="btn btn-small btn-default" data-toggle="tooltip" title="Hapus Pertanyaan"><i class="icon-trash"></i></a>
                             </div>
 
-                            {{ p.pertanyaan|raw }}
+                            {{ html_entity_decode(p.pertanyaan)|raw }}
                         </div>
 
                         {% if tugas.type_id == 3 %}
-                        <div class="pilihan-{{ p.id }}">
+                        <div id="pilihan-{{ p.id }}">
                             <table class="table table-condensed table-striped">
                                 <tbody>
                                     {% for pil in p.pilihan %}
-                                    <tr>
+                                    <tr {{ (pil.kunci == 1) ? 'class="success"' }}>
                                         <td width="3%"><b>({{ get_abjad(pil.urutan) }})</b></td>
                                         <td>
                                             <div class="btn-group pull-right" style="margin-left:10px;">
                                                 {% if pil.kunci == 0 %}
-                                                    <a href="{{ site_url('tugas/kunci_pilihan/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ pil.id ~ '/' ~ enurl_redirect(current_url())) }}" class="btn btn-small btn-default"><i class="icon-ok"></i> Jadikan Kunci</a>
-                                                {% elseif pil.kunci == 1 %}
-                                                    <a href="#" class="btn btn-small btn-default"><i class="icon-star"></i> Kunci</a>
+                                                    <a href="{{ site_url('tugas/kunci_pilihan/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ pil.id ~ '/' ~ enurl_redirect(current_url())) }}" class="btn btn-small btn-default" data-toggle="tooltip" title="Jadikan Kunci"><i class="icon-ok"></i></a>
                                                 {% endif %}
-                                                <a href="{{ site_url('tugas/edit_pilihan/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ pil.id) }}" class="btn btn-small btn-default iframe-pilihan"><i class="icon-edit"></i> Edit</a>
-                                                <a href="{{ site_url('tugas/hapus_pilihan/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ pil.id ~ '/' ~ enurl_redirect(current_url())) }}" class="btn btn-small btn-default"><i class="icon-trash"></i> Hapus</a>
+                                                <a href="{{ site_url('tugas/edit_pilihan/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ pil.id) }}" class="btn btn-small btn-default iframe-pilihan" data-toggle="tooltip" title="Edit Pilihan"><i class="icon-edit"></i></a>
+                                                <a onclick="return confirm('Anda yakin ingin menghapus?')" href="{{ site_url('tugas/hapus_pilihan/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ pil.id ~ '/' ~ enurl_redirect(current_url())) }}" class="btn btn-small btn-default" data-toggle="tooltip" title="Hapus Pilihan"><i class="icon-trash"></i></a>
                                             </div>
-                                            {{ pil.konten|raw }}
+                                            {{ html_entity_decode(pil.konten)|raw }}
+
+                                            {% if pil.kunci == 1 %}
+                                            <b class="text-warning"><i class="icon-star"></i> Kunci Jawaban</b>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}

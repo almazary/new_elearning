@@ -9,7 +9,7 @@
 {{ get_flashdata('tugas')|raw }}
 
 {{ form_open('tugas/edit_pilihan/' ~ tugas.id ~ '/' ~ pertanyaan.id ~ '/' ~ pilihan.id)|raw }}
-<table class="table table-striped">
+<table class="table table-striped" style="margin-top:20px;">
     <tbody>
         <tr>
             <th width="15%">Pilihan <span class="text-error">*</span></th>
@@ -27,7 +27,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <textarea name="konten" id="konten" style="height:350px;width:100%;">{{ set_value('konten', pilihan.konten)|raw }}</textarea>
+                <textarea name="konten" id="konten" style="height:350px;width:100%;">{{ set_value('konten', html_entity_decode(pilihan.konten))|raw }}</textarea>
                 {{ form_error('konten')|raw }}
             </td>
         <tr>

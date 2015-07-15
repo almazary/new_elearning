@@ -299,7 +299,7 @@ class __TwigTemplate_8ac215a290914e04874404a546e9c3097768976d6925efc804ad62a129b
             if ((($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "type_label") == "Ganda") || ($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "type_label") == "Essay"))) {
                 // line 148
                 echo "                                ";
-                echo anchor(("tugas/manajemen_soal/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon icon-tasks\"></i> Manajemen Soal", array("class" => "btn btn-primary btn-small"));
+                echo anchor(("tugas/manajemen_soal/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon icon-tasks\"></i> Soal", array("class" => "btn btn-primary btn-small"));
                 echo "
                             ";
             }
@@ -324,6 +324,10 @@ class __TwigTemplate_8ac215a290914e04874404a546e9c3097768976d6925efc804ad62a129b
             // line 156
             echo anchor(((("tugas/edit/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")) . "/") . enurl_redirect(current_url())), "<i class=\"icon-edit\"></i> Edit", array("class" => "btn btn-default btn-small"));
             echo "
+                            ";
+            // line 157
+            echo anchor(("tugas/koreksi/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-check\"></i> Koreksi", array("class" => "btn btn-info btn-small"));
+            echo "
                         </div>
                     </td>
                 </tr>
@@ -332,12 +336,12 @@ class __TwigTemplate_8ac215a290914e04874404a546e9c3097768976d6925efc804ad62a129b
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['no'], $context['m'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 161
+        // line 162
         echo "            </tbody>
         </table>
         <br>
         ";
-        // line 164
+        // line 165
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
 
@@ -358,6 +362,6 @@ class __TwigTemplate_8ac215a290914e04874404a546e9c3097768976d6925efc804ad62a129b
 
     public function getDebugInfo()
     {
-        return array (  341 => 164,  336 => 161,  325 => 156,  322 => 155,  316 => 153,  310 => 151,  307 => 150,  301 => 148,  299 => 147,  294 => 144,  290 => 142,  286 => 140,  282 => 138,  280 => 137,  270 => 134,  266 => 132,  260 => 130,  258 => 129,  255 => 128,  246 => 126,  242 => 125,  237 => 123,  233 => 122,  228 => 120,  225 => 119,  221 => 118,  191 => 91,  182 => 85,  173 => 79,  161 => 70,  153 => 65,  145 => 60,  134 => 51,  120 => 47,  116 => 45,  112 => 44,  103 => 37,  89 => 33,  85 => 31,  81 => 30,  72 => 24,  64 => 19,  60 => 18,  56 => 17,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  345 => 165,  340 => 162,  329 => 157,  325 => 156,  322 => 155,  316 => 153,  310 => 151,  307 => 150,  301 => 148,  299 => 147,  294 => 144,  290 => 142,  286 => 140,  282 => 138,  280 => 137,  270 => 134,  266 => 132,  260 => 130,  258 => 129,  255 => 128,  246 => 126,  242 => 125,  237 => 123,  233 => 122,  228 => 120,  225 => 119,  221 => 118,  191 => 91,  182 => 85,  173 => 79,  161 => 70,  153 => 65,  145 => 60,  134 => 51,  120 => 47,  116 => 45,  112 => 44,  103 => 37,  89 => 33,  85 => 31,  81 => 30,  72 => 24,  64 => 19,  60 => 18,  56 => 17,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

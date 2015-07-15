@@ -45,7 +45,7 @@ class __TwigTemplate_2f99b5b88c70e18ef19a4e4caac080df53ad820fd47c662b026ae71509b
         // line 11
         echo form_open(((((("tugas/edit_pilihan/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["pertanyaan"]) ? $context["pertanyaan"] : null), "id")) . "/") . $this->getAttribute((isset($context["pilihan"]) ? $context["pilihan"] : null), "id")));
         echo "
-<table class=\"table table-striped\">
+<table class=\"table table-striped\" style=\"margin-top:20px;\">
     <tbody>
         <tr>
             <th width=\"15%\">Pilihan <span class=\"text-error\">*</span></th>
@@ -83,7 +83,7 @@ class __TwigTemplate_2f99b5b88c70e18ef19a4e4caac080df53ad820fd47c662b026ae71509b
             <td colspan=\"2\">
                 <textarea name=\"konten\" id=\"konten\" style=\"height:350px;width:100%;\">";
         // line 30
-        echo set_value("konten", $this->getAttribute((isset($context["pilihan"]) ? $context["pilihan"] : null), "konten"));
+        echo set_value("konten", html_entity_decode($this->getAttribute((isset($context["pilihan"]) ? $context["pilihan"] : null), "konten")));
         echo "</textarea>
                 ";
         // line 31

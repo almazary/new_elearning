@@ -3,7 +3,9 @@
 {% block content %}
 <div class="btn-group pull-right">
     <a class="btn btn-primary btn-small" href="{{ site_url('tugas/tambah_soal/' ~ tugas.id) }}">Tambah Pertanyaan</a>
+    {% if tugas.type_id == 3 %}
     <a class="btn btn-primary btn-small" href="{{ site_url('tugas/tambah_pilihan/' ~ tugas.id ~ '/' ~ pertanyaan.id) }}">Tambah Pilihan</a>
+    {% endif %}
 </div>
 
 <h4>Edit Pertanyaan ke {{ no_pertanyaan }}</h4>
@@ -14,7 +16,7 @@
     <tbody>
         <tr>
             <td>
-                <textarea name="pertanyaan" id="pertanyaan" style="height:400px;width:100%;">{{ set_value('pertanyaan', pertanyaan.pertanyaan)|raw }}</textarea>
+                <textarea name="pertanyaan" id="pertanyaan" style="height:400px;width:100%;">{{ set_value('pertanyaan', html_entity_decode(pertanyaan.pertanyaan))|raw }}</textarea>
                 {{ form_error('pertanyaan')|raw }}
             </td>
         <tr>

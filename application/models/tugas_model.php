@@ -312,6 +312,23 @@ class Tugas_model extends CI_Model
     }
 
     /**
+     * Method untuk menjadikan pilihan menjadi kunci pilihan
+     *
+     * @param  integer $pertanyaan_id
+     * @param  integer $pilihan_id
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function create_kunci($pertanyaan_id, $pilihan_id)
+    {
+        $this->db->where('pertanyaan_id', $pertanyaan_id);
+        $this->db->update('pilihan', array('kunci' => 0));
+
+        $this->db->where('id', $pilihan_id);
+        $this->db->update('pilihan', array('kunci' => 1));
+        return true;
+    }
+
+    /**
      * Method untuk menghapus data pilihan
      *
      * @param  integer $id
@@ -324,6 +341,36 @@ class Tugas_model extends CI_Model
 
         $this->db->where('id', $id);
         $this->db->update('pilihan', array('aktif' => 0));
+
+        $pilihan = $this->retrieve_pilihan($id);
+
+        $this->reorder_pilihan($pilihan['pertanyaan_id']);
+
+        return true;
+    }
+
+    /**
+     * Method untuk update urutan pilihan
+     *
+     * @param  integer $pertanyaan_id
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function reorder_pilihan($pertanyaan_id)
+    {
+        $this->db->where('pertanyaan_id', $pertanyaan_id);
+        $this->db->where('aktif', 1);
+        $this->db->order_by('urutan', 'ASC');
+        $result = $this->db->get('pilihan');
+        $result = $result->result_array();
+
+        $o = 1;
+        foreach ($result as $p) {
+            # update
+            $this->db->where('id', $p['id']);
+            $this->db->update('pilihan', array('urutan' => $o));
+            $o++;
+        }
+
         return true;
     }
 
@@ -980,10 +1027,25 @@ class Tugas_model extends CI_Model
      *
      * @author Almazari <almazary@gmail.com>
      */
-    public function update_to_active($id)
+    public function terbitkan($id)
     {
         $this->db->where('id', $id);
         $this->db->update('tugas', array('aktif' => 1));
+        return true;
+    }
+
+    /**
+     * Method untuk ubah status tugas jadi tutup
+     *
+     * @param  integer $id
+     * @return boolean true
+     *
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function tutup($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('tugas', array('aktif' => 0));
         return true;
     }
 

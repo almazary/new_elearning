@@ -145,7 +145,7 @@ Tugas - {{ parent() }}
                     <td>
                         <div class="btn-group">
                             {% if m.type_label == 'Ganda' or m.type_label == 'Essay' %}
-                                {{ anchor('tugas/manajemen_soal/' ~ m.id, '<i class="icon icon-tasks"></i> Manajemen Soal', {'class' : 'btn btn-primary btn-small'})|raw }}
+                                {{ anchor('tugas/manajemen_soal/' ~ m.id, '<i class="icon icon-tasks"></i> Soal', {'class' : 'btn btn-primary btn-small'})|raw }}
                             {% endif %}
                             {% if m.aktif == 0 %}
                                 {{ anchor('tugas/terbitkan/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-ok"></i> Terbitkan', {'class' : 'btn btn-success btn-small'})|raw }}
@@ -154,6 +154,7 @@ Tugas - {{ parent() }}
                             {% endif %}
 
                             {{ anchor('tugas/edit/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-edit"></i> Edit', {'class' : 'btn btn-default btn-small'})|raw }}
+                            {{ anchor('tugas/koreksi/' ~ m.id, '<i class="icon-check"></i> Koreksi', {'class' : 'btn btn-info btn-small'})|raw }}
                         </div>
                     </td>
                 </tr>
