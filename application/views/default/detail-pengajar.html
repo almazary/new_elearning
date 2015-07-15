@@ -67,7 +67,7 @@ Detail Pengajar - {{ parent() }}
 
         <div class="row-fluid">
             <div class="span12">
-                <div class="panel panel-default" id="riwayat-kelas">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <strong>Jadwal Matapelajaran Ajar</strong>
                     </div>
@@ -97,7 +97,7 @@ Detail Pengajar - {{ parent() }}
                                                     <td>{{ m.nama }}</td>
                                                     <td width="20%">{{ k.nama }}</td>
                                                     <td width="10%">
-                                                        {{ anchor('pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ ma.id, '<i class="icon-edit"></i> Edit', {'title' : 'Edit Jadwal Ajar', 'class' : 'iframe-6'})|raw }} 
+                                                        {{ anchor('pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ ma.id, '<i class="icon-edit"></i> Edit', {'title' : 'Edit Jadwal Ajar', 'class' : 'iframe-6'})|raw }}
                                                     </td>
                                                 </tr>
                                             {% endfor %}

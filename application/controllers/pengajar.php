@@ -201,8 +201,13 @@ class Pengajar extends MY_Controller
             $bln_lahir     = $this->input->post('bln_lahir', TRUE);
             $thn_lahir     = $this->input->post('thn_lahir', TRUE);
             $alamat        = $this->input->post('alamat', TRUE);
-            $status        = $this->input->post('status_id', TRUE);
-            $is_admin      = $this->input->post('is_admin', TRUE);
+            if (is_admin()) {
+                $status   = $this->input->post('status_id', TRUE);
+                $is_admin = $this->input->post('is_admin', TRUE);
+            } else {
+                $status   = $retrieve_pengajar['status_id'];
+                $is_admin = $retrieve_pengajar['id'];
+            }
 
             if (empty($thn_lahir)) {
                 $tanggal_lahir = null;
@@ -619,5 +624,26 @@ class Pengajar extends MY_Controller
         } else {
             redirect('pengajar/filter');
         }
+    }
+
+    function jadwal()
+    {
+        if (!is_pengajar()) {
+            redirect('pengajar');
+        }
+
+        # panggil colorbox
+        $html_js = load_comp_js(array(
+            base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+            base_url('assets/comp/colorbox/act-pengajar.js')
+        ));
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+
+        $data['pengajar']       = $this->pengajar_model->retrieve(get_sess_data('user', 'id'));
+        $data['pengajar_login'] = $this->login_model->retrieve(get_sess_data('login', 'id'));
+        $data['status_id']      = get_sess_data('user', 'status_id');
+
+        $this->twig->display('pp-jadwal-pengajar.html', $data);
     }
 }

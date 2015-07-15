@@ -146,7 +146,7 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
 
         <div class=\"row-fluid\">
             <div class=\"span12\">
-                <div class=\"panel panel-default\" id=\"riwayat-kelas\">
+                <div class=\"panel panel-default\">
                     <div class=\"panel-heading\">
                         <strong>Jadwal Matapelajaran Ajar</strong>
                     </div>
@@ -219,7 +219,7 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
                                                         ";
                     // line 100
                     echo anchor(((((("pengajar/edit_ampuan/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "id")) . "/") . $this->getAttribute((isset($context["ma"]) ? $context["ma"] : null), "id")), "<i class=\"icon-edit\"></i> Edit", array("title" => "Edit Jadwal Ajar", "class" => "iframe-6"));
-                    echo " 
+                    echo "
                                                     </td>
                                                 </tr>
                                             ";

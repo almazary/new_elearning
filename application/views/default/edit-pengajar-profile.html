@@ -66,6 +66,7 @@
                 <br>{{ form_error('alamat')|raw }}
             </td>
         <tr>
+        {% if is_admin() %}
         <tr>
             <th>Status <span class="text-error">*</span></th>
             <td>
@@ -84,6 +85,7 @@
                 <br>{{ form_error('is_admin')|raw }}
             </td>
         <tr>
+        {% endif %}
         <tr>
             <td colspan="2">
                 <button type="submit" class="btn btn-primary">Update</button>

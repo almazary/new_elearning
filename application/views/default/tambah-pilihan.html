@@ -23,7 +23,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <textarea name="konten" id="konten" style="height:350px;width:100%;">{{ set_value('konten') }}</textarea>
+                <textarea name="konten" id="konten" style="height:350px;width:100%;">{{ set_value('konten')|raw }}</textarea>
                 {{ form_error('konten')|raw }}
             </td>
         <tr>

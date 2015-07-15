@@ -180,46 +180,53 @@ class __TwigTemplate_6bc2d7f7efd869b238dcd3a56b6209e5d09d9e2ed54a9b7f6d92efcc616
         echo "
             </td>
         <tr>
-        <tr>
+        ";
+        // line 69
+        if (is_admin()) {
+            // line 70
+            echo "        <tr>
             <th>Status <span class=\"text-error\">*</span></th>
             <td>
                 ";
-        // line 72
-        if (($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == 0)) {
             // line 73
-            echo "                <label class=\"radio inline\"><input type=\"radio\" name=\"status_id\" value=\"0\" ";
-            echo twig_escape_filter($this->env, set_radio("status_id", "0", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == "0")) ? (true) : (false))), "html", null, true);
-            echo "> Pending</label>
+            if (($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == 0)) {
+                // line 74
+                echo "                <label class=\"radio inline\"><input type=\"radio\" name=\"status_id\" value=\"0\" ";
+                echo twig_escape_filter($this->env, set_radio("status_id", "0", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == "0")) ? (true) : (false))), "html", null, true);
+                echo "> Pending</label>
                 ";
-        }
-        // line 75
-        echo "                <label class=\"radio inline\"><input type=\"radio\" name=\"status_id\" value=\"1\" ";
-        echo twig_escape_filter($this->env, set_radio("status_id", "1", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == "1")) ? (true) : (false))), "html", null, true);
-        echo "> Aktif</label>
+            }
+            // line 76
+            echo "                <label class=\"radio inline\"><input type=\"radio\" name=\"status_id\" value=\"1\" ";
+            echo twig_escape_filter($this->env, set_radio("status_id", "1", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == "1")) ? (true) : (false))), "html", null, true);
+            echo "> Aktif</label>
                 <label class=\"radio inline\"><input type=\"radio\" name=\"status_id\" value=\"2\" ";
-        // line 76
-        echo twig_escape_filter($this->env, set_radio("status_id", "2", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == "2")) ? (true) : (false))), "html", null, true);
-        echo "> Blocking</label>
+            // line 77
+            echo twig_escape_filter($this->env, set_radio("status_id", "2", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "status_id") == "2")) ? (true) : (false))), "html", null, true);
+            echo "> Blocking</label>
                 <br>";
-        // line 77
-        echo form_error("status_id");
-        echo "
+            // line 78
+            echo form_error("status_id");
+            echo "
             </td>
         <tr>
         <tr>
             <th>Opsi</th>
             <td>
                 <label class=\"checkbox text-warning\"><input type=\"checkbox\" name=\"is_admin\" value=\"1\" ";
-        // line 83
-        echo twig_escape_filter($this->env, set_checkbox("is_admin", "1", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "is_admin") == 1)) ? (true) : (false))), "html", null, true);
-        echo "> Jadikan pengajar admin website</label>
+            // line 84
+            echo twig_escape_filter($this->env, set_checkbox("is_admin", "1", ((($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "is_admin") == 1)) ? (true) : (false))), "html", null, true);
+            echo "> Jadikan pengajar admin website</label>
                 <br>";
-        // line 84
-        echo form_error("is_admin");
-        echo "
+            // line 85
+            echo form_error("is_admin");
+            echo "
             </td>
         <tr>
-        <tr>
+        ";
+        }
+        // line 89
+        echo "        <tr>
             <td colspan=\"2\">
                 <button type=\"submit\" class=\"btn btn-primary\">Update</button>
             </td>
@@ -227,7 +234,7 @@ class __TwigTemplate_6bc2d7f7efd869b238dcd3a56b6209e5d09d9e2ed54a9b7f6d92efcc616
     </tbody>
 </table>
 ";
-        // line 94
+        // line 96
         echo form_close();
         echo "
 ";
@@ -245,6 +252,6 @@ class __TwigTemplate_6bc2d7f7efd869b238dcd3a56b6209e5d09d9e2ed54a9b7f6d92efcc616
 
     public function getDebugInfo()
     {
-        return array (  231 => 94,  218 => 84,  214 => 83,  205 => 77,  201 => 76,  196 => 75,  190 => 73,  188 => 72,  179 => 66,  175 => 65,  166 => 59,  162 => 58,  159 => 57,  146 => 55,  142 => 54,  137 => 51,  124 => 49,  120 => 48,  116 => 46,  113 => 45,  110 => 44,  108 => 43,  99 => 37,  95 => 36,  86 => 30,  82 => 29,  78 => 28,  69 => 22,  65 => 21,  56 => 15,  52 => 14,  43 => 8,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
+        return array (  238 => 96,  229 => 89,  222 => 85,  218 => 84,  209 => 78,  205 => 77,  200 => 76,  194 => 74,  192 => 73,  187 => 70,  185 => 69,  179 => 66,  175 => 65,  166 => 59,  162 => 58,  159 => 57,  146 => 55,  142 => 54,  137 => 51,  124 => 49,  120 => 48,  116 => 46,  113 => 45,  110 => 44,  108 => 43,  99 => 37,  95 => 36,  86 => 30,  82 => 29,  78 => 28,  69 => 22,  65 => 21,  56 => 15,  52 => 14,  43 => 8,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
     }
 }
