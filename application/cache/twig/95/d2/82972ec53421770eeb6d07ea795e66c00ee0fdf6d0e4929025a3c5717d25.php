@@ -76,7 +76,7 @@ class __TwigTemplate_95d282972ec53421770eeb6d07ea795e66c00ee0fdf6d0e4929025a3c57
             <td colspan=\"2\">
                 <textarea name=\"konten\" id=\"konten\" style=\"height:350px;width:100%;\">";
         // line 26
-        echo twig_escape_filter($this->env, set_value("konten"), "html", null, true);
+        echo set_value("konten");
         echo "</textarea>
                 ";
         // line 27

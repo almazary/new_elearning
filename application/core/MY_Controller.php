@@ -19,7 +19,7 @@ class MY_Controller extends CI_Controller
             }
         }
 
-        // $this->output->enable_profiler(TRUE);
+        $this->output->enable_profiler(TRUE);
     }
 
     function update_nis($nis = '') {

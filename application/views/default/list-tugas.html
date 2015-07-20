@@ -85,12 +85,14 @@ Tugas - {{ parent() }}
                                 <input type="text" name="info" class="span5" value="{{ set_value('info', filter.info) }}">
                             </td>
                         </tr>
+                        {% if is_pengajar() == false %}
                         <tr>
                             <th>Pembuat</th>
                             <td>
                                 <input type="text" name="pembuat" class="span4" value="{{ set_value('pembuat', filter.pembuat) }}">
                             </td>
                         </tr>
+                        {% endif %}
                         <tr>
                             <td></td>
                             <td>

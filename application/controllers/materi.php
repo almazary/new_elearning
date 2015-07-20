@@ -62,11 +62,6 @@ class Materi extends MY_Controller
                 foreach ($this->siswa_model->retrieve_all_by_name($pembuat) as $val) {
                     $siswa_id[] = $val['id'];
                 }
-
-                if (empty($pengajar_id) AND empty($siswa_id)) {
-                    $pengajar_id[] = 0;
-                    $siswa_id[]    = 0;
-                }
             }
 
             $filter = array(
@@ -233,6 +228,11 @@ class Materi extends MY_Controller
             redirect($uri_back);
         }
 
+        # cek kepemilikan pengajar
+        if (is_pengajar() AND $materi['pengajar_id'] != get_sess_data('user', 'id')) {
+            redirect($uri_back);
+        }
+
         # hanya ambil kelas_idnya
         $materi_kelas    = $this->materi_model->retrieve_all_kelas($materi['id']);
         $materi_kelas_id = array();
@@ -375,6 +375,11 @@ class Materi extends MY_Controller
 
         $materi = $this->materi_model->retrieve($materi_id);
         if (empty($materi)) {
+            redirect($uri_back);
+        }
+
+        # cek kepemilikan pengajar
+        if (is_pengajar() AND $materi['pengajar_id'] != get_sess_data('user', 'id')) {
             redirect($uri_back);
         }
 

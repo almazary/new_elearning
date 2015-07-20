@@ -46,7 +46,7 @@ class __TwigTemplate_015b7f9f12266a371caf5a358dee52d8f2f50cd35f3387f8b8307a488af
             <td>
                 <textarea name=\"pertanyaan\" id=\"pertanyaan\" style=\"height:400px;width:100%;\">";
         // line 12
-        echo twig_escape_filter($this->env, set_value("pertanyaan"), "html", null, true);
+        echo set_value("pertanyaan");
         echo "</textarea>
                 ";
         // line 13

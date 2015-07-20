@@ -57,7 +57,7 @@ class Tugas extends MY_Controller
         if ($this->form_validation->run('tugas/filter') == true) {
             $pembuat = $this->input->post('pembuat', TRUE);
 
-            # cari id pengajar dan siswa
+            # cari id pengajar
             $pengajar_id = array();
             if (!empty($pembuat)) {
                 foreach ($this->pengajar_model->retrieve_all_by_name($pembuat) as $val) {
@@ -96,6 +96,12 @@ class Tugas extends MY_Controller
                 'status'      => array()
             );
         }
+
+        # jika pengajar, tampilkan tugas yang dia buat
+        if (is_pengajar()) {
+            $filter['pengajar_id'] = array(get_sess_data('user', 'id'));
+        }
+
         $data['filter'] = $filter;
 
         # ambil semua data tugas
@@ -210,6 +216,11 @@ class Tugas extends MY_Controller
             redirect($uri_back);
         }
 
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
+            redirect('tugas');
+        }
+
         # type label
         if ($tugas['type_id'] == 1) {
             $data['type_label'] = 'Upload';
@@ -310,6 +321,11 @@ class Tugas extends MY_Controller
             redirect($uri_back);
         }
 
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
+            redirect('tugas');
+        }
+
         # terbitkan tugas
         $this->tugas_model->terbitkan($tugas['id']);
 
@@ -337,6 +353,11 @@ class Tugas extends MY_Controller
             redirect($uri_back);
         }
 
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
+            redirect('tugas');
+        }
+
         # tutup tugas
         $this->tugas_model->tutup($tugas['id']);
 
@@ -355,6 +376,11 @@ class Tugas extends MY_Controller
         $tugas = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas) OR $tugas['type_id'] == 1) {
             redirect('tugas/index');
+        }
+
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
+            redirect('tugas');
         }
 
         $data['tugas'] = $this->formatData($tugas);
@@ -397,6 +423,11 @@ class Tugas extends MY_Controller
             exit("Tugas tidak ditemukan");
         }
 
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
+            exit("Tugas tidak ditemukan");
+        }
+
         $data['tugas']         = $tugas;
         $data['comp_js']       = get_tinymce('pertanyaan', 'advanced', array('autosave'));
         $data['no_pertanyaan'] = $this->tugas_model->count_pertanyaan($tugas['id']) + 1;
@@ -424,6 +455,11 @@ class Tugas extends MY_Controller
 
         $tugas = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas) OR $tugas['type_id'] == 1) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
             exit("Tugas tidak ditemukan");
         }
 
@@ -465,6 +501,11 @@ class Tugas extends MY_Controller
             exit("Tugas tidak ditemukan");
         }
 
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
+            exit("Tugas tidak ditemukan");
+        }
+
         $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
         if (empty($pertanyaan)) {
             exit("Pertanyaan tidak ditemukan");
@@ -490,6 +531,11 @@ class Tugas extends MY_Controller
 
         $tugas = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas) OR $tugas['type_id'] != 3) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
             exit("Tugas tidak ditemukan");
         }
 
@@ -528,6 +574,11 @@ class Tugas extends MY_Controller
 
         $tugas = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas) OR $tugas['type_id'] != 3) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
             exit("Tugas tidak ditemukan");
         }
 
@@ -577,6 +628,11 @@ class Tugas extends MY_Controller
             exit("Tugas tidak ditemukan");
         }
 
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
+            exit("Tugas tidak ditemukan");
+        }
+
         $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
         if (empty($pertanyaan)) {
             exit("Pertanyaan tidak ditemukan");
@@ -607,6 +663,11 @@ class Tugas extends MY_Controller
 
         $tugas = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas) OR $tugas['type_id'] != 3) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
             exit("Tugas tidak ditemukan");
         }
 

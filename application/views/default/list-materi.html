@@ -110,14 +110,28 @@ Materi - {{ parent() }}
             </thead>
             <tbody>
                 {% for no, m in materi %}
+
+                {% if is_admin() == true %}
+                    {% set action_edit = true %}
+                    {% set action_delete = true %}
+                {% elseif is_pengajar() == true %}
+                    {% if m.pengajar_id == get_sess_data('user', 'id') %}
+                        {% set action_edit = true %}
+                        {% set action_delete = true %}
+                    {% else %}
+                        {% set action_edit = false %}
+                        {% set action_delete = false %}
+                    {% endif %}
+                {% endif %}
+
                 <tr>
                     <td><b>{{ m.id }}</b></td>
                     <td>
                         <strong class="text-warning">{{ m.judul }}</strong>
                         <br><small><b>{{ m.mapel.nama }}</b>
-                        
+
                         {% for mk in m.materi_kelas %}
-                            , {{ mk.nama }} 
+                            , {{ mk.nama }}
                         {% endfor %}
 
                         </small>
@@ -134,8 +148,14 @@ Materi - {{ parent() }}
                                 {% set url_type = 'tertulis' %}
                             {% endif %}
                             {{ anchor('materi/detail/' ~ m.id, '<i class="icon-zoom-in"></i> Detail', {'class' : 'btn btn-default btn-small', 'target' : '_blank'})|raw }}
-                            {{ anchor('materi/edit/' ~ url_type ~ '/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-edit"></i> Edit', {'class' : 'btn btn-default btn-small'})|raw }}
-                            {{ anchor('materi/delete/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-trash"></i> Hapus', {'class' : 'btn btn-default btn-small', 'onclick' : "return confirm('Anda yakin ingin menghapus?')"})|raw }}
+
+                            {% if action_edit == true %}
+                                {{ anchor('materi/edit/' ~ url_type ~ '/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-edit"></i> Edit', {'class' : 'btn btn-default btn-small'})|raw }}
+                            {% endif %}
+
+                            {% if action_delete == true %}
+                                {{ anchor('materi/delete/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-trash"></i> Hapus', {'class' : 'btn btn-default btn-small', 'onclick' : "return confirm('Anda yakin ingin menghapus?')"})|raw }}
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
