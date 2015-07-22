@@ -7,7 +7,11 @@ Detail Siswa - {{ parent() }}
 {% block content %}
 <div class="module">
     <div class="module-head">
+        {% if is_admin() %}
         <h3>{{ anchor('siswa/index/' ~ status_id, 'Data Siswa')|raw }} / Detail Siswa</h3>
+        {% elseif is_pengajar() %}
+        <h3>{{ anchor('siswa/filter', 'Filter Siswa')|raw }} / Detail Siswa</h3>
+        {% endif %}
     </div>
     <div class="module-body">
         {{ get_flashdata('siswa')|raw }}
@@ -15,10 +19,12 @@ Detail Siswa - {{ parent() }}
         <div class="panel panel-default">
             <div class="panel-heading">
                 <strong>Profil Siswa</strong>
+                {% if is_admin() %}
                 <div class="btn-group pull-right" style="margin-top:-4px;">
                     {{ anchor('siswa/edit_profile/' ~ status_id ~ '/' ~ siswa.id, 'Edit Profil', {'class' : 'iframe-4 btn btn-small btn-primary', 'title' : 'Edit Profil Siswa'})|raw }}
                     {{ anchor('siswa/edit_picture/' ~ status_id ~ '/' ~ siswa.id, 'Edit Foto', {'class' : 'iframe-5 btn btn-small btn-primary', 'title' : 'Edit Foto Siswa'})|raw }}
                 </div>
+                {% endif %}
             </div>
             <div class="panel-body">
                 <table class="table">
@@ -80,7 +86,7 @@ Detail Siswa - {{ parent() }}
                 <div class="panel panel-default" id="riwayat-kelas">
                     <div class="panel-heading">
                         <strong>Riwayat Kelas</strong>
-                        {% if status_id != 3 %}
+                        {% if is_admin() and status_id != 3 %}
                         <div class="btn-group pull-right" style="margin-top:-4px;">
                             {{ anchor('siswa/moved_class/' ~ status_id ~ '/' ~ siswa.id, 'Pindah Kelas', {'class' : 'iframe btn btn-small btn-primary', 'title' : 'Pindah siswa ke Kelas lain'})|raw }}
                         </div>
@@ -118,6 +124,7 @@ Detail Siswa - {{ parent() }}
                     </div>
                 </div>
             </div>
+            {% if is_admin() %}
             <div class="span6">
                 <div class="panel panel-default" id="akun">
                     <div class="panel-heading">
@@ -147,6 +154,7 @@ Detail Siswa - {{ parent() }}
                     </div>
                 </div>
             </div>
+            {% endif %}
         </div>
 
     </div>

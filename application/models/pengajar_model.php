@@ -71,7 +71,7 @@ class Pengajar_model extends CI_Model
         $pagination    = true
     ) {
         $where = array();
-        $orderby['pengajar.nama'] = 'ASC';
+        $orderby['pengajar.id'] = 'DESC';
 
         if (!empty($nip)) {
             $nip = (int)$nip;
@@ -169,7 +169,8 @@ class Pengajar_model extends CI_Model
     public function retrieve_all_ma(
         $hari_id        = null,
         $pengajar_id    = null,
-        $mapel_kelas_id = null
+        $mapel_kelas_id = null,
+        $aktif = null
     ) {
         if (!is_null($hari_id)) {
             $hari_id = (int)$hari_id;
@@ -182,6 +183,9 @@ class Pengajar_model extends CI_Model
         if (!is_null($mapel_kelas_id)) {
             $mapel_kelas_id = (int)$mapel_kelas_id;
             $this->db->where('mapel_ajar.mapel_kelas_id', $mapel_kelas_id);
+        }
+        if (!is_null($aktif)) {
+            $this->db->where('mapel_ajar.aktif', $aktif);
         }
 
         $this->db->select('mapel_ajar.*');

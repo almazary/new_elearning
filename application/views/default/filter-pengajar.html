@@ -35,7 +35,7 @@ Filter Pengajar - {{ parent() }}
             {{ form_open('pengajar/filter')|raw }}
             <table class="table table-condensed" id="form-search">
                 <tr>
-                    <th width="20%">NIS</th>
+                    <th width="20%">NIP</th>
                     <td>
                         <input type="text" name="nip" class="span2" style="margin-bottom:0px;" value="{{ set_value('nip', (filter.nip is defined) ? filter.nip) }}">
                     </td>

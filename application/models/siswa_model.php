@@ -153,7 +153,7 @@ class Siswa_model extends CI_Model
         $pagination    = true
     ) {
         $where = array();
-        $orderby['siswa.nama'] = 'ASC';
+        $orderby['siswa.id'] = 'DESC';
 
         if (!empty($nis)) {
             $nis = (int)$nis;

@@ -223,12 +223,12 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
                             <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
             // line 107
-            echo twig_escape_filter($this->env, site_url("pengajar/index"), "html", null, true);
-            echo "\"><i class=\"menu-icon icon-tasks\"></i> Tim Pengajar </a></li>
+            echo twig_escape_filter($this->env, site_url("pengajar/filter"), "html", null, true);
+            echo "\"><i class=\"menu-icon icon-search\"></i> Filter Pengajar </a></li>
                                 <li><a href=\"";
             // line 108
-            echo twig_escape_filter($this->env, site_url("siswa/index"), "html", null, true);
-            echo "\"><i class=\"menu-icon icon-book\"></i> Siswa </a></li>
+            echo twig_escape_filter($this->env, site_url("siswa/filter"), "html", null, true);
+            echo "\"><i class=\"menu-icon icon-search\"></i> Filter Siswa </a></li>
                             </ul>
                             ";
         }

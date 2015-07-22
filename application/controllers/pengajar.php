@@ -11,33 +11,21 @@ class Pengajar extends MY_Controller
 
     function index($segment_3 = '', $segment_4 = '')
     {
-        # jika yang login admin
-        if (is_admin()) {
-
-            $status_id = $segment_3;
-            if ($status_id == '' OR $status_id > 2) {
-                $status_id = 1;
-            }
-
-            $page_no = (int)$segment_4;
-            if (empty($page_no)) {
-                $page_no = 1;
-            }
-
-            $base_url_module = 'pengajar/index/'.$status_id.'/';
-        }
-
-        # jika yang login pengajar
         if (is_pengajar()) {
-            $status_id = 1;
-
-            $page_no = (int)$segment_3;
-            if (empty($page_no)) {
-                $page_no = 1;
-            }
-
-            $base_url_module = 'pengajar/index/';
+            redirect('pengajar/filter');
         }
+
+        $status_id = $segment_3;
+        if ($status_id == '' OR $status_id > 2) {
+            $status_id = 1;
+        }
+
+        $page_no = (int)$segment_4;
+        if (empty($page_no)) {
+            $page_no = 1;
+        }
+
+        $base_url_module = 'pengajar/index/'.$status_id.'/';
 
         # ambil semua data pengajar
         $retrieve_all = $this->pengajar_model->retrieve_all(20, $page_no, $status_id);
@@ -453,7 +441,7 @@ class Pengajar extends MY_Controller
 
         $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
         if (empty($retrieve_pengajar)) {
-            exit('Data Pengajar tidak ditemukan');
+            redirect('pengajar');
         }
 
         $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
@@ -630,6 +618,22 @@ class Pengajar extends MY_Controller
                 'prev_page'    => 0
             );
 
+        }
+
+        if (is_pengajar() AND empty($filter)) {
+            $filter = array(
+                'nip'           => '',
+                'nama'          => '',
+                'jenis_kelamin' => '',
+                'tempat_lahir'  => '',
+                'tgl_lahir'     => '',
+                'bln_lahir'     => '',
+                'thn_lahir'     => '',
+                'alamat'        => '',
+                'status_id'     => '',
+                'username'      => '',
+                'is_admin'      => ''
+            );
         }
 
         $data['filter'] = $filter;

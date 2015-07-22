@@ -96,7 +96,7 @@ class __TwigTemplate_d6e7099ba40984ab7cc44a389903d936b173cc1806f217e30e75e123937
         echo "
             <table class=\"table table-condensed\" id=\"form-search\">
                 <tr>
-                    <th width=\"20%\">NIS</th>
+                    <th width=\"20%\">NIP</th>
                     <td>
                         <input type=\"text\" name=\"nip\" class=\"span2\" style=\"margin-bottom:0px;\" value=\"";
         // line 40

@@ -94,7 +94,7 @@ Detail Pengajar - {{ parent() }}
                                         {{ anchor('pengajar/add_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ hari_id, 'Tambah', {'class' : 'iframe btn btn-small btn-primary', 'title' : 'Tambah jadwal hari ' ~ h})|raw }}
                                         {% endif %}
 
-                                        {% set retrieve_all_ma = get_row_data('pengajar_model', 'retrieve_all_ma', [hari_id, pengajar.id, null]) %}
+                                        {% set retrieve_all_ma = get_row_data('pengajar_model', 'retrieve_all_ma', [hari_id, pengajar.id, null, (is_pengajar() == true) ? 1 : null]) %}
                                         {% if retrieve_all_ma is not empty %}
                                         <table style="margin-top:10px;" class="table table-condensed">
                                             {% for ma in retrieve_all_ma %}

@@ -11,9 +11,8 @@ class Siswa extends MY_Controller
 
     function index($segment_3 = '', $segment_4 = '')
     {
-        # harus login sebagai admin
-        if (!is_admin()) {
-            redirect('welcome');
+        if (is_pengajar()) {
+            redirect('siswa/filter');
         }
 
         $status_id = $segment_3;
@@ -248,6 +247,24 @@ class Siswa extends MY_Controller
                 'prev_page'    => 0
             );
 
+        }
+
+        if (is_pengajar() AND empty($filter)) {
+            $filter = array(
+                'nis'           => '',
+                'nama'          => '',
+                'jenis_kelamin' => '',
+                'tahun_masuk'   => '',
+                'tempat_lahir'  => '',
+                'tgl_lahir'     => '',
+                'bln_lahir'     => '',
+                'thn_lahir'     => '',
+                'agama'         => '',
+                'alamat'        => '',
+                'status_id'     => '',
+                'kelas_id'      => '',
+                'username'      => ''
+            );
         }
 
         $data['filter'] = $filter;
@@ -600,8 +617,13 @@ class Siswa extends MY_Controller
 
     function detail($segment_3 = '', $segment_4 = '')
     {
-        $status_id = (int)$segment_3;
-        $siswa_id  = (int)$segment_4;
+        if (is_admin()) {
+            $status_id         = (int)$segment_3;
+            $siswa_id          = (int)$segment_4;
+        } else {
+            $siswa_id  = (int)$segment_3;
+            $status_id = 1;
+        }
 
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
         if (empty($retrieve_siswa)) {

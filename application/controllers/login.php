@@ -68,6 +68,10 @@ class Login extends MY_Controller
     {
         unset($_SESSION['E-LEARNING']);
         $this->session->set_userdata('login_' . APP_PREFIX, null);
+        $this->session->set_userdata('filter_pengajar', null);
+        $this->session->set_userdata('filter_materi', null);
+        $this->session->set_userdata('filter_tugas', null);
+        $this->session->set_userdata('filter_siswa', null);
 
         redirect('login/index');
     }
