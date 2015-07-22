@@ -217,7 +217,7 @@ class Pengajar extends MY_Controller
                 $is_admin = $this->input->post('is_admin', TRUE);
             } else {
                 $status   = $retrieve_pengajar['status_id'];
-                $is_admin = $retrieve_pengajar['id'];
+                $is_admin = $retrieve_login['is_admin'];
             }
 
             if (empty($thn_lahir)) {

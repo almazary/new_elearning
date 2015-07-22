@@ -112,7 +112,7 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
         if (is_pengajar()) {
             // line 45
             echo "                                    <li>";
-            echo anchor("login/pp", "Profil & Ubah Password", array("title" => "Detail Profil"));
+            echo anchor("login/pp", "Profil & Akun Login", array("title" => "Detail Profil"));
             echo "</li>
                                     ";
         }
@@ -202,7 +202,7 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
                                 <li><a href=\"";
             // line 97
             echo twig_escape_filter($this->env, site_url("login/pp"), "html", null, true);
-            echo "\"><i class=\"menu-icon icon-paste\"></i>Profilku</a></li>
+            echo "\"><i class=\"menu-icon icon-user\"></i>Profilku</a></li>
                                 <li><a href=\"";
             // line 98
             echo twig_escape_filter($this->env, site_url("pengajar/jadwal"), "html", null, true);

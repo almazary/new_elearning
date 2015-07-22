@@ -15,7 +15,7 @@ class MY_Controller extends CI_Controller
         if (is_login()) {
             # cek session kcfindernya ada atau tidak
             if (empty($_SESSION['E-LEARNING']['KCFINDER'])) {
-                redirect('login/logout');
+                create_sess_kcfinder(get_sess_data('login', 'id'));
             }
         }
 

@@ -14,7 +14,7 @@ function default_parser_item($add_item = array())
     if ($CI->agent->is_referral()) {
         $url_referrer = $CI->agent->referrer();
     } else {
-        # kalo kosong diisi dengan segment 
+        # kalo kosong diisi dengan segment
         $url_referrer = site_url($CI->uri->segment(1));
     }
 
@@ -75,10 +75,10 @@ function load_comp_js($target_src = array())
 
 /**
  * Fungsi yang berguna untuk mendapatkan data tertentu dari model tertentu
- * 
- * @param  string $model     
- * @param  string $func      
- * @param  array  $args      
+ *
+ * @param  string $model
+ * @param  string $func
+ * @param  array  $args
  * @param  string $field_name
  * @return array|string
  */
@@ -216,7 +216,7 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
 
 /**
  * Method untuk ngecek apakah sudah login atau belum
- * 
+ *
  * @return boolean
  */
 function is_login()
@@ -339,10 +339,10 @@ function get_sess_data($key1, $key2)
 
 /**
  * Method untuk ngecek yang request ajax bukan
- * 
+ *
  * @return boolean
  */
-function is_ajax() 
+function is_ajax()
 {
     /* AJAX check  */
     if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -436,7 +436,7 @@ function get_path_image($img = '', $size = '')
 
 /**
  * Deklarasi path file
- * 
+ *
  * @param  string $file
  * @return string
  */
@@ -448,7 +448,7 @@ function get_path_file($file = '')
 
 /**
  * Method untuk mendapatkan flashdata
- * 
+ *
  * @param  string $key
  * @return string
  */
@@ -461,7 +461,7 @@ function get_flashdata($key) {
 
 /**
  * Fungsi untuk mendapatkan bulan dengan nama indonesia
- * 
+ *
  * @param  string $bln
  * @return string
  */
@@ -477,7 +477,7 @@ function get_indo_bulan($bln = '') {
 
 /**
  * Fungsi untuk mendapatkan nama hari indonesia
- * 
+ *
  * @param  string $hari
  * @return string
  */
@@ -493,7 +493,7 @@ function get_indo_hari($hari = '') {
 
 /**
  * Method untuk memformat tanggal ke indonesia
- * 
+ *
  * @param  string $tgl
  * @return string
  */
@@ -506,7 +506,7 @@ function tgl_indo($tgl = '') {
 
 /**
  * Method untuk memformat tanggal dan jam ke format indonesia
- * 
+ *
  * @param  string $tgl_jam
  * @return string
  */
@@ -519,7 +519,7 @@ function tgl_jam_indo($tgl_jam = '') {
 
 /**
  * Metho untuk mendapatkan array post
- * 
+ *
  * @param  string $key
  * @return string
  */
@@ -531,7 +531,7 @@ function get_post_data($key = '') {
 
 /**
  * Method untuk mendapatkan huruf berdasarkan nomornya
- * 
+ *
  * @param  integer $index
  * @return string
  */
@@ -542,7 +542,7 @@ function get_abjad($index) {
 
 /**
  * Method untuk enkripsi url
- * 
+ *
  * @param  string $current_url
  * @return string
  */
@@ -552,7 +552,7 @@ function enurl_redirect($current_url) {
 
 /**
  * Method untuk deskripsi url
- * 
+ *
  * @param  string $url
  * @return string
  */
@@ -572,7 +572,7 @@ function get_data_array($array, $index1, $index2) {
 
 /**
  * Fungsi untuk mendapatkan nama panggilan
- * 
+ *
  * @param  string $str_nama
  * @return string
  */
@@ -581,3 +581,19 @@ function nama_panggilan($str_nama) {
     return $split[0];
 }
 
+function create_sess_kcfinder($login_id)
+{
+    $_SESSION['E-LEARNING']['KCFINDER']              = array();
+    $_SESSION['E-LEARNING']['KCFINDER']['disabled']  = false;
+    $_SESSION['E-LEARNING']['KCFINDER']['uploadDir'] = "";
+    if ($user_type == 'admin') {
+        $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('assets/uploads/');
+    } else {
+        $user_folder = './assets/uploads/' . $login_id;
+        if (!is_dir($user_folder)) {
+            mkdir($user_folder, 0755);
+            chmod($user_folder, 0755);
+        }
+        $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('assets/uploads/' . $login_id);
+    }
+}

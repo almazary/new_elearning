@@ -469,7 +469,7 @@ $config['pengajar/edit_profile'] = array(
     array(
         'field' => 'status_id',
         'label' => 'Status',
-        'rules' => 'required|trim|xss_clean|numeric'
+        'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'is_admin',

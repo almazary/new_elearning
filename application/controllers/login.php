@@ -43,19 +43,7 @@ class Login extends MY_Controller
 
                 $this->session->set_userdata($data_session);
 
-                $_SESSION['E-LEARNING']['KCFINDER']              = array();
-                $_SESSION['E-LEARNING']['KCFINDER']['disabled']  = false;
-                $_SESSION['E-LEARNING']['KCFINDER']['uploadDir'] = "";
-                if ($user_type == 'admin') {
-                    $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('assets/uploads/');
-                } else {
-                    $user_folder = './assets/uploads/' . $get_login['id'];
-                    if (!is_dir($user_folder)) {
-                        mkdir($user_folder, 0755);
-                        chmod($user_folder, 0755);
-                    }
-                    $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('assets/uploads/' . $get_login['id']);
-                }
+                create_sess_kcfinder($get_login['id']);
 
                 redirect('welcome');
             }
@@ -66,7 +54,7 @@ class Login extends MY_Controller
 
     function logout()
     {
-        unset($_SESSION['E-LEARNING']);
+        $_SESSION['E-LEARNING'] = array();
         $this->session->set_userdata('login_' . APP_PREFIX, null);
         $this->session->set_userdata('filter_pengajar', null);
         $this->session->set_userdata('filter_materi', null);
