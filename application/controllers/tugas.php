@@ -15,7 +15,11 @@ class Tugas extends MY_Controller
         if (!empty($val['pengajar_id'])) {
             $pengajar = $this->pengajar_model->retrieve($val['pengajar_id']);
             $val['pembuat'] = $pengajar;
-            $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+            if (is_admin()) {
+                $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+            } else {
+                $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['id']);
+            }
         }
 
         # cari tugas kelas

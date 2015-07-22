@@ -12,6 +12,7 @@ Data Pengajar - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('pengajar')|raw }}
 
+        {% if is_admin() == true %}
         <div class="row-fluid">
             <div class="span8">
                 <a href="{{ site_url('pengajar/add/' ~ status_id) }}" class="btn btn-primary">Tambah Pengajar</a>
@@ -26,6 +27,84 @@ Data Pengajar - {{ parent() }}
                 </div>
             </div>
         </div>
+        {% elseif is_pengajar() == true %}
+        <div class="bs-callout bs-callout-info">
+            <b><a class="as-link" data-toggle="collapse" data-target="#form-filter"><i class="icon-search" style="line-height: 0px;"></i> Filter</a></b>
+            <div id="form-filter" class="collapse" style="margin-top: 5px;">
+                {{ form_open('pengajar/filter')|raw }}
+                <table class="table table-condensed" id="form-search">
+                    <tr>
+                        <th width="20%" style="border-top:none;">NIS</th>
+                        <td style="border-top:none;">
+                            <input type="text" name="nip" class="span2" style="margin-bottom:0px;" value="{{ set_value('nip', (filter.nip is defined) ? filter.nip) }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Nama</th>
+                        <td>
+                            <input type="text" name="nama" class="span4" style="margin-bottom:0px;" value="{{ set_value('nama', (filter.nama is defined) ? filter.nama) }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Jenis Kelamin</th>
+                        <td>
+                            <p style="margin-top:0px; margin-bottom:5px;">
+                            <label class="checkbox inline">
+                                <input type="checkbox" name="jenis_kelamin[]" value="Laki-laki" {{ set_checkbox('jenis_kelamin[]', 'Laki-laki', (filter.jenis_kelamin is defined and 'Laki-laki' in filter.jenis_kelamin) ? TRUE : FALSE) }}> Laki-laki
+                            </label>
+                            <label class="checkbox inline">
+                                <input type="checkbox" name="jenis_kelamin[]" value="Perempuan" {{ set_checkbox('jenis_kelamin[]', 'Perempuan', (filter.jenis_kelamin is defined and 'Perempuan' in filter.jenis_kelamin) ? TRUE : FALSE) }}> Perempuan
+                            </label>
+                            </p>
+                        </td>
+                    <tr>
+                    <tr>
+                        <th>Tempat Lahir</th>
+                        <td>
+                            <input type="text" name="tempat_lahir" class="span3" style="margin-bottom:0px;" value="{{ set_value('tempat_lahir', (filter.tempat_lahir is defined) ? filter.tempat_lahir) }}">
+                        </td>
+                    <tr>
+                    <tr>
+                        <th>Tanggal Lahir</th>
+                        <td>
+                            <select class="span2" style="width: 10%;" name="tgl_lahir">
+                                <option value="">Tgl</option>
+                                {% for i in 1..31 %}
+                                    <option value="{{ i }}" {{ set_select('tgl_lahir', i, (filter.tgl_lahir is defined and i == filter.tgl_lahir) ? TRUE : FALSE) }}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                            <select class="span2" style="width: 17%;" name="bln_lahir">
+                                <option value="">Bulan</option>
+                                {% for i in 1..12 %}
+                                    <option value="{{ i }}" {{ set_select('bln_lahir', i, (filter.bln_lahir is defined and i == filter.bln_lahir) ? TRUE : FALSE) }}>{{ get_indo_bulan(i) }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="text" name="thn_lahir" class="span1" maxlength="4" value="{{ set_value('thn_lahir', (filter.thn_lahir is defined) ? filter.thn_lahir) }}" placeholder="Tahun">
+                        </td>
+                    <tr>
+                    <tr>
+                        <th>Alamat</th>
+                        <td>
+                            <input type="text" name="alamat" class="span4" style="margin-bottom:0px;" value="{{ set_value('alamat', (filter.alamat is defined) ? filter.alamat) }}">
+                        </td>
+                    <tr>
+                    <tr>
+                        <th>Opsi</th>
+                        <td>
+                            <label><input type="checkbox" name="is_admin" value="1" style="margin-top:-2px;" {{ set_checkbox('is_admin', '1', (filter.is_admin is defined and filter.is_admin == 1) ? TRUE : FALSE) }}> Administrator</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button type="submit" class="btn btn-primary">Filter</button>
+                        </td>
+                    </tr>
+                </table>
+                {{ form_close()|raw }}
+            </div>
+        </div>
+        {% endif %}
         <br>
 
         {{ form_open('pengajar/index/' ~ status_id)|raw }}
@@ -62,6 +141,7 @@ Data Pengajar - {{ parent() }}
                     </td>
                     <td>
                         <ul class="nav nav-pills" style="margin-bottom:0px;">
+                            {% if is_admin() == true %}
                             <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
                             <li class="dropdown">
                                 <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
@@ -72,6 +152,9 @@ Data Pengajar - {{ parent() }}
                                     <li>{{ anchor('pengajar/edit_password/' ~ status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
                                 </ul>
                             </li>
+                            {% elseif is_pengajar() == true %}
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            {% endif %}
                         </ul>
                     </td>
                 </tr>

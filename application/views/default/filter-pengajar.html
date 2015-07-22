@@ -12,22 +12,23 @@ Filter Pengajar - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('pengajar')|raw }}
 
+        {% if is_admin() == true %}
         <div class="row-fluid">
-        <div class="span8">
-            <a href="{{ site_url('pengajar/add/1') }}" class="btn btn-primary">Tambah Pengajar</a>
-        </div>
+            <div class="span8">
+                <a href="{{ site_url('pengajar/add/1') }}" class="btn btn-primary">Tambah Pengajar</a>
+            </div>
 
-        <div class="span4">
-            <div class="btn-group">
-                {{ anchor('pengajar/index/1', 'Aktif', {'class' : 'btn btn-default'})|raw }}
-                {{ anchor('pengajar/index/0', 'Pending', {'class' : 'btn btn-default'})|raw }}
-                {{ anchor('pengajar/index/2', 'Blocking', {'class' : 'btn btn-default'})|raw }}
-                {{ anchor('pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-info'})|raw }}
+            <div class="span4">
+                <div class="btn-group">
+                    {{ anchor('pengajar/index/1', 'Aktif', {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('pengajar/index/0', 'Pending', {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('pengajar/index/2', 'Blocking', {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-info'})|raw }}
+                </div>
             </div>
         </div>
-        </div>
-
         <br>
+        {% endif %}
 
         <div class="bs-callout bs-callout-info">
             <b><a id="button" href="javascript:void(0)">PARAMETER PENCARIAN</a></b>
@@ -88,6 +89,7 @@ Filter Pengajar - {{ parent() }}
                         <input type="text" name="alamat" class="span4" style="margin-bottom:0px;" value="{{ set_value('alamat', (filter.alamat is defined) ? filter.alamat) }}">
                     </td>
                 <tr>
+                {% if is_admin() == true %}
                 <tr>
                     <th>Status</th>
                     <td>
@@ -104,6 +106,7 @@ Filter Pengajar - {{ parent() }}
                         <input type="text" name="username" class="span3" style="margin-bottom:0px;" value="{{ set_value('username', (filter.username is defined) ? filter.username) }}">
                     </td>
                 </tr>
+                {% endif %}
                 <tr>
                     <th>Opsi</th>
                     <td>
@@ -127,7 +130,7 @@ Filter Pengajar - {{ parent() }}
             <thead>
                 <tr>
                     <th width="7%">
-                        {% if status_id == 0 or status_id == 2 %}
+                        {% if is_admin() and (status_id == 0 or status_id == 2) %}
                             <input type="checkbox" style="margin-top:-2px;" onclick="ch_uch_checkbox(this)">
                         {% endif %}
                         ID
@@ -140,7 +143,7 @@ Filter Pengajar - {{ parent() }}
                 {% for no, v in pengajars %}
                 <tr>
                     <td>
-                        {% if status_id == 0 or status_id == 2 %}
+                        {% if is_admin() and (status_id == 0 or status_id == 2) %}
                             <input type="checkbox" name="pengajar_id[]" value="{{ v.id }}" style="margin-top:-2px;">
                         {% endif %}
                         <b>{{ v.id }}</b>
@@ -156,6 +159,7 @@ Filter Pengajar - {{ parent() }}
                     </td>
                     <td>
                         <ul class="nav nav-pills" style="margin-bottom:0px;">
+                            {% if is_admin() == true %}
                             <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
                             <li class="dropdown">
                                 <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
@@ -166,6 +170,9 @@ Filter Pengajar - {{ parent() }}
                                     <li>{{ anchor('pengajar/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
                                 </ul>
                             </li>
+                            {% elseif is_pengajar() == true %}
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            {% endif %}
                         </ul>
                     </td>
                 </tr>
@@ -173,7 +180,7 @@ Filter Pengajar - {{ parent() }}
             </tbody>
         </table>
 
-        {% if pengajars is not empty %}
+        {% if is_admin() and pengajars is not empty %}
         <br>
         <div class="row-fluid">
             <div class="span8">
