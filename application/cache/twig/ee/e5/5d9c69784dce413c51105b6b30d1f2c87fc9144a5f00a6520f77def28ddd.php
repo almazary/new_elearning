@@ -91,12 +91,12 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
             <div class=\"panel-body\">
                 <table class=\"table\">
                     <tr>
-                        <th bgcolor=\"#FBFBFB\" width=\"25%\">NIP</th>
-                        <td>";
+                        <th bgcolor=\"#FBFBFB\" width=\"25%\" style=\"border-top: 0px;\">NIP</th>
+                        <td style=\"border-top: 0px;\">";
         // line 33
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "nip"), "html", null, true);
         echo "</td>
-                        <td rowspan=\"5\" width=\"15%\">
+                        <td rowspan=\"5\" width=\"15%\" style=\"border-top: 0px;\">
                             <img style=\"width:113px;\" class=\"img-polaroid\" src=\"";
         // line 35
         echo twig_escape_filter($this->env, get_url_image_pengajar($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "foto"), "medium", $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "jenis_kelamin")), "html", null, true);
@@ -203,7 +203,7 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
             echo "
                                         ";
             // line 97
-            $context["retrieve_all_ma"] = get_row_data("pengajar_model", "retrieve_all_ma", array(0 => (isset($context["hari_id"]) ? $context["hari_id"] : null), 1 => $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "id"), 2 => null, 3 => (((is_pengajar() == true)) ? (1) : (null))));
+            $context["retrieve_all_ma"] = get_row_data("pengajar_model", "retrieve_all_ma", array(0 => (isset($context["hari_id"]) ? $context["hari_id"] : null), 1 => $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "id"), 2 => null, 3 => ((((is_pengajar() == true) || (is_siswa() == true))) ? (1) : (null))));
             // line 98
             echo "                                        ";
             if ((!twig_test_empty((isset($context["retrieve_all_ma"]) ? $context["retrieve_all_ma"] : null)))) {
@@ -305,8 +305,8 @@ class __TwigTemplate_eee55d9c69784dce413c51105b6b30d1f2c87fc9144a5f00a6520f77def
                         <table class=\"table\">
                             <tbody>
                                 <tr>
-                                    <th width=\"30%\" bgcolor=\"#FBFBFB\">Username</th>
-                                    <td>
+                                    <th width=\"30%\" bgcolor=\"#FBFBFB\" style=\"border-top: 0px;\">Username</th>
+                                    <td style=\"border-top: 0px;\">
                                         ";
             // line 145
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar_login"]) ? $context["pengajar_login"] : null), "username"), "html", null, true);

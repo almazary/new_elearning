@@ -11,7 +11,7 @@ class Siswa extends MY_Controller
 
     function index($segment_3 = '', $segment_4 = '')
     {
-        if (is_pengajar()) {
+        if (is_pengajar() or is_siswa()) {
             redirect('siswa/filter');
         }
 
@@ -86,6 +86,11 @@ class Siswa extends MY_Controller
 
     function add($segment_3 = '')
     {
+        # harus login sebagai admin
+        if (!is_admin()) {
+            redirect('welcome');
+        }
+
         $status_id = $segment_3;
         if ($status_id  == '' OR $status_id > 3) {
             redirect('siswa/index/1');
@@ -249,7 +254,7 @@ class Siswa extends MY_Controller
 
         }
 
-        if (is_pengajar() AND empty($filter)) {
+        if ((is_pengajar() OR is_siswa()) AND empty($filter)) {
             $filter = array(
                 'nis'           => '',
                 'nama'          => '',
@@ -384,11 +389,20 @@ class Siswa extends MY_Controller
 
     function edit_profile($segment_3 = '', $segment_4 = '')
     {
+        if (is_pengajar()) {
+            exit('Akses ditolak');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
         if (empty($retrieve_siswa)) {
             exit('Data siswa tidak ditemukan');
+        }
+
+        # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
+        if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
+            exit('Akses ditolak');
         }
 
         $data['status_id'] = $status_id;
@@ -438,11 +452,20 @@ class Siswa extends MY_Controller
 
     function edit_picture($segment_3 = '', $segment_4 = '')
     {
+        if (is_pengajar()) {
+            exit('Akses ditolak');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
         if (empty($retrieve_siswa)) {
             exit('Data siswa tidak ditemukan');
+        }
+
+        # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
+        if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
+            exit('Akses ditolak');
         }
 
         $data['status_id'] = $status_id;
@@ -517,6 +540,10 @@ class Siswa extends MY_Controller
 
     function moved_class($segment_3 = '', $segment_4 = '')
     {
+        if (!is_admin()) {
+            exit('Akses ditolak');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
@@ -557,11 +584,20 @@ class Siswa extends MY_Controller
 
     function edit_username($segment_3 = '', $segment_4 = '')
     {
+        if (is_pengajar()) {
+            exit('Akses ditolak');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
         if (empty($retrieve_siswa)) {
             exit('Data siswa tidak ditemukan');
+        }
+
+        # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
+        if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
+            exit('Akses ditolak');
         }
 
         $data['login']     = $this->login_model->retrieve(null, null, null, $siswa_id);
@@ -591,11 +627,20 @@ class Siswa extends MY_Controller
 
     function edit_password($segment_3 = '', $segment_4 = '')
     {
+        if (is_pengajar()) {
+            exit('Akses ditolak');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
         if (empty($retrieve_siswa)) {
             exit('Data siswa tidak ditemukan');
+        }
+
+        # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
+        if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
+            exit('Akses ditolak');
         }
 
         $data['status_id'] = $status_id;
@@ -647,5 +692,16 @@ class Siswa extends MY_Controller
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
         $this->twig->display('detail-siswa.html', $data);
+    }
+
+    function jadwal_mapel()
+    {
+        if (!is_siswa()) {
+            redirect('siswa');
+        }
+
+        $data['list_jadwal'] = $this->get_jadwal_mapel_siswa(get_sess_data('user', 'id'));
+
+        $this->twig->display('jadwal-mapel.html', $data);
     }
 }

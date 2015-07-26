@@ -2,6 +2,8 @@
 
 class MY_Controller extends CI_Controller
 {
+    public $siswa_kelas_aktif = array();
+
     function __construct()
     {
         parent::__construct();
@@ -19,7 +21,20 @@ class MY_Controller extends CI_Controller
             }
         }
 
-        $this->output->enable_profiler(TRUE);
+        if (is_siswa()) {
+            # jika kelas aktifnya kosong, sebaiknya di die jasa
+            $kelas_aktif = $this->kelas_model->retrieve_siswa(null, array(
+                'siswa_id' => get_sess_data('user', 'id'),
+                'aktif'    => 1
+            ));
+            if (empty($kelas_aktif)) {
+                exit('Kelas aktif anda tidak ditemukan, segera hubungi admin e-learning.');
+            }
+
+            $this->siswa_kelas_aktif = $kelas_aktif;
+        }
+
+        // $this->output->enable_profiler(TRUE);
     }
 
     function update_nis($nis = '') {
@@ -67,5 +82,50 @@ class MY_Controller extends CI_Controller
         $this->image_lib->resize();
         $this->image_lib->clear();
         unset($config);
+    }
+
+    function get_jadwal_mapel_siswa($siswa_id)
+    {
+        $siswa = $this->siswa_model->retrieve($siswa_id);
+        if (empty($siswa)) {
+            return array();
+        }
+
+        # cari kelas aktif
+        $kelas_aktif = $this->siswa_kelas_aktif;
+
+        # cek kelas, aktif tidak
+        $kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
+        if (empty($kelas['aktif'])) {
+            return array();
+        }
+
+        $jadwal = array();
+        foreach (get_indo_hari() as $hari_key => $hari_nama) {
+            $jadwal[$hari_key] = array();
+            $jadwal[$hari_key]['nama_hari'] = $hari_nama;
+
+            # cari mapel_ajar yang hari dan kelasnya ini
+            $mapel_ajar = $this->pengajar_model->retrieve_all_ma($hari_key, null, null, 1, $kelas['id']);
+            foreach ($mapel_ajar as $ma) {
+                $mapel_kelas = $this->mapel_model->retrieve_kelas($ma['mapel_kelas_id']);
+                if (empty($mapel_kelas)) {
+                    continue;
+                }
+
+                $mapel = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                if (empty($mapel['aktif'])) {
+                    continue;
+                }
+
+                $ma['pengajar'] = $this->pengajar_model->retrieve($ma['pengajar_id']);
+                $ma['pengajar']['link_profil'] = site_url('pengajar/detail/' . $ma['pengajar_id']);
+                $ma['mapel'] = $mapel;
+
+                $jadwal[$hari_key]['jadwal'][] = $ma;
+            }
+        }
+
+        return $jadwal;
     }
 }

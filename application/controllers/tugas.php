@@ -106,6 +106,12 @@ class Tugas extends MY_Controller
             $filter['pengajar_id'] = array(get_sess_data('user', 'id'));
         }
 
+        # jika siswa, tampilkan tugas pada kelas aktifnya
+        elseif (is_siswa()) {
+            $kelas_aktif = $this->siswa_kelas_aktif;
+            $filter['kelas_id'] = array($kelas_aktif['kelas_id']);
+        }
+
         $data['filter'] = $filter;
 
         # ambil semua data tugas
@@ -328,6 +334,47 @@ class Tugas extends MY_Controller
         # jika sebagai pengajar, cek kepemilikan
         if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
             redirect('tugas');
+        }
+
+        # cek pertanyaan, sudah ada belum
+        if ($tugas['type_id'] != 1) {
+            $check_pertanyaan = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id']);
+            if (empty($check_pertanyaan)) {
+                $this->session->set_flashdata('tugas', get_alert('warning', 'Pertanyaan masih kosong.'));
+                redirect($uri_back);
+            }
+
+            # jika pilihan ganda cek pilihannya sudah ada belum
+            if ($tugas['type_id'] == 3) {
+                $empty_pilihan = array();
+                $empty_kunci   = array();
+                foreach ($check_pertanyaan as $p) {
+                    $pilihan = $this->tugas_model->retrieve_all_pilihan($p['id']);
+                    if (empty($pilihan)) {
+                        $empty_pilihan[] = $p['urutan'];
+                    } else {
+                        $ada_kunci = false;
+                        # cek kuncinya sudah diatur belum
+                        foreach ($pilihan as $pil) {
+                            if ($pil['kunci'] == 1) {
+                                $ada_kunci = true;
+                            }
+                        }
+
+                        if (!$ada_kunci) {
+                            $empty_kunci[] = $p['urutan'];
+                        }
+                    }
+                }
+
+                if (!empty($empty_pilihan)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Pertanyaan no ' . implode(', ', $empty_pilihan) . ' belum ada pilihan jawaban.'));
+                    redirect($uri_back);
+                } elseif (!empty($empty_kunci)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Pilihan pertanyaan no ' . implode(', ', $empty_kunci) . ' belum ada kunci jawaban.'));
+                    redirect($uri_back);
+                }
+            }
         }
 
         # terbitkan tugas
@@ -694,5 +741,102 @@ class Tugas extends MY_Controller
         $this->tugas_model->delete_pilihan($pilihan['id']);
 
         redirect($uri_back . '#pilihan-' . $pertanyaan['id']);
+    }
+
+    function kerjakan($tugas_id = '')
+    {
+        // pr($this->session->userdata('mengerjakan_tugas'));die;
+        // pr($this->session->all_userdata());die;
+        if (!is_siswa()) {
+            redirect('tugas');
+        }
+
+        $tugas_id = (int)$tugas_id;
+        $tugas    = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas)) {
+            redirect('tugas');
+        }
+
+        # cek aktif tidak dan tampil siswa tidak
+        if (empty($tugas['aktif'])) {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas belum aktif.'));
+            redirect('tugas');
+        }
+
+        if (empty($tugas['tampil_siswa'])) {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas belum aktif.'));
+            redirect('tugas');
+        }
+
+        # cek sudah mengerjakan belum
+        $nilai = $this->tugas_model->retrieve_nilai(null, $tugas['id'], get_sess_data('user', 'id'));
+        if (!empty($nilai)) {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
+            redirect('tugas');
+        }
+
+        $table_name  = 'field_tambahan';
+        $field_id    = 'mengerjakan-' . $tugas['id'] . '-' . get_sess_data('user', 'id');
+        $field_name  = 'Mengerjakan Tugas';
+
+        $mulai   = date('Y-m-d H:i:s');
+        $selesai = date('Y-m-d H:i:s', strtotime("+ $tugas[durasi] minutes", strtotime($mulai)));
+
+        $field_value = array(
+            'mulai'   => $mulai,
+            'selesai' => $selesai
+        );
+
+        # cek sudah pernah mengerjakan belum, untuk keamanan.
+        # karna bisa saja dibuka 2 kali dikomputer yang berbeda
+        $check_field = retrieve_field($field_id);
+        if (!empty($check_field)) {
+            # cek session
+            $session_mengerjakan = $this->session->userdata('mengerjakan_tugas');
+            if (empty($session_mengerjakan)) {
+                $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah pernah mengerjakan tugas ini.'));
+                redirect('tugas');
+            }
+
+            $check_field_value = json_decode($check_field['value'], 1);
+
+            # cek sudah selesai belum dari segi waktunya
+            if (strtotime(date('Y-m-d H:i:s')) >= strtotime($check_field_value['selesai'])) {
+                redirect('tugas/selesai/' . $check_field_value['unix_id']);
+            }
+        }
+
+        # jika masih kosong, berarti belum mengerjakan sama sekali
+        else {
+            $pertanyaan = array();
+            if ($tugas['type_id'] != 1) {
+                # ambil pertanyaan ditugas ini
+                $pertanyaan = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'ASC');
+                # jika pilihan ganda, ambil pilihannya
+                if ($tugas['type_id'] == 3) {
+                    foreach ($pertanyaan as $key => $val) {
+                        $val['pilihan'] = $this->tugas_model->retrieve_all_pilihan($val['id']);
+                        $pertanyaan[$key] = $val;
+                    }
+                }
+            }
+            $field_value['pertanyaan'] = $pertanyaan;
+            $field_value['tugas']      = $tugas;
+            $field_value['unix_id']    = md5($field_id);
+            create_field($field_id, $field_name, json_encode($field_value));
+
+            # buat session
+            $this->session->set_userdata('mengerjakan_tugas', true);
+        }
+
+        $check_field = retrieve_field($field_id);
+
+        $html_js = load_comp_js(array(
+            base_url('assets/comp/jquery.countdown/jquery.countdown.min.js'),
+        ));
+        $data['comp_js']  = $html_js;
+
+        $data['data'] = json_decode($check_field['value'], 1);
+        $this->twig->display('ujian-online.html', $data);
     }
 }

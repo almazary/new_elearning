@@ -583,17 +583,39 @@ function nama_panggilan($str_nama) {
 
 function create_sess_kcfinder($login_id)
 {
-    $_SESSION['E-LEARNING']['KCFINDER']              = array();
-    $_SESSION['E-LEARNING']['KCFINDER']['disabled']  = false;
-    $_SESSION['E-LEARNING']['KCFINDER']['uploadDir'] = "";
-    if ($user_type == 'admin') {
-        $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('assets/uploads/');
-    } else {
-        $user_folder = './assets/uploads/' . $login_id;
-        if (!is_dir($user_folder)) {
-            mkdir($user_folder, 0755);
-            chmod($user_folder, 0755);
+    if (is_login()) {
+        $_SESSION['E-LEARNING']['KCFINDER']              = array();
+        $_SESSION['E-LEARNING']['KCFINDER']['disabled']  = false;
+        $_SESSION['E-LEARNING']['KCFINDER']['uploadDir'] = "";
+        if (is_admin()) {
+            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('assets/uploads/');
+        } else {
+            $user_folder = './assets/uploads/' . $login_id;
+            if (!is_dir($user_folder)) {
+                mkdir($user_folder, 0755);
+                chmod($user_folder, 0755);
+            }
+            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('assets/uploads/' . $login_id);
         }
-        $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('assets/uploads/' . $login_id);
     }
+}
+
+function retrieve_field($id)
+{
+    return get_row_data('config_model', 'retrieve_field', array('id' => $id));
+}
+
+function update_field($id, $nama = null, $value = null)
+{
+    return get_row_data('config_model', 'update_field', array($id, $nama, $value));
+}
+
+function delete_field($id)
+{
+    return get_row_data('config_model', 'delete_field', array('id' => $id));
+}
+
+function create_field($id, $nama = null, $value = null)
+{
+    return get_row_data('config_model', 'create_field', array('id' => $id, 'nama' => $nama, 'value' => $value));
 }

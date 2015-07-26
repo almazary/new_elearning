@@ -555,21 +555,31 @@ class Tugas_model extends CI_Model
         $tugas_id      = null,
         $sort          = 'ASC'
     ) {
-        $no_of_records = (int)$no_of_records;
-        $page_no       = (int)$page_no;
+        if ($no_of_records == 'all') {
+            if (!is_null($tugas_id)) {
+                $this->db->where('tugas_id', $tugas_id);
+            }
+            $this->db->order_by('urutan', $sort);
+            $result = $this->db->get('tugas_pertanyaan');
+            $data   = $result->result_array();
 
-        $where = array();
-        if (!is_null($tugas_id)) {
-            $tugas_id = (int)$tugas_id;
-            $where['tugas_id'] = array($tugas_id, 'where');
+        } else {
+            $no_of_records = (int)$no_of_records;
+            $page_no       = (int)$page_no;
+
+            $where = array();
+            if (!is_null($tugas_id)) {
+                $tugas_id = (int)$tugas_id;
+                $where['tugas_id'] = array($tugas_id, 'where');
+            }
+
+            # tampilkan hanya yang aktif saja
+            $where['aktif'] = array(1, 'where');
+
+            $orderby = array('urutan' => $sort);
+
+            $data = $this->pager->set('tugas_pertanyaan', $no_of_records, $page_no, $where, $orderby);
         }
-
-        # tampilkan hanya yang aktif saja
-        $where['aktif'] = array(1, 'where');
-
-        $orderby = array('urutan' => $sort);
-
-        $data = $this->pager->set('tugas_pertanyaan', $no_of_records, $page_no, $where, $orderby);
 
         return $data;
     }
@@ -838,7 +848,12 @@ class Tugas_model extends CI_Model
             $where['tugas.aktif'] = array($aktif, 'where_in');
         }
 
-        $orderby = array('id' => 'DESC');
+        if (is_siswa()) {
+            $where['tugas.tampil_siswa'] = array(1, 'where');
+            $orderby = array('tugas.aktif' => 'DESC');
+        } else {
+            $orderby = array('tugas.id' => 'DESC');
+        }
 
         $data = $this->pager->set('tugas', $no_of_records, $page_no, $where, $orderby, 'tugas.*', $group_by);
 
@@ -1030,7 +1045,7 @@ class Tugas_model extends CI_Model
     public function terbitkan($id)
     {
         $this->db->where('id', $id);
-        $this->db->update('tugas', array('aktif' => 1));
+        $this->db->update('tugas', array('aktif' => 1, 'tampil_siswa' => 1));
         return true;
     }
 

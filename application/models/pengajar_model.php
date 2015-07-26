@@ -170,7 +170,8 @@ class Pengajar_model extends CI_Model
         $hari_id        = null,
         $pengajar_id    = null,
         $mapel_kelas_id = null,
-        $aktif = null
+        $aktif          = null,
+        $kelas_id       = null
     ) {
         if (!is_null($hari_id)) {
             $hari_id = (int)$hari_id;
@@ -186,6 +187,9 @@ class Pengajar_model extends CI_Model
         }
         if (!is_null($aktif)) {
             $this->db->where('mapel_ajar.aktif', $aktif);
+        }
+        if (!is_null($kelas_id)) {
+            $this->db->where('mapel_kelas.kelas_id', $kelas_id);
         }
 
         $this->db->select('mapel_ajar.*');

@@ -801,4 +801,9 @@ $config['tugas/filter'] = array(
         'label' => 'Type',
         'rules' => 'xss_clean'
     ),
+    array(
+        'field' => 'status[]',
+        'label' => 'Status',
+        'rules' => 'xss_clean'
+    ),
 );

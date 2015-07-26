@@ -42,7 +42,11 @@
                                     {% endif %}
 
                                     {% if is_pengajar() %}
-                                    <li>{{ anchor('login/pp', 'Profil & Akun Login', {'title' : 'Detail Profil'})|raw }}</li>
+                                    <li>{{ anchor('login/pp', 'Profil & Akun Login')|raw }}</li>
+                                    {% endif %}
+
+                                    {% if is_siswa() %}
+                                    <li>{{ anchor('login/pp', 'Profil & Akun Login')|raw }}</li>
                                     {% endif %}
 
                                     <li><a href="{{ site_url('login/logout') }}">Logout</a></li>
@@ -96,6 +100,23 @@
                             <ul class="widget widget-menu unstyled">
                                 <li><a href="{{ site_url('login/pp') }}"><i class="menu-icon icon-user"></i>Profilku</a></li>
                                 <li><a href="{{ site_url('pengajar/jadwal') }}"><i class="menu-icon icon-tasks"></i> Jadwal Mengajar </a></li>
+                            </ul>
+
+                            <ul class="widget widget-menu unstyled">
+                                <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i> Tugas </a></li>
+                                <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i> Materi </a></li>
+                            </ul>
+
+                            <ul class="widget widget-menu unstyled">
+                                <li><a href="{{ site_url('pengajar/filter') }}"><i class="menu-icon icon-search"></i> Filter Pengajar </a></li>
+                                <li><a href="{{ site_url('siswa/filter') }}"><i class="menu-icon icon-search"></i> Filter Siswa </a></li>
+                            </ul>
+                            {% endif %}
+
+                            {% if is_siswa() %}
+                            <ul class="widget widget-menu unstyled">
+                                <li><a href="{{ site_url('login/pp') }}"><i class="menu-icon icon-user"></i>Profilku</a></li>
+                                <li><a href="{{ site_url('siswa/jadwal_mapel') }}"><i class="menu-icon icon-tasks"></i> Jadwal Matapelajaran</a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">

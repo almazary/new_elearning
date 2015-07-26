@@ -13,11 +13,13 @@ Tugas - {{ parent() }}
         {{ get_flashdata('tugas')|raw }}
 
         <div class="bs-callout bs-callout-info">
+            {% if (is_siswa() == false) %}
             <div class="btn-group pull-right" style="margin-top:-5px;">
                 {{ anchor('tugas/add/3', 'Tambah Tugas Ganda', {'class' : 'btn btn-primary'})|raw }}
                 {{ anchor('tugas/add/2', 'Tambah Tugas Essay', {'class' : 'btn btn-primary'})|raw }}
                 {{ anchor('tugas/add/1', 'Tambah Tugas Upload', {'class' : 'btn btn-primary'})|raw }}
             </div>
+            {% endif %}
             <b><a class="as-link" data-toggle="collapse" data-target="#form-filter"><i class="icon-search" style="line-height: 0px;"></i> Filter</a></b>
 
             <div id="form-filter" class="collapse" style="margin-top: 5px;">
@@ -37,6 +39,7 @@ Tugas - {{ parent() }}
                                 </ul>
                             </td>
                         </tr>
+                        {% if (is_siswa() == false) %}
                         <tr>
                             <th>Kelas</th>
                             <td>
@@ -51,6 +54,7 @@ Tugas - {{ parent() }}
                                 </ul>
                             </td>
                         </tr>
+                        {% endif %}
                         <tr>
                             <th>Tipe</th>
                             <td>
@@ -94,6 +98,23 @@ Tugas - {{ parent() }}
                         </tr>
                         {% endif %}
                         <tr>
+                            <th>Status</th>
+                            <td>
+                                <ul class="unstyled inline" style="margin-left: -5px;">
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="status[]" value="1" {{ set_checkbox('status[]', '1', (filter.status is not empty and in_array('1', filter.status)) ? true) }}> Terbit
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="status[]" value="0" {{ set_checkbox('status[]', '0', (filter.status != '' and in_array('0', filter.status)) ? true) }}> Tutup
+                                        </label>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
                             <td></td>
                             <td>
                                 <button type="submit" class="btn btn-primary">Filter</button>
@@ -118,7 +139,7 @@ Tugas - {{ parent() }}
             </thead>
             <tbody>
                 {% for no, m in tugas %}
-                <tr>
+                <tr {{ (is_siswa() and m.aktif == 1) ? 'class="success"' }}>
                     <td><b>{{ m.id }}</b></td>
                     <td>
                         <strong class="text-warning">{{ m.judul }}</strong>
@@ -134,6 +155,10 @@ Tugas - {{ parent() }}
 
                         </small>
                         <br><small><b>Pembuat : </b> <a href="{{ m.pembuat.link_profil }}">{{ m.pembuat.nama }}</a>, {{ tgl_jam_indo(m.tgl_buat) }}</small>
+                        {% if is_siswa() and m.info != '' %}
+                            <hr style="margin-top: 5px;margin-bottom: 5px;border:none;border-bottom: 1px dashed black;">
+                            {{ m.info|raw }}
+                        {% endif %}
                     </td>
                     <td>
                         {% if m.type_label == 'Ganda' %}
@@ -146,6 +171,7 @@ Tugas - {{ parent() }}
                     </td>
                     <td>
                         <div class="btn-group">
+                        {% if is_siswa() == false %}
                             {% if m.type_label == 'Ganda' or m.type_label == 'Essay' %}
                                 {{ anchor('tugas/manajemen_soal/' ~ m.id, '<i class="icon icon-tasks"></i> Soal', {'class' : 'btn btn-primary btn-small'})|raw }}
                             {% endif %}
@@ -157,6 +183,13 @@ Tugas - {{ parent() }}
 
                             {{ anchor('tugas/edit/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-edit"></i> Edit', {'class' : 'btn btn-default btn-small'})|raw }}
                             {{ anchor('tugas/koreksi/' ~ m.id, '<i class="icon-check"></i> Koreksi', {'class' : 'btn btn-info btn-small'})|raw }}
+                        {% elseif is_siswa() == true %}
+                            {% if m.aktif == 1 %}
+                                {{ anchor('tugas/kerjakan/' ~ m.id, '<i class="icon-ok-sign"></i> Mulai Kerjakan', {'class' : 'btn btn-success btn-small', 'onclick' : 'return confirm(\'Anda yakin ingin memulai mengerjakan tugas ini?\')'})|raw }}
+                            {% else %}
+                                {{ anchor('tugas/nilai/' ~ m.id, '<i class="icon-flag"></i> Lihat Nilai', {'class' : 'btn btn-info btn-small'})|raw }}
+                            {% endif %}
+                        {% endif %}
                         </div>
                     </td>
                 </tr>

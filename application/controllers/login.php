@@ -60,6 +60,7 @@ class Login extends MY_Controller
         $this->session->set_userdata('filter_materi', null);
         $this->session->set_userdata('filter_tugas', null);
         $this->session->set_userdata('filter_siswa', null);
+        $this->session->set_userdata('mengerjakan_tugas', null);
 
         redirect('login/index');
     }
@@ -82,6 +83,27 @@ class Login extends MY_Controller
             $data['status_id']      = get_sess_data('user', 'status_id');
 
             $this->twig->display('pp-pengajar.html', $data);
+        }
+
+        if (is_siswa()) {
+            $retrieve_siswa     = $this->siswa_model->retrieve(get_sess_data('user', 'id'));
+            $retrieve_login     = $this->login_model->retrieve(get_sess_data('login', 'id'));
+            $retrieve_all_kelas = $this->kelas_model->retrieve_all_siswa(10, 1, array('siswa_id' => $retrieve_siswa['id']));
+
+            $data['siswa']       = $retrieve_siswa;
+            $data['siswa_login'] = $retrieve_login;
+            $data['siswa_kelas'] = $retrieve_all_kelas;
+            $data['status_id']   = get_sess_data('user', 'status_id');
+
+            # panggil colorbox
+            $html_js = load_comp_js(array(
+                base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                base_url('assets/comp/colorbox/act-siswa.js')
+            ));
+            $data['comp_js']  = $html_js;
+            $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+
+            $this->twig->display('pp-siswa.html', $data);
         }
     }
 }

@@ -1,0 +1,41 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Profilku - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Jadwal Matapelajaran</strong>
+    </div>
+    <div class="panel-body">
+        <table class="table">
+            <tbody>
+                {% for key, lj in list_jadwal %}
+                <tr>
+                    <td {{ (key == 1) ? 'style="border-top: 0px;"' }} width="15%"><b>{{ lj.nama_hari }}</b></td>
+                    <td {{ (key == 1) ? 'style="border-top: 0px;"' }}>
+                        {% if lj.jadwal is not empty %}
+                        <table class="table table-condensed">
+                            <tbody>
+                                {% for jd in lj.jadwal %}
+                                <tr class="success">
+                                    <td width="5%">{{ jd.jam_mulai|date('H:i') }}</td>
+                                    <td width="2%">-</td>
+                                    <td width="5%">{{ jd.jam_selesai|date('H:i') }}</td>
+                                    <td width="30%">{{ jd.mapel.nama }}</td>
+                                    <td>Pengajar : {{ anchor(jd.pengajar.link_profil, jd.pengajar.nama)|raw }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

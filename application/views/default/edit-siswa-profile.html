@@ -8,6 +8,7 @@
 <input type="hidden" name="siswa_id" value="{{ siswa_id }}">
 <table class="table table-striped">
     <tbody>
+        {% if is_admin() %}
         <tr>
             <th width="30%">NIS <span class="text-error">*</span></th>
             <td>
@@ -15,6 +16,9 @@
                 <br>{{ form_error('nis')|raw }}
             </td>
         <tr>
+        {% else %}
+        <input type="hidden" name="nis" value="{{ siswa.nis }}">
+        {% endif %}
         <tr>
             <th>Nama <span class="text-error">*</span></th>
             <td>
@@ -87,7 +91,7 @@
                 <br>{{ form_error('alamat')|raw }}
             </td>
         <tr>
-        {% if siswa.status_id != 3 %}
+        {% if is_admin() and siswa.status_id != 3 %}
         <tr>
             <th>Status <span class="text-error">*</span></th>
             <td>
@@ -99,7 +103,7 @@
             </td>
         <tr>
         {% else %}
-            <input type="hidden" name="status_id" value="3">
+            <input type="hidden" name="status_id" value="{{ siswa.status_id }}">
         {% endif %}
         <tr>
             <td colspan="2">

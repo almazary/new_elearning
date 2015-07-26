@@ -59,12 +59,12 @@ class __TwigTemplate_a57029d76ff40e0c9207668e96723f2b6971e282fe08a2cc8580b1856b3
     <div class=\"panel-body\">
         <table class=\"table\">
             <tr>
-                <th bgcolor=\"#FBFBFB\" width=\"25%\">NIP</th>
-                <td>";
+                <th bgcolor=\"#FBFBFB\" width=\"25%\" style=\"border-top: 0px;\">NIP</th>
+                <td style=\"border-top: 0px;\">";
         // line 20
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "nip"), "html", null, true);
         echo "</td>
-                <td rowspan=\"5\" width=\"15%\">
+                <td rowspan=\"5\" width=\"15%\" style=\"border-top: 0px;\">
                     <img style=\"width:113px;\" class=\"img-polaroid\" src=\"";
         // line 22
         echo twig_escape_filter($this->env, get_url_image_pengajar($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "foto"), "medium", $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "jenis_kelamin")), "html", null, true);
@@ -151,8 +151,8 @@ class __TwigTemplate_a57029d76ff40e0c9207668e96723f2b6971e282fe08a2cc8580b1856b3
                 <table class=\"table\">
                     <tbody>
                         <tr>
-                            <th width=\"30%\" bgcolor=\"#FBFBFB\">Username</th>
-                            <td>
+                            <th width=\"30%\" bgcolor=\"#FBFBFB\" style=\"border-top: 0px;\">Username</th>
+                            <td style=\"border-top: 0px;\">
                                 ";
         // line 77
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pengajar_login"]) ? $context["pengajar_login"] : null), "username"), "html", null, true);

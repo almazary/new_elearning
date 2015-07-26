@@ -29,9 +29,9 @@ Detail Pengajar - {{ parent() }}
             <div class="panel-body">
                 <table class="table">
                     <tr>
-                        <th bgcolor="#FBFBFB" width="25%">NIP</th>
-                        <td>{{ pengajar.nip }}</td>
-                        <td rowspan="5" width="15%">
+                        <th bgcolor="#FBFBFB" width="25%" style="border-top: 0px;">NIP</th>
+                        <td style="border-top: 0px;">{{ pengajar.nip }}</td>
+                        <td rowspan="5" width="15%" style="border-top: 0px;">
                             <img style="width:113px;" class="img-polaroid" src="{{ get_url_image_pengajar(pengajar.foto, 'medium', pengajar.jenis_kelamin) }}">
                         </td>
                     </tr>
@@ -94,7 +94,7 @@ Detail Pengajar - {{ parent() }}
                                         {{ anchor('pengajar/add_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ hari_id, 'Tambah', {'class' : 'iframe btn btn-small btn-primary', 'title' : 'Tambah jadwal hari ' ~ h})|raw }}
                                         {% endif %}
 
-                                        {% set retrieve_all_ma = get_row_data('pengajar_model', 'retrieve_all_ma', [hari_id, pengajar.id, null, (is_pengajar() == true) ? 1 : null]) %}
+                                        {% set retrieve_all_ma = get_row_data('pengajar_model', 'retrieve_all_ma', [hari_id, pengajar.id, null, (is_pengajar() == true or is_siswa() == true) ? 1 : null]) %}
                                         {% if retrieve_all_ma is not empty %}
                                         <table style="margin-top:10px;" class="table table-condensed">
                                             {% for ma in retrieve_all_ma %}
@@ -140,8 +140,8 @@ Detail Pengajar - {{ parent() }}
                         <table class="table">
                             <tbody>
                                 <tr>
-                                    <th width="30%" bgcolor="#FBFBFB">Username</th>
-                                    <td>
+                                    <th width="30%" bgcolor="#FBFBFB" style="border-top: 0px;">Username</th>
+                                    <td style="border-top: 0px;">
                                         {{ pengajar_login.username }}
                                     </td>
                                 </tr>

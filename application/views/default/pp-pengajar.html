@@ -16,9 +16,9 @@ Profilku - {{ parent() }}
     <div class="panel-body">
         <table class="table">
             <tr>
-                <th bgcolor="#FBFBFB" width="25%">NIP</th>
-                <td>{{ pengajar.nip }}</td>
-                <td rowspan="5" width="15%">
+                <th bgcolor="#FBFBFB" width="25%" style="border-top: 0px;">NIP</th>
+                <td style="border-top: 0px;">{{ pengajar.nip }}</td>
+                <td rowspan="5" width="15%" style="border-top: 0px;">
                     <img style="width:113px;" class="img-polaroid" src="{{ get_url_image_pengajar(pengajar.foto, 'medium', pengajar.jenis_kelamin) }}">
                 </td>
             </tr>
@@ -72,8 +72,8 @@ Profilku - {{ parent() }}
                 <table class="table">
                     <tbody>
                         <tr>
-                            <th width="30%" bgcolor="#FBFBFB">Username</th>
-                            <td>
+                            <th width="30%" bgcolor="#FBFBFB" style="border-top: 0px;">Username</th>
+                            <td style="border-top: 0px;">
                                 {{ pengajar_login.username }}
                             </td>
                         </tr>

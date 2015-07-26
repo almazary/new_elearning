@@ -1,0 +1,53 @@
+{% extends "layout-detail-materi.html" %}
+
+{% block title %}
+{{ data.tugas.judul }} - {{ parent() }}
+{% endblock %}
+
+{% block css %}
+<style type="text/css">
+    #clock {
+        font-size: 25px;
+        margin-top: 5px;
+        font-weight: bold;
+    }
+    .clock-info {
+        font-weight: normal;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="wrap">
+    <div class="container">
+        <h1 class="title">{{ data.tugas.judul }}</h1>
+        <hr class="hr-top">
+        <div class="wrap-content">
+            <div class="content">
+                <div class="row-fluid">
+                    <div class="span8">
+                        <b>Informasi : </b><br>
+                        {{ data.tugas.info|raw }}
+                    </div>
+                    <div class="span4">
+                        <b>Siswa waktu : </b><br>
+                        <div id="clock"></div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    $('#clock').countdown("2015-07-26 23:43:29", function(event) {
+        var totalHours = event.offset.totalDays * 24 + event.offset.hours;
+        $(this).html(event.strftime(totalHours + ' <span class="clock-info">jam</span> %M <span class="clock-info">menit</span> %S <span class="clock-info">detik</span>'));
+    });
+</script>
+{% endblock %}
