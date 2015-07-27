@@ -745,8 +745,6 @@ class Tugas extends MY_Controller
 
     function kerjakan($tugas_id = '')
     {
-        // pr($this->session->userdata('mengerjakan_tugas'));die;
-        // pr($this->session->all_userdata());die;
         if (!is_siswa()) {
             redirect('tugas');
         }
@@ -833,10 +831,47 @@ class Tugas extends MY_Controller
 
         $html_js = load_comp_js(array(
             base_url('assets/comp/jquery.countdown/jquery.countdown.min.js'),
+            base_url('assets/comp/jquery.countdown/script.js'),
         ));
         $data['comp_js']  = $html_js;
 
         $data['data'] = json_decode($check_field['value'], 1);
         $this->twig->display('ujian-online.html', $data);
+    }
+
+    function finish($tugas_id = '', $unix_id = '')
+    {
+        if (!is_siswa()) {
+            redirect('tugas');
+        }
+
+        $tugas_id = (int)$tugas_id;
+        $tugas    = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas)) {
+            redirect('tugas');
+        }
+
+        if (empty($unix_id)) {
+            redirect('tugas');
+        }
+
+        # cek sudah mengerjakan belum
+        $nilai = $this->tugas_model->retrieve_nilai(null, $tugas['id'], get_sess_data('user', 'id'));
+        if (!empty($nilai)) {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
+            redirect('tugas');
+        }
+
+        $table_name  = 'field_tambahan';
+        $field_id    = 'mengerjakan-' . $tugas['id'] . '-' . get_sess_data('user', 'id');
+        $field_name  = 'Mengerjakan Tugas';
+
+        $check_field = retrieve_field($field_id);
+        if (!empty($check_field)) {
+            # session tidak usah dicek, ada atau tidak, yang jelas badingkan saja unix_idnya
+
+        }
+
+        redirect('tugas');
     }
 }

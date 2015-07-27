@@ -60,26 +60,36 @@ class __TwigTemplate_ba5c575a2893b698a30632e392e0810c43fb044010ca8c78e712a8bd22b
         $this->displayBlock('content', $context, $blocks);
         // line 17
         echo "
+        <script type=\"text/javascript\">
+        var site_url = \"";
+        // line 19
+        echo twig_escape_filter($this->env, site_url(), "html", null, true);
+        echo "\";
+        var base_url = \"";
+        // line 20
+        echo twig_escape_filter($this->env, base_url(), "html", null, true);
+        echo "\";
+        </script>
         <script src=\"";
-        // line 18
+        // line 22
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 19
+        // line 23
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-ui-1.10.1.custom.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 20
+        // line 24
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "bootstrap/js/bootstrap.min.js\" type=\"text/javascript\"></script>
         ";
-        // line 21
+        // line 25
         echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
         echo "
         ";
-        // line 22
+        // line 26
         $this->displayBlock('js', $context, $blocks);
-        // line 23
+        // line 27
         echo "    </body>
 </html>
 ";
@@ -101,7 +111,7 @@ class __TwigTemplate_ba5c575a2893b698a30632e392e0810c43fb044010ca8c78e712a8bd22b
     {
     }
 
-    // line 22
+    // line 26
     public function block_js($context, array $blocks = array())
     {
     }
@@ -118,6 +128,6 @@ class __TwigTemplate_ba5c575a2893b698a30632e392e0810c43fb044010ca8c78e712a8bd22b
 
     public function getDebugInfo()
     {
-        return array (  105 => 22,  100 => 16,  95 => 10,  89 => 6,  83 => 23,  81 => 22,  77 => 21,  73 => 20,  69 => 19,  65 => 18,  62 => 17,  60 => 16,  53 => 12,  48 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,  55 => 15,  47 => 10,  43 => 8,  40 => 7,  32 => 4,  29 => 3,);
+        return array (  115 => 26,  110 => 16,  105 => 10,  99 => 6,  93 => 27,  91 => 26,  87 => 25,  83 => 24,  79 => 23,  75 => 22,  70 => 20,  66 => 19,  62 => 17,  60 => 16,  53 => 12,  48 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
     }
 }

@@ -8,6 +8,8 @@ class MY_Controller extends CI_Controller
     {
         parent::__construct();
 
+        date_default_timezone_set('Asia/Jakarta');
+
         # load saja semua model
         $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model'));
 

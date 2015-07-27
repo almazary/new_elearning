@@ -619,3 +619,10 @@ function create_field($id, $nama = null, $value = null)
 {
     return get_row_data('config_model', 'create_field', array('id' => $id, 'nama' => $nama, 'value' => $value));
 }
+
+function is_pilih($array, $pertanyaan_id, $pilihan_id) {
+    if (isset($array[$pertanyaan_id]) AND $array[$pertanyaan_id] == $pilihan_id) {
+        return true;
+    }
+    return false;
+}

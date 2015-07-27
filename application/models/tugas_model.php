@@ -388,13 +388,7 @@ class Tugas_model extends CI_Model
         $this->db->where('aktif', 1);
         $this->db->where('pertanyaan_id', $pertanyaan_id);
         $result = $this->db->get('pilihan');
-        if ($result->num_rows() > 0) {
-            $result = $result->result_array();
-            # reindex agar dimulai dari 1
-            return array_combine(range(1, count($result)), array_values($result));
-        } else {
-            return array();
-        }
+        return $result->result_array();
     }
 
     /**
@@ -559,6 +553,7 @@ class Tugas_model extends CI_Model
             if (!is_null($tugas_id)) {
                 $this->db->where('tugas_id', $tugas_id);
             }
+            $this->db->where('aktif', 1);
             $this->db->order_by('urutan', $sort);
             $result = $this->db->get('tugas_pertanyaan');
             $data   = $result->result_array();
