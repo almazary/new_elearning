@@ -96,7 +96,7 @@
                                         <tbody>
                                             {% for pil in p.pilihan %}
                                             <tr>
-                                                <td width="7%"><label class="label-radio">( <input {{ (is_pilih(data.jawaban, p.id, pil.id)) ? 'checked' }} type="radio" name="pilihan-{{ p.id }}" value="{{ pil.urutan }}" onclick="update_ganda({{ data.tugas.id }}, {{ p.id }}, {{ pil.id }})" class="radio"> {{ get_abjad(pil.urutan) }} )</label></td>
+                                                <td width="5%"><label class="label-radio"><input {{ (is_pilih(data.jawaban, p.id, pil.id)) ? 'checked' }} type="radio" name="pilihan-{{ p.id }}" value="{{ pil.urutan }}" onclick="update_ganda({{ data.tugas.id }}, {{ p.id }}, {{ pil.id }})" class="radio"> {{ get_abjad(pil.urutan) }}</label></td>
                                                 <td>
                                                     {{ html_entity_decode(pil.konten)|raw }}
                                                 </td>

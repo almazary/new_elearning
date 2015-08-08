@@ -4,7 +4,7 @@ $('#clock').countdown($("#final_date").val())
     $(this).html(event.strftime(totalHours + ' <span class="clock-info">jam</span> %M <span class="clock-info">menit</span> %S <span class="clock-info">detik</span>'));
 })
 .on('finish.countdown', function(event) {
-    window.location.replace($("#finish_url"));
+    window.location.replace($("#finish_url").val());
 });
 
 // $('#clock').countdown($("#final_date").val(), function(event) {

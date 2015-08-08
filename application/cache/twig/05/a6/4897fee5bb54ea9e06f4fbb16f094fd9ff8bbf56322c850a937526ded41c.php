@@ -174,7 +174,7 @@ class __TwigTemplate_05a64897fee5bb54ea9e06f4fbb16f094fd9ff8bbf56322c850a937526d
                 foreach ($context['_seq'] as $context["_key"] => $context["pil"]) {
                     // line 98
                     echo "                                            <tr>
-                                                <td width=\"7%\"><label class=\"label-radio\">( <input ";
+                                                <td width=\"5%\"><label class=\"label-radio\"><input ";
                     // line 99
                     echo ((is_pilih($this->getAttribute((isset($context["data"]) ? $context["data"] : null), "jawaban"), $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"), $this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "id"))) ? ("checked") : (""));
                     echo " type=\"radio\" name=\"pilihan-";
@@ -189,7 +189,7 @@ class __TwigTemplate_05a64897fee5bb54ea9e06f4fbb16f094fd9ff8bbf56322c850a937526d
                     echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "id"), "html", null, true);
                     echo ")\" class=\"radio\"> ";
                     echo twig_escape_filter($this->env, get_abjad($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "urutan")), "html", null, true);
-                    echo " )</label></td>
+                    echo "</label></td>
                                                 <td>
                                                     ";
                     // line 101

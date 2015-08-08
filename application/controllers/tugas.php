@@ -868,8 +868,58 @@ class Tugas extends MY_Controller
 
         $check_field = retrieve_field($field_id);
         if (!empty($check_field)) {
-            # session tidak usah dicek, ada atau tidak, yang jelas badingkan saja unix_idnya
+            # bandingkan unix_id nya
+            $check_field_value = json_decode($check_field['value'], 1);
+            if ($unix_id != $check_field_value['unix_id']) {
+                $this->session->set_flashdata('tugas', get_alert('warning', 'Anda tidak mengerjakan tugas ini.'));
+                redirect('tugas');
+            }
 
+            $jml_soal = 0;
+
+            # cari kunci jawaban
+            $data_kunci = array();
+            foreach ($check_field_value['pertanyaan'] as $pertanyaan) {
+                # cari kuncinya
+                foreach ($pertanyaan['pilihan'] as $pilihan) {
+                    if ($pilihan['kunci'] == 1) {
+                        $data_kunci[$pertanyaan['id']] = $pilihan['id'];
+                    }
+                }
+                $jml_soal++;
+            }
+
+            $jml_benar = 0;
+            $jml_salah = 0;
+
+            # cari jawabannya
+            foreach ($check_field_value['jawaban'] as $pertanyaan_id => $pilihan_id) {
+                # cek jawaban benar tidak
+                if (isset($data_kunci[$pertanyaan_id]) && $data_kunci[$pertanyaan_id] == $pilihan_id) {
+                    $jml_benar++;
+                } else {
+                    $jml_salah++;
+                }
+            }
+
+            $nilai = ($jml_benar / $jml_soal) * 100;
+
+            # simpan nilai
+            $this->tugas_model->create_nilai($nilai, $tugas['id'], get_sess_data('user', 'id'));
+
+            # hapus field tambahan
+            delete_field($field_id);
+
+            # simpan history
+            $new_field_id                   = 'history-mengerjakan-' . $tugas['id'] . '-' . get_sess_data('user', 'id');
+            $check_field_value['nilai']     = $nilai;
+            $check_field_value['jml_benar'] = $jml_benar;
+            $check_field_value['jml_salah'] = $jml_salah;
+
+            create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
+
+            $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
+            redirect('tugas');
         }
 
         redirect('tugas');
