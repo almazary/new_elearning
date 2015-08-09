@@ -194,7 +194,7 @@ class Tugas extends MY_Controller
             if ($type != 1) {
                 # redirect ke manajemen soal
                 $this->session->set_flashdata('tugas', get_alert('success', 'Manajemen soal tugas.'));
-                redirect('tugas/manajemen_soal/' . $tugas_id . '/' . enurl_redirect(site_url('tugas')));
+                redirect('tugas/manajemen_soal/' . $tugas_id);
             } else {
                 $this->session->set_flashdata('tugas', get_alert('success', 'Tugas Upload berhasil disimpan.'));
                 redirect('tugas');
@@ -774,7 +774,7 @@ class Tugas extends MY_Controller
         }
 
         $table_name  = 'field_tambahan';
-        $field_id    = 'mengerjakan-' . $tugas['id'] . '-' . get_sess_data('user', 'id');
+        $field_id    = 'mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
         $field_name  = 'Mengerjakan Tugas';
 
         $mulai   = date('Y-m-d H:i:s');
@@ -789,18 +789,11 @@ class Tugas extends MY_Controller
         # karna bisa saja dibuka 2 kali dikomputer yang berbeda
         $check_field = retrieve_field($field_id);
         if (!empty($check_field)) {
-            # cek session
-            $session_mengerjakan = $this->session->userdata('mengerjakan_tugas');
-            if (empty($session_mengerjakan)) {
-                $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah pernah mengerjakan tugas ini.'));
-                redirect('tugas');
-            }
-
             $check_field_value = json_decode($check_field['value'], 1);
 
             # cek sudah selesai belum dari segi waktunya
             if (strtotime(date('Y-m-d H:i:s')) >= strtotime($check_field_value['selesai'])) {
-                redirect('tugas/selesai/' . $check_field_value['unix_id']);
+                redirect('tugas/finish/' . $tugas['id'] . '/' . $check_field_value['unix_id']);
             }
         }
 
@@ -820,22 +813,34 @@ class Tugas extends MY_Controller
             }
             $field_value['pertanyaan'] = $pertanyaan;
             $field_value['tugas']      = $tugas;
-            $field_value['unix_id']    = md5($field_id);
+            $field_value['unix_id']    = md5($field_id) . rand(9, 999999);
             create_field($field_id, $field_name, json_encode($field_value));
-
-            # buat session
-            $this->session->set_userdata('mengerjakan_tugas', true);
         }
 
-        $check_field = retrieve_field($field_id);
+        $check_field       = retrieve_field($field_id);
+        $check_field_value = json_decode($check_field['value'], 1);
+        $data['data']      = $check_field_value;
 
         $html_js = load_comp_js(array(
             base_url('assets/comp/jquery.countdown/jquery.countdown.min.js'),
             base_url('assets/comp/jquery.countdown/script.js'),
         ));
-        $data['comp_js']  = $html_js;
 
-        $data['data'] = json_decode($check_field['value'], 1);
+        if ($tugas['type_id'] == 2) {
+            # cari id pertanyaan, untuk keperluan auto save
+            $arr_pertanyaan_id = array();
+            foreach ($check_field_value['pertanyaan'] as $p) {
+                $arr_pertanyaan_id[] = $p['id'];
+            }
+
+            $html_js .= get_tinymce('jawaban, textarea#jawaban-' . implode(', textarea#jawaban-', $arr_pertanyaan_id), 'advanced', array('autosave'));
+            $html_js .= load_comp_js(array(
+                base_url('assets/comp/jquery/tinymce.autosave.js'),
+            ));
+            $data['data']['str_id'] = implode(',', $arr_pertanyaan_id);
+        }
+
+        $data['comp_js'] = $html_js;
         $this->twig->display('ujian-online.html', $data);
     }
 
@@ -863,7 +868,7 @@ class Tugas extends MY_Controller
         }
 
         $table_name  = 'field_tambahan';
-        $field_id    = 'mengerjakan-' . $tugas['id'] . '-' . get_sess_data('user', 'id');
+        $field_id    = 'mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
         $field_name  = 'Mengerjakan Tugas';
 
         $check_field = retrieve_field($field_id);
@@ -911,7 +916,7 @@ class Tugas extends MY_Controller
             delete_field($field_id);
 
             # simpan history
-            $new_field_id                   = 'history-mengerjakan-' . $tugas['id'] . '-' . get_sess_data('user', 'id');
+            $new_field_id                   = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
             $check_field_value['nilai']     = $nilai;
             $check_field_value['jml_benar'] = $jml_benar;
             $check_field_value['jml_salah'] = $jml_salah;
@@ -923,5 +928,11 @@ class Tugas extends MY_Controller
         }
 
         redirect('tugas');
+    }
+
+    function submit_essay($tugas_id = '', $unix_id = '')
+    {
+        $jawaban = $this->input->post('jawaban');
+        pr($jawaban);
     }
 }

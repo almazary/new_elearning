@@ -41,6 +41,10 @@
         padding: 5px 10px 10px;
         border-radius: 5px;
     }
+    .affix {
+        position: fixed;
+        margin-top: -60px;
+    }
 </style>
 {% endblock %}
 
@@ -74,55 +78,97 @@
                     </div>
                 </div>
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th width="5%">No</th>
-                            <th>Pertanyaan {{ (data.tugas.type_id == 3) ? ' dan Pilihan' }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for p in data.pertanyaan %}
-                        <tr id="pertanyaan-{{ p.id }}">
-                            <td><b>{{ p.urutan }}.</b></td>
-                            <td>
-                                <div class="pertanyaan">
-                                    {{ html_entity_decode(p.pertanyaan)|raw }}
-                                </div>
+                {% if data.tugas.type_id == 3 %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th>Pertanyaan {{ (data.tugas.type_id == 3) ? ' dan Pilihan' }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in data.pertanyaan %}
+                            <tr id="pertanyaan-{{ p.id }}">
+                                <td><b>{{ p.urutan }}.</b></td>
+                                <td>
+                                    <div class="pertanyaan">
+                                        {{ html_entity_decode(p.pertanyaan)|raw }}
+                                    </div>
 
-                                {% if data.tugas.type_id == 3 %}
-                                <div id="pilihan-{{ p.id }}">
-                                    <table class="table table-condensed table-striped">
-                                        <tbody>
-                                            {% for pil in p.pilihan %}
-                                            <tr>
-                                                <td width="5%"><label class="label-radio"><input {{ (is_pilih(data.jawaban, p.id, pil.id)) ? 'checked' }} type="radio" name="pilihan-{{ p.id }}" value="{{ pil.urutan }}" onclick="update_ganda({{ data.tugas.id }}, {{ p.id }}, {{ pil.id }})" class="radio"> {{ get_abjad(pil.urutan) }}</label></td>
-                                                <td>
-                                                    {{ html_entity_decode(pil.konten)|raw }}
-                                                </td>
-                                            </tr>
-                                            {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                {% endif %}
+                                    <div id="pilihan-{{ p.id }}">
+                                        <table class="table table-condensed table-striped">
+                                            <tbody>
+                                                {% for pil in p.pilihan %}
+                                                <tr>
+                                                    <td width="5%"><label class="label-radio"><input {{ (is_pilih(data.jawaban, p.id, pil.id)) ? 'checked' }} type="radio" name="pilihan-{{ p.id }}" value="{{ pil.urutan }}" onclick="update_ganda({{ data.tugas.id }}, {{ p.id }}, {{ pil.id }})" class="radio"> {{ get_abjad(pil.urutan) }}</label></td>
+                                                    <td>
+                                                        {{ html_entity_decode(pil.konten)|raw }}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
 
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            {% endfor %}
+                        </tbody>
+                    </table>
 
-                <div class="well well-sm">
-                    <a class="btn btn-large btn-primary pull-right" href="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}" onclick="return confirm('Anda yakin ingin mengahiri pengerjaan tugas ini?')">Selesai</a>
-                    <p class="p-info">Mohon periksa kembali jawaban anda sebelum menekan tombol <b>selesai</b>.</p>
-                    <br>
-                </div>
+                    <div class="well well-sm">
+                        <a class="btn btn-large btn-primary pull-right" href="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}" onclick="return confirm('Anda yakin ingin mengahiri pengerjaan tugas ini?')">Selesai</a>
+                        <p class="p-info">Mohon periksa kembali jawaban anda sebelum menekan tombol <b>selesai</b>.</p>
+                        <br>
+                    </div>
+
+                {% endif %}
+
+
+                {% if data.tugas.type_id == 2 %}
+                    {{ form_open('tugas/submit_essay/' ~ data.tugas.id ~ '/' ~ data.unix_id)|raw }}
+                    <input type="hidden" id="str_id" value="{{ data.str_id }}">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th>Pertanyaan {{ (data.tugas.type_id == 3) ? ' dan Pilihan' }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in data.pertanyaan %}
+                            <tr id="pertanyaan-{{ p.id }}">
+                                <td><b>{{ p.urutan }}.</b></td>
+                                <td>
+                                    <div class="pertanyaan">
+                                        {{ html_entity_decode(p.pertanyaan)|raw }}
+                                    </div>
+
+                                    <textarea name="jawaban[{{ p.id }}]" id="jawaban-{{ p.id }}" style="width:100%; height:300px;">{{ get_jawaban(data.jawaban, p.id)|raw }}</textarea>
+
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="well well-sm">
+                        <button type="submit" class="btn btn-large btn-primary pull-right" onclick="return confirm('Anda yakin ingin mengahiri pengerjaan tugas ini?')">Selesai</button>
+                        <p class="p-info">Mohon periksa kembali jawaban anda sebelum menekan tombol <b>selesai</b>.</p>
+                        <br>
+                    </div>
+                    {{ form_close()|raw }}
+
+                {% endif %}
+
+
             </div>
         </div>
     </div>
 </div>
+<input type="hidden" id="tugas_id" value="{{ data.tugas.id }}">
 <input type="hidden" id="final_date" value="{{ data.selesai }}">
 <input type="hidden" id="finish_url" value="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}">
 {% endblock %}

@@ -626,3 +626,9 @@ function is_pilih($array, $pertanyaan_id, $pilihan_id) {
     }
     return false;
 }
+
+function get_jawaban($array, $pertanyaan_id) {
+    if (!empty($array[$pertanyaan_id])) {
+        return $array[$pertanyaan_id];
+    }
+}

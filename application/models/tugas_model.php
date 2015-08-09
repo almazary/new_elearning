@@ -845,7 +845,7 @@ class Tugas_model extends CI_Model
 
         if (is_siswa()) {
             $where['tugas.tampil_siswa'] = array(1, 'where');
-            $orderby = array('tugas.aktif' => 'DESC');
+            $orderby = array('tugas.id' => 'DESC', 'tugas.aktif' => 'DESC');
         } else {
             $orderby = array('tugas.id' => 'DESC');
         }
