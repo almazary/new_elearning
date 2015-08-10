@@ -66,6 +66,7 @@
         <div class="wrap-content">
             <div class="content">
                 <div class="row-fluid">
+                    {% if data.tugas.type_id != 1 %}
                     <div class="span8">
                         <b>Informasi : </b><br>
                         {{ data.tugas.info|raw }}
@@ -76,6 +77,12 @@
                             <div id="clock"></div>
                         </div>
                     </div>
+                    {% else %}
+                    <div class="span12">
+                        <b>Informasi : </b><br>
+                        {{ data.tugas.info|raw }}
+                    </div>
+                    {% endif %}
                 </div>
 
                 {% if data.tugas.type_id == 3 %}
@@ -163,12 +170,30 @@
 
                 {% endif %}
 
+                {% if data.tugas.type_id == 1 %}
+                <div class="well well-sm">
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <h4>Upload file tugas anda</h4>
+                        </div>
+                        <div class="span8">
+                            {{ form_open_multipart('tugas/submit_upload/' ~ data.tugas.id ~ '/' ~ data.unix_id)|raw }}
+                            <input type="file" name="userfile">
+                            <hr>
+                            <button type="submit" class="btn btn-primary">Upload</button>
+                            {{ form_close()|raw }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
 
             </div>
         </div>
     </div>
 </div>
+{% if data.tugas.type_id != 1 %}
 <input type="hidden" id="tugas_id" value="{{ data.tugas.id }}">
 <input type="hidden" id="final_date" value="{{ data.selesai }}">
 <input type="hidden" id="finish_url" value="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}">
+{% endif %}
 {% endblock %}

@@ -267,7 +267,7 @@ class __TwigTemplate_8ac215a290914e04874404a546e9c3097768976d6925efc804ad62a129b
         foreach ($context['_seq'] as $context["no"] => $context["m"]) {
             // line 142
             echo "                <tr ";
-            echo (((is_siswa() && ($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "aktif") == 1))) ? ("class=\"success\"") : (""));
+            echo ((((is_siswa() && ($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "aktif") == 1)) && (sudah_ngerjakan($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id"), get_sess_data("user", "id")) == false))) ? ("class=\"success\"") : (""));
             echo ">
                     <td><b>";
             // line 143
@@ -396,20 +396,26 @@ class __TwigTemplate_8ac215a290914e04874404a546e9c3097768976d6925efc804ad62a129b
                 if (($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "aktif") == 1)) {
                     // line 188
                     echo "                                ";
-                    echo anchor(("tugas/kerjakan/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-ok-sign\"></i> Mulai Kerjakan", array("class" => "btn btn-success btn-small", "onclick" => "return confirm('Anda yakin ingin memulai mengerjakan tugas ini?')"));
-                    echo "
-                            ";
+                    if ((sudah_ngerjakan($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id"), get_sess_data("user", "id")) == false)) {
+                        // line 189
+                        echo "                                    ";
+                        echo anchor(("tugas/kerjakan/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-ok-sign\"></i> Mulai Kerjakan", array("class" => "btn btn-success btn-small", "onclick" => "return confirm('Anda yakin ingin memulai mengerjakan tugas ini?')"));
+                        echo "
+                                ";
+                    }
+                    // line 191
+                    echo "                            ";
                 } else {
-                    // line 190
+                    // line 192
                     echo "                                ";
                     echo anchor(("tugas/nilai/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-flag\"></i> Lihat Nilai", array("class" => "btn btn-info btn-small"));
                     echo "
                             ";
                 }
-                // line 192
+                // line 194
                 echo "                        ";
             }
-            // line 193
+            // line 195
             echo "                        </div>
                     </td>
                 </tr>
@@ -418,12 +424,12 @@ class __TwigTemplate_8ac215a290914e04874404a546e9c3097768976d6925efc804ad62a129b
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['no'], $context['m'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 197
+        // line 199
         echo "            </tbody>
         </table>
         <br>
         ";
-        // line 200
+        // line 202
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
 
@@ -444,6 +450,6 @@ class __TwigTemplate_8ac215a290914e04874404a546e9c3097768976d6925efc804ad62a129b
 
     public function getDebugInfo()
     {
-        return array (  427 => 200,  422 => 197,  413 => 193,  410 => 192,  404 => 190,  398 => 188,  395 => 187,  390 => 185,  386 => 184,  383 => 183,  377 => 181,  371 => 179,  368 => 178,  362 => 176,  359 => 175,  357 => 174,  352 => 171,  348 => 169,  344 => 167,  340 => 165,  338 => 164,  334 => 162,  329 => 160,  326 => 159,  324 => 158,  316 => 157,  312 => 155,  306 => 153,  304 => 152,  301 => 151,  292 => 149,  288 => 148,  283 => 146,  279 => 145,  274 => 143,  269 => 142,  265 => 141,  232 => 111,  224 => 106,  216 => 100,  209 => 96,  204 => 93,  202 => 92,  196 => 89,  187 => 83,  175 => 74,  167 => 69,  159 => 64,  151 => 58,  145 => 54,  131 => 50,  127 => 48,  123 => 47,  117 => 43,  115 => 42,  110 => 39,  96 => 35,  92 => 33,  88 => 32,  79 => 26,  74 => 23,  68 => 20,  64 => 19,  60 => 18,  57 => 17,  55 => 16,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  433 => 202,  428 => 199,  419 => 195,  416 => 194,  410 => 192,  407 => 191,  401 => 189,  398 => 188,  395 => 187,  390 => 185,  386 => 184,  383 => 183,  377 => 181,  371 => 179,  368 => 178,  362 => 176,  359 => 175,  357 => 174,  352 => 171,  348 => 169,  344 => 167,  340 => 165,  338 => 164,  334 => 162,  329 => 160,  326 => 159,  324 => 158,  316 => 157,  312 => 155,  306 => 153,  304 => 152,  301 => 151,  292 => 149,  288 => 148,  283 => 146,  279 => 145,  274 => 143,  269 => 142,  265 => 141,  232 => 111,  224 => 106,  216 => 100,  209 => 96,  204 => 93,  202 => 92,  196 => 89,  187 => 83,  175 => 74,  167 => 69,  159 => 64,  151 => 58,  145 => 54,  131 => 50,  127 => 48,  123 => 47,  117 => 43,  115 => 42,  110 => 39,  96 => 35,  92 => 33,  88 => 32,  79 => 26,  74 => 23,  68 => 20,  64 => 19,  60 => 18,  57 => 17,  55 => 16,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

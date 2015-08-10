@@ -139,7 +139,7 @@ Tugas - {{ parent() }}
             </thead>
             <tbody>
                 {% for no, m in tugas %}
-                <tr {{ (is_siswa() and m.aktif == 1) ? 'class="success"' }}>
+                <tr {{ (is_siswa() and m.aktif == 1 and sudah_ngerjakan(m.id, get_sess_data('user', 'id')) == false) ? 'class="success"' }}>
                     <td><b>{{ m.id }}</b></td>
                     <td>
                         <strong class="text-warning">{{ m.judul }}</strong>
@@ -185,7 +185,9 @@ Tugas - {{ parent() }}
                             {{ anchor('tugas/koreksi/' ~ m.id, '<i class="icon-check"></i> Koreksi', {'class' : 'btn btn-info btn-small'})|raw }}
                         {% elseif is_siswa() == true %}
                             {% if m.aktif == 1 %}
-                                {{ anchor('tugas/kerjakan/' ~ m.id, '<i class="icon-ok-sign"></i> Mulai Kerjakan', {'class' : 'btn btn-success btn-small', 'onclick' : 'return confirm(\'Anda yakin ingin memulai mengerjakan tugas ini?\')'})|raw }}
+                                {% if sudah_ngerjakan(m.id, get_sess_data('user', 'id')) == false %}
+                                    {{ anchor('tugas/kerjakan/' ~ m.id, '<i class="icon-ok-sign"></i> Mulai Kerjakan', {'class' : 'btn btn-success btn-small', 'onclick' : 'return confirm(\'Anda yakin ingin memulai mengerjakan tugas ini?\')'})|raw }}
+                                {% endif %}
                             {% else %}
                                 {{ anchor('tugas/nilai/' ~ m.id, '<i class="icon-flag"></i> Lihat Nilai', {'class' : 'btn btn-info btn-small'})|raw }}
                             {% endif %}

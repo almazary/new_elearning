@@ -143,6 +143,12 @@ class Tugas extends MY_Controller
 
     function add($segment_3 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));
+            redirect('tugas');
+        }
+
         $type = (string)strtolower($segment_3);
         if (!in_array($type, array(1, 2, 3))) {
             redirect('tugas');
@@ -206,6 +212,12 @@ class Tugas extends MY_Controller
 
     function edit($segment_3 = '', $segment_4 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));
+            redirect('tugas');
+        }
+
         $tugas_id = (int)$segment_3;
         $uri_back = (string)$segment_4;
 
@@ -313,6 +325,12 @@ class Tugas extends MY_Controller
 
     function terbitkan($segment_3 = '', $segment_4 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));
+            redirect('tugas');
+        }
+
         $tugas_id = (int)$segment_3;
         $uri_back = (string)$segment_4;
 
@@ -386,6 +404,12 @@ class Tugas extends MY_Controller
 
     function tutup($segment_3 = '', $segment_4 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));
+            redirect('tugas');
+        }
+
         $tugas_id = (int)$segment_3;
         $uri_back = (string)$segment_4;
 
@@ -418,6 +442,12 @@ class Tugas extends MY_Controller
 
     function manajemen_soal($segment_3 = '', $segment_4 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));
+            redirect('tugas');
+        }
+
         $tugas_id = (int)$segment_3;
         $page_no  = (int)$segment_4;
         if (empty($page_no)) {
@@ -467,6 +497,11 @@ class Tugas extends MY_Controller
 
     function tambah_soal($segment_3 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            exit("Akses ditolak.");
+        }
+
         $tugas_id = (int)$segment_3;
 
         $tugas = $this->tugas_model->retrieve($tugas_id);
@@ -501,6 +536,11 @@ class Tugas extends MY_Controller
 
     function edit_soal($segment_3 = '', $segment_4 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            exit("Akses ditolak.");
+        }
+
         $tugas_id      = (int)$segment_3;
         $pertanyaan_id = (int)$segment_4;
 
@@ -543,6 +583,11 @@ class Tugas extends MY_Controller
 
     function hapus_soal($segment_3 = '', $segment_4 = '', $segment_5 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            exit("Akses ditolak.");
+        }
+
         $tugas_id      = (int)$segment_3;
         $pertanyaan_id = (int)$segment_4;
         $uri_back      = (string)$segment_5;
@@ -577,6 +622,11 @@ class Tugas extends MY_Controller
 
     function tambah_pilihan($segment_3 = '', $segment_4 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            exit("Akses ditolak.");
+        }
+
         $tugas_id      = (int)$segment_3;
         $pertanyaan_id = (int)$segment_4;
 
@@ -619,6 +669,11 @@ class Tugas extends MY_Controller
 
     function edit_pilihan($segment_3 = '', $segment_4 = '', $segment_5 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            exit("Akses ditolak.");
+        }
+
         $tugas_id      = (int)$segment_3;
         $pertanyaan_id = (int)$segment_4;
         $pilihan_id    = (int)$segment_5;
@@ -669,6 +724,11 @@ class Tugas extends MY_Controller
 
     function kunci_pilihan($segment_3 = '', $segment_4 = '', $segment_5 = '', $segment_6 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            exit("Akses ditolak.");
+        }
+
         $tugas_id      = (int)$segment_3;
         $pertanyaan_id = (int)$segment_4;
         $pilihan_id    = (int)$segment_5;
@@ -707,6 +767,11 @@ class Tugas extends MY_Controller
 
     function hapus_pilihan($segment_3 = '', $segment_4 = '', $segment_5 = '', $segment_6 = '')
     {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            exit("Akses ditolak.");
+        }
+
         $tugas_id      = (int)$segment_3;
         $pertanyaan_id = (int)$segment_4;
         $pilihan_id    = (int)$segment_5;
@@ -767,8 +832,7 @@ class Tugas extends MY_Controller
         }
 
         # cek sudah mengerjakan belum
-        $nilai = $this->tugas_model->retrieve_nilai(null, $tugas['id'], get_sess_data('user', 'id'));
-        if (!empty($nilai)) {
+        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
             redirect('tugas');
         }
@@ -791,8 +855,8 @@ class Tugas extends MY_Controller
         if (!empty($check_field)) {
             $check_field_value = json_decode($check_field['value'], 1);
 
-            # cek sudah selesai belum dari segi waktunya
-            if (strtotime(date('Y-m-d H:i:s')) >= strtotime($check_field_value['selesai'])) {
+            # cek upload tidak dan sudah selesai belum dari segi waktunya
+            if ($tugas['type_id'] != 1 AND strtotime(date('Y-m-d H:i:s')) >= strtotime($check_field_value['selesai'])) {
                 redirect('tugas/finish/' . $tugas['id'] . '/' . $check_field_value['unix_id']);
             }
         }
@@ -810,21 +874,33 @@ class Tugas extends MY_Controller
                         $pertanyaan[$key] = $val;
                     }
                 }
+
+                $field_value['pertanyaan'] = $pertanyaan;
+                $field_value['tugas']      = $tugas;
+                $field_value['unix_id']    = md5($field_id) . rand(9, 999999);
+                create_field($field_id, $field_name, json_encode($field_value));
+
+            } else {
+                create_field($field_id, $field_name, json_encode(array(
+                    'mulai'   => $mulai,
+                    'tugas'   => $tugas,
+                    'unix_id' => md5($field_id) . rand(9, 999999)
+                )));
             }
-            $field_value['pertanyaan'] = $pertanyaan;
-            $field_value['tugas']      = $tugas;
-            $field_value['unix_id']    = md5($field_id) . rand(9, 999999);
-            create_field($field_id, $field_name, json_encode($field_value));
         }
 
         $check_field       = retrieve_field($field_id);
         $check_field_value = json_decode($check_field['value'], 1);
         $data['data']      = $check_field_value;
 
-        $html_js = load_comp_js(array(
-            base_url('assets/comp/jquery.countdown/jquery.countdown.min.js'),
-            base_url('assets/comp/jquery.countdown/script.js'),
-        ));
+        $html_js = '';
+
+        if ($tugas['type_id'] != 1) {
+            $html_js = load_comp_js(array(
+                base_url('assets/comp/jquery.countdown/jquery.countdown.min.js'),
+                base_url('assets/comp/jquery.countdown/script.js'),
+            ));
+        }
 
         if ($tugas['type_id'] == 2) {
             # cari id pertanyaan, untuk keperluan auto save
@@ -861,8 +937,7 @@ class Tugas extends MY_Controller
         }
 
         # cek sudah mengerjakan belum
-        $nilai = $this->tugas_model->retrieve_nilai(null, $tugas['id'], get_sess_data('user', 'id'));
-        if (!empty($nilai)) {
+        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
             redirect('tugas');
         }
@@ -880,48 +955,62 @@ class Tugas extends MY_Controller
                 redirect('tugas');
             }
 
-            $jml_soal = 0;
+            # jika pilihan ganda langsung di hitung benar salahnya
+            if ($tugas['type_id'] == 3) {
+                $jml_soal = 0;
 
-            # cari kunci jawaban
-            $data_kunci = array();
-            foreach ($check_field_value['pertanyaan'] as $pertanyaan) {
-                # cari kuncinya
-                foreach ($pertanyaan['pilihan'] as $pilihan) {
-                    if ($pilihan['kunci'] == 1) {
-                        $data_kunci[$pertanyaan['id']] = $pilihan['id'];
+                # cari kunci jawaban
+                $data_kunci = array();
+                foreach ($check_field_value['pertanyaan'] as $pertanyaan) {
+                    # cari kuncinya
+                    foreach ($pertanyaan['pilihan'] as $pilihan) {
+                        if ($pilihan['kunci'] == 1) {
+                            $data_kunci[$pertanyaan['id']] = $pilihan['id'];
+                        }
+                    }
+                    $jml_soal++;
+                }
+
+                $jml_benar = 0;
+                $jml_salah = 0;
+
+                # cari jawabannya
+                foreach ($check_field_value['jawaban'] as $pertanyaan_id => $pilihan_id) {
+                    # cek jawaban benar tidak
+                    if (isset($data_kunci[$pertanyaan_id]) && $data_kunci[$pertanyaan_id] == $pilihan_id) {
+                        $jml_benar++;
+                    } else {
+                        $jml_salah++;
                     }
                 }
-                $jml_soal++;
+
+                $nilai = ($jml_benar / $jml_soal) * 100;
+
+                # simpan nilai
+                $this->tugas_model->create_nilai($nilai, $tugas['id'], get_sess_data('user', 'id'));
+
+                # hapus field tambahan
+                delete_field($field_id);
+
+                # simpan history
+                $new_field_id                   = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+                $check_field_value['nilai']     = $nilai;
+                $check_field_value['jml_benar'] = $jml_benar;
+                $check_field_value['jml_salah'] = $jml_salah;
+
+                create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
             }
 
-            $jml_benar = 0;
-            $jml_salah = 0;
+            # jika essay dan upload, biar dikoreksi dl
+            else {
+                # hapus field tambahan
+                delete_field($field_id);
 
-            # cari jawabannya
-            foreach ($check_field_value['jawaban'] as $pertanyaan_id => $pilihan_id) {
-                # cek jawaban benar tidak
-                if (isset($data_kunci[$pertanyaan_id]) && $data_kunci[$pertanyaan_id] == $pilihan_id) {
-                    $jml_benar++;
-                } else {
-                    $jml_salah++;
-                }
+                # simpan history
+                $new_field_id = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+
+                create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
             }
-
-            $nilai = ($jml_benar / $jml_soal) * 100;
-
-            # simpan nilai
-            $this->tugas_model->create_nilai($nilai, $tugas['id'], get_sess_data('user', 'id'));
-
-            # hapus field tambahan
-            delete_field($field_id);
-
-            # simpan history
-            $new_field_id                   = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
-            $check_field_value['nilai']     = $nilai;
-            $check_field_value['jml_benar'] = $jml_benar;
-            $check_field_value['jml_salah'] = $jml_salah;
-
-            create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
             redirect('tugas');
@@ -932,7 +1021,57 @@ class Tugas extends MY_Controller
 
     function submit_essay($tugas_id = '', $unix_id = '')
     {
-        $jawaban = $this->input->post('jawaban');
-        pr($jawaban);
+        if (!is_siswa()) {
+            redirect('tugas');
+        }
+
+        $tugas_id = (int)$tugas_id;
+        $tugas    = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas) OR $tugas['type_id'] != 2) {
+            redirect('tugas');
+        }
+
+        if (empty($unix_id)) {
+            redirect('tugas');
+        }
+
+        # cek sudah mengerjakan belum
+        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
+            redirect('tugas');
+        }
+
+        $table_name  = 'field_tambahan';
+        $field_id    = 'mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+        $field_name  = 'Mengerjakan Tugas';
+
+        $check_field = retrieve_field($field_id);
+        if (!empty($check_field)) {
+            # bandingkan unix_id nya
+            $check_field_value = json_decode($check_field['value'], 1);
+            if ($unix_id != $check_field_value['unix_id']) {
+                $this->session->set_flashdata('tugas', get_alert('warning', 'Anda tidak mengerjakan tugas ini.'));
+                redirect('tugas');
+            }
+
+            $post_jawaban = $this->input->post('jawaban');
+            foreach ($post_jawaban as $pertanyaan_id => $jawaban) {
+                # replace yang sudah terimpan atau yang belum disimpan
+                $check_field_value['jawaban'][$pertanyaan_id] = $jawaban;
+            }
+
+            # hapus field tambahan
+            delete_field($field_id);
+
+            # simpan history
+            $new_field_id = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+
+            create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
+
+            $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
+            redirect('tugas');
+        }
+
+        redirect('tugas');
     }
 }

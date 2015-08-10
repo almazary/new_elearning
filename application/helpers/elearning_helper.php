@@ -632,3 +632,19 @@ function get_jawaban($array, $pertanyaan_id) {
         return $array[$pertanyaan_id];
     }
 }
+
+function sudah_ngerjakan($tugas_id, $siswa_id) {
+    # cek sudah mengerjakan belum
+    $nilai = get_row_data('tugas_model', 'retrieve_nilai', array(null, $tugas_id, $siswa_id));
+    if (!empty($nilai)) {
+        return true;
+    }
+
+    # cek history untuk tugas essay, karna harus dikoreksi dl
+    $check_history = retrieve_field('history-mengerjakan-' . $siswa_id . '-' . $tugas_id);
+    if (!empty($check_history)) {
+        return true;
+    }
+
+    return false;
+}
