@@ -247,7 +247,7 @@ body [class^="icon-"], body [class*=" icon-"] {
 
 .navbar .nav>.active>a, .navbar .nav>.active>a:hover, .navbar .nav>.active>a:focus
 {
-	
+
 -webkit-box-shadow: none;
 -moz-box-shadow: none;
 box-shadow: none;
@@ -397,7 +397,7 @@ transition: all .2s ease-in-out;
 }
 .btn-box:hover i {
 	color: rgba(0,0,0,0.4);
-	
+
 }
 .btn-group>.btn:first-child {
 	-webkit-border-top-left-radius: 3px;
@@ -707,9 +707,9 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@topColor', end
 	text-decoration: none!important
 }
 .media .media-avatar {
-	 
+
 	border: 1px solid rgba(204, 204, 204, 0.5);
-	
+
 	-webkit-border-radius: 50px;
 	-moz-border-radius: 50px;
 	border-radius: 50px;
@@ -779,7 +779,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@topColor', end
 .media.user:hover .media-avatar {
 	background: #fff;
 	border-color: #bbb;
-	
+
 }
 .progress {
 	-webkit-border-radius: 3px;
@@ -889,11 +889,11 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@topColor', end
 }
 .widget-menu {
 	background: #fff;
-	
+
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
-	
+
 	overflow: hidden
 }
 .widget-menu a {
@@ -904,9 +904,9 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@topColor', end
 	text-decoration: none!important
 }
 .widget-menu .menu-icon {
-	 
+
 	margin-right: 10px;
-	 
+
 	color: #767676;
 	 -webkit-transition: all .2s ease-in-out;
 -moz-transition: all .2s ease-in-out;
@@ -981,8 +981,8 @@ transition: all .2s ease-in-out;
 	padding: 9px 15px 9px 30px
 }
 .widget-usage {
-	
-	
+
+
 background-color: #fff;
 border: 1px solid transparent;
 border-radius: 4px;
@@ -1004,7 +1004,7 @@ text-decoration: none!important;
 	border-top: 1px solid #ddd
 }
 .module {
-	
+
 	box-shadow: 0 0 3px rgba(0,0,0,.1);
 	border-color: #e9e9e9;
 	margin-bottom: 20px;
@@ -1013,11 +1013,11 @@ border-radius: 4px;
 -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
 box-shadow: 0 1px 1px rgba(0,0,0,.05);
 
-	
+
 
 }
 .module-head {
-	
+
 	color: #767676;
 background-color: #f6f6f6;
 border-color: #e9e9e9;
@@ -1030,7 +1030,7 @@ border-top-left-radius: 3px;
 
 
 
-	
+
 }
 .module-head h3 {
 	font-size: 14px;
@@ -1118,7 +1118,7 @@ border-top-left-radius: 3px;
 }
 .stream.new-update a, .stream.load-more a {
 	background: #background: #f7f7f7;;
-	
+
 	color: #555;
 	font-weight: 600;
 	font-size: 14px;
@@ -1139,7 +1139,7 @@ border-top-left-radius: 3px;
 	-moz-border-radius: 0 0 2px 2px;
 	border-radius: 0 0 2px 2px;
 	background: #f5f5f5;
-	
+
 }
 .stream-author {
 	font-size: 14px;
@@ -1158,7 +1158,7 @@ border-top-left-radius: 3px;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
-	 
+
 	margin: 10px 0 0;
 	width: 80%;
 	padding: 10px
@@ -1342,7 +1342,7 @@ border-top-left-radius: 3px;
 .message .table-message tbody tr.task.resolved .icon-checker {
 	border-color: #ddd
 }
-.dataTables_wrapper {
+/*.dataTables_wrapper {
 	overflow: hidden
 }
 .dataTables_wrapper select, .dataTables_wrapper input, .dataTables_wrapper label {
@@ -1428,7 +1428,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@topColor', end
 	float: right
 }
 .datatable-pagination>a {
-	
+
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
 	border-radius: 0;
@@ -1437,7 +1437,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@topColor', end
 	line-height: 20px;
 	height: 20px;
 	background-color: #f5f5f5;
-	
+
 	padding: 4px 12px;
 	text-align: center;
 	text-decoration: none!important;
@@ -1474,8 +1474,8 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@topColor', end
 filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe6e6e6', GradientType=0)
 }
 .datatable-pagination>a.paginate_disabled_previous, .datatable-pagination>a.paginate_disabled_next {
-		
-	
+
+
 	cursor: default
 }
 .datatable-pagination>a.paginate_disabled_previous i, .datatable-pagination>a.paginate_disabled_next i {
@@ -1484,7 +1484,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', end
 }
 .datatable-pagination>a span {
 	display: none
-}
+}*/
 .chart .legend table {
 	color: inherit!important;
 	font-size: 11px!important
@@ -1607,9 +1607,9 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', end
 }
 .ui-slider-horizontal .ui-slider-range {
 	border: 1px solid #0070a8;
-	
+
 	background-color: #0e90d2;
-	
+
 	top: -1px;
 	height: 100%
 }
@@ -2081,7 +2081,7 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', end
 
 .table-soal th, .table-soal td {
 	border-top: none;
-} 
+}
 
 .bs-callout-noborder {
 	border-left: none;

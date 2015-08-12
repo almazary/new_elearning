@@ -10,39 +10,18 @@ class Tugas_model extends CI_Model
 {
 
     /**
-     * Method untuk mendapatkan banyak data nilai
+     * Method untuk mendapatkan data nilai
      *
-     * @param  integer      $no_of_records
-     * @param  integer      $page_no
-     * @param  null|integer $tugas_id
-     * @param  null|integer $siswa_id
+     * @param  integer $tugas_id
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
-    public function retrieve_all_nilai(
-        $no_of_records = 10,
-        $page_no       = 1,
-        $tugas_id      = null,
-        $siswa_id      = null
-    ) {
-        $no_of_records = (int)$no_of_records;
-        $page_no       = (int)$page_no;
-
-        $where = array();
-        if (!is_null($tugas_id)) {
-            $tugas_id = (int)$tugas_id;
-            $where['tugas_id'] = array($tugas_id, 'where');
-        }
-        if (!is_null($siswa_id)) {
-            $siswa_id = (int)$siswa_id;
-            $where['siswa_id'] = array($siswa_id, 'where');
-        }
-
-        $orderby = array('id', 'DESC');
-
-        $data = $this->pager->set('nilai_tugas', $no_of_records, $page_no, $where, $orderby);
-
-        return $data;
+    public function retrieve_all_nilai($tugas_id)
+    {
+        $this->db->where('tugas_id', $tugas_id);
+        $this->db->order_by('id', 'DESC');
+        $result = $this->db->get('nilai_tugas');
+        return $result->result_array();
     }
 
     /**
@@ -134,181 +113,16 @@ class Tugas_model extends CI_Model
     }
 
     /**
-     * Method untuk mendapatkan satu jawaban ganda
+     * Method untuk menghapus nilai berdasarkan idnya
      *
-     * @param  null|integer $id
-     * @param  null|integer $pilihan_id
-     * @param  null|integer $siswa_id
-     * @return array
+     * @param  integer $id
+     * @return boolean
      * @author Almazari <almazary@gmail.com>
      */
-    public function retrieve_ganda($id = null, $pilihan_id = null, $siswa_id = null)
+    public function delete_nilai($id)
     {
-        if (!is_null($id)) {
-            $this->db->where('id', $id);
-        }
-        if (!is_null($pilihan_id)) {
-            $this->db->where('pilihan_id', $pilihan_id);
-        }
-        if (!is_null($siswa_id)) {
-            $this->db->where('siswa_id', $siswa_id);
-        }
-        $result = $this->db->get('ganda', 1);
-        return $result->row_array();
-    }
-
-    /**
-     * Method untuk menghapus jawaban ganda
-     *
-     * @param  integer $id
-     * @return boolean true jika berhasil
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function delete_ganda($id)
-    {
-        $id = (int)$id;
-
         $this->db->where('id', $id);
-        $this->db->delete('ganda');
-        return true;
-    }
-
-    /**
-     * Method untuk memperbaharui jawaban ganda
-     *
-     * @param  integer $id
-     * @param  integer $pilihan_id
-     * @param  integer $siswa_id
-     * @return boolean true jika berhasil
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function update_ganda(
-        $id,
-        $pilihan_id,
-        $siswa_id
-    ) {
-        $id         = (int)$id;
-        $pilihan_id = (int)$pilihan_id;
-        $siswa_id   = (int)$siswa_id;
-
-        $data = array(
-            'pilihan_id' => $pilihan_id,
-            'siswa_id'   => $siswa_id
-        );
-        $this->db->where('id', $id);
-        $this->db->update('ganda', $data);
-        return true;
-    }
-
-    /**
-     * Method untuk menambah jawaban ganda
-     *
-     * @param  integer $pilihan_id
-     * @param  integer $siswa_id
-     * @return integer last insert id
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function create_ganda(
-        $pilihan_id,
-        $siswa_id
-    ) {
-        $pilihan_id = (int)$pilihan_id;
-        $siswa_id   = (int)$siswa_id;
-
-        $data = array(
-            'pilihan_id' => $pilihan_id,
-            'siswa_id'   => $siswa_id
-        );
-        $this->db->insert('ganda', $data);
-        return $this->db->insert_id();
-    }
-
-    /**
-     * Method untuk menghapus jawaban essay
-     *
-     * @param  integer $id
-     * @return boolean true jika berhasil
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function delete_essay($id)
-    {
-        $id = (int)$id;
-
-        $this->db->where('id', $id);
-        $this->db->delete('essay');
-        return true;
-    }
-
-    /**
-     * Method untuk mendapatkan satu record jawaban essay
-     *
-     * @param  integer $id
-     * @return array
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function retrieve_essay($id)
-    {
-        $id = (int)$id;
-
-        $this->db->where('id', $id);
-        $result = $this->db->get('essay', 1);
-        return $result->row_array();
-    }
-
-    /**
-     * Method untuk update jawaban essay
-     *
-     * @param  integer $id
-     * @param  string  $jawaban
-     * @param  integer $pertanyaan_id
-     * @param  integer $siswa_id
-     * @return boolan  true jika berhasil
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function update_essay(
-        $id,
-        $jawaban,
-        $pertanyaan_id,
-        $siswa_id
-    ) {
-        $id            = (int)$id;
-        $pertanyaan_id = (int)$pertanyaan_id;
-        $siswa_id      = (int)$siswa_id;
-
-        $data = array(
-            'jawaban'       => $jawaban,
-            'pertanyaan_id' => $pertanyaan_id,
-            'siswa_id'      => $siswa_id
-        );
-        $this->db->where('id', $id);
-        $this->db->update('essay', $data);
-        return true;
-    }
-
-    /**
-     * Method untuk menambah jawaban essay
-     *
-     * @param  string  $jawaban
-     * @param  integer $pertanyaan_id
-     * @param  integer $siswa_id
-     * @return integer last insert id
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function create_essay(
-        $jawaban,
-        $pertanyaan_id,
-        $siswa_id
-    ) {
-        $pertanyaan_id = (int)$pertanyaan_id;
-        $siswa_id      = (int)$siswa_id;
-
-        $data = array(
-            'jawaban'       => $jawaban,
-            'pertanyaan_id' => $pertanyaan_id,
-            'siswa_id'      => $siswa_id
-        );
-        $this->db->insert('essay', $data);
-        return $this->db->insert_id();
+        return $this->db->delete('nilai_tugas');
     }
 
     /**
@@ -672,92 +486,6 @@ class Tugas_model extends CI_Model
             'tugas_id'   => $tugas_id
         );
         $this->db->insert('tugas_pertanyaan', $data);
-        return $this->db->insert_id();
-    }
-
-    /**
-     * Method untuk mengambil banyak data jawaban upload
-     *
-     * @param  integer       $no_of_records
-     * @param  integer       $page_no
-     * @param  integer|null  $tugas_id
-     * @param  integer|null  $siswa_id
-     * @return array
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function retrieve_all_upload(
-        $no_of_records = 10,
-        $page_no       = 1,
-        $tugas_id      = null,
-        $siswa_id      = null
-    ) {
-        $no_of_records = (int)$no_of_records;
-        $page_no       = (int)$page_no;
-
-        $where = array();
-        if (!is_null($tugas_id)) {
-            $tugas_id = (int)$tugas_id;
-            $where['tugas_id'] = array($tugas_id, 'where');
-        }
-        if (!is_null($siswa_id)) {
-            $siswa_id = (int)$siswa_id;
-            $where['siswa_id'] = array($siswa_id, 'where');
-        }
-        $orderby = array('id' => 'DESC');
-
-        $data = $this->pager->set('upload', $no_of_records, $page_no, $where, $orderby);
-
-        return $data;
-    }
-
-    /**
-     * Method untuk mendapatkan satu record jawaban upload
-     *
-     * @param  integer $id
-     * @return array
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function retrieve_upload($id, $tugas_id = null, $siswa_id = null)
-    {
-        $id = (int)$id;
-
-        $this->db->where('id', $id);
-        if (!is_null($tugas_id)) {
-            $tugas_id = (int)$tugas_id;
-            $this->db->where('tugas_id', $tugas_id);
-        }
-        if (!is_null($siswa_id)) {
-            $siswa_id = (int)$siswa_id;
-            $this->db->where('siswa_id', $siswa_id);
-        }
-        $result = $this->db->get('upload', 1);
-        return $result->row_array();
-    }
-
-    /**
-     * Method untuk insert data jawaban upload
-     *
-     * @param  string  $file
-     * @param  integer $tugas_id
-     * @param  integer $siswa_id
-     * @return integer last insert id
-     * @author Almazari <almazary@gmail.com>
-     */
-    public function create_upload(
-        $file,
-        $tugas_id,
-        $siswa_id
-    ) {
-        $tugas_id = (int)$tugas_id;
-        $siswa_id = (int)$siswa_id;
-
-        $data = array(
-            'file'       => $file,
-            'tgl_upload' => date('Y-m-d H:i:s'),
-            'tugas_id'   => $tugas_id,
-            'siswa_id'   => $siswa_id
-        );
-        $this->db->insert('upload', $data);
         return $this->db->insert_id();
     }
 

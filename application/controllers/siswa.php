@@ -37,8 +37,8 @@ class Siswa extends MY_Controller
 
             # kelas aktif
             if (!empty($kelas_siswa) AND $val['status_id'] != 3) {
-                $kelas                         = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
-                $val['kelas_aktif']            = $kelas;
+                $kelas              = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
+                $val['kelas_aktif'] = $kelas;
             }
 
             $retrieve_all['results'][$key] = $val;
@@ -663,8 +663,8 @@ class Siswa extends MY_Controller
     function detail($segment_3 = '', $segment_4 = '')
     {
         if (is_admin()) {
-            $status_id         = (int)$segment_3;
-            $siswa_id          = (int)$segment_4;
+            $status_id = (int)$segment_3;
+            $siswa_id  = (int)$segment_4;
         } else {
             $siswa_id  = (int)$segment_3;
             $status_id = 1;

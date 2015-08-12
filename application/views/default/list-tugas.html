@@ -182,7 +182,11 @@ Tugas - {{ parent() }}
                             {% endif %}
 
                             {{ anchor('tugas/edit/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-edit"></i> Edit', {'class' : 'btn btn-default btn-small'})|raw }}
-                            {{ anchor('tugas/koreksi/' ~ m.id, '<i class="icon-check"></i> Koreksi', {'class' : 'btn btn-info btn-small'})|raw }}
+                            {% if m.type_id == 3 %}
+                                {{ anchor('tugas/nilai/' ~ m.id, '<i class="icon-eye-open"></i> Lihat Nilai', {'class' : 'btn btn-info btn-small'})|raw }}
+                            {% else %}
+                                {{ anchor('tugas/koreksi/' ~ m.id, '<i class="icon-check"></i> Koreksi', {'class' : 'btn btn-info btn-small'})|raw }}
+                            {% endif %}
                         {% elseif is_siswa() == true %}
                             {% if m.aktif == 1 %}
                                 {% if sudah_ngerjakan(m.id, get_sess_data('user', 'id')) == false %}

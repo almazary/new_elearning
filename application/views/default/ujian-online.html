@@ -45,6 +45,9 @@
         position: fixed;
         margin-top: -60px;
     }
+    hr.hr1 {
+        margin-top: 5px;
+    }
 </style>
 {% endblock %}
 
@@ -78,9 +81,29 @@
                         </div>
                     </div>
                     {% else %}
-                    <div class="span12">
+                    <div class="span6">
                         <b>Informasi : </b><br>
                         {{ data.tugas.info|raw }}
+                        <br>
+                        <b>Ekstensi File :</b><br>
+                        doc|zip|rar|txt|docx|xls|xlsx|pdf|tar|gz|jpg|jpeg|JPG|JPEG|png|ppt|pptx
+                    </div>
+                    <div class="span6">
+                        <p><b>Upload file tugas anda : </b></p>
+                        <div class="well well-sm">
+                            {{ form_open_multipart('tugas/submit_upload/' ~ data.tugas.id ~ '/' ~ data.unix_id)|raw }}
+                            <input type="file" name="userfile">
+                            <hr class="hr1">
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <button type="submit" class="btn btn-primary">Upload</button>
+                                </div>
+                                <div class="span9">
+                                    {{ get_flashdata('upload')|raw }}
+                                </div>
+                            </div>
+                            {{ form_close()|raw }}
+                        </div>
                     </div>
                     {% endif %}
                 </div>
@@ -168,23 +191,6 @@
                     </div>
                     {{ form_close()|raw }}
 
-                {% endif %}
-
-                {% if data.tugas.type_id == 1 %}
-                <div class="well well-sm">
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <h4>Upload file tugas anda</h4>
-                        </div>
-                        <div class="span8">
-                            {{ form_open_multipart('tugas/submit_upload/' ~ data.tugas.id ~ '/' ~ data.unix_id)|raw }}
-                            <input type="file" name="userfile">
-                            <hr>
-                            <button type="submit" class="btn btn-primary">Upload</button>
-                            {{ form_close()|raw }}
-                        </div>
-                    </div>
-                </div>
                 {% endif %}
 
             </div>
