@@ -93,7 +93,7 @@ class __TwigTemplate_18d708353966a113828069dbf63b3aef96e9f839ae96f120a03a47e7d4d
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/script.js\" type=\"text/javascript\"></script>
         <script type=\"text/javascript\">
-            function inIframe () 
+            function inIframe ()
             {
                 var is_iframe = true;
                 try {

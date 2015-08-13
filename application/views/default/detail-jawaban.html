@@ -1,0 +1,70 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+            <div class="container">
+<h4>Detail Jawaban</h4>
+
+<div class="rowd">
+    <div class="span7">
+        <table class="table table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>Jml benar</th>
+                    <th>Jml salah</th>
+                    <th>Nilai</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ history.jml_benar }}</td>
+                    <td>{{ history.jml_salah }}</td>
+                    <td>{{ history.nilai }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="span5">
+        asdfasdf
+    </div>
+</div>
+<br>
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th colspan="2">Pertanyaan</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in history.pertanyaan %}
+        <tr id="pertanyaan-{{ p.id }}">
+            <td><b>{{ p.urutan }}.</b></td>
+            <td>
+                <div class="pertanyaan">
+                    {{ html_entity_decode(p.pertanyaan)|raw }}
+                </div>
+
+                <div id="pilihan-{{ p.id }}">
+                    <table class="table table-condensed table-striped">
+                        <tbody>
+                            {% for pil in p.pilihan %}
+                            <tr>
+                                <td style="width:30px;"><label class="label-radio"><input {{ (is_pilih(data.jawaban, p.id, pil.id)) ? 'checked' }} type="radio" name="pilihan-{{ p.id }}" value="{{ pil.urutan }}" onclick="update_ganda({{ data.tugas.id }}, {{ p.id }}, {{ pil.id }})" class="radio"> {{ get_abjad(pil.urutan) }}</label></td>
+                                <td>
+                                    {{ html_entity_decode(pil.konten)|raw }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </td>
+        </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+{% endblock %}

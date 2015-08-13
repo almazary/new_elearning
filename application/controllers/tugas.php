@@ -1220,13 +1220,15 @@ class Tugas extends MY_Controller
         $data['tugas'] = $this->formatData($tugas);
 
         # cari history
-        $history_id = 'history-mengerjakan-' . $siswa['siswa_id'] . '-' . $tugas['id'];
+        $history_id = 'history-mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
         $history    = retrieve_field($history_id);
 
         if (empty($history)) {
             exit('Tugas belum dikerjakan');
         }
 
-        $data['history'] = $history;
+        $data['history'] = json_decode($history['value'], 1);
+
+        $this->twig->display('detail-jawaban.html', $data);
     }
 }
