@@ -1,13 +1,13 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Lihat Nilai - {{ parent() }}
+Koreksi - {{ parent() }}
 {% endblock %}
 
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>{{ anchor('tugas', 'Tugas')|raw }} / Lihat Nilai</h3>
+        <h3>{{ anchor('tugas', 'Tugas')|raw }} / Koreksi</h3>
     </div>
     <div class="module-body">
         {{ get_flashdata('tugas')|raw }}
@@ -66,23 +66,21 @@ Lihat Nilai - {{ parent() }}
                 <tr>
                     <th>Siswa</th>
                     <th>Kelas</th>
-                    <th>Nilai</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                {% for n in data_nilai %}
+                {% for s in data_siswa %}
                 <tr>
                     <td>
-                        <img style="height:20px;width:20px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(n.siswa.foto, 'medium', n.siswa.jenis_kelamin) }}">
-                        <a href="{{ site_url('siswa/detail/' ~ n.siswa.id) }}"><b>{{ n.siswa.nama }} {{ ((n.siswa.nis is not empty) ? '<span class="text-muted">(' ~ n.siswa.nis ~ ')</span>')|raw }}</b></a>
+                        <img style="height:20px;width:20px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(s.foto, 'medium', s.jenis_kelamin) }}">
+                        <a href="{{ site_url('siswa/detail/' ~ s.id) }}"><b>{{ s.nama }} {{ ((s.nis is not empty) ? '<span class="text-muted">(' ~ s.nis ~ ')</span>')|raw }}</b></a>
                     </td>
-                    <td>{{ n.siswa.kelas_aktif.nama }}</td>
-                    <td>{{ n.nilai }}</td>
+                    <td>{{ s.kelas_aktif.nama }}</td>
                     <td>
                         <div class="btn-group">
-                            {{ anchor('tugas/detail_jawaban/' ~ n.siswa.id ~ '/' ~ tugas.id, 'Detail',{'class' : 'btn btn-small btn-primary iframe-detail-jawaban'})|raw }}
-                            <a href="{{ site_url('tugas/reset_jawaban/' ~ tugas.id ~ '/' ~ n.siswa_id) }}" class="btn btn-small btn-default" onclick="return confirm('Anda yakin ingin menganggap siswa belum mengerjakan?')" data-toggle="tooltip" title="Reset jawaban siswa, <br>anggap siswa menjadi belum mengerjakan.">Reset</a>
+                            {{ anchor('tugas/detail_jawaban/' ~ s.id ~ '/' ~ tugas.id, 'Detail',{'class' : 'btn btn-small btn-primary iframe-detail-jawaban'})|raw }}
+                            <a href="{{ site_url('tugas/reset_jawaban/' ~ tugas.id ~ '/' ~ s_id) }}" class="btn btn-small btn-default" onclick="return confirm('Anda yakin ingin menganggap siswa belum mengerjakan?')" data-toggle="tooltip" title="Reset jawaban siswa, <br>anggap siswa menjadi belum mengerjakan.">Reset</a>
                         </div>
                     </td>
                 </tr>

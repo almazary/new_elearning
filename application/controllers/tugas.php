@@ -990,10 +990,14 @@ class Tugas extends MY_Controller
                 delete_field($field_id);
 
                 # simpan history
-                $new_field_id                   = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
-                $check_field_value['nilai']     = $nilai;
-                $check_field_value['jml_benar'] = $jml_benar;
-                $check_field_value['jml_salah'] = $jml_salah;
+                $new_field_id                     = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+                $check_field_value['nilai']       = $nilai;
+                $check_field_value['jml_benar']   = $jml_benar;
+                $check_field_value['jml_salah']   = $jml_salah;
+
+                $sekarang                         = date('Y-m-d H:i:s');
+                $check_field_value['tgl_submit']  = $sekarang;
+                $check_field_value['total_waktu'] = lama_pengerjaan($check_field_value['mulai'], $sekarang);
 
                 create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
             }
@@ -1004,7 +1008,10 @@ class Tugas extends MY_Controller
                 delete_field($field_id);
 
                 # simpan history
-                $new_field_id = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+                $new_field_id                     = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+                $sekarang                         = date('Y-m-d H:i:s');
+                $check_field_value['tgl_submit']  = $sekarang;
+                $check_field_value['total_waktu'] = lama_pengerjaan($check_field_value['mulai'], $sekarang);
 
                 create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
             }
@@ -1059,7 +1066,10 @@ class Tugas extends MY_Controller
             delete_field($field_id);
 
             # simpan history
-            $new_field_id = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+            $new_field_id                     = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+            $sekarang                         = date('Y-m-d H:i:s');
+            $check_field_value['tgl_submit']  = $sekarang;
+            $check_field_value['total_waktu'] = lama_pengerjaan($check_field_value['mulai'], $sekarang);
 
             create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
 
@@ -1123,7 +1133,9 @@ class Tugas extends MY_Controller
             delete_field($field_id);
 
             # simpan history
-            $new_field_id = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+            $new_field_id                    = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+            $sekarang                        = date('Y-m-d H:i:s');
+            $check_field_value['tgl_submit'] = $sekarang;
 
             create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
 
@@ -1139,6 +1151,11 @@ class Tugas extends MY_Controller
         $tugas_id = (int)$tugas_id;
         $tugas    = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas)) {
+            redirect('tugas');
+        }
+
+        # ini harus ganda
+        if ($tugas['type_id'] != 3) {
             redirect('tugas');
         }
 
@@ -1167,7 +1184,7 @@ class Tugas extends MY_Controller
 
                 # kelas siswa
                 $kelas_siswa = $this->kelas_model->retrieve_siswa(null, array(
-                    'siswa_id' => $nilai['id'],
+                    'siswa_id' => $nilai['siswa_id'],
                     'aktif'    => 1
                 ));
                 $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
@@ -1195,6 +1212,78 @@ class Tugas extends MY_Controller
             ));
 
             $this->twig->display('list-nilai.html', $data);
+        }
+    }
+
+    function koreksi($tugas_id = '')
+    {
+        if (is_siswa()) {
+            redirect('tugas');
+        }
+
+        $tugas_id = (int)$tugas_id;
+        $tugas    = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas)) {
+            redirect('tugas');
+        }
+
+        # ini essay atau upload
+        if ($tugas['type_id'] == 3) {
+            redirect('tugas');
+        }
+
+        $data['tugas'] = $this->formatData($tugas);
+
+        $data_siswa = array();
+
+        # ambil history
+        $retrieve_all_history = $this->tugas_model->retrieve_all_history($tugas_id);
+        foreach ($retrieve_all_history as $history) {
+            # cari siswa_id
+            $split_id = explode('-' , $history['id']);
+            $siswa_id = $split_id[2];
+
+            # cari tugas_id
+            $history_tugas_id = end($split_id);
+            if ($history_tugas_id != $tugas['id']) {
+                continue;
+            }
+
+            # cari siswa
+            $siswa = $this->siswa_model->retrieve($siswa_id);
+
+            # kelas siswa
+            $kelas_siswa = $this->kelas_model->retrieve_siswa(null, array(
+                'siswa_id' => $siswa_id,
+                'aktif'    => 1
+            ));
+            $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
+            $siswa['kelas_aktif'] = $kelas;
+            $siswa['history']     = $history;
+
+            $data_siswa[] = $siswa;
+        }
+        $data['data_siswa'] = $data_siswa;
+        // pr($data_siswa);die;
+
+        # panggil datatables dan combobox
+        $data['comp_js'] = load_comp_js(array(
+            base_url('assets/comp/datatables/jquery.dataTables.js'),
+            base_url('assets/comp/datatables/datatable-bootstrap2.js'),
+            base_url('assets/comp/datatables/script.js'),
+            base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+            base_url('assets/comp/colorbox/act-tugas.js'),
+        ));
+
+        $data['comp_css'] = load_comp_css(array(
+            base_url('assets/comp/datatables/datatable-bootstrap2.css'),
+            base_url('assets/comp/colorbox/colorbox.css'),
+        ));
+
+        if ($tugas['type_id'] == 2) {
+            $this->twig->display('list-peserta-essay.html', $data);
+        } elseif ($tugas['type_id'] == 1) {
+            $this->twig->display('list-peserta-upload.html', $data);
         }
     }
 
@@ -1230,5 +1319,37 @@ class Tugas extends MY_Controller
         $data['history'] = json_decode($history['value'], 1);
 
         $this->twig->display('detail-jawaban.html', $data);
+    }
+
+    function reset_jawaban($tugas_id, $siswa_id)
+    {
+        # jika pengajar atau admin
+        if (is_pengajar() OR is_admin()) {
+            $tugas_id = (int)$tugas_id;
+            $tugas    = $this->tugas_model->retrieve($tugas_id);
+            if (empty($tugas)) {
+                redirect('tugas');
+            }
+
+            $siswa = $this->siswa_model->retrieve($siswa_id);
+            if (empty($siswa)) {
+                redirect('tugas');
+            }
+
+            # hapus history
+            $history_id = 'history-mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
+            delete_field($history_id);
+
+            # hapus nilai
+            $retrieve_nilai = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
+            $this->tugas_model->delete_nilai($retrieve_nilai['id']);
+
+            $this->session->set_flashdata('tugas', get_alert('success', 'Siswa berhasil dianggap belum mengerjakan.'));
+            redirect('tugas/nilai/' . $tugas['id']);
+
+        } else {
+            $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));
+            redirect('tugas');
+        }
     }
 }

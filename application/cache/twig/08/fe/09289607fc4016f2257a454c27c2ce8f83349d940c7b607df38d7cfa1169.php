@@ -28,105 +28,150 @@ class __TwigTemplate_08fe09289607fc4016f2257a454c27c2ce8f83349d940c7b607df38d7cf
     public function block_content($context, array $blocks = array())
     {
         // line 4
-        echo "            <div class=\"container\">
-<h4>Detail Jawaban</h4>
+        echo "<h4>Detail Jawaban</h4>
 
-<div class=\"rowd\">
-    <div class=\"span7\">
-        <table class=\"table table-condensed table-striped\">
-            <thead>
-                <tr>
-                    <th>Jml benar</th>
-                    <th>Jml salah</th>
-                    <th>Nilai</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>";
-        // line 19
+<table class=\"table table-condensed table-striped\">
+    <thead>
+        <tr>
+            <th>Tgl Mengerjakan</th>
+            <th>Tgl Selesai</th>
+            <th>Lama Pengerjaan</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>";
+        // line 16
+        echo twig_escape_filter($this->env, tgl_jam_indo($this->getAttribute((isset($context["history"]) ? $context["history"] : null), "mulai")), "html", null, true);
+        echo "</td>
+            <td>";
+        // line 17
+        echo twig_escape_filter($this->env, tgl_jam_indo($this->getAttribute((isset($context["history"]) ? $context["history"] : null), "tgl_submit")), "html", null, true);
+        echo "</td>
+            <td>";
+        // line 18
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["history"]) ? $context["history"] : null), "total_waktu"), "html", null, true);
+        echo "</td>
+        </tr>
+    </tbody>
+</table>
+<br>
+
+<table class=\"table table-condensed table-striped\">
+    <thead>
+        <tr>
+            <th>Jml soal</th>
+            <th>Jml benar</th>
+            <th>Jml salah</th>
+            <th>Nilai</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>";
+        // line 35
+        echo twig_escape_filter($this->env, count($this->getAttribute((isset($context["history"]) ? $context["history"] : null), "pertanyaan")), "html", null, true);
+        echo "</td>
+            <td>";
+        // line 36
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["history"]) ? $context["history"] : null), "jml_benar"), "html", null, true);
         echo "</td>
-                    <td>";
-        // line 20
+            <td>";
+        // line 37
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["history"]) ? $context["history"] : null), "jml_salah"), "html", null, true);
         echo "</td>
-                    <td>";
-        // line 21
+            <td><b>";
+        // line 38
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["history"]) ? $context["history"] : null), "nilai"), "html", null, true);
-        echo "</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class=\"span5\">
-        asdfasdf
-    </div>
-</div>
+        echo "</b></td>
+        </tr>
+    </tbody>
+</table>
 <br>
 
 <table class=\"table table-condensed\">
     <thead>
         <tr>
-            <th colspan=\"2\">Pertanyaan</th>
+            <th colspan=\"2\">List Jawaban</th>
         </tr>
     </thead>
     <tbody>
         ";
-        // line 39
+        // line 51
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable($this->getAttribute((isset($context["history"]) ? $context["history"] : null), "pertanyaan"));
         foreach ($context['_seq'] as $context["_key"] => $context["p"]) {
-            // line 40
+            // line 52
             echo "        <tr id=\"pertanyaan-";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"), "html", null, true);
             echo "\">
-            <td><b>";
-            // line 41
+            <td style=\"width:30px;\">
+                <b>";
+            // line 54
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "urutan"), "html", null, true);
-            echo ".</b></td>
+            echo ".</b>
+                <br>
+                ";
+            // line 56
+            if ((get_jawaban($this->getAttribute((isset($context["history"]) ? $context["history"] : null), "jawaban"), $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id")) == get_kunci_pilihan($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan")))) {
+                // line 57
+                echo "                <span class=\"text-error\"><i class=\"icon icon-ok\"></i></span>
+                ";
+            } else {
+                // line 59
+                echo "                <span class=\"text-error\"><i class=\"icon icon-remove\"></i></span>
+                ";
+            }
+            // line 61
+            echo "            </td>
             <td>
                 <div class=\"pertanyaan\">
                     ";
-            // line 44
+            // line 64
             echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan"));
             echo "
                 </div>
 
                 <div id=\"pilihan-";
-            // line 47
+            // line 67
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"), "html", null, true);
             echo "\">
                     <table class=\"table table-condensed table-striped\">
                         <tbody>
                             ";
-            // line 50
+            // line 70
             $context['_parent'] = (array) $context;
             $context['_seq'] = twig_ensure_traversable($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan"));
             foreach ($context['_seq'] as $context["_key"] => $context["pil"]) {
-                // line 51
+                // line 71
                 echo "                            <tr>
-                                <td style=\"width:30px;\"><label class=\"label-radio\"><input ";
-                // line 52
-                echo ((is_pilih($this->getAttribute((isset($context["data"]) ? $context["data"] : null), "jawaban"), $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"), $this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "id"))) ? ("checked") : (""));
-                echo " type=\"radio\" name=\"pilihan-";
-                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"), "html", null, true);
-                echo "\" value=\"";
-                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "urutan"), "html", null, true);
-                echo "\" onclick=\"update_ganda(";
-                echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["data"]) ? $context["data"] : null), "tugas"), "id"), "html", null, true);
-                echo ", ";
-                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"), "html", null, true);
-                echo ", ";
-                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "id"), "html", null, true);
-                echo ")\" class=\"radio\"> ";
+                                <td style=\"width:15px;\"><b>";
+                // line 72
                 echo twig_escape_filter($this->env, get_abjad($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "urutan")), "html", null, true);
-                echo "</label></td>
+                echo "</b></td>
                                 <td>
                                     ";
-                // line 54
+                // line 74
                 echo html_entity_decode($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "konten"));
                 echo "
+
+                                    <ul class=\"unstyled inline\" style=\"margin-bottom: 0px;margin-left: -5px;\">
+                                        ";
+                // line 77
+                if (($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "kunci") == 1)) {
+                    // line 78
+                    echo "                                            <li><small class=\"text-warning\"><i class=\"icon icon-star\"></i> Kunci Jawaban</small></li>
+                                        ";
+                }
+                // line 80
+                echo "                                        ";
+                if ((is_pilih($this->getAttribute((isset($context["history"]) ? $context["history"] : null), "jawaban"), $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"), $this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "id")) == true)) {
+                    // line 81
+                    echo "                                            <li><small class=\"text-success\"><i class=\"icon-hand-up\"></i> Jawaban Siswa</small></li>
+                                        ";
+                }
+                // line 83
+                echo "                                    </ul>
                                 </td>
                             </tr>
                             ";
@@ -134,7 +179,7 @@ class __TwigTemplate_08fe09289607fc4016f2257a454c27c2ce8f83349d940c7b607df38d7cf
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['pil'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 58
+            // line 87
             echo "                        </tbody>
                     </table>
                 </div>
@@ -147,10 +192,9 @@ class __TwigTemplate_08fe09289607fc4016f2257a454c27c2ce8f83349d940c7b607df38d7cf
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['p'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 66
+        // line 95
         echo "    </tbody>
 </table>
-</div>
 
 ";
     }
@@ -167,6 +211,6 @@ class __TwigTemplate_08fe09289607fc4016f2257a454c27c2ce8f83349d940c7b607df38d7cf
 
     public function getDebugInfo()
     {
-        return array (  151 => 66,  138 => 58,  128 => 54,  111 => 52,  108 => 51,  104 => 50,  98 => 47,  92 => 44,  86 => 41,  81 => 40,  77 => 39,  56 => 21,  52 => 20,  48 => 19,  31 => 4,  28 => 3,);
+        return array (  196 => 95,  183 => 87,  174 => 83,  170 => 81,  167 => 80,  163 => 78,  161 => 77,  155 => 74,  150 => 72,  147 => 71,  143 => 70,  137 => 67,  131 => 64,  126 => 61,  122 => 59,  118 => 57,  116 => 56,  111 => 54,  105 => 52,  101 => 51,  85 => 38,  81 => 37,  77 => 36,  73 => 35,  53 => 18,  49 => 17,  45 => 16,  31 => 4,  28 => 3,);
     }
 }

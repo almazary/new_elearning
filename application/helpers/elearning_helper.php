@@ -633,6 +633,14 @@ function get_jawaban($array, $pertanyaan_id) {
     }
 }
 
+function get_kunci_pilihan($pilihan) {
+    foreach ($pilihan as $value) {
+        if ($value['kunci'] == 1) {
+            return $value['id'];
+        }
+    }
+}
+
 function sudah_ngerjakan($tugas_id, $siswa_id) {
     # cek sudah mengerjakan belum
     $nilai = get_row_data('tugas_model', 'retrieve_nilai', array(null, $tugas_id, $siswa_id));
@@ -647,4 +655,18 @@ function sudah_ngerjakan($tugas_id, $siswa_id) {
     }
 
     return false;
+}
+
+function lama_pengerjaan($start, $finish) {
+    $date_a = new DateTime($start);
+    $date_b = new DateTime($finish);
+
+    $interval = date_diff($date_a, $date_b);
+
+    $result  = $interval->format('%h jam %i menit %s detik');
+    $result  = str_replace('0 jam', '', $result);
+    $result  = str_replace('0 menit', '', $result);
+    $result  = str_replace('0 detik', '', $result);
+
+    return trim($result);
 }

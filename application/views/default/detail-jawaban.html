@@ -1,44 +1,64 @@
 {% extends "layout-iframe.html" %}
 
 {% block content %}
-            <div class="container">
 <h4>Detail Jawaban</h4>
 
-<div class="rowd">
-    <div class="span7">
-        <table class="table table-condensed table-striped">
-            <thead>
-                <tr>
-                    <th>Jml benar</th>
-                    <th>Jml salah</th>
-                    <th>Nilai</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ history.jml_benar }}</td>
-                    <td>{{ history.jml_salah }}</td>
-                    <td>{{ history.nilai }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div class="span5">
-        asdfasdf
-    </div>
-</div>
+<table class="table table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>Tgl Mengerjakan</th>
+            <th>Tgl Selesai</th>
+            <th>Lama Pengerjaan</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ tgl_jam_indo(history.mulai) }}</td>
+            <td>{{ tgl_jam_indo(history.tgl_submit) }}</td>
+            <td>{{ history.total_waktu }}</td>
+        </tr>
+    </tbody>
+</table>
+<br>
+
+<table class="table table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>Jml soal</th>
+            <th>Jml benar</th>
+            <th>Jml salah</th>
+            <th>Nilai</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ count(history.pertanyaan) }}</td>
+            <td>{{ history.jml_benar }}</td>
+            <td>{{ history.jml_salah }}</td>
+            <td><b>{{ history.nilai }}</b></td>
+        </tr>
+    </tbody>
+</table>
 <br>
 
 <table class="table table-condensed">
     <thead>
         <tr>
-            <th colspan="2">Pertanyaan</th>
+            <th colspan="2">List Jawaban</th>
         </tr>
     </thead>
     <tbody>
         {% for p in history.pertanyaan %}
         <tr id="pertanyaan-{{ p.id }}">
-            <td><b>{{ p.urutan }}.</b></td>
+            <td style="width:30px;">
+                <b>{{ p.urutan }}.</b>
+                <br>
+                {% if get_jawaban(history.jawaban, p.id) == get_kunci_pilihan(p.pilihan) %}
+                <span class="text-error"><i class="icon icon-ok"></i></span>
+                {% else %}
+                <span class="text-error"><i class="icon icon-remove"></i></span>
+                {% endif %}
+            </td>
             <td>
                 <div class="pertanyaan">
                     {{ html_entity_decode(p.pertanyaan)|raw }}
@@ -49,9 +69,18 @@
                         <tbody>
                             {% for pil in p.pilihan %}
                             <tr>
-                                <td style="width:30px;"><label class="label-radio"><input {{ (is_pilih(data.jawaban, p.id, pil.id)) ? 'checked' }} type="radio" name="pilihan-{{ p.id }}" value="{{ pil.urutan }}" onclick="update_ganda({{ data.tugas.id }}, {{ p.id }}, {{ pil.id }})" class="radio"> {{ get_abjad(pil.urutan) }}</label></td>
+                                <td style="width:15px;"><b>{{ get_abjad(pil.urutan) }}</b></td>
                                 <td>
                                     {{ html_entity_decode(pil.konten)|raw }}
+
+                                    <ul class="unstyled inline" style="margin-bottom: 0px;margin-left: -5px;">
+                                        {% if pil.kunci == 1 %}
+                                            <li><small class="text-warning"><i class="icon icon-star"></i> Kunci Jawaban</small></li>
+                                        {% endif %}
+                                        {% if is_pilih(history.jawaban, p.id, pil.id) == true %}
+                                            <li><small class="text-success"><i class="icon-hand-up"></i> Jawaban Siswa</small></li>
+                                        {% endif %}
+                                    </ul>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -65,6 +94,5 @@
         {% endfor %}
     </tbody>
 </table>
-</div>
 
 {% endblock %}

@@ -58,7 +58,7 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
                         <input class=\"span12\" name=\"email\" type=\"text\" placeholder=\"Username (Email)\" value=\"";
         // line 18
         echo twig_escape_filter($this->env, set_value("email"), "html", null, true);
-        echo "\">
+        echo "\" autofocus>
                         ";
         // line 19
         echo form_error("email");

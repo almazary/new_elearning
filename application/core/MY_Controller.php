@@ -36,7 +36,7 @@ class MY_Controller extends CI_Controller
             $this->siswa_kelas_aktif = $kelas_aktif;
         }
 
-        // $this->output->enable_profiler(TRUE);
+        $this->output->enable_profiler(TRUE);
     }
 
     function update_nis($nis = '') {

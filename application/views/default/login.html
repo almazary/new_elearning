@@ -15,7 +15,7 @@ Login - {{ parent() }}
                {{ get_flashdata('login')|raw }}
                 <div class="control-group">
                     <div class="controls row-fluid">
-                        <input class="span12" name="email" type="text" placeholder="Username (Email)" value="{{ set_value('email') }}">
+                        <input class="span12" name="email" type="text" placeholder="Username (Email)" value="{{ set_value('email') }}" autofocus>
                         {{ form_error('email')|raw }}
                     </div>
                 </div>

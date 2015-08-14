@@ -8,6 +8,12 @@
  */
 class Tugas_model extends CI_Model
 {
+    public function retrieve_all_history($tugas_id)
+    {
+        $this->db->like('id', $tugas_id, 'before');
+        $result = $this->db->get('field_tambahan');
+        return $result->result_array();
+    }
 
     /**
      * Method untuk mendapatkan data nilai
