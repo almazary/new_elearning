@@ -1,0 +1,72 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+{% if sudah_dikoreksi == false %}
+    <h4>Koreksi Jawaban</h4>
+{% else %}
+    <h4>Detail Jawaban</h4>
+{% endif %}
+
+<table class="table table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>Tgl Mengerjakan</th>
+            <th>Tgl Selesai</th>
+            <th>Lama Pengerjaan</th>
+            {% if sudah_dikoreksi == true %}
+            <th>Nilai</th>
+            {% endif %}
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ tgl_jam_indo(history.mulai) }}</td>
+            <td>{{ tgl_jam_indo(history.tgl_submit) }}</td>
+            <td>{{ history.total_waktu }}</td>
+            {% if sudah_dikoreksi == true %}
+            <th>{{ nilai.nilai }}</th>
+            {% endif %}
+        </tr>
+    </tbody>
+</table>
+<br>
+
+{{ form_open('tugas/detail_jawaban/' ~ siswa.id ~ '/' ~ tugas.id)|raw }}
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th colspan="2">List Jawaban</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in history.pertanyaan %}
+        <tr id="pertanyaan-{{ p.id }}">
+            <td style="width:30px;">
+                <b>{{ p.urutan }}.</b>
+            </td>
+            <td>
+                <div class="pertanyaan">
+                    {{ html_entity_decode(p.pertanyaan)|raw }}
+                </div>
+
+                <b>Jawaban :</b>
+                {{ html_entity_decode(get_jawaban(history.jawaban, p.id))|raw }}
+
+                <b>Nilai :</b>
+                <br>
+                <input type="text" name="nilai[{{ p.id }}]" style="width:50px;" value="{{ get_jawaban(history.nilai, p.id) }}">
+            </td>
+        </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+{% if sudah_dikoreksi == false %}
+<button class="btn btn-primary" type="submit">Simpan Nilai</button>
+{% else %}
+<button class="btn btn-primary" type="submit">Update Nilai</button>
+{% endif %}
+</form>
+
+{% endblock %}

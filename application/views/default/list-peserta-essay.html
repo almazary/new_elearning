@@ -66,6 +66,7 @@ Koreksi - {{ parent() }}
                 <tr>
                     <th>Siswa</th>
                     <th>Kelas</th>
+                    <th>Nilai</th>
                     <th></th>
                 </tr>
             </thead>
@@ -77,9 +78,14 @@ Koreksi - {{ parent() }}
                         <a href="{{ site_url('siswa/detail/' ~ s.id) }}"><b>{{ s.nama }} {{ ((s.nis is not empty) ? '<span class="text-muted">(' ~ s.nis ~ ')</span>')|raw }}</b></a>
                     </td>
                     <td>{{ s.kelas_aktif.nama }}</td>
+                    <td>{{ s.nilai.nilai }}</td>
                     <td>
                         <div class="btn-group">
-                            {{ anchor('tugas/detail_jawaban/' ~ s.id ~ '/' ~ tugas.id, 'Detail',{'class' : 'btn btn-small btn-primary iframe-detail-jawaban'})|raw }}
+                            {% if s.nilai is empty %}
+                                {{ anchor('tugas/detail_jawaban/' ~ s.id ~ '/' ~ tugas.id, 'Koreksi',{'class' : 'btn btn-small btn-primary iframe-koreksi-jawaban'})|raw }}
+                            {% else %}
+                                {{ anchor('tugas/detail_jawaban/' ~ s.id ~ '/' ~ tugas.id, 'Detail',{'class' : 'btn btn-small btn-primary iframe-koreksi-jawaban'})|raw }}
+                            {% endif %}
                             <a href="{{ site_url('tugas/reset_jawaban/' ~ tugas.id ~ '/' ~ s_id) }}" class="btn btn-small btn-default" onclick="return confirm('Anda yakin ingin menganggap siswa belum mengerjakan?')" data-toggle="tooltip" title="Reset jawaban siswa, <br>anggap siswa menjadi belum mengerjakan.">Reset</a>
                         </div>
                     </td>

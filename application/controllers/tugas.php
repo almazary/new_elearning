@@ -1261,6 +1261,9 @@ class Tugas extends MY_Controller
             $siswa['kelas_aktif'] = $kelas;
             $siswa['history']     = $history;
 
+            # cari nilai
+            $siswa['nilai'] = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
+
             $data_siswa[] = $siswa;
         }
         $data['data_siswa'] = $data_siswa;
@@ -1307,6 +1310,7 @@ class Tugas extends MY_Controller
         }
 
         $data['tugas'] = $this->formatData($tugas);
+        $data['siswa'] = $siswa;
 
         # cari history
         $history_id = 'history-mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
@@ -1316,9 +1320,41 @@ class Tugas extends MY_Controller
             exit('Tugas belum dikerjakan');
         }
 
-        $data['history'] = json_decode($history['value'], 1);
+        $history_value   = json_decode($history['value'], 1);
+        $data['history'] = $history_value;
 
-        $this->twig->display('detail-jawaban.html', $data);
+        if ($tugas['type_id'] == 3) {
+            $this->twig->display('detail-jawaban-ganda.html', $data);
+        } elseif ($tugas['type_id'] == 2) {
+            # jika ada post nilai
+            if (!empty($_POST['nilai'])) {
+                $total_nilai = 0;
+                foreach ($_POST['nilai'] as $p_id => $p_nilai) {
+                    $total_nilai = $total_nilai + $p_nilai;
+                }
+
+                # update history
+                $history_value['nilai'] = $_POST['nilai'];
+                update_field($history_id, $history['nama'], json_encode($history_value));
+
+                # simpan atau update nilai
+                $check = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
+                if (empty($check)) {
+                    $this->tugas_model->create_nilai($total_nilai, $tugas['id'], $siswa['id']);
+                } else {
+                    $this->tugas_model->update_nilai($check['id'], $total_nilai, $tugas['id'], $siswa['id']);
+                }
+
+                redirect('tugas/detail_jawaban/' . $siswa['id'] . '/' . $tugas['id']);
+            }
+
+            # cek sudah koreksi belum, dengan cara cek nilainya sudah ada belum
+            $nilai                   = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
+            $data['sudah_dikoreksi'] = !empty($nilai) ? true : false;
+            $data['nilai']           = $nilai;
+
+            $this->twig->display('detail-jawaban-essay.html', $data);
+        }
     }
 
     function reset_jawaban($tugas_id, $siswa_id)
