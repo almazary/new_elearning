@@ -9,10 +9,17 @@ $(document).ready(function(){
     $(".iframe-koreksi-jawaban").colorbox({
         iframe:true,
         width:"700",
-        height:"600",
+        height:"550",
         fixed:true,
         onClosed : function() {
             location.reload();
         }
+    });
+
+    $(".iframe-lihat-nilai").colorbox({
+        iframe:true,
+        width:"400",
+        height:"200",
+        fixed:true,
     });
 });

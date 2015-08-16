@@ -195,7 +195,7 @@ Filter Siswa - {{ parent() }}
                                     <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
                                 </ul>
                             </li>
-                            {% elseif is_pengajar() %}
+                            {% else %}
                             <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
                             {% endif %}
                         </ul>

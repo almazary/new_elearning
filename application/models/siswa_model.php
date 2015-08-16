@@ -9,6 +9,14 @@
 class Siswa_model extends CI_Model
 {
 
+    /**
+     * Method untuk menghitung data siswa berdasarkan parameter tertentu
+     *
+     * @param  string $by
+     * @param  array  $param
+     * @return integer
+     * @author Almazari <almazary@gmail.com>
+     */
     public function count($by, $param = array())
     {
         switch ($by) {
@@ -20,11 +28,23 @@ class Siswa_model extends CI_Model
                 $this->db->where('siswa.status_id', 1);
                 $result = $this->db->get('kelas_siswa');
                 return $result->num_rows();
-                break;
+            break;
+
+            case 'total':
+                $this->db->where('status_id !=', '0');
+                $result = $this->db->get('siswa');
+                return $result->num_rows();
+            break;
+
+            case 'pending':
+                $this->db->where('status_id', '0');
+                $result = $this->db->get('siswa');
+                return $result->num_rows();
+            break;
 
             default:
                 return 0;
-                break;
+            break;
         }
     }
 

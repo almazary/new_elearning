@@ -112,6 +112,10 @@ class Tugas extends MY_Controller
             $filter['kelas_id'] = array($kelas_aktif['kelas_id']);
         }
 
+        if (!empty($_GET['judul'])) {
+            $filter['judul'] = (string)$_GET['judul'];
+        }
+
         $data['filter'] = $filter;
 
         # ambil semua data tugas
@@ -134,9 +138,17 @@ class Tugas extends MY_Controller
         }
 
         $data['tugas']      = $results;
-        $data['pagination']  = $this->pager->view($retrieve_all_tugas, 'tugas/index/');
-        $data['kelas']       = $this->kelas_model->retrieve_all_child();
-        $data['mapel']       = $this->mapel_model->retrieve_all_mapel();
+        $data['pagination'] = $this->pager->view($retrieve_all_tugas, 'tugas/index/');
+        $data['kelas']      = $this->kelas_model->retrieve_all_child();
+        $data['mapel']      = $this->mapel_model->retrieve_all_mapel();
+
+        # panggil colorbox
+        $html_js = load_comp_js(array(
+            base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+            base_url('assets/comp/colorbox/act-tugas.js')
+        ));
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
         $this->twig->display('list-tugas.html', $data);
     }
@@ -1154,14 +1166,14 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
-        # ini harus ganda
-        if ($tugas['type_id'] != 3) {
-            redirect('tugas');
-        }
+        $data['tugas'] = $this->formatData($tugas);
 
         # jika pengajar atau admin
         if (is_pengajar() OR is_admin()) {
-            $data['tugas'] = $this->formatData($tugas);
+            # ini harus ganda
+            if ($tugas['type_id'] != 3) {
+                redirect('tugas');
+            }
 
             # ambil nilai
             $data_nilai     = array();
@@ -1212,6 +1224,24 @@ class Tugas extends MY_Controller
             ));
 
             $this->twig->display('list-nilai.html', $data);
+        }
+
+        if (is_siswa()) {
+            $nilai         = $this->tugas_model->retrieve_nilai(null, $tugas['id'], get_sess_data('user', 'id'));
+            $data['nilai'] = $nilai;
+
+            # cari history
+            $history_id = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+            $history    = retrieve_field($history_id);
+
+            if (empty($history)) {
+                exit('Tugas belum dikerjakan');
+            }
+
+            $history_value   = json_decode($history['value'], 1);
+            $data['history'] = $history_value;
+
+            $this->twig->display('lihat-nilai.html', $data);
         }
     }
 
@@ -1283,11 +1313,7 @@ class Tugas extends MY_Controller
             base_url('assets/comp/colorbox/colorbox.css'),
         ));
 
-        if ($tugas['type_id'] == 2) {
-            $this->twig->display('list-peserta-essay.html', $data);
-        } elseif ($tugas['type_id'] == 1) {
-            $this->twig->display('list-peserta-upload.html', $data);
-        }
+        $this->twig->display('list-peserta.html', $data);
     }
 
     function detail_jawaban($siswa_id = '', $tugas_id = '')
@@ -1354,6 +1380,34 @@ class Tugas extends MY_Controller
             $data['nilai']           = $nilai;
 
             $this->twig->display('detail-jawaban-essay.html', $data);
+        } elseif ($tugas['type_id'] == 1) {
+            if (!empty($_POST['nilai'])) {
+                $nilai = $this->input->post('nilai', true);
+
+                # update history
+                $history_value['nilai'] = $nilai;
+                update_field($history_id, $history['nama'], json_encode($history_value));
+
+                # simpan atau update nilai
+                $check = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
+                if (empty($check)) {
+                    $this->tugas_model->create_nilai($nilai, $tugas['id'], $siswa['id']);
+                } else {
+                    $this->tugas_model->update_nilai($check['id'], $nilai, $tugas['id'], $siswa['id']);
+                }
+
+                redirect('tugas/detail_jawaban/' . $siswa['id'] . '/' . $tugas['id']);
+            }
+
+            # cek sudah koreksi belum, dengan cara cek nilainya sudah ada belum
+            $nilai                   = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
+            $data['sudah_dikoreksi'] = !empty($nilai) ? true : false;
+            $data['nilai']           = $nilai;
+
+            $data['file_info']         = get_file_info(get_path_file($history_value['file_name']));
+            $data['file_info']['mime'] = get_mime_by_extension(get_path_file($history_value['file_name']));
+
+            $this->twig->display('detail-jawaban-upload.html', $data);
         }
     }
 

@@ -370,7 +370,7 @@ class __TwigTemplate_d6e7099ba40984ab7cc44a389903d936b173cc1806f217e30e75e123937
                                 </ul>
                             </li>
                             ";
-            } elseif ((is_pengajar() == true)) {
+            } else {
                 // line 174
                 echo "                            <li><a class=\"btn btn-default btn-small\" href=\"";
                 echo twig_escape_filter($this->env, site_url(("pengajar/detail/" . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"))), "html", null, true);

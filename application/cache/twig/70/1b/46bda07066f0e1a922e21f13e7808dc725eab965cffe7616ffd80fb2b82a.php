@@ -49,7 +49,7 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
             echo anchor(("siswa/index/" . (isset($context["status_id"]) ? $context["status_id"] : null)), "Data Siswa");
             echo " / Detail Siswa</h3>
         ";
-        } elseif (is_pengajar()) {
+        } else {
             // line 13
             echo "        <h3>";
             echo anchor("siswa/filter", "Filter Siswa");
@@ -88,12 +88,12 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
             <div class=\"panel-body\">
                 <table class=\"table\">
                     <tr>
-                        <th bgcolor=\"#FBFBFB\" width=\"25%\">NIS</th>
-                        <td>";
+                        <th bgcolor=\"#FBFBFB\" width=\"25%\" style=\"border-top: 0px;\">NIS</th>
+                        <td style=\"border-top: 0px;\">";
         // line 33
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "nis"), "html", null, true);
         echo "</td>
-                        <td rowspan=\"5\" width=\"15%\">
+                        <td rowspan=\"5\" width=\"15%\" style=\"border-top: 0px;\">
                             <img style=\"width:113px;\" class=\"img-polaroid\" src=\"";
         // line 35
         echo twig_escape_filter($this->env, get_url_image_siswa($this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "foto"), "medium", $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "jenis_kelamin")), "html", null, true);
@@ -283,8 +283,8 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
                         <table class=\"table\">
                             <tbody>
                                 <tr>
-                                    <th width=\"30%\" bgcolor=\"#FBFBFB\">Username</th>
-                                    <td>
+                                    <th width=\"30%\" bgcolor=\"#FBFBFB\" style=\"border-top: 0px;\">Username</th>
+                                    <td style=\"border-top: 0px;\">
                                         ";
             // line 143
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["siswa_login"]) ? $context["siswa_login"] : null), "username"), "html", null, true);

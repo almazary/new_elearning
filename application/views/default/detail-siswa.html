@@ -9,7 +9,7 @@ Detail Siswa - {{ parent() }}
     <div class="module-head">
         {% if is_admin() %}
         <h3>{{ anchor('siswa/index/' ~ status_id, 'Data Siswa')|raw }} / Detail Siswa</h3>
-        {% elseif is_pengajar() %}
+        {% else %}
         <h3>{{ anchor('siswa/filter', 'Filter Siswa')|raw }} / Detail Siswa</h3>
         {% endif %}
     </div>

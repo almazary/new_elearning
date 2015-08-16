@@ -10,6 +10,35 @@ class Pengajar_model extends CI_Model
 {
 
     /**
+     * Method untuk menghitung data jumlah berdasarkan parameter tertentu
+     *
+     * @param  string $by
+     * @param  array  $param
+     * @return integer
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function count($by, $param = array())
+    {
+        switch ($by) {
+            case 'total':
+                $this->db->where('status_id !=', '0');
+                $result = $this->db->get('pengajar');
+                return $result->num_rows();
+            break;
+
+            case 'pending':
+                $this->db->where('status_id', '0');
+                $result = $this->db->get('pengajar');
+                return $result->num_rows();
+            break;
+
+            default:
+                return 0;
+            break;
+        }
+    }
+
+    /**
      * Method untuk mendapatkan semua pengajar berhasarkan nama
      *
      * @param  string $nama

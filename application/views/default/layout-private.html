@@ -66,67 +66,61 @@
                 <div class="row">
                     <div class="span3">
                         <div class="sidebar">
-                            <ul class="widget widget-menu unstyled">
-                                <li class="active"><a href="index.html"><i class="menu-icon icon-dashboard"></i>Dashboard
-                                </a></li>
-                                <li><a href="activity.html"><i class="menu-icon icon-bullhorn"></i>News Feed </a>
-                                </li>
-                                <li><a href="message.html"><i class="menu-icon icon-inbox"></i>Inbox <b class="label green pull-right">
-                                    11</b> </a></li>
-                                <li><a href="task.html"><i class="menu-icon icon-inbox"></i>Outbox <b class="label orange pull-right">
-                                    19</b> </a></li>
-                            </ul>
-                            <!--/.widget-nav-->
-
                             {% if is_admin() %}
                             <ul class="widget widget-menu unstyled">
-                                <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i> Tugas </a></li>
-                                <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i> Materi </a></li>
+                                <li><a href="{{ site_url() }}"><i class="menu-icon icon-home"></i>Beranda</a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
-                                <li><a href="{{ site_url('siswa') }}"><i class="menu-icon icon-tasks"></i> Siswa </a></li>
-                                <li><a href="{{ site_url('pengajar') }}"><i class="menu-icon icon-book"></i> Pengajar </a></li>
+                                <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
+                                <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
+                            </ul>
+
+                            <ul class="widget widget-menu unstyled">
+                                <li><a href="{{ site_url('siswa') }}"><i class="menu-icon icon-tasks"></i>Siswa </a></li>
+                                <li><a href="{{ site_url('pengajar') }}"><i class="menu-icon icon-book"></i>Pengajar </a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
                                 <li><a href="{{ site_url('kelas/mapel_kelas') }}"><i class="menu-icon icon-paste"></i>Matapelajaran Kelas </a></li>
-                                <li><a href="{{ site_url('kelas') }}"><i class="menu-icon icon-tasks"></i> Manajemen Kelas </a></li>
+                                <li><a href="{{ site_url('kelas') }}"><i class="menu-icon icon-tasks"></i>Manajemen Kelas </a></li>
                                 <li><a href="{{ site_url('mapel') }}"><i class="menu-icon icon-book"></i>Manajemen Matapelajaran </a></li>
                             </ul>
                             {% endif %}
 
                             {% if is_pengajar() %}
                             <ul class="widget widget-menu unstyled">
+                                <li><a href="{{ site_url() }}"><i class="menu-icon icon-home"></i>Beranda
                                 <li><a href="{{ site_url('login/pp') }}"><i class="menu-icon icon-user"></i>Profilku</a></li>
-                                <li><a href="{{ site_url('pengajar/jadwal') }}"><i class="menu-icon icon-tasks"></i> Jadwal Mengajar </a></li>
+                                <li><a href="{{ site_url('pengajar/jadwal') }}"><i class="menu-icon icon-tasks"></i>Jadwal Mengajar </a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
-                                <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i> Tugas </a></li>
-                                <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i> Materi </a></li>
+                                <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
+                                <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
-                                <li><a href="{{ site_url('pengajar/filter') }}"><i class="menu-icon icon-search"></i> Filter Pengajar </a></li>
-                                <li><a href="{{ site_url('siswa/filter') }}"><i class="menu-icon icon-search"></i> Filter Siswa </a></li>
+                                <li><a href="{{ site_url('pengajar/filter') }}"><i class="menu-icon icon-search"></i>Filter Pengajar </a></li>
+                                <li><a href="{{ site_url('siswa/filter') }}"><i class="menu-icon icon-search"></i>Filter Siswa </a></li>
                             </ul>
                             {% endif %}
 
                             {% if is_siswa() %}
                             <ul class="widget widget-menu unstyled">
+                                <li><a href="{{ site_url() }}"><i class="menu-icon icon-home"></i>Beranda
                                 <li><a href="{{ site_url('login/pp') }}"><i class="menu-icon icon-user"></i>Profilku</a></li>
-                                <li><a href="{{ site_url('siswa/jadwal_mapel') }}"><i class="menu-icon icon-tasks"></i> Jadwal Matapelajaran</a></li>
+                                <li><a href="{{ site_url('siswa/jadwal_mapel') }}"><i class="menu-icon icon-tasks"></i>Jadwal Matapelajaran</a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
-                                <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i> Tugas </a></li>
-                                <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i> Materi </a></li>
+                                <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
+                                <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
-                                <li><a href="{{ site_url('pengajar/filter') }}"><i class="menu-icon icon-search"></i> Filter Pengajar </a></li>
-                                <li><a href="{{ site_url('siswa/filter') }}"><i class="menu-icon icon-search"></i> Filter Siswa </a></li>
+                                <li><a href="{{ site_url('pengajar/filter') }}"><i class="menu-icon icon-search"></i>Filter Pengajar </a></li>
+                                <li><a href="{{ site_url('siswa/filter') }}"><i class="menu-icon icon-search"></i>Filter Siswa </a></li>
                             </ul>
                             {% endif %}
 

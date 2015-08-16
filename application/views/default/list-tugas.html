@@ -193,7 +193,7 @@ Tugas - {{ parent() }}
                                     {{ anchor('tugas/kerjakan/' ~ m.id, '<i class="icon-ok-sign"></i> Mulai Kerjakan', {'class' : 'btn btn-success btn-small', 'onclick' : 'return confirm(\'Anda yakin ingin memulai mengerjakan tugas ini?\')'})|raw }}
                                 {% endif %}
                             {% else %}
-                                {{ anchor('tugas/nilai/' ~ m.id, '<i class="icon-flag"></i> Lihat Nilai', {'class' : 'btn btn-info btn-small'})|raw }}
+                                {{ anchor('tugas/nilai/' ~ m.id, '<i class="icon-flag"></i> Lihat Nilai', {'class' : 'btn btn-info btn-small iframe-lihat-nilai'})|raw }}
                             {% endif %}
                         {% endif %}
                         </div>

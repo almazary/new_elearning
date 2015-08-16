@@ -420,7 +420,7 @@ class __TwigTemplate_8ac215a290914e04874404a546e9c3097768976d6925efc804ad62a129b
                 } else {
                     // line 196
                     echo "                                ";
-                    echo anchor(("tugas/nilai/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-flag\"></i> Lihat Nilai", array("class" => "btn btn-info btn-small"));
+                    echo anchor(("tugas/nilai/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-flag\"></i> Lihat Nilai", array("class" => "btn btn-info btn-small iframe-lihat-nilai"));
                     echo "
                             ";
                 }

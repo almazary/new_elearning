@@ -620,7 +620,7 @@ class Pengajar extends MY_Controller
 
         }
 
-        if (is_pengajar() AND empty($filter)) {
+        if ((is_pengajar() OR is_siswa()) AND empty($filter)) {
             $filter = array(
                 'nip'           => '',
                 'nama'          => '',

@@ -30,76 +30,155 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
         // line 4
         echo "<div class=\"btn-controls\">
     <div class=\"btn-box-row row-fluid\">
-        <a href=\"#\" class=\"btn-box big span4\"><i class=\" icon-random\"></i><b>65%</b>
-            <p class=\"text-muted\">
-                Growth</p>
-        </a><a href=\"#\" class=\"btn-box big span4\"><i class=\"icon-user\"></i><b>15</b>
-            <p class=\"text-muted\">
-                New Users</p>
-        </a><a href=\"#\" class=\"btn-box big span4\"><i class=\"icon-money\"></i><b>15,152</b>
-            <p class=\"text-muted\">
-                Profit</p>
-        </a>
+        <div class=\"span12\">
+            <div class=\"widget-usage\" style=\"padding: 10px 15px;\">
+                <small class=\"pull-right\">";
+        // line 8
+        echo twig_escape_filter($this->env, tgl_indo(date("Y-m-d")), "html", null, true);
+        echo ", IP ";
+        echo twig_escape_filter($this->env, get_ip(), "html", null, true);
+        echo "</small>
+                Selamat datang di <b>E-learning ";
+        // line 9
+        echo twig_escape_filter($this->env, get_pengaturan("nama-sekolah", "value"), "html", null, true);
+        echo "</b>
+                <br>
+                <i class=\"icon icon-map-marker\"></i> ";
+        // line 11
+        echo twig_escape_filter($this->env, get_pengaturan("alamat", "value"), "html", null, true);
+        echo "
+                ";
+        // line 12
+        if ((!twig_test_empty(get_pengaturan("telp", "value")))) {
+            // line 13
+            echo "                <i class=\"icon icon-phone\"></i> ";
+            echo twig_escape_filter($this->env, get_pengaturan("telp", "value"), "html", null, true);
+            echo "
+                ";
+        }
+        // line 15
+        echo "            </div>
+        </div>
     </div>
-    <div class=\"btn-box-row row-fluid\">
-        <div class=\"span8\">
-            <div class=\"row-fluid\">
-                <div class=\"span12\">
-                    <a href=\"#\" class=\"btn-box small span4\"><i class=\"icon-envelope\"></i><b>Messages</b>
-                    </a><a href=\"#\" class=\"btn-box small span4\"><i class=\"icon-group\"></i><b>Clients</b>
-                    </a><a href=\"#\" class=\"btn-box small span4\"><i class=\"icon-exchange\"></i><b>Expenses</b>
-                    </a>
-                </div>
-            </div>
-            <div class=\"row-fluid\">
-                <div class=\"span12\">
-                    <a href=\"#\" class=\"btn-box small span4\"><i class=\"icon-save\"></i><b>Total Sales</b>
-                    </a><a href=\"#\" class=\"btn-box small span4\"><i class=\"icon-bullhorn\"></i><b>Social Feed</b>
-                    </a><a href=\"#\" class=\"btn-box small span4\"><i class=\"icon-sort-down\"></i><b>Bounce
-                        Rate</b> </a>
-                </div>
+    <br>
+    ";
+        // line 19
+        if (is_siswa()) {
+            // line 20
+            echo "    <div class=\"btn-box-row row-fluid\">
+        <div class=\"span6\">
+            <div class=\"widget-usage\" style=\"padding: 10px 15px;\">
+                <b>Materi terbaru</b>
+                <table class=\"table table-striped table-condensed\">
+                    ";
+            // line 25
+            $context['_parent'] = (array) $context;
+            $context['_seq'] = twig_ensure_traversable((isset($context["materi_terbaru"]) ? $context["materi_terbaru"] : null));
+            foreach ($context['_seq'] as $context["_key"] => $context["m"]) {
+                // line 26
+                echo "                    <tr>
+                        <td>
+                            <a href=\"";
+                // line 28
+                echo twig_escape_filter($this->env, site_url(("materi/detail/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id"))), "html", null, true);
+                echo "\" target=\"_blank\">";
+                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "judul"), "html", null, true);
+                echo "</a>
+                        </td>
+                    </tr>
+                    ";
+            }
+            $_parent = $context['_parent'];
+            unset($context['_seq'], $context['_iterated'], $context['_key'], $context['m'], $context['_parent'], $context['loop']);
+            $context = array_intersect_key($context, $_parent) + $_parent;
+            // line 32
+            echo "                </table>
             </div>
         </div>
-        <ul class=\"widget widget-usage unstyled span4\">
-            <li>
-                <p>
-                    <strong>Windows 8</strong> <span class=\"pull-right small muted\">78%</span>
-                </p>
-                <div class=\"progress tight\">
-                    <div class=\"bar\" style=\"width: 78%;\">
-                    </div>
-                </div>
-            </li>
-            <li>
-                <p>
-                    <strong>Mac</strong> <span class=\"pull-right small muted\">56%</span>
-                </p>
-                <div class=\"progress tight\">
-                    <div class=\"bar bar-success\" style=\"width: 56%;\">
-                    </div>
-                </div>
-            </li>
-            <li>
-                <p>
-                    <strong>Linux</strong> <span class=\"pull-right small muted\">44%</span>
-                </p>
-                <div class=\"progress tight\">
-                    <div class=\"bar bar-warning\" style=\"width: 44%;\">
-                    </div>
-                </div>
-            </li>
-            <li>
-                <p>
-                    <strong>iPhone</strong> <span class=\"pull-right small muted\">67%</span>
-                </p>
-                <div class=\"progress tight\">
-                    <div class=\"bar bar-danger\" style=\"width: 67%;\">
-                    </div>
-                </div>
-            </li>
-        </ul>
+        <div class=\"span6\">
+            <div class=\"widget-usage\" style=\"padding: 10px 15px;\">
+                <b>Tugas terbaru</b>
+                <table class=\"table table-striped table-condensed\">
+                    ";
+            // line 39
+            $context['_parent'] = (array) $context;
+            $context['_seq'] = twig_ensure_traversable((isset($context["tugas_terbaru"]) ? $context["tugas_terbaru"] : null));
+            foreach ($context['_seq'] as $context["_key"] => $context["m"]) {
+                // line 40
+                echo "                    <tr>
+                        <td>
+                            <a href=\"";
+                // line 42
+                echo twig_escape_filter($this->env, site_url(("tugas?judul=" . urlencode($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "judul")))), "html", null, true);
+                echo "\">";
+                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "judul"), "html", null, true);
+                echo "</a>
+                        </td>
+                    </tr>
+                    ";
+            }
+            $_parent = $context['_parent'];
+            unset($context['_seq'], $context['_iterated'], $context['_key'], $context['m'], $context['_parent'], $context['loop']);
+            $context = array_intersect_key($context, $_parent) + $_parent;
+            // line 46
+            echo "                </table>
+            </div>
+        </div>
     </div>
-</div>
+    ";
+        }
+        // line 51
+        echo "
+    ";
+        // line 52
+        if (is_admin()) {
+            // line 53
+            echo "    <div class=\"btn-box-row row-fluid\">
+        <a href=\"";
+            // line 54
+            echo twig_escape_filter($this->env, site_url("siswa/index/1"), "html", null, true);
+            echo "\" class=\"btn-box big span3\">
+            <i class=\"icon-group\"></i><b>";
+            // line 55
+            echo twig_escape_filter($this->env, (isset($context["jml_siswa"]) ? $context["jml_siswa"] : null), "html", null, true);
+            echo "</b>
+            <p class=\"text-muted\">Siswa</p>
+        </a>
+        <a href=\"";
+            // line 58
+            echo twig_escape_filter($this->env, site_url("pengajar/index/1"), "html", null, true);
+            echo "\" class=\"btn-box big span3\">
+            <i class=\"icon-user\"></i><b>";
+            // line 59
+            echo twig_escape_filter($this->env, (isset($context["jml_pengajar"]) ? $context["jml_pengajar"] : null), "html", null, true);
+            echo "</b>
+            <p class=\"text-muted\">Pengajar</p>
+        </a>
+        <a href=\"";
+            // line 62
+            echo twig_escape_filter($this->env, site_url("siswa/index/0"), "html", null, true);
+            echo "\" class=\"btn-box big span3\">
+            <i class=\"icon-group\"></i><b>";
+            // line 63
+            echo twig_escape_filter($this->env, (isset($context["jml_siswa_pending"]) ? $context["jml_siswa_pending"] : null), "html", null, true);
+            echo "</b>
+            <p class=\"text-muted\">Pending siswa</p>
+        </a>
+        <a href=\"";
+            // line 66
+            echo twig_escape_filter($this->env, site_url("pengajar/index/0"), "html", null, true);
+            echo "\" class=\"btn-box big span3\">
+            <i class=\"icon-user\"></i><b>";
+            // line 67
+            echo twig_escape_filter($this->env, (isset($context["jml_pengajar_pending"]) ? $context["jml_pengajar_pending"] : null), "html", null, true);
+            echo "</b>
+            <p class=\"text-muted\">Pending pengajar</p>
+        </a>
+    </div>
+    ";
+        }
+        // line 72
+        echo "</div>
 <!--/#btn-controls-->
 ";
     }
@@ -116,6 +195,6 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
 
     public function getDebugInfo()
     {
-        return array (  31 => 4,  28 => 3,);
+        return array (  181 => 72,  173 => 67,  169 => 66,  163 => 63,  159 => 62,  153 => 59,  149 => 58,  143 => 55,  139 => 54,  136 => 53,  134 => 52,  131 => 51,  124 => 46,  112 => 42,  108 => 40,  104 => 39,  95 => 32,  83 => 28,  79 => 26,  75 => 25,  68 => 20,  66 => 19,  60 => 15,  54 => 13,  52 => 12,  48 => 11,  43 => 9,  37 => 8,  31 => 4,  28 => 3,);
     }
 }

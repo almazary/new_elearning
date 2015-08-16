@@ -641,6 +641,10 @@ function get_kunci_pilihan($pilihan) {
     }
 }
 
+function get_ip() {
+    return $_SERVER['REMOTE_ADDR'];
+}
+
 function sudah_ngerjakan($tugas_id, $siswa_id) {
     # cek sudah mengerjakan belum
     $nilai = get_row_data('tugas_model', 'retrieve_nilai', array(null, $tugas_id, $siswa_id));
@@ -663,10 +667,8 @@ function lama_pengerjaan($start, $finish) {
 
     $interval = date_diff($date_a, $date_b);
 
-    $result  = $interval->format('%h jam %i menit %s detik');
-    $result  = str_replace('0 jam', '', $result);
-    $result  = str_replace('0 menit', '', $result);
-    $result  = str_replace('0 detik', '', $result);
+    $result  = $interval->format(" %h jam %i menit %s detik");
+    $result  = str_replace(array(" 0 jam", " 0 menit", " 0 detik"), '', $result);
 
     return trim($result);
 }

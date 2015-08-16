@@ -441,7 +441,7 @@ class __TwigTemplate_27143e0613e8a420cce8813a454b41e219fbd11bf32fe3297b2cab25f90
                                 </ul>
                             </li>
                             ";
-            } elseif (is_pengajar()) {
+            } else {
                 // line 199
                 echo "                            <li><a class=\"btn btn-default btn-small\" href=\"";
                 echo twig_escape_filter($this->env, site_url(("siswa/detail/" . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id"))), "html", null, true);

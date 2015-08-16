@@ -122,6 +122,14 @@ Materi - {{ parent() }}
                         {% set action_edit = false %}
                         {% set action_delete = false %}
                     {% endif %}
+                {% elseif is_siswa() == true %}
+                    {% if m.siswa_id == get_sess_data('user', 'id') %}
+                        {% set action_edit = true %}
+                        {% set action_delete = true %}
+                    {% else %}
+                        {% set action_edit = false %}
+                        {% set action_delete = false %}
+                    {% endif %}
                 {% endif %}
 
                 <tr>
