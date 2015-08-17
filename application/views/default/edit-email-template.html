@@ -1,0 +1,46 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Edit Email Template - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ anchor('email', 'Email Template')|raw }} / Edit</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('email')|raw }}
+
+        {{ form_open('email/edit/' ~ template.id, {'class' : 'form-horizontal row-fluid'})|raw }}
+            <div class="control-group">
+                <label class="control-label">Nama</label>
+                <div class="controls">
+                    <p style="margin-top:5px;">{{ template.nama }}</p>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Subject</label>
+                <div class="controls">
+                    <input type="text" name="subject" class="span12" value="{{ set_value('subject', template.subject) }}">
+                    <br>{{ form_error('subject')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Body</label>
+                <div class="controls">
+                    <textarea name="body" id="body" style="height:300px;width:100%;">{{ set_value('body', html_entity_decode(template.body))|raw }}</textarea>
+                    {{ form_error('body')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                    <a href="{{ site_url('email') }}" class="btn btn-default">Kembali</a>
+                </div>
+            </div>
+        {{ form_close()|raw }}
+
+    </div>
+</div>
+{% endblock %}

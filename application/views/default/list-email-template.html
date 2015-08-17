@@ -1,0 +1,36 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Email Template - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Email Template</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('mapel')|raw }}
+
+        <table class="table table-striped datatable">
+            <thead>
+                <tr>
+                    <th>Nama template</th>
+                    <th width="15%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in template %}
+                <tr>
+                    <td>{{ e.nama }}</td>
+                    <td>
+                        <a href="{{ site_url('email/edit/' ~ e.id) }}" class="btn btn-default">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}
