@@ -23,11 +23,11 @@
                         <img src="{{ logo_url_medium }}"> {{ site_name }}
                     </a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
-                        <form class="navbar-search pull-left input-append" action="#">
-                        <input type="text" class="span3">
-                        <button class="btn" type="button">
-                            <i class="icon-search"></i>
-                        </button>
+                        <form class="navbar-search pull-left input-append" method="get" action="{{ site_url('welcome/search') }}">
+                            <input type="text" class="span3" name="q">
+                            <button class="btn" type="submit">
+                                <i class="icon-search"></i>
+                            </button>
                         </form>
                         <ul class="nav pull-right">
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -78,8 +78,8 @@
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
-                                <li><a href="{{ site_url('siswa') }}"><i class="menu-icon icon-tasks"></i>Siswa </a></li>
-                                <li><a href="{{ site_url('pengajar') }}"><i class="menu-icon icon-book"></i>Pengajar </a></li>
+                                <li><a href="{{ site_url('siswa') }}"><i class="menu-icon icon-group"></i>Siswa </a></li>
+                                <li><a href="{{ site_url('pengajar') }}"><i class="menu-icon icon-user"></i>Pengajar </a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">

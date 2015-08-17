@@ -31,7 +31,7 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
         echo "<div class=\"btn-controls\">
     <div class=\"btn-box-row row-fluid\">
         <div class=\"span12\">
-            <div class=\"widget-usage\" style=\"padding: 10px 15px;margin-bottom: 10px;\">
+            <div class=\"widget-usage\" style=\"padding: 10px 15px;margin-bottom: 20px;\">
                 <small class=\"pull-right\">";
         // line 8
         echo twig_escape_filter($this->env, tgl_indo(date("Y-m-d")), "html", null, true);
@@ -63,7 +63,7 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
         // line 17
         if (((is_admin() == false) && (!twig_test_empty(get_pengaturan("peraturan-elearning", "value"))))) {
             // line 18
-            echo "            <div class=\"widget-usage\" style=\"padding: 10px 15px;margin-bottom: 10px;\">
+            echo "            <div class=\"widget-usage\" style=\"padding: 10px 15px;\">
                 <b>Peraturan E-learning : </b><br>
                 ";
             // line 20
@@ -148,7 +148,7 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
         // line 59
         if (is_admin()) {
             // line 60
-            echo "    <div class=\"btn-box-row row-fluid\">
+            echo "    <div class=\"btn-box-row row-fluid\" style=\"margin-top:-20px;\">
         <a href=\"";
             // line 61
             echo twig_escape_filter($this->env, site_url("siswa/index/1"), "html", null, true);

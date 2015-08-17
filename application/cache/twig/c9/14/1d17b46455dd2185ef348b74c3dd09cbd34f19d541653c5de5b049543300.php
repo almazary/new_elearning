@@ -76,11 +76,14 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
         echo "
                     </a>
                     <div class=\"nav-collapse collapse navbar-inverse-collapse\">
-                        <form class=\"navbar-search pull-left input-append\" action=\"#\">
-                        <input type=\"text\" class=\"span3\">
-                        <button class=\"btn\" type=\"button\">
-                            <i class=\"icon-search\"></i>
-                        </button>
+                        <form class=\"navbar-search pull-left input-append\" method=\"get\" action=\"";
+        // line 26
+        echo twig_escape_filter($this->env, site_url("welcome/search"), "html", null, true);
+        echo "\">
+                            <input type=\"text\" class=\"span3\" name=\"q\">
+                            <button class=\"btn\" type=\"submit\">
+                                <i class=\"icon-search\"></i>
+                            </button>
                         </form>
                         <ul class=\"nav pull-right\">
                             <li class=\"nav-user dropdown\"><a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\">
@@ -179,11 +182,11 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
                                 <li><a href=\"";
             // line 81
             echo twig_escape_filter($this->env, site_url("siswa"), "html", null, true);
-            echo "\"><i class=\"menu-icon icon-tasks\"></i>Siswa </a></li>
+            echo "\"><i class=\"menu-icon icon-group\"></i>Siswa </a></li>
                                 <li><a href=\"";
             // line 82
             echo twig_escape_filter($this->env, site_url("pengajar"), "html", null, true);
-            echo "\"><i class=\"menu-icon icon-book\"></i>Pengajar </a></li>
+            echo "\"><i class=\"menu-icon icon-user\"></i>Pengajar </a></li>
                             </ul>
 
                             <ul class=\"widget widget-menu unstyled\">
@@ -405,6 +408,6 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
 
     public function getDebugInfo()
     {
-        return array (  392 => 164,  387 => 138,  382 => 11,  376 => 6,  370 => 165,  368 => 164,  364 => 163,  360 => 162,  356 => 161,  352 => 160,  348 => 159,  343 => 157,  339 => 156,  329 => 151,  325 => 150,  312 => 139,  310 => 138,  299 => 130,  294 => 127,  288 => 124,  284 => 123,  277 => 119,  273 => 118,  266 => 114,  262 => 113,  258 => 112,  255 => 111,  253 => 110,  250 => 109,  244 => 106,  240 => 105,  233 => 101,  229 => 100,  222 => 96,  218 => 95,  214 => 94,  211 => 93,  209 => 92,  206 => 91,  200 => 88,  196 => 87,  192 => 86,  185 => 82,  181 => 81,  174 => 77,  170 => 76,  163 => 72,  159 => 71,  156 => 70,  154 => 69,  134 => 52,  131 => 51,  125 => 49,  123 => 48,  120 => 47,  114 => 45,  112 => 44,  109 => 43,  103 => 41,  101 => 40,  94 => 36,  89 => 34,  73 => 23,  69 => 22,  57 => 13,  52 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
+        return array (  395 => 164,  390 => 138,  385 => 11,  379 => 6,  373 => 165,  371 => 164,  367 => 163,  363 => 162,  359 => 161,  355 => 160,  351 => 159,  346 => 157,  342 => 156,  332 => 151,  328 => 150,  315 => 139,  313 => 138,  302 => 130,  297 => 127,  291 => 124,  287 => 123,  280 => 119,  276 => 118,  269 => 114,  265 => 113,  261 => 112,  258 => 111,  256 => 110,  253 => 109,  247 => 106,  243 => 105,  236 => 101,  232 => 100,  225 => 96,  221 => 95,  217 => 94,  214 => 93,  212 => 92,  209 => 91,  203 => 88,  199 => 87,  195 => 86,  188 => 82,  184 => 81,  177 => 77,  173 => 76,  166 => 72,  162 => 71,  159 => 70,  157 => 69,  137 => 52,  134 => 51,  128 => 49,  126 => 48,  123 => 47,  117 => 45,  115 => 44,  112 => 43,  106 => 41,  104 => 40,  97 => 36,  92 => 34,  81 => 26,  73 => 23,  69 => 22,  57 => 13,  52 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
     }
 }

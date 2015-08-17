@@ -1,0 +1,187 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Pencarian - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Pencarian</h3>
+    </div>
+    <div class="module-body">
+        <div class="well well-small" style="box-shadow: none;">
+            Hasil pencarian dengan kata kunci : <b>{{ keyword }}</b>
+        </div>
+
+        {% if results.siswa is not empty %}
+        <b><i class="icon-group"></i> Siswa </b>(ditemukan {{ count(results.siswa) }} record)
+        <table class="table table-condensed table-striped">
+            {% for v in results.siswa %}
+            <tr>
+                <td>
+                    <img style="height:30px;width:30px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(v.foto, 'medium', v.jenis_kelamin) }}">
+                    <b>{{ v.nama }} {{ ((v.nis is not empty) ? '<span class="text-muted">(' ~ v.nis ~ ')</span>')|raw }}</b>
+                    <br>{{ (v.status_id != 3) ? v.kelas_aktif.nama ~ ' , ' }} {{ v.jenis_kelamin }} , {{ v.agama }}
+                </td>
+                <td width="20%">
+                    <ul class="nav nav-pills" style="margin-bottom:0px;">
+                        {% if is_admin() %}
+                        <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                        <li class="dropdown">
+                            <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
+                                <li>{{ anchor('siswa/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
+                                <li>{{ anchor('siswa/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>
+                                {% if v.status_id != 3 %}
+                                <li>{{ anchor('siswa/moved_class/' ~ v.status_id ~ '/' ~ v.id, 'Edit Kelas Aktif', {'class' : 'iframe-kelas-aktif', 'title' : 'Edit Kelas Aktif'})|raw }}</li>
+                                {% endif %}
+                                <li>{{ anchor('siswa/edit_username/' ~ v.status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Siswa'})|raw }}</li>
+                                <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                        {% endif %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        {% endif %}
+
+        {% if results.pengajar is not empty %}
+        <b><i class="icon-user"></i> Pengajar </b>(ditemukan {{ count(results.pengajar) }} record)
+        <table class="table table-condensed table-striped">
+            {% for no, v in results.pengajar %}
+            <tr>
+                <td>
+                    <img style="height:30px;width:30px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_pengajar(v.foto, 'medium', v.jenis_kelamin) }}">
+                    <b>{{ v.nama }} {{ ((v.nip is not empty) ? '<span class="text-muted">(' ~ v.nip ~ ')</span>')|raw }}</b>
+                    {% set is_admin =  get_row_data('login_model', 'retrieve', [null, null, null, null, v.id], 'is_admin') %}
+                    {% if is_admin == 1 %}
+                        <span class="label label-warning">Administrator</span>
+                    {% endif %}
+                    <br><b>Alamat :</b> {{ v.alamat }}
+                </td>
+                <td width="20%">
+                    <ul class="nav nav-pills" style="margin-bottom:0px;">
+                        {% if is_admin() == true %}
+                        <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                        <li class="dropdown">
+                            <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
+                                <li>{{ anchor('pengajar/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
+                                <li>{{ anchor('pengajar/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>
+                                <li>{{ anchor('pengajar/edit_username/' ~ v.status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Pengajar'})|raw }}</li>
+                                <li>{{ anchor('pengajar/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
+                            </ul>
+                        </li>
+                        {% else %}
+                        <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                        {% endif %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        {% endif %}
+
+        {% if results.materi is not empty %}
+        <b><i class="icon-book"></i> Materi </b>(ditemukan {{ count(results.materi) }} record)
+        <table class="table table-condensed table-striped">
+            {% for m in results.materi %}
+                {% if is_admin() == true %}
+                    {% set action_edit = true %}
+                    {% set action_delete = true %}
+                {% elseif is_pengajar() == true %}
+                    {% if m.pengajar_id == get_sess_data('user', 'id') %}
+                        {% set action_edit = true %}
+                        {% set action_delete = true %}
+                    {% else %}
+                        {% set action_edit = false %}
+                        {% set action_delete = false %}
+                    {% endif %}
+                {% endif %}
+
+                {% if is_siswa() %}
+                <tr>
+                    <td>
+                        <a href="{{ site_url('materi/detail/' ~ m.id) }}" target="_blank">{{ m.judul }}</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td>
+                        {{ m.judul }}
+                    </td>
+                    <td width="20%">
+                        <div class="btn-group">
+                            {% if m.file is not empty %}
+                                {% set url_type = 'file' %}
+                            {% else %}
+                                {% set url_type = 'tertulis' %}
+                            {% endif %}
+                            {{ anchor('materi/detail/' ~ m.id, '<i class="icon-zoom-in"></i> Detail', {'class' : 'btn btn-default btn-small', 'target' : '_blank'})|raw }}
+
+                            {% if action_edit == true %}
+                                {{ anchor('materi/edit/' ~ url_type ~ '/' ~ m.id ~ '/' ~ enurl_redirect(current_url() ~ '?q=' ~ keyword), '<i class="icon-edit"></i> Edit', {'class' : 'btn btn-default btn-small'})|raw }}
+                            {% endif %}
+
+                            {% if action_delete == true %}
+                                {{ anchor('materi/delete/' ~ m.id ~ '/' ~ enurl_redirect(current_url() ~ '?q=' ~ keyword), '<i class="icon-trash"></i> Hapus', {'class' : 'btn btn-default btn-small', 'onclick' : "return confirm('Anda yakin ingin menghapus?')"})|raw }}
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+        <br>
+        {% endif %}
+
+        {% if results.tugas is not empty %}
+        <b><i class="icon-tasks"></i> Tugas </b>(ditemukan {{ count(results.tugas) }} record)
+        <table class="table table-condensed table-striped">
+            {% for no, m in results.tugas %}
+            {% if is_admin() or is_pengajar() %}
+                <tr>
+                    <td>
+                        {{ m.judul }}
+                    </td>
+                    <td width="20%">
+                        <div class="btn-group">
+                            {% if m.type_label == 'Ganda' or m.type_label == 'Essay' %}
+                                {{ anchor('tugas/manajemen_soal/' ~ m.id, '<i class="icon icon-tasks"></i> Soal', {'class' : 'btn btn-primary btn-small'})|raw }}
+                            {% endif %}
+                            {% if m.aktif == 0 %}
+                                {{ anchor('tugas/terbitkan/' ~ m.id ~ '/' ~ enurl_redirect(current_url() ~ '?q=' ~ keyword), '<i class="icon-ok"></i> Terbitkan', {'class' : 'btn btn-success btn-small'})|raw }}
+                            {% elseif m.aktif == 1 %}
+                                {{ anchor('tugas/tutup/' ~ m.id ~ '/' ~ enurl_redirect(current_url() ~ '?q=' ~ keyword), '<i class="icon-minus"></i> Tutup', {'class' : 'btn btn-danger btn-small'})|raw }}
+                            {% endif %}
+
+                            {{ anchor('tugas/edit/' ~ m.id ~ '/' ~ enurl_redirect(current_url() ~ '?q=' ~ keyword), '<i class="icon-edit"></i> Edit', {'class' : 'btn btn-default btn-small'})|raw }}
+                            {% if m.type_id == 3 %}
+                                {{ anchor('tugas/nilai/' ~ m.id, '<i class="icon-eye-open"></i> Lihat Nilai', {'class' : 'btn btn-info btn-small'})|raw }}
+                            {% else %}
+                                {{ anchor('tugas/koreksi/' ~ m.id, '<i class="icon-check"></i> Koreksi', {'class' : 'btn btn-info btn-small'})|raw }}
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>
+                        <a href="{{ site_url('tugas?judul=' ~ urlencode(m.judul)) }}">{{ m.judul }}</a>
+                    </td>
+                </tr>
+            {% endif %}
+            {% endfor %}
+        </table>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

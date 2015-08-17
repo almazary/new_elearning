@@ -512,7 +512,7 @@ class Tugas_model extends CI_Model
     }
 
     /**
-     * Method untuk mendapatkan banyak data materi
+     * Method untuk mendapatkan banyak data tugas
      *
      * @param  integer $no_of_records
      * @param  integer $page_no
@@ -536,7 +536,8 @@ class Tugas_model extends CI_Model
         $kelas_id      = array(),
         $judul         = null,
         $info          = null,
-        $aktif         = array()
+        $aktif         = array(),
+        $pagination    = true
     ) {
         $no_of_records = (int)$no_of_records;
         $page_no       = (int)$page_no;
@@ -584,7 +585,14 @@ class Tugas_model extends CI_Model
             $orderby = array('tugas.id' => 'DESC');
         }
 
-        $data = $this->pager->set('tugas', $no_of_records, $page_no, $where, $orderby, 'tugas.*', $group_by);
+        if ($pagination) {
+            $data = $this->pager->set('tugas', $no_of_records, $page_no, $where, $orderby, 'tugas.*', $group_by);
+        } else {
+            # cari jumlah semua pengajar
+            $no_of_records = $this->db->count_all('tugas');
+            $search_all    = $this->pager->set('tugas', $no_of_records, $page_no, $where, $orderby, 'tugas.*', $group_by);
+            $data          = $search_all['results'];
+        }
 
         return $data;
     }

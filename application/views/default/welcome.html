@@ -4,7 +4,7 @@
 <div class="btn-controls">
     <div class="btn-box-row row-fluid">
         <div class="span12">
-            <div class="widget-usage" style="padding: 10px 15px;margin-bottom: 10px;">
+            <div class="widget-usage" style="padding: 10px 15px;margin-bottom: 20px;">
                 <small class="pull-right">{{ tgl_indo(date('Y-m-d')) }}, IP {{ get_ip() }}</small>
                 Selamat datang di <b>E-learning {{ get_pengaturan('nama-sekolah', 'value') }}</b>
                 <br>
@@ -15,7 +15,7 @@
             </div>
 
             {% if is_admin() == false and get_pengaturan('peraturan-elearning', 'value') is not empty %}
-            <div class="widget-usage" style="padding: 10px 15px;margin-bottom: 10px;">
+            <div class="widget-usage" style="padding: 10px 15px;">
                 <b>Peraturan E-learning : </b><br>
                 {{ get_pengaturan('peraturan-elearning', 'value')|raw }}
             </div>
@@ -57,7 +57,7 @@
     {% endif %}
 
     {% if is_admin() %}
-    <div class="btn-box-row row-fluid">
+    <div class="btn-box-row row-fluid" style="margin-top:-20px;">
         <a href="{{ site_url('siswa/index/1') }}" class="btn-box big span3">
             <i class="icon-group"></i><b>{{ jml_siswa }}</b>
             <p class="text-muted">Siswa</p>
