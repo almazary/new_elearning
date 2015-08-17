@@ -72,7 +72,8 @@ class Login_model extends CI_Model
         $password    = null,
         $siswa_id    = null,
         $pengajar_id = null,
-        $is_admin    = null
+        $is_admin    = null,
+        $reset_kode  = null
     ) {
         if (!is_null($id)) {
             $id = (int)$id;
@@ -95,6 +96,9 @@ class Login_model extends CI_Model
         if (!is_null($is_admin)) {
             $is_admin = (int)$is_admin;
             $this->db->where('is_admin', $is_admin);
+        }
+        if (!is_null($reset_kode)) {
+            $this->db->where('reset_kode', $reset_kode);
         }
 
         $result = $this->db->get('login', 1);

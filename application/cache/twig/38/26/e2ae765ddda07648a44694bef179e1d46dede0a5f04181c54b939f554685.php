@@ -1,7 +1,7 @@
 <?php
 
-/* login.html */
-class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d720333a94 extends Twig_Template
+/* lupa-password.html */
+class __TwigTemplate_3826e2ae765ddda07648a44694bef179e1d46dede0a5f04181c54b939f554685 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -29,7 +29,7 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
     public function block_title($context, array $blocks = array())
     {
         // line 4
-        echo "Login - ";
+        echo "Lupa password - ";
         $this->displayParentBlock("title", $context, $blocks);
         echo "
 ";
@@ -43,19 +43,19 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
     <div class=\"module span4 offset4\">
         ";
         // line 10
-        echo form_open("login", array("autocomplete" => "off", "class" => "form-vertical"));
+        echo form_open("login/lupa_password", array("class" => "form-vertical"));
         echo "
             <div class=\"module-head\">
-                <h3>Login E-learning</h3>
+                <h3>Lupa password</h3>
             </div>
             <div class=\"module-body\">
                ";
         // line 15
-        echo get_flashdata("login");
+        echo get_flashdata("lupa_password");
         echo "
                 <div class=\"control-group\">
                     <div class=\"controls row-fluid\">
-                        <input class=\"span12\" name=\"email\" type=\"text\" placeholder=\"Username (Email)\" value=\"";
+                        <input class=\"span12\" name=\"email\" type=\"text\" placeholder=\"Masukkan username (Email)\" value=\"";
         // line 18
         echo twig_escape_filter($this->env, set_value("email"), "html", null, true);
         echo "\" autofocus>
@@ -65,25 +65,16 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
         echo "
                     </div>
                 </div>
-                <div class=\"control-group\">
-                    <div class=\"controls row-fluid\">
-                        <input class=\"span12\" name=\"password\" type=\"password\" placeholder=\"Password\">
-                    </div>
-                </div>
             </div>
             <div class=\"module-foot\">
                 <div class=\"control-group\">
                     <div class=\"controls clearfix\">
-                        <button type=\"submit\" class=\"btn btn-large btn-primary pull-right\">Login</button>
-                        <a href=\"";
-        // line 32
-        echo twig_escape_filter($this->env, site_url("login/lupa_password"), "html", null, true);
-        echo "\">Lupa password?</a>
+                        <button type=\"submit\" class=\"btn btn-large btn-primary pull-right\">Reset</button>
                     </div>
                 </div>
             </div>
         ";
-        // line 36
+        // line 30
         echo (isset($context["form_close"]) ? $context["form_close"] : null);
         echo "
     </div>
@@ -93,7 +84,7 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
 
     public function getTemplateName()
     {
-        return "login.html";
+        return "lupa-password.html";
     }
 
     public function isTraitable()
@@ -103,6 +94,6 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
 
     public function getDebugInfo()
     {
-        return array (  87 => 36,  80 => 32,  64 => 19,  60 => 18,  54 => 15,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  78 => 30,  64 => 19,  60 => 18,  54 => 15,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

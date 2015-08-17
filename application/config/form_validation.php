@@ -28,6 +28,27 @@ $config['setup/index'] = array(
     ),
 );
 
+$config['lupa_password'] = array(
+    array(
+        'field' => 'email',
+        'label' => 'Username (Email)',
+        'rules' => 'required|trim|valid_email|xss_clean|callback_check_username_exist'
+    ),
+);
+
+$config['reset_password'] = array(
+    array(
+        'field' => 'password',
+        'label' => 'Password',
+        'rules' => 'required|trim|xss_clean|alpha_numeric'
+    ),
+    array(
+        'field' => 'password2',
+        'label' => 'Confirm Password',
+        'rules' => 'required|trim|xss_clean|alpha_numeric|matches[password]'
+    ),
+);
+
 $config['register/siswa'] = array(
     array(
         'field' => 'nis',

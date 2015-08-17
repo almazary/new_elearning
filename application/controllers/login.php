@@ -109,6 +109,10 @@ class Login extends MY_Controller
 
     function register($sebagai = 'siswa')
     {
+        if (is_login()) {
+            redirect('welcome');
+        }
+
         # cek fitur
         if (empty(get_pengaturan('registrasi-siswa', 'value')) && empty(get_pengaturan('registrasi-pengajar', 'value'))) {
             redirect('login');
@@ -241,5 +245,85 @@ class Login extends MY_Controller
         $data['sebagai'] = $sebagai;
 
         $this->twig->display('register.html', $data);
+    }
+
+    function lupa_password()
+    {
+        if (is_login()) {
+            redirect('welcome');
+        }
+
+        $data = array();
+        if ($this->form_validation->run('lupa_password') == true) {
+            # retrieve
+            $retrieve = $this->login_model->retrieve(
+                $id          = null,
+                $username    = $this->input->post('email', true)
+            );
+
+            # set reset kode
+            $this->login_model->update(
+                $id          = $retrieve['id'],
+                $username    = $retrieve['username'],
+                $siswa_id    = $retrieve['siswa_id'],
+                $pengajar_id = $retrieve['pengajar_id'],
+                $is_admin    = $retrieve['is_admin'],
+                $reset_kode  = md5(time())
+            );
+
+            # kirim email disini
+
+
+            $this->session->set_flashdata('lupa_password', get_alert('success', 'Link reset password telah dikirimkan keemail anda.'));
+            redirect('login/lupa_password');
+        }
+
+        $this->twig->display('lupa-password.html', $data);
+    }
+
+    function reset_password($kode = '')
+    {
+        if (empty($kode)) {
+            redirect('welcome/lupa_password');
+        }
+
+        $login = $this->login_model->retrieve(
+            $id          = null,
+            $username    = null,
+            $password    = null,
+            $siswa_id    = null,
+            $pengajar_id = null,
+            $is_admin    = null,
+            $reset_kode  = $kode
+        );
+
+        if (empty($login)) {
+            $this->session->set_flashdata('lupa_password', get_alert('warning', 'Reset kode tidak benar.'));
+            redirect('login/lupa_password');
+        }
+
+        if ($this->form_validation->run('reset_password') == true) {
+            # update password
+            $this->login_model->update_password(
+                $login['id'],
+                $this->input->post('password', true)
+            );
+
+            # update reset kode
+            $this->login_model->update(
+                $id          = $login['id'],
+                $username    = $login['username'],
+                $siswa_id    = $login['siswa_id'],
+                $pengajar_id = $login['pengajar_id'],
+                $is_admin    = $login['is_admin'],
+                $reset_kode  = null
+            );
+
+            $this->session->set_flashdata('login', get_alert('success', 'Password berhasil diperbaharui, silahkan login menggunakan password baru anda.'));
+            redirect('login');
+        }
+
+        $data['login'] = $login;
+        $this->twig->display('reset-password.html', $data);
     }
 }

@@ -70,6 +70,18 @@ class MY_Controller extends CI_Controller
         }
     }
 
+    function check_username_exist($username) {
+        $this->db->where('username', $username);
+        $result = $this->db->get('login');
+        $result = $result->num_rows();
+        if (empty($result)) {
+            $this->form_validation->set_message('check_username_exist', 'Username tidak ditemukan.');
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     function create_img_thumb($source_path = '', $marker = '_thumb', $width = '90', $height = '90')
     {
         $config['image_library']  = 'gd2';

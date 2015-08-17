@@ -1,7 +1,7 @@
 <?php
 
-/* login.html */
-class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d720333a94 extends Twig_Template
+/* reset-password.html */
+class __TwigTemplate_d9b275d4aa78db9fc5df682d37a135ca96c1507efab2c485c41b08c6e2a79983 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -29,7 +29,7 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
     public function block_title($context, array $blocks = array())
     {
         // line 4
-        echo "Login - ";
+        echo "Reset password - ";
         $this->displayParentBlock("title", $context, $blocks);
         echo "
 ";
@@ -43,47 +43,49 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
     <div class=\"module span4 offset4\">
         ";
         // line 10
-        echo form_open("login", array("autocomplete" => "off", "class" => "form-vertical"));
+        echo form_open(("login/reset_password/" . $this->getAttribute((isset($context["login"]) ? $context["login"] : null), "reset_kode")), array("class" => "form-vertical"));
         echo "
             <div class=\"module-head\">
-                <h3>Login E-learning</h3>
+                <h3>Reset password</h3>
             </div>
             <div class=\"module-body\">
                ";
         // line 15
-        echo get_flashdata("login");
+        echo get_flashdata("reset_password");
         echo "
+                <b>Username : </b>";
+        // line 16
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["login"]) ? $context["login"] : null), "username"), "html", null, true);
+        echo "
+                <br><br>
                 <div class=\"control-group\">
                     <div class=\"controls row-fluid\">
-                        <input class=\"span12\" name=\"email\" type=\"text\" placeholder=\"Username (Email)\" value=\"";
-        // line 18
-        echo twig_escape_filter($this->env, set_value("email"), "html", null, true);
-        echo "\" autofocus>
+                        <input class=\"span12\" name=\"password\" type=\"password\" placeholder=\"Masukkan password baru\" autofocus>
                         ";
-        // line 19
-        echo form_error("email");
+        // line 21
+        echo form_error("password");
         echo "
                     </div>
                 </div>
                 <div class=\"control-group\">
                     <div class=\"controls row-fluid\">
-                        <input class=\"span12\" name=\"password\" type=\"password\" placeholder=\"Password\">
+                        <input class=\"span12\" name=\"password2\" type=\"password\" placeholder=\"Ketik ulang password\">
+                        ";
+        // line 27
+        echo form_error("password2");
+        echo "
                     </div>
                 </div>
             </div>
             <div class=\"module-foot\">
                 <div class=\"control-group\">
                     <div class=\"controls clearfix\">
-                        <button type=\"submit\" class=\"btn btn-large btn-primary pull-right\">Login</button>
-                        <a href=\"";
-        // line 32
-        echo twig_escape_filter($this->env, site_url("login/lupa_password"), "html", null, true);
-        echo "\">Lupa password?</a>
+                        <button type=\"submit\" class=\"btn btn-large btn-primary pull-right\">Reset</button>
                     </div>
                 </div>
             </div>
         ";
-        // line 36
+        // line 38
         echo (isset($context["form_close"]) ? $context["form_close"] : null);
         echo "
     </div>
@@ -93,7 +95,7 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
 
     public function getTemplateName()
     {
-        return "login.html";
+        return "reset-password.html";
     }
 
     public function isTraitable()
@@ -103,6 +105,6 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
 
     public function getDebugInfo()
     {
-        return array (  87 => 36,  80 => 32,  64 => 19,  60 => 18,  54 => 15,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  89 => 38,  75 => 27,  66 => 21,  58 => 16,  54 => 15,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }
