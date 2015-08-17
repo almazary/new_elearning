@@ -106,4 +106,140 @@ class Login extends MY_Controller
             $this->twig->display('pp-siswa.html', $data);
         }
     }
+
+    function register($sebagai = 'siswa')
+    {
+        # cek fitur
+        if (empty(get_pengaturan('registrasi-siswa', 'value')) && empty(get_pengaturan('registrasi-pengajar', 'value'))) {
+            redirect('login');
+        }
+
+        $sebagai = empty($sebagai) ? 'siswa' : $sebagai;
+        $allow_register = array('siswa', 'pengajar');
+        if (!in_array($sebagai, $allow_register)) {
+            redirect('login/register');
+        }
+
+        if (empty(get_pengaturan('registrasi-siswa', 'value')) && $sebagai == 'siswa') {
+            redirect('login/register/pengajar');
+        }
+
+        if (empty(get_pengaturan('registrasi-pengajar', 'value')) && $sebagai == 'pengajar') {
+            redirect('login/register/siswa');
+        }
+
+        $data = array();
+        if ($sebagai == 'siswa') {
+            if ($this->form_validation->run('register/siswa') == true) {
+                $nama          = $this->input->post('nis', TRUE);
+                $nama          = $this->input->post('nama', TRUE);
+                $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+                $tahun_masuk   = $this->input->post('tahun_masuk', TRUE);
+                $kelas_id      = $this->input->post('kelas_id', TRUE);
+                $tempat_lahir  = $this->input->post('tempat_lahir', TRUE);
+                $tgl_lahir     = $this->input->post('tgl_lahir', TRUE);
+                $bln_lahir     = $this->input->post('bln_lahir', TRUE);
+                $thn_lahir     = $this->input->post('thn_lahir', TRUE);
+                $agama         = $this->input->post('agama', TRUE);
+                $alamat        = $this->input->post('alamat', TRUE);
+                $username      = $this->input->post('username', TRUE);
+                $password      = $this->input->post('password2', TRUE);
+
+                if (empty($thn_lahir)) {
+                    $tanggal_lahir = null;
+                } else {
+                    $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
+                }
+
+                $foto = null;
+
+                # simpan data siswa
+                $siswa_id = $this->siswa_model->create(
+                    $nis,
+                    $nama,
+                    $jenis_kelamin,
+                    $tempat_lahir,
+                    $tanggal_lahir,
+                    $agama,
+                    $alamat,
+                    $tahun_masuk,
+                    $foto,
+                    0
+                );
+
+                # simpan data login
+                $this->login_model->create(
+                    $username,
+                    $password,
+                    $siswa_id,
+                    null
+                );
+
+                # simpan kelas siswa
+                $this->kelas_model->create_siswa(
+                    $kelas_id,
+                    $siswa_id,
+                    1
+                );
+
+                $this->session->set_flashdata('register', get_alert('success', 'Terimakasih telah melakukan registrasi sebagai siswa, tunggu pengaktifan akun oleh admin.'));
+                redirect('login/register/siswa');
+            }
+
+            $data['kelas'] = $this->kelas_model->retrieve_all_child();
+        }
+
+        # jika pengajar
+        elseif ($sebagai == 'pengajar') {
+            if ($this->form_validation->run('register/pengajar') == true) {
+                $nip           = $this->input->post('nip', TRUE);
+                $nama          = $this->input->post('nama', TRUE);
+                $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+                $tempat_lahir  = $this->input->post('tempat_lahir', TRUE);
+                $tgl_lahir     = $this->input->post('tgl_lahir', TRUE);
+                $bln_lahir     = $this->input->post('bln_lahir', TRUE);
+                $thn_lahir     = $this->input->post('thn_lahir', TRUE);
+                $alamat        = $this->input->post('alamat', TRUE);
+                $username      = $this->input->post('username', TRUE);
+                $password      = $this->input->post('password2', TRUE);
+                $is_admin      = 0;
+                $foto          = null;
+
+                if (empty($thn_lahir)) {
+                    $tanggal_lahir = null;
+                } else {
+                    $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
+                }
+
+                # simpan data siswa
+                $pengajar_id = $this->pengajar_model->create(
+                    $nip,
+                    $nama,
+                    $jenis_kelamin,
+                    $tempat_lahir,
+                    $tanggal_lahir,
+                    $alamat,
+                    $foto,
+                    0
+                );
+
+                # simpan data login
+                $this->login_model->create(
+                    $username,
+                    $password,
+                    null,
+                    $pengajar_id,
+                    $is_admin
+                );
+
+                $this->session->set_flashdata('register', get_alert('success', 'Terimakasih telah melakukan registrasi sebagai pengajar, tunggu pengaktifan akun oleh admin.'));
+                redirect('login/register/pengajar');
+            }
+        }
+
+
+        $data['sebagai'] = $sebagai;
+
+        $this->twig->display('register.html', $data);
+    }
 }

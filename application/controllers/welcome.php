@@ -45,6 +45,32 @@ class Welcome extends MY_Controller
 
         $this->twig->display('welcome.html', $data);
     }
+
+    function pengaturan()
+    {
+        must_login();
+
+        if (!is_admin()) {
+            redirect('welcome');
+        }
+
+        $data['comp_js'] = get_tinymce('tinymce, textarea.tinymce');
+
+        if ($this->form_validation->run('pengaturan') == true) {
+            foreach ($_POST as $key => $val) {
+                # cek ada tidak, kalo ada update
+                $retrieve = $this->config_model->retrieve($key);
+                if (!empty($retrieve)) {
+                    $this->config_model->update($key, $retrieve['nama'], $val);
+                }
+            }
+
+            $this->session->set_flashdata('pengaturan', get_alert('success', 'Pengaturan berhasil diperbaharui.'));
+            redirect('welcome/pengaturan');
+        }
+
+        $this->twig->display('pengaturan.html', $data);
+    }
 }
 
 /* End of file welcome.php */

@@ -158,140 +158,144 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
             // line 71
             echo twig_escape_filter($this->env, site_url(), "html", null, true);
             echo "\"><i class=\"menu-icon icon-home\"></i>Beranda</a></li>
+                                <li><a href=\"";
+            // line 72
+            echo twig_escape_filter($this->env, site_url("welcome/pengaturan"), "html", null, true);
+            echo "\"><i class=\"menu-icon icon-wrench\"></i>Pengaturan</a></li>
                             </ul>
 
                             <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
-            // line 75
+            // line 76
             echo twig_escape_filter($this->env, site_url("tugas?clear_filter=true"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-tasks\"></i>Tugas </a></li>
                                 <li><a href=\"";
-            // line 76
+            // line 77
             echo twig_escape_filter($this->env, site_url("materi?clear_filter=true"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-book\"></i>Materi </a></li>
                             </ul>
 
                             <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
-            // line 80
+            // line 81
             echo twig_escape_filter($this->env, site_url("siswa"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-tasks\"></i>Siswa </a></li>
                                 <li><a href=\"";
-            // line 81
+            // line 82
             echo twig_escape_filter($this->env, site_url("pengajar"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-book\"></i>Pengajar </a></li>
                             </ul>
 
                             <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
-            // line 85
+            // line 86
             echo twig_escape_filter($this->env, site_url("kelas/mapel_kelas"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-paste\"></i>Matapelajaran Kelas </a></li>
                                 <li><a href=\"";
-            // line 86
+            // line 87
             echo twig_escape_filter($this->env, site_url("kelas"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-tasks\"></i>Manajemen Kelas </a></li>
                                 <li><a href=\"";
-            // line 87
+            // line 88
             echo twig_escape_filter($this->env, site_url("mapel"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-book\"></i>Manajemen Matapelajaran </a></li>
                             </ul>
                             ";
         }
-        // line 90
+        // line 91
         echo "
                             ";
-        // line 91
+        // line 92
         if (is_pengajar()) {
-            // line 92
+            // line 93
             echo "                            <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
-            // line 93
+            // line 94
             echo twig_escape_filter($this->env, site_url(), "html", null, true);
             echo "\"><i class=\"menu-icon icon-home\"></i>Beranda
                                 <li><a href=\"";
-            // line 94
+            // line 95
             echo twig_escape_filter($this->env, site_url("login/pp"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-user\"></i>Profilku</a></li>
                                 <li><a href=\"";
-            // line 95
+            // line 96
             echo twig_escape_filter($this->env, site_url("pengajar/jadwal"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-tasks\"></i>Jadwal Mengajar </a></li>
                             </ul>
 
                             <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
-            // line 99
+            // line 100
             echo twig_escape_filter($this->env, site_url("tugas?clear_filter=true"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-tasks\"></i>Tugas </a></li>
                                 <li><a href=\"";
-            // line 100
+            // line 101
             echo twig_escape_filter($this->env, site_url("materi?clear_filter=true"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-book\"></i>Materi </a></li>
                             </ul>
 
                             <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
-            // line 104
+            // line 105
             echo twig_escape_filter($this->env, site_url("pengajar/filter"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-search\"></i>Filter Pengajar </a></li>
                                 <li><a href=\"";
-            // line 105
+            // line 106
             echo twig_escape_filter($this->env, site_url("siswa/filter"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-search\"></i>Filter Siswa </a></li>
                             </ul>
                             ";
         }
-        // line 108
+        // line 109
         echo "
                             ";
-        // line 109
+        // line 110
         if (is_siswa()) {
-            // line 110
+            // line 111
             echo "                            <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
-            // line 111
+            // line 112
             echo twig_escape_filter($this->env, site_url(), "html", null, true);
             echo "\"><i class=\"menu-icon icon-home\"></i>Beranda
                                 <li><a href=\"";
-            // line 112
+            // line 113
             echo twig_escape_filter($this->env, site_url("login/pp"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-user\"></i>Profilku</a></li>
                                 <li><a href=\"";
-            // line 113
+            // line 114
             echo twig_escape_filter($this->env, site_url("siswa/jadwal_mapel"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-tasks\"></i>Jadwal Matapelajaran</a></li>
                             </ul>
 
                             <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
-            // line 117
+            // line 118
             echo twig_escape_filter($this->env, site_url("tugas?clear_filter=true"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-tasks\"></i>Tugas </a></li>
                                 <li><a href=\"";
-            // line 118
+            // line 119
             echo twig_escape_filter($this->env, site_url("materi?clear_filter=true"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-book\"></i>Materi </a></li>
                             </ul>
 
                             <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
-            // line 122
+            // line 123
             echo twig_escape_filter($this->env, site_url("pengajar/filter"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-search\"></i>Filter Pengajar </a></li>
                                 <li><a href=\"";
-            // line 123
+            // line 124
             echo twig_escape_filter($this->env, site_url("siswa/filter"), "html", null, true);
             echo "\"><i class=\"menu-icon icon-search\"></i>Filter Siswa </a></li>
                             </ul>
                             ";
         }
-        // line 126
+        // line 127
         echo "
                             <!--/.widget-nav-->
                             <ul class=\"widget widget-menu unstyled\">
                                 <li><a href=\"";
-        // line 129
+        // line 130
         echo twig_escape_filter($this->env, site_url("login/logout"), "html", null, true);
         echo "\"><i class=\"menu-icon icon-signout\"></i>Logout </a></li>
                             </ul>
@@ -302,9 +306,9 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
                     <div class=\"span9\">
                         <div class=\"content\">
                             ";
-        // line 137
-        $this->displayBlock('content', $context, $blocks);
         // line 138
+        $this->displayBlock('content', $context, $blocks);
+        // line 139
         echo "                        </div>
                     </div>
                     <!--/.span9-->
@@ -317,11 +321,11 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
             <div class=\"container\">
                 <center>
                     <b class=\"copyright\">";
-        // line 149
+        // line 150
         echo (isset($context["copyright"]) ? $context["copyright"] : null);
         echo " </b> All rights reserved.<br>
                     ";
-        // line 150
+        // line 151
         echo (isset($context["version"]) ? $context["version"] : null);
         echo " | Page loaded in ";
         echo twig_escape_filter($this->env, (isset($context["elapsed_time"]) ? $context["elapsed_time"] : null), "html", null, true);
@@ -331,38 +335,38 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
         </div>
         <script type=\"text/javascript\">
         var site_url = \"";
-        // line 155
+        // line 156
         echo twig_escape_filter($this->env, site_url(), "html", null, true);
         echo "\";
         var base_url = \"";
-        // line 156
+        // line 157
         echo twig_escape_filter($this->env, base_url(), "html", null, true);
         echo "\";
         </script>
         <script src=\"";
-        // line 158
+        // line 159
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 159
+        // line 160
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-ui-1.10.1.custom.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 160
+        // line 161
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "bootstrap/js/bootstrap.min.js\" type=\"text/javascript\"></script>
         ";
-        // line 161
+        // line 162
         echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
         echo "
         <script src=\"";
-        // line 162
+        // line 163
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/script.js\" type=\"text/javascript\"></script>
         ";
-        // line 163
-        $this->displayBlock('js', $context, $blocks);
         // line 164
+        $this->displayBlock('js', $context, $blocks);
+        // line 165
         echo "    </body>
 </html>
 ";
@@ -379,12 +383,12 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
     {
     }
 
-    // line 137
+    // line 138
     public function block_content($context, array $blocks = array())
     {
     }
 
-    // line 163
+    // line 164
     public function block_js($context, array $blocks = array())
     {
     }
@@ -401,6 +405,6 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
 
     public function getDebugInfo()
     {
-        return array (  388 => 163,  383 => 137,  378 => 11,  372 => 6,  366 => 164,  364 => 163,  360 => 162,  356 => 161,  352 => 160,  348 => 159,  344 => 158,  339 => 156,  335 => 155,  325 => 150,  321 => 149,  308 => 138,  306 => 137,  295 => 129,  290 => 126,  284 => 123,  280 => 122,  273 => 118,  269 => 117,  262 => 113,  258 => 112,  254 => 111,  251 => 110,  249 => 109,  246 => 108,  240 => 105,  236 => 104,  229 => 100,  225 => 99,  218 => 95,  214 => 94,  210 => 93,  207 => 92,  205 => 91,  202 => 90,  196 => 87,  192 => 86,  188 => 85,  181 => 81,  177 => 80,  170 => 76,  166 => 75,  159 => 71,  156 => 70,  154 => 69,  134 => 52,  131 => 51,  125 => 49,  123 => 48,  120 => 47,  114 => 45,  112 => 44,  109 => 43,  103 => 41,  101 => 40,  94 => 36,  89 => 34,  73 => 23,  69 => 22,  57 => 13,  52 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
+        return array (  392 => 164,  387 => 138,  382 => 11,  376 => 6,  370 => 165,  368 => 164,  364 => 163,  360 => 162,  356 => 161,  352 => 160,  348 => 159,  343 => 157,  339 => 156,  329 => 151,  325 => 150,  312 => 139,  310 => 138,  299 => 130,  294 => 127,  288 => 124,  284 => 123,  277 => 119,  273 => 118,  266 => 114,  262 => 113,  258 => 112,  255 => 111,  253 => 110,  250 => 109,  244 => 106,  240 => 105,  233 => 101,  229 => 100,  222 => 96,  218 => 95,  214 => 94,  211 => 93,  209 => 92,  206 => 91,  200 => 88,  196 => 87,  192 => 86,  185 => 82,  181 => 81,  174 => 77,  170 => 76,  163 => 72,  159 => 71,  156 => 70,  154 => 69,  134 => 52,  131 => 51,  125 => 49,  123 => 48,  120 => 47,  114 => 45,  112 => 44,  109 => 43,  103 => 41,  101 => 40,  94 => 36,  89 => 34,  73 => 23,  69 => 22,  57 => 13,  52 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
     }
 }

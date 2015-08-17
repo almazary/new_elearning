@@ -620,7 +620,7 @@ class Pengajar extends MY_Controller
 
         }
 
-        if ((is_pengajar() OR is_siswa()) AND empty($filter)) {
+        if (empty($filter)) {
             $filter = array(
                 'nip'           => '',
                 'nama'          => '',
@@ -634,6 +634,10 @@ class Pengajar extends MY_Controller
                 'username'      => '',
                 'is_admin'      => ''
             );
+        }
+
+        if (empty($filter['status_id'])) {
+            $filter['status_id'] = array(1, 2);
         }
 
         $data['filter'] = $filter;

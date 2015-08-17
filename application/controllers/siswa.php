@@ -254,7 +254,7 @@ class Siswa extends MY_Controller
 
         }
 
-        if ((is_pengajar() OR is_siswa()) AND empty($filter)) {
+        if (empty($filter)) {
             $filter = array(
                 'nis'           => '',
                 'nama'          => '',
@@ -270,6 +270,10 @@ class Siswa extends MY_Controller
                 'kelas_id'      => '',
                 'username'      => ''
             );
+        }
+
+        if (empty($filter['status_id'])) {
+            $filter['status_id'] = array(1, 2);
         }
 
         $data['filter'] = $filter;

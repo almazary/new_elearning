@@ -75,11 +75,12 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
                 <div class=\"control-group\">
                     <div class=\"controls clearfix\">
                         <button type=\"submit\" class=\"btn btn-large btn-primary pull-right\">Login</button>
+                        <a href=\"\">Lupa password?</a>
                     </div>
                 </div>
             </div>
         ";
-        // line 35
+        // line 36
         echo (isset($context["form_close"]) ? $context["form_close"] : null);
         echo "
     </div>
@@ -99,6 +100,6 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
 
     public function getDebugInfo()
     {
-        return array (  83 => 35,  64 => 19,  60 => 18,  54 => 15,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  84 => 36,  64 => 19,  60 => 18,  54 => 15,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

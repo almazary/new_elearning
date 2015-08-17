@@ -24,7 +24,7 @@ function default_parser_item($add_item = array())
         'favicon_url'       => base_url('assets/images/favicon.ico'),
         'copyright_setup'   => 'Copyright &copy; 2014 Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
         'copyright'         => 'Copyright &copy; 2014 '.get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
-        'version'           => '<a href="https://github.com/almazary/new_elearning">@dev version</a>',
+        'version'           => '<a href="https://github.com/almazary/new_elearning">versi ' . get_pengaturan('versi', 'value') . '</a>',
         'current_url'       => current_url(),
         'logo_url_small'    => get_logo_url(),
         'logo_url_medium'   => get_logo_url('medium'),
@@ -34,7 +34,8 @@ function default_parser_item($add_item = array())
         'site_name'         => 'E-Learning '.get_pengaturan('nama-sekolah', 'value'),
         'comp_css'          => '',
         'comp_js'           => '',
-        'url_referrer'      => $url_referrer
+        'url_referrer'      => $url_referrer,
+        'elapsed_time'      => $CI->benchmark->elapsed_time(),
     );
 
     if (!empty($add_item) AND is_array($add_item)) {
