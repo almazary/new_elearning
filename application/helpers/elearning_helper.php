@@ -673,3 +673,58 @@ function lama_pengerjaan($start, $finish) {
 
     return trim($result);
 }
+
+function get_email_admin()
+{
+    $results = array();
+
+    $retrieve_all = get_row_data('login_model', 'retrieve_all', array(10, 1, 1, false));
+    foreach ($retrieve_all as $login) {
+        # cari pengajar
+        $pengajar = get_row_data('pengajar_model', 'retrieve', array($login['pengajar_id']));
+        if ($pengajar['status_id'] != 1) {
+            continue;
+        }
+
+        $results[] = array(
+            'nama'  => $pengajar['nama'],
+            'email' => $login['username']
+        );
+    }
+
+    return $results;
+}
+
+function kirim_email($nama_email, $to = array(), $array_data = array())
+{
+    # cari email
+    $template = get_pengaturan($nama_email, 'value');
+    $template = json_decode($template, 1);
+    if (empty($template)) {
+        return false;
+    }
+
+    $arr_old = array();
+    $arr_new = array();
+    foreach ((array)$array_data as $key => $value) {
+        $arr_old[] = '{$'.$key.'}';
+        $arr_new[] = $value;
+    }
+
+    $email_subject = str_replace($arr_old, $arr_new, $template['subject']);
+    $email_body    = str_replace($arr_old, $arr_new, $template['body']);
+
+    $CI &= get_instance();
+    $CI->email->clear(true);
+
+    $config['mailtype'] = 'html';
+    $CI->email->initialize($config);
+
+    $CI->email->to($to);
+    $CI->email->from(get_pengaturan('email-server', 'value'), '[E-learning] - ' . get_pengaturan('nama-sekolah', 'value'));
+    $CI->email->subject($email_subject);
+    $CI->email->message($email_body);
+    $CI->email->send();
+
+    return true;
+}

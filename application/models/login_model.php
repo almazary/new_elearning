@@ -36,7 +36,8 @@ class Login_model extends CI_Model
     public function retrieve_all(
         $no_of_records = 10,
         $page_no       = 1,
-        $is_admin      = 0
+        $is_admin      = 0,
+        $pagination    = true
     ) {
         $no_of_records = (int)$no_of_records;
         $page_no       = (int)$page_no;
@@ -49,7 +50,13 @@ class Login_model extends CI_Model
 
         $orderby = array('id' => 'DESC');
 
-        $data = $this->pager->set('login', $no_of_records, $page_no, $where, $orderby);
+        if ($pagination) {
+            $data = $this->pager->set('login', $no_of_records, $page_no, $where, $orderby);
+        } else {
+            $no_of_records = $this->db->count_all('login');
+            $search_all    = $this->pager->set('login', $no_of_records, $page_no, $where, $orderby);
+            $data          = $search_all['results'];
+        }
 
         return $data;
     }

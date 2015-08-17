@@ -145,12 +145,25 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                 </div>
             </div>
             <div class=\"control-group\">
+                <label class=\"control-label\">Email server</label>
+                <div class=\"controls\">
+                    <input type=\"text\" name=\"email-server\" class=\"span5\" value=\"";
+        // line 74
+        echo twig_escape_filter($this->env, set_value("email-server", get_pengaturan("email-server", "value")), "html", null, true);
+        echo "\">
+                    <br>";
+        // line 75
+        echo form_error("email-server");
+        echo "
+                </div>
+            </div>
+            <div class=\"control-group\">
                 <div class=\"controls\">
                     <button type=\"submit\" class=\"btn btn-primary\">Update</button>
                 </div>
             </div>
         ";
-        // line 76
+        // line 83
         echo form_close();
         echo "
 
@@ -171,6 +184,6 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
 
     public function getDebugInfo()
     {
-        return array (  154 => 76,  143 => 68,  134 => 62,  124 => 55,  118 => 52,  107 => 44,  101 => 41,  91 => 34,  87 => 33,  78 => 27,  74 => 26,  65 => 20,  61 => 19,  54 => 15,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  167 => 83,  156 => 75,  152 => 74,  143 => 68,  134 => 62,  124 => 55,  118 => 52,  107 => 44,  101 => 41,  91 => 34,  87 => 33,  78 => 27,  74 => 26,  65 => 20,  61 => 19,  54 => 15,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

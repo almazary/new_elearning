@@ -69,7 +69,7 @@ class __TwigTemplate_3826e2ae765ddda07648a44694bef179e1d46dede0a5f04181c54b939f5
             <div class=\"module-foot\">
                 <div class=\"control-group\">
                     <div class=\"controls clearfix\">
-                        <button type=\"submit\" class=\"btn btn-large btn-primary pull-right\">Reset</button>
+                        <button type=\"submit\" class=\"btn btn-large btn-primary pull-right\">Kirim</button>
                     </div>
                 </div>
             </div>
