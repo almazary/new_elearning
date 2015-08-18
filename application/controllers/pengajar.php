@@ -61,6 +61,10 @@ class Pengajar extends MY_Controller
                         $retrieve_pengajar['foto'],
                         $post_status_id
                     );
+
+                    if ($retrieve_pengajar['status_id'] == 0 && $post_status_id == 1) {
+                        kirim_email_approve_pengajar($pengajar_id);
+                    }
                 }
             }
 
@@ -248,6 +252,10 @@ class Pengajar extends MY_Controller
                 $is_admin,
                 null
             );
+
+            if ($retrieve_pengajar['status_id'] == 0 && $status == 1) {
+                kirim_email_approve_pengajar($pengajar_id);
+            }
 
             $this->session->set_flashdata('edit', get_alert('success', 'Profil pengajar berhasil diperbaharui.'));
             redirect('pengajar/edit_profile/'.$status_id.'/'.$pengajar_id);

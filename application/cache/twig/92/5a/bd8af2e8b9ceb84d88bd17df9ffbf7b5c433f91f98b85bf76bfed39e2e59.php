@@ -54,13 +54,27 @@ class __TwigTemplate_925abd8af2e8b9ceb84d88bd17df9ffbf7b5c433f91f98b85bf76bfed39
 
         ";
         // line 15
+        echo get_alert("success", "Ubah bentuk atau kata - kata template email selain {\$...}");
+        echo "
+
+        ";
+        // line 17
         echo form_open(("email/edit/" . $this->getAttribute((isset($context["template"]) ? $context["template"] : null), "id")), array("class" => "form-horizontal row-fluid"));
         echo "
+            <div class=\"control-group\">
+                <label class=\"control-label\">ID</label>
+                <div class=\"controls\">
+                    <p style=\"margin-top:5px;\">";
+        // line 21
+        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["template"]) ? $context["template"] : null), "id"), "html", null, true);
+        echo "</p>
+                </div>
+            </div>
             <div class=\"control-group\">
                 <label class=\"control-label\">Nama</label>
                 <div class=\"controls\">
                     <p style=\"margin-top:5px;\">";
-        // line 19
+        // line 27
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["template"]) ? $context["template"] : null), "nama"), "html", null, true);
         echo "</p>
                 </div>
@@ -69,11 +83,11 @@ class __TwigTemplate_925abd8af2e8b9ceb84d88bd17df9ffbf7b5c433f91f98b85bf76bfed39
                 <label class=\"control-label\">Subject</label>
                 <div class=\"controls\">
                     <input type=\"text\" name=\"subject\" class=\"span12\" value=\"";
-        // line 25
+        // line 33
         echo twig_escape_filter($this->env, set_value("subject", $this->getAttribute((isset($context["template"]) ? $context["template"] : null), "subject")), "html", null, true);
         echo "\">
                     <br>";
-        // line 26
+        // line 34
         echo form_error("subject");
         echo "
                 </div>
@@ -82,11 +96,11 @@ class __TwigTemplate_925abd8af2e8b9ceb84d88bd17df9ffbf7b5c433f91f98b85bf76bfed39
                 <label class=\"control-label\">Body</label>
                 <div class=\"controls\">
                     <textarea name=\"body\" id=\"body\" style=\"height:300px;width:100%;\">";
-        // line 32
+        // line 40
         echo set_value("body", html_entity_decode($this->getAttribute((isset($context["template"]) ? $context["template"] : null), "body")));
         echo "</textarea>
                     ";
-        // line 33
+        // line 41
         echo form_error("body");
         echo "
                 </div>
@@ -95,13 +109,13 @@ class __TwigTemplate_925abd8af2e8b9ceb84d88bd17df9ffbf7b5c433f91f98b85bf76bfed39
                 <div class=\"controls\">
                     <button type=\"submit\" class=\"btn btn-primary\">Update</button>
                     <a href=\"";
-        // line 39
+        // line 47
         echo twig_escape_filter($this->env, site_url("email"), "html", null, true);
         echo "\" class=\"btn btn-default\">Kembali</a>
                 </div>
             </div>
         ";
-        // line 42
+        // line 50
         echo form_close();
         echo "
 
@@ -122,6 +136,6 @@ class __TwigTemplate_925abd8af2e8b9ceb84d88bd17df9ffbf7b5c433f91f98b85bf76bfed39
 
     public function getDebugInfo()
     {
-        return array (  105 => 42,  99 => 39,  90 => 33,  86 => 32,  77 => 26,  73 => 25,  64 => 19,  57 => 15,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  119 => 50,  113 => 47,  104 => 41,  100 => 40,  91 => 34,  87 => 33,  78 => 27,  69 => 21,  62 => 17,  57 => 15,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

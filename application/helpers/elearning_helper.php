@@ -728,3 +728,84 @@ function kirim_email($nama_email, $to = array(), $array_data = array())
 
     return true;
 }
+
+function kirim_email_approve_siswa($siswa_id)
+{
+    $retrieve_siswa = get_row_data('siswa_model', 'retrieve', array($siswa_id));
+    $login = get_row_data('login_model', 'retrieve', array(null, null, null, $siswa_id));
+
+    $tabel_profil = '<table border="1" cellspacing="0" cellpadding="5">
+        <tr>
+            <td valign="top">NIS</td>
+            <td>' . $retrieve_siswa['nis'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Nama</td>
+            <td>' . $retrieve_siswa['nama'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Jenis kelamin</td>
+            <td>' . $retrieve_siswa['jenis_kelamin'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Tempat lahir</td>
+            <td>' . $retrieve_siswa['tempat_lahir'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Tgl. Lahir</td>
+            <td>' . tgl_indo($retrieve_siswa['tgl_lahir']) . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Alamat</td>
+            <td>' . $retrieve_siswa['alamat'] . '</td>
+        </tr>
+    </table>';
+
+    @kirim_email('email-template-approve-siswa', $login['username'], array(
+        'nama'         => $nama,
+        'nama_sekolah' => get_pengaturan('nama-sekolah', 'value'),
+        'tabel_profil' => $tabel_profil,
+        'url_login'    => site_url('login')
+    ));
+}
+
+
+function kirim_email_approve_pengajar($pengajar_id)
+{
+    $pengajar = get_row_data('pengajar_model', 'retrieve', array($pengajar_id));
+    $login    = get_row_data('login_model', 'retrieve', array(null, null, null, null, $pengajar_id));
+
+    $tabel_profil = '<table border="1" cellspacing="0" cellpadding="5">
+        <tr>
+            <td valign="top">NIP</td>
+            <td>' . $pengajar['nip'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Nama</td>
+            <td>' . $pengajar['nama'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Jenis kelamin</td>
+            <td>' . $pengajar['jenis_kelamin'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Tempat lahir</td>
+            <td>' . $pengajar['tempat_lahir'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Tgl. Lahir</td>
+            <td>' . tgl_indo($pengajar['tgl_lahir']) . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Alamat</td>
+            <td>' . $pengajar['alamat'] . '</td>
+        </tr>
+    </table>';
+
+    @kirim_email('email-template-approve-pengajar', $login['username'], array(
+        'nama'         => $nama,
+        'nama_sekolah' => get_pengaturan('nama-sekolah', 'value'),
+        'tabel_profil' => $tabel_profil,
+        'url_login'    => site_url('login')
+    ));
+}

@@ -135,7 +135,7 @@ class Login extends MY_Controller
         $data = array();
         if ($sebagai == 'siswa') {
             if ($this->form_validation->run('register/siswa') == true) {
-                $nama          = $this->input->post('nis', TRUE);
+                $nis           = $this->input->post('nis', TRUE);
                 $nama          = $this->input->post('nama', TRUE);
                 $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
                 $tahun_masuk   = $this->input->post('tahun_masuk', TRUE);
@@ -185,6 +185,12 @@ class Login extends MY_Controller
                     $siswa_id,
                     1
                 );
+
+                # kirim email registrasi
+                @kirim_email('email-template-register-siswa', $username, array(
+                    'nama'         => $nama,
+                    'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
+                ));
 
                 $this->session->set_flashdata('register', get_alert('success', 'Terimakasih telah melakukan registrasi sebagai siswa, tunggu pengaktifan akun oleh admin.'));
                 redirect('login/register/siswa');
@@ -236,6 +242,12 @@ class Login extends MY_Controller
                     $is_admin
                 );
 
+                # kirim email registrasi
+                @kirim_email('email-template-register-pengajar', $username, array(
+                    'nama'         => $nama,
+                    'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
+                ));
+
                 $this->session->set_flashdata('register', get_alert('success', 'Terimakasih telah melakukan registrasi sebagai pengajar, tunggu pengaktifan akun oleh admin.'));
                 redirect('login/register/pengajar');
             }
@@ -261,6 +273,8 @@ class Login extends MY_Controller
                 $username    = $this->input->post('email', true)
             );
 
+            $reset_kode = md5(time());
+
             # set reset kode
             $this->login_model->update(
                 $id          = $retrieve['id'],
@@ -268,11 +282,13 @@ class Login extends MY_Controller
                 $siswa_id    = $retrieve['siswa_id'],
                 $pengajar_id = $retrieve['pengajar_id'],
                 $is_admin    = $retrieve['is_admin'],
-                $reset_kode  = md5(time())
+                $reset_kode  = $reset_kode
             );
 
             # kirim email disini
-
+            @kirim_email('email-template-link-reset', $retrieve['username'], array(
+                'link_reset' => site_url('reset_password/' . $reset_kode)
+            ));
 
             $this->session->set_flashdata('lupa_password', get_alert('success', 'Link reset password telah dikirimkan keemail anda.'));
             redirect('login/lupa_password');

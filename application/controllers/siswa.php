@@ -76,6 +76,10 @@ class Siswa extends MY_Controller
                         $retrieve_siswa['foto'],
                         $post_status_id
                     );
+
+                    if ($retrieve_siswa['status_id'] == 0 && $post_status_id == 1) {
+                        kirim_email_approve_siswa($retrieve_siswa['id']);
+                    }
                 }
             }
             redirect('siswa/index/'.$status_id);
@@ -446,6 +450,11 @@ class Siswa extends MY_Controller
                 $retrieve_siswa['foto'],
                 $status
             );
+
+            # jika sebelumnya berstatus pending, dan dibuah ke aktif kirimkan email approve
+            if ($retrieve_siswa['status_id'] == 0 && $status == 1) {
+                kirim_email_approve_siswa($retrieve_siswa['id']);
+            }
 
             $this->session->set_flashdata('edit', get_alert('success', 'Profil siswa berhasil diperbaharui.'));
             redirect('siswa/edit_profile/'.$status_id.'/'.$siswa_id);

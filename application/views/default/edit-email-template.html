@@ -12,7 +12,15 @@ Edit Email Template - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('email')|raw }}
 
+        {{ get_alert('success', 'Ubah bentuk atau kata - kata template email selain {$...}')|raw }}
+
         {{ form_open('email/edit/' ~ template.id, {'class' : 'form-horizontal row-fluid'})|raw }}
+            <div class="control-group">
+                <label class="control-label">ID</label>
+                <div class="controls">
+                    <p style="margin-top:5px;">{{ template.id }}</p>
+                </div>
+            </div>
             <div class="control-group">
                 <label class="control-label">Nama</label>
                 <div class="controls">
