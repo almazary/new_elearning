@@ -1,30 +1,30 @@
 <?php
 
-$config['setup/index'] = array(
+$config['setup/index/1'] = array(
     array(
-        'field' => 'nama',
-        'label' => 'Nama Sekolah',
-        'rules' => 'required|trim|xss_clean|min_length[3]'
+        'field' => 'host',
+        'label' => 'Mysql host',
+        'rules' => 'required|trim|xss_clean'
     ),
     array(
-        'field' => 'alamat',
-        'label' => 'Alamat Sekolah',
-        'rules' => 'required|trim|xss_clean|min_length[3]'
-    ),
-    array(
-        'field' => 'email',
-        'label' => 'Email Admin',
-        'rules' => 'required|trim|xss_clean|valid_email'
+        'field' => 'user',
+        'label' => 'Mysql user',
+        'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'password',
-        'label' => 'Password',
-        'rules' => 'required|trim|xss_clean|alpha_numeric'
+        'label' => 'Mysql password',
+        'rules' => 'trim|xss_clean'
     ),
     array(
-        'field' => 'password2',
-        'label' => 'Confirm Password',
-        'rules' => 'required|trim|xss_clean|alpha_numeric|matches[password]'
+        'field' => 'db',
+        'label' => 'Mysql database',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'prefix',
+        'label' => 'Tabel Prefix',
+        'rules' => 'trim|xss_clean'
     ),
 );
 

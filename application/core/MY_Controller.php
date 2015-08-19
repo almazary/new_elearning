@@ -10,6 +10,17 @@ class MY_Controller extends CI_Controller
 
         date_default_timezone_set('Asia/Jakarta');
 
+        # load helper
+        $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download'));
+
+        # cek setup
+        if (is_file(APPPATH . 'controllers/setup.php')) {
+            redirect('setup');
+        }
+
+        # load library
+        $this->load->library(array('database', 'session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email'));
+
         # load saja semua model
         $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model'));
 

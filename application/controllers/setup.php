@@ -5,65 +5,48 @@ class Setup extends CI_Controller
     function __construct()
     {
         parent::__construct();
-        $this->load->model(array('login_model', 'pengajar_model', 'config_model'));
 
-        //ambil salah satu admin
-        $admin = $this->login_model->retrieve(null, null, null, null, null, 1);
-        if (!empty($admin)) {
-            redirect('welcome', 'refresh');
-        }
+        # load library
+        $this->load->library(array('form_validation', 'twig', 'user_agent'));
 
+        # load helper
+        $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date'));
+
+        # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
     }
 
-    function index()
+    function index($step = '')
     {
-        if ($this->form_validation->run() == FALSE) {
+        switch ($step) {
+            case 'value':
+                # code...
+            break;
 
-            $data = array(
-                'web_title'  => 'Setup E-Learning System',
-                'form_open'  => form_open('setup', array('autocomplete' => 'off', 'class' => 'form-vertical')),
-                'form_close' => form_close(),
-                'info'       => 'Selamat datang di <b>Learning Content Management System (LMS)</b>. 
-                                <br>Lengkapi bebarapa informasi pada form di bawah untuk memulai menggunakan LMS ini:'
-            );
+            case '1':
+            default:
+                $data['error'] = '';
+                if ($this->form_validation->run('setup/index/1') == true) {
+                    $host     = $this->input->post('host', true);
+                    $user     = $this->input->post('user', true);
+                    $password = $this->input->post('password', true);
+                    $db       = $this->input->post('db', true);
 
-            $data = array_merge(default_parser_item(), $data);
-            $this->parser->parse('setup', $data);
+                    $link = @mysqli_connect($host, $user, $password);
+                    if (!$link) {
+                        $data['error'] = get_alert('error', 'Failed to connect to the server: ' . mysqli_connect_error());
+                    }
+                    elseif (!@mysqli_select_db($link, $db)) {
+                        $data['error'] = get_alert('error', 'Failed to connect to the database: ' . mysqli_error($link));
+                    }
 
-        } else {
+                    if (empty($data['error'])) {
+                        # buat file database.php
+                    }
+                }
 
-            $nama_sekolah = $this->input->post('nama', TRUE);
-            $alamat       = $this->input->post('alamat', TRUE);
-            $email        = $this->input->post('email', TRUE);
-            $password     = $this->input->post('password', TRUE);
-
-            //insert config
-            $this->config_model->create_update($nama_sekolah, $alamat);
-
-            //insert pengajar sebagai admin
-            $pengajar_id = $this->pengajar_model->create(
-                $nip           = null,
-                $nama          = 'Administrator',
-                $jenis_kelamin = 'Laki-laki',
-                $tempat_lahir  = '',
-                $tgl_lahir     = null,
-                $alamat        = '',
-                $foto          = null,
-                $status_id     = 1
-            );
-
-            //insert login
-            $this->login_model->create(
-                $email,
-                $password,
-                null,
-                $pengajar_id,
-                1
-            );
-
-            //redirect ke admin
-            redirect('admin/login');
+                $this->twig->display('install-step-1.html', $data);
+            break;
         }
     }
 }

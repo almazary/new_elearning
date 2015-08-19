@@ -23,20 +23,24 @@ function default_parser_item($add_item = array())
         'site_url'          => site_url(),
         'favicon_url'       => base_url('assets/images/favicon.ico'),
         'copyright_setup'   => 'Copyright &copy; 2014 Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
-        'copyright'         => 'Copyright &copy; 2014 '.get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
-        'version'           => '<a href="https://github.com/almazary/new_elearning">versi ' . get_pengaturan('versi', 'value') . '</a>',
         'current_url'       => current_url(),
         'logo_url_small'    => get_logo_url(),
         'logo_url_medium'   => get_logo_url('medium'),
         'logo_url_large'    => get_logo_url('large'),
         'base_url_theme'    => base_url_theme().'/',
         'site_name_default' => 'E-Learning System',
-        'site_name'         => 'E-Learning '.get_pengaturan('nama-sekolah', 'value'),
         'comp_css'          => '',
         'comp_js'           => '',
         'url_referrer'      => $url_referrer,
         'elapsed_time'      => $CI->benchmark->elapsed_time(),
     );
+
+    # cek proses install tidak
+    if ($CI->uri->segment(1) != 'setup') {
+        $return['copyright'] = 'Copyright &copy; 2014 '.get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>';
+        $return['site_name'] = 'E-Learning '.get_pengaturan('nama-sekolah', 'value');
+        $return['version']   = '<a href="https://github.com/almazary/new_elearning">versi ' . get_pengaturan('versi', 'value') . '</a>';
+    }
 
     if (!empty($add_item) AND is_array($add_item)) {
         $return = array_merge($return, $add_item);
@@ -363,13 +367,13 @@ function is_ajax()
 function get_url_image($img, $size = '')
 {
     if (empty($size)) {
-        return base_url('assets/images/'.$img);
+        return base_url('userfiles/images/'.$img);
     } else {
         $pisah = explode('.', $img);
         $ext = end($pisah);
         $nama_file = $pisah[0];
 
-        return base_url('assets/images/'.$nama_file.'_'.$size.'.'.$ext);
+        return base_url('userfiles/images/'.$nama_file.'_'.$size.'.'.$ext);
     }
 }
 
@@ -425,13 +429,13 @@ function get_url_image_pengajar($img = '', $size = 'medium', $jk = 'Laki-laki') 
 function get_path_image($img = '', $size = '')
 {
     if (empty($size)) {
-        return './assets/images/'.$img;
+        return './userfiles/images/'.$img;
     } else {
         $pisah = explode('.', $img);
         $ext = end($pisah);
         $nama_file = $pisah[0];
 
-        return './assets/images/'.$nama_file.'_'.$size.'.'.$ext;
+        return './userfiles/images/'.$nama_file.'_'.$size.'.'.$ext;
     }
 }
 
@@ -443,7 +447,7 @@ function get_path_image($img = '', $size = '')
  */
 function get_path_file($file = '')
 {
-    return './assets/files/'.$file;
+    return './userfiles/files/'.$file;
 }
 
 
@@ -589,14 +593,14 @@ function create_sess_kcfinder($login_id)
         $_SESSION['E-LEARNING']['KCFINDER']['disabled']  = false;
         $_SESSION['E-LEARNING']['KCFINDER']['uploadDir'] = "";
         if (is_admin()) {
-            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('assets/uploads/');
+            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('userfiles/uploads/');
         } else {
-            $user_folder = './assets/uploads/' . $login_id;
+            $user_folder = './userfiles/uploads/' . $login_id;
             if (!is_dir($user_folder)) {
                 mkdir($user_folder, 0755);
                 chmod($user_folder, 0755);
             }
-            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('assets/uploads/' . $login_id);
+            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('userfiles/uploads/' . $login_id);
         }
     }
 }
