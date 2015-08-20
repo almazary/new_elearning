@@ -284,7 +284,9 @@ class Tugas_model extends CI_Model
         $kunci         = (int)$kunci;
 
         if (empty($urutan)) {
-            $query = $this->db->query("SELECT MAX(urutan) AS max FROM pilihan WHERE pertanyaan_id = $pertanyaan_id");
+            $this->db->selet('MAX(urutan) AS max');
+            $this->db->where('pertanyaan_id', $pertanyaan_id);
+            $query = $this->db->get('pilihan');
             $row = $query->row_array();
             if (!isset($row['max']) OR empty($row['max'])) {
                 $row['max'] = 1;
@@ -476,7 +478,9 @@ class Tugas_model extends CI_Model
         $tugas_id = (int)$tugas_id;
 
         if (empty($urutan)) {
-            $query = $this->db->query("SELECT MAX(urutan) AS max FROM tugas_pertanyaan WHERE tugas_id = $tugas_id");
+            $this->db->select('MAX(urutan) AS max');
+            $this->db->where('tugas_id', $tugas_id);
+            $query = $this->db->get('tugas_pertanyaan');
             $row = $query->row_array();
             if (!isset($row['max']) OR empty($row['max'])) {
                 $row['max'] = 1;
