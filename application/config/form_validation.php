@@ -1,29 +1,24 @@
 <?php
 
-$config['setup/index/1'] = array(
+$config['setup/index/2'] = array(
     array(
-        'field' => 'host',
-        'label' => 'Mysql host',
+        'field' => 'jenjang',
+        'label' => 'Jenjang Pendidikan',
         'rules' => 'required|trim|xss_clean'
     ),
     array(
-        'field' => 'user',
-        'label' => 'Mysql user',
+        'field' => 'nama-sekolah',
+        'label' => 'Nama sekolah',
         'rules' => 'required|trim|xss_clean'
     ),
     array(
-        'field' => 'password',
-        'label' => 'Mysql password',
-        'rules' => 'trim|xss_clean'
-    ),
-    array(
-        'field' => 'db',
-        'label' => 'Mysql database',
+        'field' => 'alamat',
+        'label' => 'Alamat',
         'rules' => 'required|trim|xss_clean'
     ),
     array(
-        'field' => 'prefix',
-        'label' => 'Tabel Prefix',
+        'field' => 'telp',
+        'label' => 'Telpon',
         'rules' => 'trim|xss_clean'
     ),
 );

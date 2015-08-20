@@ -15,48 +15,16 @@ Install - {{ parent() }}
             <div class="module-body">
                 {{ error|raw }}
 
-                {{ form_open('setup/index/1', {'class' : 'form-horizontal row-fluid'})|raw }}
-                    <div class="control-group">
-                        <label class="control-label">Host <span class="text-error">*</span></label>
-                        <div class="controls">
-                            <input type="text" name="host" class="span6" value="{{ set_value('host', 'localhost') }}">
-                            <br>{{ form_error('host')|raw }}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">User <span class="text-error">*</span></label>
-                        <div class="controls">
-                            <input type="text" name="user" class="span6" value="{{ set_value('user') }}">
-                            <br>{{ form_error('user')|raw }}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Password</label>
-                        <div class="controls">
-                            <input type="text" name="password" class="span6" value="{{ set_value('password') }}">
-                            <br>{{ form_error('password')|raw }}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Nama database <span class="text-error">*</span></label>
-                        <div class="controls">
-                            <input type="text" name="db" class="span6" value="{{ set_value('db') }}">
-                            <br>{{ form_error('db')|raw }}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label">Prefix</label>
-                        <div class="controls">
-                            <input type="text" name="prefix" class="span6" value="{{ set_value('prefix', 'EL_') }}">
-                            <br>{{ form_error('prefix')|raw }}
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="controls">
-                            <button type="submit" class="btn btn-primary">Atur</button>
-                        </div>
-                    </div>
-                {{ form_close()|raw }}
+                {% if error is not empty %}
+                Silahkan atur koneksi database pada file <b>application/config/database.php</b>, isi bagian - bagian berikut :<br>
+<pre>
+$db['default']['hostname'] = '';
+$db['default']['username'] = '';
+$db['default']['password'] = '';
+$db['default']['database'] = '';
+$db['default']['dbprefix'] = '';
+</pre>
+                {% endif %}
 
             </div>
     </div>

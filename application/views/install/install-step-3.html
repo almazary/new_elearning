@@ -1,0 +1,155 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Install - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="module span8 offset2">
+            <div class="module-head">
+                <span class="pull-right"><b>Step 3 : </b>Pengaturan data</span>
+                <h3>Install e-learning</h3>
+            </div>
+
+            <div class="module-body">
+                <div class="row-fluid">
+                    <div class="span4">
+                        <b>Kelas</b>
+                        <hr style="margin-top: 5px; margin-bottom: 5px;">
+                        {% if jenjang == 'SMA' %}
+                        <ul class="unstyled">
+                            <li>
+                                KELAS X
+                                <ul>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS X - A
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS X - B
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS X - C
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS X - D
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS X - E
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS X - F
+                                        </label>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                KELAS XI
+                                <ul>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XI - A
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XI - B
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XI - C
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XI - D
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XI - E
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XI - F
+                                        </label>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                KELAS XII
+                                <ul>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XII - A
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XII - B
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XII - C
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XII - D
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XII - E
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label>
+                                            <input type="checkbox" style="margin-top: -5px;"> KELAS XII - F
+                                        </label>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        {% endif %}
+                    </div>
+                    <div class="span8">
+                        <b>Matapelajaran</b>
+                        <hr style="margin-top: 5px; margin-bottom: 5px;">
+                        <ul class="unstyled">
+                            <li>
+                                <label>
+                                    <input type="checkbox" style="margin-top: -5px;"> Bahasa Indonesia
+                                </label>
+                            </li>
+                            <li>
+                                <label>
+                                    <input type="checkbox" style="margin-top: -5px;"> Bahasa Inggris
+                                </label>
+                            </li>
+                            <li>
+                                <label>
+                                    <input type="checkbox" style="margin-top: -5px;"> Matematika
+                                </label>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}

@@ -54,83 +54,20 @@ class __TwigTemplate_3f46c52f1ea72498d873afce8fa5756fe38945e6a5b42e974ee5c2476a3
 
                 ";
         // line 18
-        echo form_open("setup/index/1", array("class" => "form-horizontal row-fluid"));
-        echo "
-                    <div class=\"control-group\">
-                        <label class=\"control-label\">Host <span class=\"text-error\">*</span></label>
-                        <div class=\"controls\">
-                            <input type=\"text\" name=\"host\" class=\"span6\" value=\"";
-        // line 22
-        echo twig_escape_filter($this->env, set_value("host", "localhost"), "html", null, true);
-        echo "\">
-                            <br>";
-        // line 23
-        echo form_error("host");
-        echo "
-                        </div>
-                    </div>
-                    <div class=\"control-group\">
-                        <label class=\"control-label\">User <span class=\"text-error\">*</span></label>
-                        <div class=\"controls\">
-                            <input type=\"text\" name=\"user\" class=\"span6\" value=\"";
-        // line 29
-        echo twig_escape_filter($this->env, set_value("user"), "html", null, true);
-        echo "\">
-                            <br>";
-        // line 30
-        echo form_error("user");
-        echo "
-                        </div>
-                    </div>
-                    <div class=\"control-group\">
-                        <label class=\"control-label\">Password</label>
-                        <div class=\"controls\">
-                            <input type=\"text\" name=\"password\" class=\"span6\" value=\"";
-        // line 36
-        echo twig_escape_filter($this->env, set_value("password"), "html", null, true);
-        echo "\">
-                            <br>";
-        // line 37
-        echo form_error("password");
-        echo "
-                        </div>
-                    </div>
-                    <div class=\"control-group\">
-                        <label class=\"control-label\">Nama database <span class=\"text-error\">*</span></label>
-                        <div class=\"controls\">
-                            <input type=\"text\" name=\"db\" class=\"span6\" value=\"";
-        // line 43
-        echo twig_escape_filter($this->env, set_value("db"), "html", null, true);
-        echo "\">
-                            <br>";
-        // line 44
-        echo form_error("db");
-        echo "
-                        </div>
-                    </div>
-                    <div class=\"control-group\">
-                        <label class=\"control-label\">Prefix</label>
-                        <div class=\"controls\">
-                            <input type=\"text\" name=\"prefix\" class=\"span6\" value=\"";
-        // line 50
-        echo twig_escape_filter($this->env, set_value("prefix", "EL_"), "html", null, true);
-        echo "\">
-                            <br>";
-        // line 51
-        echo form_error("prefix");
-        echo "
-                        </div>
-                    </div>
-                    <div class=\"control-group\">
-                        <div class=\"controls\">
-                            <button type=\"submit\" class=\"btn btn-primary\">Atur</button>
-                        </div>
-                    </div>
+        if ((!twig_test_empty((isset($context["error"]) ? $context["error"] : null)))) {
+            // line 19
+            echo "                Silahkan atur koneksi database pada file <b>application/config/database.php</b>, isi bagian - bagian berikut :<br>
+<pre>
+\$db['default']['hostname'] = '';
+\$db['default']['username'] = '';
+\$db['default']['password'] = '';
+\$db['default']['database'] = '';
+\$db['default']['dbprefix'] = '';
+</pre>
                 ";
-        // line 59
-        echo form_close();
+        }
+        // line 28
         echo "
-
             </div>
     </div>
 </div>
@@ -149,6 +86,6 @@ class __TwigTemplate_3f46c52f1ea72498d873afce8fa5756fe38945e6a5b42e974ee5c2476a3
 
     public function getDebugInfo()
     {
-        return array (  131 => 59,  120 => 51,  116 => 50,  107 => 44,  103 => 43,  94 => 37,  90 => 36,  81 => 30,  77 => 29,  68 => 23,  64 => 22,  57 => 18,  52 => 16,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  70 => 28,  59 => 19,  57 => 18,  52 => 16,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }
