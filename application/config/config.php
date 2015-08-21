@@ -18,6 +18,17 @@ $config['base_url']	= 'http://localhost/new_elearning/';
 
 /*
 |--------------------------------------------------------------------------
+| Encryption Key
+|--------------------------------------------------------------------------
+|
+| If you use the Encryption class or the Session class you
+| MUST set an encryption key.  See the user guide for info.
+|
+*/
+$config['encryption_key'] = 'd922e33b39813b3aa358bd20ed8a7a61';
+
+/*
+|--------------------------------------------------------------------------
 | Index File
 |--------------------------------------------------------------------------
 |
@@ -214,17 +225,6 @@ $config['log_date_format'] = 'Y-m-d H:i:s';
 |
 */
 $config['cache_path'] = '';
-
-/*
-|--------------------------------------------------------------------------
-| Encryption Key
-|--------------------------------------------------------------------------
-|
-| If you use the Encryption class or the Session class you
-| MUST set an encryption key.  See the user guide for info.
-|
-*/
-$config['encryption_key'] = 'new*(&&&&&)Eleaning#DA091^%@@@jhsujasokyeh$$312!!';
 
 /*
 |--------------------------------------------------------------------------

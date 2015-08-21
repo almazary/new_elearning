@@ -14,12 +14,14 @@ class MY_Controller extends CI_Controller
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download'));
 
         # cek setup
-        if (is_file(APPPATH . 'controllers/setup.php')) {
+        if (is_file('./install')) {
             redirect('setup');
         }
 
+        $this->load->database();
+
         # load library
-        $this->load->library(array('database', 'session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email'));
+        $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email'));
 
         # load saja semua model
         $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model'));

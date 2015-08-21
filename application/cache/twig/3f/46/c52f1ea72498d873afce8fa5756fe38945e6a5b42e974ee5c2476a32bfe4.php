@@ -52,22 +52,35 @@ class __TwigTemplate_3f46c52f1ea72498d873afce8fa5756fe38945e6a5b42e974ee5c2476a3
         echo (isset($context["error"]) ? $context["error"] : null);
         echo "
 
-                ";
+";
         // line 18
         if ((!twig_test_empty((isset($context["error"]) ? $context["error"] : null)))) {
             // line 19
-            echo "                Silahkan atur koneksi database pada file <b>application/config/database.php</b>, isi bagian - bagian berikut :<br>
+            echo "Atur koneksi database pada file <b>application/config/database.php</b>, isi bagian - bagian berikut :<br>
 <pre>
 \$db['default']['hostname'] = '';
 \$db['default']['username'] = '';
 \$db['default']['password'] = '';
 \$db['default']['database'] = '';
-\$db['default']['dbprefix'] = '';
+\$db['default']['dbprefix'] = 'el_';
 </pre>
-                ";
+";
         }
         // line 28
         echo "
+Buka file <b>application/config/config.php</b>, atur base_url dan encryption_key menjadi seperti berikut : <br>
+<pre>
+\$config['base_url'] = '";
+        // line 31
+        echo twig_escape_filter($this->env, (isset($context["set_base_url"]) ? $context["set_base_url"] : null), "html", null, true);
+        echo "';
+\$config['encryption_key'] = '";
+        // line 32
+        echo twig_escape_filter($this->env, md5(uniqid()), "html", null, true);
+        echo "';
+</pre>
+
+Jika sudah diatur, refresh kembali halaman ini.
             </div>
     </div>
 </div>
@@ -86,6 +99,6 @@ class __TwigTemplate_3f46c52f1ea72498d873afce8fa5756fe38945e6a5b42e974ee5c2476a3
 
     public function getDebugInfo()
     {
-        return array (  70 => 28,  59 => 19,  57 => 18,  52 => 16,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  79 => 32,  75 => 31,  70 => 28,  59 => 19,  57 => 18,  52 => 16,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

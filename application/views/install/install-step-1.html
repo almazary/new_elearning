@@ -15,17 +15,24 @@ Install - {{ parent() }}
             <div class="module-body">
                 {{ error|raw }}
 
-                {% if error is not empty %}
-                Silahkan atur koneksi database pada file <b>application/config/database.php</b>, isi bagian - bagian berikut :<br>
+{% if error is not empty %}
+Atur koneksi database pada file <b>application/config/database.php</b>, isi bagian - bagian berikut :<br>
 <pre>
 $db['default']['hostname'] = '';
 $db['default']['username'] = '';
 $db['default']['password'] = '';
 $db['default']['database'] = '';
-$db['default']['dbprefix'] = '';
+$db['default']['dbprefix'] = 'el_';
 </pre>
-                {% endif %}
+{% endif %}
 
+Buka file <b>application/config/config.php</b>, atur base_url dan encryption_key menjadi seperti berikut : <br>
+<pre>
+$config['base_url'] = '{{ set_base_url }}';
+$config['encryption_key'] = '{{ md5(uniqid()) }}';
+</pre>
+
+Jika sudah diatur, refresh kembali halaman ini, kemudian tunggu loading sampai selesai.
             </div>
     </div>
 </div>

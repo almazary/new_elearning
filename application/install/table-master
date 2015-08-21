@@ -518,3 +518,16 @@ ADD CONSTRAINT `fk_tugas_kelas_tugas1` FOREIGN KEY (`tugas_id`) REFERENCES `{$pr
 --
 ALTER TABLE `{$prefix}tugas_pertanyaan`
 ADD CONSTRAINT `fk_tugas_essay_tugas1` FOREIGN KEY (`tugas_id`) REFERENCES `{$prefix}tugas` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+INSERT INTO `{$prefix}pengaturan` (`id`, `nama`, `value`) VALUES
+('email-server', 'Email server', 'no-reply@domain.com'),
+('email-template-approve-pengajar', 'Approve pengajar (email pengajar)', '{"subject":"Pengaktifan Akun","body":"<p>Hai {$nama},<\\/p>\\n<p>Anda telah diterima sebagai pengajar pada {$nama_sekolah}, berikut informasi data diri anda:<\\/p>\\n<p>{$tabel_profil}<\\/p>\\n<p>Anda dapat login ke sistem E-Learning menggunakan username dan password yang telah anda buat saat pendaftaran, login pada url berikut : {$url_login}<\\/p>"}'),
+('email-template-approve-siswa', 'Approve siswa (email siswa)', '{"subject":"Pengaktifan Akun","body":"<p>Hai {$nama},<\\/p>\\n<p>Anda telah diterima sebagai siswa pada {$nama_sekolah}, berikut informasi data diri anda:<\\/p>\\n<p>{$tabel_profil}<\\/p>\\n<p>Anda dapat login ke sistem E-Learning menggunakan username dan password yang telah anda buat saat pendaftaran, login pada url berikut : {$url_login}<\\/p>"}'),
+('email-template-link-reset', 'Link Reset Password', '{"subject":"Reset Password","body":"<p>Hai,<\\/p>\\n<p>Anda mengirimkan permintaan untuk reset password anda, klik link berikut untuk memulai reset password : {$link_reset}<\\/p>"}'),
+('email-template-register-pengajar', 'Register pengajar (email pengajar)', '{"subject":"Registrasi Berhasil","body":"<p>Hai {$nama},<\\/p>\\n<p>Terimakasih telah melakukan pendaftaran sebagai pengajar di E-Learning {$nama_sekolah}. Akun anda akan segera diaktifkan oleh admin.<\\/p>"}'),
+('email-template-register-siswa', 'Register siswa (email siswa)', '{"subject":"Registrasi Berhasil","body":"<p>Hai {$nama},<\\/p>\\n<p>Terimakasih telah melakukan pendaftaran sebagai siswa di E-Learning {$nama_sekolah}. Akun anda akan segera diaktifkan oleh admin.<\\/p>"}'),
+('info-registrasi', 'Info Registrasi', '<p>Silahkan mendaftar sebagai siswa atau pengajar (jika anda sebagai pengajar) sengan memilih sesuai tab berikut :</p>'),
+('peraturan-elearning', 'Peraturan E-learning', ''),
+('registrasi-pengajar', 'Registrasi Pengajar', '1'),
+('registrasi-siswa', 'Registrasi Siswa', '1'),
+('versi', 'Versi', '1.0');

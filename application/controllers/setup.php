@@ -35,6 +35,15 @@ class Setup extends CI_Controller
 
             # load model
             $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model'));
+
+            # load session
+            $this->load->library('session');
+        }
+
+        if (!empty($this->db_error)) {
+            if (!is_file('./install')) {
+                write_file('./install', '1');
+            }
         }
     }
 
@@ -57,7 +66,72 @@ class Setup extends CI_Controller
                     redirect('setup/index/3');
                 }
 
-                $this->twig->display('install-step-4.html');
+                # cek admin
+                $this->db->where('is_admin', 1);
+                $result = $this->db->get('login');
+                $result = $result->row_array();
+                if (!empty($result)) {
+                    if (is_file('./install')) {
+                        @unlink('./install');
+                    }
+                }
+
+                if ($this->form_validation->run('register/pengajar') == true) {
+                    $nip           = $this->input->post('nip', TRUE);
+                    $nama          = $this->input->post('nama', TRUE);
+                    $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+                    $tempat_lahir  = $this->input->post('tempat_lahir', TRUE);
+                    $tgl_lahir     = $this->input->post('tgl_lahir', TRUE);
+                    $bln_lahir     = $this->input->post('bln_lahir', TRUE);
+                    $thn_lahir     = $this->input->post('thn_lahir', TRUE);
+                    $alamat        = $this->input->post('alamat', TRUE);
+                    $username      = $this->input->post('username', TRUE);
+                    $password      = $this->input->post('password2', TRUE);
+                    $is_admin      = 1;
+                    $foto          = null;
+
+                    if (empty($thn_lahir)) {
+                        $tanggal_lahir = null;
+                    } else {
+                        $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
+                    }
+
+                    # simpan data siswa
+                    $pengajar_id = $this->pengajar_model->create(
+                        $nip,
+                        $nama,
+                        $jenis_kelamin,
+                        $tempat_lahir,
+                        $tanggal_lahir,
+                        $alamat,
+                        $foto,
+                        1
+                    );
+
+                    # simpan data login
+                    $this->login_model->create(
+                        $username,
+                        $password,
+                        null,
+                        $pengajar_id,
+                        $is_admin
+                    );
+
+                    @unlink('./install');
+
+                    $this->session->set_flashdata('login', get_alert('success', 'Instalasi e-learning berhasil, silahkan login sebagai administrator.'));
+                    redirect('setup/index/4');
+                }
+
+                $data['success'] = false;
+                if (!empty($result)) {
+                    $data['success'] = true;
+                    if (is_file('./install')) {
+                        $data['file_install_exist'] = true;
+                    }
+                }
+
+                $this->twig->display('install-step-4.html', $data);
             break;
 
             case '3':
@@ -68,6 +142,12 @@ class Setup extends CI_Controller
                 $check = $this->config_model->retrieve('nama-sekolah');
                 if (empty($check)) {
                     redirect('setup/index/2');
+                }
+
+                # cek kelas
+                $check = $this->db->count_all_results('kelas');
+                if (!empty($check)) {
+                    redirect('setup/index/4');
                 }
 
                 if (!empty($_POST)) {
@@ -101,6 +181,7 @@ class Setup extends CI_Controller
                         # cek mapel
                         $this->db->where('nama', $nama);
                         $result = $this->db->get('mapel');
+                        $result = $result->row_array();
                         if (empty($result)) {
                             $this->mapel_model->create($nama);
                         }
@@ -143,14 +224,7 @@ class Setup extends CI_Controller
             default:
                 if (empty($this->db_error)) {
                     # cek tabel pengaturan, jika sudah ada lanjut ke step 2
-                    $error = false;
-                    try {
-                        $this->db->get('pengaturan');
-                    } catch (Exception $e) {
-                        $error = true;
-                    }
-
-                    if (!$error) {
+                    if ($this->db->table_exists('pengaturan')) {
                         redirect('setup/index/2');
                     }
 
@@ -170,6 +244,9 @@ class Setup extends CI_Controller
 
                     redirect('setup/index/2');
                 }
+
+                $set_base_url = explode('index.php', current_url());
+                $data['set_base_url'] = $set_base_url[0];
 
                 $data['error'] = $this->db_error;
                 $this->twig->display('install-step-1.html', $data);

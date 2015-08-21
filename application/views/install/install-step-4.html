@@ -8,15 +8,110 @@ Install - {{ parent() }}
 <div class="row">
     <div class="module span8 offset2">
             <div class="module-head">
-                <span class="pull-right"><b>Step 3 : </b>Pengaturan admin</span>
+                <span class="pull-right"><b>Step 4 : </b>User administrator</span>
                 <h3>Install e-learning</h3>
             </div>
 
             <div class="module-body">
+
+                {% if success == false %}
                 <div class="well well-small" style="box-shadow: none;">
                     Buat pengajar yang bertindak sebagai administrator.
                 </div>
+                {{ form_open_multipart('setup/index/4', {'class' : 'form-horizontal row-fluid'})|raw }}
+                    <div class="control-group">
+                        <label class="control-label">NIP</label>
+                        <div class="controls">
+                            <input type="text" id="nip" name="nip" class="span4" value="{{ set_value('nip') }}">
+                            <br>{{ form_error('nip')|raw }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Nama <span class="text-error">*</span></label>
+                        <div class="controls">
+                            <input type="text" name="nama" class="span8" value="{{ set_value('nama') }}">
+                            <br>{{ form_error('nama')|raw }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Jenis Kelamin <span class="text-error">*</span></label>
+                        <div class="controls">
+                            <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Laki-laki" {{ set_radio('jenis_kelamin', 'Laki-laki') }}> Laki-laki</label>
+                            <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Perempuan" {{ set_radio('jenis_kelamin', 'Perempuan') }}> Perempuan</label>
+                            <br>{{ form_error('jenis_kelamin')|raw }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Tempat Lahir</label>
+                        <div class="controls">
+                            <input type="text" name="tempat_lahir" class="span5" value="{{ set_value('tempat_lahir') }}">
+                            <br>{{ form_error('tempat_lahir')|raw }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Tanggal Lahir</label>
+                        <div class="controls">
+                            <select class="span2" style="width: 10%;" name="tgl_lahir">
+                                <option value="">Tgl</option>
+                                {% for i in 1..31 %}
+                                    <option value="{{ i }}" {{ set_select('tgl_lahir', i) }}>{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                            <select class="span2" style="width: 17%;" name="bln_lahir">
+                                <option value="">Bulan</option>
+                                {% for i in 1..12 %}
+                                    <option value="{{ i }}" {{ set_select('bln_lahir', i) }}>{{ get_indo_bulan(i) }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="text" name="thn_lahir" class="span2" maxlength="4" value="{{ set_value('thn_lahir') }}" placeholder="Tahun">
+                            <br>{{ form_error('thn_lahir')|raw }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Alamat</label>
+                        <div class="controls">
+                            <input type="text" name="alamat" class="span10" value="{{ set_value('alamat') }}">
+                            <br>{{ form_error('alamat')|raw }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Username <span class="text-error">*</span></label>
+                        <div class="controls">
+                            <input type="text" id="username" name="username" class="span5" value="{{ set_value('username') }}" placeholder="alamat email">
+                            <br>{{ form_error('username')|raw }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Password <span class="text-error">*</span></label>
+                        <div class="controls">
+                            <input type="password" name="password" class="span5" value="{{ set_value('password') }}">
+                            <br>{{ form_error('password')|raw }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Ulangi Password <span class="text-error">*</span></label>
+                        <div class="controls">
+                            <input type="password" name="password2" class="span5" value="{{ set_value('password2') }}">
+                            <br>{{ form_error('password2')|raw }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </div>
+                {{ form_close()|raw }}
 
+                {% else %}
+                    {% if file_install_exist == true %}
+                        {{ get_alert('success', 'Gagal hapus file <b>install</b>, silahkan hapus file <b>install</b> terlebih dahulu.')|raw }}
+                    {% endif %}
+
+                    <div class="well well-small" style="box-shadow: none;">
+                        Instalasi e-learning berhasil, <a href="{{ site_url('login') }}">login administrator</a>.
+                    </div>
+
+                {% endif %}
             </div>
     </div>
 </div>
