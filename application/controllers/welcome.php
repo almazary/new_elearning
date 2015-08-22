@@ -41,6 +41,15 @@ class Welcome extends MY_Controller
             $data['jml_siswa_pending']    = $this->siswa_model->count('pending');
             $data['jml_pengajar']         = $this->pengajar_model->count('total');
             $data['jml_pengajar_pending'] = $this->pengajar_model->count('pending');
+
+            $data['info_update_link']   = $this->update_link;
+            $data['portal_update_link'] = $this->portal_update_link;
+            $data['bug_tracker_link']   = $this->bug_tracker_link;
+
+            $html_js = load_comp_js(array(
+                base_url('assets/comp/jquery/info-update.js'),
+            ));
+            $data['comp_js'] = $html_js;
         }
 
         $this->twig->display('welcome.html', $data);

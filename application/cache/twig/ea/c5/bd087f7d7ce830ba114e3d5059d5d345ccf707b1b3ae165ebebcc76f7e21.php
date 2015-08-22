@@ -190,9 +190,28 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
             <p class=\"text-muted\">Pending pengajar</p>
         </a>
     </div>
+
+    <div class=\"well well-small\" style=\"box-shadow: none;background-color: #FFF;\">
+        <div class=\"pull-right\">
+            <a class=\"muted\" href=\"";
+            // line 81
+            echo twig_escape_filter($this->env, (isset($context["portal_update_link"]) ? $context["portal_update_link"] : null), "html", null, true);
+            echo "\" target=\"_blank\">Portal update</a> |
+            <a class=\"muted\" href=\"";
+            // line 82
+            echo twig_escape_filter($this->env, (isset($context["bug_tracker_link"]) ? $context["bug_tracker_link"] : null), "html", null, true);
+            echo "\" target=\"_blank\">Bug tracker</a>
+        </div>
+        <b><i class=\"icon-bullhorn\"></i> Info Update</b>
+        <table class=\"table table-striped table-condensed\" id=\"info-update\"></table>
+        <input type=\"hidden\" id=\"info-update-link\" value=\"";
+            // line 86
+            echo twig_escape_filter($this->env, (isset($context["info_update_link"]) ? $context["info_update_link"] : null), "html", null, true);
+            echo "\">
+    </div>
     ";
         }
-        // line 79
+        // line 89
         echo "</div>
 <!--/#btn-controls-->
 ";
@@ -210,6 +229,6 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
 
     public function getDebugInfo()
     {
-        return array (  196 => 79,  188 => 74,  184 => 73,  178 => 70,  174 => 69,  168 => 66,  164 => 65,  158 => 62,  154 => 61,  151 => 60,  149 => 59,  146 => 58,  139 => 53,  127 => 49,  123 => 47,  119 => 46,  110 => 39,  98 => 35,  94 => 33,  90 => 32,  83 => 27,  81 => 26,  76 => 23,  70 => 20,  66 => 18,  64 => 17,  60 => 15,  54 => 13,  52 => 12,  48 => 11,  43 => 9,  37 => 8,  31 => 4,  28 => 3,);
+        return array (  215 => 89,  209 => 86,  202 => 82,  198 => 81,  188 => 74,  184 => 73,  178 => 70,  174 => 69,  168 => 66,  164 => 65,  158 => 62,  154 => 61,  151 => 60,  149 => 59,  146 => 58,  139 => 53,  127 => 49,  123 => 47,  119 => 46,  110 => 39,  98 => 35,  94 => 33,  90 => 32,  83 => 27,  81 => 26,  76 => 23,  70 => 20,  66 => 18,  64 => 17,  60 => 15,  54 => 13,  52 => 12,  48 => 11,  43 => 9,  37 => 8,  31 => 4,  28 => 3,);
     }
 }

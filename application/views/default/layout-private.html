@@ -69,13 +69,6 @@
                             {% if is_admin() %}
                             <ul class="widget widget-menu unstyled">
                                 <li><a href="{{ site_url() }}"><i class="menu-icon icon-home"></i>Beranda</a></li>
-                                <li><a href="{{ site_url('welcome/pengaturan') }}"><i class="menu-icon icon-wrench"></i>Pengaturan</a></li>
-                                <li><a href="{{ site_url('email') }}"><i class="menu-icon icon-envelope"></i>Email Template</a></li>
-                            </ul>
-
-                            <ul class="widget widget-menu unstyled">
-                                <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
-                                <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
@@ -84,9 +77,19 @@
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
+                                <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
+                                <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
+                            </ul>
+
+                            <ul class="widget widget-menu unstyled">
                                 <li><a href="{{ site_url('kelas/mapel_kelas') }}"><i class="menu-icon icon-paste"></i>Matapelajaran Kelas </a></li>
                                 <li><a href="{{ site_url('kelas') }}"><i class="menu-icon icon-tasks"></i>Manajemen Kelas </a></li>
                                 <li><a href="{{ site_url('mapel') }}"><i class="menu-icon icon-book"></i>Manajemen Matapelajaran </a></li>
+                            </ul>
+
+                            <ul class="widget widget-menu unstyled">
+                                <li><a href="{{ site_url('welcome/pengaturan') }}"><i class="menu-icon icon-wrench"></i>Pengaturan</a></li>
+                                <li><a href="{{ site_url('email') }}"><i class="menu-icon icon-envelope"></i>Email Template</a></li>
                             </ul>
                             {% endif %}
 

@@ -3,6 +3,9 @@
 class MY_Controller extends CI_Controller
 {
     public $siswa_kelas_aktif = array();
+    public $update_link;
+    public $portal_update_link;
+    public $bug_tracker_link;
 
     function __construct()
     {
@@ -48,6 +51,10 @@ class MY_Controller extends CI_Controller
 
             $this->siswa_kelas_aktif = $kelas_aktif;
         }
+
+        $this->update_link        = 'http://www.dokumenary.net/category/new-elearning/feed/';
+        $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
+        $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
 
         // $this->output->enable_profiler(TRUE);
     }

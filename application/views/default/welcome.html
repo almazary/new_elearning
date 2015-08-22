@@ -75,6 +75,16 @@
             <p class="text-muted">Pending pengajar</p>
         </a>
     </div>
+
+    <div class="well well-small" style="box-shadow: none;background-color: #FFF;">
+        <div class="pull-right">
+            <a class="muted" href="{{ portal_update_link }}" target="_blank">Portal update</a> |
+            <a class="muted" href="{{ bug_tracker_link }}" target="_blank">Bug tracker</a>
+        </div>
+        <b><i class="icon-bullhorn"></i> Info Update</b>
+        <table class="table table-striped table-condensed" id="info-update"></table>
+        <input type="hidden" id="info-update-link" value="{{ info_update_link }}">
+    </div>
     {% endif %}
 </div>
 <!--/#btn-controls-->
