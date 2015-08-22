@@ -2,8 +2,7 @@
 
 class Setup extends CI_Controller
 {
-    private $file_error = '';
-    private $db_error   = '';
+    private $db_error;
     private $prefix;
 
     function __construct()
@@ -19,30 +18,20 @@ class Setup extends CI_Controller
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
-        # cek file database & config
-        $db_file     = APPPATH . 'config/database.php';
-        if (!is_file($db_file)) {
-            $this->file_error = get_alert('error', 'File database.php in application/config/ not exists');
-        }
-
-        if (empty($this->file_error)) {
-            # cek pengaturan database
-            include APPPATH . 'config/database.php';
-
-            $link = @mysqli_connect($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
-            if (!$link) {
-                $this->db_error = get_alert('error', 'Failed to connect to the server: ' . mysqli_connect_error());
+        try {
+            $success = install_success();
+            if ($success) {
+                redirect('login');
             }
-            elseif (!@mysqli_select_db($link, $db['default']['database'])) {
-                $this->db_error = get_alert('error', 'Failed to connect to the database: ' . mysqli_error($link));
-            }
-        }
-        else {
-            $this->db_error = get_alert('error', 'File database.php in application/config/ not exists');
+        } catch (Exception $e) {
+            $this->db_error = $e->getMessage();
         }
 
         if (empty($this->db_error)) {
             $this->load->database();
+
+            include APPPATH . 'config/database.php';
+
             $this->prefix = $db['default']['dbprefix'];
 
             # load model
@@ -50,12 +39,6 @@ class Setup extends CI_Controller
 
             # load session
             $this->load->library('session');
-        }
-
-        if (!empty($this->db_error)) {
-            if (!is_file('./install')) {
-                write_file('./install', '1');
-            }
         }
     }
 
@@ -76,16 +59,6 @@ class Setup extends CI_Controller
                 $check = $this->db->count_all_results('kelas');
                 if (empty($check)) {
                     redirect('setup/index/3');
-                }
-
-                # cek admin
-                $this->db->where('is_admin', 1);
-                $result = $this->db->get('login');
-                $result = $result->row_array();
-                if (!empty($result)) {
-                    if (is_file('./install')) {
-                        @unlink('./install');
-                    }
                 }
 
                 if ($this->form_validation->run('register/pengajar') == true) {
@@ -129,18 +102,21 @@ class Setup extends CI_Controller
                         $is_admin
                     );
 
-                    @unlink('./install');
+                    # create success install
+                    $this->config_model->create('install-success', 'install-success', '1');
 
                     $this->session->set_flashdata('login', get_alert('success', 'Instalasi e-learning berhasil, silahkan login sebagai administrator.'));
-                    redirect('setup/index/4');
+                    redirect('login');
                 }
+
+                # cek admin
+                $this->db->where('is_admin', 1);
+                $result = $this->db->get('login');
+                $result = $result->row_array();
 
                 $data['success'] = false;
                 if (!empty($result)) {
                     $data['success'] = true;
-                    if (is_file('./install')) {
-                        $data['file_install_exist'] = true;
-                    }
                 }
 
                 $this->twig->display('install-step-4.html', $data);

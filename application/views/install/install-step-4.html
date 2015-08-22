@@ -103,9 +103,6 @@ Install - {{ parent() }}
                 {{ form_close()|raw }}
 
                 {% else %}
-                    {% if file_install_exist == true %}
-                        {{ get_alert('error', 'Gagal hapus file <b>./install</b>, mohon hapus secara manual.')|raw }}
-                    {% endif %}
 
                     <div class="well well-small" style="box-shadow: none;">
                         Instalasi e-learning berhasil, <a href="{{ site_url('login') }}">login administrator</a>.

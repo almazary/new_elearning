@@ -1,6 +1,44 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
+ * Method untuk ngecek instal sudah berhasil atau berlum
+ * @return true kalo sudah berhasil
+ */
+function install_success()
+{
+    $db_file = APPPATH . 'config/database.php';
+    if (!is_file($db_file)) {
+        throw new Exception(get_alert('error', 'File database.php in application/config/ not exists'));
+    }
+
+    # cek pengaturan database
+    include APPPATH . 'config/database.php';
+
+    $link = @mysqli_connect($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
+    if (!$link) {
+        throw new Exception(get_alert('error', 'Failed to connect to the server: ' . mysqli_connect_error()));
+    }
+    elseif (!@mysqli_select_db($link, $db['default']['database'])) {
+        throw new Exception(get_alert('error', 'Failed to connect to the database: ' . mysqli_error($link)));
+    }
+
+    $CI =& get_instance();
+    $CI->load->database();
+
+    if ($CI->db->table_exists('pengaturan')) {
+        # cek record install-success
+        $success = get_pengaturan('install-success', 'value');
+        if (empty($success)) {
+            return false;
+        }
+    } else {
+        return false;
+    }
+
+    return true;
+}
+
+/**
  * Method untuk deklarasi array default yang akan di parser dan di berikan ke view
  *
  * @param  array  $add_item

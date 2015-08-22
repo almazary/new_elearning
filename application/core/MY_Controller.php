@@ -16,8 +16,12 @@ class MY_Controller extends CI_Controller
         # load helper
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download'));
 
-        # cek setup
-        if (is_file('./install')) {
+        try {
+            $success = install_success();
+            if (!$success) {
+                redirect('setup');
+            }
+        } catch (Exception $e) {
             redirect('setup');
         }
 

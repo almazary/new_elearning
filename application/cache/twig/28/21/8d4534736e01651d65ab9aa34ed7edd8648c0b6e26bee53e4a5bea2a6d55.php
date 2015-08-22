@@ -237,26 +237,17 @@ class __TwigTemplate_28218d4534736e01651d65ab9aa34ed7edd8648c0b6e26bee53e4a5bea2
                 ";
         } else {
             // line 106
-            echo "                    ";
-            if (((isset($context["file_install_exist"]) ? $context["file_install_exist"] : null) == true)) {
-                // line 107
-                echo "                        ";
-                echo get_alert("error", "Gagal hapus file <b>./install</b>, mohon hapus secara manual.");
-                echo "
-                    ";
-            }
-            // line 109
             echo "
                     <div class=\"well well-small\" style=\"box-shadow: none;\">
                         Instalasi e-learning berhasil, <a href=\"";
-            // line 111
+            // line 108
             echo twig_escape_filter($this->env, site_url("login"), "html", null, true);
             echo "\">login administrator</a>.
                     </div>
 
                 ";
         }
-        // line 115
+        // line 112
         echo "            </div>
     </div>
 </div>
@@ -275,6 +266,6 @@ class __TwigTemplate_28218d4534736e01651d65ab9aa34ed7edd8648c0b6e26bee53e4a5bea2
 
     public function getDebugInfo()
     {
-        return array (  260 => 115,  253 => 111,  249 => 109,  243 => 107,  240 => 106,  234 => 103,  223 => 95,  219 => 94,  210 => 88,  206 => 87,  197 => 81,  193 => 80,  184 => 74,  180 => 73,  171 => 67,  167 => 66,  164 => 65,  151 => 63,  147 => 62,  142 => 59,  129 => 57,  125 => 56,  114 => 48,  110 => 47,  101 => 41,  97 => 40,  93 => 39,  84 => 33,  80 => 32,  71 => 26,  67 => 25,  60 => 21,  55 => 18,  53 => 17,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  251 => 112,  244 => 108,  240 => 106,  234 => 103,  223 => 95,  219 => 94,  210 => 88,  206 => 87,  197 => 81,  193 => 80,  184 => 74,  180 => 73,  171 => 67,  167 => 66,  164 => 65,  151 => 63,  147 => 62,  142 => 59,  129 => 57,  125 => 56,  114 => 48,  110 => 47,  101 => 41,  97 => 40,  93 => 39,  84 => 33,  80 => 32,  71 => 26,  67 => 25,  60 => 21,  55 => 18,  53 => 17,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }
