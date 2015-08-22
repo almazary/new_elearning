@@ -8,12 +8,14 @@ Install - {{ parent() }}
 <div class="row">
     <div class="module span8 offset2">
             <div class="module-head">
-                <span class="pull-right"><b>Step 1 : </b>Konfigurasi database</span>
+                <span class="pull-right"><b>Step 1 : </b>Konfigurasi config & database</span>
                 <h3>Install e-learning</h3>
             </div>
 
             <div class="module-body">
                 {{ error|raw }}
+
+<p>Rename file <b>application/config/database.sample.php</b> menjadi <b>application/config/database.php</b></p>
 
 {% if error is not empty %}
 Atur koneksi database pada file <b>application/config/database.php</b>, isi bagian - bagian berikut :<br>
