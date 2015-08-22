@@ -12,7 +12,7 @@ diharapkan pengembang dapat dengan mudah memahami alur sistem.
 
 Pada aplikasi ini juga telah disediakan informasi update sistem dan bug tracker pada halaman home administrator.
 
-Pengguna pada elearning terbagi menjadi :
+Pengguna pada elearning terbagi menjadi :<br>
 1. Siswa<br>
 2. Pengajar<br>
 3. Administrator (Pengajar yang bertindak sebagai administrator)<br>
