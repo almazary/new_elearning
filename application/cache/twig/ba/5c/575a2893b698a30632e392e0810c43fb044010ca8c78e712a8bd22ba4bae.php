@@ -48,30 +48,48 @@ class __TwigTemplate_ba5c575a2893b698a30632e392e0810c43fb044010ca8c78e712a8bd22b
         echo "        <link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"";
         echo twig_escape_filter($this->env, (isset($context["favicon_url"]) ? $context["favicon_url"] : null), "html", null, true);
         echo "\">
+        ";
+        // line 12
+        echo (isset($context["comp_css"]) ? $context["comp_css"] : null);
+        echo "
     </head>
     <body>
 
         ";
-        // line 15
-        $this->displayBlock('content', $context, $blocks);
         // line 16
-        echo "
-        <script src=\"";
+        $this->displayBlock('content', $context, $blocks);
         // line 17
+        echo "
+        <script type=\"text/javascript\">
+        var site_url = \"";
+        // line 19
+        echo twig_escape_filter($this->env, site_url(), "html", null, true);
+        echo "\";
+        var base_url = \"";
+        // line 20
+        echo twig_escape_filter($this->env, base_url(), "html", null, true);
+        echo "\";
+        </script>
+        <script src=\"";
+        // line 22
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 18
+        // line 23
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-ui-1.10.1.custom.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 19
+        // line 24
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "bootstrap/js/bootstrap.min.js\" type=\"text/javascript\"></script>
         ";
-        // line 20
+        // line 25
+        echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
+        echo "
+        ";
+        // line 26
         $this->displayBlock('js', $context, $blocks);
-        // line 21
+        // line 27
         echo "    </body>
 </html>
 ";
@@ -88,12 +106,12 @@ class __TwigTemplate_ba5c575a2893b698a30632e392e0810c43fb044010ca8c78e712a8bd22b
     {
     }
 
-    // line 15
+    // line 16
     public function block_content($context, array $blocks = array())
     {
     }
 
-    // line 20
+    // line 26
     public function block_js($context, array $blocks = array())
     {
     }
@@ -110,6 +128,6 @@ class __TwigTemplate_ba5c575a2893b698a30632e392e0810c43fb044010ca8c78e712a8bd22b
 
     public function getDebugInfo()
     {
-        return array (  97 => 20,  87 => 10,  81 => 6,  75 => 21,  69 => 19,  65 => 18,  61 => 17,  58 => 16,  48 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,  151 => 48,  145 => 45,  142 => 44,  139 => 43,  133 => 40,  128 => 38,  123 => 36,  118 => 34,  113 => 32,  109 => 30,  103 => 28,  100 => 27,  98 => 26,  92 => 15,  84 => 19,  80 => 18,  73 => 20,  64 => 15,  60 => 14,  56 => 15,  53 => 12,  51 => 11,  47 => 10,  43 => 8,  40 => 7,  32 => 4,  29 => 3,);
+        return array (  115 => 26,  110 => 16,  105 => 10,  99 => 6,  93 => 27,  91 => 26,  87 => 25,  83 => 24,  79 => 23,  75 => 22,  70 => 20,  66 => 19,  62 => 17,  60 => 16,  53 => 12,  48 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
     }
 }

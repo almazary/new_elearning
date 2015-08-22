@@ -1,0 +1,19 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<h4>Nilai Tugas</h4>
+{{ get_flashdata('edit')|raw }}
+
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th width="35%">Nilai</th>
+            <td>{{ nilai.nilai }}</td>
+        <tr>
+        <tr>
+            <th width="35%">Tgl Mengerjakan</th>
+            <td>{{ tgl_jam_indo(history.mulai) }}</td>
+        <tr>
+    </tbody>
+</table>
+{% endblock %}

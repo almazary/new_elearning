@@ -20,10 +20,17 @@
                     <i class="icon-reorder shaded"></i>
                 </a>
 
-                <a class="brand" href="{{ current_url }}">
+                <a class="brand" href="{{ site_url() }}">
                     <img src="{{ logo_url_medium }}"> {{ site_name }}
                 </a>
 
+                <div class="nav-collapse collapse navbar-inverse-collapse">
+                    <ul class="nav pull-right">
+                        {% if get_pengaturan('registrasi-siswa', 'value') == 1 or get_pengaturan('registrasi-pengajar', 'value') == 1 %}
+                        <li><a href="{{ site_url('login/register') }}">Register</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
         </div><!-- /navbar-inner -->
     </div><!-- /navbar -->

@@ -9,7 +9,7 @@
     <tbody>
         <tr>
             <td>
-                <textarea name="pertanyaan" id="pertanyaan" style="height:400px;width:100%;">{{ set_value('pertanyaan') }}</textarea>
+                <textarea name="pertanyaan" id="pertanyaan" style="height:400px;width:100%;">{{ set_value('pertanyaan')|raw }}</textarea>
                 {{ form_error('pertanyaan')|raw }}
             </td>
         <tr>

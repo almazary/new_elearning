@@ -15,7 +15,7 @@ Login - {{ parent() }}
                {{ get_flashdata('login')|raw }}
                 <div class="control-group">
                     <div class="controls row-fluid">
-                        <input class="span12" name="email" type="text" placeholder="Username (Email)" value="{{ set_value('email') }}">
+                        <input class="span12" name="email" type="text" placeholder="Username (Email)" value="{{ set_value('email') }}" autofocus>
                         {{ form_error('email')|raw }}
                     </div>
                 </div>
@@ -29,6 +29,7 @@ Login - {{ parent() }}
                 <div class="control-group">
                     <div class="controls clearfix">
                         <button type="submit" class="btn btn-large btn-primary pull-right">Login</button>
+                        <a href="{{ site_url('login/lupa_password') }}">Lupa password?</a>
                     </div>
                 </div>
             </div>

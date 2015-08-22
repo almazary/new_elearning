@@ -1,21 +1,37 @@
 <?php
 
-$config['setup/index'] = array(
+$config['setup/index/2'] = array(
     array(
-        'field' => 'nama',
-        'label' => 'Nama Sekolah',
-        'rules' => 'required|trim|xss_clean|min_length[3]'
+        'field' => 'jenjang',
+        'label' => 'Jenjang Pendidikan',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'nama-sekolah',
+        'label' => 'Nama sekolah',
+        'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'alamat',
-        'label' => 'Alamat Sekolah',
-        'rules' => 'required|trim|xss_clean|min_length[3]'
+        'label' => 'Alamat',
+        'rules' => 'required|trim|xss_clean'
     ),
     array(
-        'field' => 'email',
-        'label' => 'Email Admin',
-        'rules' => 'required|trim|xss_clean|valid_email'
+        'field' => 'telp',
+        'label' => 'Telpon',
+        'rules' => 'trim|xss_clean'
     ),
+);
+
+$config['lupa_password'] = array(
+    array(
+        'field' => 'email',
+        'label' => 'Username (Email)',
+        'rules' => 'required|trim|valid_email|xss_clean|callback_check_username_exist'
+    ),
+);
+
+$config['reset_password'] = array(
     array(
         'field' => 'password',
         'label' => 'Password',
@@ -25,6 +41,165 @@ $config['setup/index'] = array(
         'field' => 'password2',
         'label' => 'Confirm Password',
         'rules' => 'required|trim|xss_clean|alpha_numeric|matches[password]'
+    ),
+);
+
+$config['register/siswa'] = array(
+    array(
+        'field' => 'nis',
+        'label' => 'NIS',
+        'rules' => 'trim|xss_clean|is_unique[siswa.nis]'
+    ),
+    array(
+        'field' => 'nama',
+        'label' => 'Nama',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'jenis_kelamin',
+        'label' => 'Jenis Kelamin',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'tahun_masuk',
+        'label' => 'Tahun Masuk',
+        'rules' => 'required|trim|xss_clean|numeric|min_length[4]|max_length[4]'
+    ),
+    array(
+        'field' => 'kelas_id',
+        'label' => 'Kelas',
+        'rules' => 'required|trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'tempat_lahir',
+        'label' => 'Tempat Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'tgl_lahir',
+        'label' => 'Tgl Lahir',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'bln_lahir',
+        'label' => 'Bulan Lahir',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'thn_lahir',
+        'label' => 'Tahun Lahir',
+        'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[4]'
+    ),
+    array(
+        'field' => 'agama',
+        'label' => 'Agama',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'alamat',
+        'label' => 'Alamat',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'username',
+        'label' => 'Username',
+        'rules' => 'required|trim|xss_clean|valid_email|is_unique[login.username]'
+    ),
+    array(
+        'field' => 'password',
+        'label' => 'Password',
+        'rules' => 'required|trim|xss_clean|alpha_numeric'
+    ),
+    array(
+        'field' => 'password2',
+        'label' => 'Ulangi Password',
+        'rules' => 'required|matches[password]'
+    ),
+);
+
+$config['register/pengajar'] = array(
+    array(
+        'field' => 'nip',
+        'label' => 'NIP',
+        'rules' => 'trim|xss_clean|is_unique[pengajar.nip]'
+    ),
+    array(
+        'field' => 'nama',
+        'label' => 'Nama',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'jenis_kelamin',
+        'label' => 'Jenis Kelamin',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'tempat_lahir',
+        'label' => 'Tempat Lahir',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'tgl_lahir',
+        'label' => 'Tgl Lahir',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'bln_lahir',
+        'label' => 'Bulan Lahir',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'thn_lahir',
+        'label' => 'Tahun Lahir',
+        'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[4]'
+    ),
+    array(
+        'field' => 'alamat',
+        'label' => 'Alamat',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'username',
+        'label' => 'Username',
+        'rules' => 'required|trim|xss_clean|valid_email|is_unique[login.username]'
+    ),
+    array(
+        'field' => 'password',
+        'label' => 'Password',
+        'rules' => 'required|trim|xss_clean|alpha_numeric'
+    ),
+    array(
+        'field' => 'password2',
+        'label' => 'Ulangi Password',
+        'rules' => 'required|matches[password]'
+    ),
+);
+
+$config['pengaturan'] = array(
+    array(
+        'field' => 'nama-sekolah',
+        'label' => 'Nama sekolah',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'alamat',
+        'label' => 'Alamat sekolah',
+        'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'telp',
+        'label' => 'Telpon',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'registrasi-siswa',
+        'label' => 'Registrasi siswa',
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
+        'field' => 'registrasi-pengajar',
+        'label' => 'Registrasi pengajar',
+        'rules' => 'trim|xss_clean'
     ),
 );
 $config['login'] = array(
@@ -359,8 +534,8 @@ $config['siswa/filter'] = array(
 
 $config['pengajar/add'] = array(
     array(
-        'field' => 'nis',
-        'label' => 'NIS',
+        'field' => 'nip',
+        'label' => 'NIP',
         'rules' => 'trim|xss_clean|is_unique[pengajar.nip]'
     ),
     array(
@@ -469,7 +644,7 @@ $config['pengajar/edit_profile'] = array(
     array(
         'field' => 'status_id',
         'label' => 'Status',
-        'rules' => 'required|trim|xss_clean|numeric'
+        'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'is_admin',
@@ -799,6 +974,11 @@ $config['tugas/filter'] = array(
     array(
         'field' => 'type[]',
         'label' => 'Type',
+        'rules' => 'xss_clean'
+    ),
+    array(
+        'field' => 'status[]',
+        'label' => 'Status',
         'rules' => 'xss_clean'
     ),
 );

@@ -1,0 +1,207 @@
+{% extends "layout-detail-materi.html" %}
+
+{% block title %}
+{{ data.tugas.judul }} - {{ parent() }}
+{% endblock %}
+
+{% block css %}
+<style type="text/css">
+    #clock {
+        font-size: 25px;
+        margin-top: 5px;
+        font-weight: bold;
+        text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
+    }
+    .clock-info {
+        font-weight: normal;
+    }
+    img.nav-avatar {
+        width: 30px;
+        height: 30px;
+    }
+    ul.user-info {
+        margin-top: 10px;
+        margin-bottom: 0px;
+    }
+    input.radio{
+        margin-top: -3px;
+    }
+    .label-radio {
+        font-weight: bold;
+    }
+    .well {
+        border:2px dashed red;
+    }
+    .p-info {
+        font-size: 18px;
+    }
+    .box-clock {
+        background: rgb(245, 239, 230);
+        border:1px dashed red;
+        padding: 5px 10px 10px;
+        border-radius: 5px;
+    }
+    .affix {
+        position: fixed;
+        margin-top: -60px;
+    }
+    hr.hr1 {
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="wrap">
+    <div class="container">
+        <div class="row-fluid">
+            <div class="span9">
+                <h1 class="title">{{ data.tugas.judul }}</h1>
+            </div>
+            <div class="span3">
+                <ul class="unstyled inline pull-right user-info">
+                    <li><b>{{ nama_panggilan(get_sess_data('user', 'nama')) }}</b></li>
+                    <li><img src="{{ get_url_image_pengajar(get_sess_data('user', 'foto'), 'medium', get_sess_data('user', 'jenis_kelamin')) }}" class="nav-avatar img-polaroid img-circle" /></li>
+                </ul>
+            </div>
+        </div>
+        <hr class="hr-top">
+        <div class="wrap-content">
+            <div class="content">
+                <div class="row-fluid">
+                    {% if data.tugas.type_id != 1 %}
+                    <div class="span8">
+                        <b>Informasi : </b><br>
+                        {{ data.tugas.info|raw }}
+                    </div>
+                    <div class="span4">
+                        <div class="box-clock" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+                            <b>Siswa waktu : </b><br>
+                            <div id="clock"></div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="span6">
+                        <b>Informasi : </b><br>
+                        {{ data.tugas.info|raw }}
+                        <br>
+                        <small>
+                        <b>Ekstensi file :</b><br>
+                        doc, zip, rar, txt, docx, xls, xlsx, pdf, tar, gz, jpg, jpeg, JPG, JPEG, png, ppt, pptx
+                        </small>
+                    </div>
+                    <div class="span6">
+                        <p><b>Upload file tugas anda : </b></p>
+                        <div class="well well-sm">
+                            {{ form_open_multipart('tugas/submit_upload/' ~ data.tugas.id ~ '/' ~ data.unix_id)|raw }}
+                            <input type="file" name="userfile">
+                            <hr class="hr1">
+                            <div class="row-fluid">
+                                <div class="span3">
+                                    <button type="submit" class="btn btn-primary">Upload</button>
+                                </div>
+                                <div class="span9">
+                                    {{ get_flashdata('upload')|raw }}
+                                </div>
+                            </div>
+                            {{ form_close()|raw }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if data.tugas.type_id == 3 %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th>Pertanyaan {{ (data.tugas.type_id == 3) ? ' dan Pilihan' }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in data.pertanyaan %}
+                            <tr id="pertanyaan-{{ p.id }}">
+                                <td><b>{{ p.urutan }}.</b></td>
+                                <td>
+                                    <div class="pertanyaan">
+                                        {{ html_entity_decode(p.pertanyaan)|raw }}
+                                    </div>
+
+                                    <div id="pilihan-{{ p.id }}">
+                                        <table class="table table-condensed table-striped">
+                                            <tbody>
+                                                {% for pil in p.pilihan %}
+                                                <tr>
+                                                    <td width="5%"><label class="label-radio"><input {{ (is_pilih(data.jawaban, p.id, pil.id)) ? 'checked' }} type="radio" name="pilihan-{{ p.id }}" value="{{ pil.urutan }}" onclick="update_ganda({{ data.tugas.id }}, {{ p.id }}, {{ pil.id }})" class="radio"> {{ get_abjad(pil.urutan) }}</label></td>
+                                                    <td>
+                                                        {{ html_entity_decode(pil.konten)|raw }}
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="well well-sm">
+                        <a class="btn btn-large btn-primary pull-right" href="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}" onclick="return confirm('Anda yakin ingin mengahiri pengerjaan tugas ini?')">Selesai</a>
+                        <p class="p-info">Mohon periksa kembali jawaban anda sebelum menekan tombol <b>selesai</b>.</p>
+                        <br>
+                    </div>
+
+                {% endif %}
+
+
+                {% if data.tugas.type_id == 2 %}
+                    {{ form_open('tugas/submit_essay/' ~ data.tugas.id ~ '/' ~ data.unix_id)|raw }}
+                    <input type="hidden" id="str_id" value="{{ data.str_id }}">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="5%">No</th>
+                                <th>Pertanyaan {{ (data.tugas.type_id == 3) ? ' dan Pilihan' }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in data.pertanyaan %}
+                            <tr id="pertanyaan-{{ p.id }}">
+                                <td><b>{{ p.urutan }}.</b></td>
+                                <td>
+                                    <div class="pertanyaan">
+                                        {{ html_entity_decode(p.pertanyaan)|raw }}
+                                    </div>
+
+                                    <textarea name="jawaban[{{ p.id }}]" id="jawaban-{{ p.id }}" style="width:100%; height:300px;">{{ get_jawaban(data.jawaban, p.id)|raw }}</textarea>
+
+                                </td>
+                            </tr>
+
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="well well-sm">
+                        <button type="submit" class="btn btn-large btn-primary pull-right" onclick="return confirm('Anda yakin ingin mengahiri pengerjaan tugas ini?')">Selesai</button>
+                        <p class="p-info">Mohon periksa kembali jawaban anda sebelum menekan tombol <b>selesai</b>.</p>
+                        <br>
+                    </div>
+                    {{ form_close()|raw }}
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+{% if data.tugas.type_id != 1 %}
+<input type="hidden" id="tugas_id" value="{{ data.tugas.id }}">
+<input type="hidden" id="final_date" value="{{ data.selesai }}">
+<input type="hidden" id="finish_url" value="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}">
+{% endif %}
+{% endblock %}

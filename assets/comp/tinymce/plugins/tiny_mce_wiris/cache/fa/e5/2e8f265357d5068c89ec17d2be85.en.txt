@@ -1,1 +1,0 @@
-open square brackets table row cell open parentheses table row blank row blank end table close parentheses end cell row blank end table close square brackets

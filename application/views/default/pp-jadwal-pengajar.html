@@ -1,0 +1,55 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Profilku - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid">
+    <div class="span12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Jadwal Mengajar</strong>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                        <tr bgcolor="#fbfbfb">
+                            <th>HARI</th>
+                            <th>MATAPELAJARAN DAN JAM</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for hari_id, h in get_indo_hari() %}
+                        <tr>
+                            <th width="15%">{{ h }}</th>
+                            <td>
+                                {{ anchor('pengajar/add_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ hari_id, 'Tambah', {'class' : 'iframe btn btn-small btn-primary', 'title' : 'Tambah jadwal hari ' ~ h})|raw }}
+                                {% set retrieve_all_ma = get_row_data('pengajar_model', 'retrieve_all_ma', [hari_id, pengajar.id, null]) %}
+                                {% if retrieve_all_ma is not empty %}
+                                <table style="margin-top:10px;" class="table table-condensed">
+                                    {% for ma in retrieve_all_ma %}
+                                        {% set mk = get_row_data('mapel_model', 'retrieve_kelas', [ma.mapel_kelas_id]) %}
+                                        {% set k  = get_row_data('kelas_model', 'retrieve', [mk.kelas_id]) %}
+                                        {% set m  = get_row_data('mapel_model', 'retrieve', [mk.mapel_id]) %}
+                                        <tr {{ (ma.aktif == 0) ? 'class="error text-muted"' : 'class="info text-info"' }}>
+                                            <td width="15%">{{ ma.jam_mulai|date('H:i') }} - {{ ma.jam_selesai|date('H:i') }}</td>
+                                            <td>{{ m.nama }}</td>
+                                            <td width="20%">{{ k.nama }}</td>
+                                            <td width="10%">
+                                                {{ anchor('pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ ma.id, '<i class="icon-edit"></i> Edit', {'title' : 'Edit Jadwal Ajar', 'class' : 'iframe-6'})|raw }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

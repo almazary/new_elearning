@@ -1,0 +1,247 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Install - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="module span8 offset2">
+            <div class="module-head">
+                <span class="pull-right"><b>Step 3 : </b>Pengaturan data</span>
+                <h3>Install e-learning</h3>
+            </div>
+
+            <div class="module-body">
+                <div class="well well-small" style="box-shadow: none;">
+                    Atur Kelas dan Matapelajaran yang ada di sekolah. Kelas dan Matapelajaran masih dapat diubah.
+                </div>
+                <form method="post" action="{{ site_url('setup/index/3') }}">
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <b>Kelas</b>
+                            <hr style="margin-top: 5px; margin-bottom: 5px;">
+                            {% if jenjang == 'SMP' %}
+                            <ul class="unstyled">
+                                <li>
+                                    KELAS VII
+                                    <ul class="unstyled" style="margin-left: 20px;">
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[VII][]" {{ set_checkbox('kelas[VII][]', 'A', true) }} value="A" style="margin-top: -5px;"> KELAS VII - A
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[VII][]" {{ set_checkbox('kelas[VII][]', 'B', true) }} value="B" style="margin-top: -5px;"> KELAS VII - B
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[VII][]" {{ set_checkbox('kelas[VII][]', 'C', true) }} value="C" style="margin-top: -5px;"> KELAS VII - C
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[VII][]" {{ set_checkbox('kelas[VII][]', 'D', true) }} value="D" style="margin-top: -5px;"> KELAS VII - D
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    KELAS VIII
+                                    <ul class="unstyled" style="margin-left: 20px;">
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[VIII][]" {{ set_checkbox('kelas[VIII][]', 'A', true) }} value="A" style="margin-top: -5px;"> KELAS VIII - A
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[VIII][]" {{ set_checkbox('kelas[VIII][]', 'B', true) }} value="B" style="margin-top: -5px;"> KELAS VIII - B
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[VIII][]" {{ set_checkbox('kelas[VIII][]', 'C', true) }} value="C" style="margin-top: -5px;"> KELAS VIII - C
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[VIII][]" {{ set_checkbox('kelas[VIII][]', 'D', true) }} value="D" style="margin-top: -5px;"> KELAS VIII - D
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    KELAS IX
+                                    <ul class="unstyled" style="margin-left: 20px;">
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[IX][]" {{ set_checkbox('kelas[IX][]', 'A', true) }} value="A" style="margin-top: -5px;"> KELAS IX - A
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[IX][]" {{ set_checkbox('kelas[IX][]', 'B', true) }} value="B" style="margin-top: -5px;"> KELAS IX - B
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[IX][]" {{ set_checkbox('kelas[IX][]', 'C', true) }} value="C" style="margin-top: -5px;"> KELAS IX - C
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[IX][]" {{ set_checkbox('kelas[IX][]', 'D', true) }} value="D" style="margin-top: -5px;"> KELAS IX - D
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            {% endif %}
+
+                            {% if jenjang == 'SMA' %}
+                            <ul class="unstyled">
+                                <li>
+                                    KELAS X
+                                    <ul class="unstyled" style="margin-left: 20px;">
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[X][]" {{ set_checkbox('kelas[X][]', 'A', true) }} value="A" style="margin-top: -5px;"> KELAS X - A
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[X][]" {{ set_checkbox('kelas[X][]', 'B', true) }} value="B" style="margin-top: -5px;"> KELAS X - B
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[X][]" {{ set_checkbox('kelas[X][]', 'C', true) }} value="C" style="margin-top: -5px;"> KELAS X - C
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[X][]" {{ set_checkbox('kelas[X][]', 'D', true) }} value="D" style="margin-top: -5px;"> KELAS X - D
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    KELAS XI
+                                    <ul class="unstyled" style="margin-left: 20px;">
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[XI][]" {{ set_checkbox('kelas[XI][]', 'A', true) }} value="A" style="margin-top: -5px;"> KELAS XI - A
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[XI][]" {{ set_checkbox('kelas[XI][]', 'B', true) }} value="B" style="margin-top: -5px;"> KELAS XI - B
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[XI][]" {{ set_checkbox('kelas[XI][]', 'C', true) }} value="C" style="margin-top: -5px;"> KELAS XI - C
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[XI][]" {{ set_checkbox('kelas[XI][]', 'D', true) }} value="D" style="margin-top: -5px;"> KELAS XI - D
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    KELAS XII
+                                    <ul class="unstyled" style="margin-left: 20px;">
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[XII][]" {{ set_checkbox('kelas[XII][]', 'A', true) }} value="A" style="margin-top: -5px;"> KELAS XII - A
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[XII][]" {{ set_checkbox('kelas[XII][]', 'B', true) }} value="B" style="margin-top: -5px;"> KELAS XII - B
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[XII][]" {{ set_checkbox('kelas[XII][]', 'C', true) }} value="C" style="margin-top: -5px;"> KELAS XII - C
+                                            </label>
+                                        </li>
+                                        <li>
+                                            <label>
+                                                <input type="checkbox" name="kelas[XII][]" {{ set_checkbox('kelas[XII][]', 'D', true) }} value="D" style="margin-top: -5px;"> KELAS XII - D
+                                            </label>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                            {% endif %}
+                        </div>
+                        <div class="span8">
+                            <b>Matapelajaran</b>
+                            <hr style="margin-top: 5px; margin-bottom: 5px;">
+                            <ul class="unstyled">
+                                <li>
+                                    <label>
+                                        <input type="checkbox" {{ set_checkbox('mapel[]', 'Bahasa Indonesia', true) }} name="mapel[]" value="Bahasa Indonesia" style="margin-top: -5px;"> Bahasa Indonesia
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="checkbox" {{ set_checkbox('mapel[]', 'Bahasa Inggris', true) }} name="mapel[]" value="Bahasa Inggris" style="margin-top: -5px;"> Bahasa Inggris
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="checkbox" {{ set_checkbox('mapel[]', 'Matematika', true) }} name="mapel[]" value="Matematika" style="margin-top: -5px;"> Matematika
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="checkbox" {{ set_checkbox('mapel[]', 'Ekonomi', true) }} name="mapel[]" value="Ekonomi" style="margin-top: -5px;"> Ekonomi
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="checkbox" {{ set_checkbox('mapel[]', 'Geografi', true) }} name="mapel[]" value="Geografi" style="margin-top: -5px;"> Geografi
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="checkbox" {{ set_checkbox('mapel[]', 'Biologi', true) }} name="mapel[]" value="Biologi" style="margin-top: -5px;"> Biologi
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="checkbox" {{ set_checkbox('mapel[]', 'Penjas', true) }} name="mapel[]" value="Penjas" style="margin-top: -5px;"> Penjas
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="checkbox" {{ set_checkbox('mapel[]', 'Agama', true) }} name="mapel[]" value="Agama" style="margin-top: -5px;"> Agama
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="checkbox" {{ set_checkbox('mapel[]', 'Fisika', true) }} name="mapel[]" value="Fisika" style="margin-top: -5px;"> Fisika
+                                    </label>
+                                </li>
+                                <li>
+                                    <label>
+                                        <input type="checkbox" {{ set_checkbox('mapel[]', 'Kimia', true) }} name="mapel[]" value="Kimia" style="margin-top: -5px;"> Kimia
+                                    </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
+                    <button class="btn btn-primary" type="submit">Simpan</button>
+                </form>
+            </div>
+    </div>
+</div>
+{% endblock %}

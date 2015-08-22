@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Install - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="module span8 offset2">
+            <div class="module-head">
+                <span class="pull-right"><b>Step 1 : </b>Konfigurasi database</span>
+                <h3>Install e-learning</h3>
+            </div>
+
+            <div class="module-body">
+                {{ error|raw }}
+
+{% if error is not empty %}
+Atur koneksi database pada file <b>application/config/database.php</b>, isi bagian - bagian berikut :<br>
+<pre>
+$db['default']['hostname'] = '';
+$db['default']['username'] = '';
+$db['default']['password'] = '';
+$db['default']['database'] = '';
+$db['default']['dbprefix'] = 'el_';
+</pre>
+{% endif %}
+
+Buka file <b>application/config/config.php</b>, atur base_url dan encryption_key menjadi seperti berikut : <br>
+<pre>
+$config['base_url'] = '{{ set_base_url }}';
+$config['encryption_key'] = '{{ md5(uniqid()) }}';
+</pre>
+
+Jika sudah diatur, refresh kembali halaman ini, kemudian tunggu loading sampai selesai.
+            </div>
+    </div>
+</div>
+{% endblock %}

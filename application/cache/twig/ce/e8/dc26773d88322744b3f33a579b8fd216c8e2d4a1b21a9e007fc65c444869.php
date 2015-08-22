@@ -144,7 +144,7 @@ class __TwigTemplate_cee8dc26773d88322744b3f33a579b8fd216c8e2d4a1b21a9e007fc65c4
                 <div class=\"controls\">
                     <textarea name=\"info\" id=\"info\" style=\"width:100%; height:300px;\">";
         // line 53
-        echo twig_escape_filter($this->env, set_value("info"), "html", null, true);
+        echo set_value("info");
         echo "</textarea>
                     ";
         // line 54

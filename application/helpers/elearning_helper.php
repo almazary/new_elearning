@@ -14,7 +14,7 @@ function default_parser_item($add_item = array())
     if ($CI->agent->is_referral()) {
         $url_referrer = $CI->agent->referrer();
     } else {
-        # kalo kosong diisi dengan segment 
+        # kalo kosong diisi dengan segment
         $url_referrer = site_url($CI->uri->segment(1));
     }
 
@@ -23,19 +23,24 @@ function default_parser_item($add_item = array())
         'site_url'          => site_url(),
         'favicon_url'       => base_url('assets/images/favicon.ico'),
         'copyright_setup'   => 'Copyright &copy; 2014 Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
-        'copyright'         => 'Copyright &copy; 2014 '.get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
-        'version'           => '<a href="https://github.com/almazary/new_elearning">@dev version</a>',
         'current_url'       => current_url(),
         'logo_url_small'    => get_logo_url(),
         'logo_url_medium'   => get_logo_url('medium'),
         'logo_url_large'    => get_logo_url('large'),
         'base_url_theme'    => base_url_theme().'/',
-        'site_name_default' => 'E-Learning System',
-        'site_name'         => 'E-Learning '.get_pengaturan('nama-sekolah', 'value'),
+        'site_name_default' => 'e-Learning system',
         'comp_css'          => '',
         'comp_js'           => '',
-        'url_referrer'      => $url_referrer
+        'url_referrer'      => $url_referrer,
+        'elapsed_time'      => $CI->benchmark->elapsed_time(),
     );
+
+    # cek proses install tidak
+    if ($CI->uri->segment(1) != 'setup') {
+        $return['copyright'] = 'Copyright &copy; 2014 '.get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>';
+        $return['site_name'] = 'E-Learning '.get_pengaturan('nama-sekolah', 'value');
+        $return['version']   = '<a href="https://github.com/almazary/new_elearning">versi ' . get_pengaturan('versi', 'value') . '</a>';
+    }
 
     if (!empty($add_item) AND is_array($add_item)) {
         $return = array_merge($return, $add_item);
@@ -75,10 +80,10 @@ function load_comp_js($target_src = array())
 
 /**
  * Fungsi yang berguna untuk mendapatkan data tertentu dari model tertentu
- * 
- * @param  string $model     
- * @param  string $func      
- * @param  array  $args      
+ *
+ * @param  string $model
+ * @param  string $func
+ * @param  array  $args
  * @param  string $field_name
  * @return array|string
  */
@@ -216,7 +221,7 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
 
 /**
  * Method untuk ngecek apakah sudah login atau belum
- * 
+ *
  * @return boolean
  */
 function is_login()
@@ -339,10 +344,10 @@ function get_sess_data($key1, $key2)
 
 /**
  * Method untuk ngecek yang request ajax bukan
- * 
+ *
  * @return boolean
  */
-function is_ajax() 
+function is_ajax()
 {
     /* AJAX check  */
     if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -362,13 +367,13 @@ function is_ajax()
 function get_url_image($img, $size = '')
 {
     if (empty($size)) {
-        return base_url('assets/images/'.$img);
+        return base_url('userfiles/images/'.$img);
     } else {
         $pisah = explode('.', $img);
         $ext = end($pisah);
         $nama_file = $pisah[0];
 
-        return base_url('assets/images/'.$nama_file.'_'.$size.'.'.$ext);
+        return base_url('userfiles/images/'.$nama_file.'_'.$size.'.'.$ext);
     }
 }
 
@@ -424,31 +429,31 @@ function get_url_image_pengajar($img = '', $size = 'medium', $jk = 'Laki-laki') 
 function get_path_image($img = '', $size = '')
 {
     if (empty($size)) {
-        return './assets/images/'.$img;
+        return './userfiles/images/'.$img;
     } else {
         $pisah = explode('.', $img);
         $ext = end($pisah);
         $nama_file = $pisah[0];
 
-        return './assets/images/'.$nama_file.'_'.$size.'.'.$ext;
+        return './userfiles/images/'.$nama_file.'_'.$size.'.'.$ext;
     }
 }
 
 /**
  * Deklarasi path file
- * 
+ *
  * @param  string $file
  * @return string
  */
 function get_path_file($file = '')
 {
-    return './assets/files/'.$file;
+    return './userfiles/files/'.$file;
 }
 
 
 /**
  * Method untuk mendapatkan flashdata
- * 
+ *
  * @param  string $key
  * @return string
  */
@@ -461,7 +466,7 @@ function get_flashdata($key) {
 
 /**
  * Fungsi untuk mendapatkan bulan dengan nama indonesia
- * 
+ *
  * @param  string $bln
  * @return string
  */
@@ -477,7 +482,7 @@ function get_indo_bulan($bln = '') {
 
 /**
  * Fungsi untuk mendapatkan nama hari indonesia
- * 
+ *
  * @param  string $hari
  * @return string
  */
@@ -493,7 +498,7 @@ function get_indo_hari($hari = '') {
 
 /**
  * Method untuk memformat tanggal ke indonesia
- * 
+ *
  * @param  string $tgl
  * @return string
  */
@@ -506,7 +511,7 @@ function tgl_indo($tgl = '') {
 
 /**
  * Method untuk memformat tanggal dan jam ke format indonesia
- * 
+ *
  * @param  string $tgl_jam
  * @return string
  */
@@ -519,7 +524,7 @@ function tgl_jam_indo($tgl_jam = '') {
 
 /**
  * Metho untuk mendapatkan array post
- * 
+ *
  * @param  string $key
  * @return string
  */
@@ -531,7 +536,7 @@ function get_post_data($key = '') {
 
 /**
  * Method untuk mendapatkan huruf berdasarkan nomornya
- * 
+ *
  * @param  integer $index
  * @return string
  */
@@ -542,7 +547,7 @@ function get_abjad($index) {
 
 /**
  * Method untuk enkripsi url
- * 
+ *
  * @param  string $current_url
  * @return string
  */
@@ -552,7 +557,7 @@ function enurl_redirect($current_url) {
 
 /**
  * Method untuk deskripsi url
- * 
+ *
  * @param  string $url
  * @return string
  */
@@ -572,7 +577,7 @@ function get_data_array($array, $index1, $index2) {
 
 /**
  * Fungsi untuk mendapatkan nama panggilan
- * 
+ *
  * @param  string $str_nama
  * @return string
  */
@@ -581,3 +586,230 @@ function nama_panggilan($str_nama) {
     return $split[0];
 }
 
+function create_sess_kcfinder($login_id)
+{
+    if (is_login()) {
+        $_SESSION['E-LEARNING']['KCFINDER']              = array();
+        $_SESSION['E-LEARNING']['KCFINDER']['disabled']  = false;
+        $_SESSION['E-LEARNING']['KCFINDER']['uploadDir'] = "";
+        if (is_admin()) {
+            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('userfiles/uploads/');
+        } else {
+            $user_folder = './userfiles/uploads/' . $login_id;
+            if (!is_dir($user_folder)) {
+                mkdir($user_folder, 0755);
+                chmod($user_folder, 0755);
+            }
+            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('userfiles/uploads/' . $login_id);
+        }
+    }
+}
+
+function retrieve_field($id)
+{
+    return get_row_data('config_model', 'retrieve_field', array('id' => $id));
+}
+
+function update_field($id, $nama = null, $value = null)
+{
+    return get_row_data('config_model', 'update_field', array($id, $nama, $value));
+}
+
+function delete_field($id)
+{
+    return get_row_data('config_model', 'delete_field', array('id' => $id));
+}
+
+function create_field($id, $nama = null, $value = null)
+{
+    return get_row_data('config_model', 'create_field', array('id' => $id, 'nama' => $nama, 'value' => $value));
+}
+
+function is_pilih($array, $pertanyaan_id, $pilihan_id) {
+    if (isset($array[$pertanyaan_id]) AND $array[$pertanyaan_id] == $pilihan_id) {
+        return true;
+    }
+    return false;
+}
+
+function get_jawaban($array, $pertanyaan_id) {
+    if (!empty($array[$pertanyaan_id])) {
+        return $array[$pertanyaan_id];
+    }
+}
+
+function get_kunci_pilihan($pilihan) {
+    foreach ($pilihan as $value) {
+        if ($value['kunci'] == 1) {
+            return $value['id'];
+        }
+    }
+}
+
+function get_ip() {
+    return $_SERVER['REMOTE_ADDR'];
+}
+
+function sudah_ngerjakan($tugas_id, $siswa_id) {
+    # cek sudah mengerjakan belum
+    $nilai = get_row_data('tugas_model', 'retrieve_nilai', array(null, $tugas_id, $siswa_id));
+    if (!empty($nilai)) {
+        return true;
+    }
+
+    # cek history untuk tugas essay, karna harus dikoreksi dl
+    $check_history = retrieve_field('history-mengerjakan-' . $siswa_id . '-' . $tugas_id);
+    if (!empty($check_history)) {
+        return true;
+    }
+
+    return false;
+}
+
+function lama_pengerjaan($start, $finish) {
+    $date_a = new DateTime($start);
+    $date_b = new DateTime($finish);
+
+    $interval = date_diff($date_a, $date_b);
+
+    $result  = $interval->format(" %h jam %i menit %s detik");
+    $result  = str_replace(array(" 0 jam", " 0 menit", " 0 detik"), '', $result);
+
+    return trim($result);
+}
+
+function get_email_admin()
+{
+    $results = array();
+
+    $retrieve_all = get_row_data('login_model', 'retrieve_all', array(10, 1, 1, false));
+    foreach ($retrieve_all as $login) {
+        # cari pengajar
+        $pengajar = get_row_data('pengajar_model', 'retrieve', array($login['pengajar_id']));
+        if ($pengajar['status_id'] != 1) {
+            continue;
+        }
+
+        $results[] = array(
+            'nama'  => $pengajar['nama'],
+            'email' => $login['username']
+        );
+    }
+
+    return $results;
+}
+
+function kirim_email($nama_email, $to = array(), $array_data = array())
+{
+    # cari email
+    $template = get_pengaturan($nama_email, 'value');
+    $template = json_decode($template, 1);
+    if (empty($template)) {
+        return false;
+    }
+
+    $arr_old = array();
+    $arr_new = array();
+    foreach ((array)$array_data as $key => $value) {
+        $arr_old[] = '{$'.$key.'}';
+        $arr_new[] = $value;
+    }
+
+    $email_subject = str_replace($arr_old, $arr_new, $template['subject']);
+    $email_body    = str_replace($arr_old, $arr_new, $template['body']);
+
+    $CI &= get_instance();
+    $CI->email->clear(true);
+
+    $config['mailtype'] = 'html';
+    $CI->email->initialize($config);
+
+    $CI->email->to($to);
+    $CI->email->from(get_pengaturan('email-server', 'value'), '[E-learning] - ' . get_pengaturan('nama-sekolah', 'value'));
+    $CI->email->subject($email_subject);
+    $CI->email->message($email_body);
+    $CI->email->send();
+
+    return true;
+}
+
+function kirim_email_approve_siswa($siswa_id)
+{
+    $retrieve_siswa = get_row_data('siswa_model', 'retrieve', array($siswa_id));
+    $login = get_row_data('login_model', 'retrieve', array(null, null, null, $siswa_id));
+
+    $tabel_profil = '<table border="1" cellspacing="0" cellpadding="5">
+        <tr>
+            <td valign="top">NIS</td>
+            <td>' . $retrieve_siswa['nis'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Nama</td>
+            <td>' . $retrieve_siswa['nama'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Jenis kelamin</td>
+            <td>' . $retrieve_siswa['jenis_kelamin'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Tempat lahir</td>
+            <td>' . $retrieve_siswa['tempat_lahir'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Tgl. Lahir</td>
+            <td>' . tgl_indo($retrieve_siswa['tgl_lahir']) . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Alamat</td>
+            <td>' . $retrieve_siswa['alamat'] . '</td>
+        </tr>
+    </table>';
+
+    @kirim_email('email-template-approve-siswa', $login['username'], array(
+        'nama'         => $nama,
+        'nama_sekolah' => get_pengaturan('nama-sekolah', 'value'),
+        'tabel_profil' => $tabel_profil,
+        'url_login'    => site_url('login')
+    ));
+}
+
+
+function kirim_email_approve_pengajar($pengajar_id)
+{
+    $pengajar = get_row_data('pengajar_model', 'retrieve', array($pengajar_id));
+    $login    = get_row_data('login_model', 'retrieve', array(null, null, null, null, $pengajar_id));
+
+    $tabel_profil = '<table border="1" cellspacing="0" cellpadding="5">
+        <tr>
+            <td valign="top">NIP</td>
+            <td>' . $pengajar['nip'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Nama</td>
+            <td>' . $pengajar['nama'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Jenis kelamin</td>
+            <td>' . $pengajar['jenis_kelamin'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Tempat lahir</td>
+            <td>' . $pengajar['tempat_lahir'] . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Tgl. Lahir</td>
+            <td>' . tgl_indo($pengajar['tgl_lahir']) . '</td>
+        </tr>
+        <tr>
+            <td valign="top">Alamat</td>
+            <td>' . $pengajar['alamat'] . '</td>
+        </tr>
+    </table>';
+
+    @kirim_email('email-template-approve-pengajar', $login['username'], array(
+        'nama'         => $nama,
+        'nama_sekolah' => get_pengaturan('nama-sekolah', 'value'),
+        'tabel_profil' => $tabel_profil,
+        'url_login'    => site_url('login')
+    ));
+}

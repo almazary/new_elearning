@@ -12,23 +12,24 @@ Filter Siswa - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('siswa')|raw }}
 
+        {% if is_admin() == true %}
         <div class="row-fluid">
-        <div class="span7">
-            <a href="{{ site_url('siswa/add/1') }}" class="btn btn-primary">Tambah Siswa</a>
-        </div>
+            <div class="span7">
+                <a href="{{ site_url('siswa/add/1') }}" class="btn btn-primary">Tambah Siswa</a>
+            </div>
 
-        <div class="span5">
-            <div class="btn-group">
-                {{ anchor('siswa/index/1', 'Aktif', {'class' : 'btn btn-default'})|raw }}
-                {{ anchor('siswa/index/0', 'Pending', {'class' : 'btn btn-default'})|raw }}
-                {{ anchor('siswa/index/2', 'Blocking', {'class' : 'btn btn-default'})|raw }}
-                {{ anchor('siswa/index/3', 'Alumni', {'class' : 'btn btn-default'})|raw }}
-                {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-info'})|raw }}
+            <div class="span5">
+                <div class="btn-group">
+                    {{ anchor('siswa/index/1', 'Aktif', {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/0', 'Pending', {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/2', 'Blocking', {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/3', 'Alumni', {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-info'})|raw }}
+                </div>
             </div>
         </div>
-        </div>
-
         <br>
+        {% endif %}
 
         <div class="bs-callout bs-callout-info">
             <b><a id="button" href="javascript:void(0)">PARAMETER PENCARIAN</a></b>
@@ -121,19 +122,23 @@ Filter Siswa - {{ parent() }}
                     <th>Status</th>
                     <td>
                         <p style="margin-top:0px; margin-bottom:5px;">
+                            {% if is_admin() %}
                             <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="0" {{ set_checkbox('status_id[]', '0', (filter.status_id is defined and 0 in filter.status_id) ? TRUE : FALSE) }}> Pending</label>
                             <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="1" {{ set_checkbox('status_id[]', '1', (filter.status_id is defined and 1 in filter.status_id) ? TRUE : FALSE) }}> Aktif</label>
                             <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="2" {{ set_checkbox('status_id[]', '2', (filter.status_id is defined and 2 in filter.status_id) ? TRUE : FALSE) }}> Blocking</label>
+                            {% endif %}
                             <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="3" {{ set_checkbox('status_id[]', '3', (filter.status_id is defined and 3 in filter.status_id) ? TRUE : FALSE) }}> Alumni</label>
                         </p>
                     </td>
                 <tr>
+                {% if is_admin() %}
                 <tr>
                     <th>Username</th>
                     <td>
                         <input type="text" name="username" class="span3" style="margin-bottom:0px;" value="{{ set_value('username', (filter.username is defined) ? filter.username) }}">
                     </td>
                 </tr>
+                {% endif %}
                 <tr>
                     <td></td>
                     <td>
@@ -151,7 +156,7 @@ Filter Siswa - {{ parent() }}
             <thead>
                 <tr>
                     <th width="7%">
-                        {% if status_id == 0 or status_id == 2 %}
+                        {% if is_admin() and (status_id == 0 or status_id == 2) %}
                             <input type="checkbox" style="margin-top:-2px;" onclick="ch_uch_checkbox(this)">
                         {% endif %}
                         ID
@@ -164,16 +169,19 @@ Filter Siswa - {{ parent() }}
                 {% for no, v in siswas %}
                 <tr>
                     <td>
+                        {% if is_admin() %}
                         <input type="checkbox" name="siswa_id[]" value="{{ v.id }}" style="margin-top:-2px;" {{ (v.status_id == 3) ? 'disabled' }}>
+                        {% endif %}
                         <b>{{ v.id }}</b>
                     </td>
                     <td>
                         <img style="height:40px;width:40px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(v.foto, 'medium', v.jenis_kelamin) }}">
                         <b>{{ v.nama }} {{ ((v.nis is not empty) ? '<span class="text-muted">(' ~ v.nis ~ ')</span>')|raw }}</b>
-                        <br>{{ v.kelas_aktif.nama }} , {{ v.jenis_kelamin }} , {{ v.agama }}
+                        <br>{{ ((v.kelas_aktif is not empty) ? v.kelas_aktif.nama : '<b class="text-success">Alumni</b>')|raw }} , {{ v.jenis_kelamin }} , {{ v.agama }}
                     </td>
                     <td>
                         <ul class="nav nav-pills" style="margin-bottom:0px;">
+                            {% if is_admin() %}
                             <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
                             <li class="dropdown">
                                 <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
@@ -187,6 +195,9 @@ Filter Siswa - {{ parent() }}
                                     <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
                                 </ul>
                             </li>
+                            {% else %}
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            {% endif %}
                         </ul>
                     </td>
                 </tr>
@@ -194,7 +205,7 @@ Filter Siswa - {{ parent() }}
             </tbody>
         </table>
 
-        {% if siswas is not empty %}
+        {% if is_admin() and siswas is not empty %}
         <br>
         <div class="row-fluid">
             <div class="span8">

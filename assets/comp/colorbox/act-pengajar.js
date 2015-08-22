@@ -53,4 +53,13 @@ $(document).ready(function(){
             location.reload();
         }
     });
+    $(".iframe-7").colorbox({
+        iframe:true,
+        width:"600",
+        height:"500",
+        fixed:true,
+        onClosed : function() {
+            location.reload();
+        }
+    });
 });

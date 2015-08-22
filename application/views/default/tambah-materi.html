@@ -51,7 +51,7 @@ Tambah Materi - {{ parent() }}
             <div class="control-group">
                 <label class="control-label">Konten <span class="text-error">*</span></label>
                 <div class="controls">
-                    <textarea name="konten" id="konten" style="height:500px;width:100%;">{{ set_value('konten') }}</textarea>
+                    <textarea name="konten" id="konten" style="height:500px;width:100%;">{{ set_value('konten')|raw }}</textarea>
                     {{ form_error('konten')|raw }}
                 </div>
             </div>

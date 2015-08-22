@@ -210,40 +210,103 @@ class __TwigTemplate_7f857167ed078456c7dacce5699c3c84c4bbedc1d2c03ce6f2834231bba
         $context['_seq'] = twig_ensure_traversable((isset($context["materi"]) ? $context["materi"] : null));
         foreach ($context['_seq'] as $context["no"] => $context["m"]) {
             // line 113
-            echo "                <tr>
-                    <td><b>";
+            echo "
+                ";
             // line 114
+            if ((is_admin() == true)) {
+                // line 115
+                echo "                    ";
+                $context["action_edit"] = true;
+                // line 116
+                echo "                    ";
+                $context["action_delete"] = true;
+                // line 117
+                echo "                ";
+            } elseif ((is_pengajar() == true)) {
+                // line 118
+                echo "                    ";
+                if (($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "pengajar_id") == get_sess_data("user", "id"))) {
+                    // line 119
+                    echo "                        ";
+                    $context["action_edit"] = true;
+                    // line 120
+                    echo "                        ";
+                    $context["action_delete"] = true;
+                    // line 121
+                    echo "                    ";
+                } else {
+                    // line 122
+                    echo "                        ";
+                    $context["action_edit"] = false;
+                    // line 123
+                    echo "                        ";
+                    $context["action_delete"] = false;
+                    // line 124
+                    echo "                    ";
+                }
+                // line 125
+                echo "                ";
+            } elseif ((is_siswa() == true)) {
+                // line 126
+                echo "                    ";
+                if (($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "siswa_id") == get_sess_data("user", "id"))) {
+                    // line 127
+                    echo "                        ";
+                    $context["action_edit"] = true;
+                    // line 128
+                    echo "                        ";
+                    $context["action_delete"] = true;
+                    // line 129
+                    echo "                    ";
+                } else {
+                    // line 130
+                    echo "                        ";
+                    $context["action_edit"] = false;
+                    // line 131
+                    echo "                        ";
+                    $context["action_delete"] = false;
+                    // line 132
+                    echo "                    ";
+                }
+                // line 133
+                echo "                ";
+            }
+            // line 134
+            echo "
+                <tr>
+                    <td><b>";
+            // line 136
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id"), "html", null, true);
             echo "</b></td>
                     <td>
                         <strong class=\"text-warning\">";
-            // line 116
+            // line 138
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "judul"), "html", null, true);
             echo "</strong>
                         <br><small><b>";
-            // line 117
+            // line 139
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "mapel"), "nama"), "html", null, true);
             echo "</b>
-                        
+
                         ";
-            // line 119
+            // line 141
             $context['_parent'] = (array) $context;
             $context['_seq'] = twig_ensure_traversable($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "materi_kelas"));
             foreach ($context['_seq'] as $context["_key"] => $context["mk"]) {
-                // line 120
+                // line 142
                 echo "                            , ";
                 echo twig_escape_filter($this->env, $this->getAttribute((isset($context["mk"]) ? $context["mk"] : null), "nama"), "html", null, true);
-                echo " 
+                echo "
                         ";
             }
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['mk'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 122
+            // line 144
             echo "
                         </small>
                         <br><small><b>Pembuat : </b> <a href=\"";
-            // line 124
+            // line 146
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "pembuat"), "link_profil"), "html", null, true);
             echo "\">";
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "pembuat"), "nama"), "html", null, true);
@@ -257,40 +320,54 @@ class __TwigTemplate_7f857167ed078456c7dacce5699c3c84c4bbedc1d2c03ce6f2834231bba
                     </td>
                     <td>
                         ";
-            // line 127
+            // line 149
             echo (((!twig_test_empty($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "file")))) ? ("<span class=\"label label-info\">File</span>") : ("<span class=\"label label-success\">Tertulis</span>"));
             echo "
                     </td>
                     <td>
                         <div class=\"btn-group\">
                             ";
-            // line 131
+            // line 153
             if ((!twig_test_empty($this->getAttribute((isset($context["m"]) ? $context["m"] : null), "file")))) {
-                // line 132
+                // line 154
                 echo "                                ";
                 $context["url_type"] = "file";
-                // line 133
+                // line 155
                 echo "                            ";
             } else {
-                // line 134
+                // line 156
                 echo "                                ";
                 $context["url_type"] = "tertulis";
-                // line 135
+                // line 157
                 echo "                            ";
             }
-            // line 136
+            // line 158
             echo "                            ";
             echo anchor(("materi/detail/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")), "<i class=\"icon-zoom-in\"></i> Detail", array("class" => "btn btn-default btn-small", "target" => "_blank"));
             echo "
+
                             ";
-            // line 137
-            echo anchor(((((("materi/edit/" . (isset($context["url_type"]) ? $context["url_type"] : null)) . "/") . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")) . "/") . enurl_redirect(current_url())), "<i class=\"icon-edit\"></i> Edit", array("class" => "btn btn-default btn-small"));
+            // line 160
+            if (((isset($context["action_edit"]) ? $context["action_edit"] : null) == true)) {
+                // line 161
+                echo "                                ";
+                echo anchor(((((("materi/edit/" . (isset($context["url_type"]) ? $context["url_type"] : null)) . "/") . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")) . "/") . enurl_redirect(current_url())), "<i class=\"icon-edit\"></i> Edit", array("class" => "btn btn-default btn-small"));
+                echo "
+                            ";
+            }
+            // line 163
             echo "
                             ";
-            // line 138
-            echo anchor(((("materi/delete/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")) . "/") . enurl_redirect(current_url())), "<i class=\"icon-trash\"></i> Hapus", array("class" => "btn btn-default btn-small", "onclick" => "return confirm('Anda yakin ingin menghapus?')"));
-            echo "
-                        </div>
+            // line 164
+            if (((isset($context["action_delete"]) ? $context["action_delete"] : null) == true)) {
+                // line 165
+                echo "                                ";
+                echo anchor(((("materi/delete/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id")) . "/") . enurl_redirect(current_url())), "<i class=\"icon-trash\"></i> Hapus", array("class" => "btn btn-default btn-small", "onclick" => "return confirm('Anda yakin ingin menghapus?')"));
+                echo "
+                            ";
+            }
+            // line 167
+            echo "                        </div>
                     </td>
                 </tr>
                 ";
@@ -298,12 +375,12 @@ class __TwigTemplate_7f857167ed078456c7dacce5699c3c84c4bbedc1d2c03ce6f2834231bba
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['no'], $context['m'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 143
+        // line 171
         echo "            </tbody>
         </table>
         <br>
         ";
-        // line 146
+        // line 174
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
 
@@ -324,6 +401,6 @@ class __TwigTemplate_7f857167ed078456c7dacce5699c3c84c4bbedc1d2c03ce6f2834231bba
 
     public function getDebugInfo()
     {
-        return array (  307 => 146,  302 => 143,  291 => 138,  287 => 137,  282 => 136,  279 => 135,  276 => 134,  273 => 133,  270 => 132,  268 => 131,  261 => 127,  247 => 124,  243 => 122,  234 => 120,  230 => 119,  225 => 117,  221 => 116,  216 => 114,  213 => 113,  209 => 112,  179 => 85,  170 => 79,  161 => 73,  149 => 64,  141 => 59,  130 => 50,  116 => 46,  112 => 44,  108 => 43,  99 => 36,  85 => 32,  81 => 30,  77 => 29,  68 => 23,  60 => 18,  56 => 17,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  384 => 174,  379 => 171,  370 => 167,  364 => 165,  362 => 164,  359 => 163,  353 => 161,  351 => 160,  345 => 158,  342 => 157,  339 => 156,  336 => 155,  333 => 154,  331 => 153,  324 => 149,  310 => 146,  306 => 144,  297 => 142,  293 => 141,  288 => 139,  284 => 138,  279 => 136,  275 => 134,  272 => 133,  269 => 132,  266 => 131,  263 => 130,  260 => 129,  257 => 128,  254 => 127,  251 => 126,  248 => 125,  245 => 124,  242 => 123,  239 => 122,  236 => 121,  233 => 120,  230 => 119,  227 => 118,  224 => 117,  221 => 116,  218 => 115,  216 => 114,  213 => 113,  209 => 112,  179 => 85,  170 => 79,  161 => 73,  149 => 64,  141 => 59,  130 => 50,  116 => 46,  112 => 44,  108 => 43,  99 => 36,  85 => 32,  81 => 30,  77 => 29,  68 => 23,  60 => 18,  56 => 17,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

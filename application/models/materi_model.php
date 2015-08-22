@@ -155,7 +155,8 @@ class Materi_model extends CI_Model
         $tgl_posting   = null,
         $publish       = null,
         $kelas_id      = array(),
-        $type          = array()
+        $type          = array(),
+        $pagination    = true
     ) {
         $no_of_records = (int)$no_of_records;
         $page_no       = (int)$page_no;
@@ -166,7 +167,12 @@ class Materi_model extends CI_Model
             $where['materi.pengajar_id'] = array($pengajar_id, 'where_in');
         }
         if (!empty($siswa_id)) {
-            $where['materi.siswa_id'] = array($siswa_id, 'where_in');
+            if (!empty($pengajar_id)) {
+                $operation = 'or_where_in';
+            } else {
+                $operation = 'where_in';
+            }
+            $where['materi.siswa_id'] = array($siswa_id, $operation);
         }
         if (!empty($mapel_id)) {
             $where['materi.mapel_id'] = array($mapel_id, 'where_in');
@@ -208,13 +214,20 @@ class Materi_model extends CI_Model
 
         # cari yang mapelnya berstatus aktif yang ditampilkan
         $where['mapel'] = array('materi.mapel_id = mapel.id', 'join', 'inner');
-        $where['mapel.aktif'] = array('1', 'where');
+        $where['mapel.aktif'] = array(1, 'where');
 
         $orderby = array(
             'materi.id' => 'DESC'
         );
 
-        $data = $this->pager->set('materi', $no_of_records, $page_no, $where, $orderby, 'materi.*', $group_by);
+        if ($pagination) {
+            $data = $this->pager->set('materi', $no_of_records, $page_no, $where, $orderby, 'materi.*', $group_by);
+        } else {
+            # cari jumlah semua pengajar
+            $no_of_records = $this->db->count_all('materi');
+            $search_all    = $this->pager->set('materi', $no_of_records, $page_no, $where, $orderby, 'materi.*', $group_by);
+            $data          = $search_all['results'];
+        }
 
         return $data;
     }

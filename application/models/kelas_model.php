@@ -74,7 +74,8 @@ class Kelas_model extends CI_Model
             $parent_id = (int)$parent_id;
         }
 
-        $query = $this->db->query("SELECT MAX(urutan) AS urutan FROM kelas");
+        $this->db->select('MAX(urutan) AS urutan');
+        $query = $this->db->get('kelas');
         $row   = $query->row_array();
         if (empty($row['urutan'])) {
             $row['urutan'] = 1;

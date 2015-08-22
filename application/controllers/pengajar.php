@@ -11,9 +11,8 @@ class Pengajar extends MY_Controller
 
     function index($segment_3 = '', $segment_4 = '')
     {
-        # harus login sebagai admin
-        if (!is_admin()) {
-            redirect('welcome');
+        if (is_pengajar()) {
+            redirect('pengajar/filter');
         }
 
         $status_id = $segment_3;
@@ -26,12 +25,14 @@ class Pengajar extends MY_Controller
             $page_no = 1;
         }
 
+        $base_url_module = 'pengajar/index/'.$status_id.'/';
+
         # ambil semua data pengajar
         $retrieve_all = $this->pengajar_model->retrieve_all(20, $page_no, $status_id);
 
         $data['status_id']  = $status_id;
         $data['pengajar']   = $retrieve_all['results'];
-        $data['pagination'] = $this->pager->view($retrieve_all, 'pengajar/index/'.$status_id.'/');
+        $data['pagination'] = $this->pager->view($retrieve_all, $base_url_module);
 
         # panggil colorbox
         $html_js = load_comp_js(array(
@@ -60,10 +61,14 @@ class Pengajar extends MY_Controller
                         $retrieve_pengajar['foto'],
                         $post_status_id
                     );
+
+                    if ($retrieve_pengajar['status_id'] == 0 && $post_status_id == 1) {
+                        kirim_email_approve_pengajar($pengajar_id);
+                    }
                 }
             }
 
-            redirect('pengajar/index/'.$status_id);
+            redirect($base_url_module);
         }
 
         $this->twig->display('list-pengajar.html', $data);
@@ -178,11 +183,21 @@ class Pengajar extends MY_Controller
 
     function edit_profile($segment_3 = '', $segment_4 = '')
     {
+        # siswa tidak diijinkan
+        if (is_siswa()) {
+            exit('Akses ditolak');
+        }
+
         $status_id         = (int)$segment_3;
         $pengajar_id       = (int)$segment_4;
         $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
         if (empty($retrieve_pengajar)) {
             exit('Data Pengajar tidak ditemukan');
+        }
+
+        # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
+        if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
+            exit('Akses ditolak');
         }
 
         $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
@@ -201,8 +216,13 @@ class Pengajar extends MY_Controller
             $bln_lahir     = $this->input->post('bln_lahir', TRUE);
             $thn_lahir     = $this->input->post('thn_lahir', TRUE);
             $alamat        = $this->input->post('alamat', TRUE);
-            $status        = $this->input->post('status_id', TRUE);
-            $is_admin      = $this->input->post('is_admin', TRUE);
+            if (is_admin()) {
+                $status   = $this->input->post('status_id', TRUE);
+                $is_admin = $this->input->post('is_admin', TRUE);
+            } else {
+                $status   = $retrieve_pengajar['status_id'];
+                $is_admin = $retrieve_login['is_admin'];
+            }
 
             if (empty($thn_lahir)) {
                 $tanggal_lahir = null;
@@ -233,6 +253,10 @@ class Pengajar extends MY_Controller
                 null
             );
 
+            if ($retrieve_pengajar['status_id'] == 0 && $status == 1) {
+                kirim_email_approve_pengajar($pengajar_id);
+            }
+
             $this->session->set_flashdata('edit', get_alert('success', 'Profil pengajar berhasil diperbaharui.'));
             redirect('pengajar/edit_profile/'.$status_id.'/'.$pengajar_id);
         }
@@ -242,11 +266,21 @@ class Pengajar extends MY_Controller
 
     function edit_picture($segment_3 = '', $segment_4 = '')
     {
+        # siswa tidak diijinkan
+        if (is_siswa()) {
+            exit('Akses ditolak');
+        }
+
         $status_id         = (int)$segment_3;
         $pengajar_id       = (int)$segment_4;
         $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
         if (empty($retrieve_pengajar)) {
             exit('Data Pengajar tidak ditemukan');
+        }
+
+        # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
+        if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
+            exit('Akses ditolak');
         }
 
         $data['status_id']    = $status_id;
@@ -319,11 +353,21 @@ class Pengajar extends MY_Controller
 
     function edit_username($segment_3 = '', $segment_4 = '')
     {
+        # siswa tidak diijinkan
+        if (is_siswa()) {
+            exit('Akses ditolak');
+        }
+
         $status_id         = (int)$segment_3;
         $pengajar_id       = (int)$segment_4;
         $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
         if (empty($retrieve_pengajar)) {
             exit('Data Pengajar tidak ditemukan');
+        }
+
+        # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
+        if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
+            exit('Akses ditolak');
         }
 
         $data['status_id']    = $status_id;
@@ -358,11 +402,21 @@ class Pengajar extends MY_Controller
 
     function edit_password($segment_3 = '', $segment_4 = '')
     {
+        # siswa tidak diijinkan
+        if (is_siswa()) {
+            exit('Akses ditolak');
+        }
+
         $status_id         = (int)$segment_3;
         $pengajar_id       = (int)$segment_4;
         $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
         if (empty($retrieve_pengajar)) {
             exit('Data Pengajar tidak ditemukan');
+        }
+
+        # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
+        if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
+            exit('Akses ditolak');
         }
 
         $data['status_id']    = $status_id;
@@ -385,18 +439,23 @@ class Pengajar extends MY_Controller
 
     function detail($segment_3 = '', $segment_4 = '')
     {
-        $status_id         = (int)$segment_3;
-        $pengajar_id       = (int)$segment_4;
+        if (is_admin()) {
+            $status_id         = (int)$segment_3;
+            $pengajar_id       = (int)$segment_4;
+            $data['status_id'] = $status_id;
+        } else {
+            $pengajar_id = (int)$segment_3;
+        }
+
         $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
         if (empty($retrieve_pengajar)) {
-            exit('Data Pengajar tidak ditemukan');
+            redirect('pengajar');
         }
 
         $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
 
         $data['pengajar']       = $retrieve_pengajar;
         $data['pengajar_login'] = $retrieve_login;
-        $data['status_id']      = $status_id;
 
         # panggil colorbox
         $html_js = load_comp_js(array(
@@ -411,6 +470,11 @@ class Pengajar extends MY_Controller
 
     function add_ampuan($segment_3 = '', $segment_4 = '', $segment_5 = '')
     {
+        # siswa tidak diijinkan
+        if (is_siswa()) {
+            exit('Akses ditolak');
+        }
+
         $status_id    = (int)$segment_3;
         $pengajar_id  = (int)$segment_4;
         $hari_id      = (int)$segment_5;
@@ -421,6 +485,11 @@ class Pengajar extends MY_Controller
         $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
         if (empty($retrieve_pengajar)) {
             exit('Data Pengajar tidak ditemukan');
+        }
+
+        # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
+        if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
+            exit('Akses ditolak');
         }
 
         $data['comp_js'] = load_comp_js(array(
@@ -454,12 +523,22 @@ class Pengajar extends MY_Controller
 
     function edit_ampuan($segment_3 = '', $segment_4 = '', $segment_5 = '')
     {
+        # siswa tidak diijinkan
+        if (is_siswa()) {
+            exit('Akses ditolak');
+        }
+
         $status_id         = (int)$segment_3;
         $pengajar_id       = (int)$segment_4;
         $ma_id             = (int)$segment_5;
         $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
         if (empty($retrieve_pengajar)) {
             exit('Data Pengajar tidak ditemukan');
+        }
+
+        # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
+        if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
+            exit('Akses ditolak');
         }
 
         $retrieve_ma = $this->pengajar_model->retrieve_ma($ma_id);
@@ -549,6 +628,26 @@ class Pengajar extends MY_Controller
 
         }
 
+        if (empty($filter)) {
+            $filter = array(
+                'nip'           => '',
+                'nama'          => '',
+                'jenis_kelamin' => '',
+                'tempat_lahir'  => '',
+                'tgl_lahir'     => '',
+                'bln_lahir'     => '',
+                'thn_lahir'     => '',
+                'alamat'        => '',
+                'status_id'     => '',
+                'username'      => '',
+                'is_admin'      => ''
+            );
+        }
+
+        if (empty($filter['status_id'])) {
+            $filter['status_id'] = array(1, 2);
+        }
+
         $data['filter'] = $filter;
 
         if (!empty($filter)) {
@@ -619,5 +718,26 @@ class Pengajar extends MY_Controller
         } else {
             redirect('pengajar/filter');
         }
+    }
+
+    function jadwal()
+    {
+        if (!is_pengajar()) {
+            redirect('pengajar');
+        }
+
+        # panggil colorbox
+        $html_js = load_comp_js(array(
+            base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+            base_url('assets/comp/colorbox/act-pengajar.js')
+        ));
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+
+        $data['pengajar']       = $this->pengajar_model->retrieve(get_sess_data('user', 'id'));
+        $data['pengajar_login'] = $this->login_model->retrieve(get_sess_data('login', 'id'));
+        $data['status_id']      = get_sess_data('user', 'status_id');
+
+        $this->twig->display('pp-jadwal-pengajar.html', $data);
     }
 }

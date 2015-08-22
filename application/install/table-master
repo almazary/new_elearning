@@ -1,0 +1,533 @@
+
+--
+-- Database: `new_elearning`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}field_tambahan`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}field_tambahan` (
+  `id` varchar(255) NOT NULL,
+  `nama` varchar(255) DEFAULT NULL,
+  `value` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}kelas`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}kelas` (
+`id` int(11) NOT NULL,
+  `nama` varchar(45) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `urutan` int(11) NOT NULL,
+  `aktif` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1=aktif 0=tidak'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}kelas_siswa`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}kelas_siswa` (
+`id` int(11) NOT NULL,
+  `kelas_id` int(11) NOT NULL,
+  `siswa_id` int(11) NOT NULL,
+  `aktif` tinyint(4) NOT NULL COMMENT '0 jika bukan, 1 jika ya'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}login`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}login` (
+`id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `siswa_id` int(11) DEFAULT NULL,
+  `pengajar_id` int(11) DEFAULT NULL,
+  `is_admin` int(11) NOT NULL COMMENT '0=tidak,1=ya',
+  `reset_kode` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}mapel`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}mapel` (
+`id` int(11) NOT NULL,
+  `nama` varchar(255) NOT NULL,
+  `info` text,
+  `aktif` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 = ya, 0 = tidak'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}mapel_ajar`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}mapel_ajar` (
+`id` int(11) NOT NULL,
+  `hari_id` tinyint(4) NOT NULL COMMENT '1=senin,2=selasa,3=rabu,4=kamis,5=jum''at,6=sabtu,7=minggu',
+  `jam_mulai` time NOT NULL,
+  `jam_selesai` time NOT NULL,
+  `pengajar_id` int(11) NOT NULL,
+  `mapel_kelas_id` int(11) NOT NULL,
+  `aktif` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 = aktif 0 = tidak'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}mapel_kelas`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}mapel_kelas` (
+`id` int(11) NOT NULL,
+  `kelas_id` int(11) NOT NULL,
+  `mapel_id` int(11) NOT NULL,
+  `aktif` tinyint(4) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}materi`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}materi` (
+`id` int(11) NOT NULL,
+  `mapel_id` int(11) NOT NULL,
+  `pengajar_id` int(11) DEFAULT NULL,
+  `siswa_id` int(11) DEFAULT NULL,
+  `judul` varchar(255) NOT NULL,
+  `konten` text,
+  `file` text,
+  `tgl_posting` datetime NOT NULL,
+  `publish` tinyint(4) NOT NULL DEFAULT '0',
+  `views` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}materi_kelas`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}materi_kelas` (
+`id` int(11) NOT NULL,
+  `materi_id` int(11) NOT NULL,
+  `kelas_id` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}nilai_tugas`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}nilai_tugas` (
+`id` int(11) NOT NULL,
+  `nilai` float NOT NULL,
+  `tugas_id` int(11) NOT NULL,
+  `siswa_id` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}pengajar`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}pengajar` (
+`id` int(11) NOT NULL,
+  `nip` varchar(45) DEFAULT NULL,
+  `nama` varchar(100) NOT NULL,
+  `jenis_kelamin` varchar(9) NOT NULL,
+  `tempat_lahir` varchar(45) NOT NULL,
+  `tgl_lahir` date DEFAULT NULL,
+  `alamat` varchar(255) NOT NULL,
+  `foto` text,
+  `status_id` tinyint(4) NOT NULL COMMENT '0=pending, 1=aktif, 2=blok'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}pengaturan`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}pengaturan` (
+  `id` varchar(255) NOT NULL,
+  `nama` varchar(255) DEFAULT NULL,
+  `value` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}pilihan`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}pilihan` (
+`id` int(11) NOT NULL,
+  `pertanyaan_id` int(11) NOT NULL,
+  `konten` text NOT NULL,
+  `kunci` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0=tidak',
+  `urutan` int(11) NOT NULL,
+  `aktif` tinyint(4) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}siswa`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}siswa` (
+`id` int(11) NOT NULL,
+  `nis` varchar(45) DEFAULT NULL,
+  `nama` varchar(100) NOT NULL,
+  `jenis_kelamin` varchar(9) NOT NULL COMMENT 'Laki-laki dan Perempuan',
+  `tempat_lahir` varchar(45) NOT NULL,
+  `tgl_lahir` date DEFAULT NULL,
+  `agama` char(7) DEFAULT NULL,
+  `alamat` varchar(255) NOT NULL,
+  `tahun_masuk` year(4) NOT NULL,
+  `foto` text,
+  `status_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0=pending, 1=aktif, 2=blok, 3=alumni, 4=deleted'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}tugas`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}tugas` (
+`id` int(11) NOT NULL,
+  `mapel_id` int(11) NOT NULL,
+  `pengajar_id` int(11) NOT NULL,
+  `type_id` tinyint(4) NOT NULL COMMENT '1=upload,2=essay,3=ganda',
+  `judul` varchar(255) NOT NULL,
+  `durasi` int(11) DEFAULT NULL COMMENT 'lama pengerjaan dalam menit',
+  `info` text,
+  `aktif` tinyint(4) NOT NULL DEFAULT '0',
+  `tgl_buat` datetime DEFAULT NULL,
+  `tampil_siswa` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0=tidak tampil di siswa, 1=tampil siswa'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}tugas_kelas`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}tugas_kelas` (
+`id` int(11) NOT NULL,
+  `tugas_id` int(11) NOT NULL,
+  `kelas_id` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `{$prefix}tugas_pertanyaan`
+--
+
+CREATE TABLE IF NOT EXISTS `{$prefix}tugas_pertanyaan` (
+`id` int(11) NOT NULL,
+  `pertanyaan` text NOT NULL,
+  `urutan` int(11) NOT NULL,
+  `tugas_id` int(11) NOT NULL,
+  `aktif` tinyint(4) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `{$prefix}field_tambahan`
+--
+ALTER TABLE `{$prefix}field_tambahan`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `{$prefix}kelas`
+--
+ALTER TABLE `{$prefix}kelas`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `{$prefix}kelas_siswa`
+--
+ALTER TABLE `{$prefix}kelas_siswa`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_kelas_siswa_kelas_idx` (`kelas_id`), ADD KEY `fk_kelas_siswa_siswa1_idx` (`siswa_id`);
+
+--
+-- Indexes for table `{$prefix}login`
+--
+ALTER TABLE `{$prefix}login`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_login_siswa1_idx` (`siswa_id`), ADD KEY `fk_login_pengajar1_idx` (`pengajar_id`);
+
+--
+-- Indexes for table `{$prefix}mapel`
+--
+ALTER TABLE `{$prefix}mapel`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `{$prefix}mapel_ajar`
+--
+ALTER TABLE `{$prefix}mapel_ajar`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_mapel_ajar_pengajar1_idx` (`pengajar_id`), ADD KEY `fk_mapel_ajar_mapel_kelas1_idx` (`mapel_kelas_id`);
+
+--
+-- Indexes for table `{$prefix}mapel_kelas`
+--
+ALTER TABLE `{$prefix}mapel_kelas`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_mapel_kelas_kelas1_idx` (`kelas_id`), ADD KEY `fk_mapel_kelas_mapel1_idx` (`mapel_id`);
+
+--
+-- Indexes for table `{$prefix}materi`
+--
+ALTER TABLE `{$prefix}materi`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_materi_pengajar1_idx` (`pengajar_id`), ADD KEY `fk_materi_siswa1_idx` (`siswa_id`), ADD KEY `fk_materi_mapel1_idx` (`mapel_id`);
+
+--
+-- Indexes for table `{$prefix}materi_kelas`
+--
+ALTER TABLE `{$prefix}materi_kelas`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_materi_kelas_materi1_idx` (`materi_id`), ADD KEY `fk_materi_kelas_kelas1_idx` (`kelas_id`);
+
+--
+-- Indexes for table `{$prefix}nilai_tugas`
+--
+ALTER TABLE `{$prefix}nilai_tugas`
+ ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `tugas_id` (`tugas_id`,`siswa_id`), ADD KEY `fk_nilai_tugas1_idx` (`tugas_id`), ADD KEY `fk_nilai_siswa1_idx` (`siswa_id`);
+
+--
+-- Indexes for table `{$prefix}pengajar`
+--
+ALTER TABLE `{$prefix}pengajar`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `{$prefix}pengaturan`
+--
+ALTER TABLE `{$prefix}pengaturan`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `{$prefix}pilihan`
+--
+ALTER TABLE `{$prefix}pilihan`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_pilihan_tugas_pertanyaan1_idx` (`pertanyaan_id`);
+
+--
+-- Indexes for table `{$prefix}siswa`
+--
+ALTER TABLE `{$prefix}siswa`
+ ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `{$prefix}tugas`
+--
+ALTER TABLE `{$prefix}tugas`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_tugas_mapel1_idx` (`mapel_id`), ADD KEY `fk_tugas_pengajar1_idx` (`pengajar_id`);
+
+--
+-- Indexes for table `{$prefix}tugas_kelas`
+--
+ALTER TABLE `{$prefix}tugas_kelas`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_tugas_kelas_tugas1_idx` (`tugas_id`), ADD KEY `fk_tugas_kelas_kelas1_idx` (`kelas_id`);
+
+--
+-- Indexes for table `{$prefix}tugas_pertanyaan`
+--
+ALTER TABLE `{$prefix}tugas_pertanyaan`
+ ADD PRIMARY KEY (`id`), ADD KEY `fk_tugas_essay_tugas1_idx` (`tugas_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `{$prefix}kelas`
+--
+ALTER TABLE `{$prefix}kelas`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}kelas_siswa`
+--
+ALTER TABLE `{$prefix}kelas_siswa`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}login`
+--
+ALTER TABLE `{$prefix}login`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}mapel`
+--
+ALTER TABLE `{$prefix}mapel`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}mapel_ajar`
+--
+ALTER TABLE `{$prefix}mapel_ajar`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}mapel_kelas`
+--
+ALTER TABLE `{$prefix}mapel_kelas`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}materi`
+--
+ALTER TABLE `{$prefix}materi`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}materi_kelas`
+--
+ALTER TABLE `{$prefix}materi_kelas`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}nilai_tugas`
+--
+ALTER TABLE `{$prefix}nilai_tugas`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}pengajar`
+--
+ALTER TABLE `{$prefix}pengajar`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}pilihan`
+--
+ALTER TABLE `{$prefix}pilihan`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}siswa`
+--
+ALTER TABLE `{$prefix}siswa`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}tugas`
+--
+ALTER TABLE `{$prefix}tugas`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}tugas_kelas`
+--
+ALTER TABLE `{$prefix}tugas_kelas`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- AUTO_INCREMENT for table `{$prefix}tugas_pertanyaan`
+--
+ALTER TABLE `{$prefix}tugas_pertanyaan`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `{$prefix}kelas_siswa`
+--
+ALTER TABLE `{$prefix}kelas_siswa`
+ADD CONSTRAINT `fk_kelas_siswa_kelas` FOREIGN KEY (`kelas_id`) REFERENCES `{$prefix}kelas` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_kelas_siswa_siswa1` FOREIGN KEY (`siswa_id`) REFERENCES `{$prefix}siswa` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `{$prefix}login`
+--
+ALTER TABLE `{$prefix}login`
+ADD CONSTRAINT `fk_login_pengajar1` FOREIGN KEY (`pengajar_id`) REFERENCES `{$prefix}pengajar` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_login_siswa1` FOREIGN KEY (`siswa_id`) REFERENCES `{$prefix}siswa` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `{$prefix}mapel_ajar`
+--
+ALTER TABLE `{$prefix}mapel_ajar`
+ADD CONSTRAINT `fk_mapel_ajar_mapel_kelas1` FOREIGN KEY (`mapel_kelas_id`) REFERENCES `{$prefix}mapel_kelas` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_mapel_ajar_pengajar1` FOREIGN KEY (`pengajar_id`) REFERENCES `{$prefix}pengajar` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `{$prefix}mapel_kelas`
+--
+ALTER TABLE `{$prefix}mapel_kelas`
+ADD CONSTRAINT `fk_mapel_kelas_kelas1` FOREIGN KEY (`kelas_id`) REFERENCES `{$prefix}kelas` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_mapel_kelas_mapel1` FOREIGN KEY (`mapel_id`) REFERENCES `{$prefix}mapel` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `{$prefix}materi`
+--
+ALTER TABLE `{$prefix}materi`
+ADD CONSTRAINT `fk_materi_mapel1` FOREIGN KEY (`mapel_id`) REFERENCES `{$prefix}mapel` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_materi_pengajar1` FOREIGN KEY (`pengajar_id`) REFERENCES `{$prefix}pengajar` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_materi_siswa1` FOREIGN KEY (`siswa_id`) REFERENCES `{$prefix}siswa` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `{$prefix}materi_kelas`
+--
+ALTER TABLE `{$prefix}materi_kelas`
+ADD CONSTRAINT `fk_materi_kelas_kelas1` FOREIGN KEY (`kelas_id`) REFERENCES `{$prefix}kelas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_materi_kelas_materi1` FOREIGN KEY (`materi_id`) REFERENCES `{$prefix}materi` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `{$prefix}nilai_tugas`
+--
+ALTER TABLE `{$prefix}nilai_tugas`
+ADD CONSTRAINT `fk_nilai_siswa1` FOREIGN KEY (`siswa_id`) REFERENCES `{$prefix}siswa` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_nilai_tugas1` FOREIGN KEY (`tugas_id`) REFERENCES `{$prefix}tugas` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `{$prefix}pilihan`
+--
+ALTER TABLE `{$prefix}pilihan`
+ADD CONSTRAINT `fk_pilihan_tugas_pertanyaan1` FOREIGN KEY (`pertanyaan_id`) REFERENCES `{$prefix}tugas_pertanyaan` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `{$prefix}tugas`
+--
+ALTER TABLE `{$prefix}tugas`
+ADD CONSTRAINT `fk_tugas_mapel1` FOREIGN KEY (`mapel_id`) REFERENCES `{$prefix}mapel` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_tugas_pengajar1` FOREIGN KEY (`pengajar_id`) REFERENCES `{$prefix}pengajar` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `{$prefix}tugas_kelas`
+--
+ALTER TABLE `{$prefix}tugas_kelas`
+ADD CONSTRAINT `fk_tugas_kelas_kelas1` FOREIGN KEY (`kelas_id`) REFERENCES `{$prefix}kelas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_tugas_kelas_tugas1` FOREIGN KEY (`tugas_id`) REFERENCES `{$prefix}tugas` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `{$prefix}tugas_pertanyaan`
+--
+ALTER TABLE `{$prefix}tugas_pertanyaan`
+ADD CONSTRAINT `fk_tugas_essay_tugas1` FOREIGN KEY (`tugas_id`) REFERENCES `{$prefix}tugas` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+INSERT INTO `{$prefix}pengaturan` (`id`, `nama`, `value`) VALUES
+('email-server', 'Email server', 'no-reply@domain.com'),
+('email-template-approve-pengajar', 'Approve pengajar (email pengajar)', '{"subject":"Pengaktifan Akun","body":"<p>Hai {$nama},<\\/p>\\n<p>Anda telah diterima sebagai pengajar pada {$nama_sekolah}, berikut informasi data diri anda:<\\/p>\\n<p>{$tabel_profil}<\\/p>\\n<p>Anda dapat login ke sistem E-Learning menggunakan username dan password yang telah anda buat saat pendaftaran, login pada url berikut : {$url_login}<\\/p>"}'),
+('email-template-approve-siswa', 'Approve siswa (email siswa)', '{"subject":"Pengaktifan Akun","body":"<p>Hai {$nama},<\\/p>\\n<p>Anda telah diterima sebagai siswa pada {$nama_sekolah}, berikut informasi data diri anda:<\\/p>\\n<p>{$tabel_profil}<\\/p>\\n<p>Anda dapat login ke sistem E-Learning menggunakan username dan password yang telah anda buat saat pendaftaran, login pada url berikut : {$url_login}<\\/p>"}'),
+('email-template-link-reset', 'Link Reset Password', '{"subject":"Reset Password","body":"<p>Hai,<\\/p>\\n<p>Anda mengirimkan permintaan untuk reset password anda, klik link berikut untuk memulai reset password : {$link_reset}<\\/p>"}'),
+('email-template-register-pengajar', 'Register pengajar (email pengajar)', '{"subject":"Registrasi Berhasil","body":"<p>Hai {$nama},<\\/p>\\n<p>Terimakasih telah melakukan pendaftaran sebagai pengajar di E-Learning {$nama_sekolah}. Akun anda akan segera diaktifkan oleh admin.<\\/p>"}'),
+('email-template-register-siswa', 'Register siswa (email siswa)', '{"subject":"Registrasi Berhasil","body":"<p>Hai {$nama},<\\/p>\\n<p>Terimakasih telah melakukan pendaftaran sebagai siswa di E-Learning {$nama_sekolah}. Akun anda akan segera diaktifkan oleh admin.<\\/p>"}'),
+('info-registrasi', 'Info Registrasi', '<p>Silahkan mendaftar sebagai siswa atau pengajar (jika anda sebagai pengajar) sengan memilih sesuai tab berikut :</p>'),
+('peraturan-elearning', 'Peraturan E-learning', ''),
+('registrasi-pengajar', 'Registrasi Pengajar', '1'),
+('registrasi-siswa', 'Registrasi Siswa', '1'),
+('versi', 'Versi', '1.0');

@@ -15,12 +15,20 @@ class Materi extends MY_Controller
         if (!empty($val['pengajar_id'])) {
             $pengajar = $this->pengajar_model->retrieve($val['pengajar_id']);
             $val['pembuat'] = $pengajar;
-            $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+            if (is_admin()) {
+                $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+            } else {
+                $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['id']);
+            }
         }
         if (!empty($val['siswa_id'])) {
             $siswa = $this->siswa_model->retrieve($val['siswa_id']);
             $val['pembuat'] = $siswa;
-            $val['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['status_id'].'/'.$siswa['id']);
+            if (is_admin()) {
+                $val['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['status_id'].'/'.$siswa['id']);
+            } else {
+                $val['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['id']);
+            }
         }
 
         # cari materi kelas
@@ -61,11 +69,6 @@ class Materi extends MY_Controller
 
                 foreach ($this->siswa_model->retrieve_all_by_name($pembuat) as $val) {
                     $siswa_id[] = $val['id'];
-                }
-
-                if (empty($pengajar_id) AND empty($siswa_id)) {
-                    $pengajar_id[] = 0;
-                    $siswa_id[]    = 0;
                 }
             }
 
@@ -147,8 +150,8 @@ class Materi extends MY_Controller
                 $konten   = $this->input->post('konten', TRUE);
 
                 $materi_id = $this->materi_model->create(
-                    get_sess_data('user', 'id'),
-                    null,
+                    (is_pengajar() OR is_admin()) ? get_sess_data('user', 'id') : null,
+                    is_siswa() ? get_sess_data('user', 'id') : null,
                     $mapel_id,
                     $judul,
                     $konten,
@@ -174,8 +177,8 @@ class Materi extends MY_Controller
                 $file        = $upload_data['file_name'];
 
                 $materi_id = $this->materi_model->create(
-                    get_sess_data('user', 'id'),
-                    null,
+                    (is_pengajar() OR is_admin()) ? get_sess_data('user', 'id') : null,
+                    is_siswa() ? get_sess_data('user', 'id') : null,
                     $mapel_id,
                     $judul,
                     null,
@@ -233,6 +236,15 @@ class Materi extends MY_Controller
             redirect($uri_back);
         }
 
+        # cek kepemilikan
+        if (is_pengajar() AND $materi['pengajar_id'] != get_sess_data('user', 'id')) {
+            redirect($uri_back);
+        }
+
+        if (is_siswa() AND $materi['siswa_id'] != get_sess_data('user', 'id')) {
+            redirect($uri_back);
+        }
+
         # hanya ambil kelas_idnya
         $materi_kelas    = $this->materi_model->retrieve_all_kelas($materi['id']);
         $materi_kelas_id = array();
@@ -262,7 +274,7 @@ class Materi extends MY_Controller
                 $this->materi_model->update(
                     $materi['id'],
                     $materi['pengajar_id'],
-                    null,
+                    $materi['siswa_id'],
                     $mapel_id,
                     $judul,
                     $konten,
@@ -305,7 +317,7 @@ class Materi extends MY_Controller
                 $this->materi_model->update(
                     $materi['id'],
                     $materi['pengajar_id'],
-                    null,
+                    $materi['siswa_id'],
                     $mapel_id,
                     $judul,
                     null,
@@ -375,6 +387,15 @@ class Materi extends MY_Controller
 
         $materi = $this->materi_model->retrieve($materi_id);
         if (empty($materi)) {
+            redirect($uri_back);
+        }
+
+        # cek kepemilikan
+        if (is_pengajar() AND $materi['pengajar_id'] != get_sess_data('user', 'id')) {
+            redirect($uri_back);
+        }
+
+        if (is_siswa() AND $materi['siswa_id'] != get_sess_data('user', 'id')) {
             redirect($uri_back);
         }
 
@@ -463,19 +484,28 @@ class Materi extends MY_Controller
                     if (!empty($materi['pengajar_id'])) {
                         $pengajar = $this->pengajar_model->retrieve($materi['pengajar_id']);
                         $data['materi']['pembuat'] = array(
-                            'nama'         => $pengajar['nama'],
-                            'link_profil'  => site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']),
-                            'link_foto'    => get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin'])
+                            'nama'      => $pengajar['nama'],
+                            'link_foto' => get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin'])
                         );
+                        if (is_admin()) {
+                            $data['materi']['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+                        } else {
+                            $data['materi']['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['id']);
+                        }
                     }
 
                     if (!empty($materi['siswa_id'])) {
                         $siswa = $this->siswa_model->retrieve($materi['siswa_id']);
                         $data['materi']['pembuat'] = array(
                             'nama'        => $siswa['nama'],
-                            'link_profil' => site_url('siswa/'.$siswa['status_id'].'/'.$siswa['id']),
                             'link_foto'   => get_url_image_siswa($siswa['foto'], 'medium', $siswa['jenis_kelamin'])
                         );
+
+                        if (is_admin()) {
+                            $data['materi']['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['status_id'].'/'.$siswa['id']);
+                        } else {
+                            $data['materi']['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['id']);
+                        }
                     }
 
                 } else {

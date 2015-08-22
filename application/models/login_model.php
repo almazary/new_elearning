@@ -36,7 +36,8 @@ class Login_model extends CI_Model
     public function retrieve_all(
         $no_of_records = 10,
         $page_no       = 1,
-        $is_admin      = 0
+        $is_admin      = 0,
+        $pagination    = true
     ) {
         $no_of_records = (int)$no_of_records;
         $page_no       = (int)$page_no;
@@ -49,7 +50,13 @@ class Login_model extends CI_Model
 
         $orderby = array('id' => 'DESC');
 
-        $data = $this->pager->set('login', $no_of_records, $page_no, $where, $orderby);
+        if ($pagination) {
+            $data = $this->pager->set('login', $no_of_records, $page_no, $where, $orderby);
+        } else {
+            $no_of_records = $this->db->count_all('login');
+            $search_all    = $this->pager->set('login', $no_of_records, $page_no, $where, $orderby);
+            $data          = $search_all['results'];
+        }
 
         return $data;
     }
@@ -72,7 +79,8 @@ class Login_model extends CI_Model
         $password    = null,
         $siswa_id    = null,
         $pengajar_id = null,
-        $is_admin    = null
+        $is_admin    = null,
+        $reset_kode  = null
     ) {
         if (!is_null($id)) {
             $id = (int)$id;
@@ -95,6 +103,9 @@ class Login_model extends CI_Model
         if (!is_null($is_admin)) {
             $is_admin = (int)$is_admin;
             $this->db->where('is_admin', $is_admin);
+        }
+        if (!is_null($reset_kode)) {
+            $this->db->where('reset_kode', $reset_kode);
         }
 
         $result = $this->db->get('login', 1);

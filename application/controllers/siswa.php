@@ -11,9 +11,8 @@ class Siswa extends MY_Controller
 
     function index($segment_3 = '', $segment_4 = '')
     {
-        # harus login sebagai admin
-        if (!is_admin()) {
-            redirect('welcome');
+        if (is_pengajar() or is_siswa()) {
+            redirect('siswa/filter');
         }
 
         $status_id = $segment_3;
@@ -38,8 +37,8 @@ class Siswa extends MY_Controller
 
             # kelas aktif
             if (!empty($kelas_siswa) AND $val['status_id'] != 3) {
-                $kelas                         = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
-                $val['kelas_aktif']            = $kelas;
+                $kelas              = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
+                $val['kelas_aktif'] = $kelas;
             }
 
             $retrieve_all['results'][$key] = $val;
@@ -77,6 +76,10 @@ class Siswa extends MY_Controller
                         $retrieve_siswa['foto'],
                         $post_status_id
                     );
+
+                    if ($retrieve_siswa['status_id'] == 0 && $post_status_id == 1) {
+                        kirim_email_approve_siswa($retrieve_siswa['id']);
+                    }
                 }
             }
             redirect('siswa/index/'.$status_id);
@@ -87,6 +90,11 @@ class Siswa extends MY_Controller
 
     function add($segment_3 = '')
     {
+        # harus login sebagai admin
+        if (!is_admin()) {
+            redirect('welcome');
+        }
+
         $status_id = $segment_3;
         if ($status_id  == '' OR $status_id > 3) {
             redirect('siswa/index/1');
@@ -250,6 +258,28 @@ class Siswa extends MY_Controller
 
         }
 
+        if (empty($filter)) {
+            $filter = array(
+                'nis'           => '',
+                'nama'          => '',
+                'jenis_kelamin' => '',
+                'tahun_masuk'   => '',
+                'tempat_lahir'  => '',
+                'tgl_lahir'     => '',
+                'bln_lahir'     => '',
+                'thn_lahir'     => '',
+                'agama'         => '',
+                'alamat'        => '',
+                'status_id'     => '',
+                'kelas_id'      => '',
+                'username'      => ''
+            );
+        }
+
+        if (empty($filter['status_id'])) {
+            $filter['status_id'] = array(1, 2);
+        }
+
         $data['filter'] = $filter;
 
         if (!empty($filter)) {
@@ -367,11 +397,20 @@ class Siswa extends MY_Controller
 
     function edit_profile($segment_3 = '', $segment_4 = '')
     {
+        if (is_pengajar()) {
+            exit('Akses ditolak');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
         if (empty($retrieve_siswa)) {
             exit('Data siswa tidak ditemukan');
+        }
+
+        # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
+        if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
+            exit('Akses ditolak');
         }
 
         $data['status_id'] = $status_id;
@@ -412,6 +451,11 @@ class Siswa extends MY_Controller
                 $status
             );
 
+            # jika sebelumnya berstatus pending, dan dibuah ke aktif kirimkan email approve
+            if ($retrieve_siswa['status_id'] == 0 && $status == 1) {
+                kirim_email_approve_siswa($retrieve_siswa['id']);
+            }
+
             $this->session->set_flashdata('edit', get_alert('success', 'Profil siswa berhasil diperbaharui.'));
             redirect('siswa/edit_profile/'.$status_id.'/'.$siswa_id);
         }
@@ -421,11 +465,20 @@ class Siswa extends MY_Controller
 
     function edit_picture($segment_3 = '', $segment_4 = '')
     {
+        if (is_pengajar()) {
+            exit('Akses ditolak');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
         if (empty($retrieve_siswa)) {
             exit('Data siswa tidak ditemukan');
+        }
+
+        # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
+        if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
+            exit('Akses ditolak');
         }
 
         $data['status_id'] = $status_id;
@@ -500,6 +553,10 @@ class Siswa extends MY_Controller
 
     function moved_class($segment_3 = '', $segment_4 = '')
     {
+        if (!is_admin()) {
+            exit('Akses ditolak');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
@@ -540,11 +597,20 @@ class Siswa extends MY_Controller
 
     function edit_username($segment_3 = '', $segment_4 = '')
     {
+        if (is_pengajar()) {
+            exit('Akses ditolak');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
         if (empty($retrieve_siswa)) {
             exit('Data siswa tidak ditemukan');
+        }
+
+        # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
+        if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
+            exit('Akses ditolak');
         }
 
         $data['login']     = $this->login_model->retrieve(null, null, null, $siswa_id);
@@ -574,11 +640,20 @@ class Siswa extends MY_Controller
 
     function edit_password($segment_3 = '', $segment_4 = '')
     {
+        if (is_pengajar()) {
+            exit('Akses ditolak');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
         if (empty($retrieve_siswa)) {
             exit('Data siswa tidak ditemukan');
+        }
+
+        # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
+        if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
+            exit('Akses ditolak');
         }
 
         $data['status_id'] = $status_id;
@@ -600,8 +675,13 @@ class Siswa extends MY_Controller
 
     function detail($segment_3 = '', $segment_4 = '')
     {
-        $status_id = (int)$segment_3;
-        $siswa_id  = (int)$segment_4;
+        if (is_admin()) {
+            $status_id = (int)$segment_3;
+            $siswa_id  = (int)$segment_4;
+        } else {
+            $siswa_id  = (int)$segment_3;
+            $status_id = 1;
+        }
 
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
         if (empty($retrieve_siswa)) {
@@ -625,5 +705,16 @@ class Siswa extends MY_Controller
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
         $this->twig->display('detail-siswa.html', $data);
+    }
+
+    function jadwal_mapel()
+    {
+        if (!is_siswa()) {
+            redirect('siswa');
+        }
+
+        $data['list_jadwal'] = $this->get_jadwal_mapel_siswa(get_sess_data('user', 'id'));
+
+        $this->twig->display('jadwal-mapel.html', $data);
     }
 }

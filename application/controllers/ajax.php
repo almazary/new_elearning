@@ -58,6 +58,89 @@ class Ajax extends MY_Controller
                     echo '<option value="'.$v['id'].'">'.$m['nama'].'</option>';
                 }
             break;
+
+            case 'update_jawaban_ganda':
+                if (!is_siswa()) {
+                    exit('Akses ditolak');
+                }
+
+                $tugas_id      = (int)$this->input->post('tugas_id', true);
+                $pertanyaan_id = (int)$this->input->post('pertanyaan_id', true);
+                $pilihan_id    = (int)$this->input->post('pilihan_id', true);
+
+                $tugas = $this->tugas_model->retrieve($tugas_id);
+                if (empty($tugas)) {
+                    exit('Akses ditolak');
+                }
+
+                $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
+                if (empty($pertanyaan)) {
+                    exit('Akses ditolak');
+                }
+
+                if ($pertanyaan['tugas_id'] != $tugas['id']) {
+                    exit('Akses ditolak');
+                }
+
+                $pilihan = $this->tugas_model->retrieve_pilihan($pilihan_id, $pertanyaan['id']);
+                if (empty($pilihan)) {
+                    exit('Akses ditolak');
+                }
+
+                $table_name  = 'field_tambahan';
+                $field_id    = 'mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+                $field_name  = 'Mengerjakan Tugas';
+
+                $check_field = retrieve_field($field_id);
+                if (empty($check_field)) {
+                    exit('Akses ditolak');
+                }
+
+                # update index jawaban
+                $field_value = json_decode($check_field['value'], 1);
+                $field_value['jawaban'][$pertanyaan['id']] = $pilihan['id'];
+
+                update_field($field_id, $field_name, json_encode($field_value));
+            break;
+
+            case 'update_jawaban_essay':
+                if (!is_siswa()) {
+                    exit('Akses ditolak');
+                }
+
+                $tugas_id      = (int)$this->input->post('tugas_id', true);
+                $pertanyaan_id = (int)$this->input->post('pertanyaan_id', true);
+                $jawaban       = $this->input->post('jawaban', true);
+
+                $tugas = $this->tugas_model->retrieve($tugas_id);
+                if (empty($tugas)) {
+                    exit('Akses ditolak');
+                }
+
+                $pertanyaan = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
+                if (empty($pertanyaan)) {
+                    exit('Akses ditolak');
+                }
+
+                if ($pertanyaan['tugas_id'] != $tugas['id']) {
+                    exit('Akses ditolak');
+                }
+
+                $table_name  = 'field_tambahan';
+                $field_id    = 'mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+                $field_name  = 'Mengerjakan Tugas';
+
+                $check_field = retrieve_field($field_id);
+                if (empty($check_field)) {
+                    exit('Akses ditolak');
+                }
+
+                # update index jawaban
+                $field_value = json_decode($check_field['value'], 1);
+                $field_value['jawaban'][$pertanyaan['id']] = $jawaban;
+
+                update_field($field_id, $field_name, json_encode($field_value));
+            break;
         }
     }
 

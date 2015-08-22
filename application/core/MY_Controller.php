@@ -2,9 +2,29 @@
 
 class MY_Controller extends CI_Controller
 {
+    public $siswa_kelas_aktif = array();
+    public $update_link;
+    public $portal_update_link;
+    public $bug_tracker_link;
+
     function __construct()
     {
         parent::__construct();
+
+        date_default_timezone_set('Asia/Jakarta');
+
+        # load helper
+        $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download'));
+
+        # cek setup
+        if (is_file('./install')) {
+            redirect('setup');
+        }
+
+        $this->load->database();
+
+        # load library
+        $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email'));
 
         # load saja semua model
         $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model'));
@@ -15,11 +35,28 @@ class MY_Controller extends CI_Controller
         if (is_login()) {
             # cek session kcfindernya ada atau tidak
             if (empty($_SESSION['E-LEARNING']['KCFINDER'])) {
-                redirect('login/logout');
+                create_sess_kcfinder(get_sess_data('login', 'id'));
             }
         }
 
-        $this->output->enable_profiler(TRUE);
+        if (is_siswa()) {
+            # jika kelas aktifnya kosong, sebaiknya di die jasa
+            $kelas_aktif = $this->kelas_model->retrieve_siswa(null, array(
+                'siswa_id' => get_sess_data('user', 'id'),
+                'aktif'    => 1
+            ));
+            if (empty($kelas_aktif)) {
+                exit('Kelas aktif anda tidak ditemukan, segera hubungi admin e-learning.');
+            }
+
+            $this->siswa_kelas_aktif = $kelas_aktif;
+        }
+
+        $this->update_link        = 'http://www.dokumenary.net/category/new-elearning/feed/';
+        $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
+        $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
+
+        // $this->output->enable_profiler(TRUE);
     }
 
     function update_nis($nis = '') {
@@ -53,6 +90,18 @@ class MY_Controller extends CI_Controller
         }
     }
 
+    function check_username_exist($username) {
+        $this->db->where('username', $username);
+        $result = $this->db->get('login');
+        $result = $result->num_rows();
+        if (empty($result)) {
+            $this->form_validation->set_message('check_username_exist', 'Username tidak ditemukan.');
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     function create_img_thumb($source_path = '', $marker = '_thumb', $width = '90', $height = '90')
     {
         $config['image_library']  = 'gd2';
@@ -67,5 +116,50 @@ class MY_Controller extends CI_Controller
         $this->image_lib->resize();
         $this->image_lib->clear();
         unset($config);
+    }
+
+    function get_jadwal_mapel_siswa($siswa_id)
+    {
+        $siswa = $this->siswa_model->retrieve($siswa_id);
+        if (empty($siswa)) {
+            return array();
+        }
+
+        # cari kelas aktif
+        $kelas_aktif = $this->siswa_kelas_aktif;
+
+        # cek kelas, aktif tidak
+        $kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
+        if (empty($kelas['aktif'])) {
+            return array();
+        }
+
+        $jadwal = array();
+        foreach (get_indo_hari() as $hari_key => $hari_nama) {
+            $jadwal[$hari_key] = array();
+            $jadwal[$hari_key]['nama_hari'] = $hari_nama;
+
+            # cari mapel_ajar yang hari dan kelasnya ini
+            $mapel_ajar = $this->pengajar_model->retrieve_all_ma($hari_key, null, null, 1, $kelas['id']);
+            foreach ($mapel_ajar as $ma) {
+                $mapel_kelas = $this->mapel_model->retrieve_kelas($ma['mapel_kelas_id']);
+                if (empty($mapel_kelas)) {
+                    continue;
+                }
+
+                $mapel = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                if (empty($mapel['aktif'])) {
+                    continue;
+                }
+
+                $ma['pengajar'] = $this->pengajar_model->retrieve($ma['pengajar_id']);
+                $ma['pengajar']['link_profil'] = site_url('pengajar/detail/' . $ma['pengajar_id']);
+                $ma['mapel'] = $mapel;
+
+                $jadwal[$hari_key]['jadwal'][] = $ma;
+            }
+        }
+
+        return $jadwal;
     }
 }
