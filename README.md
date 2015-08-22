@@ -6,9 +6,15 @@ By     : http://www.dokumenary.net
 Author : Almazari <almazary@gmail.com>
 
 
-Sistem ini di develop bertujuan untuk menggantikam elearning sederhana yang sebelumnya. 
-Aplikasi ini bersifat open source dan bebas untuk di kembangkan. Semoga aplikasi ini dapat mempermudah dalam proses ajar mengajar.
+Aplikasi ini didevelop bertujuan untuk menggantikan elearning sederhana yang sebelumnya, yang saya merasa banyak kekurangan.
+Elearning yang baru ini dibuat dengan framework Codeigniter versi 2.2 dan menggunakan aturan standar codeigniter dalam penulisan program, sehingga
+diharapkan pengembang dapat dengan mudah memahami alur sistem.
 
+Pada aplikasi ini juga telah disediakan informasi update sistem dan bug tracker pada halaman home administrator.
 
+Pengguna pada elearning terbagi menjadi :
+1. Siswa
+2. Pengajar
+3. Administrator (Pengajar yang bertindak sebagai administrator)
 
-
+Versi pertama dimulai dari 1.0
