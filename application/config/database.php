@@ -48,12 +48,12 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
+$db['default']['hostname'] = '';
+$db['default']['username'] = '';
 $db['default']['password'] = '';
-$db['default']['database'] = 'testdb';
+$db['default']['database'] = '';
 $db['default']['dbdriver'] = 'mysql';
-$db['default']['dbprefix'] = 'EL_';
+$db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
 $db['default']['cache_on'] = FALSE;
