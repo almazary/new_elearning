@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/new_elearning/';
+$config['base_url']	= '';
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ $config['base_url']	= 'http://localhost/new_elearning/';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = 'd922e33b39813b3aa358bd20ed8a7a61';
+$config['encryption_key'] = '';
 
 /*
 |--------------------------------------------------------------------------
