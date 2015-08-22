@@ -164,7 +164,7 @@ class __TwigTemplate_84b7ed6f68c91c9d605c0ed55641d039890087e9396a5a76defa6b0cdb5
                                 <th>Name</th>
                                 <td><a href=\"";
             // line 66
-            echo twig_escape_filter($this->env, base_url(("assets/files/" . $this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "name"))), "html", null, true);
+            echo twig_escape_filter($this->env, base_url(("userfiles/files/" . $this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "name"))), "html", null, true);
             echo "\" target=\"_blank\">";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "name"), "html", null, true);
             echo "</a></td>
