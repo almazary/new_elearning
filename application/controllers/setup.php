@@ -2,7 +2,8 @@
 
 class Setup extends CI_Controller
 {
-    private $db_error;
+    private $file_error = '';
+    private $db_error   = '';
     private $prefix;
 
     function __construct()
@@ -18,15 +19,26 @@ class Setup extends CI_Controller
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
-        # cek pengaturan database
-        include APPPATH . 'config/database.php';
-
-        $link = @mysqli_connect($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
-        if (!$link) {
-            $this->db_error = get_alert('error', 'Failed to connect to the server: ' . mysqli_connect_error());
+        # cek file database & config
+        $db_file     = APPPATH . 'config/database.php';
+        if (!is_file($db_file)) {
+            $this->file_error = get_alert('error', 'File database.php in application/config/ not exists');
         }
-        elseif (!@mysqli_select_db($link, $db['default']['database'])) {
-            $this->db_error = get_alert('error', 'Failed to connect to the database: ' . mysqli_error($link));
+
+        if (empty($this->file_error)) {
+            # cek pengaturan database
+            include APPPATH . 'config/database.php';
+
+            $link = @mysqli_connect($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
+            if (!$link) {
+                $this->db_error = get_alert('error', 'Failed to connect to the server: ' . mysqli_connect_error());
+            }
+            elseif (!@mysqli_select_db($link, $db['default']['database'])) {
+                $this->db_error = get_alert('error', 'Failed to connect to the database: ' . mysqli_error($link));
+            }
+        }
+        else {
+            $this->db_error = get_alert('error', 'File database.php in application/config/ not exists');
         }
 
         if (empty($this->db_error)) {

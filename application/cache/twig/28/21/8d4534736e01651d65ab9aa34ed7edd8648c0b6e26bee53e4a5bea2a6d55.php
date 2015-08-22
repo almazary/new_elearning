@@ -241,7 +241,7 @@ class __TwigTemplate_28218d4534736e01651d65ab9aa34ed7edd8648c0b6e26bee53e4a5bea2
             if (((isset($context["file_install_exist"]) ? $context["file_install_exist"] : null) == true)) {
                 // line 107
                 echo "                        ";
-                echo get_alert("success", "Gagal hapus file <b>install</b>, silahkan hapus file <b>install</b> terlebih dahulu.");
+                echo get_alert("error", "Gagal hapus file <b>./install</b>, mohon hapus secara manual.");
                 echo "
                     ";
             }

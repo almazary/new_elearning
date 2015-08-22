@@ -104,7 +104,7 @@ Install - {{ parent() }}
 
                 {% else %}
                     {% if file_install_exist == true %}
-                        {{ get_alert('success', 'Gagal hapus file <b>install</b>, silahkan hapus file <b>install</b> terlebih dahulu.')|raw }}
+                        {{ get_alert('error', 'Gagal hapus file <b>./install</b>, mohon hapus secara manual.')|raw }}
                     {% endif %}
 
                     <div class="well well-small" style="box-shadow: none;">
