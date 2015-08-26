@@ -1,0 +1,76 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Manajemen Kelas - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module message">
+    <div class="module-head">
+        <h3>Pesan</h3>
+    </div>
+    <div class="module-body">
+        <div class="module-option clearfix">
+            {{ get_flashdata('msg')|raw }}
+
+            <div class="pull-left">
+                <div class="btn-group">
+                    <button class="btn">
+                        Inbox</button>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Inbox ({{ count_unread }})</a></li>
+                        <li><a href="#">Outbox </a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pull-right">
+                <a href="{{ site_url('message/create/') }}" class="btn btn-primary"><i class="icon-pencil"></i> Tulis pesan</a>
+            </div>
+        </div>
+        <div class="module-body table">
+            <table class="table table-message">
+                <tbody>
+                    <tr class="heading">
+                        <td class="cell-check">
+                            <input type="checkbox" class="inbox-checkbox">
+                        </td>
+                        <td class="cell-author hidden-phone hidden-tablet">
+                            Pengirim
+                        </td>
+                        <td class="cell-title">
+                            Pesan
+                        </td>
+                        <td class="cell-time align-right">
+                            Tanggal
+                        </td>
+                    </tr>
+                    {% for d in inbox %}
+                    <tr class="{{ (d.opened == 0) ? 'unread' }} clickable-row" data-href="{{ site_url('message/detail/' ~ d.id ~ '#msg-' ~ d.id)}}">
+                        <td class="cell-check">
+                            <input type="checkbox" class="inbox-checkbox">
+                        </td>
+                        <td class="cell-author hidden-phone hidden-tablet">
+                            <a href="{{ d.sender.profil.link_profil }}">{{ d.sender.profil.nama }}</a>
+                        </td>
+                        <td class="cell-title">
+                            {{ ellipsize(d.content, '32', '.5') }}
+                        </td>
+                        <td class="cell-time align-right">
+                            {{ d.date }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <div class="module-foot">
+            {{ pagination|raw }}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

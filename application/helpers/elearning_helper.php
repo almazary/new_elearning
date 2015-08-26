@@ -851,3 +851,19 @@ function kirim_email_approve_pengajar($pengajar_id)
         'url_login'    => site_url('login')
     ));
 }
+
+
+function get_email_from_string($str) {
+    $split = explode(" ", $str);
+
+    foreach ($split as $u) {
+        $u = html_entity_decode($u);
+        $u = ltrim($u, '<');
+        $u = rtrim($u, '>');
+        if (filter_var($u, FILTER_VALIDATE_EMAIL)) {
+            return $u;
+        }
+    }
+
+    return '';
+}

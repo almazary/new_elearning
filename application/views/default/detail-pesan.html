@@ -1,0 +1,72 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Detail pesan - {{ parent() }}
+{% endblock %}
+
+{% block css %}
+<style type="text/css">
+    .msg-active {
+        border:1px solid #DDD; padding: 5px 10px;border-radius: 2px; background-color: #fbfbfb;
+        margin-bottom: 10px;
+    }
+    .msg {
+        padding: 5px 10px;border-radius: 2px;
+        border-top: 1px dashed #DDD;
+    }
+    .hr-msg {
+        margin-top: 5px;margin-bottom: 5px;border:none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ anchor('message', 'Pesan')|raw }} / Detail</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('msg')|raw }}
+
+        {% for o in old_related_msg %}
+        <div class="msg" id="msg-{{ o.id }}">
+            {% if o.sender is not empty %}
+            <i class="icon-user"></i> <a href="{{ r.sender.profil.link_profil }}">{{ o.sender.profil.nama }}</a> <{{ o.sender.login.username }}>, <i class="icon-time"></i> {{ o.date }}
+            {% endif %}
+            <hr class="hr-msg">
+            {{ o.content|raw }}
+        </div>
+        {% endfor %}
+
+        <div class="msg-active" id="msg-{{ r.id }}">
+            {% if r.sender is not empty %}
+            <i class="icon-user"></i> <a href="{{ r.sender.profil.link_profil }}">{{ r.sender.profil.nama }}</a> <{{ r.sender.login.username }}>, <i class="icon-time"></i> {{ r.date }}
+            {% endif %}
+            <hr class="hr-msg">
+            {{ r.content|raw }}
+        </div>
+
+        {% for o in new_related_msg %}
+        <div class="msg" id="msg-{{ o.id }}">
+            {% if o.sender is not empty %}
+            <i class="icon-user"></i> <a href="{{ r.sender.profil.link_profil }}">{{ o.sender.profil.nama }}</a> <{{ o.sender.login.username }}>, <i class="icon-time"></i> {{ o.date }}
+            {% endif %}
+            <hr class="hr-msg">
+            {{ o.content|raw }}
+        </div>
+        {% endfor %}
+
+        <div class="msg-active">
+            <b><i class="icon-reply"></i> Balas Pesan</b>
+            <hr class="hr-msg">
+            {{ form_open_multipart('message/create/' ~ ((login is not empty) ? login.id), {'class' : 'form-horizontal row-fluid'})|raw }}
+                <textarea name="content" id="content" style="height:300px;width:100%;">{{ set_value('content')|raw }}</textarea>
+                {{ form_error('content')|raw }}
+                <br>
+                <p><button class="btn btn-primary">Kirim</button></p>
+            {{ form_close()|raw }}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

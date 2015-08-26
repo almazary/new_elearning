@@ -17,6 +17,30 @@ class Ajax extends MY_Controller
         }
     }
 
+    function get_data($page)
+    {
+        switch ($page) {
+            case 'penerima':
+                $query =  !empty($_GET['query']) ? $_GET['query'] : '';
+
+                $sql = "SELECT " . $this->db->dbprefix('login') . ".username, " . $this->db->dbprefix('pengajar') . ".nama FROM " . $this->db->dbprefix('pengajar') . " INNER JOIN " . $this->db->dbprefix('login') . " ON " . $this->db->dbprefix('pengajar') . ".id = " . $this->db->dbprefix('login') . ".pengajar_id
+                        WHERE " . $this->db->dbprefix('login') . ".username LIKE '%" . $this->db->escape_like_str($query) . "%' OR " . $this->db->dbprefix('pengajar') . ".nama LIKE '%" . $this->db->escape_like_str($query) . "%'
+                        UNION
+                        SELECT " . $this->db->dbprefix('login') . ".username, " . $this->db->dbprefix('siswa') . ".nama FROM " . $this->db->dbprefix('siswa') . " INNER JOIN " . $this->db->dbprefix('login') . " ON " . $this->db->dbprefix('siswa') . ".id = " . $this->db->dbprefix('login') . ".siswa_id
+                        WHERE " . $this->db->dbprefix('login') . ".username LIKE '%" . $this->db->escape_like_str($query) . "%' OR " . $this->db->dbprefix('siswa') . ".nama LIKE '%" . $this->db->escape_like_str($query) . "%'";
+
+                $result = $this->db->query($sql);
+
+                $data['suggestions'] = array();
+                foreach ($result->result_array() as $r) {
+                    $data['suggestions'][] = array('value' => $r['nama'] . ' <' . $r['username'] . '>');
+                }
+
+                echo json_encode($data);
+            break;
+        }
+    }
+
     function post_data($page)
     {
         switch ($page) {

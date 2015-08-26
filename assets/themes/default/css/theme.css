@@ -1264,10 +1264,10 @@ border-top-left-radius: 3px;
 	padding-right: 0!important
 }
 .message .table-message tbody td.cell-author {
-	width: 150px
+	width: 200px
 }
 .message .table-message tbody td.cell-time {
-	width: 70px
+	width: 150px
 }
 .message .table-message tbody td.cell-status {
 	width: 100px;

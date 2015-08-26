@@ -9,4 +9,8 @@ $(function() {
 
     $("#popover").popover();
     $('[data-toggle="tooltip"]').tooltip({html:true});
+
+    $(".clickable-row").click(function() {
+        window.document.location = $(this).data("href");
+    });
 });

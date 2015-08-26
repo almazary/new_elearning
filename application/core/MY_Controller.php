@@ -31,7 +31,7 @@ class MY_Controller extends CI_Controller
         $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email'));
 
         # load saja semua model
-        $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model'));
+        $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model', 'msg_model'));
 
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
@@ -102,6 +102,28 @@ class MY_Controller extends CI_Controller
             $this->form_validation->set_message('check_username_exist', 'Username tidak ditemukan.');
             return false;
         } else {
+            return true;
+        }
+    }
+
+    function check_penerima_pesan($username = '') {
+        $get_email = get_email_from_string($username);
+
+        if (empty($get_email)) {
+            $this->form_validation->set_message('check_penerima_pesan', 'Username tidak ditemukan.');
+            return false;
+        } else {
+            # cek ada tidak
+            if (!$this->check_username_exist($get_email)) {
+                $this->form_validation->set_message('check_penerima_pesan', 'Username tidak ditemukan.');
+                return false;
+            }
+
+            # cek sama dengan yang login tidak
+            if ($get_email == get_sess_data('login', 'username')) {
+                $this->form_validation->set_message('check_penerima_pesan', 'Anda tidak dapat mengirim pesan ke diri sendiri.');
+                return false;
+            }
             return true;
         }
     }
