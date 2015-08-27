@@ -78,11 +78,12 @@ class Siswa extends MY_Controller
                     );
 
                     if ($retrieve_siswa['status_id'] == 0 && $post_status_id == 1) {
-                        kirim_email_approve_siswa($retrieve_siswa['id']);
+                        @kirim_email_approve_siswa($retrieve_siswa['id']);
                     }
                 }
             }
-            redirect('siswa/index/'.$status_id);
+
+            redirect('siswa/index/' . $post_status_id);
         }
 
         $this->twig->display('list-siswa.html', $data);

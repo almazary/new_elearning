@@ -87,7 +87,7 @@ class __TwigTemplate_a345721d4f8a8d97e9895bdb66af546779397817bf392e9d4fd7c73908f
 
         ";
         // line 32
-        echo form_open(("siswa/index" . (isset($context["status_id"]) ? $context["status_id"] : null)));
+        echo form_open(("siswa/index/" . (isset($context["status_id"]) ? $context["status_id"] : null)));
         echo "
         <table class=\"table table-striped\">
             <thead>

@@ -756,7 +756,7 @@ function kirim_email($nama_email, $to = array(), $array_data = array())
     $email_subject = str_replace($arr_old, $arr_new, $template['subject']);
     $email_body    = str_replace($arr_old, $arr_new, $template['body']);
 
-    $CI &= get_instance();
+    $CI =& get_instance();
     $CI->email->clear(true);
 
     $config['mailtype'] = 'html';
