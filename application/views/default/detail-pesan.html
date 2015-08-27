@@ -38,6 +38,7 @@ Detail pesan - {{ parent() }}
         </div>
         {% endfor %}
 
+        {% if r.sender is not empty %}
         <div class="msg-active" id="msg-{{ r.id }}">
             {% if r.sender is not empty %}
             <i class="icon-user"></i> <a href="{{ r.sender.profil.link_profil }}">{{ r.sender.profil.nama }}</a> <{{ r.sender.login.username }}>, <i class="icon-time"></i> {{ r.date }}
@@ -45,6 +46,7 @@ Detail pesan - {{ parent() }}
             <hr class="hr-msg">
             {{ r.content|raw }}
         </div>
+        {% endif %}
 
         {% for o in new_related_msg %}
         <div class="msg" id="msg-{{ o.id }}">
@@ -56,16 +58,19 @@ Detail pesan - {{ parent() }}
         </div>
         {% endfor %}
 
+        {% if r.sender is not empty %}
         <div class="msg-active">
             <b><i class="icon-reply"></i> Balas Pesan</b>
             <hr class="hr-msg">
-            {{ form_open_multipart('message/create/' ~ ((login is not empty) ? login.id), {'class' : 'form-horizontal row-fluid'})|raw }}
+            {{ form_open_multipart('message/create/' ~ r.sender.login.id, {'class' : 'form-horizontal row-fluid'})|raw }}
+                <input type="hidden" name="penerima" value="{{ r.sender.login.profil.nama }} <{{ r.sender.login.username }}>">
                 <textarea name="content" id="content" style="height:300px;width:100%;">{{ set_value('content')|raw }}</textarea>
                 {{ form_error('content')|raw }}
                 <br>
                 <p><button class="btn btn-primary">Kirim</button></p>
             {{ form_close()|raw }}
         </div>
+        {% endif %}
 
     </div>
 </div>

@@ -163,6 +163,17 @@ class Message extends MY_Controller
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/autocomplete/autocomplete.css')));
 
+        # update read
+        $this->msg_model->update_read($msg_id);
+
+        foreach ($data['old_related_msg'] as $old_msg) {
+            $this->msg_model->update_read($old_msg['id']);
+        }
+
+        foreach ($data['new_related_msg'] as $new_msg) {
+            $this->msg_model->update_read($new_msg['id']);
+        }
+
         $this->twig->display('detail-pesan.html', $data);
     }
 }

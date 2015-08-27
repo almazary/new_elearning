@@ -111,46 +111,52 @@ class __TwigTemplate_4409d83e7bf14b54192c22f7dbfcdca4c07e33344cb30d5e515e720c695
         $context = array_intersect_key($context, $_parent) + $_parent;
         // line 40
         echo "
-        <div class=\"msg-active\" id=\"msg-";
-        // line 41
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["r"]) ? $context["r"] : null), "id"), "html", null, true);
-        echo "\">
-            ";
-        // line 42
-        if ((!twig_test_empty($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender")))) {
-            // line 43
-            echo "            <i class=\"icon-user\"></i> <a href=\"";
-            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender"), "profil"), "link_profil"), "html", null, true);
-            echo "\">";
-            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender"), "profil"), "nama"), "html", null, true);
-            echo "</a> <";
-            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender"), "login"), "username"), "html", null, true);
-            echo ">, <i class=\"icon-time\"></i> ";
-            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["r"]) ? $context["r"] : null), "date"), "html", null, true);
-            echo "
-            ";
-        }
-        // line 45
-        echo "            <hr class=\"hr-msg\">
-            ";
-        // line 46
-        echo $this->getAttribute((isset($context["r"]) ? $context["r"] : null), "content");
-        echo "
-        </div>
-
         ";
-        // line 49
+        // line 41
+        if ((!twig_test_empty($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender")))) {
+            // line 42
+            echo "        <div class=\"msg-active\" id=\"msg-";
+            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["r"]) ? $context["r"] : null), "id"), "html", null, true);
+            echo "\">
+            ";
+            // line 43
+            if ((!twig_test_empty($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender")))) {
+                // line 44
+                echo "            <i class=\"icon-user\"></i> <a href=\"";
+                echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender"), "profil"), "link_profil"), "html", null, true);
+                echo "\">";
+                echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender"), "profil"), "nama"), "html", null, true);
+                echo "</a> <";
+                echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender"), "login"), "username"), "html", null, true);
+                echo ">, <i class=\"icon-time\"></i> ";
+                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["r"]) ? $context["r"] : null), "date"), "html", null, true);
+                echo "
+            ";
+            }
+            // line 46
+            echo "            <hr class=\"hr-msg\">
+            ";
+            // line 47
+            echo $this->getAttribute((isset($context["r"]) ? $context["r"] : null), "content");
+            echo "
+        </div>
+        ";
+        }
+        // line 50
+        echo "
+        ";
+        // line 51
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["new_related_msg"]) ? $context["new_related_msg"] : null));
         foreach ($context['_seq'] as $context["_key"] => $context["o"]) {
-            // line 50
+            // line 52
             echo "        <div class=\"msg\" id=\"msg-";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["o"]) ? $context["o"] : null), "id"), "html", null, true);
             echo "\">
             ";
-            // line 51
+            // line 53
             if ((!twig_test_empty($this->getAttribute((isset($context["o"]) ? $context["o"] : null), "sender")))) {
-                // line 52
+                // line 54
                 echo "            <i class=\"icon-user\"></i> <a href=\"";
                 echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender"), "profil"), "link_profil"), "html", null, true);
                 echo "\">";
@@ -162,10 +168,10 @@ class __TwigTemplate_4409d83e7bf14b54192c22f7dbfcdca4c07e33344cb30d5e515e720c695
                 echo "
             ";
             }
-            // line 54
+            // line 56
             echo "            <hr class=\"hr-msg\">
             ";
-            // line 55
+            // line 57
             echo $this->getAttribute((isset($context["o"]) ? $context["o"] : null), "content");
             echo "
         </div>
@@ -174,31 +180,44 @@ class __TwigTemplate_4409d83e7bf14b54192c22f7dbfcdca4c07e33344cb30d5e515e720c695
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['o'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 58
+        // line 60
         echo "
-        <div class=\"msg-active\">
+        ";
+        // line 61
+        if ((!twig_test_empty($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender")))) {
+            // line 62
+            echo "        <div class=\"msg-active\">
             <b><i class=\"icon-reply\"></i> Balas Pesan</b>
             <hr class=\"hr-msg\">
             ";
-        // line 62
-        echo form_open_multipart(("message/create/" . (((!twig_test_empty((isset($context["login"]) ? $context["login"] : null)))) ? ($this->getAttribute((isset($context["login"]) ? $context["login"] : null), "id")) : (""))), array("class" => "form-horizontal row-fluid"));
-        echo "
+            // line 65
+            echo form_open_multipart(("message/create/" . $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender"), "login"), "id")), array("class" => "form-horizontal row-fluid"));
+            echo "
+                <input type=\"hidden\" name=\"penerima\" value=\"";
+            // line 66
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender"), "login"), "profil"), "nama"), "html", null, true);
+            echo " <";
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "sender"), "login"), "username"), "html", null, true);
+            echo ">\">
                 <textarea name=\"content\" id=\"content\" style=\"height:300px;width:100%;\">";
-        // line 63
-        echo set_value("content");
-        echo "</textarea>
+            // line 67
+            echo set_value("content");
+            echo "</textarea>
                 ";
-        // line 64
-        echo form_error("content");
-        echo "
+            // line 68
+            echo form_error("content");
+            echo "
                 <br>
                 <p><button class=\"btn btn-primary\">Kirim</button></p>
             ";
-        // line 67
-        echo form_close();
-        echo "
+            // line 71
+            echo form_close();
+            echo "
         </div>
-
+        ";
+        }
+        // line 74
+        echo "
     </div>
 </div>
 ";
@@ -216,6 +235,6 @@ class __TwigTemplate_4409d83e7bf14b54192c22f7dbfcdca4c07e33344cb30d5e515e720c695
 
     public function getDebugInfo()
     {
-        return array (  198 => 67,  192 => 64,  188 => 63,  184 => 62,  178 => 58,  169 => 55,  166 => 54,  154 => 52,  152 => 51,  147 => 50,  143 => 49,  137 => 46,  134 => 45,  122 => 43,  120 => 42,  116 => 41,  113 => 40,  104 => 37,  101 => 36,  89 => 34,  87 => 33,  82 => 32,  78 => 31,  73 => 29,  67 => 26,  63 => 24,  60 => 23,  43 => 8,  40 => 7,  33 => 4,  30 => 3,);
+        return array (  220 => 74,  214 => 71,  208 => 68,  204 => 67,  198 => 66,  194 => 65,  189 => 62,  187 => 61,  184 => 60,  175 => 57,  172 => 56,  160 => 54,  158 => 53,  153 => 52,  149 => 51,  146 => 50,  140 => 47,  137 => 46,  125 => 44,  123 => 43,  118 => 42,  116 => 41,  113 => 40,  104 => 37,  101 => 36,  89 => 34,  87 => 33,  82 => 32,  78 => 31,  73 => 29,  67 => 26,  63 => 24,  60 => 23,  43 => 8,  40 => 7,  33 => 4,  30 => 3,);
     }
 }
