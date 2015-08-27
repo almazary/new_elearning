@@ -111,7 +111,12 @@ class Pager
         }
 
         //gabungkan
-        $combine = array_combine($array_key, $result->result_array());
+        $array_result = $result->result_array();
+        if (!empty($array_key) && !empty($array_result)) {
+            $combine = array_combine($array_key, $result->result_array());
+        } else {
+            $combine = array();
+        }
 
         $return = array(
             'results'      => $combine,
@@ -177,7 +182,7 @@ class Pager
 
     /**
      * Method yang bertugas menjalankan groupby untuk mendukung fungsi get_pager
-     * 
+     *
      * @param  array  $group_by
      * <code>
      * $group_by = [

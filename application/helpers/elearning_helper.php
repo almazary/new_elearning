@@ -148,7 +148,8 @@ function get_row_data($model, $func, $args = array(), $field_name = '')
  */
 function get_pengaturan($id, $get = null)
 {
-    return get_row_data('config_model', 'retrieve', array($id), $get);
+    $result = get_row_data('config_model', 'retrieve', array($id), $get);
+    return $result;
 }
 
 /**

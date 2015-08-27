@@ -217,21 +217,29 @@ class Siswa extends MY_Controller
             $page_no = 1;
         }
 
+        $session_filter = $this->session->userdata('filter_siswa');
+
         if ($this->form_validation->run('siswa/filter') == TRUE) {
+
+            $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+            $thn_lahir     = (int)$this->input->post('thn_lahir', TRUE);
+            $agama         = $this->input->post('agama', TRUE);
+            $status_id     = $this->input->post('status_id', TRUE);
+            $kelas_id      = $this->input->post('kelas_id', TRUE);
 
             $filter = array(
                 'nis'           => $this->input->post('nis', TRUE),
                 'nama'          => $this->input->post('nama', TRUE),
-                'jenis_kelamin' => (empty($this->input->post('jenis_kelamin', TRUE))) ? array() : $this->input->post('jenis_kelamin', TRUE),
+                'jenis_kelamin' => (empty($jenis_kelamin)) ? array() : $jenis_kelamin,
                 'tahun_masuk'   => $this->input->post('tahun_masuk', TRUE),
                 'tempat_lahir'  => $this->input->post('tempat_lahir', TRUE),
                 'tgl_lahir'     => (int)$this->input->post('tgl_lahir', TRUE),
                 'bln_lahir'     => (int)$this->input->post('bln_lahir', TRUE),
-                'thn_lahir'     => (empty((int)$this->input->post('thn_lahir', TRUE))) ? '' : (int)$this->input->post('thn_lahir', TRUE),
-                'agama'         => (empty($this->input->post('agama', TRUE))) ? array() : $this->input->post('agama', TRUE),
+                'thn_lahir'     => (empty($thn_lahir)) ? '' : $thn_lahir,
+                'agama'         => (empty($agama)) ? array() : $agama,
                 'alamat'        => $this->input->post('alamat', TRUE),
-                'status_id'     => (empty($this->input->post('status_id', TRUE))) ? array() : $this->input->post('status_id', TRUE),
-                'kelas_id'      => (empty($this->input->post('kelas_id', TRUE))) ? array() : $this->input->post('kelas_id', TRUE),
+                'status_id'     => (empty($status_id)) ? array() : $status_id,
+                'kelas_id'      => (empty($kelas_id)) ? array() : $kelas_id,
                 'username'      => $this->input->post('username', TRUE)
             );
 
@@ -239,7 +247,7 @@ class Siswa extends MY_Controller
 
             redirect('siswa/filter');
 
-        } elseif (!empty($this->session->userdata('filter_siswa'))) {
+        } elseif (!empty($session_filter)) {
 
             $filter = $this->session->userdata('filter_siswa');
 

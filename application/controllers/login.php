@@ -114,7 +114,9 @@ class Login extends MY_Controller
         }
 
         # cek fitur
-        if (empty(get_pengaturan('registrasi-siswa', 'value')) && empty(get_pengaturan('registrasi-pengajar', 'value'))) {
+        $registrasi_siswa    = get_pengaturan('registrasi-siswa', 'value');
+        $registrasi_pengajar = get_pengaturan('registrasi-pengajar', 'value');
+        if (empty($registrasi_siswa) && empty($registrasi_pengajar)) {
             redirect('login');
         }
 
@@ -124,11 +126,11 @@ class Login extends MY_Controller
             redirect('login/register');
         }
 
-        if (empty(get_pengaturan('registrasi-siswa', 'value')) && $sebagai == 'siswa') {
+        if (empty($registrasi_siswa) && $sebagai == 'siswa') {
             redirect('login/register/pengajar');
         }
 
-        if (empty(get_pengaturan('registrasi-pengajar', 'value')) && $sebagai == 'pengajar') {
+        if (empty($registrasi_pengajar) && $sebagai == 'pengajar') {
             redirect('login/register/siswa');
         }
 
