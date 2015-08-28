@@ -148,7 +148,8 @@ function get_row_data($model, $func, $args = array(), $field_name = '')
  */
 function get_pengaturan($id, $get = null)
 {
-    return get_row_data('config_model', 'retrieve', array($id), $get);
+    $result = get_row_data('config_model', 'retrieve', array($id), $get);
+    return $result;
 }
 
 /**
@@ -850,4 +851,20 @@ function kirim_email_approve_pengajar($pengajar_id)
         'tabel_profil' => $tabel_profil,
         'url_login'    => site_url('login')
     ));
+}
+
+
+function get_email_from_string($str) {
+    $split = explode(" ", $str);
+
+    foreach ($split as $u) {
+        $u = html_entity_decode($u);
+        $u = ltrim($u, '<');
+        $u = rtrim($u, '>');
+        if (filter_var($u, FILTER_VALIDATE_EMAIL)) {
+            return $u;
+        }
+    }
+
+    return '';
 }

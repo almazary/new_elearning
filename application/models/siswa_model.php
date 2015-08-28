@@ -87,15 +87,15 @@ class Siswa_model extends CI_Model
 
         $where = array();
         if (!is_null($jenis_kelamin)) {
-            $where['jenis_kelamin'] = [$jenis_kelamin, 'where'];
+            $where['jenis_kelamin'] = array($jenis_kelamin, 'where');
         }
         if (!is_null($tahun_masuk)) {
             $tahun_masuk = (int)$tahun_masuk;
-            $where['tahun_masuk'] = [$tahun_masuk, 'where'];
+            $where['tahun_masuk'] = array($tahun_masuk, 'where');
         }
         if (!is_null($status_id)) {
             $status_id = (int)$status_id;
-            $where['status_id'] = [$status_id, 'where'];
+            $where['status_id'] = array($status_id, 'where');
         }
 
         $orderby = array('id' => 'DESC');

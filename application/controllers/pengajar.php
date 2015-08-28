@@ -588,18 +588,24 @@ class Pengajar extends MY_Controller
             $page_no = 1;
         }
 
+        $session_filter = $this->session->userdata('filter_pengajar');
+
         if ($this->form_validation->run('pengajar/filter') == TRUE) {
+
+            $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+            $thn_lahir     = (int)$this->input->post('thn_lahir', TRUE);
+            $status_id     = $this->input->post('status_id', TRUE);
 
             $filter = array(
                 'nip'           => $this->input->post('nip', TRUE),
                 'nama'          => $this->input->post('nama', TRUE),
-                'jenis_kelamin' => (empty($this->input->post('jenis_kelamin', TRUE))) ? array() : $this->input->post('jenis_kelamin', TRUE),
+                'jenis_kelamin' => (empty($jenis_kelamin)) ? array() : $jenis_kelamin,
                 'tempat_lahir'  => $this->input->post('tempat_lahir', TRUE),
                 'tgl_lahir'     => (int)$this->input->post('tgl_lahir', TRUE),
                 'bln_lahir'     => (int)$this->input->post('bln_lahir', TRUE),
-                'thn_lahir'     => (empty((int)$this->input->post('thn_lahir', TRUE))) ? '' : (int)$this->input->post('thn_lahir', TRUE),
+                'thn_lahir'     => (empty($thn_lahir)) ? '' : $thn_lahir,
                 'alamat'        => $this->input->post('alamat', TRUE),
-                'status_id'     => (empty($this->input->post('status_id', TRUE))) ? array() : $this->input->post('status_id', TRUE),
+                'status_id'     => (empty($status_id)) ? array() : $status_id,
                 'username'      => $this->input->post('username', TRUE),
                 'is_admin'      => $this->input->post('is_admin', TRUE)
             );
@@ -608,7 +614,7 @@ class Pengajar extends MY_Controller
 
             redirect('pengajar/filter');
 
-        } elseif (!empty($this->session->userdata('filter_pengajar'))) {
+        } elseif (!empty($session_filter)) {
 
             $filter = $this->session->userdata('filter_pengajar');
 
