@@ -1,7 +1,7 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Detail pesan - {{ parent() }}
+Detail Percakapan - {{ parent() }}
 {% endblock %}
 
 {% block css %}
@@ -9,10 +9,6 @@ Detail pesan - {{ parent() }}
     .msg-active {
         border:1px solid #DDD; padding: 5px 10px;border-radius: 2px; background-color: #fbfbfb;
         margin-bottom: 10px;
-    }
-    .msg {
-        padding: 5px 10px;border-radius: 2px;
-        border-top: 1px dashed #DDD;
     }
     .hr-msg {
         margin-top: 5px;margin-bottom: 5px;border:none;
@@ -23,52 +19,76 @@ Detail pesan - {{ parent() }}
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>{{ anchor('message', 'Pesan')|raw }} / Detail</h3>
+        <h3>{{ anchor('message', 'Pesan')|raw }} / Detail Percakapan</h3>
     </div>
     <div class="module-body">
         {{ get_flashdata('msg')|raw }}
 
-        {% for o in old_related_msg %}
-        <div class="msg" id="msg-{{ o.id }}">
-            {% if o.sender is not empty %}
-            <i class="icon-user"></i> <a href="{{ r.sender.profil.link_profil }}">{{ o.sender.profil.nama }}</a> <{{ o.sender.login.username }}>, <i class="icon-time"></i> {{ o.date }}
-            {% endif %}
-            <hr class="hr-msg">
-            {{ o.content|raw }}
-        </div>
-        {% endfor %}
+        <table class="table table-hover">
+            {% for d in old_related_msg %}
+            <tr id="msg-{{ d.id }}">
+                <td style="width: 250px;">
+                    <img style="height:30px;width:30px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(d.profil.foto, 'medium', d.profil.jenis_kelamin) }}">
+                    <a href="{{ d.profil.link_profil }}">{{ character_limiter(d.profil.nama, 23, '...') }}</a>
+                    <br><small>{{ d.date }}</small>
+                </td>
+                <td bgcolor="#f5f5f5">
+                    <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ d.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
+                    {{ d.content|raw }}
+                </td>
+            </tr>
+            {% endfor %}
 
-        {% if r.sender is not empty %}
-        <div class="msg-active" id="msg-{{ r.id }}">
-            {% if r.sender is not empty %}
-            <i class="icon-user"></i> <a href="{{ r.sender.profil.link_profil }}">{{ r.sender.profil.nama }}</a> <{{ r.sender.login.username }}>, <i class="icon-time"></i> {{ r.date }}
-            {% endif %}
-            <hr class="hr-msg">
-            {{ r.content|raw }}
-        </div>
-        {% endif %}
+            <tr id="msg-{{ r.id }}">
+                <td style="width: 250px;">
+                    <img style="height:30px;width:30px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(r.profil.foto, 'medium', r.profil.jenis_kelamin) }}">
+                    <a href="{{ r.profil.link_profil }}">{{ character_limiter(r.profil.nama, 23, '...') }}</a>
+                    <br><small>{{ r.date }}</small>
+                </td>
+                <td bgcolor="#f5f5f5">
+                    <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ r.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
+                    {{ r.content|raw }}
+                </td>
+            </tr>
 
-        {% for o in new_related_msg %}
-        <div class="msg" id="msg-{{ o.id }}">
-            {% if o.sender is not empty %}
-            <i class="icon-user"></i> <a href="{{ r.sender.profil.link_profil }}">{{ o.sender.profil.nama }}</a> <{{ o.sender.login.username }}>, <i class="icon-time"></i> {{ o.date }}
-            {% endif %}
-            <hr class="hr-msg">
-            {{ o.content|raw }}
-        </div>
-        {% endfor %}
+            {% for n in new_related_msg %}
+            <tr id="msg-{{ d.id }}">
+                <td style="width: 250px;">
+                    <img style="height:30px;width:30px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(n.profil.foto, 'medium', n.profil.jenis_kelamin) }}">
+                    <a href="{{ n.profil.link_profil }}">{{ character_limiter(n.profil.nama, 23, '...') }}</a>
+                    <br><small>{{ n.date }}</small>
+                </td>
+                <td bgcolor="#f5f5f5">
+                    <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ n.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
+                    {{ n.content|raw }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
 
-        {% if r.sender is not empty %}
+        <br>
+        {% if confirm_del_all == false %}
         <div class="msg-active">
             <b><i class="icon-reply"></i> Balas Pesan</b>
             <hr class="hr-msg">
-            {{ form_open_multipart('message/create/' ~ r.sender.login.id, {'class' : 'form-horizontal row-fluid'})|raw }}
-                <input type="hidden" name="penerima" value="{{ r.sender.login.profil.nama }} <{{ r.sender.login.username }}>">
+            {{ form_open_multipart('message/create/' ~ r.login.id, {'class' : 'form-horizontal row-fluid'})|raw }}
+                <input type="hidden" name="penerima" value="{{ r.login.profil.nama }} <{{ r.login.username }}>">
                 <textarea name="content" id="content" style="height:300px;width:100%;">{{ set_value('content')|raw }}</textarea>
                 {{ form_error('content')|raw }}
                 <br>
                 <p><button class="btn btn-primary">Kirim</button></p>
             {{ form_close()|raw }}
+        </div>
+        {% endif %}
+
+        {% if confirm_del_all == true %}
+        <hr class="hr-msg">
+        <div id="confirm" class="alert alert-block">
+            <div class="pull-right btn-group" style="margin-top: -5px;">
+                <a class="btn btn-danger" href="{{ site_url('message/del_all/' ~ r.id) }}">Ya hapus</a>
+                <a class="btn btn-primary" href="{{ site_url('message') }}">Batal</a>
+            </div>
+            <b>Anda yakin ingin menghapus percakapan ini?</b>
         </div>
         {% endif %}
 

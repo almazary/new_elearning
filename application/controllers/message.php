@@ -11,8 +11,15 @@ class Message extends MY_Controller
 
     private function format_msg($retrieve)
     {
+        # jika inbox yang dicari pengirimnya
+        if ($retrieve['type_id'] == 1) {
+            $get_user = $retrieve['sender_receiver_id'];
+        } elseif ($retrieve['type_id'] == 2) {
+            $get_user = $retrieve['owner_id'];
+        }
+
         # cari sender/receiver
-        $login = $this->login_model->retrieve($retrieve['sender_receiver_id']);
+        $login = $this->login_model->retrieve($get_user);
         if (!empty($login['siswa_id'])) {
             $user = $this->siswa_model->retrieve($login['siswa_id']);
             if (is_admin()) {
@@ -29,17 +36,8 @@ class Message extends MY_Controller
             }
         }
 
-        # jika inbox
-        if ($retrieve['type_id'] == 1) {
-            $index = 'sender';
-        }
-        # jika outbox
-        elseif ($retrieve['type_id'] == 2) {
-            $index = 'receiver';
-        }
-
-        $retrieve[$index]['profil'] = $user;
-        $retrieve[$index]['login']  = $login;
+        $retrieve['profil'] = $user;
+        $retrieve['login']  = $login;
 
         # format tanggal, jika hari ini
         if (date('Y-m-d') == date('Y-m-d', strtotime($retrieve['date']))) {
@@ -60,24 +58,34 @@ class Message extends MY_Controller
         return $retrieve;
     }
 
-    function index($segment_3 = '')
+    function index($segment_3 = '', $segment_4 = '')
     {
-        $page_no = (int)$segment_3;
+        if (!empty($_GET['q'])) {
+            redirect('message/index/' . $_GET['q']);
+        }
+
+        $query   = (string)$segment_3;
+        if ($query == 'no-query') {
+            $query = '';
+        }
+
+        $page_no = (int)$segment_4;
         if (empty($page_no)) {
             $page_no = 1;
         }
 
         # ambil semua inbox
-        $retrieve_all = $this->msg_model->retrieve_all(15, $page_no, 1, get_sess_data('login', 'id'));
+        $retrieve_all = $this->msg_model->retrieve_all(10, $page_no, get_sess_data('login', 'id'), (!empty($query) ? array('content' => $query) : array()));
         $results_data = array();
         foreach ($retrieve_all['results'] as $key => $val) {
             $results_data[$key] = $this->format_msg($val);
         }
 
         $data['inbox']        = $results_data;
-        $data['pagination']   = $this->pager->view($retrieve_all, 'message/index/');
+        $data['pagination']   = $this->pager->view($retrieve_all, 'message/index/' . (empty($query) ? 'no-query' : $query) . '/');
         $data['count_unread'] = $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
 
+        $data['keyword'] = $query;
         $this->twig->display('list-inbox.html', $data);
     }
 
@@ -111,10 +119,10 @@ class Message extends MY_Controller
             $login = $this->login_model->retrieve(null, $get_email);
 
             # kirim email
-            $this->msg_model->send(get_sess_data('login', 'id'), $login['id'], $content);
+            $outbox_id = $this->msg_model->send(get_sess_data('login', 'id'), $login['id'], $content);
 
             $this->session->set_flashdata('msg', get_alert('success', 'Pesan berhasil dikirimkan.'));
-            redirect('message');
+            redirect('message/detail/' . $outbox_id . '#msg-' . $outbox_id);
         }
 
         $data['login']   = $login;
@@ -149,7 +157,7 @@ class Message extends MY_Controller
             $retrieve['new_related_msg'][$key] = $this->format_msg($val);
         }
 
-        // pr($retrieve);
+        // pr($retrieve);die;
 
         $data['r']               = $retrieve['retrieve'];
         $data['old_related_msg'] = $retrieve['old_related_msg'];
@@ -174,6 +182,63 @@ class Message extends MY_Controller
             $this->msg_model->update_read($new_msg['id']);
         }
 
+        if (!empty($_GET['confirm']) AND $_GET['confirm'] == 1) {
+            $data['confirm_del_all'] = true;
+        }
+
         $this->twig->display('detail-pesan.html', $data);
+    }
+
+    function del_all($segment_3 = '')
+    {
+        $msg_id   = (int)$segment_3;
+        $retrieve = $this->msg_model->retrieve(get_sess_data('login', 'id'), $msg_id, true, true);
+
+        if (empty($retrieve['retrieve'])) {
+            $this->session->set_flashdata('msg', get_alert('success', 'Pesan tidak ditemukan.'));
+            redirect('message');
+        }
+
+        $this->msg_model->delete($msg_id);
+
+        foreach ($retrieve['old_related_msg'] as $m) {
+            $this->msg_model->delete($m['id']);
+        }
+
+        foreach ($retrieve['new_related_msg'] as $m) {
+            $this->msg_model->delete($m['id']);
+        }
+
+        $this->session->set_flashdata('msg', get_alert('success', 'Percakapan berhasil dihapus.'));
+
+        redirect('message');
+    }
+
+    function del($segment_3 = '', $segment_4 = '')
+    {
+        $msg_id   = (int)$segment_3;
+        $retrieve = $this->msg_model->retrieve(get_sess_data('login', 'id'), $msg_id);
+
+        if (empty($retrieve['retrieve'])) {
+            $this->session->set_flashdata('msg', get_alert('success', 'Pesan tidak ditemukan.'));
+            redirect('message');
+        }
+
+        $this->msg_model->delete($msg_id);
+
+        $this->session->set_flashdata('msg', get_alert('success', 'Pesan berhasil dihapus.'));
+
+        $segment_4 = (int)$segment_4;
+        if (!empty($segment_4)) {
+            $retrieve = $this->msg_model->retrieve(get_sess_data('login', 'id'), $segment_4);
+
+            if (empty($retrieve['retrieve'])) {
+                redirect('message');
+            } else {
+                redirect('message/detail/' . $segment_4);
+            }
+        }
+
+        redirect('message');
     }
 }

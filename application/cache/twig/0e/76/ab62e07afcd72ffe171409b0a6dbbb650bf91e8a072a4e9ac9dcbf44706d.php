@@ -50,25 +50,23 @@ class __TwigTemplate_0e76ab62e07afcd72ffe171409b0a6dbbb650bf91e8a072a4e9ac9dcbf4
         echo get_flashdata("msg");
         echo "
 
-            <div class=\"pull-left\">
-                <div class=\"btn-group\">
-                    <button class=\"btn\">
-                        Inbox</button>
-                    <button class=\"btn dropdown-toggle\" data-toggle=\"dropdown\">
-                    <span class=\"caret\"></span>
-                    </button>
-                    <ul class=\"dropdown-menu\">
-                        <li><a href=\"#\">Inbox (";
-        // line 24
-        echo twig_escape_filter($this->env, (isset($context["count_unread"]) ? $context["count_unread"] : null), "html", null, true);
-        echo ")</a></li>
-                        <li><a href=\"#\">Outbox </a></li>
-                    </ul>
-                </div>
-            </div>
             <div class=\"pull-right\">
+                <form class=\"form-search\" method=\"get\" action=\"";
+        // line 17
+        echo twig_escape_filter($this->env, site_url("message/index/"), "html", null, true);
+        echo "\">
+                    <div class=\"input-append\">
+                        <input type=\"text\" class=\"span3 search-query\" placeholder=\"cari pesan...\" name=\"q\" value=\"";
+        // line 19
+        echo twig_escape_filter($this->env, (isset($context["keyword"]) ? $context["keyword"] : null), "html", null, true);
+        echo "\">
+                        <button type=\"submit\" class=\"btn\"><i class=\"icon-search\"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class=\"pull-left\">
                 <a href=\"";
-        // line 30
+        // line 25
         echo twig_escape_filter($this->env, site_url("message/create/"), "html", null, true);
         echo "\" class=\"btn btn-primary\"><i class=\"icon-pencil\"></i> Tulis pesan</a>
             </div>
@@ -76,52 +74,41 @@ class __TwigTemplate_0e76ab62e07afcd72ffe171409b0a6dbbb650bf91e8a072a4e9ac9dcbf4
         <div class=\"module-body table\">
             <table class=\"table table-message\">
                 <tbody>
-                    <tr class=\"heading\">
-                        <td class=\"cell-check\">
-                            <input type=\"checkbox\" class=\"inbox-checkbox\">
-                        </td>
-                        <td class=\"cell-author hidden-phone hidden-tablet\">
-                            Pengirim
-                        </td>
-                        <td class=\"cell-title\">
-                            Pesan
-                        </td>
-                        <td class=\"cell-time align-right\">
-                            Tanggal
-                        </td>
-                    </tr>
                     ";
-        // line 50
+        // line 31
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["inbox"]) ? $context["inbox"] : null));
         foreach ($context['_seq'] as $context["_key"] => $context["d"]) {
-            // line 51
+            // line 32
             echo "                    <tr class=\"";
             echo ((($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "opened") == 0)) ? ("unread") : (""));
             echo " clickable-row\" data-href=\"";
             echo twig_escape_filter($this->env, site_url(((("message/detail/" . $this->getAttribute((isset($context["d"]) ? $context["d"] : null), "id")) . "#msg-") . $this->getAttribute((isset($context["d"]) ? $context["d"] : null), "id"))), "html", null, true);
             echo "\">
-                        <td class=\"cell-check\">
-                            <input type=\"checkbox\" class=\"inbox-checkbox\">
-                        </td>
-                        <td class=\"cell-author hidden-phone hidden-tablet\">
+                        <td class=\"cell-author\">
+                            <img style=\"height:30px;width:30px; margin-right: 10px;\" class=\"img-polaroid img-circle pull-left\" src=\"";
+            // line 34
+            echo twig_escape_filter($this->env, get_url_image_siswa($this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "foto"), "medium", $this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "jenis_kelamin")), "html", null, true);
+            echo "\">
                             <a href=\"";
-            // line 56
-            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "sender"), "profil"), "link_profil"), "html", null, true);
+            // line 35
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "link_profil"), "html", null, true);
             echo "\">";
-            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "sender"), "profil"), "nama"), "html", null, true);
+            echo twig_escape_filter($this->env, character_limiter($this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "nama"), 23, "..."), "html", null, true);
             echo "</a>
-                        </td>
-                        <td class=\"cell-title\">
-                            ";
-            // line 59
-            echo twig_escape_filter($this->env, ellipsize($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "content"), "32", ".5"), "html", null, true);
-            echo "
-                        </td>
-                        <td class=\"cell-time align-right\">
-                            ";
-            // line 62
+                            <br><small>";
+            // line 36
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["d"]) ? $context["d"] : null), "date"), "html", null, true);
+            echo "</small>
+                        </td>
+                        <td class=\"cell-title hidden-phone hidden-tablet\">
+                            <a class=\"pull-right\" style=\"margin-left:10px;\" href=\"";
+            // line 39
+            echo twig_escape_filter($this->env, site_url((("message/detail/" . $this->getAttribute((isset($context["d"]) ? $context["d"] : null), "id")) . "/?confirm=1#confirm")), "html", null, true);
+            echo "\"><i class=\"icon-trash\"></i></a>
+                            ";
+            // line 40
+            echo character_limiter(strip_tags($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "content")), 80, "...");
             echo "
                         </td>
                     </tr>
@@ -130,14 +117,14 @@ class __TwigTemplate_0e76ab62e07afcd72ffe171409b0a6dbbb650bf91e8a072a4e9ac9dcbf4
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['d'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 66
+        // line 44
         echo "
                 </tbody>
             </table>
         </div>
         <div class=\"module-foot\">
             ";
-        // line 71
+        // line 49
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
         </div>
@@ -159,6 +146,6 @@ class __TwigTemplate_0e76ab62e07afcd72ffe171409b0a6dbbb650bf91e8a072a4e9ac9dcbf4
 
     public function getDebugInfo()
     {
-        return array (  141 => 71,  134 => 66,  124 => 62,  118 => 59,  110 => 56,  99 => 51,  95 => 50,  72 => 30,  63 => 24,  50 => 14,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  128 => 49,  121 => 44,  111 => 40,  107 => 39,  101 => 36,  95 => 35,  91 => 34,  83 => 32,  79 => 31,  70 => 25,  61 => 19,  56 => 17,  50 => 14,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

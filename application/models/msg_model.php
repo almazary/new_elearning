@@ -12,6 +12,19 @@ class Msg_model extends CI_Model
     private $table = 'messages';
 
     /**
+     * Method untuk menghapus record message
+     *
+     * @param  integer $id
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete($this->table);
+        return true;
+    }
+
+    /**
      * Metthod untuk update opened menjadi 1
      *
      * @param  integer $id
@@ -64,6 +77,8 @@ class Msg_model extends CI_Model
             'opened'             => 1
         ));
 
+        $outbox_id = $this->db->insert_id();
+
         # create inbox
         $this->db->insert($this->table, array(
             'type_id'            => 1,
@@ -74,7 +89,7 @@ class Msg_model extends CI_Model
             'opened'             => 0
         ));
 
-        return true;
+        return $outbox_id;
     }
 
     /**
@@ -100,8 +115,7 @@ class Msg_model extends CI_Model
         # cari pesan terkait sebelumnya
         if (!empty($retrieve) && $old_related_msg) {
             $this->db->where('owner_id', $owner_id);
-            $this->db->where('type_id', $retrieve['type_id']);
-            $this->db->where('sender_receiver_id', $retrieve['sender_receiver_id']);
+            $this->db->where_in('sender_receiver_id', array($retrieve['sender_receiver_id'], $owner_id));
             $this->db->where('id <', $id);
             $this->db->order_by('id');
             $results = $this->db->get($this->table);
@@ -111,8 +125,7 @@ class Msg_model extends CI_Model
         # cari pesan terkait setelahnya
         if (!empty($retrieve) && $new_related_msg) {
             $this->db->where('owner_id', $owner_id);
-            $this->db->where('type_id', $retrieve['type_id']);
-            $this->db->where('sender_receiver_id', $retrieve['sender_receiver_id']);
+            $this->db->where_in('sender_receiver_id', array($retrieve['sender_receiver_id'], $owner_id));
             $this->db->where('id >', $id);
             $this->db->order_by('id');
             $results = $this->db->get($this->table);
@@ -132,11 +145,10 @@ class Msg_model extends CI_Model
      * @param  array   $search
      * @return array
      */
-    public function retrieve_all($no_of_records = 10, $page_no = 1, $type_id, $owner_id, $search = array())
+    public function retrieve_all($no_of_records = 10, $page_no = 1, $owner_id, $search = array())
     {
         $where             = array();
         $group_by          = array();
-        $where['type_id']  = array($type_id, 'where');
         $where['owner_id'] = array($owner_id, 'where');
 
         if (empty($search)) {
@@ -158,18 +170,25 @@ class Msg_model extends CI_Model
         $orderby = array('id' => 'DESC');
         $data    = $this->pager->set($this->table, $no_of_records, $page_no, $where, $orderby, $this->table.'.*', $group_by);
 
-        foreach ($data['results'] as $key => &$val) {
-            # cek ada yang lebih baru tidak
-            $this->db->where('type_id', $val['type_id']);
-            $this->db->where('owner_id', $val['owner_id']);
-            $this->db->where('sender_receiver_id', $val['sender_receiver_id']);
-            $this->db->where('id >', $val['id']);
-            $this->db->order_by('id', 'DESC');
-            $retrieve_newer = $this->db->get($this->table, 1);
-            $retrieve_newer = $retrieve_newer->row_array();
-            if (!empty($retrieve_newer)) {
-                $data['results'][$key] = $retrieve_newer;
+        if (empty($search)) {
+            $new_data = array();
+            foreach ($data['results'] as $key => &$val) {
+                # cek ada yang lebih baru tidak
+                $this->db->where('owner_id', $val['owner_id']);
+                $this->db->where('sender_receiver_id', $val['sender_receiver_id']);
+                $this->db->where('id >', $val['id']);
+                $this->db->order_by('id', 'DESC');
+                $retrieve_newer = $this->db->get($this->table, 1);
+                $retrieve_newer = $retrieve_newer->row_array();
+                if (!empty($retrieve_newer)) {
+                    $new_data[strtotime($retrieve_newer['date'])] = $retrieve_newer;
+                } else {
+                    $new_data[strtotime($val['date'])] = $val;
+                }
             }
+
+            krsort($new_data);
+            $data['results'] = $new_data;
         }
 
         return $data;
