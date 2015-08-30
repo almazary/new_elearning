@@ -210,7 +210,7 @@ class __TwigTemplate_4409d83e7bf14b54192c22f7dbfcdca4c07e33344cb30d5e515e720c695
         if (((isset($context["confirm_del_all"]) ? $context["confirm_del_all"] : null) == false)) {
             // line 86
             echo "        <div class=\"msg-active\">
-            <b><i class=\"icon-reply\"></i> Balas Pesan</b>
+            <b>Kirim Pesan</b>
             <hr class=\"hr-msg\">
             ";
             // line 89

@@ -84,7 +84,7 @@ Detail Percakapan - {{ parent() }}
         <br>
         {% if confirm_del_all == false %}
         <div class="msg-active">
-            <b><i class="icon-reply"></i> Balas Pesan</b>
+            <b>Kirim Pesan</b>
             <hr class="hr-msg">
             {{ form_open_multipart('message/create/' ~ r.sender_receiver_id, {'class' : 'form-horizontal row-fluid'})|raw }}
                 <input type="hidden" name="penerima" value="{{ receiver_name }}">

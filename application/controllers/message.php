@@ -261,4 +261,55 @@ class Message extends MY_Controller
 
         redirect('message');
     }
+
+    function to($segment_3 = '', $segment_4 = '')
+    {
+        $tujuan = (string)$segment_3;
+        if (!in_array($tujuan, array('siswa', 'pengajar'))) {
+            exit('Tujuan tidak ditemukan.');
+        }
+
+        $id = (int)$segment_4;
+        if (empty($id)) {
+            exit('Tujuan tidak ditemukan.');
+        }
+
+        if ($tujuan == 'siswa') {
+            $user = $this->siswa_model->retrieve($id);
+            if (empty($user)) {
+                exit('Tujuan tidak ditemukan.');
+            }
+
+            if (is_siswa() && get_sess_data('user', 'id') == $user['id']) {
+                exit('Anda tidak dapat mengirim pesan ke diri sendiri.');
+            }
+
+            $login = $this->login_model->retrieve(null, null, null, $user['id']);
+        }
+
+        if ($tujuan == 'pengajar') {
+            $user = $this->pengajar_model->retrieve($id);
+            if (empty($user)) {
+                exit('Tujuan tidak ditemukan.');
+            }
+
+            if ((is_pengajar() || is_admin()) && get_sess_data('user', 'id') == $user['id']) {
+                exit('Anda tidak dapat mengirim pesan ke diri sendiri.');
+            }
+
+            $login = $this->login_model->retrieve(null, null, null, null, $user['id']);
+        }
+
+        # cari masih ada percakapan tidak
+        $this->db->where('owner_id', get_sess_data('login', 'id'));
+        $this->db->where_in('sender_receiver_id', array(get_sess_data('login', 'id'), $login['id']));
+        $this->db->order_by('id', 'DESC');
+        $result = $this->db->get('messages');
+        $result = $result->row_array();
+        if (!empty($result)) {
+            redirect('message/detail/' . $result['id'] . '#msg-' . $result['id']);
+        }
+
+        redirect('message/create/' . $login['id']);
+    }
 }

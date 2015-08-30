@@ -16,6 +16,17 @@ Detail Siswa - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('siswa')|raw }}
 
+        {% if siswa_login.id != get_sess_data('login', 'id') %}
+        <div class="row-fluid">
+            <div class="span4">
+                <div class="btn-group">
+                    <a class="btn btn-default btn-sm" href="{{ site_url('message/to/siswa/' ~ siswa.id) }}"><i class="icon-comments"></i> Kirim Pesan</a>
+                </div>
+            </div>
+        </div>
+        <br>
+        {% endif %}
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 <strong>Profil Siswa</strong>
