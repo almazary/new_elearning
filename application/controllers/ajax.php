@@ -38,6 +38,10 @@ class Ajax extends MY_Controller
 
                 echo json_encode($data);
             break;
+
+            case 'new_msg':
+                echo $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
+            break;
         }
     }
 
@@ -164,6 +168,88 @@ class Ajax extends MY_Controller
                 $field_value['jawaban'][$pertanyaan['id']] = $jawaban;
 
                 update_field($field_id, $field_name, json_encode($field_value));
+            break;
+
+            case 'new_msg':
+                $active_msg_id = $this->input->post('active_msg_id', true);
+                $active_msg_id = (int)$active_msg_id;
+                if (empty($active_msg_id)) {
+                    echo '';
+                }
+
+                $msg = $this->msg_model->retrieve(get_sess_data('login', 'id'), $active_msg_id, false, false);
+                if (empty($msg)) {
+                    echo '';
+                }
+                $msg = $msg['retrieve'];
+
+                $this->db->where('owner_id', get_sess_data('login', 'id'));
+                $this->db->where('opened', '0');
+                $this->db->where_in('sender_receiver_id', array(get_sess_data('login', 'id'), $msg['sender_receiver_id']));
+                $this->db->order_by('id', 'ASC');
+                $results = $this->db->get('messages');
+
+                foreach ($results->result_array() as $retrieve) {
+                    $this->msg_model->update_read($retrieve['id']);
+
+                    # jika inbox yang dicari pengirimnya
+                    if ($retrieve['type_id'] == 1) {
+                        $get_user = $retrieve['sender_receiver_id'];
+                    } elseif ($retrieve['type_id'] == 2) {
+                        $get_user = $retrieve['owner_id'];
+                    }
+
+                    # cari sender/receiver
+                    $login = $this->login_model->retrieve($get_user);
+                    if (!empty($login['siswa_id'])) {
+                        $user = $this->siswa_model->retrieve($login['siswa_id']);
+                        if (is_admin()) {
+                            $user['link_profil'] = site_url('siswa/detail/' . $user['status_id'] . '/' . $user['id']);
+                        } else {
+                            $user['link_profil'] = site_url('siswa/detail/' . $user['id']);
+                        }
+                        $user['link_image'] = get_url_image_siswa($user['foto'], 'medium', $user['jenis_kelamin']);
+
+                    } elseif (!empty($login['pengajar_id'])) {
+                        $user = $this->pengajar_model->retrieve($login['pengajar_id']);
+                        if (is_admin()) {
+                            $user['link_profil'] = site_url('pengajar/detail/' . $user['status_id'] . '/' . $user['id']);
+                        } else {
+                            $user['link_profil'] = site_url('pengajar/detail/' . $user['id']);
+                        }
+                        $user['link_image'] = get_url_image_pengajar($user['foto'], 'medium', $user['jenis_kelamin']);
+                    }
+
+                    # format tanggal, jika hari ini
+                    if (date('Y-m-d') == date('Y-m-d', strtotime($retrieve['date']))) {
+                        $retrieve['date'] = date('H:i', strtotime($retrieve['date']));
+                    }
+                    # kemarin
+                    elseif (date('Y-m-d', strtotime('-1 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
+                        $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' kemarin';
+                    }
+                    # lusa
+                    elseif (date('Y-m-d', strtotime('-2 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
+                        $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' lusa';
+                    }
+                    else {
+                        $retrieve['date'] = tgl_jam_indo($retrieve['date']);
+                    }
+
+                    ?>
+                    <tr id="msg-<?php echo $val['id'] ?>">
+                        <td class="user flag-new">
+                            <img class="img-user img-polaroid img-circle pull-left" src="<?php echo $user['link_image']; ?>">
+                            <a href="{{ n.profil.link_profil }}"><?php echo character_limiter($user['nama'], 23, '...') ?></a>
+                            <br><small><?php echo $retrieve['date']; ?></small>
+                        </td>
+                        <td class="msg-content">
+                            <a class="pull-right" style="margin-left:10px;" href="<?php echo site_url('message/del/' . $retrieve['id'] . '/' . $msg['id']) ?>" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
+                            <?php echo html_entity_decode($retrieve['content']); ?>
+                        </td>
+                    </tr>
+                    <?php
+                }
             break;
         }
     }

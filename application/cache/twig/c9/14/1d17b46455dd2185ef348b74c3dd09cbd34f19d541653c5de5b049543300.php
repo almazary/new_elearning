@@ -164,7 +164,7 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
                                 <li><a href=\"";
             // line 72
             echo twig_escape_filter($this->env, site_url("message"), "html", null, true);
-            echo "\"><i class=\"menu-icon icon-comments\"></i>Pesan</a></li>
+            echo "\"><i class=\"menu-icon icon-comments\"></i>Pesan <span id=\"count-new-msg\"></span></a></li>
                             </ul>
 
                             <ul class=\"widget widget-menu unstyled\">
@@ -230,7 +230,7 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
                                 <li><a href=\"";
             // line 100
             echo twig_escape_filter($this->env, site_url("message"), "html", null, true);
-            echo "\"><i class=\"menu-icon icon-comments\"></i>Pesan</a></li>
+            echo "\"><i class=\"menu-icon icon-comments\"></i>Pesan <span id=\"count-new-msg\"></span></a></li>
                                 <li><a href=\"";
             // line 101
             echo twig_escape_filter($this->env, site_url("login/pp"), "html", null, true);
@@ -278,7 +278,7 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
                                 <li><a href=\"";
             // line 119
             echo twig_escape_filter($this->env, site_url("message"), "html", null, true);
-            echo "\"><i class=\"menu-icon icon-comments\"></i>Pesan</a></li>
+            echo "\"><i class=\"menu-icon icon-comments\"></i>Pesan <span id=\"count-new-msg\"></span></a></li>
                                 <li><a href=\"";
             // line 120
             echo twig_escape_filter($this->env, site_url("login/pp"), "html", null, true);

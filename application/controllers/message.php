@@ -6,6 +6,10 @@ class Message extends MY_Controller
     {
         parent::__construct();
 
+        if (!$this->db->table_exists('messages')) {
+            $this->msg_model->create_table();
+        }
+
         must_login();
     }
 
@@ -27,6 +31,8 @@ class Message extends MY_Controller
             } else {
                 $user['link_profil'] = site_url('siswa/detail/' . $user['id']);
             }
+            $user['link_image'] = get_url_image_siswa($user['foto'], 'medium', $user['jenis_kelamin']);
+
         } elseif (!empty($login['pengajar_id'])) {
             $user = $this->pengajar_model->retrieve($login['pengajar_id']);
             if (is_admin()) {
@@ -34,6 +40,7 @@ class Message extends MY_Controller
             } else {
                 $user['link_profil'] = site_url('pengajar/detail/' . $user['id']);
             }
+            $user['link_image'] = get_url_image_pengajar($user['foto'], 'medium', $user['jenis_kelamin']);
         }
 
         $retrieve['profil'] = $user;
@@ -81,9 +88,8 @@ class Message extends MY_Controller
             $results_data[$key] = $this->format_msg($val);
         }
 
-        $data['inbox']        = $results_data;
-        $data['pagination']   = $this->pager->view($retrieve_all, 'message/index/' . (empty($query) ? 'no-query' : $query) . '/');
-        $data['count_unread'] = $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
+        $data['inbox']      = $results_data;
+        $data['pagination'] = $this->pager->view($retrieve_all, 'message/index/' . (empty($query) ? 'no-query' : $query) . '/');
 
         $data['keyword'] = $query;
         $this->twig->display('list-inbox.html', $data);
@@ -163,10 +169,24 @@ class Message extends MY_Controller
         $data['old_related_msg'] = $retrieve['old_related_msg'];
         $data['new_related_msg'] = $retrieve['new_related_msg'];
 
+        if ($data['r']['sender_receiver_id'] != get_sess_data('login', 'id')) {
+            $login_receiver = $this->login_model->retrieve($data['r']['sender_receiver_id']);
+            if (!empty($login_receiver['siswa_id'])) {
+                $user_receiver = $this->siswa_model->retrieve($login_receiver['siswa_id']);
+            } elseif (!empty($login_receiver['pengajar_id'])) {
+                $user_receiver = $this->pengajar_model->retrieve($login_receiver['pengajar_id']);
+            }
+
+            $data['receiver_name'] = $user_receiver['nama'] . " <$login_receiver[username]>";
+        } else {
+            $data['receiver_name'] = $data['r']['profil']['nama'] . " <$data[r][login][username]>";
+        }
+
         $html_js = get_tinymce('content');
         $html_js .= load_comp_js(array(
             base_url('assets/comp/autocomplete/jquery.autocomplete.min.js'),
-            base_url('assets/comp/autocomplete/script.js')
+            base_url('assets/comp/autocomplete/script.js'),
+            base_url('assets/comp/jquery/get-new-msg.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/autocomplete/autocomplete.css')));
