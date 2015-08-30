@@ -188,4 +188,56 @@ class MY_Controller extends CI_Controller
 
         return $jadwal;
     }
+
+    function format_msg($retrieve)
+    {
+        # jika inbox yang dicari pengirimnya
+        if ($retrieve['type_id'] == 1) {
+            $get_user = $retrieve['sender_receiver_id'];
+        } elseif ($retrieve['type_id'] == 2) {
+            $get_user = $retrieve['owner_id'];
+        }
+
+        # cari sender/receiver
+        $login = $this->login_model->retrieve($get_user);
+        if (!empty($login['siswa_id'])) {
+            $user = $this->siswa_model->retrieve($login['siswa_id']);
+            if (is_admin()) {
+                $user['link_profil'] = site_url('siswa/detail/' . $user['status_id'] . '/' . $user['id']);
+            } else {
+                $user['link_profil'] = site_url('siswa/detail/' . $user['id']);
+            }
+            $user['link_image'] = get_url_image_siswa($user['foto'], 'medium', $user['jenis_kelamin']);
+
+        } elseif (!empty($login['pengajar_id'])) {
+            $user = $this->pengajar_model->retrieve($login['pengajar_id']);
+            if (is_admin()) {
+                $user['link_profil'] = site_url('pengajar/detail/' . $user['status_id'] . '/' . $user['id']);
+            } else {
+                $user['link_profil'] = site_url('pengajar/detail/' . $user['id']);
+            }
+            $user['link_image'] = get_url_image_pengajar($user['foto'], 'medium', $user['jenis_kelamin']);
+        }
+
+        $retrieve['profil'] = $user;
+        $retrieve['login']  = $login;
+
+        # format tanggal, jika hari ini
+        if (date('Y-m-d') == date('Y-m-d', strtotime($retrieve['date']))) {
+            $retrieve['date'] = date('H:i', strtotime($retrieve['date']));
+        }
+        # kemarin
+        elseif (date('Y-m-d', strtotime('-1 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
+            $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' kemarin';
+        }
+        # lusa
+        elseif (date('Y-m-d', strtotime('-2 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
+            $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' lusa';
+        }
+        else {
+            $retrieve['date'] = tgl_jam_indo($retrieve['date']);
+        }
+
+        return $retrieve;
+    }
 }

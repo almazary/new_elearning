@@ -146,7 +146,7 @@ class Msg_model extends CI_Model
      * @param  array   $search
      * @return array
      */
-    public function retrieve_all($no_of_records = 10, $page_no = 1, $owner_id, $search = array())
+    public function retrieve_all($no_of_records = 10, $page_no = 1, $owner_id, $search = array(), $pagination = true)
     {
         $where             = array();
         $group_by          = array();
@@ -169,7 +169,11 @@ class Msg_model extends CI_Model
         }
 
         $orderby = array('id' => 'DESC');
-        $data    = $this->pager->set($this->table, $no_of_records, $page_no, $where, $orderby, $this->table.'.*', $group_by);
+        if (!$pagination) {
+            $no_of_records = $this->db->count_all($this->table);
+        }
+
+        $data = $this->pager->set($this->table, $no_of_records, $page_no, $where, $orderby, $this->table.'.*', $group_by);
 
         if (empty($search)) {
             $new_data = array();
@@ -192,7 +196,11 @@ class Msg_model extends CI_Model
             $data['results'] = $new_data;
         }
 
-        return $data;
+        if ($pagination) {
+            return $data;
+        } else {
+            return $data['results'];
+        }
     }
 
     /**
