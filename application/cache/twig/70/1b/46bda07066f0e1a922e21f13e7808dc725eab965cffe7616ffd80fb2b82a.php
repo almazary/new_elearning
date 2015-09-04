@@ -64,38 +64,57 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
         echo get_flashdata("siswa");
         echo "
 
+        ";
+        // line 19
+        if (($this->getAttribute((isset($context["siswa_login"]) ? $context["siswa_login"] : null), "id") != get_sess_data("login", "id"))) {
+            // line 20
+            echo "        <div class=\"row-fluid\">
+            <div class=\"span4\">
+                <div class=\"btn-group\">
+                    <a class=\"btn btn-default btn-sm\" href=\"";
+            // line 23
+            echo twig_escape_filter($this->env, site_url(("message/to/siswa/" . $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "id"))), "html", null, true);
+            echo "\"><i class=\"icon-comments\"></i> Kirim Pesan</a>
+                </div>
+            </div>
+        </div>
+        <br>
+        ";
+        }
+        // line 29
+        echo "
         <div class=\"panel panel-default\">
             <div class=\"panel-heading\">
                 <strong>Profil Siswa</strong>
                 ";
-        // line 22
+        // line 33
         if (is_admin()) {
-            // line 23
+            // line 34
             echo "                <div class=\"btn-group pull-right\" style=\"margin-top:-4px;\">
                     ";
-            // line 24
+            // line 35
             echo anchor(((("siswa/edit_profile/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "id")), "Edit Profil", array("class" => "iframe-4 btn btn-small btn-primary", "title" => "Edit Profil Siswa"));
             echo "
                     ";
-            // line 25
+            // line 36
             echo anchor(((("siswa/edit_picture/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "id")), "Edit Foto", array("class" => "iframe-5 btn btn-small btn-primary", "title" => "Edit Foto Siswa"));
             echo "
                 </div>
                 ";
         }
-        // line 28
+        // line 39
         echo "            </div>
             <div class=\"panel-body\">
                 <table class=\"table\">
                     <tr>
                         <th bgcolor=\"#FBFBFB\" width=\"25%\" style=\"border-top: 0px;\">NIS</th>
                         <td style=\"border-top: 0px;\">";
-        // line 33
+        // line 44
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "nis"), "html", null, true);
         echo "</td>
                         <td rowspan=\"5\" width=\"15%\" style=\"border-top: 0px;\">
                             <img style=\"width:113px;\" class=\"img-polaroid\" src=\"";
-        // line 35
+        // line 46
         echo twig_escape_filter($this->env, get_url_image_siswa($this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "foto"), "medium", $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "jenis_kelamin")), "html", null, true);
         echo "\">
                         </td>
@@ -103,49 +122,49 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
                     <tr>
                         <th bgcolor=\"#FBFBFB\">Nama</th>
                         <td>";
-        // line 40
+        // line 51
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "nama"), "html", null, true);
         echo "</td>
                     </tr>
                     <tr>
                         <th bgcolor=\"#FBFBFB\">Jenis Kelamin</th>
                         <td>";
-        // line 44
+        // line 55
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "jenis_kelamin"), "html", null, true);
         echo "</td>
                     </tr>
                     <tr>
                         <th bgcolor=\"#FBFBFB\">Tahun Masuk</th>
                         <td colspan=\"2\">";
-        // line 48
+        // line 59
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "tahun_masuk"), "html", null, true);
         echo "</td>
                     </tr>
                     <tr>
                         <th bgcolor=\"#FBFBFB\">Tempat Lahir</th>
                         <td>";
-        // line 52
+        // line 63
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "tempat_lahir"), "html", null, true);
         echo "</td>
                     </tr>
                     <tr>
                         <th bgcolor=\"#FBFBFB\">Tanggal Lahir</th>
                         <td>";
-        // line 56
+        // line 67
         echo twig_escape_filter($this->env, (((!twig_test_empty($this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "tgl_lahir")))) ? (tgl_indo($this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "tgl_lahir"))) : ("")), "html", null, true);
         echo "</td>
                     </tr>
                     <tr>
                         <th bgcolor=\"#FBFBFB\">Agama</th>
                         <td colspan=\"2\">";
-        // line 60
+        // line 71
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "agama"), "html", null, true);
         echo "</td>
                     </tr>
                     <tr>
                         <th bgcolor=\"#FBFBFB\">Alamat</th>
                         <td colspan=\"2\">";
-        // line 64
+        // line 75
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "alamat"), "html", null, true);
         echo "</td>
                     </tr>
@@ -153,25 +172,25 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
                         <th bgcolor=\"#FBFBFB\">Status</th>
                         <td colspan=\"2\">
                             ";
-        // line 69
+        // line 80
         if (($this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "status_id") == 0)) {
-            // line 70
+            // line 81
             echo "                                Pending
                             ";
         } elseif (($this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "status_id") == 1)) {
-            // line 72
+            // line 83
             echo "                                Aktif
                             ";
         } elseif (($this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "status_id") == 2)) {
-            // line 74
+            // line 85
             echo "                                Blocking
                             ";
         } elseif (($this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "status_id") == 3)) {
-            // line 76
+            // line 87
             echo "                                Alumni
                             ";
         }
-        // line 78
+        // line 89
         echo "                        </td>
                     </tr>
                 </table>
@@ -184,18 +203,18 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
                     <div class=\"panel-heading\">
                         <strong>Riwayat Kelas</strong>
                         ";
-        // line 89
+        // line 100
         if ((is_admin() && ((isset($context["status_id"]) ? $context["status_id"] : null) != 3))) {
-            // line 90
+            // line 101
             echo "                        <div class=\"btn-group pull-right\" style=\"margin-top:-4px;\">
                             ";
-            // line 91
+            // line 102
             echo anchor(((("siswa/moved_class/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "id")), "Pindah Kelas", array("class" => "iframe btn btn-small btn-primary", "title" => "Pindah siswa ke Kelas lain"));
             echo "
                         </div>
                         ";
         }
-        // line 94
+        // line 105
         echo "                    </div>
                     <div class=\"panel-body\">
                         <table class=\"table table-striped\">
@@ -204,77 +223,77 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
                                 <th width=\"5%\">No</th>
                                 <th>Kelas</th>
                                 ";
-        // line 101
+        // line 112
         if (((isset($context["status_id"]) ? $context["status_id"] : null) != 3)) {
-            // line 102
+            // line 113
             echo "                                    <th>Aktif</th>
                                 ";
         }
-        // line 104
+        // line 115
         echo "                            </tr>
                         </thead>
                         <tbody>
                             ";
-        // line 107
+        // line 118
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable($this->getAttribute((isset($context["siswa_kelas"]) ? $context["siswa_kelas"] : null), "results"));
         foreach ($context['_seq'] as $context["no"] => $context["v"]) {
-            // line 108
+            // line 119
             echo "                            <tr>
                                 <td>";
-            // line 109
+            // line 120
             echo twig_escape_filter($this->env, (isset($context["no"]) ? $context["no"] : null), "html", null, true);
             echo ".</td>
                                 <td>
                                     ";
-            // line 111
+            // line 122
             echo twig_escape_filter($this->env, get_row_data("kelas_model", "retrieve", array(0 => $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "kelas_id"), 1 => true), "nama"), "html", null, true);
             echo "
                                 </td>
                                 ";
-            // line 113
+            // line 124
             if (((isset($context["status_id"]) ? $context["status_id"] : null) != 3)) {
-                // line 114
+                // line 125
                 echo "                                <td>
                                     ";
-                // line 115
+                // line 126
                 if (($this->getAttribute((isset($context["v"]) ? $context["v"] : null), "aktif") == 1)) {
-                    // line 116
+                    // line 127
                     echo "                                        <i class=\"icon icon-ok\"></i>
                                     ";
                 }
-                // line 118
+                // line 129
                 echo "                                </td>
                                 ";
             }
-            // line 120
+            // line 131
             echo "                            </tr>
                             ";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['no'], $context['v'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 122
+        // line 133
         echo "                        </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             ";
-        // line 127
+        // line 138
         if (is_admin()) {
-            // line 128
+            // line 139
             echo "            <div class=\"span6\">
                 <div class=\"panel panel-default\" id=\"akun\">
                     <div class=\"panel-heading\">
                         <strong>Akun Login</strong>
                         <div class=\"btn-group pull-right\" style=\"margin-top:-4px;\">
                             ";
-            // line 133
+            // line 144
             echo anchor(((("siswa/edit_username/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "id")), "Edit Username", array("class" => "iframe-2 btn btn-small btn-primary", "title" => "Edit Username Siswa"));
             echo "
                             ";
-            // line 134
+            // line 145
             echo anchor(((("siswa/edit_password/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . $this->getAttribute((isset($context["siswa"]) ? $context["siswa"] : null), "id")), "Edit Password", array("class" => "iframe-3 btn btn-small btn-primary", "title" => "Edit Password Siswa"));
             echo "
                         </div>
@@ -286,7 +305,7 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
                                     <th width=\"30%\" bgcolor=\"#FBFBFB\" style=\"border-top: 0px;\">Username</th>
                                     <td style=\"border-top: 0px;\">
                                         ";
-            // line 143
+            // line 154
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["siswa_login"]) ? $context["siswa_login"] : null), "username"), "html", null, true);
             echo "
                                     </td>
@@ -304,7 +323,7 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
             </div>
             ";
         }
-        // line 158
+        // line 169
         echo "        </div>
 
     </div>
@@ -324,6 +343,6 @@ class __TwigTemplate_701b46bda07066f0e1a922e21f13e7808dc725eab965cffe7616ffd80fb
 
     public function getDebugInfo()
     {
-        return array (  308 => 158,  290 => 143,  278 => 134,  274 => 133,  267 => 128,  265 => 127,  258 => 122,  251 => 120,  247 => 118,  243 => 116,  241 => 115,  238 => 114,  236 => 113,  231 => 111,  226 => 109,  223 => 108,  219 => 107,  214 => 104,  210 => 102,  208 => 101,  199 => 94,  193 => 91,  190 => 90,  188 => 89,  175 => 78,  171 => 76,  167 => 74,  163 => 72,  159 => 70,  157 => 69,  149 => 64,  142 => 60,  135 => 56,  128 => 52,  121 => 48,  114 => 44,  107 => 40,  99 => 35,  94 => 33,  87 => 28,  81 => 25,  77 => 24,  74 => 23,  72 => 22,  64 => 17,  60 => 15,  54 => 13,  48 => 11,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  327 => 169,  309 => 154,  297 => 145,  293 => 144,  286 => 139,  284 => 138,  277 => 133,  270 => 131,  266 => 129,  262 => 127,  260 => 126,  257 => 125,  255 => 124,  250 => 122,  245 => 120,  242 => 119,  238 => 118,  233 => 115,  229 => 113,  227 => 112,  218 => 105,  212 => 102,  209 => 101,  207 => 100,  194 => 89,  190 => 87,  186 => 85,  182 => 83,  178 => 81,  176 => 80,  168 => 75,  161 => 71,  154 => 67,  147 => 63,  140 => 59,  133 => 55,  126 => 51,  118 => 46,  113 => 44,  106 => 39,  100 => 36,  96 => 35,  93 => 34,  91 => 33,  85 => 29,  76 => 23,  71 => 20,  69 => 19,  64 => 17,  60 => 15,  54 => 13,  48 => 11,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

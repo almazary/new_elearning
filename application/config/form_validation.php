@@ -982,3 +982,16 @@ $config['tugas/filter'] = array(
         'rules' => 'xss_clean'
     ),
 );
+
+$config['message/create'] = array(
+    array(
+        'field' => 'penerima',
+        'label' => 'Penerima',
+        'rules' => 'trim|xss_clean|required|callback_check_penerima_pesan'
+    ),
+    array(
+        'field' => 'content',
+        'label' => 'Isi Pesan',
+        'rules' => 'trim|xss_clean|required'
+    ),
+);

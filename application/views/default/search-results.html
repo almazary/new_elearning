@@ -179,7 +179,31 @@ Pencarian - {{ parent() }}
                 </tr>
             {% endif %}
             {% endfor %}
+        </table><br>
+        {% endif %}
+
+        {% if results.pesan is not empty %}
+        <b><i class="icon-comments"></i> Pesan </b>(ditemukan {{ count(results.pesan) }} record)
+        <div class="message">
+        <table class="table table-message">
+            <tbody>
+                {% for d in results.pesan %}
+                <tr class="{{ (d.opened == 0) ? 'unread' }} clickable-row" data-href="{{ site_url('message/detail/' ~ d.id ~ '#msg-' ~ d.id)}}">
+                    <td class="cell-author">
+                        <img style="height:30px;width:30px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(d.profil.foto, 'medium', d.profil.jenis_kelamin) }}">
+                        <a href="{{ d.profil.link_profil }}">{{ character_limiter(d.profil.nama, 23, '...') }}</a>
+                        <br><small>{{ d.date }}</small>
+                    </td>
+                    <td class="cell-title hidden-phone hidden-tablet">
+                        <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/detail/' ~ d.id ~ '/?confirm=1#confirm') }}"><i class="icon-trash"></i></a>
+                        {{ character_limiter(strip_tags(d.content), 80, '...')|raw }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
+        <div>
+        <br>
         {% endif %}
 
     </div>

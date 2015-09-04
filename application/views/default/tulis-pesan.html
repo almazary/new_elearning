@@ -1,0 +1,45 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Tulis pesan - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ anchor('message', 'Pesan')|raw }} / Tulis</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('msg')|raw }}
+
+        {{ form_open_multipart('message/create/' ~ ((login is not empty) ? login.id), {'class' : 'form-horizontal row-fluid'})|raw }}
+            <div class="control-group">
+                <label class="control-label">Penerima <span class="text-error">*</span></label>
+                <div class="controls">
+                    {% if login is empty %}
+                        <input type="text" name="penerima" id="penerima" class="span8" value="{{ html_entity_decode(set_value('penerima')) }}">
+                        <br>{{ form_error('penerima')|raw }}
+                    {% else %}
+                        <div style="margin-top: 5px;"><b>{{ login.profil.nama }} </b> &lt;{{ login.username }}&gt;</div>
+                        <input type="hidden" name="penerima" value="{{ login.profil.nama }} <{{ login.username }}>">
+                    {% endif %}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Isi Pesan <span class="text-error">*</span></label>
+                <div class="controls">
+                    <textarea name="content" id="content" style="height:300px;width:100%;">{{ set_value('content')|raw }}</textarea>
+                    {{ form_error('content')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">Kirim</button>
+                    <a href="{{ site_url('message') }}" class="btn btn-default">Batal</a>
+                </div>
+            </div>
+        {{ form_close()|raw }}
+
+    </div>
+</div>
+{% endblock %}

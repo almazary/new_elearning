@@ -1,0 +1,114 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Detail Percakapan - {{ parent() }}
+{% endblock %}
+
+{% block css %}
+<style type="text/css">
+    .msg-active {
+        border:1px solid #DDD; padding: 5px 10px;border-radius: 2px; background-color: #fbfbfb;
+        margin-bottom: 10px;
+    }
+    .hr-msg {
+        margin-top: 5px;margin-bottom: 5px;border:none;
+    }
+    .table tr td.user {
+        width: 250px;
+    }
+    .table tr td.flag-new {
+        border-left:3px solid #1793D2!important;
+    }
+    .table tr td.msg-content {
+        background-color: #f5f5f5;
+    }
+    .table tr td.msg-content img, .table tr td.msg-content iframe {
+        max-width: 520px;
+    }
+    img.img-user {
+        height:30px;width:30px; margin-right: 10px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ anchor('message', 'Pesan')|raw }} / Detail Percakapan</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('msg')|raw }}
+
+        <table class="table table-hover" id="list-msg">
+            {% for d in old_related_msg %}
+            <tr id="msg-{{ d.id }}">
+                <td class="user">
+                    <img class="img-user img-polaroid img-circle pull-left" src="{{ d.profil.link_image }}">
+                    <a href="{{ d.profil.link_profil }}">{{ character_limiter(d.profil.nama, 23, '...') }}</a>
+                    <br><small>{{ d.date }}</small>
+                </td>
+                <td class="msg-content">
+                    <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ d.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
+                    {{ html_entity_decode(d.content)|raw }}
+                </td>
+            </tr>
+            {% endfor %}
+
+            <tr id="msg-{{ r.id }}">
+                <td class="user">
+                    <img class="img-user img-polaroid img-circle pull-left" src="{{ r.profil.link_image }}">
+                    <a href="{{ r.profil.link_profil }}">{{ character_limiter(r.profil.nama, 23, '...') }}</a>
+                    <br><small>{{ r.date }}</small>
+                </td>
+                <td class="msg-content">
+                    <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ r.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
+                    {{ html_entity_decode(r.content)|raw }}
+                </td>
+            </tr>
+
+            {% for n in new_related_msg %}
+            <tr id="msg-{{ d.id }}">
+                <td class="user">
+                    <img class="img-user img-polaroid img-circle pull-left" src="{{ n.profil.link_image }}">
+                    <a href="{{ n.profil.link_profil }}">{{ character_limiter(n.profil.nama, 23, '...') }}</a>
+                    <br><small>{{ n.date }}</small>
+                </td>
+                <td class="msg-content">
+                    <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ n.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
+                    {{ html_entity_decode(n.content)|raw }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <br>
+        {% if confirm_del_all == false %}
+        <div class="msg-active">
+            <b>Kirim Pesan</b>
+            <hr class="hr-msg">
+            {{ form_open_multipart('message/create/' ~ r.sender_receiver_id, {'class' : 'form-horizontal row-fluid'})|raw }}
+                <input type="hidden" name="penerima" value="{{ receiver_name }}">
+                <textarea name="content" id="content" style="height:300px;width:100%;">{{ set_value('content')|raw }}</textarea>
+                {{ form_error('content')|raw }}
+                <br>
+                <p><button class="btn btn-primary">Kirim</button></p>
+            {{ form_close()|raw }}
+        </div>
+        {% endif %}
+
+        {% if confirm_del_all == true %}
+        <hr class="hr-msg">
+        <div id="confirm" class="alert alert-block">
+            <div class="pull-right btn-group" style="margin-top: -5px;">
+                <a class="btn btn-danger" href="{{ site_url('message/del_all/' ~ r.id) }}">Ya hapus</a>
+                <a class="btn btn-primary" href="{{ site_url('message') }}">Batal</a>
+            </div>
+            <b>Anda yakin ingin menghapus percakapan ini?</b>
+        </div>
+        {% endif %}
+
+        <input type="hidden" id="active_msg_id" value="{{ r.id }}">
+
+    </div>
+</div>
+{% endblock %}

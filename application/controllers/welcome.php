@@ -177,11 +177,18 @@ class Welcome extends MY_Controller
             $pagination    = false
         );
 
+        # cari pesan
+        $retrieve_all_pesan = $this->msg_model->retrieve_all(10, $page_no, get_sess_data('login', 'id'), array('content' => $q), false);
+        foreach ($retrieve_all_pesan as $key => &$val) {
+            $retrieve_all_pesan[$key] = $this->format_msg($val);
+        }
+
         $results = array(
             'siswa'    => $retrieve_all_siswa,
             'pengajar' => $retrieve_all_pengajar,
             'materi'   => $retrieve_all_materi,
-            'tugas'    => $retrieve_all_tugas
+            'tugas'    => $retrieve_all_tugas,
+            'pesan'    => $retrieve_all_pesan
         );
 
         $data['results'] = $results;

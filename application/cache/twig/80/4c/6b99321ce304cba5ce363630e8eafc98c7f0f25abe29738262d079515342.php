@@ -489,10 +489,72 @@ class __TwigTemplate_804c6b99321ce304cba5ce363630e8eafc98c7f0f25abe29738262d0795
             unset($context['_seq'], $context['_iterated'], $context['no'], $context['m'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
             // line 182
-            echo "        </table>
+            echo "        </table><br>
         ";
         }
         // line 184
+        echo "
+        ";
+        // line 185
+        if ((!twig_test_empty($this->getAttribute((isset($context["results"]) ? $context["results"] : null), "pesan")))) {
+            // line 186
+            echo "        <b><i class=\"icon-comments\"></i> Pesan </b>(ditemukan ";
+            echo twig_escape_filter($this->env, count($this->getAttribute((isset($context["results"]) ? $context["results"] : null), "pesan")), "html", null, true);
+            echo " record)
+        <div class=\"message\">
+        <table class=\"table table-message\">
+            <tbody>
+                ";
+            // line 190
+            $context['_parent'] = (array) $context;
+            $context['_seq'] = twig_ensure_traversable($this->getAttribute((isset($context["results"]) ? $context["results"] : null), "pesan"));
+            foreach ($context['_seq'] as $context["_key"] => $context["d"]) {
+                // line 191
+                echo "                <tr class=\"";
+                echo ((($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "opened") == 0)) ? ("unread") : (""));
+                echo " clickable-row\" data-href=\"";
+                echo twig_escape_filter($this->env, site_url(((("message/detail/" . $this->getAttribute((isset($context["d"]) ? $context["d"] : null), "id")) . "#msg-") . $this->getAttribute((isset($context["d"]) ? $context["d"] : null), "id"))), "html", null, true);
+                echo "\">
+                    <td class=\"cell-author\">
+                        <img style=\"height:30px;width:30px; margin-right: 10px;\" class=\"img-polaroid img-circle pull-left\" src=\"";
+                // line 193
+                echo twig_escape_filter($this->env, get_url_image_siswa($this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "foto"), "medium", $this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "jenis_kelamin")), "html", null, true);
+                echo "\">
+                        <a href=\"";
+                // line 194
+                echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "link_profil"), "html", null, true);
+                echo "\">";
+                echo twig_escape_filter($this->env, character_limiter($this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "nama"), 23, "..."), "html", null, true);
+                echo "</a>
+                        <br><small>";
+                // line 195
+                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["d"]) ? $context["d"] : null), "date"), "html", null, true);
+                echo "</small>
+                    </td>
+                    <td class=\"cell-title hidden-phone hidden-tablet\">
+                        <a class=\"pull-right\" style=\"margin-left:10px;\" href=\"";
+                // line 198
+                echo twig_escape_filter($this->env, site_url((("message/detail/" . $this->getAttribute((isset($context["d"]) ? $context["d"] : null), "id")) . "/?confirm=1#confirm")), "html", null, true);
+                echo "\"><i class=\"icon-trash\"></i></a>
+                        ";
+                // line 199
+                echo character_limiter(strip_tags($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "content")), 80, "...");
+                echo "
+                    </td>
+                </tr>
+                ";
+            }
+            $_parent = $context['_parent'];
+            unset($context['_seq'], $context['_iterated'], $context['_key'], $context['d'], $context['_parent'], $context['loop']);
+            $context = array_intersect_key($context, $_parent) + $_parent;
+            // line 203
+            echo "            </tbody>
+        </table>
+        <div>
+        <br>
+        ";
+        }
+        // line 208
         echo "
     </div>
 </div>
@@ -511,6 +573,6 @@ class __TwigTemplate_804c6b99321ce304cba5ce363630e8eafc98c7f0f25abe29738262d0795
 
     public function getDebugInfo()
     {
-        return array (  496 => 184,  492 => 182,  486 => 181,  477 => 177,  473 => 175,  467 => 171,  461 => 169,  455 => 167,  453 => 166,  449 => 165,  446 => 164,  440 => 162,  434 => 160,  431 => 159,  425 => 157,  423 => 156,  416 => 152,  412 => 150,  409 => 149,  405 => 148,  399 => 146,  397 => 145,  394 => 144,  389 => 141,  383 => 140,  377 => 136,  371 => 134,  369 => 133,  366 => 132,  360 => 130,  358 => 129,  352 => 127,  349 => 126,  346 => 125,  343 => 124,  340 => 123,  338 => 122,  331 => 118,  327 => 116,  318 => 112,  314 => 110,  312 => 109,  309 => 108,  306 => 107,  303 => 106,  300 => 105,  297 => 104,  294 => 103,  291 => 102,  288 => 101,  285 => 100,  282 => 99,  279 => 98,  276 => 97,  273 => 96,  269 => 95,  263 => 93,  261 => 92,  258 => 91,  253 => 88,  244 => 84,  238 => 82,  231 => 78,  227 => 77,  223 => 76,  219 => 75,  215 => 74,  211 => 73,  205 => 71,  203 => 70,  195 => 66,  191 => 64,  188 => 63,  186 => 62,  180 => 61,  176 => 60,  172 => 58,  168 => 57,  162 => 55,  160 => 54,  157 => 53,  152 => 50,  143 => 46,  137 => 44,  130 => 40,  125 => 39,  119 => 37,  117 => 36,  113 => 35,  109 => 34,  105 => 33,  101 => 32,  95 => 30,  93 => 29,  82 => 25,  76 => 24,  72 => 23,  68 => 21,  64 => 20,  58 => 18,  56 => 17,  50 => 14,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  558 => 208,  551 => 203,  541 => 199,  537 => 198,  531 => 195,  525 => 194,  521 => 193,  513 => 191,  509 => 190,  501 => 186,  499 => 185,  496 => 184,  492 => 182,  486 => 181,  477 => 177,  473 => 175,  467 => 171,  461 => 169,  455 => 167,  453 => 166,  449 => 165,  446 => 164,  440 => 162,  434 => 160,  431 => 159,  425 => 157,  423 => 156,  416 => 152,  412 => 150,  409 => 149,  405 => 148,  399 => 146,  397 => 145,  394 => 144,  389 => 141,  383 => 140,  377 => 136,  371 => 134,  369 => 133,  366 => 132,  360 => 130,  358 => 129,  352 => 127,  349 => 126,  346 => 125,  343 => 124,  340 => 123,  338 => 122,  331 => 118,  327 => 116,  318 => 112,  314 => 110,  312 => 109,  309 => 108,  306 => 107,  303 => 106,  300 => 105,  297 => 104,  294 => 103,  291 => 102,  288 => 101,  285 => 100,  282 => 99,  279 => 98,  276 => 97,  273 => 96,  269 => 95,  263 => 93,  261 => 92,  258 => 91,  253 => 88,  244 => 84,  238 => 82,  231 => 78,  227 => 77,  223 => 76,  219 => 75,  215 => 74,  211 => 73,  205 => 71,  203 => 70,  195 => 66,  191 => 64,  188 => 63,  186 => 62,  180 => 61,  176 => 60,  172 => 58,  168 => 57,  162 => 55,  160 => 54,  157 => 53,  152 => 50,  143 => 46,  137 => 44,  130 => 40,  125 => 39,  119 => 37,  117 => 36,  113 => 35,  109 => 34,  105 => 33,  101 => 32,  95 => 30,  93 => 29,  82 => 25,  76 => 24,  72 => 23,  68 => 21,  64 => 20,  58 => 18,  56 => 17,  50 => 14,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

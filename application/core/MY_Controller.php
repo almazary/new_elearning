@@ -31,7 +31,7 @@ class MY_Controller extends CI_Controller
         $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email'));
 
         # load saja semua model
-        $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model'));
+        $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model', 'msg_model'));
 
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
@@ -106,6 +106,28 @@ class MY_Controller extends CI_Controller
         }
     }
 
+    function check_penerima_pesan($username = '') {
+        $get_email = get_email_from_string($username);
+
+        if (empty($get_email)) {
+            $this->form_validation->set_message('check_penerima_pesan', 'Username tidak ditemukan.');
+            return false;
+        } else {
+            # cek ada tidak
+            if (!$this->check_username_exist($get_email)) {
+                $this->form_validation->set_message('check_penerima_pesan', 'Username tidak ditemukan.');
+                return false;
+            }
+
+            # cek sama dengan yang login tidak
+            if ($get_email == get_sess_data('login', 'username')) {
+                $this->form_validation->set_message('check_penerima_pesan', 'Anda tidak dapat mengirim pesan ke diri sendiri.');
+                return false;
+            }
+            return true;
+        }
+    }
+
     function create_img_thumb($source_path = '', $marker = '_thumb', $width = '90', $height = '90')
     {
         $config['image_library']  = 'gd2';
@@ -165,5 +187,57 @@ class MY_Controller extends CI_Controller
         }
 
         return $jadwal;
+    }
+
+    function format_msg($retrieve)
+    {
+        # jika inbox yang dicari pengirimnya
+        if ($retrieve['type_id'] == 1) {
+            $get_user = $retrieve['sender_receiver_id'];
+        } elseif ($retrieve['type_id'] == 2) {
+            $get_user = $retrieve['owner_id'];
+        }
+
+        # cari sender/receiver
+        $login = $this->login_model->retrieve($get_user);
+        if (!empty($login['siswa_id'])) {
+            $user = $this->siswa_model->retrieve($login['siswa_id']);
+            if (is_admin()) {
+                $user['link_profil'] = site_url('siswa/detail/' . $user['status_id'] . '/' . $user['id']);
+            } else {
+                $user['link_profil'] = site_url('siswa/detail/' . $user['id']);
+            }
+            $user['link_image'] = get_url_image_siswa($user['foto'], 'medium', $user['jenis_kelamin']);
+
+        } elseif (!empty($login['pengajar_id'])) {
+            $user = $this->pengajar_model->retrieve($login['pengajar_id']);
+            if (is_admin()) {
+                $user['link_profil'] = site_url('pengajar/detail/' . $user['status_id'] . '/' . $user['id']);
+            } else {
+                $user['link_profil'] = site_url('pengajar/detail/' . $user['id']);
+            }
+            $user['link_image'] = get_url_image_pengajar($user['foto'], 'medium', $user['jenis_kelamin']);
+        }
+
+        $retrieve['profil'] = $user;
+        $retrieve['login']  = $login;
+
+        # format tanggal, jika hari ini
+        if (date('Y-m-d') == date('Y-m-d', strtotime($retrieve['date']))) {
+            $retrieve['date'] = date('H:i', strtotime($retrieve['date']));
+        }
+        # kemarin
+        elseif (date('Y-m-d', strtotime('-1 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
+            $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' kemarin';
+        }
+        # lusa
+        elseif (date('Y-m-d', strtotime('-2 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
+            $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' lusa';
+        }
+        else {
+            $retrieve['date'] = tgl_jam_indo($retrieve['date']);
+        }
+
+        return $retrieve;
     }
 }
