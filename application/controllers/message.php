@@ -10,6 +10,12 @@ class Message extends MY_Controller
             $this->msg_model->create_table();
         }
 
+        # cek versi, kalo masih 1.0 update ke 1.1
+        $versi = get_pengaturan('versi', 'value');
+        if ($versi == '1.0') {
+            $this->config_model->update('versi', 'Versi', '1.1');
+        }
+
         must_login();
     }
 
