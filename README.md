@@ -18,3 +18,7 @@ Pengguna pada elearning terbagi menjadi :<br>
 3. Administrator (Pengajar yang bertindak sebagai administrator)<br>
 
 Versi pertama dimulai dari 1.0
+<br>
+Versi terbaru : 1.1
+<br>
+<a href="http://dokumenary.net">Portal Update</a>
