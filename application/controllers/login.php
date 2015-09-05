@@ -289,7 +289,7 @@ class Login extends MY_Controller
 
             # kirim email disini
             @kirim_email('email-template-link-reset', $retrieve['username'], array(
-                'link_reset' => site_url('reset_password/' . $reset_kode)
+                'link_reset' => site_url('login/reset_password/' . $reset_kode)
             ));
 
             $this->session->set_flashdata('lupa_password', get_alert('success', 'Link reset password telah dikirimkan keemail anda.'));
