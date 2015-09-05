@@ -20,5 +20,5 @@ Pengguna pada elearning terbagi menjadi :<br>
 Versi pertama dimulai dari 1.0
 <br>
 Versi terbaru : 1.1
-<br>
-<a href="http://dokumenary.net">Portal Update</a>
+<br><br>
+<a href="http://dokumenary.net">PORTAL UPDATE</a> | <a href="http://www.dokumenary.net/2015/08/23/new-elearning-versi-1-0/">CARA INSTALL</a>
