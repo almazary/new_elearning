@@ -31,7 +31,7 @@ class MY_Controller extends CI_Controller
         $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email'));
 
         # load saja semua model
-        $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model', 'msg_model'));
+        $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model', 'msg_model', 'pengumuman_model'));
 
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
