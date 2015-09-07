@@ -575,5 +575,5 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;
 -- Constraints for table `{$prefix}messages`
 --
 ALTER TABLE `{$prefix}messages`
-ADD CONSTRAINT `fk_messages_login1` FOREIGN KEY (`owner_id`) REFERENCES `{prefix}login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_messages_login2` FOREIGN KEY (`sender_receiver_id`) REFERENCES `{prefix}login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ADD CONSTRAINT `fk_messages_login1` FOREIGN KEY (`owner_id`) REFERENCES `{$prefix}login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_messages_login2` FOREIGN KEY (`sender_receiver_id`) REFERENCES `{$prefix}login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
