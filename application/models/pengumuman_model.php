@@ -100,24 +100,30 @@ class Pengumuman_model extends CI_Model
      * @param  string  $konten
      * @param  date    $tgl_tampil
      * @param  date    $tgl_tutup
+     * @param  integer $tampil_siswa
+     * @param  integer $tampil_pengajar
      * @param  integer $pengajar_id
      * @return boolean
      */
     public function update(
         $id,
-        $judul      = '',
-        $konten     = '',
-        $tgl_tampil = '',
-        $tgl_tutup  = '',
+        $judul           = '',
+        $konten          = '',
+        $tgl_tampil      = '',
+        $tgl_tutup       = '',
+        $tampil_siswa    = '',
+        $tampil_pengajar = '',
         $pengajar_id
     ) {
         $this->db->where('id', $id);
         $this->db->update($this->table, array(
-            'judul'       => $judul,
-            'konten'      => $konten,
-            'tgl_tampil'  => $tgl_tampil,
-            'tgl_tutup'   => $tgl_tutup,
-            'pengajar_id' => $pengajar_id
+            'judul'           => $judul,
+            'konten'          => $konten,
+            'tgl_tampil'      => $tgl_tampil,
+            'tgl_tutup'       => $tgl_tutup,
+            'tampil_siswa'    => $tampil_siswa,
+            'tampil_pengajar' => $tampil_pengajar,
+            'pengajar_id'     => $pengajar_id
         ));
 
         return true;
@@ -130,17 +136,21 @@ class Pengumuman_model extends CI_Model
      * @param  string  $konten
      * @param  date    $tgl_tampil
      * @param  date    $tgl_tutup
+     * @param  integer $tampil_siswa
+     * @param  integer $tampil_pengajar
      * @param  integer $pengajar_id
      * @return integer last insert id
      */
-    public function create($judul = '', $konten = '', $tgl_tampil = '', $tgl_tutup = '', $pengajar_id)
+    public function create($judul = '', $konten = '', $tgl_tampil = '', $tgl_tutup = '', $tampil_siswa = '', $tampil_pengajar = '', $pengajar_id)
     {
         $this->db->insert($this->table, array(
-            'judul'       => $judul,
-            'konten'      => $konten,
-            'tgl_tampil'  => $tgl_tampil,
-            'tgl_tutup'   => $tgl_tutup,
-            'pengajar_id' => $pengajar_id
+            'judul'           => $judul,
+            'konten'          => $konten,
+            'tgl_tampil'      => $tgl_tampil,
+            'tgl_tutup'       => $tgl_tutup,
+            'tampil_siswa'    => $tampil_siswa,
+            'tampil_pengajar' => $tampil_pengajar,
+            'pengajar_id'     => $pengajar_id
         ));
 
         return $this->db->insert_id();
@@ -160,6 +170,8 @@ class Pengumuman_model extends CI_Model
           `konten` text NOT NULL,
           `tgl_tampil` date NOT NULL,
           `tgl_tutup` date NOT NULL,
+          `tampil_siswa` tinyint(1) NOT NULL DEFAULT '1',
+          `tampil_pengajar` tinyint(1) NOT NULL DEFAULT '1',
           `pengajar_id` int(11) NOT NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 

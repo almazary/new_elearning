@@ -1,0 +1,63 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Buat Pengumuman - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ anchor('pengumuman', 'Pengumuman')|raw }} / Buat Pengumuman</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('pengumuman')|raw }}
+
+        {{ form_open_multipart('pengumuman/add', {'class' : 'form-horizontal row-fluid'})|raw }}
+            <div class="control-group">
+                <label class="control-label">Judul <span class="text-error">*</span></label>
+                <div class="controls">
+                    <input type="text" name="judul" class="span12" value="{{ set_value('judul') }}">
+                    <br>{{ form_error('judul')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Tgl. Tampil <span class="text-error">*</span></label>
+                <div class="controls">
+                    <input type="text" name="tgl_tampil" class="span4" value="{{ set_value('tgl_tampil') }}" id="tgl-tampil">
+                    <br>{{ form_error('tgl_tampil')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Konten <span class="text-error">*</span></label>
+                <div class="controls">
+                    <textarea name="konten" id="konten" style="height:400px;width:100%;">{{ set_value('konten')|raw }}</textarea>
+                    {{ form_error('konten')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Tampil Disiswa</label>
+                <div class="controls">
+                    <label class="radio inline"><input type="radio" name="tampil_siswa" value="1" {{ set_radio('tampil_siswa', '1', true) }}> Ya</label>
+                    <label class="radio inline"><input type="radio" name="tampil_siswa" value="0" {{ set_radio('tampil_siswa', '0') }}> Tidak</label>
+                    <br>{{ form_error('tampil_siswa')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Tampil Dipengajar</label>
+                <div class="controls">
+                    <label class="radio inline"><input type="radio" name="tampil_pengajar" value="1" {{ set_radio('tampil_pengajar', '1', true) }}> Ya</label>
+                    <label class="radio inline"><input type="radio" name="tampil_pengajar" value="0" {{ set_radio('tampil_pengajar', '0') }}> Tidak</label>
+                    <br>{{ form_error('tampil_pengajar')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <a href="{{ site_url('pengumuman') }}" class="btn btn-default">Kembali</a>
+                </div>
+            </div>
+        {{ form_close()|raw }}
+
+    </div>
+</div>
+{% endblock %}

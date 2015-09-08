@@ -34,6 +34,20 @@ class Welcome extends MY_Controller
             );
 
             $data['tugas_terbaru'] = $retrieve_all_tugas['results'];
+
+            $where_pengumuman = array(
+                'tgl_tampil <=' => date('Y-m-d'),
+                'tgl_tutup >='  => date('Y-m-d'),
+                'tampil_siswa'  => 1
+            );
+        }
+
+        if (is_pengajar()) {
+            $where_pengumuman = array(
+                'tgl_tampil <='   => date('Y-m-d'),
+                'tgl_tutup >='    => date('Y-m-d'),
+                'tampil_pengajar' => 1
+            );
         }
 
         if (is_admin()) {
@@ -50,7 +64,15 @@ class Welcome extends MY_Controller
                 base_url('assets/comp/jquery/info-update.js'),
             ));
             $data['comp_js'] = $html_js;
+
+            $where_pengumuman = array(
+                'tgl_tampil <='   => date('Y-m-d'),
+                'tgl_tutup >='    => date('Y-m-d')
+            );
         }
+
+        # ambil pengumuman yang sudah tampil
+        $data['pengumuman'] = $this->pengumuman_model->retrieve_all(10, 1, $where_pengumuman, false);
 
         $this->twig->display('welcome.html', $data);
     }

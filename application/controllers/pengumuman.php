@@ -23,7 +23,7 @@ class Pengumuman extends MY_Controller
             $allow_action = array('detail', 'edit', 'delete');
         } elseif (is_pengajar()) {
             # kalo dia yang buat
-            if ($val['pengajar_id'] == get_sess_data('user', 'id')) {
+            if ($pengumuman['pengajar_id'] == get_sess_data('user', 'id')) {
                 $allow_action = array('detail', 'edit', 'delete');
             } else {
                 $allow_action = array('detail');
@@ -45,19 +45,13 @@ class Pengumuman extends MY_Controller
         if (is_siswa()) {
             $where = array(
                 'tgl_tampil <=' => date('Y-m-d'),
-                'tgl_tutup >='  => date('Y-m-d')
+                'tgl_tutup >='  => date('Y-m-d'),
+                'tampil_siswa'  => 1
             );
         }
 
-        # jika pengajar
-        elseif (is_pengajar()) {
-            $where = array(
-                'pengajar_id' => get_sess_data('user', 'id')
-            );
-        }
-
-        # jika admin
-        elseif (is_admin()) {
+        # jika admin / pengajar
+        elseif (is_admin() OR is_pengajar()) {
             $where = array();
         }
 
@@ -90,4 +84,139 @@ class Pengumuman extends MY_Controller
         $this->twig->display('list-pengumuman.html', $data);
     }
 
+    function add()
+    {
+        # yang bisa buat pengumuman adalah pengajar / admin
+        if (!is_pengajar() AND !is_admin()) {
+            redirect('pengumuman/index');
+        }
+
+        if ($this->form_validation->run('pengumuman') == true) {
+            $judul           = $this->input->post('judul', true);
+            $split           = explode(" s/d ", $this->input->post('tgl_tampil', true));
+            $tgl_tampil      = $split[0];
+            $tgl_tutup       = $split[1];
+            $konten          = $this->input->post('konten', true);
+            $tampil_siswa    = $this->input->post('tampil_siswa', true);
+            $tampil_pengajar = $this->input->post('tampil_pengajar', true);
+
+            $this->pengumuman_model->create($judul, $konten, $tgl_tampil, $tgl_tutup, $tampil_siswa, $tampil_pengajar, get_sess_data('user', 'id'));
+
+            $this->session->set_flashdata('pengumuman', get_alert('success', 'Pengumuman berhasil dibuat.'));
+            redirect('pengumuman/index/1');
+        }
+
+        # load komponen
+        $html_js = get_tinymce('konten');
+        $html_js .= load_comp_js(array(
+            base_url('assets/comp/jquery/moment.min.js'),
+            base_url('assets/comp/daterangepicker/jquery.daterangepicker.js'),
+            base_url('assets/comp/daterangepicker/setup.js'),
+        ));
+
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/daterangepicker/daterangepicker.css')));
+
+        $this->twig->display('tambah-pengumuman.html', $data);
+    }
+
+    function edit($segment_3 = '')
+    {
+        # yang bisa edit pengumuman adalah pengajar / admin
+        if (!is_pengajar() AND !is_admin()) {
+            redirect('pengumuman/index');
+        }
+
+        $id = (int)$segment_3;
+        $pengumuman = $this->pengumuman_model->retrieve(array('id' => $id));
+        if (empty($pengumuman)) {
+            $this->session->set_flashdata('pengumuman', get_alert('warning', 'Pengumuman tidak ditemukan.'));
+            redirect('pengumuman/index/1');
+        }
+
+        $allow_action = $this->get_allow_action($pengumuman);
+        if (!in_array('edit', $allow_action)) {
+            $this->session->set_flashdata('pengumuman', get_alert('warning', 'Akses ditolak.'));
+            redirect('pengumuman/index/1');
+        }
+
+        $data['p'] = $pengumuman;
+
+        if ($this->form_validation->run('pengumuman') == true) {
+            $judul           = $this->input->post('judul', true);
+            $split           = explode(" s/d ", $this->input->post('tgl_tampil', true));
+            $tgl_tampil      = $split[0];
+            $tgl_tutup       = $split[1];
+            $konten          = $this->input->post('konten', true);
+            $tampil_siswa    = $this->input->post('tampil_siswa', true);
+            $tampil_pengajar = $this->input->post('tampil_pengajar', true);
+
+            $this->pengumuman_model->update($pengumuman['id'], $judul, $konten, $tgl_tampil, $tgl_tutup, $tampil_siswa, $tampil_pengajar, get_sess_data('user', 'id'));
+
+            $this->session->set_flashdata('pengumuman', get_alert('success', 'Pengumuman berhasil diperbaharui.'));
+            redirect('pengumuman/edit/' . $pengumuman['id']);
+        }
+
+        # load komponen
+        $html_js = get_tinymce('konten');
+        $html_js .= load_comp_js(array(
+            base_url('assets/comp/jquery/moment.min.js'),
+            base_url('assets/comp/daterangepicker/jquery.daterangepicker.js'),
+            base_url('assets/comp/daterangepicker/setup.js'),
+        ));
+
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/daterangepicker/daterangepicker.css')));
+
+        $this->twig->display('edit-pengumuman.html', $data);
+    }
+
+    function delete($segment_3 = '')
+    {
+        # yang bisa edit pengumuman adalah pengajar / admin
+        if (!is_pengajar() AND !is_admin()) {
+            redirect('pengumuman/index');
+        }
+
+        $id = (int)$segment_3;
+        $pengumuman = $this->pengumuman_model->retrieve(array('id' => $id));
+        if (empty($pengumuman)) {
+            $this->session->set_flashdata('pengumuman', get_alert('warning', 'Pengumuman tidak ditemukan.'));
+            redirect('pengumuman/index/1');
+        }
+
+        $allow_action = $this->get_allow_action($pengumuman);
+        if (!in_array('delete', $allow_action)) {
+            $this->session->set_flashdata('pengumuman', get_alert('warning', 'Akses ditolak.'));
+            redirect('pengumuman/index/1');
+        }
+
+        $this->pengumuman_model->delete($pengumuman['id']);
+
+        $this->session->set_flashdata('pengumuman', get_alert('success', 'Pengumuman berhasil dihapus.'));
+        redirect('pengumuman/index/1');
+    }
+
+    function detail($segment_3 = '')
+    {
+        $id = (int)$segment_3;
+        $pengumuman = $this->pengumuman_model->retrieve(array('id' => $id));
+        if (empty($pengumuman)) {
+            $this->session->set_flashdata('pengumuman', get_alert('warning', 'Pengumuman tidak ditemukan.'));
+            redirect('pengumuman/index/1');
+        }
+
+        # cari pengajar
+        $pengajar = $this->pengajar_model->retrieve($pengumuman['pengajar_id']);
+        if (is_admin()) {
+            $pengajar['link_profil'] = site_url('pengajar/detail/' . $pengajar['status_id'] . '/' . $pengajar['id']);
+        } else {
+            $pengajar['link_profil'] = site_url('pengajar/detail/' . $pengajar['id']);
+        }
+        $pengumuman['pengajar']     = $pengajar;
+        $pengumuman['allow_action'] = $this->get_allow_action($pengumuman);
+        $data['p']                  = $pengumuman;
+
+        $this->twig->display('detail-pengumuman.html', $data);
+    }
 }

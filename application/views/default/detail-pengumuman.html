@@ -1,0 +1,42 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Detail Pengumuman - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    {% if is_siswa() == false %}
+    <div class="module-head">
+        <h3>{{ anchor('pengumuman', 'Pengumuman')|raw }} / Detail Pengumuman</h3>
+    </div>
+    {% endif %}
+
+    <div class="module-body">
+        {{ get_flashdata('pengumuman')|raw }}
+
+        <div class="btn-group pull-right" style="margin-left: 10px;">
+        {% for a in p.allow_action %}
+            {% if a == 'edit' %}
+            <a class="btn btn-default btn-small" href="{{ site_url('pengumuman/edit/' ~ p.id) }}" data-toggle="tooltip" title="Edit"><i class="icon-edit"></i></a>
+            {% endif %}
+
+            {% if a == 'delete' %}
+            <a onclick="return confirm('Anda yakin ingin menghapus?')" class="btn btn-default btn-small" href="{{ site_url('pengumuman/delete/' ~ p.id) }}" data-toggle="tooltip" title="Edit"><i class="icon-trash"></i></a>
+            {% endif %}
+        {% endfor %}
+        </div>
+
+        <b style="margin-bottom: 0px;">{{ p.judul }}</b>
+        <small>
+        <ul class="unstyled inline" style="margin-left: -5px;">
+            <li><b>Pembuat : </b>{{ anchor(p.pengajar.link_profil, p.pengajar.nama)|raw }}</li>
+            <li><b>Tgl. Tampil : </b>{{ tgl_indo(p.tgl_tampil) }} s/d {{ tgl_indo(p.tgl_tutup) }}</li>
+        </ul>
+        </small>
+        <hr style="margin-top: 5px;margin-bottom: 10px;">
+
+        {{ p.konten|raw }}
+    </div>
+</div>
+{% endblock %}
