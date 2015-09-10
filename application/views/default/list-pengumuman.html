@@ -1,0 +1,71 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Pengumuman - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Pengumuman</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('pengumuman')|raw }}
+
+        {% if is_siswa() == false %}
+        <div class="btn-group pull-right">
+            {{ anchor('pengumuman/add', 'Buat Pengumuman', {'class' : 'btn btn-primary'})|raw }}
+        </div>
+        {% endif %}
+        <form class="form-search" method="get" action="{{ site_url('pengumuman/index/' ~ page_no ~ '/') }}">
+            <div class="input-append">
+                <input type="text" class="span3 search-query" placeholder="cari pengumuman..." name="q" value="{{ keyword }}">
+                <button type="submit" class="btn btn-primary"><i class="icon-search"></i></button>
+            </div>
+        </form>
+        <br>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th width="5%">ID</th>
+                    <th>Judul</th>
+                    <th width="17%">Tgl. Tampil</th>
+                    <th width="17%">Tgl. Tutup</th>
+                    <th width="15%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pengumuman %}
+                <tr>
+                    <td><b>{{ p.id }}</b></td>
+                    <td><a href="{{ site_url('pengumuman/detail/' ~ p.id) }}"><b>{{ p.judul }}</b></a></td>
+                    <td>{{ tgl_indo(p.tgl_tampil) }}</td>
+                    <td>{{ tgl_indo(p.tgl_tutup) }}</td>
+                    <td>
+                        <div class="btn-group">
+                        {% for a in p.allow_action %}
+                            {% if a == 'detail' %}
+                            <a class="btn btn-default btn-small" href="{{ site_url('pengumuman/detail/' ~ p.id) }}" data-toggle="tooltip" title="Detail"><i class="icon-zoom-in"></i></a>
+                            {% endif %}
+
+                            {% if a == 'edit' %}
+                            <a class="btn btn-default btn-small" href="{{ site_url('pengumuman/edit/' ~ p.id) }}" data-toggle="tooltip" title="Edit"><i class="icon-edit"></i></a>
+                            {% endif %}
+
+                            {% if a == 'delete' %}
+                            <a onclick="return confirm('Anda yakin ingin menghapus?')" class="btn btn-default btn-small" href="{{ site_url('pengumuman/delete/' ~ p.id) }}" data-toggle="tooltip" title="Edit"><i class="icon-trash"></i></a>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        {{ pagination|raw }}
+
+    </div>
+</div>
+{% endblock %}

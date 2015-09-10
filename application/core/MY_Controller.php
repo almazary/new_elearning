@@ -31,7 +31,7 @@ class MY_Controller extends CI_Controller
         $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email'));
 
         # load saja semua model
-        $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model', 'msg_model'));
+        $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model', 'msg_model', 'pengumuman_model'));
 
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
@@ -126,6 +126,34 @@ class MY_Controller extends CI_Controller
             }
             return true;
         }
+    }
+
+    function check_tgl_tampil($tgl_tampil = '')
+    {
+        $valid = true;
+        if (empty($tgl_tampil)) {
+            $valid = false;
+        } else {
+            $split = explode(" s/d ", $tgl_tampil);
+            if (empty($split[1])) {
+                $valid = false;
+            }
+
+            if (!preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $split[0])) {
+                $valid = false;
+            }
+
+            if (!empty($split[1]) AND !preg_match("/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/", $split[1])) {
+                $valid = false;
+            }
+        }
+
+        if (!$valid) {
+            $this->form_validation->set_message('check_tgl_tampil', 'Tgl. Tampil tidak valid.');
+            return false;
+        }
+
+        return true;
     }
 
     function create_img_thumb($source_path = '', $marker = '_thumb', $width = '90', $height = '90')

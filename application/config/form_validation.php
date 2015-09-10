@@ -995,3 +995,31 @@ $config['message/create'] = array(
         'rules' => 'trim|xss_clean|required'
     ),
 );
+
+$config['pengumuman'] = array(
+    array(
+        'field' => 'judul',
+        'label' => 'Judul',
+        'rules' => 'trim|xss_clean|required'
+    ),
+    array(
+        'field' => 'tgl_tampil',
+        'label' => 'Tgl. Tampil',
+        'rules' => 'trim|xss_clean|required|callback_check_tgl_tampil'
+    ),
+    array(
+        'field' => 'konten',
+        'label' => 'Konten',
+        'rules' => 'trim|xss_clean|required'
+    ),
+    array(
+        'field' => 'tampil_siswa',
+        'label' => 'Tampil kesiswa',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'tampil_pengajar',
+        'label' => 'Tampil kepengajar',
+        'rules' => 'trim|xss_clean|numeric'
+    ),
+);

@@ -105,7 +105,7 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                         <input type=\"radio\" name=\"registrasi-siswa\" value=\"0\" ";
         // line 44
         echo twig_escape_filter($this->env, set_radio("registrasi-siswa", "0", (((get_pengaturan("registrasi-siswa", "value") == "0")) ? (true) : (""))), "html", null, true);
-        echo "> Sembuyikan
+        echo "> Sembunyikan
                     </label>
                 </div>
             </div>
@@ -122,7 +122,7 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                         <input type=\"radio\" name=\"registrasi-pengajar\" value=\"0\" ";
         // line 55
         echo twig_escape_filter($this->env, set_radio("registrasi-pengajar", "0", (((get_pengaturan("registrasi-pengajar", "value") == "0")) ? (true) : (""))), "html", null, true);
-        echo "> Sembuyikan
+        echo "> Sembunyikan
                     </label>
                 </div>
             </div>

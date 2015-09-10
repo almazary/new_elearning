@@ -132,6 +132,11 @@ class Materi extends MY_Controller
 
     function add($segment_3 = '')
     {
+        # versi 1.2 siswa tidak bisa tambah materi
+        if (is_siswa()) {
+            redirect('materi');
+        }
+
         $type = (string)strtolower($segment_3);
         if (!in_array($type, array('file', 'tertulis'))) {
             redirect('materi');
@@ -216,6 +221,11 @@ class Materi extends MY_Controller
 
     function edit($segment_3 = '', $segment_4 = '', $segment_5 = '')
     {
+        # versi 1.2 siswa tidak bisa tambah,edit,hapus materi
+        if (is_siswa()) {
+            redirect('materi');
+        }
+
         $type      = (string)strtolower($segment_3);
         $materi_id = (int)$segment_4;
         $uri_back  = (string)$segment_5;
@@ -376,6 +386,11 @@ class Materi extends MY_Controller
 
     function delete($segment_3 = '', $segment_4 = '')
     {
+        # versi 1.2 siswa tidak bisa tambah,edit,hapus materi
+        if (is_siswa()) {
+            redirect('materi');
+        }
+
         $materi_id = (int)$segment_3;
         $uri_back  = (string)$segment_4;
 
