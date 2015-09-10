@@ -205,12 +205,56 @@ class Welcome extends MY_Controller
             $retrieve_all_pesan[$key] = $this->format_msg($val);
         }
 
+        # cari pengumuman
+        if (is_siswa()) {
+            $where_pengumuman = array(
+                'tgl_tampil <=' => date('Y-m-d'),
+                'tgl_tutup >='  => date('Y-m-d'),
+                'tampil_siswa'  => 1
+            );
+        } elseif (is_pengajar()) {
+            $where_pengumuman = array(
+                'tgl_tampil <='   => date('Y-m-d'),
+                'tgl_tutup >='    => date('Y-m-d'),
+                'tampil_pengajar' => 1
+            );
+        } elseif (is_admin()) {
+            $where_pengumuman = array();
+        }
+        $where_pengumuman = array_merge($where_pengumuman, array(
+            'judul' => $q, 'konten' => $q
+        ));
+
+        $retrieve_all_pengumuman = $this->pengumuman_model->retrieve_all(10, 1, $where_pengumuman, false);
+        foreach ($retrieve_all_pengumuman as $key => &$val) {
+            $val['pengajar'] = $this->pengajar_model->retrieve($val['pengajar_id']);
+
+            # allow action
+            if (is_siswa()) {
+                $allow_action = array('detail');
+            } elseif (is_admin()) {
+                $allow_action = array('detail', 'edit', 'delete');
+            } elseif (is_pengajar()) {
+                # kalo dia yang buat
+                if ($val['pengajar_id'] == get_sess_data('user', 'id')) {
+                    $allow_action = array('detail', 'edit', 'delete');
+                } else {
+                    $allow_action = array('detail');
+                }
+            }
+
+            $val['allow_action'] = $allow_action;
+
+            $retrieve_all_pengumuman[$key] = $val;
+        }
+
         $results = array(
-            'siswa'    => $retrieve_all_siswa,
-            'pengajar' => $retrieve_all_pengajar,
-            'materi'   => $retrieve_all_materi,
-            'tugas'    => $retrieve_all_tugas,
-            'pesan'    => $retrieve_all_pesan
+            'siswa'      => $retrieve_all_siswa,
+            'pengajar'   => $retrieve_all_pengajar,
+            'materi'     => $retrieve_all_materi,
+            'tugas'      => $retrieve_all_tugas,
+            'pesan'      => $retrieve_all_pesan,
+            'pengumuman' => $retrieve_all_pengumuman
         );
 
         $data['results'] = $results;
@@ -223,8 +267,8 @@ class Welcome extends MY_Controller
                 base_url('assets/comp/colorbox/act-siswa.js'),
                 base_url('assets/comp/colorbox/act-pengajar.js')
             ));
-            $data['comp_js']      = $html_js;
-            $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+            $data['comp_js']  = $html_js;
+            $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
         }
 
         $this->twig->display('search-results.html', $data);

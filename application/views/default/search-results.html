@@ -206,6 +206,49 @@ Pencarian - {{ parent() }}
         <br>
         {% endif %}
 
+        {% if results.pengumuman is not empty %}
+        <b><i class="icon-bullhorn"></i> Pengumuman </b>(ditemukan {{ count(results.pengumuman) }} record)
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th width="5%">ID</th>
+                    <th>Judul</th>
+                    <th width="17%">Tgl. Tampil</th>
+                    <th width="17%">Tgl. Tutup</th>
+                    <th width="15%"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in results.pengumuman %}
+                <tr>
+                    <td><b>{{ p.id }}</b></td>
+                    <td><a href="{{ site_url('pengumuman/detail/' ~ p.id) }}"><b>{{ p.judul }}</b></a></td>
+                    <td>{{ tgl_indo(p.tgl_tampil) }}</td>
+                    <td>{{ tgl_indo(p.tgl_tutup) }}</td>
+                    <td>
+                        <div class="btn-group">
+                        {% for a in p.allow_action %}
+                            {% if a == 'detail' %}
+                            <a class="btn btn-default btn-small" href="{{ site_url('pengumuman/detail/' ~ p.id) }}" data-toggle="tooltip" title="Detail"><i class="icon-zoom-in"></i></a>
+                            {% endif %}
+
+                            {% if a == 'edit' %}
+                            <a class="btn btn-default btn-small" href="{{ site_url('pengumuman/edit/' ~ p.id) }}" data-toggle="tooltip" title="Edit"><i class="icon-edit"></i></a>
+                            {% endif %}
+
+                            {% if a == 'delete' %}
+                            <a onclick="return confirm('Anda yakin ingin menghapus?')" class="btn btn-default btn-small" href="{{ site_url('pengumuman/delete/' ~ p.id) }}" data-toggle="tooltip" title="Edit"><i class="icon-trash"></i></a>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        {% endif %}
+
     </div>
 </div>
 {% endblock %}

@@ -151,7 +151,7 @@ class Pengumuman extends MY_Controller
             $tampil_siswa    = $this->input->post('tampil_siswa', true);
             $tampil_pengajar = $this->input->post('tampil_pengajar', true);
 
-            $this->pengumuman_model->update($pengumuman['id'], $judul, $konten, $tgl_tampil, $tgl_tutup, $tampil_siswa, $tampil_pengajar, get_sess_data('user', 'id'));
+            $this->pengumuman_model->update($pengumuman['id'], $judul, $konten, $tgl_tampil, $tgl_tutup, $tampil_siswa, $tampil_pengajar, $pengumuman['pengajar_id']);
 
             $this->session->set_flashdata('pengumuman', get_alert('success', 'Pengumuman berhasil diperbaharui.'));
             redirect('pengumuman/edit/' . $pengumuman['id']);
