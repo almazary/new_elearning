@@ -8,6 +8,36 @@
  */
 class Config_model extends CI_Model
 {
+    /**
+     * Method untuk mendapatkan semua gambar slider
+     *
+     * @return array
+     */
+    public function get_all_slider_img()
+    {
+        $this->db->where('id', 'img-slide-1');
+        $this->db->or_where('id', 'img-slide-2');
+        $this->db->or_where('id', 'img-slide-3');
+        $this->db->or_where('id', 'img-slide-4');
+        $this->db->order_by('id');
+        $results = $this->db->get('pengaturan');
+
+        $data = array();
+        foreach ($results->result_array() as $val) {
+            if (empty($val['value'])) {
+                continue;
+            }
+
+            # cari title nya sekalian
+            $title_id = substr($val['id'], -1);
+
+            $retrieve     = $this->retrieve('info-slide-' . $title_id);
+            $val['title'] = empty($retrieve['value']) ? '' : $retrieve['value'];
+            $data[]       = $val;
+        }
+
+        return $data;
+    }
 
     /**
      * Method untuk menghapus field tambahan

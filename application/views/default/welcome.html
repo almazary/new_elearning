@@ -53,8 +53,8 @@
         <div class="span6">
             <div class="well well-small" style="box-shadow: none;background-color: #FFF;">
                 <div class="pull-right">
-                    <a class="muted" href="{{ portal_update_link }}" target="_blank">Portal update</a> |
-                    <a class="muted" href="{{ bug_tracker_link }}" target="_blank">Bug tracker</a>
+                    <a class="muted" href="{{ portal_update_link }}" target="_tab">Portal update</a> |
+                    <a class="muted" href="{{ bug_tracker_link }}" target="_tab">Bug tracker</a>
                 </div>
                 <b><i class="icon-bullhorn"></i> Info Update</b>
                 <table class="table table-striped table-condensed" id="info-update"></table>
@@ -110,7 +110,7 @@
                     {% for m in materi_terbaru %}
                     <tr>
                         <td>
-                            <a href="{{ site_url('materi/detail/' ~ m.id) }}" target="_blank">{{ m.judul }}</a>
+                            <a href="{{ site_url('materi/detail/' ~ m.id) }}" target="_tab">{{ m.judul }}</a>
                         </td>
                     </tr>
                     {% endfor %}

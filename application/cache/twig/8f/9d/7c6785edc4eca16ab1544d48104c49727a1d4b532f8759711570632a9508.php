@@ -158,12 +158,172 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                 </div>
             </div>
             <div class=\"control-group\">
+                <label class=\"control-label\">Slider halaman login</label>
+                <div class=\"controls\" style=\"background-color: #FBFBFB; padding: 10px;border-radius: 5px;\">
+                    <table class=\"table table-condensed\">
+                        <tr>
+                            <td style=\"border-top: none;\">
+                                <div class=\"row-fluid\">
+                                    <div class=\"span2\" style=\"margin-bottom: 10px;\">
+                                        Gambar 1
+                                    </div>
+                                    <div class=\"span10\">
+                                        ";
+        // line 89
+        if (get_pengaturan("img-slide-1", "value")) {
+            // line 90
+            echo "                                        <a href=\"";
+            echo twig_escape_filter($this->env, site_url("welcome/pengaturan/?delete-img=1"), "html", null, true);
+            echo "\" class=\"pull-right\" title=\"Hapus gambar\"><i class=\"icon-trash\"></i></a>
+                                        <img src=\"";
+            // line 91
+            echo twig_escape_filter($this->env, get_url_image(get_pengaturan("img-slide-1", "value")), "html", null, true);
+            echo "\" class=\"img-polaroid\" style=\"max-height: 150px;margin-bottom:10px;\">
+                                        <br>Ganti gambar :
+                                        ";
+        }
+        // line 94
+        echo "                                        <input type=\"file\" name=\"img-slide-1\">
+                                    </div>
+                                </div>
+                                <div class=\"row-fluid\" style=\"margin-bottom: 10px;margin-top: 10px;\">
+                                    <div class=\"span2\">
+                                        Info gambar 1
+                                    </div>
+                                    <div class=\"span10\">
+                                        <textarea name=\"info-slide-1\" class=\"span12\" placeholder=\"text atau html\">";
+        // line 102
+        echo set_value("info-slide-1", get_pengaturan("info-slide-1", "value"));
+        echo "</textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style=\"border-top:1px dashed #fbfbfb;\">
+                                <div class=\"row-fluid\">
+                                    <div class=\"span2\" style=\"margin-bottom: 10px;\">
+                                        Gambar 2
+                                    </div>
+                                    <div class=\"span10\">
+                                        ";
+        // line 114
+        if (get_pengaturan("img-slide-2", "value")) {
+            // line 115
+            echo "                                        <a href=\"";
+            echo twig_escape_filter($this->env, site_url("welcome/pengaturan/?delete-img=2"), "html", null, true);
+            echo "\" class=\"pull-right\" title=\"Hapus gambar\"><i class=\"icon-trash\"></i></a>
+                                        <img src=\"";
+            // line 116
+            echo twig_escape_filter($this->env, get_url_image(get_pengaturan("img-slide-2", "value")), "html", null, true);
+            echo "\" class=\"img-polaroid\" style=\"max-height: 150px;margin-bottom:10px;\">
+                                        <br>Ganti gambar :
+                                        ";
+        }
+        // line 119
+        echo "                                        <input type=\"file\" name=\"img-slide-2\">
+                                    </div>
+                                </div>
+                                <div class=\"row-fluid\" style=\"margin-bottom: 10px;margin-top: 10px;\">
+                                    <div class=\"span2\">
+                                        Info gambar 2
+                                    </div>
+                                    <div class=\"span10\">
+                                        <textarea name=\"info-slide-2\" class=\"span12\" placeholder=\"text atau html\">";
+        // line 127
+        echo set_value("info-slide-2", get_pengaturan("info-slide-2", "value"));
+        echo "</textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style=\"border-top:1px dashed #fbfbfb;\">
+                                <div class=\"row-fluid\">
+                                    <div class=\"span2\" style=\"margin-bottom: 10px;\">
+                                        Gambar 3
+                                    </div>
+                                    <div class=\"span10\">
+                                        ";
+        // line 139
+        if (get_pengaturan("img-slide-3", "value")) {
+            // line 140
+            echo "                                        <a href=\"";
+            echo twig_escape_filter($this->env, site_url("welcome/pengaturan/?delete-img=3"), "html", null, true);
+            echo "\" class=\"pull-right\" title=\"Hapus gambar\"><i class=\"icon-trash\"></i></a>
+                                        <img src=\"";
+            // line 141
+            echo twig_escape_filter($this->env, get_url_image(get_pengaturan("img-slide-3", "value")), "html", null, true);
+            echo "\" class=\"img-polaroid\" style=\"max-height: 150px;margin-bottom:10px;\">
+                                        <br>Ganti gambar :
+                                        ";
+        }
+        // line 144
+        echo "                                        <input type=\"file\" name=\"img-slide-3\">
+                                    </div>
+                                </div>
+                                <div class=\"row-fluid\" style=\"margin-bottom: 10px;margin-top: 10px;\">
+                                    <div class=\"span2\">
+                                        Info gambar 3
+                                    </div>
+                                    <div class=\"span10\">
+                                        <textarea name=\"info-slide-3\" class=\"span12\" placeholder=\"text atau html\">";
+        // line 152
+        echo set_value("info-slide-3", get_pengaturan("info-slide-3", "value"));
+        echo "</textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style=\"border-top:1px dashed #fbfbfb;\">
+                                <div class=\"row-fluid\">
+                                    <div class=\"span2\" style=\"margin-bottom: 10px;\">
+                                        Gambar 4
+                                    </div>
+                                    <div class=\"span10\">
+                                        ";
+        // line 164
+        if (get_pengaturan("img-slide-4", "value")) {
+            // line 165
+            echo "                                        <a href=\"";
+            echo twig_escape_filter($this->env, site_url("welcome/pengaturan/?delete-img=4"), "html", null, true);
+            echo "\" class=\"pull-right\" title=\"Hapus gambar\"><i class=\"icon-trash\"></i></a>
+                                        <img src=\"";
+            // line 166
+            echo twig_escape_filter($this->env, get_url_image(get_pengaturan("img-slide-4", "value")), "html", null, true);
+            echo "\" class=\"img-polaroid\" style=\"max-height: 150px;margin-bottom:10px;\">
+                                        <br>Ganti gambar :
+                                        ";
+        }
+        // line 169
+        echo "                                        <input type=\"file\" name=\"img-slide-4\">
+                                    </div>
+                                </div>
+                                <div class=\"row-fluid\" style=\"margin-bottom: 10px;margin-top: 10px;\">
+                                    <div class=\"span2\">
+                                        Info gambar 4
+                                    </div>
+                                    <div class=\"span10\">
+                                        <textarea name=\"info-slide-4\" class=\"span12\" placeholder=\"text atau html\">";
+        // line 177
+        echo set_value("info-slide-4", get_pengaturan("info-slide-4", "value"));
+        echo "</textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class=\"control-group\">
                 <div class=\"controls\">
                     <button type=\"submit\" class=\"btn btn-primary\">Update</button>
                 </div>
             </div>
         ";
-        // line 83
+        // line 191
         echo form_close();
         echo "
 
@@ -184,6 +344,6 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
 
     public function getDebugInfo()
     {
-        return array (  167 => 83,  156 => 75,  152 => 74,  143 => 68,  134 => 62,  124 => 55,  118 => 52,  107 => 44,  101 => 41,  91 => 34,  87 => 33,  78 => 27,  74 => 26,  65 => 20,  61 => 19,  54 => 15,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  327 => 191,  310 => 177,  300 => 169,  294 => 166,  289 => 165,  287 => 164,  272 => 152,  262 => 144,  256 => 141,  251 => 140,  249 => 139,  234 => 127,  224 => 119,  218 => 116,  213 => 115,  211 => 114,  196 => 102,  186 => 94,  180 => 91,  175 => 90,  173 => 89,  156 => 75,  152 => 74,  143 => 68,  134 => 62,  124 => 55,  118 => 52,  107 => 44,  101 => 41,  91 => 34,  87 => 33,  78 => 27,  74 => 26,  65 => 20,  61 => 19,  54 => 15,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

@@ -9,4 +9,15 @@ $(document).ready(function(){
             location.reload();
         }
     });
+
+    $(".iframe-copy-pertanyaan").colorbox({
+        iframe:true,
+        width:"900",
+        height:"600",
+        fixed:true,
+        overlayClose: false,
+        onClosed : function() {
+            location.reload();
+        }
+    });
 });
