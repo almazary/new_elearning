@@ -1,0 +1,56 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<h4>Copy Pertanyaan</h4>
+<hr style="margin-top: 5px; margin-bottom: 10px;">
+{{ get_flashdata('copy')|raw }}
+
+<table class="table table-striped datatable">
+    <thead>
+        <tr>
+            <th width="8%">ID</th>
+            <th>Pertanyaan</th>
+            <th width="10%"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in pertanyaan %}
+        <tr>
+            <td><b>{{ p.id }}</b></td>
+            <td>
+                {{ html_entity_decode(p.pertanyaan)|raw }}
+
+                {% if p.pilihan is not empty %}
+                <table class="table table-condensed table-striped">
+                    <tbody>
+                        {% for pil in p.pilihan %}
+                        <tr {{ (pil.kunci == 1) ? 'class="success"' }}>
+                            <td width="3%"><b>({{ get_abjad(pil.urutan) }})</b></td>
+                            <td>
+                                {{ html_entity_decode(pil.konten)|raw }}
+
+                                {% if pil.kunci == 1 %}
+                                <b class="text-warning"><i class="icon-star"></i> Kunci Jawaban</b>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+
+                <div style="padding: 5px 5px; border:1px dashed #DDD; background-color: white;">
+                    <ul class="unstyled inline" style="margin-bottom: 3px;margin-top: 0px;">
+                        <li>Dibuat oleh : <a href="{{ p.info_pembuat.link_profil }}" id="profil-{{ p.info_pembuat.id }}" target="_tab">{{ p.info_pembuat.nama }}</a></li>
+                        <li>Pada : {{ p.info_tugas.judul }}</li>
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <a class="btn btn-sm btn-primary" href="{{ site_url('tugas/copy_soal/' ~ tugas.id ~ '/?copy=' ~ p.id) }}">Copy</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

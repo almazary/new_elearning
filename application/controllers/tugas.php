@@ -507,6 +507,108 @@ class Tugas extends MY_Controller
         $this->twig->display('manajemen-tugas.html', $data);
     }
 
+    function copy_soal($segment_3 = '')
+    {
+        # harus admin atau pengajar
+        if (!is_admin() AND !is_pengajar()) {
+            exit("Akses ditolak.");
+        }
+
+        $tugas_id = (int)$segment_3;
+
+        $tugas = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas) OR $tugas['type_id'] == 1) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        # jika sebagai pengajar, cek kepemilikan
+        if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
+            exit("Tugas tidak ditemukan");
+        }
+
+        # aksi untuk copy pertanyaan
+        if (!empty($_GET['copy'])) {
+            $pertanyaan_id = (int)$_GET['copy'];
+            $pertanyaan    = $this->tugas_model->retrieve_pertanyaan($pertanyaan_id);
+            if (empty($pertanyaan)) {
+                $this->session->set_flashdata('copy', get_alert('warning', 'Pertanyaan tidak ditemukan.'));
+                redirect('tugas/copy_soal/' . $tugas['id']);
+            }
+
+            $new_pertanyaan_id = $this->tugas_model->create_pertanyaan($pertanyaan['pertanyaan'], $tugas['id']);
+
+            # cari pilihan
+            $pilihan = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+            foreach ($pilihan as $p) {
+                $this->tugas_model->create_pilihan(
+                    $new_pertanyaan_id,
+                    $p['konten'],
+                    $p['kunci'],
+                    $p['urutan']
+                );
+            }
+
+            $this->session->set_flashdata('copy', get_alert('success', "Pertanyaan ID $pertanyaan_id berhasil dicopy."));
+            redirect('tugas/copy_soal/' . $tugas['id']);
+        }
+
+        $data['tugas'] = $tugas;
+
+        # variabel untuk nyimpen biar tidak boros query
+        $arr_tugas_id    = array();
+        $arr_pengajar_id = array();
+
+        # ambil semua pertanyaan
+        $retrieve_all_pertanyaan = $this->tugas_model->retrieve_all_pertanyaan('all', 1, null);
+        foreach ($retrieve_all_pertanyaan as $key => &$val) {
+            # dapatkan informasi pembuat pertanyaan dan pada tugas apa
+            if (!isset($arr_tugas_id[$val['tugas_id']])) {
+                $info_tugas = $this->tugas_model->retrieve($val['tugas_id']);
+                $arr_tugas_id[$val['tugas_id']] = $this->tugas_model->retrieve($val['tugas_id']);
+            } else {
+                $info_tugas = $arr_tugas_id[$val['tugas_id']];
+            }
+
+            if (!isset($arr_pengajar_id[$info_tugas['pengajar_id']])) {
+                $info_pembuat = $this->pengajar_model->retrieve($info_tugas['pengajar_id']);
+            } else {
+                $info_pembuat = $arr_pengajar_id[$info_tugas['pengajar_id']];
+            }
+
+            if (is_admin()) {
+                $info_pembuat['link_profil'] = site_url('pengajar/detail/'.$info_pembuat['status_id'].'/'.$info_pembuat['id']);
+            } else {
+                $info_pembuat['link_profil'] = site_url('pengajar/detail/'.$info_pembuat['id']);
+            }
+
+            $val['info_tugas']   = $info_tugas;
+            $val['info_pembuat'] = $info_pembuat;
+
+            # cari pilihan
+            $pilihan = $this->tugas_model->retrieve_all_pilihan($val['id']);
+            if (!empty($pilihan)) {
+                $val['pilihan'] = $pilihan;
+            }
+
+            $retrieve_all_pertanyaan[$key] = $val;
+        }
+
+        $data['pertanyaan'] = $retrieve_all_pertanyaan;
+
+        # panggil datatables
+        $data['comp_js'] = load_comp_js(array(
+            base_url('assets/comp/datatables/jquery.dataTables.js'),
+            base_url('assets/comp/datatables/datatable-bootstrap2.js'),
+            base_url('assets/comp/datatables/script.js'),
+        ));
+
+        $data['comp_css'] = load_comp_css(array(
+            base_url('assets/comp/datatables/datatable-bootstrap2.css'),
+        ));
+
+        $this->twig->display('copy-pertanyaan.html', $data);
+    }
+
     function tambah_soal($segment_3 = '')
     {
         # harus admin atau pengajar
