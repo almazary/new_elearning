@@ -141,11 +141,11 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
                     <a class=\"muted\" href=\"";
             // line 56
             echo twig_escape_filter($this->env, (isset($context["portal_update_link"]) ? $context["portal_update_link"] : null), "html", null, true);
-            echo "\" target=\"_blank\">Portal update</a> |
+            echo "\" target=\"_tab\">Portal update</a> |
                     <a class=\"muted\" href=\"";
             // line 57
             echo twig_escape_filter($this->env, (isset($context["bug_tracker_link"]) ? $context["bug_tracker_link"] : null), "html", null, true);
-            echo "\" target=\"_blank\">Bug tracker</a>
+            echo "\" target=\"_tab\">Bug tracker</a>
                 </div>
                 <b><i class=\"icon-bullhorn\"></i> Info Update</b>
                 <table class=\"table table-striped table-condensed\" id=\"info-update\"></table>
@@ -253,7 +253,7 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
                             <a href=\"";
                 // line 113
                 echo twig_escape_filter($this->env, site_url(("materi/detail/" . $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "id"))), "html", null, true);
-                echo "\" target=\"_blank\">";
+                echo "\" target=\"_tab\">";
                 echo twig_escape_filter($this->env, $this->getAttribute((isset($context["m"]) ? $context["m"] : null), "judul"), "html", null, true);
                 echo "</a>
                         </td>

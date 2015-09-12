@@ -6,7 +6,24 @@ Login - {{ parent() }}
 
 {% block content %}
 <div class="row">
-    <div class="module span4 offset4">
+    {% if sliders is not empty %}
+    <div class="span5 offset1">
+        <div class="slider-wrapper theme-light">
+            <div id="slider-login" class="nivoSlider">
+                {% for s in sliders %}
+                <img src="{{ get_url_image(s.value) }}" data-thumb="{{ get_url_image(s.value) }}" title="#html{{ s.id }}">
+                {% endfor %}
+            </div>
+            {% for s in sliders %}
+            <div id="html{{ s.id }}" class="nivo-html-caption">
+                {{ s.title|raw }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="module span4 {{ (sliders is empty) ? 'offset4' }}">
         {{ form_open('login', {'autocomplete': 'off', 'class' : 'form-vertical'})|raw }}
             <div class="module-head">
                 <h3>Login E-learning</h3>

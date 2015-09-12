@@ -61,6 +61,13 @@ class MY_Controller extends CI_Controller
         $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
 
         // $this->output->enable_profiler(TRUE);
+
+        # cek versi
+        $versi_install = '1.3';
+        $versi = get_pengaturan('versi', 'value');
+        if ($versi < $versi_install) {
+            $this->config_model->update('versi', 'Versi', $versi_install);
+        }
     }
 
     function update_nis($nis = '') {

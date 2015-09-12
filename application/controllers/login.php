@@ -49,7 +49,22 @@ class Login extends MY_Controller
             }
         }
 
-        $this->twig->display('login.html');
+        $data['sliders'] = $this->config_model->get_all_slider_img();
+
+        if (!empty($data['sliders'])) {
+            # panggil colorbox
+            $html_js = load_comp_js(array(
+                base_url('assets/comp/nivoslider/jquery.nivo.slider.pack.js'),
+                base_url('assets/comp/nivoslider/setup.js'),
+            ));
+            $data['comp_js']  = $html_js;
+            $data['comp_css'] = load_comp_css(array(
+                base_url('assets/comp/nivoslider/nivo-slider.css'),
+                base_url('assets/comp/nivoslider/themes/light/light.css'),
+            ));
+        }
+
+        $this->twig->display('login.html', $data);
     }
 
     function logout()

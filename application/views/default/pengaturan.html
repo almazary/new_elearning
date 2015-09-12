@@ -76,6 +76,114 @@ Pengaturan - {{ parent() }}
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label">Slider halaman login</label>
+                <div class="controls" style="background-color: #FBFBFB; padding: 10px;border-radius: 5px;">
+                    <table class="table table-condensed">
+                        <tr>
+                            <td style="border-top: none;">
+                                <div class="row-fluid">
+                                    <div class="span2" style="margin-bottom: 10px;">
+                                        Gambar 1
+                                    </div>
+                                    <div class="span10">
+                                        {% if get_pengaturan('img-slide-1', 'value') %}
+                                        <a href="{{ site_url('welcome/pengaturan/?delete-img=1') }}" class="pull-right" title="Hapus gambar"><i class="icon-trash"></i></a>
+                                        <img src="{{ get_url_image(get_pengaturan('img-slide-1', 'value')) }}" class="img-polaroid" style="max-height: 150px;margin-bottom:10px;">
+                                        <br>Ganti gambar :
+                                        {% endif %}
+                                        <input type="file" name="img-slide-1">
+                                    </div>
+                                </div>
+                                <div class="row-fluid" style="margin-bottom: 10px;margin-top: 10px;">
+                                    <div class="span2">
+                                        Info gambar 1
+                                    </div>
+                                    <div class="span10">
+                                        <textarea name="info-slide-1" class="span12" placeholder="text atau html">{{ set_value('info-slide-1', get_pengaturan('info-slide-1', 'value'))|raw }}</textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top:1px dashed #fbfbfb;">
+                                <div class="row-fluid">
+                                    <div class="span2" style="margin-bottom: 10px;">
+                                        Gambar 2
+                                    </div>
+                                    <div class="span10">
+                                        {% if get_pengaturan('img-slide-2', 'value') %}
+                                        <a href="{{ site_url('welcome/pengaturan/?delete-img=2') }}" class="pull-right" title="Hapus gambar"><i class="icon-trash"></i></a>
+                                        <img src="{{ get_url_image(get_pengaturan('img-slide-2', 'value')) }}" class="img-polaroid" style="max-height: 150px;margin-bottom:10px;">
+                                        <br>Ganti gambar :
+                                        {% endif %}
+                                        <input type="file" name="img-slide-2">
+                                    </div>
+                                </div>
+                                <div class="row-fluid" style="margin-bottom: 10px;margin-top: 10px;">
+                                    <div class="span2">
+                                        Info gambar 2
+                                    </div>
+                                    <div class="span10">
+                                        <textarea name="info-slide-2" class="span12" placeholder="text atau html">{{ set_value('info-slide-2', get_pengaturan('info-slide-2', 'value'))|raw }}</textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top:1px dashed #fbfbfb;">
+                                <div class="row-fluid">
+                                    <div class="span2" style="margin-bottom: 10px;">
+                                        Gambar 3
+                                    </div>
+                                    <div class="span10">
+                                        {% if get_pengaturan('img-slide-3', 'value') %}
+                                        <a href="{{ site_url('welcome/pengaturan/?delete-img=3') }}" class="pull-right" title="Hapus gambar"><i class="icon-trash"></i></a>
+                                        <img src="{{ get_url_image(get_pengaturan('img-slide-3', 'value')) }}" class="img-polaroid" style="max-height: 150px;margin-bottom:10px;">
+                                        <br>Ganti gambar :
+                                        {% endif %}
+                                        <input type="file" name="img-slide-3">
+                                    </div>
+                                </div>
+                                <div class="row-fluid" style="margin-bottom: 10px;margin-top: 10px;">
+                                    <div class="span2">
+                                        Info gambar 3
+                                    </div>
+                                    <div class="span10">
+                                        <textarea name="info-slide-3" class="span12" placeholder="text atau html">{{ set_value('info-slide-3', get_pengaturan('info-slide-3', 'value'))|raw }}</textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top:1px dashed #fbfbfb;">
+                                <div class="row-fluid">
+                                    <div class="span2" style="margin-bottom: 10px;">
+                                        Gambar 4
+                                    </div>
+                                    <div class="span10">
+                                        {% if get_pengaturan('img-slide-4', 'value') %}
+                                        <a href="{{ site_url('welcome/pengaturan/?delete-img=4') }}" class="pull-right" title="Hapus gambar"><i class="icon-trash"></i></a>
+                                        <img src="{{ get_url_image(get_pengaturan('img-slide-4', 'value')) }}" class="img-polaroid" style="max-height: 150px;margin-bottom:10px;">
+                                        <br>Ganti gambar :
+                                        {% endif %}
+                                        <input type="file" name="img-slide-4">
+                                    </div>
+                                </div>
+                                <div class="row-fluid" style="margin-bottom: 10px;margin-top: 10px;">
+                                    <div class="span2">
+                                        Info gambar 4
+                                    </div>
+                                    <div class="span10">
+                                        <textarea name="info-slide-4" class="span12" placeholder="text atau html">{{ set_value('info-slide-4', get_pengaturan('info-slide-4', 'value'))|raw }}</textarea>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="control-group">
                 <div class="controls">
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
