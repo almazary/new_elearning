@@ -121,7 +121,7 @@
                         <tbody>
                             {% for p in data.pertanyaan %}
                             <tr id="pertanyaan-{{ p.id }}">
-                                <td><b>{{ p.urutan }}.</b></td>
+                                <td><b>{{ loop.index }}.</b></td>
                                 <td>
                                     <div class="pertanyaan">
                                         {{ html_entity_decode(p.pertanyaan)|raw }}
@@ -171,7 +171,7 @@
                         <tbody>
                             {% for p in data.pertanyaan %}
                             <tr id="pertanyaan-{{ p.id }}">
-                                <td><b>{{ p.urutan }}.</b></td>
+                                <td><b>{{ loop.index }}.</b></td>
                                 <td>
                                     <div class="pertanyaan">
                                         {{ html_entity_decode(p.pertanyaan)|raw }}
