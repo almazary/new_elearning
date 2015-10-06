@@ -25,9 +25,11 @@ class Message extends MY_Controller
             redirect('message/index/' . $_GET['q']);
         }
 
-        $query   = (string)$segment_3;
+        $query = (string)$segment_3;
         if ($query == 'no-query') {
             $query = '';
+        } else {
+            $query = urldecode($query);
         }
 
         $page_no = (int)$segment_4;
@@ -76,24 +78,38 @@ class Message extends MY_Controller
             $get_email = get_email_from_string($this->input->post('penerima', true));
             $content   = $this->input->post('content', true);
 
-            $login = $this->login_model->retrieve(null, $get_email);
+            $l = 0;
+            foreach ($get_email as $email) {
+                $login_penerima = $this->login_model->retrieve(null, $email);
 
-            # kirim email
-            $outbox_id = $this->msg_model->send(get_sess_data('login', 'id'), $login['id'], $content);
+                # kalo kediri sendiri di skrip
+                if ($login_penerima['id'] == get_sess_data('login', 'id')) {
+                    continue;
+                }
+
+                # kirim email
+                $outbox_id = $this->msg_model->send(get_sess_data('login', 'id'), $login_penerima['id'], $content);
+                $l++;
+            }
 
             $this->session->set_flashdata('msg', get_alert('success', 'Pesan berhasil dikirimkan.'));
-            redirect('message/detail/' . $outbox_id . '#msg-' . $outbox_id);
+            if ($l == 1) {
+                redirect('message/detail/' . $outbox_id . '#msg-' . $outbox_id);
+            } else {
+                redirect('message');
+            }
         }
 
         $data['login']   = $login;
 
         $html_js = get_tinymce('content');
         $html_js .= load_comp_js(array(
-            base_url('assets/comp/autocomplete/jquery.autocomplete.min.js'),
-            base_url('assets/comp/autocomplete/script.js')
+            base_url('assets/comp/tags/bootstrap-tagsinput.js'),
         ));
         $data['comp_js']  = $html_js;
-        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/autocomplete/autocomplete.css')));
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/tags/bootstrap-tagsinput.css')));
+
+        $data['all_users'] = '"' . implode('","', $this->login_model->retrieve_all_users()) . '"';
 
         $this->twig->display('tulis-pesan.html', $data);
     }

@@ -176,8 +176,7 @@ class Msg_model extends CI_Model
         $data = $this->pager->set($this->table, $no_of_records, $page_no, $where, $orderby, $this->table.'.*', $group_by);
 
         if (empty($search)) {
-            $new_data = array();
-            foreach ($data['results'] as $key => &$val) {
+            foreach ($data['results'] as $key => $val) {
                 # cek ada yang lebih baru tidak
                 $this->db->where('owner_id', $val['owner_id']);
                 $this->db->where('sender_receiver_id', $val['sender_receiver_id']);
@@ -186,14 +185,22 @@ class Msg_model extends CI_Model
                 $retrieve_newer = $this->db->get($this->table, 1);
                 $retrieve_newer = $retrieve_newer->row_array();
                 if (!empty($retrieve_newer)) {
-                    $new_data[strtotime($retrieve_newer['date'])] = $retrieve_newer;
-                } else {
-                    $new_data[strtotime($val['date'])] = $val;
+                    $data['results'][$key] = $retrieve_newer;
                 }
             }
+        }
 
-            krsort($new_data);
-            $data['results'] = $new_data;
+        # diurutkan berdasarkan pesan yang belum dibuka
+        $arr_msg_id = array();
+        foreach ($data['results'] as $val) {
+            $arr_msg_id[] = $val['id'];
+        }
+
+        if (!empty($arr_msg_id)) {
+            $where       = array();
+            $where['id'] = array($arr_msg_id, 'where_in');
+            $order_by    = array('id', 'DESC');
+            $data = $this->pager->set($this->table, $no_of_records, $page_no, $where, $orderby, $this->table.'.*');
         }
 
         if ($pagination) {

@@ -12,6 +12,7 @@ class __TwigTemplate_35e5a628a8ea04528ec1abe306796622093d88686157145f6e5721b5e79
         $this->blocks = array(
             'title' => array($this, 'block_title'),
             'content' => array($this, 'block_content'),
+            'js' => array($this, 'block_js'),
         );
     }
 
@@ -63,7 +64,7 @@ class __TwigTemplate_35e5a628a8ea04528ec1abe306796622093d88686157145f6e5721b5e79
         // line 19
         if (twig_test_empty((isset($context["login"]) ? $context["login"] : null))) {
             // line 20
-            echo "                        <input type=\"text\" name=\"penerima\" id=\"penerima\" class=\"span8\" value=\"";
+            echo "                        <input type=\"text\" name=\"penerima\" id=\"penerima\" data-role=\"tagsinput\" placeholder=\"Nama atau email\" value=\"";
             echo twig_escape_filter($this->env, html_entity_decode(set_value("penerima")), "html", null, true);
             echo "\">
                         <br>";
@@ -121,6 +122,24 @@ class __TwigTemplate_35e5a628a8ea04528ec1abe306796622093d88686157145f6e5721b5e79
 ";
     }
 
+    // line 47
+    public function block_js($context, array $blocks = array())
+    {
+        // line 48
+        echo "<script type=\"text/javascript\">
+    \$('#penerima').tagsinput({
+        allowDuplicates: false,
+        typeahead: {
+            source: [";
+        // line 52
+        echo html_entity_decode((isset($context["all_users"]) ? $context["all_users"] : null));
+        echo "],
+        },
+    });
+</script>
+";
+    }
+
     public function getTemplateName()
     {
         return "tulis-pesan.html";
@@ -133,6 +152,6 @@ class __TwigTemplate_35e5a628a8ea04528ec1abe306796622093d88686157145f6e5721b5e79
 
     public function getDebugInfo()
     {
-        return array (  116 => 41,  110 => 38,  101 => 32,  97 => 31,  90 => 26,  83 => 24,  76 => 23,  71 => 21,  66 => 20,  64 => 19,  57 => 15,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  135 => 52,  129 => 48,  126 => 47,  117 => 41,  111 => 38,  102 => 32,  98 => 31,  91 => 26,  84 => 24,  77 => 23,  72 => 21,  67 => 20,  65 => 19,  58 => 15,  53 => 13,  47 => 10,  43 => 8,  40 => 7,  33 => 4,  30 => 3,);
     }
 }

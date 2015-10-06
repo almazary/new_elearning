@@ -17,7 +17,7 @@ Tulis pesan - {{ parent() }}
                 <label class="control-label">Penerima <span class="text-error">*</span></label>
                 <div class="controls">
                     {% if login is empty %}
-                        <input type="text" name="penerima" id="penerima" class="span8" value="{{ html_entity_decode(set_value('penerima')) }}">
+                        <input type="text" name="penerima" id="penerima" data-role="tagsinput" placeholder="Nama atau email" value="{{ html_entity_decode(set_value('penerima')) }}">
                         <br>{{ form_error('penerima')|raw }}
                     {% else %}
                         <div style="margin-top: 5px;"><b>{{ login.profil.nama }} </b> &lt;{{ login.username }}&gt;</div>
@@ -42,4 +42,15 @@ Tulis pesan - {{ parent() }}
 
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    $('#penerima').tagsinput({
+        allowDuplicates: false,
+        typeahead: {
+            source: [{{ html_entity_decode(all_users)|raw }}],
+        },
+    });
+</script>
 {% endblock %}

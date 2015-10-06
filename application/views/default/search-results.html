@@ -196,6 +196,9 @@ Pencarian - {{ parent() }}
                     </td>
                     <td class="cell-title hidden-phone hidden-tablet">
                         <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/detail/' ~ d.id ~ '/?confirm=1#confirm') }}"><i class="icon-trash"></i></a>
+                        {% if d.receiver is not empty %}
+                        <div>To <a href="{{ d.receiver.link_profil }}">{{ d.receiver.nama }}</a></div>
+                        {% endif %}
                         {{ character_limiter(strip_tags(d.content), 80, '...')|raw }}
                     </td>
                 </tr>

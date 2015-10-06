@@ -203,7 +203,7 @@ class __TwigTemplate_b739346f71a3a9f2ef8c0bb4486ee13a79e132b8959f74c20243fca7c26
             }
             // line 89
             echo "                            <a href=\"";
-            echo twig_escape_filter($this->env, site_url(((("tugas/reset_jawaban/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . (isset($context["s_id"]) ? $context["s_id"] : null))), "html", null, true);
+            echo twig_escape_filter($this->env, site_url(((("tugas/reset_jawaban/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/") . $this->getAttribute((isset($context["s"]) ? $context["s"] : null), "id"))), "html", null, true);
             echo "\" class=\"btn btn-small btn-default\" onclick=\"return confirm('Anda yakin ingin menganggap siswa belum mengerjakan?')\" data-toggle=\"tooltip\" title=\"Reset jawaban siswa, <br>anggap siswa menjadi belum mengerjakan.\">Reset</a>
                         </div>
                     </td>

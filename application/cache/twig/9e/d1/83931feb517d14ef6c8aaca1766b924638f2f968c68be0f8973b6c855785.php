@@ -86,7 +86,7 @@ class __TwigTemplate_9ed183931feb517d14ef6c8aaca1766b924638f2f968c68be0f8973b6c8
             <td><a href=\"";
         // line 36
         echo twig_escape_filter($this->env, base_url(("userfiles/files/" . $this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "name"))), "html", null, true);
-        echo "\" target=\"_blank\">";
+        echo "\" target=\"_tab\">";
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["file_info"]) ? $context["file_info"] : null), "name"), "html", null, true);
         echo "</a></td>
         </tr>
