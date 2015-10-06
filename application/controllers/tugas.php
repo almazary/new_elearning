@@ -979,7 +979,7 @@ class Tugas extends MY_Controller
             $pertanyaan = array();
             if ($tugas['type_id'] != 1) {
                 # ambil pertanyaan ditugas ini
-                $pertanyaan = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'ASC');
+                $pertanyaan = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'random');
                 # jika pilihan ganda, ambil pilihannya
                 if ($tugas['type_id'] == 3) {
                     foreach ($pertanyaan as $key => $val) {
