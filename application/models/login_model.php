@@ -9,6 +9,34 @@
 class Login_model extends CI_Model
 {
     /**
+     * Method untuk mendapatkan semua data user
+     * @return array
+     */
+    public function retrieve_all_users()
+    {
+        $table_pengajar = $this->db->dbprefix('pengajar');
+        $table_siswa    = $this->db->dbprefix('siswa');
+        $table_login    = $this->db->dbprefix('login');
+
+        $sql = "SELECT {$table_login}.username, {$table_pengajar}.nama FROM {$table_pengajar} INNER JOIN {$table_login} ON {$table_pengajar}.id = {$table_login}.pengajar_id
+                UNION
+                SELECT {$table_login}.username, {$table_siswa}.nama FROM {$table_siswa} INNER JOIN {$table_login} ON {$table_siswa}.id = {$table_login}.siswa_id";
+
+        $result = $this->db->query($sql);
+
+        $data = array();
+        foreach ($result->result_array() as $r) {
+            # selain yang login
+            if (is_login() && $r['username'] == get_sess_data('login', 'username')) {
+                continue;
+            }
+            $data[] = $r['nama'] . ' &lt;' . $r['username'] . '&gt;';
+        }
+
+        return $data;
+    }
+
+    /**
      * Method untuk menghapus data login
      *
      * @param  integer $id

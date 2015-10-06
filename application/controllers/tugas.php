@@ -1507,6 +1507,10 @@ class Tugas extends MY_Controller
             $data['nilai']           = $nilai;
 
             $data['file_info']         = get_file_info(get_path_file($history_value['file_name']));
+            # bug ci http://stackoverflow.com/questions/24095996/codeignter-get-file-info-returns-filename-as-false
+            if (empty($data['file_info']['name'])) {
+                $data['file_info']['name'] = $history_value['file_name'];
+            }
             $data['file_info']['mime'] = get_mime_by_extension(get_path_file($history_value['file_name']));
 
             $this->twig->display('detail-jawaban-upload.html', $data);
@@ -1530,6 +1534,8 @@ class Tugas extends MY_Controller
 
             # hapus history
             $history_id = 'history-mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
+            $history    = retrieve_field($history_id);
+            $history_value = json_decode($history['value'], 1);
             delete_field($history_id);
 
             # hapus nilai
@@ -1537,7 +1543,17 @@ class Tugas extends MY_Controller
             $this->tugas_model->delete_nilai($retrieve_nilai['id']);
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Siswa berhasil dianggap belum mengerjakan.'));
-            redirect('tugas/nilai/' . $tugas['id']);
+
+            if ($tugas['type_id'] == 3) {
+                redirect('tugas/nilai/' . $tugas['id']);
+            } else {
+                # jika tugas upload, dihapus juga file uploadnya biar g menuh-menuhin space
+                if ($tugas['type_id'] == 1 && is_file(get_path_file($history_value['file_name']))) {
+                    @unlink(get_path_file($history_value['file_name']));
+                }
+
+                redirect('tugas/koreksi/' . $tugas['id']);
+            }
 
         } else {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));

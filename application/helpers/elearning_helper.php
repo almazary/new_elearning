@@ -855,16 +855,9 @@ function kirim_email_approve_pengajar($pengajar_id)
 
 
 function get_email_from_string($str) {
-    $split = explode(" ", $str);
+    $pattern = '/[a-z\d._%+-]+@[a-z\d.-]+\.[a-z]{2,4}\b/i';
 
-    foreach ($split as $u) {
-        $u = html_entity_decode($u);
-        $u = ltrim($u, '<');
-        $u = rtrim($u, '>');
-        if (filter_var($u, FILTER_VALIDATE_EMAIL)) {
-            return $u;
-        }
-    }
+    preg_match_all($pattern, $str, $results);
 
-    return '';
+    return $results[0];
 }

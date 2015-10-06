@@ -63,7 +63,7 @@ class MY_Controller extends CI_Controller
         // $this->output->enable_profiler(TRUE);
 
         # cek versi
-        $versi_install = '1.3';
+        $versi_install = '1.4';
         $versi = get_pengaturan('versi', 'value');
         if ($versi < $versi_install) {
             $this->config_model->update('versi', 'Versi', $versi_install);
@@ -120,17 +120,21 @@ class MY_Controller extends CI_Controller
             $this->form_validation->set_message('check_penerima_pesan', 'Username tidak ditemukan.');
             return false;
         } else {
-            # cek ada tidak
-            if (!$this->check_username_exist($get_email)) {
-                $this->form_validation->set_message('check_penerima_pesan', 'Username tidak ditemukan.');
-                return false;
+
+            foreach ($get_email as $email) {
+                # cek ada tidak
+                if (!$this->check_username_exist($email)) {
+                    $this->form_validation->set_message('check_penerima_pesan', "Username $email tidak ditemukan.");
+                    return false;
+                }
+
+                # cek sama dengan yang login tidak
+                if ($email == get_sess_data('login', 'username')) {
+                    $this->form_validation->set_message('check_penerima_pesan', 'Anda tidak dapat mengirim pesan ke diri sendiri.');
+                    return false;
+                }
             }
 
-            # cek sama dengan yang login tidak
-            if ($get_email == get_sess_data('login', 'username')) {
-                $this->form_validation->set_message('check_penerima_pesan', 'Anda tidak dapat mengirim pesan ke diri sendiri.');
-                return false;
-            }
             return true;
         }
     }
@@ -224,17 +228,10 @@ class MY_Controller extends CI_Controller
         return $jadwal;
     }
 
-    function format_msg($retrieve)
+    function get_user_data($login_id)
     {
-        # jika inbox yang dicari pengirimnya
-        if ($retrieve['type_id'] == 1) {
-            $get_user = $retrieve['sender_receiver_id'];
-        } elseif ($retrieve['type_id'] == 2) {
-            $get_user = $retrieve['owner_id'];
-        }
-
         # cari sender/receiver
-        $login = $this->login_model->retrieve($get_user);
+        $login = $this->login_model->retrieve($login_id);
         if (!empty($login['siswa_id'])) {
             $user = $this->siswa_model->retrieve($login['siswa_id']);
             if (is_admin()) {
@@ -254,8 +251,23 @@ class MY_Controller extends CI_Controller
             $user['link_image'] = get_url_image_pengajar($user['foto'], 'medium', $user['jenis_kelamin']);
         }
 
-        $retrieve['profil'] = $user;
-        $retrieve['login']  = $login;
+        return $user;
+    }
+
+    function format_msg($retrieve)
+    {
+        # jika inbox yang dicari pengirimnya
+        if ($retrieve['type_id'] == 1) {
+            $get_user = $retrieve['sender_receiver_id'];
+        } elseif ($retrieve['type_id'] == 2) {
+            $get_user = $retrieve['owner_id'];
+
+            # cari profil penerima
+            $retrieve['receiver'] = $this->get_user_data($retrieve['sender_receiver_id']);
+        }
+
+        $retrieve['profil'] = $this->get_user_data($get_user);
+        $retrieve['login']  = $this->login_model->retrieve($get_user);
 
         # format tanggal, jika hari ini
         if (date('Y-m-d') == date('Y-m-d', strtotime($retrieve['date']))) {

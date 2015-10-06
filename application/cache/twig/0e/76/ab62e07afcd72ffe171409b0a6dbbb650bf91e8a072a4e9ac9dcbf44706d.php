@@ -88,7 +88,7 @@ class __TwigTemplate_0e76ab62e07afcd72ffe171409b0a6dbbb650bf91e8a072a4e9ac9dcbf4
                         <td class=\"cell-author\">
                             <img style=\"height:30px;width:30px; margin-right: 10px;\" class=\"img-polaroid img-circle pull-left\" src=\"";
             // line 34
-            echo twig_escape_filter($this->env, get_url_image_siswa($this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "foto"), "medium", $this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "jenis_kelamin")), "html", null, true);
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "profil"), "link_image"), "html", null, true);
             echo "\">
                             <a href=\"";
             // line 35
@@ -108,6 +108,17 @@ class __TwigTemplate_0e76ab62e07afcd72ffe171409b0a6dbbb650bf91e8a072a4e9ac9dcbf4
             echo "\"><i class=\"icon-trash\"></i></a>
                             ";
             // line 40
+            if ((!twig_test_empty($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "receiver")))) {
+                // line 41
+                echo "                            <div>To <a href=\"";
+                echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "receiver"), "link_profil"), "html", null, true);
+                echo "\">";
+                echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "receiver"), "nama"), "html", null, true);
+                echo "</a></div>
+                            ";
+            }
+            // line 43
+            echo "                            ";
             echo character_limiter(strip_tags($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "content")), 80, "...");
             echo "
                         </td>
@@ -117,14 +128,14 @@ class __TwigTemplate_0e76ab62e07afcd72ffe171409b0a6dbbb650bf91e8a072a4e9ac9dcbf4
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['d'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 44
+        // line 47
         echo "
                 </tbody>
             </table>
         </div>
         <div class=\"module-foot\">
             ";
-        // line 49
+        // line 52
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
         </div>
@@ -146,6 +157,6 @@ class __TwigTemplate_0e76ab62e07afcd72ffe171409b0a6dbbb650bf91e8a072a4e9ac9dcbf4
 
     public function getDebugInfo()
     {
-        return array (  128 => 49,  121 => 44,  111 => 40,  107 => 39,  101 => 36,  95 => 35,  91 => 34,  83 => 32,  79 => 31,  70 => 25,  61 => 19,  56 => 17,  50 => 14,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  139 => 52,  132 => 47,  121 => 43,  113 => 41,  111 => 40,  107 => 39,  101 => 36,  95 => 35,  91 => 34,  83 => 32,  79 => 31,  70 => 25,  61 => 19,  56 => 17,  50 => 14,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }
