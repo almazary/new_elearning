@@ -51,7 +51,7 @@
                                 {% for k in materi.komentar %}
                                 <div class="komentar" id="komentar-{{ k.id }}">
                                     <img src="{{ k.login.link_image }}" style="height:25px;width:25px; margin-left:5px;" class="img-circle img-polaroid pull-right">
-                                    <p><a href="{{ k.login.link_profil }}"><b>{{ k.login.nama }}</b></a>, <small>{{ k.tgl_posting|date('d F Y') }}</small>, <small><a href="" class="text-muted"><i class="fa fa-bug"></i> laporkan</a></small></p>
+                                    <p><a href="{{ k.login.link_profil }}"><b>{{ k.login.nama }}</b></a>, <small>{{ k.tgl_posting|date('d F Y') }}</small>, <small><a href="{{ site_url('materi/detail/' ~ materi.id ~ '/laporkan/' ~ k.id) }}" class="text-muted iframe-laporkan"><i class="fa fa-bug"></i> laporkan</a></small></p>
                                     {{ k.konten|raw_youtube|raw }}
                                 </div>
                                 {% endfor %}

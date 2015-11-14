@@ -172,7 +172,9 @@ class __TwigTemplate_29e7abeb6ab234c92e133b9be5c71e9d4a095ced90650a15dacb2b1805b
                     echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "login"), "nama"), "html", null, true);
                     echo "</b></a>, <small>";
                     echo twig_escape_filter($this->env, twig_date_format_filter($this->env, $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "tgl_posting"), "d F Y"), "html", null, true);
-                    echo "</small>, <small><a href=\"\" class=\"text-muted\"><i class=\"fa fa-bug\"></i> laporkan</a></small></p>
+                    echo "</small>, <small><a href=\"";
+                    echo twig_escape_filter($this->env, site_url(((("materi/detail/" . $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "id")) . "/laporkan/") . $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"))), "html", null, true);
+                    echo "\" class=\"text-muted iframe-laporkan\"><i class=\"fa fa-bug\"></i> laporkan</a></small></p>
                                     ";
                     // line 55
                     echo call_user_func_array($this->env->getFilter('raw_youtube')->getCallable(), array($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "konten")));
@@ -310,6 +312,6 @@ class __TwigTemplate_29e7abeb6ab234c92e133b9be5c71e9d4a095ced90650a15dacb2b1805b
 
     public function getDebugInfo()
     {
-        return array (  294 => 107,  288 => 104,  285 => 103,  278 => 98,  274 => 96,  272 => 95,  269 => 94,  253 => 90,  249 => 88,  245 => 87,  233 => 78,  229 => 77,  223 => 74,  219 => 73,  213 => 70,  208 => 67,  205 => 66,  201 => 64,  195 => 61,  192 => 60,  190 => 59,  187 => 58,  178 => 55,  170 => 54,  166 => 53,  161 => 52,  157 => 51,  151 => 49,  149 => 48,  143 => 44,  137 => 41,  132 => 39,  127 => 37,  122 => 35,  117 => 33,  113 => 31,  107 => 29,  104 => 28,  102 => 27,  96 => 23,  90 => 20,  84 => 19,  80 => 18,  73 => 17,  64 => 15,  60 => 14,  56 => 13,  53 => 12,  51 => 11,  47 => 10,  43 => 8,  40 => 7,  32 => 4,  29 => 3,);
+        return array (  296 => 107,  290 => 104,  287 => 103,  280 => 98,  276 => 96,  274 => 95,  271 => 94,  255 => 90,  251 => 88,  247 => 87,  235 => 78,  231 => 77,  225 => 74,  221 => 73,  215 => 70,  210 => 67,  207 => 66,  203 => 64,  197 => 61,  194 => 60,  192 => 59,  189 => 58,  180 => 55,  170 => 54,  166 => 53,  161 => 52,  157 => 51,  151 => 49,  149 => 48,  143 => 44,  137 => 41,  132 => 39,  127 => 37,  122 => 35,  117 => 33,  113 => 31,  107 => 29,  104 => 28,  102 => 27,  96 => 23,  90 => 20,  84 => 19,  80 => 18,  73 => 17,  64 => 15,  60 => 14,  56 => 13,  53 => 12,  51 => 11,  47 => 10,  43 => 8,  40 => 7,  32 => 4,  29 => 3,);
     }
 }

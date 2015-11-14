@@ -52,6 +52,19 @@ class Komentar_model extends CI_Model
     }
 
     /**
+     * Method untuk menghapus komentar
+     *
+     * @param  integer $id
+     * @return boolean
+     */
+    public function delete($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete($this->table);
+        return true;
+    }
+
+    /**
      * Method untuk mengambil banyak data komentar
      *
      * @param  string        $no_of_records   all/integer (dengan pagination)
@@ -68,8 +81,9 @@ class Komentar_model extends CI_Model
         $materi_id     = null,
         $tampil        = null
     ) {
-        if ($no_of_records == 'all') {
-            $no_of_records = $this->db->count_all($this->table);
+        $show_record = $no_of_records;
+        if ($no_of_records == "all") {
+            $show_record = $this->db->count_all($this->table);
         }
 
         $where = array();
@@ -84,9 +98,9 @@ class Komentar_model extends CI_Model
         }
 
         $orderby = array('id' => 'DESC');
-        $data = $this->pager->set($this->table, $no_of_records, $page_no, $where, $orderby);
+        $data = $this->pager->set($this->table, $show_record, $page_no, $where, $orderby);
 
-        if ($no_of_records == 'all') {
+        if ($no_of_records == "all") {
             return $data['results'];
         } else {
             return $data;

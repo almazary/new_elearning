@@ -431,7 +431,7 @@ class Materi extends MY_Controller
         redirect($uri_back);
     }
 
-    function detail($segment_3 = '', $segment_4 = '')
+    function detail($segment_3 = '', $segment_4 = '', $segment_5 = '')
     {
         $materi_id = (int)$segment_3;
 
@@ -464,7 +464,55 @@ class Materi extends MY_Controller
             }
         }
 
+        $data['materi'] = $materi;
+
         switch ($segment_4) {
+            case 'laporkan':
+                $komentar = $this->komentar_model->retrieve((int)$segment_5);
+                if (empty($komentar) OR $komentar['tampil'] == 0 OR $komentar['materi_id'] != $materi['id']) {
+                    show_error('Komentar tidak ditemukan');
+                }
+                $data['komentar'] = $komentar;
+
+                $this->form_validation->set_rules('alasan', 'Alasan', 'required|trim|xss_clean');
+                if (!empty($_POST['alasan']) AND $_POST['alasan'] == 'tulis') {
+                    $this->form_validation->set_rules('alasan_lain', 'Tulis alasan', 'required|trim|xss_clean');
+                }
+
+                if ($this->form_validation->run() == true) {
+                    $alasan = $this->input->post('alasan', true);
+                    if ($alasan == 'tulis') {
+                        $alasan = $this->input->post('alasan_lain', true);
+                    }
+
+                    $field_id = 'laporkan-komentar-' . $materi['id'];
+                    $retrieve_field = retrieve_field($field_id);
+                    if (empty($retrieve_field)) {
+                        create_field($field_id, 'Laporkan Komentar', json_encode(array(
+                            array(
+                                'materi_id'   => $materi['id'],
+                                'komentar_id' => $komentar['id'],
+                                'alasan'      => $alasan
+                            )
+                        )));
+                    } else {
+                        $value_field = json_decode($retrieve_field['value'], 1);
+                        $value_field[] = array(
+                            'materi_id'   => $materi['id'],
+                            'komentar_id' => $komentar['id'],
+                            'alasan'      => $alasan
+                        );
+
+                        update_field($field_id, 'Laporkan Komentar', json_encode($value_field));
+                    }
+
+                    $this->session->set_flashdata('laporkan', get_alert('success', 'Laporan berhasil dikirim.'));
+                    redirect('materi/detail/' . $materi['id'] . '/laporkan/' . $komentar['id']);
+                }
+
+                $this->twig->display('laporkan-komentar.html', $data);
+            break;
+
             default:
             case 'download':
                 # jika request download
@@ -477,189 +525,232 @@ class Materi extends MY_Controller
                     force_download($name_file, $data_file);
                 }
 
-                if (!isset($data['error'])) {
-
-                    # post komentar
-                    $this->form_validation->set_rules('komentar', 'Komentar', 'required|trim|xss_clean');
-                    if ($this->form_validation->run() == true) {
-                        $komentar_id = $this->komentar_model->create(
-                            get_sess_data('login', 'id'),
-                            $materi['id'],
-                            $tampil = 1,
-                            $this->input->post('komentar', true)
-                        );
-
-                        redirect('materi/detail/' . $materi['id'] . '/#komentar-' . $komentar_id);
-                    }
-
-                    $data['materi'] = $materi;
-                    $data['materi']['download_link'] = site_url('materi/detail/'.$materi['id'].'/download');
-
-                    # ambil komentar
-                    $retrieve_all_komentar = $this->komentar_model->retrieve_all(20, (int)$segment_4, null, $materi['id'], 1);
-
-                    # format komentar
-                    foreach ($retrieve_all_komentar['results'] as $key => $val) {
-                        $retrieve_all_komentar['results'][$key] = $this->format_komentar($val);
-                    }
-
-                    $data['materi']['komentar']            = $retrieve_all_komentar['results'];
-                    $data['materi']['jml_komentar']        = $retrieve_all_komentar['total_record'];
-                    $data['materi']['komentar_pagination'] = $this->pager->view($retrieve_all_komentar, 'materi/detail/' . $materi['id'] . '/', array(), false);
-
-                    # cari tipenya
-                    if (empty($materi['file'])) {
-                        $type = 'tertulis';
-                    } else {
-                        $type = 'file';
-                        $data['materi']['file_info']         = get_file_info(get_path_file($materi['file']));
-                        $data['materi']['file_info']['mime'] = get_mime_by_extension(get_path_file($materi['file']));
-                    }
-
-                    $data['type'] = $type;
-                    $data['materi']['mapel'] = $this->mapel_model->retrieve($materi['mapel_id']);
-
-                    # cari materi kelas
-                    $arr_materi_kelas_id = array();
-                    $materi_kelas        = $this->materi_model->retrieve_all_kelas($materi['id']);
-                    foreach ($materi_kelas as $mk) {
-                        $arr_materi_kelas_id[]            = $mk['kelas_id'];
-                        $kelas                            = $this->kelas_model->retrieve($mk['kelas_id']);
-                        $data['materi']['materi_kelas'][] = $kelas;
-                    }
-
-                    # cari pembuatnya
-                    if (!empty($materi['pengajar_id'])) {
-                        $pengajar = $this->pengajar_model->retrieve($materi['pengajar_id']);
-                        $data['materi']['pembuat'] = array(
-                            'nama'      => $pengajar['nama'],
-                            'link_foto' => get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin'])
-                        );
-                        if (is_admin()) {
-                            $data['materi']['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
-                        } else {
-                            $data['materi']['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['id']);
-                        }
-                    }
-
-                    if (!empty($materi['siswa_id'])) {
-                        $siswa = $this->siswa_model->retrieve($materi['siswa_id']);
-                        $data['materi']['pembuat'] = array(
-                            'nama'        => $siswa['nama'],
-                            'link_foto'   => get_url_image_siswa($siswa['foto'], 'medium', $siswa['jenis_kelamin'])
-                        );
-
-                        if (is_admin()) {
-                            $data['materi']['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['status_id'].'/'.$siswa['id']);
-                        } else {
-                            $data['materi']['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['id']);
-                        }
-                    }
-
-                    # cari materi terkait
-                    $retrieve_terkait_mapel = $this->materi_model->retrieve_all(
-                        $no_of_records = 10,
-                        $page_no       = 1,
-                        $pengajar_id   = array(),
-                        $siswa_id      = array(),
-                        $mapel_id      = array($materi['mapel_id']),
-                        $judul         = null,
-                        $konten        = null,
-                        $tgl_posting   = null,
-                        $publish       = 1,
-                        $kelas_id      = array(),
-                        $type          = array(),
-                        $pagination    = false
+                # post komentar
+                $this->form_validation->set_rules('komentar', 'Komentar', 'required|trim|xss_clean');
+                if ($this->form_validation->run() == true) {
+                    $komentar_id = $this->komentar_model->create(
+                        get_sess_data('login', 'id'),
+                        $materi['id'],
+                        $tampil = 1,
+                        $this->input->post('komentar', true)
                     );
 
-                    $data_terkait = array();
-                    foreach ($retrieve_terkait_mapel as $row) {
-                        if (empty($data_terkait[$row['id']]) AND $row['id'] != $materi['id'] AND count($data_terkait) <= 20) {
-                            $data_terkait[$row['id']] = $row;
-                        }
-                    }
-
-                    $retrieve_terkait_kelas = $this->materi_model->retrieve_all(
-                        $no_of_records = 10,
-                        $page_no       = 1,
-                        $pengajar_id   = array(),
-                        $siswa_id      = array(),
-                        $mapel_id      = array(),
-                        $judul         = null,
-                        $konten        = null,
-                        $tgl_posting   = null,
-                        $publish       = 1,
-                        $kelas_id      = $arr_materi_kelas_id,
-                        $type          = array(),
-                        $pagination    = false
-                    );
-
-                    foreach ($retrieve_terkait_kelas as $row) {
-                        if (empty($data_terkait[$row['id']]) AND $row['id'] != $materi['id'] AND count($data_terkait) <= 20) {
-                            $data_terkait[$row['id']] = $row;
-                        }
-                    }
-
-                    $data['terkait'] = $data_terkait;
-
-                } else {
-                    $data['materi'] = array();
+                    redirect('materi/detail/' . $materi['id'] . '/#komentar-' . $komentar_id);
                 }
+
+                $data['materi']['download_link'] = site_url('materi/detail/'.$materi['id'].'/download');
+
+                # ambil komentar
+                $retrieve_all_komentar = $this->komentar_model->retrieve_all(20, (int)$segment_4, null, $materi['id'], 1);
+
+                # format komentar
+                foreach ($retrieve_all_komentar['results'] as $key => $val) {
+                    $retrieve_all_komentar['results'][$key] = $this->format_komentar($val);
+                }
+
+                $data['materi']['komentar']            = $retrieve_all_komentar['results'];
+                $data['materi']['jml_komentar']        = $retrieve_all_komentar['total_record'];
+                $data['materi']['komentar_pagination'] = $this->pager->view($retrieve_all_komentar, 'materi/detail/' . $materi['id'] . '/', array(), false);
+
+                # cari tipenya
+                if (empty($materi['file'])) {
+                    $type = 'tertulis';
+                } else {
+                    $type = 'file';
+                    $data['materi']['file_info']         = get_file_info(get_path_file($materi['file']));
+                    $data['materi']['file_info']['mime'] = get_mime_by_extension(get_path_file($materi['file']));
+                }
+
+                $data['type'] = $type;
+                $data['materi']['mapel'] = $this->mapel_model->retrieve($materi['mapel_id']);
+
+                # cari materi kelas
+                $arr_materi_kelas_id = array();
+                $materi_kelas        = $this->materi_model->retrieve_all_kelas($materi['id']);
+                foreach ($materi_kelas as $mk) {
+                    $arr_materi_kelas_id[]            = $mk['kelas_id'];
+                    $kelas                            = $this->kelas_model->retrieve($mk['kelas_id']);
+                    $data['materi']['materi_kelas'][] = $kelas;
+                }
+
+                # cari pembuatnya
+                if (!empty($materi['pengajar_id'])) {
+                    $pengajar = $this->pengajar_model->retrieve($materi['pengajar_id']);
+                    $data['materi']['pembuat'] = array(
+                        'nama'      => $pengajar['nama'],
+                        'link_foto' => get_url_image_pengajar($pengajar['foto'], 'medium', $pengajar['jenis_kelamin'])
+                    );
+                    if (is_admin()) {
+                        $data['materi']['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+                    } else {
+                        $data['materi']['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['id']);
+                    }
+                }
+
+                if (!empty($materi['siswa_id'])) {
+                    $siswa = $this->siswa_model->retrieve($materi['siswa_id']);
+                    $data['materi']['pembuat'] = array(
+                        'nama'        => $siswa['nama'],
+                        'link_foto'   => get_url_image_siswa($siswa['foto'], 'medium', $siswa['jenis_kelamin'])
+                    );
+
+                    if (is_admin()) {
+                        $data['materi']['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['status_id'].'/'.$siswa['id']);
+                    } else {
+                        $data['materi']['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['id']);
+                    }
+                }
+
+                # cari materi terkait
+                $retrieve_terkait_mapel = $this->materi_model->retrieve_all(
+                    $no_of_records = 10,
+                    $page_no       = 1,
+                    $pengajar_id   = array(),
+                    $siswa_id      = array(),
+                    $mapel_id      = array($materi['mapel_id']),
+                    $judul         = null,
+                    $konten        = null,
+                    $tgl_posting   = null,
+                    $publish       = 1,
+                    $kelas_id      = array(),
+                    $type          = array(),
+                    $pagination    = false
+                );
+
+                $data_terkait = array();
+                foreach ($retrieve_terkait_mapel as $row) {
+                    if (empty($data_terkait[$row['id']]) AND $row['id'] != $materi['id'] AND count($data_terkait) <= 20) {
+                        $data_terkait[$row['id']] = $row;
+                    }
+                }
+
+                $retrieve_terkait_kelas = $this->materi_model->retrieve_all(
+                    $no_of_records = 10,
+                    $page_no       = 1,
+                    $pengajar_id   = array(),
+                    $siswa_id      = array(),
+                    $mapel_id      = array(),
+                    $judul         = null,
+                    $konten        = null,
+                    $tgl_posting   = null,
+                    $publish       = 1,
+                    $kelas_id      = $arr_materi_kelas_id,
+                    $type          = array(),
+                    $pagination    = false
+                );
+
+                foreach ($retrieve_terkait_kelas as $row) {
+                    if (empty($data_terkait[$row['id']]) AND $row['id'] != $materi['id'] AND count($data_terkait) <= 20) {
+                        $data_terkait[$row['id']] = $row;
+                    }
+                }
+
+                $data['terkait'] = $data_terkait;
+
+                # setup componen SyntaxHighlighter
+                $html_js = load_comp_js(array(
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shCore.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAppleScript.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAS3.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushBash.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushColdFusion.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCpp.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCSharp.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCss.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDelphi.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDiff.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushErlang.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushGroovy.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJava.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJavaFX.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJScript.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPerl.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPhp.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPlain.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPowerShell.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPython.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushRuby.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSass.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushScala.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSql.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushVb.js'),
+                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushXml.js'),
+                    base_url('assets/comp/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'),
+                ));
+                $html_js .= '<script type="text/javascript">SyntaxHighlighter.all();</script>';
+
+                # setup tinymce komentar
+                $tiny_option = 'theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,link,unlink,|,sub,sup,charmap,tiny_mce_wiris_formulaEditor,|,emotions,image,media,youtubeIframe,syntaxhl,code",
+                theme_advanced_buttons2 : "",
+                theme_advanced_buttons3 : "",
+                theme_advanced_toolbar_location : "top",
+                theme_advanced_toolbar_align : "left",
+                theme_advanced_statusbar_location : "bottom",
+                file_browser_callback : "openKCFinder",
+                theme_advanced_resizing : false,
+                content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
+                convert_urls: false,
+                force_br_newlines : false,
+                force_p_newlines : false,';
+                $html_js .= get_tinymce('komentar', 'advanced', array('pdw'), $tiny_option);
+
+                # setup colorbox
+                $html_js .= load_comp_js(array(
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-materi.js')
+                ));
+
+                $data['comp_js']  = $html_js;
+                $data['comp_css'] = load_comp_css(array(
+                    base_url('assets/comp/SyntaxHighlighter/styles/shCoreEclipse.css'),
+                    base_url('assets/comp/colorbox/colorbox.css')
+                ));
+
+                $this->twig->display('detail-materi.html', $data);
             break;
         }
+    }
 
-        # setup componen SyntaxHighlighter
-        $html_js = load_comp_js(array(
-            base_url('assets/comp/SyntaxHighlighter/scripts/shCore.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAppleScript.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAS3.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushBash.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushColdFusion.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCpp.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCSharp.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCss.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDelphi.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDiff.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushErlang.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushGroovy.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJava.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJavaFX.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJScript.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPerl.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPhp.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPlain.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPowerShell.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPython.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushRuby.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSass.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushScala.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSql.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushVb.js'),
-            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushXml.js'),
-            base_url('assets/comp/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'),
+    function komentar($segment_3 = '')
+    {
+        # panggil datatables dan combobox
+        $data['comp_js'] = load_comp_js(array(
+            base_url('assets/comp/datatables/jquery.dataTables.js'),
+            base_url('assets/comp/datatables/datatable-bootstrap2.js'),
+            base_url('assets/comp/datatables/script.js'),
         ));
-        $html_js .= '<script type="text/javascript">SyntaxHighlighter.all();</script>';
 
-        # setup tinymce komentar
-        $tiny_option = 'theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,link,unlink,|,sub,sup,charmap,tiny_mce_wiris_formulaEditor,|,emotions,image,media,youtubeIframe,syntaxhl,code",
-        theme_advanced_buttons2 : "",
-        theme_advanced_buttons3 : "",
-        theme_advanced_toolbar_location : "top",
-        theme_advanced_toolbar_align : "left",
-        theme_advanced_statusbar_location : "bottom",
-        file_browser_callback : "openKCFinder",
-        theme_advanced_resizing : false,
-        content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
-        convert_urls: false,
-        force_br_newlines : false,
-        force_p_newlines : false,';
-        $html_js .= get_tinymce('komentar', 'advanced', array('pdw'), $tiny_option);
-
-        $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(
-            base_url('assets/comp/SyntaxHighlighter/styles/shCoreEclipse.css'),
+            base_url('assets/comp/datatables/datatable-bootstrap2.css'),
         ));
 
-        $this->twig->display('detail-materi.html', $data);
+        switch ($segment_3) {
+            case 'value':
+                # code...
+            break;
+
+            default:
+                $login_id = null;
+                if (!is_admin()) {
+                    $login_id = get_sess_data('login', 'id');
+                }
+
+                $retrieve_all = $this->komentar_model->retrieve_all(
+                    $no_of_records = "all",
+                    $page_no       = 1,
+                    $login_id,
+                    $materi_id     = null,
+                    $tampil        = 1
+                );
+                foreach ($retrieve_all as $key => $val) {
+                    $val['materi']      = $this->materi_model->retrieve($val['materi_id']);
+                    $retrieve_all[$key] = $this->format_komentar($val);
+                }
+
+                $data['komentar'] = $retrieve_all;
+
+                $this->twig->display('list-komentar.html', $data);
+            break;
+        }
     }
 }

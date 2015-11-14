@@ -587,9 +587,11 @@ function tgl_jam_indo($tgl_jam = '') {
  * @return string
  */
 function get_post_data($key = '') {
-    if (!empty($_POST)) {
+    if (isset($_POST[$key])) {
         return $_POST[$key];
     }
+
+    return;
 }
 
 /**
