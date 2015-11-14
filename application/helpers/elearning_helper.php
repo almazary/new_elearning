@@ -60,7 +60,7 @@ function default_parser_item($add_item = array())
         'base_url'          => base_url(),
         'site_url'          => site_url(),
         'favicon_url'       => base_url('assets/images/favicon.ico'),
-        'copyright_setup'   => 'Copyright &copy; 2014 Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
+        'copyright_setup'   => 'Copyright &copy; 2014 - ' . date('Y') . ' Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
         'current_url'       => current_url(),
         'logo_url_small'    => get_logo_url(),
         'logo_url_medium'   => get_logo_url('medium'),
@@ -75,7 +75,7 @@ function default_parser_item($add_item = array())
 
     # cek proses install tidak
     if ($CI->uri->segment(1) != 'setup') {
-        $return['copyright'] = 'Copyright &copy; 2014 '.get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>';
+        $return['copyright'] = 'Copyright &copy; 2014 - ' . date('Y') . ' ' . get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>';
         $return['site_name'] = 'E-Learning '.get_pengaturan('nama-sekolah', 'value');
         $return['version']   = '<a href="https://github.com/almazary/new_elearning">versi ' . get_pengaturan('versi', 'value') . '</a>';
     }
@@ -202,7 +202,7 @@ function get_alert($notif = 'success', $msg = '')
  * @param  string $element_id
  * @return string
  */
-function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array())
+function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array(), $str_options = null)
 {
     $tiny_plugins = array('pdw','emotions','syntaxhl','wordcount','pagebreak','style','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','searchreplace','contextmenu','paste','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
     if (!empty($remove_plugins)) {
@@ -219,26 +219,29 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
         tinyMCE.init({
             selector: "textarea#'.$element_id.'",
             theme : "'.$theme.'",
-            plugins : "'.implode(',', $tiny_plugins).'",
+            plugins : "'.implode(',', $tiny_plugins).'",';
 
-            // Theme options
-            theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,advhr,hr,|,link,unlink,|,sub,sup,charmap,tiny_mce_wiris_formulaEditor,|,code,|,pdw_toggle",
-            theme_advanced_buttons2 : "forecolor,backcolor,|,undo,redo,|,search,replace,outdent,indent,ltr,rtl,blockquote,|,emotions,image,media,youtubeIframe,syntaxhl,|,print,preview,fullscreen",
-            theme_advanced_buttons3 : "",
-            theme_advanced_toolbar_location : "top",
-            theme_advanced_toolbar_align : "left",
-            theme_advanced_statusbar_location : "bottom",
-            pdw_toggle_on : 1,
-            pdw_toggle_toolbars : "2,3",
-            file_browser_callback : "openKCFinder",
-            theme_advanced_resizing : false,
-            content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
-            convert_urls: false,
-            force_br_newlines : false,
-            force_p_newlines : false,
-        });
+            if (empty($str_options)) {
+                $return .= 'theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,advhr,hr,|,link,unlink,|,sub,sup,charmap,tiny_mce_wiris_formulaEditor,tinymath,|,code,|,pdw_toggle",
+                    theme_advanced_buttons2 : "forecolor,backcolor,|,undo,redo,|,search,replace,outdent,indent,ltr,rtl,blockquote,|,emotions,image,media,youtubeIframe,syntaxhl",
+                    theme_advanced_buttons3 : "",
+                    theme_advanced_toolbar_location : "top",
+                    theme_advanced_toolbar_align : "left",
+                    theme_advanced_statusbar_location : "bottom",
+                    pdw_toggle_on : 1,
+                    pdw_toggle_toolbars : "2,3",
+                    file_browser_callback : "openKCFinder",
+                    theme_advanced_resizing : false,
+                    content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
+                    convert_urls: false,
+                    force_br_newlines : false,
+                    force_p_newlines : false,';
+            } else {
+                $return .= $str_options;
+            }
+    $return .= '});';
 
-        function openKCFinder(field_name, url, type, win) {
+    $return .= 'function openKCFinder(field_name, url, type, win) {
             tinyMCE.activeEditor.windowManager.open({
                 file: "'.base_url('assets/comp/kcfinder/browse.php?opener=tinymce&type=').'" + type,
                 title: "KCFinder",
@@ -455,6 +458,22 @@ function get_url_image_pengajar($img = '', $size = 'medium', $jk = 'Laki-laki') 
         return get_url_image($img);
     } else {
         return get_url_image($img, $size);
+    }
+}
+
+/**
+ * Method untuk mendapatkan link foto pengajar/admin/siswa ketika sudah login
+ *
+ * @param  string $img
+ * @param  string $size
+ * @param  string $jk
+ * @return string url
+ */
+function get_url_image_session($img = '', $size = 'medium', $jk = 'Laki-laki') {
+    if (is_pengajar() OR is_admin()) {
+        return get_url_image_pengajar($img, $size, $jk);
+    } elseif (is_siswa()) {
+        return get_url_image_siswa($img, $size, $jk);
     }
 }
 

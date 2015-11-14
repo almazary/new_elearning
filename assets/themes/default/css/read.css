@@ -2,9 +2,11 @@ html,
 body {
     height: 100%;
     background-color: rgb(245, 239, 230);
-    font-family: "ProximaNova","Helvetica Neue",helvetica,arial,sans-serif;
-    font-size: 15px;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
     line-height: 21px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #606c71;
 }
 
 /* Wrapper for page content to push down footer */
@@ -13,13 +15,14 @@ body {
     height: auto !important;
     height: 100%;
     /* Negative indent footer by it's height */
+
     margin: 0 auto -60px;
 }
 
 /* Custom page CSS
 -------------------------------------------------- */
-/* Not required for template or sticky footer method. */
 
+/* Not required for template or sticky footer method. */
 .container {
     width: 1000px;
 }
@@ -31,9 +34,9 @@ body {
     padding: 20px 25px;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
-    border:1px solid #DDD;
+    border: 1px solid #DDD;
     margin-bottom: 20px;
-    color:#282928;
+    color: #282928;
     /*-webkit-box-shadow: 0px 5px 7px 1px rgba(173,170,173,1);
     -moz-box-shadow: 0px 5px 7px 1px rgba(173,170,173,1);
     box-shadow: 0px 5px 7px 1px rgba(173,170,173,1);*/
@@ -47,20 +50,50 @@ h1.title {
     font-size: 27px;
     line-height: 35px;
 }
-.title-info {
-    color:#900;
-}
 hr.hr-top {
-    border:none;
+    border: none;
     /*border-top:1px solid #ECECEC;*/
+
     margin-top: 5px;
     margin-bottom: 0px;
-    border-top:5px solid #000;
+    border-top: 5px solid #000;
 }
 ul.ul-top {
-    margin-left:-5px;
+    margin-left: -5px;
+    font-size: 12px;
+    margin-bottom: 5px;
 }
 .wrap-content {
-    padding-right:10px;
+    padding-right: 10px;
     padding-left: 10px;
+}
+.hr-1 {
+    margin-top: 5px;
+}
+.komentar {
+    background-color: #f5f5f5;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 15px;
+}
+.is_reply {
+    margin-left: 40px;
+    border-left: 2px solid #5bc0de;
+}
+.footer {
+    font-size: 13px;
+}
+.materi {
+    background-color: #f5f5f5;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 15px;
+}
+ul.ul-materi li {
+    margin-bottom: 15px;
+}
+.bg-form-komentar {
+    background-color: #f5f5f5;padding: 10px;border-radius: 5px;
+    font-size: 14px;
 }

@@ -39,6 +39,17 @@ class Twig
             }
         }
 
+        # untuk decode iframe youtube yang di encode
+        $filter = new Twig_SimpleFilter('raw_youtube', function ($string) {
+            if (strpos($string, '&lt;iframe src="http://www.youtube.com/embed/') !== false) {
+                $string = str_replace('&lt;iframe src="http://www.youtube.com/embed/', '<iframe src="http://www.youtube.com/embed/', $string);
+                $string .= str_replace('&gt;&lt;/iframe>', '></iframe>', $string);
+            }
+            return $string;
+        });
+
+        $this->_twig->addFilter($filter);
+
     }
 
     public function add_function($name)

@@ -201,17 +201,17 @@ class Siswa_model extends CI_Model
 
         if (!empty($tgl_lahir)) {
             $tgl_lahir = (int)$tgl_lahir;
-            $where['DAY(siswa.tgl_lahir)'] = array($tgl_lahir, 'where');
+            $where['DAY(tgl_lahir)'] = array($tgl_lahir, 'where');
         }
 
         if (!empty($bln_lahir)) {
             $bln_lahir = (int)$bln_lahir;
-            $where['MONTH(siswa.tgl_lahir)'] = array($bln_lahir, 'where');
+            $where['MONTH(tgl_lahir)'] = array($bln_lahir, 'where');
         }
 
         if (!empty($thn_lahir)) {
             $thn_lahir = (int)$thn_lahir;
-            $where['YEAR(siswa.tgl_lahir)'] = array($thn_lahir, 'where');
+            $where['YEAR(tgl_lahir)'] = array($thn_lahir, 'where');
         }
 
         if (!empty($alamat)) {

@@ -229,25 +229,31 @@ class Pager
      * @param  array  $array_data
      * @param  string $url
      * @param  array  $add_value_segment berguna untuk menambah value parameter pada slah berikutnya (link pagination)
+     * @param  bool   $show_info         untuk menampilkan/menyembunyikan informasi total data
      * <code>
      * $add_value_segment = array('search value');
      * </code>
      * @return string
      * @author Almazari <almazary@gmail.com>
      */
-    public function view($array_data, $url, $add_value_segment = array())
+    public function view($array_data, $url, $add_value_segment = array(), $show_info = true)
     {
         $add_segment = '';
         foreach ((array)$add_value_segment as $value) {
             $add_segment .= '/'.$value;
         }
 
-        $return = '<div class="row-fluid">
-            <div class="span5">
-                '.$array_data['total_respon'].' dari '.$array_data['total_record'].' total data
-            </div>
-            <div class="span7">
-                <div class="pagination pull-right" style="margin-top:0px;">
+        $return = '<div class="row-fluid">';
+            if ($show_info) {
+                $return .= '<div class="span5">
+                    '.$array_data['total_respon'].' dari '.$array_data['total_record'].' total data
+                </div>
+                <div class="span7">';
+            } else {
+                $return .= '<div class="span12">';
+            }
+
+            $return .= '<div class="pagination pull-right" style="margin-top:0px;">
                 <ul>';
 
                 if ($array_data['total_page'] > 1) {

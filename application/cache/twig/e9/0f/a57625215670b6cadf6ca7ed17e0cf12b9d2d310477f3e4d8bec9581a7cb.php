@@ -45,19 +45,27 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
         // line 10
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "images/icons/css/font-awesome.css\" rel=\"stylesheet\">
-    ";
+    <link type=\"text/css\" href=\"";
         // line 11
-        $this->displayBlock('css', $context, $blocks);
+        echo twig_escape_filter($this->env, base_url("assets/comp/pace/flash.css"), "html", null, true);
+        echo "\" rel=\"stylesheet\">
+    <link type=\"text/css\" href=\"";
         // line 12
+        echo twig_escape_filter($this->env, base_url("assets/comp/offline/offline-theme-chrome.css"), "html", null, true);
+        echo "\" rel=\"stylesheet\">
+    ";
+        // line 13
+        $this->displayBlock('css', $context, $blocks);
+        // line 14
         echo "    ";
         echo (isset($context["comp_css"]) ? $context["comp_css"] : null);
         echo "
     <link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"";
-        // line 13
+        // line 15
         echo twig_escape_filter($this->env, (isset($context["favicon_url"]) ? $context["favicon_url"] : null), "html", null, true);
         echo "\">
 </head>
-<body>
+<body style=\"display: none;\">
 
     <div class=\"navbar navbar-fixed-top\">
         <div class=\"navbar-inner\">
@@ -67,11 +75,11 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
                 </a>
 
                 <a class=\"brand\" href=\"";
-        // line 24
+        // line 26
         echo twig_escape_filter($this->env, site_url(), "html", null, true);
         echo "\">
                     <img src=\"";
-        // line 25
+        // line 27
         echo twig_escape_filter($this->env, (isset($context["logo_url_medium"]) ? $context["logo_url_medium"] : null), "html", null, true);
         echo "\"> ";
         echo twig_escape_filter($this->env, (isset($context["site_name"]) ? $context["site_name"] : null), "html", null, true);
@@ -81,15 +89,15 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
                 <div class=\"nav-collapse collapse navbar-inverse-collapse\">
                     <ul class=\"nav pull-right\">
                         ";
-        // line 30
+        // line 32
         if (((get_pengaturan("registrasi-siswa", "value") == 1) || (get_pengaturan("registrasi-pengajar", "value") == 1))) {
-            // line 31
+            // line 33
             echo "                        <li><a href=\"";
             echo twig_escape_filter($this->env, site_url("login/register"), "html", null, true);
             echo "\">Register</a></li>
                         ";
         }
-        // line 33
+        // line 35
         echo "                    </ul>
                 </div>
             </div>
@@ -100,9 +108,9 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
         <div class=\"container\">
 
             ";
-        // line 42
+        // line 44
         $this->displayBlock('content', $context, $blocks);
-        // line 43
+        // line 45
         echo "
         </div>
     </div><!--/.wrapper-->
@@ -111,11 +119,11 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
         <div class=\"container\">
             <center>
                 <b class=\"copyright\">";
-        // line 50
+        // line 52
         echo (isset($context["copyright"]) ? $context["copyright"] : null);
         echo " </b> All rights reserved.<br>
                 ";
-        // line 51
+        // line 53
         echo (isset($context["version"]) ? $context["version"] : null);
         echo " | Page loaded in ";
         echo twig_escape_filter($this->env, (isset($context["elapsed_time"]) ? $context["elapsed_time"] : null), "html", null, true);
@@ -124,24 +132,37 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
         </div>
     </div>
     <script src=\"";
-        // line 55
+        // line 57
+        echo twig_escape_filter($this->env, base_url("assets/comp/pace/pace.min.js"), "html", null, true);
+        echo "\" type=\"text/javascript\"></script>
+    <script src=\"";
+        // line 58
+        echo twig_escape_filter($this->env, base_url("assets/comp/offline/offline.min.js"), "html", null, true);
+        echo "\" type=\"text/javascript\"></script>
+    <script src=\"";
+        // line 59
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>
     <script src=\"";
-        // line 56
+        // line 60
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-ui-1.10.1.custom.min.js\" type=\"text/javascript\"></script>
     <script src=\"";
-        // line 57
+        // line 61
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "bootstrap/js/bootstrap.min.js\" type=\"text/javascript\"></script>
     ";
-        // line 58
+        // line 62
         $this->displayBlock('js', $context, $blocks);
-        // line 59
+        // line 63
         echo "    ";
         echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
         echo "
+    <script type=\"text/javascript\">
+        \$( document ).ready(function() {
+            \$(\"body\").show();
+        });
+    </script>
 </body>
 ";
     }
@@ -152,17 +173,17 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
         echo twig_escape_filter($this->env, (isset($context["site_name"]) ? $context["site_name"] : null), "html", null, true);
     }
 
-    // line 11
+    // line 13
     public function block_css($context, array $blocks = array())
     {
     }
 
-    // line 42
+    // line 44
     public function block_content($context, array $blocks = array())
     {
     }
 
-    // line 58
+    // line 62
     public function block_js($context, array $blocks = array())
     {
     }
@@ -179,6 +200,6 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
 
     public function getDebugInfo()
     {
-        return array (  166 => 58,  161 => 42,  156 => 11,  150 => 6,  142 => 59,  140 => 58,  132 => 56,  128 => 55,  119 => 51,  115 => 50,  106 => 43,  104 => 42,  93 => 33,  87 => 31,  85 => 30,  75 => 25,  71 => 24,  57 => 13,  50 => 11,  46 => 10,  38 => 8,  34 => 7,  30 => 6,  23 => 1,  143 => 53,  136 => 57,  120 => 36,  116 => 35,  110 => 32,  102 => 27,  98 => 26,  95 => 25,  90 => 22,  81 => 19,  76 => 18,  72 => 17,  69 => 16,  56 => 14,  52 => 12,  47 => 10,  45 => 9,  42 => 9,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  187 => 62,  182 => 44,  177 => 13,  171 => 6,  158 => 63,  156 => 62,  152 => 61,  148 => 60,  144 => 59,  140 => 58,  136 => 57,  127 => 53,  123 => 52,  114 => 45,  112 => 44,  101 => 35,  95 => 33,  93 => 32,  83 => 27,  79 => 26,  65 => 15,  60 => 14,  58 => 13,  54 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
     }
 }

@@ -41,6 +41,9 @@ class Materi extends MY_Controller
         # cari matapelajarannya
         $val['mapel'] = $this->mapel_model->retrieve($val['mapel_id']);
 
+        # hitung jumlah komentar
+        $val['jml_komentar'] = $this->komentar_model->count_by('materi', $val['id']);
+
         return $val;
     }
 
@@ -419,6 +422,9 @@ class Materi extends MY_Controller
             unlink(get_path_file($materi['file']));
         }
 
+        # hapus komentar pada materi ini
+        $this->komentar_model->delete_by_materi($materi['id']);
+
         $this->materi_model->delete($materi['id']);
 
         $this->session->set_flashdata('materi', get_alert('warning', 'Materi berhasil dihapus.'));
@@ -430,12 +436,12 @@ class Materi extends MY_Controller
         $materi_id = (int)$segment_3;
 
         if (empty($materi_id)) {
-            $data['error'] = "Materi tidak ditemukan.";
+            show_error("Materi tidak ditemukan.");
         }
 
         $materi = $this->materi_model->retrieve($materi_id);
         if (empty($materi) OR empty($materi['publish'])) {
-            $data['error'] = "Materi tidak ditemukan.";
+            show_error("Materi tidak ditemukan.");
         }
 
         # tambah views jika materi terfulis
@@ -473,8 +479,33 @@ class Materi extends MY_Controller
 
                 if (!isset($data['error'])) {
 
+                    # post komentar
+                    $this->form_validation->set_rules('komentar', 'Komentar', 'required|trim|xss_clean');
+                    if ($this->form_validation->run() == true) {
+                        $komentar_id = $this->komentar_model->create(
+                            get_sess_data('login', 'id'),
+                            $materi['id'],
+                            $tampil = 1,
+                            $this->input->post('komentar', true)
+                        );
+
+                        redirect('materi/detail/' . $materi['id'] . '/#komentar-' . $komentar_id);
+                    }
+
                     $data['materi'] = $materi;
                     $data['materi']['download_link'] = site_url('materi/detail/'.$materi['id'].'/download');
+
+                    # ambil komentar
+                    $retrieve_all_komentar = $this->komentar_model->retrieve_all(20, (int)$segment_4, null, $materi['id'], 1);
+
+                    # format komentar
+                    foreach ($retrieve_all_komentar['results'] as $key => $val) {
+                        $retrieve_all_komentar['results'][$key] = $this->format_komentar($val);
+                    }
+
+                    $data['materi']['komentar']            = $retrieve_all_komentar['results'];
+                    $data['materi']['jml_komentar']        = $retrieve_all_komentar['total_record'];
+                    $data['materi']['komentar_pagination'] = $this->pager->view($retrieve_all_komentar, 'materi/detail/' . $materi['id'] . '/', array(), false);
 
                     # cari tipenya
                     if (empty($materi['file'])) {
@@ -489,9 +520,11 @@ class Materi extends MY_Controller
                     $data['materi']['mapel'] = $this->mapel_model->retrieve($materi['mapel_id']);
 
                     # cari materi kelas
-                    $materi_kelas = $this->materi_model->retrieve_all_kelas($materi['id']);
+                    $arr_materi_kelas_id = array();
+                    $materi_kelas        = $this->materi_model->retrieve_all_kelas($materi['id']);
                     foreach ($materi_kelas as $mk) {
-                        $kelas = $this->kelas_model->retrieve($mk['kelas_id']);
+                        $arr_materi_kelas_id[]            = $mk['kelas_id'];
+                        $kelas                            = $this->kelas_model->retrieve($mk['kelas_id']);
                         $data['materi']['materi_kelas'][] = $kelas;
                     }
 
@@ -523,11 +556,109 @@ class Materi extends MY_Controller
                         }
                     }
 
+                    # cari materi terkait
+                    $retrieve_terkait_mapel = $this->materi_model->retrieve_all(
+                        $no_of_records = 10,
+                        $page_no       = 1,
+                        $pengajar_id   = array(),
+                        $siswa_id      = array(),
+                        $mapel_id      = array($materi['mapel_id']),
+                        $judul         = null,
+                        $konten        = null,
+                        $tgl_posting   = null,
+                        $publish       = 1,
+                        $kelas_id      = array(),
+                        $type          = array(),
+                        $pagination    = false
+                    );
+
+                    $data_terkait = array();
+                    foreach ($retrieve_terkait_mapel as $row) {
+                        if (empty($data_terkait[$row['id']]) AND $row['id'] != $materi['id'] AND count($data_terkait) <= 20) {
+                            $data_terkait[$row['id']] = $row;
+                        }
+                    }
+
+                    $retrieve_terkait_kelas = $this->materi_model->retrieve_all(
+                        $no_of_records = 10,
+                        $page_no       = 1,
+                        $pengajar_id   = array(),
+                        $siswa_id      = array(),
+                        $mapel_id      = array(),
+                        $judul         = null,
+                        $konten        = null,
+                        $tgl_posting   = null,
+                        $publish       = 1,
+                        $kelas_id      = $arr_materi_kelas_id,
+                        $type          = array(),
+                        $pagination    = false
+                    );
+
+                    foreach ($retrieve_terkait_kelas as $row) {
+                        if (empty($data_terkait[$row['id']]) AND $row['id'] != $materi['id'] AND count($data_terkait) <= 20) {
+                            $data_terkait[$row['id']] = $row;
+                        }
+                    }
+
+                    $data['terkait'] = $data_terkait;
+
                 } else {
                     $data['materi'] = array();
                 }
             break;
         }
+
+        # setup componen SyntaxHighlighter
+        $html_js = load_comp_js(array(
+            base_url('assets/comp/SyntaxHighlighter/scripts/shCore.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAppleScript.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAS3.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushBash.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushColdFusion.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCpp.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCSharp.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCss.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDelphi.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDiff.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushErlang.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushGroovy.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJava.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJavaFX.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJScript.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPerl.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPhp.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPlain.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPowerShell.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPython.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushRuby.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSass.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushScala.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSql.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushVb.js'),
+            base_url('assets/comp/SyntaxHighlighter/scripts/shBrushXml.js'),
+            base_url('assets/comp/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'),
+        ));
+        $html_js .= '<script type="text/javascript">SyntaxHighlighter.all();</script>';
+
+        # setup tinymce komentar
+        $tiny_option = 'theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,link,unlink,|,sub,sup,charmap,tiny_mce_wiris_formulaEditor,|,emotions,image,media,youtubeIframe,syntaxhl,code",
+        theme_advanced_buttons2 : "",
+        theme_advanced_buttons3 : "",
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_statusbar_location : "bottom",
+        file_browser_callback : "openKCFinder",
+        theme_advanced_resizing : false,
+        content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
+        convert_urls: false,
+        force_br_newlines : false,
+        force_p_newlines : false,';
+        $html_js .= get_tinymce('komentar', 'advanced', array('pdw'), $tiny_option);
+
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(
+            base_url('assets/comp/SyntaxHighlighter/styles/shCoreEclipse.css'),
+        ));
 
         $this->twig->display('detail-materi.html', $data);
     }

@@ -10,26 +10,27 @@
         <h1 class="title">{{ materi.judul }}</h1>
         {% if error is not defined %}
         <ul class="unstyled inline ul-top">
-            <li><b class="title-info">{{ materi.mapel.nama }}</b>,</li>
+            <li><b>{{ materi.mapel.nama }}</b>,</li>
             {% for mk in materi.materi_kelas %}
                 <li>{{ mk.nama }},</li>
             {% endfor %}
             <li>Diposting oleh <a href="{{ materi.pembuat.link_profil }}">{{ materi.pembuat.nama }}</a></li>
             <li>{{ tgl_jam_indo(materi.tgl_posting) }},</li>
             <li>{{ (type == 'tertulis') ? 'Dibaca' : 'Diunduh' }} {{ materi.views }} Kali</li>
+            <li>{{ materi.jml_komentar }} Komentar</li>
         </ul>
         {% endif %}
-        
+
         <hr class="hr-top">
         <div class="wrap-content">
             <div class="content">
                 {% if error is not defined %}
                     {% if type == 'tertulis' %}
-                        {{ html_entity_decode(materi.konten)|raw }}
+                        {{ materi.konten|raw_youtube|raw }}
                     {% elseif type == 'file' %}
                         <dl class="dl-horizontal">
                             <dt>Name</dt>
-                            <dd>{{ materi.file_info.name }}</dd>
+                            <dd>{{ (materi.file_info.name is empty) ? 'noname' : materi.file_info.name }}</dd>
                             <dt>Size</dt>
                             <dd>{{ byte_format(materi.file_info.size) }}</dd>
                             <dt>Modified</dt>
@@ -40,6 +41,64 @@
                             <dd><br><a href="{{ materi.download_link }}" class="btn btn-warning"><i class="icon-download"></i> Download File</a></dd>
                         </dl>
                     {% endif %}
+
+                    <br>
+                    <div class="row-fluid">
+                        <div class="span8">
+                            {% if materi.jml_komentar > 0 %}
+                                <h4><i class="fa fa-comments"></i> {{ materi.jml_komentar }} Komentar</h4>
+
+                                {% for k in materi.komentar %}
+                                <div class="komentar" id="komentar-{{ k.id }}">
+                                    <img src="{{ k.login.link_image }}" style="height:25px;width:25px; margin-left:5px;" class="img-circle img-polaroid pull-right">
+                                    <p><a href="{{ k.login.link_profil }}"><b>{{ k.login.nama }}</b></a>, <small>{{ k.tgl_posting|date('d F Y') }}</small>, <small><a href="" class="text-muted"><i class="fa fa-bug"></i> laporkan</a></small></p>
+                                    {{ k.konten|raw_youtube|raw }}
+                                </div>
+                                {% endfor %}
+
+                                {% if materi.jml_komentar > 20 %}
+                                    <div style="font-size:12px;">
+                                    {{ materi.komentar_pagination|raw }}
+                                    </div>
+                                {% else %}
+                                    <br>
+                                {% endif %}
+                            {% endif %}
+
+                            <h4>
+                                <i class="fa fa-pencil"></i> Tulis komentar
+                                <div class="pull-right" style="font-size: 14px;">{{ form_error('komentar')|raw }}</div>
+                            </h4>
+                            <div class="bg-form-komentar" id="form-komentar">
+                                <form method="post" action="{{ site_url('materi/detail/' ~ materi.id) }}">
+                                    <p><textarea class="span12" id="komentar" name="komentar">{{ set_value('komentar')|raw }}</textarea></p>
+                                    <p>
+                                        <button class="btn btn-primary pull-right">Post komentar</button>
+                                        <img src="{{ get_url_image_session(get_sess_data('user', 'foto'), 'medium', get_sess_data('user', 'jenis_kelamin')) }}" style="height:30px;width:30px; margin-right:5px;" class="img-circle img-polaroid">
+                                        {{ get_sess_data('user', 'nama') }}
+                                    </p>
+                                    <div class="clear"></div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="span4">
+                            <h4><i class="fa fa-file"></i> Materi lainnya</h4>
+                            <ul class="unstyled ul-materi">
+                                {% for t in terkait %}
+                                <li>
+                                    <div class="materi">
+                                        <a href="{{ site_url('materi/detail/' ~ t.id) }}"><i class="fa {{ (t.file is empty) ? 'fa-file-text' : 'fa-file' }} img-circle img-polaroid {{ (strlen(t.judul) > 33) ? 'pull-left' }}" style="padding:10px; margin-right:10px;"></i>{{ t.judul|raw }}</a>
+                                    </div>
+                                </li>
+                                {% endfor %}
+
+                                {% if terkait is empty %}
+                                <div class="alert alert-info">Tidak ada materi terkait</div>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+
                 {% else %}
                     <div class="alert alert-danger">
                         <h3>{{ error }}</h3>
