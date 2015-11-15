@@ -70,12 +70,18 @@ ul.ul-top {
 .hr-1 {
     margin-top: 5px;
 }
+iframe {
+    max-width: 100%;
+}
 .komentar {
     background-color: #f5f5f5;
     padding: 10px;
     margin-bottom: 15px;
     border-radius: 5px;
     font-size: 15px;
+}
+.komentar img {
+    max-width: 100%;
 }
 .is_reply {
     margin-left: 40px;

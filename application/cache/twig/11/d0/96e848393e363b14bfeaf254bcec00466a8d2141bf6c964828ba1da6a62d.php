@@ -67,6 +67,27 @@ class __TwigTemplate_11d096e848393e363b14bfeaf254bcec00466a8d2141bf6c964828ba1da
         echo get_flashdata("komentar");
         echo "
 
+        ";
+        // line 28
+        if (is_admin()) {
+            // line 29
+            echo "        <div class=\"btn-group\">
+            <a href=\"";
+            // line 30
+            echo twig_escape_filter($this->env, site_url("materi/komentar"), "html", null, true);
+            echo "\" class=\"btn btn-sm btn-primary\">Semua</a>
+            <a href=\"";
+            // line 31
+            echo twig_escape_filter($this->env, site_url("materi/komentar/laporan"), "html", null, true);
+            echo "\" class=\"btn btn-sm btn-default\">Laporan (";
+            echo twig_escape_filter($this->env, (isset($context["jml_laporan"]) ? $context["jml_laporan"] : null), "html", null, true);
+            echo ")</a>
+        </div>
+        <br><br>
+        ";
+        }
+        // line 35
+        echo "
         <table class=\"table table-striped datatable\">
             <thead>
                 <tr>
@@ -76,31 +97,41 @@ class __TwigTemplate_11d096e848393e363b14bfeaf254bcec00466a8d2141bf6c964828ba1da
             </thead>
             <tbody>
                 ";
-        // line 36
+        // line 44
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["komentar"]) ? $context["komentar"] : null));
         foreach ($context['_seq'] as $context["_key"] => $context["k"]) {
-            // line 37
+            // line 45
             echo "                <tr>
                     <td>
                         <b>";
-            // line 39
+            // line 47
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"), "html", null, true);
             echo "</b>
-                        <br>
-                        <a href=\"\"><i class=\"icon icon-trash\"></i></a>
-                    </td>
+                        ";
+            // line 48
+            if (is_admin()) {
+                // line 49
+                echo "                        <br>
+                        <a href=\"";
+                // line 50
+                echo twig_escape_filter($this->env, site_url(("materi/komentar/delete/" . $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"))), "html", null, true);
+                echo "\" onclick=\"return confirm('Anda yakin ingin menghapus komentar ini?')\"><i class=\"icon icon-trash\"></i></a>
+                        ";
+            }
+            // line 52
+            echo "                    </td>
                     <td>
                         <div class=\"media\">
                             <div class=\"pull-right\">
                                 <img src=\"";
-            // line 46
+            // line 56
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "login"), "link_image"), "html", null, true);
             echo "\" style=\"height:25px;width:25px;\" class=\"img-circle img-polaroid\">
                             </div>
                             <div class=\"media-body\">
                                 <p><a href=\"";
-            // line 49
+            // line 59
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "login"), "link_profil"), "html", null, true);
             echo "\"><b>";
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "login"), "nama"), "html", null, true);
@@ -112,7 +143,7 @@ class __TwigTemplate_11d096e848393e363b14bfeaf254bcec00466a8d2141bf6c964828ba1da
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "materi"), "judul"), "html", null, true);
             echo "</a></b></p>
                                 ";
-            // line 50
+            // line 60
             echo call_user_func_array($this->env->getFilter('raw_youtube')->getCallable(), array($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "konten")));
             echo "
                             </div>
@@ -124,7 +155,7 @@ class __TwigTemplate_11d096e848393e363b14bfeaf254bcec00466a8d2141bf6c964828ba1da
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['k'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 56
+        // line 66
         echo "            </tbody>
         </table>
 
@@ -145,6 +176,6 @@ class __TwigTemplate_11d096e848393e363b14bfeaf254bcec00466a8d2141bf6c964828ba1da
 
     public function getDebugInfo()
     {
-        return array (  128 => 56,  116 => 50,  104 => 49,  98 => 46,  88 => 39,  84 => 37,  80 => 36,  67 => 26,  60 => 21,  57 => 20,  43 => 8,  40 => 7,  33 => 4,  30 => 3,);
+        return array (  159 => 66,  147 => 60,  135 => 59,  129 => 56,  123 => 52,  118 => 50,  115 => 49,  113 => 48,  109 => 47,  105 => 45,  101 => 44,  90 => 35,  81 => 31,  77 => 30,  74 => 29,  72 => 28,  67 => 26,  60 => 21,  57 => 20,  43 => 8,  40 => 7,  33 => 4,  30 => 3,);
     }
 }

@@ -144,29 +144,61 @@ class __TwigTemplate_29e7abeb6ab234c92e133b9be5c71e9d4a095ced90650a15dacb2b1805b
                     <br>
                     <div class=\"row-fluid\">
                         <div class=\"span8\">
+                            <h4>
+                                <i class=\"fa fa-pencil\"></i> Tulis komentar
+                                <div class=\"pull-right\" style=\"font-size: 14px;\">";
+            // line 50
+            echo form_error("komentar");
+            echo "</div>
+                            </h4>
+                            <div class=\"bg-form-komentar\" id=\"form-komentar\">
+                                <form method=\"post\" action=\"";
+            // line 53
+            echo twig_escape_filter($this->env, site_url(("materi/detail/" . $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "id"))), "html", null, true);
+            echo "\">
+                                    <p><textarea class=\"span12\" id=\"komentar\" name=\"komentar\">";
+            // line 54
+            echo set_value("komentar");
+            echo "</textarea></p>
+                                    <p>
+                                        <button class=\"btn btn-primary pull-right\">Post komentar</button>
+                                        <img src=\"";
+            // line 57
+            echo twig_escape_filter($this->env, get_url_image_session(get_sess_data("user", "foto"), "medium", get_sess_data("user", "jenis_kelamin")), "html", null, true);
+            echo "\" style=\"height:30px;width:30px; margin-right:5px;\" class=\"img-circle img-polaroid\">
+                                        ";
+            // line 58
+            echo twig_escape_filter($this->env, get_sess_data("user", "nama"), "html", null, true);
+            echo "
+                                    </p>
+                                    <div class=\"clear\"></div>
+                                </form>
+                            </div>
+                            <br>
+
                             ";
-            // line 48
+            // line 65
             if (($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "jml_komentar") > 0)) {
-                // line 49
+                // line 66
                 echo "                                <h4><i class=\"fa fa-comments\"></i> ";
                 echo twig_escape_filter($this->env, $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "jml_komentar"), "html", null, true);
                 echo " Komentar</h4>
 
                                 ";
-                // line 51
+                // line 68
                 $context['_parent'] = (array) $context;
                 $context['_seq'] = twig_ensure_traversable($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "komentar"));
                 foreach ($context['_seq'] as $context["_key"] => $context["k"]) {
-                    // line 52
+                    // line 69
                     echo "                                <div class=\"komentar\" id=\"komentar-";
                     echo twig_escape_filter($this->env, $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"), "html", null, true);
                     echo "\">
                                     <img src=\"";
-                    // line 53
+                    // line 70
                     echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "login"), "link_image"), "html", null, true);
                     echo "\" style=\"height:25px;width:25px; margin-left:5px;\" class=\"img-circle img-polaroid pull-right\">
                                     <p><a href=\"";
-                    // line 54
+                    // line 71
                     echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "login"), "link_profil"), "html", null, true);
                     echo "\"><b>";
                     echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "login"), "nama"), "html", null, true);
@@ -176,7 +208,7 @@ class __TwigTemplate_29e7abeb6ab234c92e133b9be5c71e9d4a095ced90650a15dacb2b1805b
                     echo twig_escape_filter($this->env, site_url(((("materi/detail/" . $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "id")) . "/laporkan/") . $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"))), "html", null, true);
                     echo "\" class=\"text-muted iframe-laporkan\"><i class=\"fa fa-bug\"></i> laporkan</a></small></p>
                                     ";
-                    // line 55
+                    // line 72
                     echo call_user_func_array($this->env->getFilter('raw_youtube')->getCallable(), array($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "konten")));
                     echo "
                                 </div>
@@ -185,73 +217,31 @@ class __TwigTemplate_29e7abeb6ab234c92e133b9be5c71e9d4a095ced90650a15dacb2b1805b
                 $_parent = $context['_parent'];
                 unset($context['_seq'], $context['_iterated'], $context['_key'], $context['k'], $context['_parent'], $context['loop']);
                 $context = array_intersect_key($context, $_parent) + $_parent;
-                // line 58
+                // line 75
                 echo "
+                                <div style=\"font-size:12px;\">
                                 ";
-                // line 59
-                if (($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "jml_komentar") > 20)) {
-                    // line 60
-                    echo "                                    <div style=\"font-size:12px;\">
-                                    ";
-                    // line 61
-                    echo $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "komentar_pagination");
-                    echo "
-                                    </div>
-                                ";
-                } else {
-                    // line 64
-                    echo "                                    <br>
-                                ";
-                }
-                // line 66
-                echo "                            ";
+                // line 77
+                echo $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "komentar_pagination");
+                echo "
+                                </div>
+                            ";
             }
-            // line 67
-            echo "
-                            <h4>
-                                <i class=\"fa fa-pencil\"></i> Tulis komentar
-                                <div class=\"pull-right\" style=\"font-size: 14px;\">";
-            // line 70
-            echo form_error("komentar");
-            echo "</div>
-                            </h4>
-                            <div class=\"bg-form-komentar\" id=\"form-komentar\">
-                                <form method=\"post\" action=\"";
-            // line 73
-            echo twig_escape_filter($this->env, site_url(("materi/detail/" . $this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "id"))), "html", null, true);
-            echo "\">
-                                    <p><textarea class=\"span12\" id=\"komentar\" name=\"komentar\">";
-            // line 74
-            echo set_value("komentar");
-            echo "</textarea></p>
-                                    <p>
-                                        <button class=\"btn btn-primary pull-right\">Post komentar</button>
-                                        <img src=\"";
-            // line 77
-            echo twig_escape_filter($this->env, get_url_image_session(get_sess_data("user", "foto"), "medium", get_sess_data("user", "jenis_kelamin")), "html", null, true);
-            echo "\" style=\"height:30px;width:30px; margin-right:5px;\" class=\"img-circle img-polaroid\">
-                                        ";
-            // line 78
-            echo twig_escape_filter($this->env, get_sess_data("user", "nama"), "html", null, true);
-            echo "
-                                    </p>
-                                    <div class=\"clear\"></div>
-                                </form>
-                            </div>
-                        </div>
+            // line 80
+            echo "                        </div>
                         <div class=\"span4\">
                             <h4><i class=\"fa fa-file\"></i> Materi lainnya</h4>
                             <ul class=\"unstyled ul-materi\">
                                 ";
-            // line 87
+            // line 84
             $context['_parent'] = (array) $context;
             $context['_seq'] = twig_ensure_traversable((isset($context["terkait"]) ? $context["terkait"] : null));
             foreach ($context['_seq'] as $context["_key"] => $context["t"]) {
-                // line 88
+                // line 85
                 echo "                                <li>
                                     <div class=\"materi\">
                                         <a href=\"";
-                // line 90
+                // line 87
                 echo twig_escape_filter($this->env, site_url(("materi/detail/" . $this->getAttribute((isset($context["t"]) ? $context["t"] : null), "id"))), "html", null, true);
                 echo "\"><i class=\"fa ";
                 echo ((twig_test_empty($this->getAttribute((isset($context["t"]) ? $context["t"] : null), "file"))) ? ("fa-file-text") : ("fa-file"));
@@ -267,32 +257,32 @@ class __TwigTemplate_29e7abeb6ab234c92e133b9be5c71e9d4a095ced90650a15dacb2b1805b
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['t'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 94
+            // line 91
             echo "
                                 ";
-            // line 95
+            // line 92
             if (twig_test_empty((isset($context["terkait"]) ? $context["terkait"] : null))) {
-                // line 96
+                // line 93
                 echo "                                <div class=\"alert alert-info\">Tidak ada materi terkait</div>
                                 ";
             }
-            // line 98
+            // line 95
             echo "                            </ul>
                         </div>
                     </div>
 
                 ";
         } else {
-            // line 103
+            // line 100
             echo "                    <div class=\"alert alert-danger\">
                         <h3>";
-            // line 104
+            // line 101
             echo twig_escape_filter($this->env, (isset($context["error"]) ? $context["error"] : null), "html", null, true);
             echo "</h3>
                     </div>
                 ";
         }
-        // line 107
+        // line 104
         echo "            </div>
         </div>
     </div>
@@ -312,6 +302,6 @@ class __TwigTemplate_29e7abeb6ab234c92e133b9be5c71e9d4a095ced90650a15dacb2b1805b
 
     public function getDebugInfo()
     {
-        return array (  296 => 107,  290 => 104,  287 => 103,  280 => 98,  276 => 96,  274 => 95,  271 => 94,  255 => 90,  251 => 88,  247 => 87,  235 => 78,  231 => 77,  225 => 74,  221 => 73,  215 => 70,  210 => 67,  207 => 66,  203 => 64,  197 => 61,  194 => 60,  192 => 59,  189 => 58,  180 => 55,  170 => 54,  166 => 53,  161 => 52,  157 => 51,  151 => 49,  149 => 48,  143 => 44,  137 => 41,  132 => 39,  127 => 37,  122 => 35,  117 => 33,  113 => 31,  107 => 29,  104 => 28,  102 => 27,  96 => 23,  90 => 20,  84 => 19,  80 => 18,  73 => 17,  64 => 15,  60 => 14,  56 => 13,  53 => 12,  51 => 11,  47 => 10,  43 => 8,  40 => 7,  32 => 4,  29 => 3,);
+        return array (  286 => 104,  280 => 101,  277 => 100,  270 => 95,  266 => 93,  264 => 92,  261 => 91,  245 => 87,  241 => 85,  237 => 84,  231 => 80,  225 => 77,  221 => 75,  212 => 72,  202 => 71,  198 => 70,  193 => 69,  189 => 68,  183 => 66,  181 => 65,  171 => 58,  167 => 57,  161 => 54,  157 => 53,  151 => 50,  143 => 44,  137 => 41,  132 => 39,  127 => 37,  122 => 35,  117 => 33,  113 => 31,  107 => 29,  104 => 28,  102 => 27,  96 => 23,  90 => 20,  84 => 19,  80 => 18,  73 => 17,  64 => 15,  60 => 14,  56 => 13,  53 => 12,  51 => 11,  47 => 10,  43 => 8,  40 => 7,  32 => 4,  29 => 3,);
     }
 }

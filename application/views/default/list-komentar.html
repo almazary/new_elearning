@@ -25,6 +25,14 @@ Komentar Materi - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('komentar')|raw }}
 
+        {% if is_admin() %}
+        <div class="btn-group">
+            <a href="{{ site_url('materi/komentar') }}" class="btn btn-sm btn-primary">Semua</a>
+            <a href="{{ site_url('materi/komentar/laporan') }}" class="btn btn-sm btn-default">Laporan ({{ jml_laporan }})</a>
+        </div>
+        <br><br>
+        {% endif %}
+
         <table class="table table-striped datatable">
             <thead>
                 <tr>
@@ -37,8 +45,10 @@ Komentar Materi - {{ parent() }}
                 <tr>
                     <td>
                         <b>{{ k.id }}</b>
+                        {% if is_admin() %}
                         <br>
-                        <a href=""><i class="icon icon-trash"></i></a>
+                        <a href="{{ site_url('materi/komentar/delete/' ~ k.id) }}" onclick="return confirm('Anda yakin ingin menghapus komentar ini?')"><i class="icon icon-trash"></i></a>
+                        {% endif %}
                     </td>
                     <td>
                         <div class="media">

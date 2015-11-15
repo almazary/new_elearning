@@ -485,25 +485,41 @@ class Materi extends MY_Controller
                         $alasan = $this->input->post('alasan_lain', true);
                     }
 
-                    $field_id = 'laporkan-komentar-' . $materi['id'];
+                    $unix_id  = uniqid() . time();
+                    $field_id = 'laporkan-komentar';
                     $retrieve_field = retrieve_field($field_id);
                     if (empty($retrieve_field)) {
                         create_field($field_id, 'Laporkan Komentar', json_encode(array(
-                            array(
+                            $unix_id => array(
                                 'materi_id'   => $materi['id'],
                                 'komentar_id' => $komentar['id'],
-                                'alasan'      => $alasan
+                                'alasan'      => $alasan,
+                                'login_id'    => get_sess_data('login', 'id'),
+                                'tgl_lapor'   => date('Y-m-d H:i:s')
                             )
                         )));
                     } else {
                         $value_field = json_decode($retrieve_field['value'], 1);
-                        $value_field[] = array(
-                            'materi_id'   => $materi['id'],
-                            'komentar_id' => $komentar['id'],
-                            'alasan'      => $alasan
-                        );
 
-                        update_field($field_id, 'Laporkan Komentar', json_encode($value_field));
+                        # cek sudah ada belum datanya
+                        $exist = false;
+                        foreach ($value_field as $val) {
+                            if ($val['materi_id'] == $materi['id'] AND $val['login_id'] == get_sess_data('login', 'id') AND $val['komentar_id'] == $komentar['id']) {
+                                $exist = true;
+                            }
+                        }
+
+                        if (!$exist) {
+                            $value_field[$unix_id] = array(
+                                'materi_id'   => $materi['id'],
+                                'komentar_id' => $komentar['id'],
+                                'alasan'      => $alasan,
+                                'login_id'    => get_sess_data('login', 'id'),
+                                'tgl_lapor'   => date('Y-m-d H:i:s')
+                            );
+
+                            update_field($field_id, 'Laporkan Komentar', json_encode($value_field));
+                        }
                     }
 
                     $this->session->set_flashdata('laporkan', get_alert('success', 'Laporan berhasil dikirim.'));
@@ -550,7 +566,7 @@ class Materi extends MY_Controller
 
                 $data['materi']['komentar']            = $retrieve_all_komentar['results'];
                 $data['materi']['jml_komentar']        = $retrieve_all_komentar['total_record'];
-                $data['materi']['komentar_pagination'] = $this->pager->view($retrieve_all_komentar, 'materi/detail/' . $materi['id'] . '/', array(), false);
+                $data['materi']['komentar_pagination'] = $this->pager->view($retrieve_all_komentar, 'materi/detail/' . $materi['id'] . '/');
 
                 # cari tipenya
                 if (empty($materi['file'])) {
@@ -711,7 +727,7 @@ class Materi extends MY_Controller
         }
     }
 
-    function komentar($segment_3 = '')
+    function komentar($segment_3 = '', $segment_4 = '')
     {
         # panggil datatables dan combobox
         $data['comp_js'] = load_comp_js(array(
@@ -725,8 +741,97 @@ class Materi extends MY_Controller
         ));
 
         switch ($segment_3) {
-            case 'value':
-                # code...
+            case 'laporan':
+                if (!is_admin()) {
+                    redirect('materi/komentar');
+                }
+
+                $field_id       = 'laporkan-komentar';
+                $retrieve_field = retrieve_field($field_id);
+                if (isset($retrieve_field['value'])) {
+                    $field_value = json_decode($retrieve_field['value'], 1);
+                } else {
+                    $field_value = array();
+                }
+
+                # aksi
+                $get_act = (!empty($_GET['act'])) ? $_GET['act'] : '';
+                if (!empty($get_act) AND in_array($get_act, array(1, 2))) {
+                    $id = (string)$_GET['id'];
+                    if (empty($id)) {
+                        redirect('materi/komentar/laporan');
+                    }
+
+                    # hapus komentar dan laporan
+                    if (!empty($field_value[$id])) {
+                        $laporan = $field_value[$id];
+
+                        if ($get_act == 1) {
+                            # hapus komentar
+                            $this->komentar_model->delete($laporan['komentar_id']);
+                        }
+
+                        # hapus laporan
+                        unset($field_value[$id]);
+                        update_field($field_id, 'Laporan Komentar', json_encode($field_value));
+
+                        $this->session->set_flashdata('komentar', get_alert('success', 'Komentar ' . (($get_act == 1) ? 'dan laporan ' : '') . 'berhasil dihapus.'));
+                        redirect('materi/komentar/laporan');
+                    } else {
+                        redirect('materi/komentar/laporan');
+                    }
+                }
+
+                # format data
+                $results = array();
+                foreach ($field_value as $id => $val) {
+                    $val['id'] = $id;
+
+                    # cari materi
+                    $materi = $this->materi_model->retrieve($val['materi_id']);
+                    if (empty($materi)) {
+                        # hapus laporan
+                        unset($field_value[$id]);
+                        update_field($field_id, 'Laporan Komentar', json_encode($field_value));
+                        continue;
+                    }
+                    $val['materi'] = $materi;
+
+                    $login = $this->get_user_data($val['login_id']);
+                    $val['login'] = $login;
+
+                    $komentar = $this->komentar_model->retrieve($val['komentar_id']);
+                    if (empty($komentar)) {
+                        # hapus laporan
+                        unset($field_value[$id]);
+                        update_field($field_id, 'Laporan Komentar', json_encode($field_value));
+                        continue;
+                    }
+                    $val['komentar'] = $komentar;
+                    $val['komentar']['login'] = $this->get_user_data($komentar['login_id']);
+
+                    $results[] = $val;
+                }
+                $data['laporan'] = $results;
+
+                $this->twig->display('list-komentar-laporan.html', $data);
+            break;
+
+            case 'delete':
+                if (!is_admin()) {
+                    redirect('materi/komentar');
+                }
+
+                $komentar = $this->komentar_model->retrieve((int)$segment_4);
+                if (empty($komentar)) {
+                    show_error('Komentar tidak ditemukan');
+                }
+
+                # hapus komentar
+                $this->komentar_model->delete($komentar['id']);
+
+                $this->session->set_flashdata('komentar', get_alert('success', 'Komentar berhasil dihapus.'));
+                redirect('materi/komentar');
             break;
 
             default:
@@ -748,6 +853,19 @@ class Materi extends MY_Controller
                 }
 
                 $data['komentar'] = $retrieve_all;
+
+                if (is_admin()) {
+                    # hitung jumlah laporan
+                    $field_id       = 'laporkan-komentar';
+                    $retrieve_field = retrieve_field($field_id);
+                    if (isset($retrieve_field['value'])) {
+                        $field_value = json_decode($retrieve_field['value'], 1);
+                    } else {
+                        $field_value = array();
+                    }
+
+                    $data['jml_laporan'] = count($field_value);
+                }
 
                 $this->twig->display('list-komentar.html', $data);
             break;
