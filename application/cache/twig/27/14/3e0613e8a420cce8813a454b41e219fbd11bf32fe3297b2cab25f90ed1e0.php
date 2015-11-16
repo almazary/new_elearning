@@ -93,7 +93,7 @@ class __TwigTemplate_27143e0613e8a420cce8813a454b41e219fbd11bf32fe3297b2cab25f90
         // line 33
         echo "
         <div class=\"bs-callout bs-callout-info\">
-            <b><a id=\"button\" href=\"javascript:void(0)\">PARAMETER PENCARIAN</a></b>
+            <b><a id=\"button\" href=\"javascript:void(0)\"><i class=\"icon-search\" style=\"line-height: 0px;\"></i> PARAMETER PENCARIAN</a></b>
             ";
         // line 36
         echo form_open("siswa/filter");

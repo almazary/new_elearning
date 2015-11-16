@@ -89,7 +89,7 @@ class __TwigTemplate_d6e7099ba40984ab7cc44a389903d936b173cc1806f217e30e75e123937
         // line 32
         echo "
         <div class=\"bs-callout bs-callout-info\">
-            <b><a id=\"button\" href=\"javascript:void(0)\">PARAMETER PENCARIAN</a></b>
+            <b><a id=\"button\" href=\"javascript:void(0)\"><i class=\"icon-search\" style=\"line-height: 0px;\"></i> PARAMETER PENCARIAN</a></b>
             ";
         // line 35
         echo form_open("pengajar/filter");
