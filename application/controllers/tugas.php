@@ -1260,7 +1260,7 @@ class Tugas extends MY_Controller
         redirect('tugas');
     }
 
-    function nilai($tugas_id = '')
+    function nilai($tugas_id = '', $mode = '')
     {
         $tugas_id = (int)$tugas_id;
         $tugas    = $this->tugas_model->retrieve($tugas_id);
@@ -1277,6 +1277,9 @@ class Tugas extends MY_Controller
                 redirect('tugas');
             }
 
+            # kelas
+            $kelas_nilai = array();
+
             # ambil nilai
             $data_nilai     = array();
             $retrieve_nilai = $this->tugas_model->retrieve_all_nilai($tugas['id']);
@@ -1292,6 +1295,7 @@ class Tugas extends MY_Controller
                 }
 
                 $nilai['history'] = $history;
+                $nilai['history']['value'] = json_decode($history['value'], 1);
 
                 # cari siswa
                 $siswa = $this->siswa_model->retrieve($nilai['siswa_id']);
@@ -1304,28 +1308,47 @@ class Tugas extends MY_Controller
                 $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
                 $siswa['kelas_aktif'] = $kelas;
 
+                if (!isset($kelas_nilai[$kelas['id']])) {
+                    $kelas_nilai[$kelas['id']] = $kelas;
+                }
+
                 $nilai['siswa'] = $siswa;
 
-                $data_nilai[] = $nilai;
+                if (!empty($_POST['kelas_id'])) {
+                    if ($_POST['kelas_id'] == 'all' OR $kelas['id'] == $_POST['kelas_id']) {
+                        $data_nilai[] = $nilai;
+                    }
+                } else {
+                    $data_nilai[] = $nilai;
+                }
             }
 
-            $data['data_nilai'] = $data_nilai;
+            $data['data_nilai']  = $data_nilai;
+            $data['kelas_nilai'] = $kelas_nilai;
 
-            # panggil datatables dan combobox
-            $data['comp_js'] = load_comp_js(array(
-                base_url('assets/comp/datatables/jquery.dataTables.js'),
-                base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-                base_url('assets/comp/datatables/script.js'),
-                base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                base_url('assets/comp/colorbox/act-tugas.js'),
-            ));
+            if ($mode == 'print') {
+                $this->twig->display('print-nilai.html', $data);
+            } elseif ($mode == 'export_excel') {
+                header("Content-type: application/vnd-ms-excel");
+                header("Content-Disposition: attachment; filename=nilai-" . url_title($data['tugas']['judul'], '-', true)  . ".xls");
+                $this->twig->display('export-excel-nilai.html', $data);
+            } else {
+                # panggil datatables dan combobox
+                $data['comp_js'] = load_comp_js(array(
+                    base_url('assets/comp/datatables/jquery.dataTables.js'),
+                    base_url('assets/comp/datatables/datatable-bootstrap2.js'),
+                    base_url('assets/comp/datatables/script.js'),
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-tugas.js'),
+                ));
 
-            $data['comp_css'] = load_comp_css(array(
-                base_url('assets/comp/datatables/datatable-bootstrap2.css'),
-                base_url('assets/comp/colorbox/colorbox.css'),
-            ));
+                $data['comp_css'] = load_comp_css(array(
+                    base_url('assets/comp/datatables/datatable-bootstrap2.css'),
+                    base_url('assets/comp/colorbox/colorbox.css'),
+                ));
 
-            $this->twig->display('list-nilai.html', $data);
+                $this->twig->display('list-nilai.html', $data);
+            }
         }
 
         if (is_siswa()) {
@@ -1347,7 +1370,7 @@ class Tugas extends MY_Controller
         }
     }
 
-    function koreksi($tugas_id = '')
+    function koreksi($tugas_id = '', $mode = '')
     {
         if (is_siswa()) {
             redirect('tugas');
@@ -1367,6 +1390,9 @@ class Tugas extends MY_Controller
         $data['tugas'] = $this->formatData($tugas);
 
         $data_siswa = array();
+
+        # kelas
+        $kelas_nilai = array();
 
         # ambil history
         $retrieve_all_history = $this->tugas_model->retrieve_all_history($tugas_id);
@@ -1392,30 +1418,49 @@ class Tugas extends MY_Controller
             $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
             $siswa['kelas_aktif'] = $kelas;
             $siswa['history']     = $history;
+            $siswa['history']['value'] = json_decode($history['value'], 1);
+
+            if (!isset($kelas_nilai[$kelas['id']])) {
+                $kelas_nilai[$kelas['id']] = $kelas;
+            }
 
             # cari nilai
             $siswa['nilai'] = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
 
-            $data_siswa[] = $siswa;
+            if (!empty($_POST['kelas_id'])) {
+                if ($_POST['kelas_id'] == 'all' OR $kelas['id'] == $_POST['kelas_id']) {
+                    $data_siswa[] = $siswa;
+                }
+            } else {
+                $data_siswa[] = $siswa;
+            }
         }
-        $data['data_siswa'] = $data_siswa;
-        // pr($data_siswa);die;
+        $data['data_siswa']  = $data_siswa;
+        $data['kelas_nilai'] = $kelas_nilai;
 
-        # panggil datatables dan combobox
-        $data['comp_js'] = load_comp_js(array(
-            base_url('assets/comp/datatables/jquery.dataTables.js'),
-            base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-            base_url('assets/comp/datatables/script.js'),
-            base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-tugas.js'),
-        ));
+        if ($mode == 'print') {
+            $this->twig->display('print-nilai.html', $data);
+        } elseif ($mode == 'export_excel') {
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=nilai-" . url_title($data['tugas']['judul'], '-', true)  . ".xls");
+            $this->twig->display('export-excel-nilai.html', $data);
+        } else {
+            # panggil datatables dan combobox
+            $data['comp_js'] = load_comp_js(array(
+                base_url('assets/comp/datatables/jquery.dataTables.js'),
+                base_url('assets/comp/datatables/datatable-bootstrap2.js'),
+                base_url('assets/comp/datatables/script.js'),
+                base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                base_url('assets/comp/colorbox/act-tugas.js'),
+            ));
 
-        $data['comp_css'] = load_comp_css(array(
-            base_url('assets/comp/datatables/datatable-bootstrap2.css'),
-            base_url('assets/comp/colorbox/colorbox.css'),
-        ));
+            $data['comp_css'] = load_comp_css(array(
+                base_url('assets/comp/datatables/datatable-bootstrap2.css'),
+                base_url('assets/comp/colorbox/colorbox.css'),
+            ));
 
-        $this->twig->display('list-peserta.html', $data);
+            $this->twig->display('list-peserta.html', $data);
+        }
     }
 
     function detail_jawaban($siswa_id = '', $tugas_id = '')

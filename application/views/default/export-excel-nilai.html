@@ -1,0 +1,57 @@
+<p><b>Nilai {{ tugas.judul }}, {{ tugas.mapel.nama }}</b></p>
+
+{% if tugas.type_id == 3 %}
+<table border="1">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Nis</th>
+            <th>Nama</th>
+            <th>Kelas</th>
+            <th>Benar</th>
+            <th>Salah</th>
+            <th>Kosong</th>
+            <th>Nilai</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for n in data_nilai %}
+        <tr>
+            <td>{{ loop.index }}.</td>
+            <td>{{ n.siswa.nis }}</td>
+            <td>{{ n.siswa.nama }}</td>
+            <td>{{ n.siswa.kelas_aktif.nama }}</td>
+            <td>{{ n.history.value.jml_benar }}</td>
+            <td>{{ n.history.value.jml_salah }}</td>
+            <td>{{ (count(n.history.value.pertanyaan) != (n.history.value.jml_benar + n.history.value.jml_salah)) ? count(n.history.value.pertanyaan) - (n.history.value.jml_benar + n.history.value.jml_salah) : 0 }}</td>
+            <td>{{ n.nilai }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if tugas.type_id == 2 or tugas.type_id == 1 %}
+<table border="1">
+    <thead>
+        <tr>
+            <th width="5%">No</th>
+            <th>Nis</th>
+            <th>Nama</th>
+            <th>Kelas</th>
+            <th>Nilai</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in data_siswa %}
+        <tr>
+            <td>{{ loop.index }}.</td>
+            <td>{{ s.nis }}</td>
+            <td>{{ s.nama }}</td>
+            <td>{{ s.kelas_aktif.nama }}</td>
+            <td>{{ s.nilai.nilai }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
