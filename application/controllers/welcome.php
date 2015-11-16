@@ -328,6 +328,11 @@ class Welcome extends MY_Controller
 
         $this->twig->display('search-results.html', $data);
     }
+
+    function donation()
+    {
+        $this->twig->display('donation.html');
+    }
 }
 
 /* End of file welcome.php */

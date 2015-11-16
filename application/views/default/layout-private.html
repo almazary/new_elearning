@@ -33,12 +33,16 @@
                             </button>
                         </form>
                         <ul class="nav pull-right">
+                            {% if is_admin() %}
+                            <li><a href="{{ site_url('welcome/donation') }}">DONASI</a></li>
+                            {% endif %}
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 {{ nama_panggilan(get_sess_data('user', 'nama')) }}
 
+                                <span class="pull-right">
                                 <img src="{{ get_url_image_session(get_sess_data('user', 'foto'), 'medium', get_sess_data('user', 'jenis_kelamin')) }}" class="nav-avatar img-polaroid" />
-
                                 <b class="caret"></b></a>
+                                </span>
                                 <ul class="dropdown-menu">
                                     {% if is_admin() %}
                                     <li>{{ anchor('pengajar/detail/'~ get_sess_data('user', 'status_id') ~'/' ~ get_sess_data('user', 'id'), 'Detail Profil', {'title' : 'Detail Profil'})|raw }}</li>
