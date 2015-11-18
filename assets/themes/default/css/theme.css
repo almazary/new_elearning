@@ -1117,8 +1117,6 @@ border-top-left-radius: 3px;
 	padding: 0
 }
 .stream.new-update a, .stream.load-more a {
-	background: #background: #f7f7f7;;
-
 	color: #555;
 	font-weight: 600;
 	font-size: 14px;

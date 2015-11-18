@@ -79,7 +79,7 @@ class Type {
 		if($c === null) {
 			return null;
 		}
-		return $inst = $c->getConstructor() ? $c->newInstanceArgs($args->»a) : $c->newInstanceArgs();
+		return $inst = $c->getConstructor() ? $c->newInstanceArgs($args->ï¿½a) : $c->newInstanceArgs();
 	}
 	static function createEmptyInstance($cl) {
 		if($cl->__qname__ === "Array") {
@@ -105,8 +105,8 @@ class Type {
 			}
 			php_Boot::$skip_constructor = false;
 			return $i;
-		}catch(Exception $»e) {
-			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+		}catch(Exception $e) {
+			$_ex_ = ($e instanceof HException) ? $e->e : $e;
 			$e = $_ex_;
 			{
 				php_Boot::$skip_constructor = false;
@@ -256,8 +256,8 @@ class Type {
 					unset($i);
 				}
 			}
-		}catch(Exception $»e) {
-			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+		}catch(Exception $e) {
+			$_ex_ = ($e instanceof HException) ? $e->e : $e;
 			$e = $_ex_;
 			{
 				return false;

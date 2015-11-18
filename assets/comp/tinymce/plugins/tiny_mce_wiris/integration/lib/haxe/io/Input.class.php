@@ -103,14 +103,14 @@ class haxe_io_Input {
 			if(_hx_char_code_at($s, strlen($s) - 1) === 13) {
 				$s = _hx_substr($s, 0, -1);
 			}
-		}catch(Exception $»e) {
-			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+		}catch(Exception $e) {
+			$_ex_ = ($e instanceof HException) ? $e->e : $e;
 			if(($e = $_ex_) instanceof haxe_io_Eof){
 				$s = $buf->b;
 				if(strlen($s) === 0) {
 					throw new HException($e);
 				}
-			} else throw $»e;;
+			} else throw $e;;
 		}
 		return $s;
 	}
@@ -164,10 +164,10 @@ class haxe_io_Input {
 				}
 				unset($len);
 			}
-		}catch(Exception $»e) {
-			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+		}catch(Exception $e) {
+			$_ex_ = ($e instanceof HException) ? $e->e : $e;
 			if(($e = $_ex_) instanceof haxe_io_Eof){
-			} else throw $»e;;
+			} else throw $e;;
 		}
 		return $total->getBytes();
 	}
@@ -197,58 +197,58 @@ class haxe_io_Input {
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
-		else if(isset($this->»dynamics[$m]) && is_callable($this->»dynamics[$m]))
-			return call_user_func_array($this->»dynamics[$m], $a);
+		else if(isset($this->dynamics[$m]) && is_callable($this->dynamics[$m]))
+			return call_user_func_array($this->dynamics[$m], $a);
 		else if('toString' == $m)
 			return $this->__toString();
 		else
-			throw new HException('Unable to call «'.$m.'»');
+			throw new HException('Unable to call '.$m.'');
 	}
 	static $__properties__ = array("set_bigEndian" => "setEndian");
 	function __toString() { return 'haxe.io.Input'; }
 }
-function haxe_io_Input_0(&$»this, &$ch1, &$ch2, &$ch3, &$ch4) {
-	if($»this->bigEndian) {
+function haxe_io_Input_0(&$this, &$ch1, &$ch2, &$ch3, &$ch4) {
+	if($this->bigEndian) {
 		return ($ch1 << 8 | $ch2) << 16 | ($ch3 << 8 | $ch4);
 	} else {
 		return ($ch4 << 8 | $ch3) << 16 | ($ch2 << 8 | $ch1);
 	}
 }
-function haxe_io_Input_1(&$»this, &$ch1, &$ch2, &$ch3, &$ch4) {
-	if($»this->bigEndian) {
+function haxe_io_Input_1(&$this, &$ch1, &$ch2, &$ch3, &$ch4) {
+	if($this->bigEndian) {
 		return $ch4 | $ch3 << 8 | $ch2 << 16 | $ch1 << 24;
 	} else {
 		return $ch1 | $ch2 << 8 | $ch3 << 16 | $ch4 << 24;
 	}
 }
-function haxe_io_Input_2(&$»this, &$ch1, &$ch2, &$ch3) {
-	if($»this->bigEndian) {
+function haxe_io_Input_2(&$this, &$ch1, &$ch2, &$ch3) {
+	if($this->bigEndian) {
 		return $ch3 | $ch2 << 8 | $ch1 << 16;
 	} else {
 		return $ch1 | $ch2 << 8 | $ch3 << 16;
 	}
 }
-function haxe_io_Input_3(&$»this, &$ch1, &$ch2, &$ch3) {
-	if($»this->bigEndian) {
+function haxe_io_Input_3(&$this, &$ch1, &$ch2, &$ch3) {
+	if($this->bigEndian) {
 		return $ch3 | $ch2 << 8 | $ch1 << 16;
 	} else {
 		return $ch1 | $ch2 << 8 | $ch3 << 16;
 	}
 }
-function haxe_io_Input_4(&$»this, &$ch1, &$ch2) {
-	if($»this->bigEndian) {
+function haxe_io_Input_4(&$this, &$ch1, &$ch2) {
+	if($this->bigEndian) {
 		return $ch2 | $ch1 << 8;
 	} else {
 		return $ch1 | $ch2 << 8;
 	}
 }
-function haxe_io_Input_5(&$»this, &$ch1, &$ch2) {
-	if($»this->bigEndian) {
+function haxe_io_Input_5(&$this, &$ch1, &$ch2) {
+	if($this->bigEndian) {
 		return $ch2 | $ch1 << 8;
 	} else {
 		return $ch1 | $ch2 << 8;
 	}
 }
-function haxe_io_Input_6(&$»this) {
+function haxe_io_Input_6(&$this) {
 	throw new HException("Not implemented");
 }

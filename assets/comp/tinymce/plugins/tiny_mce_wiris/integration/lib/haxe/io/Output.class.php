@@ -29,10 +29,10 @@ class haxe_io_Output {
 				}
 				unset($p,$len);
 			}
-		}catch(Exception $»e) {
-			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+		}catch(Exception $e) {
+			$_ex_ = ($e instanceof HException) ? $e->e : $e;
 			if(($e = $_ex_) instanceof haxe_io_Eof){
-			} else throw $»e;;
+			} else throw $e;;
 		}
 	}
 	public function prepare($nbytes) {
@@ -181,19 +181,19 @@ class haxe_io_Output {
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
-		else if(isset($this->»dynamics[$m]) && is_callable($this->»dynamics[$m]))
-			return call_user_func_array($this->»dynamics[$m], $a);
+		else if(isset($this->dynamics[$m]) && is_callable($this->dynamics[$m]))
+			return call_user_func_array($this->dynamics[$m], $a);
 		else if('toString' == $m)
 			return $this->__toString();
 		else
-			throw new HException('Unable to call «'.$m.'»');
+			throw new HException('Unable to call '.$m.'');
 	}
 	static $LN2;
 	static $__properties__ = array("set_bigEndian" => "setEndian");
 	function __toString() { return 'haxe.io.Output'; }
 }
 haxe_io_Output::$LN2 = Math::log(2);
-function haxe_io_Output_0(&$»this, &$x) {
+function haxe_io_Output_0(&$this, &$x) {
 	{
 		$x1 = _hx_shift_right($x, 24);
 		if(($x1 >> 30 & 1) !== _hx_shift_right($x1, 31)) {
@@ -202,7 +202,7 @@ function haxe_io_Output_0(&$»this, &$x) {
 		return $x1 & -1;
 	}
 }
-function haxe_io_Output_1(&$»this, &$x) {
+function haxe_io_Output_1(&$this, &$x) {
 	{
 		$x1 = _hx_shift_right($x, 16);
 		if(($x1 >> 30 & 1) !== _hx_shift_right($x1, 31)) {
@@ -211,7 +211,7 @@ function haxe_io_Output_1(&$»this, &$x) {
 		return $x1 & -1;
 	}
 }
-function haxe_io_Output_2(&$»this, &$x) {
+function haxe_io_Output_2(&$this, &$x) {
 	{
 		$x1 = _hx_shift_right($x, 8);
 		if(($x1 >> 30 & 1) !== _hx_shift_right($x1, 31)) {
@@ -220,7 +220,7 @@ function haxe_io_Output_2(&$»this, &$x) {
 		return $x1 & -1;
 	}
 }
-function haxe_io_Output_3(&$»this, &$x) {
+function haxe_io_Output_3(&$this, &$x) {
 	{
 		$x1 = $x & (255 | 0);
 		if(($x1 >> 30 & 1) !== _hx_shift_right($x1, 31)) {
@@ -229,7 +229,7 @@ function haxe_io_Output_3(&$»this, &$x) {
 		return $x1 & -1;
 	}
 }
-function haxe_io_Output_4(&$»this, &$x) {
+function haxe_io_Output_4(&$this, &$x) {
 	{
 		$x1 = $x & (255 | 0);
 		if(($x1 >> 30 & 1) !== _hx_shift_right($x1, 31)) {
@@ -238,7 +238,7 @@ function haxe_io_Output_4(&$»this, &$x) {
 		return $x1 & -1;
 	}
 }
-function haxe_io_Output_5(&$»this, &$x) {
+function haxe_io_Output_5(&$this, &$x) {
 	{
 		$x1 = _hx_shift_right($x, 8);
 		if(($x1 >> 30 & 1) !== _hx_shift_right($x1, 31)) {
@@ -247,7 +247,7 @@ function haxe_io_Output_5(&$»this, &$x) {
 		return $x1 & -1;
 	}
 }
-function haxe_io_Output_6(&$»this, &$x) {
+function haxe_io_Output_6(&$this, &$x) {
 	{
 		$x1 = _hx_shift_right($x, 16);
 		if(($x1 >> 30 & 1) !== _hx_shift_right($x1, 31)) {
@@ -256,7 +256,7 @@ function haxe_io_Output_6(&$»this, &$x) {
 		return $x1 & -1;
 	}
 }
-function haxe_io_Output_7(&$»this, &$x) {
+function haxe_io_Output_7(&$this, &$x) {
 	{
 		$x1 = _hx_shift_right($x, 24);
 		if(($x1 >> 30 & 1) !== _hx_shift_right($x1, 31)) {

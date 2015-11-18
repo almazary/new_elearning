@@ -37,8 +37,8 @@ class com_wiris_plugin_impl_TestImpl implements com_wiris_plugin_api_Test{
 			$reportText = "<b>" . $s . "</b>";
 			$solutionLink = "";
 			$condition = true;
-		}catch(Exception $»e) {
-			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+		}catch(Exception $e) {
+			$_ex_ = ($e instanceof HException) ? $e->e : $e;
 			$ex = $_ex_;
 			{
 				$reportText = "Missing version";
@@ -145,30 +145,30 @@ class com_wiris_plugin_impl_TestImpl implements com_wiris_plugin_api_Test{
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
-		else if(isset($this->»dynamics[$m]) && is_callable($this->»dynamics[$m]))
-			return call_user_func_array($this->»dynamics[$m], $a);
+		else if(isset($this->dynamics[$m]) && is_callable($this->dynamics[$m]))
+			return call_user_func_array($this->dynamics[$m], $a);
 		else if('toString' == $m)
 			return $this->__toString();
 		else
-			throw new HException('Unable to call «'.$m.'»');
+			throw new HException('Unable to call '.$m.'');
 	}
 	function __toString() { return 'com.wiris.plugin.impl.TestImpl'; }
 }
-function com_wiris_plugin_impl_TestImpl_0(&$»this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$random, &$reportText, &$solutionLink, &$testName) {
+function com_wiris_plugin_impl_TestImpl_0(&$this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$random, &$reportText, &$solutionLink, &$testName) {
 	{
 		$s = new haxe_Utf8(null);
 		$s->addChar(171);
 		return $s->toString();
 	}
 }
-function com_wiris_plugin_impl_TestImpl_1(&$»this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$random, &$reportText, &$s2, &$solutionLink, &$testName) {
+function com_wiris_plugin_impl_TestImpl_1(&$this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$random, &$reportText, &$s2, &$solutionLink, &$testName) {
 	{
 		$s = new haxe_Utf8(null);
 		$s->addChar(187);
 		return $s->toString();
 	}
 }
-function com_wiris_plugin_impl_TestImpl_2(&$»this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$random, &$reportText, &$s2, &$solutionLink, &$testName) {
+function com_wiris_plugin_impl_TestImpl_2(&$this, &$condition, &$ex, &$imageUrl, &$mml, &$outp, &$output, &$p, &$param, &$platform, &$random, &$reportText, &$s2, &$solutionLink, &$testName) {
 	{
 		$s = new haxe_Utf8(null);
 		$s->addChar(168);

@@ -223,10 +223,10 @@ class haxe_Http {
 					}
 					unset($len);
 				}
-			}catch(Exception $»e) {
-				$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+			}catch(Exception $e) {
+				$_ex_ = ($e instanceof HException) ? $e->e : $e;
 				if(($e = $_ex_) instanceof haxe_io_Eof){
-				} else throw $»e;;
+				} else throw $e;;
 			}
 		} else {
 			$api->prepare($size);
@@ -243,11 +243,11 @@ class haxe_Http {
 					$size -= $len;
 					unset($len);
 				}
-			}catch(Exception $»e) {
-				$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+			}catch(Exception $e) {
+				$_ex_ = ($e instanceof HException) ? $e->e : $e;
 				if(($e = $_ex_) instanceof haxe_io_Eof){
 					throw new HException("Transfert aborted");
-				} else throw $»e;;
+				} else throw $e;;
 			}
 		}
 		if($chunked && ($this->chunk_size !== null || $this->chunk_buf !== null)) {
@@ -291,9 +291,9 @@ class haxe_Http {
 			}
 			$b = new StringBuf();
 			if(null == $this->params) throw new HException('null iterable');
-			$»it = $this->params->keys();
-			while($»it->hasNext()) {
-				$p = $»it->next();
+			$it = $this->params->keys();
+			while($it->hasNext()) {
+				$p = $it->next();
 				$b->add("--");
 				$b->add($boundary);
 				$b->add("\x0D\x0A");
@@ -318,9 +318,9 @@ class haxe_Http {
 			$uri = $b->b;
 		} else {
 			if(null == $this->params) throw new HException('null iterable');
-			$»it = $this->params->keys();
-			while($»it->hasNext()) {
-				$p = $»it->next();
+			$it = $this->params->keys();
+			while($it->hasNext()) {
+				$p = $it->next();
 				if($uri === null) {
 					$uri = "";
 				} else {
@@ -381,9 +381,9 @@ class haxe_Http {
 			}
 		}
 		if(null == $this->headers) throw new HException('null iterable');
-		$»it = $this->headers->keys();
-		while($»it->hasNext()) {
-			$h = $»it->next();
+		$it = $this->headers->keys();
+		while($it->hasNext()) {
+			$h = $it->next();
 			$b->add($h);
 			$b->add(": ");
 			$b->add($this->headers->get($h));
@@ -412,11 +412,11 @@ class haxe_Http {
 					$len = 0;
 					try {
 						$len = $this->file->io->readBytes($buf, 0, $size);
-					}catch(Exception $»e) {
-						$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+					}catch(Exception $e) {
+						$_ex_ = ($e instanceof HException) ? $e->e : $e;
 						if(($e = $_ex_) instanceof haxe_io_Eof){
 							break;
-						} else throw $»e;;
+						} else throw $e;;
 					}
 					$sock->output->writeFullBytes($buf, 0, $len);
 					$this->file->size -= $len;
@@ -429,14 +429,14 @@ class haxe_Http {
 			}
 			$this->readHttpResponse($api, $sock);
 			$sock->close();
-		}catch(Exception $»e) {
-			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+		}catch(Exception $e) {
+			$_ex_ = ($e instanceof HException) ? $e->e : $e;
 			$e = $_ex_;
 			{
 				try {
 					$sock->close();
-				}catch(Exception $»e) {
-					$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
+				}catch(Exception $e) {
+					$_ex_ = ($e instanceof HException) ? $e->e : $e;
 					$e1 = $_ex_;
 					{
 					}
@@ -482,12 +482,12 @@ class haxe_Http {
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
-		else if(isset($this->»dynamics[$m]) && is_callable($this->»dynamics[$m]))
-			return call_user_func_array($this->»dynamics[$m], $a);
+		else if(isset($this->dynamics[$m]) && is_callable($this->dynamics[$m]))
+			return call_user_func_array($this->dynamics[$m], $a);
 		else if('toString' == $m)
 			return $this->__toString();
 		else
-			throw new HException('Unable to call «'.$m.'»');
+			throw new HException('Unable to call '.$m.'');
 	}
 	static $PROXY = null;
 	static function requestUrl($url) {
@@ -500,30 +500,30 @@ class haxe_Http {
 	}
 	function __toString() { return 'haxe.Http'; }
 }
-function haxe_Http_0(&$»this, &$url, $status) {
+function haxe_Http_0(&$this, &$url, $status) {
 	{
 	}
 }
-function haxe_Http_1(&$»this, &$url, $msg) {
+function haxe_Http_1(&$this, &$url, $msg) {
 	{
 	}
 }
-function haxe_Http_2(&$»this, &$url, $data) {
+function haxe_Http_2(&$this, &$url, $data) {
 	{
 	}
 }
-function haxe_Http_3(&$»this, &$_g, &$a, &$api, &$b, &$chunked, &$headers, &$hline, &$hname, &$k, &$response, &$rp, &$s, &$size, &$sock, &$status) {
+function haxe_Http_3(&$this, &$_g, &$a, &$api, &$b, &$chunked, &$headers, &$hline, &$hname, &$k, &$response, &$rp, &$s, &$size, &$sock, &$status) {
 	if($a->length === 1) {
 		return $a[0];
 	} else {
 		return $a->join(": ");
 	}
 }
-function haxe_Http_4(&$»this, &$api, &$b, &$boundary, &$buf, &$bufsize, &$data, &$host, &$method, &$multipart, &$port, &$portString, &$post, &$request, &$secure, &$sock, &$uri, &$url_regexp) {
-	if($»this->file->size > $bufsize) {
+function haxe_Http_4(&$this, &$api, &$b, &$boundary, &$buf, &$bufsize, &$data, &$host, &$method, &$multipart, &$port, &$portString, &$post, &$request, &$secure, &$sock, &$uri, &$url_regexp) {
+	if($this->file->size > $bufsize) {
 		return $bufsize;
 	} else {
-		return $»this->file->size;
+		return $this->file->size;
 	}
 }
 function haxe_Http_5(&$err, &$me, &$me1, &$old, &$output, &$post, $e) {
