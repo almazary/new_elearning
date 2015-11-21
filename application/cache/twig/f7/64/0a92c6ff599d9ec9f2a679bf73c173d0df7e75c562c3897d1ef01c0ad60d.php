@@ -36,6 +36,17 @@ class __TwigTemplate_f7640a92c6ff599d9ec9f2a679bf73c173d0df7e75c562c3897d1ef01c0
 
 ";
         // line 7
+        if ((is_demo_app() && ($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "is_admin") == true))) {
+            // line 8
+            echo "    ";
+            echo get_alert("warning", get_demo_msg());
+            echo "
+";
+        }
+        // line 10
+        echo "
+";
+        // line 11
         echo form_open_multipart(((("pengajar/edit_picture/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . (isset($context["pengajar_id"]) ? $context["pengajar_id"] : null)));
         echo "
 <table class=\"table table-striped\">
@@ -43,27 +54,34 @@ class __TwigTemplate_f7640a92c6ff599d9ec9f2a679bf73c173d0df7e75c562c3897d1ef01c0
         <tr>
             <td>
                 <img class=\"img-polaroid\" src=\"";
-        // line 12
+        // line 16
         echo twig_escape_filter($this->env, get_url_image_pengajar($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "foto"), "medium", $this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "jenis_kelamin")), "html", null, true);
         echo "\">
             </td>
             <td>
                 <input type=\"file\" name=\"userfile\" class=\"btn btn-small\" style=\"max-width:190px;\">
                 ";
-        // line 16
+        // line 20
         echo (((!twig_test_empty((isset($context["error_upload"]) ? $context["error_upload"] : null)))) ? ((isset($context["error_upload"]) ? $context["error_upload"] : null)) : (""));
         echo "
             </td>
         <tr>
-        <tr>
+        ";
+        // line 23
+        if (((is_demo_app() == false) || ($this->getAttribute((isset($context["pengajar"]) ? $context["pengajar"] : null), "is_admin") == false))) {
+            // line 24
+            echo "        <tr>
             <td colspan=\"2\">
                 <button type=\"submit\" class=\"btn btn-primary\">Update</button>
             </td>
         </tr>
-    </tbody>
+        ";
+        }
+        // line 30
+        echo "    </tbody>
 </table>
 ";
-        // line 26
+        // line 32
         echo form_close();
         echo "
 ";
@@ -81,6 +99,6 @@ class __TwigTemplate_f7640a92c6ff599d9ec9f2a679bf73c173d0df7e75c562c3897d1ef01c0
 
     public function getDebugInfo()
     {
-        return array (  67 => 26,  54 => 16,  47 => 12,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
+        return array (  85 => 32,  81 => 30,  73 => 24,  71 => 23,  65 => 20,  58 => 16,  50 => 11,  47 => 10,  41 => 8,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
     }
 }

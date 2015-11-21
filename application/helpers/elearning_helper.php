@@ -894,3 +894,13 @@ function get_email_from_string($str) {
 
     return $results[0];
 }
+
+function is_demo_app() {
+    $CI =& get_instance();
+    $CI->load->config();
+    return $CI->config->item('is_demo_app');
+}
+
+function get_demo_msg() {
+    return "Maaf, untuk keperluan demo aplikasi, halaman ini tidak dapat diperbaharui.";
+}

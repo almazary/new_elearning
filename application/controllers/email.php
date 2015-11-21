@@ -52,7 +52,7 @@ class Email extends MY_Controller
             redirect('email');
         }
 
-        if (!empty($_POST)) {
+        if (!empty($_POST) AND !is_demo_app()) {
             $value = array(
                 'subject' => $_POST['subject'],
                 'body'    => $_POST['body'],

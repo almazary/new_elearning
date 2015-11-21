@@ -85,76 +85,77 @@ class Welcome extends MY_Controller
             redirect('welcome');
         }
 
-        # bagian hapus gambar
-        if (!empty($_GET['delete-img'])) {
-            $img_id = (int)$_GET['delete-img'];
-            if ($img_id > 0 AND $img_id <= 4) {
-                $key      = 'img-slide-' . $img_id;
-                $retrieve = $this->config_model->retrieve($key);
-                if (!empty($retrieve) AND !empty($retrieve['value'])) {
+        if (!is_demo_app()) {
+            # bagian hapus gambar
+            if (!empty($_GET['delete-img'])) {
+                $img_id = (int)$_GET['delete-img'];
+                if ($img_id > 0 AND $img_id <= 4) {
+                    $key      = 'img-slide-' . $img_id;
+                    $retrieve = $this->config_model->retrieve($key);
+                    if (!empty($retrieve) AND !empty($retrieve['value'])) {
 
-                    # hapus file
-                    if (is_file(get_path_image($retrieve['value']))) {
-                        unlink(get_path_image($retrieve['value']));
+                        # hapus file
+                        if (is_file(get_path_image($retrieve['value']))) {
+                            unlink(get_path_image($retrieve['value']));
+                        }
+
+                        $this->config_model->update($key, $key, '');
+
                     }
-
-                    $this->config_model->update($key, $key, '');
-
                 }
+
+                redirect('welcome/pengaturan');
             }
 
-            redirect('welcome/pengaturan');
+            if ($this->form_validation->run('pengaturan') == true) {
+
+                foreach ($_POST as $key => $val) {
+                    # cek ada tidak, kalo ada update
+                    $retrieve = $this->config_model->retrieve($key);
+                    if (!empty($retrieve)) {
+                        $this->config_model->update($key, $retrieve['nama'], $val);
+                    } else {
+                        $this->config_model->create($key, $key, $val);
+                    }
+                }
+
+                # untuk upload gambar
+                foreach ($_FILES as $key => $val) {
+                    if (!empty($val['tmp_name'])) {
+                        $config = array();
+                        $config['upload_path']   = get_path_image();
+                        $config['allowed_types'] = 'jpg|jpeg|png';
+                        $config['max_size']      = '0';
+                        $config['max_width']     = '0';
+                        $config['max_height']    = '0';
+                        $config['file_name']     = $key;
+                        $this->upload->initialize($config);
+
+                        if ($this->upload->do_upload($key)) {
+                            # hapus file sebelumnya
+                            $old_file = get_pengaturan($key, 'value');
+                            if (is_file(get_path_image($old_file))) {
+                                unlink(get_path_image($old_file));
+                            }
+
+                            $upload_data = $this->upload->data();
+
+                            $retrieve = $this->config_model->retrieve($key);
+                            if (!empty($retrieve)) {
+                                $this->config_model->update($key, $key, $upload_data['file_name']);
+                            } else {
+                                $this->config_model->create($key, $key, $upload_data['file_name']);
+                            }
+                        }
+                    }
+                }
+
+                $this->session->set_flashdata('pengaturan', get_alert('success', 'Pengaturan berhasil diperbaharui.'));
+                redirect('welcome/pengaturan');
+            }
         }
 
         $data['comp_js'] = get_tinymce('tinymce, textarea.tinymce');
-
-        if ($this->form_validation->run('pengaturan') == true) {
-
-            foreach ($_POST as $key => $val) {
-                # cek ada tidak, kalo ada update
-                $retrieve = $this->config_model->retrieve($key);
-                if (!empty($retrieve)) {
-                    $this->config_model->update($key, $retrieve['nama'], $val);
-                } else {
-                    $this->config_model->create($key, $key, $val);
-                }
-            }
-
-            # untuk upload gambar
-            foreach ($_FILES as $key => $val) {
-                if (!empty($val['tmp_name'])) {
-                    $config = array();
-                    $config['upload_path']   = get_path_image();
-                    $config['allowed_types'] = 'jpg|jpeg|png';
-                    $config['max_size']      = '0';
-                    $config['max_width']     = '0';
-                    $config['max_height']    = '0';
-                    $config['file_name']     = $key;
-                    $this->upload->initialize($config);
-
-                    if ($this->upload->do_upload($key)) {
-                        # hapus file sebelumnya
-                        $old_file = get_pengaturan($key, 'value');
-                        if (is_file(get_path_image($old_file))) {
-                            unlink(get_path_image($old_file));
-                        }
-
-                        $upload_data = $this->upload->data();
-
-                        $retrieve = $this->config_model->retrieve($key);
-                        if (!empty($retrieve)) {
-                            $this->config_model->update($key, $key, $upload_data['file_name']);
-                        } else {
-                            $this->config_model->create($key, $key, $upload_data['file_name']);
-                        }
-                    }
-                }
-            }
-
-            $this->session->set_flashdata('pengaturan', get_alert('success', 'Pengaturan berhasil diperbaharui.'));
-            redirect('welcome/pengaturan');
-        }
-
         $this->twig->display('pengaturan.html', $data);
     }
 

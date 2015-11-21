@@ -30,7 +30,7 @@ class Mapel extends MY_Controller
 
     function add()
     {
-        if ($this->form_validation->run('mapel/add') == TRUE) {
+        if ($this->form_validation->run('mapel/add') == TRUE AND !is_demo_app()) {
             $nama = $this->input->post('nama', TRUE);
             $info = $this->input->post('info', TRUE);
             $this->mapel_model->create($nama, $info);
@@ -62,7 +62,7 @@ class Mapel extends MY_Controller
         $data['uri_back'] = $uri_back;
         $data['mapel']    = $retrieve;
 
-        if ($this->form_validation->run('mapel/edit') == TRUE) {
+        if ($this->form_validation->run('mapel/edit') == TRUE AND !is_demo_app()) {
             $nama = $this->input->post('nama', TRUE);
             $info = $this->input->post('info', TRUE);
             $aktif = $this->input->post('status', TRUE);

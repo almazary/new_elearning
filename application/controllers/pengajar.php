@@ -207,7 +207,7 @@ class Pengajar extends MY_Controller
         $data['pengajar_id']  = $pengajar_id;
         $data['pengajar']     = $retrieve_pengajar;
 
-        if ($this->form_validation->run('pengajar/edit_profile') == TRUE) {
+        if ($this->form_validation->run('pengajar/edit_profile') == TRUE AND (!is_demo_app() OR !$retrieve_login['is_admin'])) {
             $nip           = $this->input->post('nip', TRUE);
             $nama          = $this->input->post('nama', TRUE);
             $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
@@ -283,6 +283,9 @@ class Pengajar extends MY_Controller
             exit('Akses ditolak');
         }
 
+        $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
+        $retrieve_pengajar['is_admin'] = $retrieve_login['is_admin'];
+
         $data['status_id']    = $status_id;
         $data['pengajar_id']  = $pengajar_id;
         $data['pengajar']     = $retrieve_pengajar;
@@ -295,7 +298,7 @@ class Pengajar extends MY_Controller
         $config['file_name']     = 'pengajar-'.url_title($retrieve_pengajar['nama'], '-', true);
         $this->upload->initialize($config);
 
-        if ($this->upload->do_upload()) {
+        if ($this->upload->do_upload() AND (!is_demo_app() OR !$retrieve_login['is_admin'])) {
 
             if (is_file(get_path_image($retrieve_pengajar['foto']))) {
                 unlink(get_path_image($retrieve_pengajar['foto']));
@@ -374,7 +377,7 @@ class Pengajar extends MY_Controller
         $data['pengajar_id']  = $pengajar_id;
         $data['login']        = $this->login_model->retrieve(null, null, null, null, $pengajar_id);
 
-        if ($this->form_validation->run('pengajar/edit_username') == TRUE) {
+        if ($this->form_validation->run('pengajar/edit_username') == TRUE AND (!is_demo_app() OR !$data['login']['is_admin'])) {
             $login_id = $this->input->post('login_id', TRUE);
             $username = $this->input->post('username', TRUE);
 
@@ -423,8 +426,9 @@ class Pengajar extends MY_Controller
         $data['pengajar_id']  = $pengajar_id;
 
         $retrieve_login = $this->login_model->retrieve(null, null, null, null, $pengajar_id);
+        $data['login']  = $retrieve_login;
 
-        if ($this->form_validation->run('pengajar/edit_password') == TRUE) {
+        if ($this->form_validation->run('pengajar/edit_password') == TRUE AND (!is_demo_app() OR !$retrieve_login['is_admin'])) {
             $password = $this->input->post('password2', TRUE);
 
             # update password

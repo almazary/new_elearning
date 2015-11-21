@@ -4,6 +4,10 @@
 <h4>Edit Profil</h4>
 {{ get_flashdata('edit')|raw }}
 
+{% if is_demo_app() and pengajar.is_admin == true %}
+    {{ get_alert('warning', get_demo_msg())|raw }}
+{% endif %}
+
 {{ form_open('pengajar/edit_profile/' ~ status_id ~ '/' ~ pengajar_id)|raw }}
 <input type="hidden" name="pengajar_id" value="{{ pengajar_id }}">
 <table class="table table-striped">
@@ -86,11 +90,14 @@
             </td>
         <tr>
         {% endif %}
+
+        {% if is_demo_app() == false or pengajar.is_admin == false %}
         <tr>
             <td colspan="2">
                 <button type="submit" class="btn btn-primary">Update</button>
             </td>
         </tr>
+        {% endif %}
     </tbody>
 </table>
 {{ form_close()|raw }}

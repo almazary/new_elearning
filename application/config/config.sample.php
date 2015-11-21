@@ -27,6 +27,19 @@ $config['base_url'] = '';
 */
 $config['encryption_key'] = '';
 
+/**
+ * @since 1.5
+ *
+ * Ini untuk keperluan demo aplikasi, jika true ada beberapa fungsi akan didisable seperti :
+ * - update pengaturan
+ * - email template
+ * - manajemen matapelajaran
+ * - manajemen kelas
+ * - matapelajaran kelas
+ * - edit profil admin
+ */
+$config['is_demo_app'] = false;
+
 /*
 |--------------------------------------------------------------------------
 | Index File

@@ -12,6 +12,10 @@ Manajemen Matapelajaran - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('mapel')|raw }}
 
+        {% if is_demo_app() %}
+            {{ get_alert('warning', get_demo_msg())|raw }}
+        {% endif %}
+
         {{ form_open('mapel/edit/' ~ mapel.id ~ '/' ~ enurl_redirect(uri_back), {'class' : 'form-horizontal row-fluid'})|raw }}
             <div class="control-group">
                 <label class="control-label">Nama <span class="text-error">*</span></label>
@@ -37,7 +41,9 @@ Manajemen Matapelajaran - {{ parent() }}
             </div>
             <div class="control-group">
                 <div class="controls">
+                    {% if is_demo_app() == false %}
                     <button type="submit" class="btn btn-primary">Update</button>
+                    {% endif %}
                     <a href="{{ uri_back }}" class="btn">Batal</a>
                 </div>
             </div>

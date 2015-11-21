@@ -12,6 +12,10 @@ Pengaturan - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('pengaturan')|raw }}
 
+        {% if is_demo_app() %}
+            {{ get_alert('warning', get_demo_msg())|raw }}
+        {% endif %}
+
         {{ form_open_multipart('welcome/pengaturan', {'class' : 'form-horizontal row-fluid'})|raw }}
             <div class="control-group">
                 <label class="control-label">Nama sekolah <span class="text-error">*</span></label>
@@ -89,6 +93,7 @@ Pengaturan - {{ parent() }}
                     <br>{{ form_error('smtp-username')|raw }}
                 </div>
             </div>
+            {% if is_demo_app() == false %}
             <div class="control-group">
                 <label class="control-label">SMTP password</label>
                 <div class="controls">
@@ -96,6 +101,7 @@ Pengaturan - {{ parent() }}
                     <br>{{ form_error('smtp-pass')|raw }}
                 </div>
             </div>
+            {% endif %}
             <div class="control-group">
                 <label class="control-label">SMTP port</label>
                 <div class="controls">
@@ -211,11 +217,13 @@ Pengaturan - {{ parent() }}
                 </div>
             </div>
 
+            {% if is_demo_app() == false %}
             <div class="control-group">
                 <div class="controls">
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </div>
+            {% endif %}
         {{ form_close()|raw }}
 
     </div>

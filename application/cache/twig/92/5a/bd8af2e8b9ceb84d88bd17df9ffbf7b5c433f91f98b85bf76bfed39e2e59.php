@@ -54,18 +54,29 @@ class __TwigTemplate_925abd8af2e8b9ceb84d88bd17df9ffbf7b5c433f91f98b85bf76bfed39
 
         ";
         // line 15
+        if (is_demo_app()) {
+            // line 16
+            echo "            ";
+            echo get_alert("warning", get_demo_msg());
+            echo "
+        ";
+        }
+        // line 18
+        echo "
+        ";
+        // line 19
         echo get_alert("success", "Ubah bentuk atau kata - kata template email selain {\$...}");
         echo "
 
         ";
-        // line 17
+        // line 21
         echo form_open(("email/edit/" . $this->getAttribute((isset($context["template"]) ? $context["template"] : null), "id")), array("class" => "form-horizontal row-fluid"));
         echo "
             <div class=\"control-group\">
                 <label class=\"control-label\">ID</label>
                 <div class=\"controls\">
                     <p style=\"margin-top:5px;\">";
-        // line 21
+        // line 25
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["template"]) ? $context["template"] : null), "id"), "html", null, true);
         echo "</p>
                 </div>
@@ -74,7 +85,7 @@ class __TwigTemplate_925abd8af2e8b9ceb84d88bd17df9ffbf7b5c433f91f98b85bf76bfed39
                 <label class=\"control-label\">Nama</label>
                 <div class=\"controls\">
                     <p style=\"margin-top:5px;\">";
-        // line 27
+        // line 31
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["template"]) ? $context["template"] : null), "nama"), "html", null, true);
         echo "</p>
                 </div>
@@ -83,11 +94,11 @@ class __TwigTemplate_925abd8af2e8b9ceb84d88bd17df9ffbf7b5c433f91f98b85bf76bfed39
                 <label class=\"control-label\">Subject</label>
                 <div class=\"controls\">
                     <input type=\"text\" name=\"subject\" class=\"span12\" value=\"";
-        // line 33
+        // line 37
         echo twig_escape_filter($this->env, set_value("subject", $this->getAttribute((isset($context["template"]) ? $context["template"] : null), "subject")), "html", null, true);
         echo "\">
                     <br>";
-        // line 34
+        // line 38
         echo form_error("subject");
         echo "
                 </div>
@@ -96,26 +107,32 @@ class __TwigTemplate_925abd8af2e8b9ceb84d88bd17df9ffbf7b5c433f91f98b85bf76bfed39
                 <label class=\"control-label\">Body</label>
                 <div class=\"controls\">
                     <textarea name=\"body\" id=\"body\" style=\"height:300px;width:100%;\">";
-        // line 40
+        // line 44
         echo set_value("body", html_entity_decode($this->getAttribute((isset($context["template"]) ? $context["template"] : null), "body")));
         echo "</textarea>
                     ";
-        // line 41
+        // line 45
         echo form_error("body");
         echo "
                 </div>
             </div>
             <div class=\"control-group\">
                 <div class=\"controls\">
-                    <button type=\"submit\" class=\"btn btn-primary\">Update</button>
-                    <a href=\"";
-        // line 47
+                    ";
+        // line 50
+        if ((is_demo_app() == false)) {
+            // line 51
+            echo "                    <button type=\"submit\" class=\"btn btn-primary\">Update</button>
+                    ";
+        }
+        // line 53
+        echo "                    <a href=\"";
         echo twig_escape_filter($this->env, site_url("email"), "html", null, true);
         echo "\" class=\"btn btn-default\">Kembali</a>
                 </div>
             </div>
         ";
-        // line 50
+        // line 56
         echo form_close();
         echo "
 
@@ -136,6 +153,6 @@ class __TwigTemplate_925abd8af2e8b9ceb84d88bd17df9ffbf7b5c433f91f98b85bf76bfed39
 
     public function getDebugInfo()
     {
-        return array (  119 => 50,  113 => 47,  104 => 41,  100 => 40,  91 => 34,  87 => 33,  78 => 27,  69 => 21,  62 => 17,  57 => 15,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  136 => 56,  129 => 53,  125 => 51,  123 => 50,  115 => 45,  111 => 44,  102 => 38,  98 => 37,  89 => 31,  80 => 25,  73 => 21,  68 => 19,  65 => 18,  59 => 16,  57 => 15,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

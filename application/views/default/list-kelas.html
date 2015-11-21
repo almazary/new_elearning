@@ -12,6 +12,10 @@ Manajemen Kelas - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('kelas')|raw }}
 
+        {% if is_demo_app() %}
+            {{ get_alert('warning', get_demo_msg())|raw }}
+        {% endif %}
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 Tambah Kelas
@@ -34,9 +38,11 @@ Manajemen Kelas - {{ parent() }}
 
         {{ kelas_hirarki|raw }}
 
+        {% if is_demo_app() == false %}
         <br>
         <div id="response_update"></div>
         <button class="btn btn-primary" id="update-hirarki">Update Hirarki</button>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
