@@ -187,8 +187,8 @@ class Komentar_model extends CI_Model
         MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
 
         $this->db->query("ALTER TABLE `{$prefix}komentar`
-          ADD CONSTRAINT `fk_komentar_login1` FOREIGN KEY (`login_id`) REFERENCES `login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-          ADD CONSTRAINT `fk_komentar_materi1` FOREIGN KEY (`materi_id`) REFERENCES `materi` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;");
+          ADD CONSTRAINT `fk_komentar_login1` FOREIGN KEY (`login_id`) REFERENCES `{$prefix}login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+          ADD CONSTRAINT `fk_komentar_materi1` FOREIGN KEY (`materi_id`) REFERENCES `{$prefix}materi` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;");
 
         return true;
     }

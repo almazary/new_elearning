@@ -175,7 +175,7 @@
         var site_url = "{{ site_url() }}";
         var base_url = "{{ base_url() }}";
         </script>
-        <script src="{{ base_url('assets/comp/pace/pace.min.js') }}" type="text/javascript"></script>
+        <script data-pace-options='{ "ajax": false }' src="{{ base_url('assets/comp/pace/pace.min.js') }}" type="text/javascript"></script>
         <script src="{{ base_url('assets/comp/offline/offline.min.js') }}" type="text/javascript"></script>
         <script src="{{ base_url_theme }}scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
         <script src="{{ base_url_theme }}scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
