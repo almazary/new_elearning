@@ -979,18 +979,21 @@ class Tugas extends MY_Controller
             $pertanyaan = array();
             if ($tugas['type_id'] != 1) {
                 # ambil pertanyaan ditugas ini
-                $pertanyaan = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'random');
-                # jika pilihan ganda, ambil pilihannya
-                if ($tugas['type_id'] == 3) {
-                    foreach ($pertanyaan as $key => $val) {
-                        $val['pilihan'] = $this->tugas_model->retrieve_all_pilihan($val['id']);
-                        $pertanyaan[$key] = $val;
-                    }
+                $pertanyaan    = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'random');
+                $pertanyaan_id = array();
+                foreach ($pertanyaan as $key => $val) {
+                    $pertanyaan_id[$key] = $val['id'];
                 }
 
-                $field_value['pertanyaan'] = $pertanyaan;
-                $field_value['tugas']      = $tugas;
-                $field_value['unix_id']    = md5($field_id) . rand(9, 999999);
+                # jika pertanyaan masih kosong
+                if (empty($pertanyaan_id)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Pertanyaan tugas masih kosong.'));
+                    redirect('tugas');
+                }
+
+                $field_value['pertanyaan_id'] = $pertanyaan_id;
+                $field_value['tugas']         = $tugas;
+                $field_value['unix_id']       = md5($field_id) . rand(9, 999999);
                 create_field($field_id, $field_name, json_encode($field_value));
 
             } else {
@@ -1004,7 +1007,23 @@ class Tugas extends MY_Controller
 
         $check_field       = retrieve_field($field_id);
         $check_field_value = json_decode($check_field['value'], 1);
-        $data['data']      = $check_field_value;
+
+        # ini untuk mendapatkan data soal lengkapnya
+        $soal = array();
+        foreach ($check_field_value['pertanyaan_id'] as $key => $p_id) {
+            $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
+
+            # jika pilihan ganda ambil pilihannya
+            if ($check_field_value['tugas']['type_id'] == 3) {
+                $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+            }
+
+            $soal[$key] = $pertanyaan;
+        }
+        $check_field_value['pertanyaan'] = $soal;
+
+        # save data
+        $data['data'] = $check_field_value;
 
         $html_js = '';
 
@@ -1016,17 +1035,11 @@ class Tugas extends MY_Controller
         }
 
         if ($tugas['type_id'] == 2) {
-            # cari id pertanyaan, untuk keperluan auto save
-            $arr_pertanyaan_id = array();
-            foreach ($check_field_value['pertanyaan'] as $p) {
-                $arr_pertanyaan_id[] = $p['id'];
-            }
-
-            $html_js .= get_tinymce('jawaban, textarea#jawaban-' . implode(', textarea#jawaban-', $arr_pertanyaan_id), 'advanced', array('autosave'));
+            $html_js .= get_tinymce('jawaban, textarea#jawaban-' . implode(', textarea#jawaban-', $check_field_value['pertanyaan_id']), 'advanced', array('autosave'));
             $html_js .= load_comp_js(array(
                 base_url('assets/comp/jquery/tinymce.autosave.js'),
             ));
-            $data['data']['str_id'] = implode(',', $arr_pertanyaan_id);
+            $data['data']['str_id'] = implode(',', $check_field_value['pertanyaan_id']);
         }
 
         $data['comp_js'] = $html_js;
@@ -1068,18 +1081,16 @@ class Tugas extends MY_Controller
 
             # jika pilihan ganda langsung di hitung benar salahnya
             if ($tugas['type_id'] == 3) {
-                $jml_soal = 0;
+                $jml_soal = count($check_field_value['pertanyaan_id']);
 
                 # cari kunci jawaban
                 $data_kunci = array();
-                foreach ($check_field_value['pertanyaan'] as $pertanyaan) {
-                    # cari kuncinya
-                    foreach ($pertanyaan['pilihan'] as $pilihan) {
+                foreach ($check_field_value['pertanyaan_id'] as $p_id) {
+                    foreach ($this->tugas_model->retrieve_all_pilihan($p_id) as $pilihan) {
                         if ($pilihan['kunci'] == 1) {
-                            $data_kunci[$pertanyaan['id']] = $pilihan['id'];
+                            $data_kunci[$p_id] = $pilihan['id'];
                         }
                     }
-                    $jml_soal++;
                 }
 
                 $jml_benar = 0;
@@ -1493,8 +1504,20 @@ class Tugas extends MY_Controller
             exit('Tugas belum dikerjakan');
         }
 
-        $history_value   = json_decode($history['value'], 1);
-        $data['history'] = $history_value;
+        $history_value = json_decode($history['value'], 1);
+        $soal          = array();
+        foreach ($history_value['pertanyaan_id'] as $key => $p_id) {
+            $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
+
+            # jika pilihan ganda ambil pilihannya
+            if ($history_value['tugas']['type_id'] == 3) {
+                $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+            }
+
+            $soal[$key] = $pertanyaan;
+        }
+        $history_value['pertanyaan'] = $soal;
+        $data['history']             = $history_value;
 
         if ($tugas['type_id'] == 3) {
             $this->twig->display('detail-jawaban-ganda.html', $data);
@@ -1507,8 +1530,11 @@ class Tugas extends MY_Controller
                 }
 
                 # update history
-                $history_value['nilai'] = $_POST['nilai'];
-                update_field($history_id, $history['nama'], json_encode($history_value));
+                $new_history          = $history_value;
+                $new_history['nilai'] = $_POST['nilai'];
+                unset($new_history['pertanyaan']);
+
+                update_field($history_id, $history['nama'], json_encode($new_history));
 
                 # simpan atau update nilai
                 $check = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
@@ -1532,8 +1558,11 @@ class Tugas extends MY_Controller
                 $nilai = $this->input->post('nilai', true);
 
                 # update history
-                $history_value['nilai'] = $nilai;
-                update_field($history_id, $history['nama'], json_encode($history_value));
+                $new_history          = $history_value;
+                $new_history['nilai'] = $nilai;
+                unset($new_history['pertanyaan']);
+
+                update_field($history_id, $history['nama'], json_encode($new_history));
 
                 # simpan atau update nilai
                 $check = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
@@ -1578,8 +1607,8 @@ class Tugas extends MY_Controller
             }
 
             # hapus history
-            $history_id = 'history-mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
-            $history    = retrieve_field($history_id);
+            $history_id    = 'history-mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
+            $history       = retrieve_field($history_id);
             $history_value = json_decode($history['value'], 1);
             delete_field($history_id);
 
