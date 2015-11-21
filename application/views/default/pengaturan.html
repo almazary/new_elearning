@@ -76,6 +76,34 @@ Pengaturan - {{ parent() }}
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label">SMTP host</label>
+                <div class="controls">
+                    <input type="text" name="smtp-host" class="span5" value="{{ set_value('smtp-host', get_pengaturan('smtp-host', 'value')) }}">
+                    <br>{{ form_error('smtp-host')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">SMTP username</label>
+                <div class="controls">
+                    <input type="text" name="smtp-username" class="span5" value="{{ set_value('smtp-username', get_pengaturan('smtp-username', 'value')) }}">
+                    <br>{{ form_error('smtp-username')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">SMTP password</label>
+                <div class="controls">
+                    <input type="text" name="smtp-pass" class="span5" value="{{ set_value('smtp-pass', get_pengaturan('smtp-pass', 'value')) }}">
+                    <br>{{ form_error('smtp-pass')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">SMTP port</label>
+                <div class="controls">
+                    <input type="text" name="smtp-port" class="span5" value="{{ set_value('smtp-port', get_pengaturan('smtp-port', 'value')) }}">
+                    <br>{{ form_error('smtp-port')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
                 <label class="control-label">Slider halaman login</label>
                 <div class="controls" style="background-color: #FBFBFB; padding: 10px;border-radius: 5px;">
                     <table class="table table-condensed">

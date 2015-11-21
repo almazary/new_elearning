@@ -158,6 +158,58 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                 </div>
             </div>
             <div class=\"control-group\">
+                <label class=\"control-label\">SMTP host</label>
+                <div class=\"controls\">
+                    <input type=\"text\" name=\"smtp-host\" class=\"span5\" value=\"";
+        // line 81
+        echo twig_escape_filter($this->env, set_value("smtp-host", get_pengaturan("smtp-host", "value")), "html", null, true);
+        echo "\">
+                    <br>";
+        // line 82
+        echo form_error("smtp-host");
+        echo "
+                </div>
+            </div>
+            <div class=\"control-group\">
+                <label class=\"control-label\">SMTP username</label>
+                <div class=\"controls\">
+                    <input type=\"text\" name=\"smtp-username\" class=\"span5\" value=\"";
+        // line 88
+        echo twig_escape_filter($this->env, set_value("smtp-username", get_pengaturan("smtp-username", "value")), "html", null, true);
+        echo "\">
+                    <br>";
+        // line 89
+        echo form_error("smtp-username");
+        echo "
+                </div>
+            </div>
+            <div class=\"control-group\">
+                <label class=\"control-label\">SMTP password</label>
+                <div class=\"controls\">
+                    <input type=\"text\" name=\"smtp-pass\" class=\"span5\" value=\"";
+        // line 95
+        echo twig_escape_filter($this->env, set_value("smtp-pass", get_pengaturan("smtp-pass", "value")), "html", null, true);
+        echo "\">
+                    <br>";
+        // line 96
+        echo form_error("smtp-pass");
+        echo "
+                </div>
+            </div>
+            <div class=\"control-group\">
+                <label class=\"control-label\">SMTP port</label>
+                <div class=\"controls\">
+                    <input type=\"text\" name=\"smtp-port\" class=\"span5\" value=\"";
+        // line 102
+        echo twig_escape_filter($this->env, set_value("smtp-port", get_pengaturan("smtp-port", "value")), "html", null, true);
+        echo "\">
+                    <br>";
+        // line 103
+        echo form_error("smtp-port");
+        echo "
+                </div>
+            </div>
+            <div class=\"control-group\">
                 <label class=\"control-label\">Slider halaman login</label>
                 <div class=\"controls\" style=\"background-color: #FBFBFB; padding: 10px;border-radius: 5px;\">
                     <table class=\"table table-condensed\">
@@ -169,20 +221,20 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                                     </div>
                                     <div class=\"span10\">
                                         ";
-        // line 89
+        // line 117
         if (get_pengaturan("img-slide-1", "value")) {
-            // line 90
+            // line 118
             echo "                                        <a href=\"";
             echo twig_escape_filter($this->env, site_url("welcome/pengaturan/?delete-img=1"), "html", null, true);
             echo "\" class=\"pull-right\" title=\"Hapus gambar\"><i class=\"icon-trash\"></i></a>
                                         <img src=\"";
-            // line 91
+            // line 119
             echo twig_escape_filter($this->env, get_url_image(get_pengaturan("img-slide-1", "value")), "html", null, true);
             echo "\" class=\"img-polaroid\" style=\"max-height: 150px;margin-bottom:10px;\">
                                         <br>Ganti gambar :
                                         ";
         }
-        // line 94
+        // line 122
         echo "                                        <input type=\"file\" name=\"img-slide-1\">
                                     </div>
                                 </div>
@@ -192,7 +244,7 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                                     </div>
                                     <div class=\"span10\">
                                         <textarea name=\"info-slide-1\" class=\"span12\" placeholder=\"text atau html\">";
-        // line 102
+        // line 130
         echo set_value("info-slide-1", get_pengaturan("info-slide-1", "value"));
         echo "</textarea>
                                     </div>
@@ -207,20 +259,20 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                                     </div>
                                     <div class=\"span10\">
                                         ";
-        // line 114
+        // line 142
         if (get_pengaturan("img-slide-2", "value")) {
-            // line 115
+            // line 143
             echo "                                        <a href=\"";
             echo twig_escape_filter($this->env, site_url("welcome/pengaturan/?delete-img=2"), "html", null, true);
             echo "\" class=\"pull-right\" title=\"Hapus gambar\"><i class=\"icon-trash\"></i></a>
                                         <img src=\"";
-            // line 116
+            // line 144
             echo twig_escape_filter($this->env, get_url_image(get_pengaturan("img-slide-2", "value")), "html", null, true);
             echo "\" class=\"img-polaroid\" style=\"max-height: 150px;margin-bottom:10px;\">
                                         <br>Ganti gambar :
                                         ";
         }
-        // line 119
+        // line 147
         echo "                                        <input type=\"file\" name=\"img-slide-2\">
                                     </div>
                                 </div>
@@ -230,7 +282,7 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                                     </div>
                                     <div class=\"span10\">
                                         <textarea name=\"info-slide-2\" class=\"span12\" placeholder=\"text atau html\">";
-        // line 127
+        // line 155
         echo set_value("info-slide-2", get_pengaturan("info-slide-2", "value"));
         echo "</textarea>
                                     </div>
@@ -245,20 +297,20 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                                     </div>
                                     <div class=\"span10\">
                                         ";
-        // line 139
+        // line 167
         if (get_pengaturan("img-slide-3", "value")) {
-            // line 140
+            // line 168
             echo "                                        <a href=\"";
             echo twig_escape_filter($this->env, site_url("welcome/pengaturan/?delete-img=3"), "html", null, true);
             echo "\" class=\"pull-right\" title=\"Hapus gambar\"><i class=\"icon-trash\"></i></a>
                                         <img src=\"";
-            // line 141
+            // line 169
             echo twig_escape_filter($this->env, get_url_image(get_pengaturan("img-slide-3", "value")), "html", null, true);
             echo "\" class=\"img-polaroid\" style=\"max-height: 150px;margin-bottom:10px;\">
                                         <br>Ganti gambar :
                                         ";
         }
-        // line 144
+        // line 172
         echo "                                        <input type=\"file\" name=\"img-slide-3\">
                                     </div>
                                 </div>
@@ -268,7 +320,7 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                                     </div>
                                     <div class=\"span10\">
                                         <textarea name=\"info-slide-3\" class=\"span12\" placeholder=\"text atau html\">";
-        // line 152
+        // line 180
         echo set_value("info-slide-3", get_pengaturan("info-slide-3", "value"));
         echo "</textarea>
                                     </div>
@@ -283,20 +335,20 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                                     </div>
                                     <div class=\"span10\">
                                         ";
-        // line 164
+        // line 192
         if (get_pengaturan("img-slide-4", "value")) {
-            // line 165
+            // line 193
             echo "                                        <a href=\"";
             echo twig_escape_filter($this->env, site_url("welcome/pengaturan/?delete-img=4"), "html", null, true);
             echo "\" class=\"pull-right\" title=\"Hapus gambar\"><i class=\"icon-trash\"></i></a>
                                         <img src=\"";
-            // line 166
+            // line 194
             echo twig_escape_filter($this->env, get_url_image(get_pengaturan("img-slide-4", "value")), "html", null, true);
             echo "\" class=\"img-polaroid\" style=\"max-height: 150px;margin-bottom:10px;\">
                                         <br>Ganti gambar :
                                         ";
         }
-        // line 169
+        // line 197
         echo "                                        <input type=\"file\" name=\"img-slide-4\">
                                     </div>
                                 </div>
@@ -306,7 +358,7 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                                     </div>
                                     <div class=\"span10\">
                                         <textarea name=\"info-slide-4\" class=\"span12\" placeholder=\"text atau html\">";
-        // line 177
+        // line 205
         echo set_value("info-slide-4", get_pengaturan("info-slide-4", "value"));
         echo "</textarea>
                                     </div>
@@ -323,7 +375,7 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                 </div>
             </div>
         ";
-        // line 191
+        // line 219
         echo form_close();
         echo "
 
@@ -344,6 +396,6 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
 
     public function getDebugInfo()
     {
-        return array (  327 => 191,  310 => 177,  300 => 169,  294 => 166,  289 => 165,  287 => 164,  272 => 152,  262 => 144,  256 => 141,  251 => 140,  249 => 139,  234 => 127,  224 => 119,  218 => 116,  213 => 115,  211 => 114,  196 => 102,  186 => 94,  180 => 91,  175 => 90,  173 => 89,  156 => 75,  152 => 74,  143 => 68,  134 => 62,  124 => 55,  118 => 52,  107 => 44,  101 => 41,  91 => 34,  87 => 33,  78 => 27,  74 => 26,  65 => 20,  61 => 19,  54 => 15,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  379 => 219,  362 => 205,  352 => 197,  346 => 194,  341 => 193,  339 => 192,  324 => 180,  314 => 172,  308 => 169,  303 => 168,  301 => 167,  286 => 155,  276 => 147,  270 => 144,  265 => 143,  263 => 142,  248 => 130,  238 => 122,  232 => 119,  227 => 118,  225 => 117,  208 => 103,  204 => 102,  195 => 96,  191 => 95,  182 => 89,  178 => 88,  169 => 82,  165 => 81,  156 => 75,  152 => 74,  143 => 68,  134 => 62,  124 => 55,  118 => 52,  107 => 44,  101 => 41,  91 => 34,  87 => 33,  78 => 27,  74 => 26,  65 => 20,  61 => 19,  54 => 15,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

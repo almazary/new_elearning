@@ -782,6 +782,18 @@ function kirim_email($nama_email, $to = array(), $array_data = array())
     $CI->email->clear(true);
 
     $config['mailtype'] = 'html';
+    # cek pakai smtp tidak
+    if (!empty(get_pengaturan('smtp-host', 'value'))) {
+        $config['protocol']  = 'smtp';
+        $config['smtp_host'] = get_pengaturan('smtp-host', 'value');
+        $config['smtp_user'] = get_pengaturan('smtp-username', 'value');
+        $config['smtp_pass'] = get_pengaturan('smtp-pass', 'value');
+
+        # cek port
+        if (!empty(get_pengaturan('smtp-port', 'value'))) {
+            $config['smtp_port'] = get_pengaturan('smtp-port', 'value');
+        }
+    }
     $CI->email->initialize($config);
 
     $CI->email->to($to);
