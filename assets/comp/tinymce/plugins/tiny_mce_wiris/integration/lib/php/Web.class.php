@@ -178,9 +178,9 @@ class php_Web {
 	static function getClientHeader($k) {
 		$k1 = str_replace("-", "_", strtoupper($k));
 		if(null == php_Web::getClientHeaders()) throw new HException('null iterable');
-		$it = php_Web::getClientHeaders()->iterator();
-		while($it->hasNext()) {
-			$i = $it->next();
+		$»it = php_Web::getClientHeaders()->iterator();
+		while($»it->hasNext()) {
+			$i = $»it->next();
 			if($i->header === $k1) {
 				return $i->value;
 			}
@@ -193,9 +193,9 @@ class php_Web {
 			php_Web::$_client_headers = new HList();
 			$h = php_Lib::hashOfAssociativeArray($_SERVER);
 			if(null == $h) throw new HException('null iterable');
-			$it = $h->keys();
-			while($it->hasNext()) {
-				$k = $it->next();
+			$»it = $h->keys();
+			while($»it->hasNext()) {
+				$k = $»it->next();
 				if(_hx_substr($k, 0, 5) === "HTTP_") {
 					php_Web::$_client_headers->add(_hx_anonymous(array("header" => _hx_substr($k, 5, null), "value" => $h->get($k))));
 				}
@@ -271,9 +271,9 @@ class php_Web {
 		}
 		$post = php_Lib::hashOfAssociativeArray($a);
 		if(null == $post) throw new HException('null iterable');
-		$it = $post->keys();
-		while($it->hasNext()) {
-			$key = $it->next();
+		$»it = $post->keys();
+		while($»it->hasNext()) {
+			$key = $»it->next();
 			call_user_func_array($onPart, array($key, ""));
 			$v = $post->get($key);
 			call_user_func_array($onData, array(haxe_io_Bytes::ofString($v), 0, strlen($v)));

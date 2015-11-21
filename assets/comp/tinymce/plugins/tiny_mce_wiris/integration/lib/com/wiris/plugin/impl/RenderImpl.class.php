@@ -9,8 +9,8 @@ class com_wiris_plugin_impl_RenderImpl implements com_wiris_plugin_api_Render{
 		try {
 			$text = $this->plugin->newTextService()->mathml2accessible($mml, $lang, $param);
 			return $text;
-		}catch(Exception $e) {
-			$_ex_ = ($e instanceof HException) ? $e->e : $e;
+		}catch(Exception $»e) {
+			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
 			$ex = $_ex_;
 			{
 				return "";
@@ -82,8 +82,8 @@ class com_wiris_plugin_impl_RenderImpl implements com_wiris_plugin_api_Render{
 		$bs = null;
 		try {
 			$bs = $this->showImage($digest, null, null);
-		}catch(Exception $e) {
-			$_ex_ = ($e instanceof HException) ? $e->e : $e;
+		}catch(Exception $»e) {
+			$_ex_ = ($»e instanceof HException) ? $»e->e : $»e;
 			$e = $_ex_;
 			{
 				return "";
@@ -234,12 +234,12 @@ class com_wiris_plugin_impl_RenderImpl implements com_wiris_plugin_api_Render{
 	public function __call($m, $a) {
 		if(isset($this->$m) && is_callable($this->$m))
 			return call_user_func_array($this->$m, $a);
-		else if(isset($this->dynamics[$m]) && is_callable($this->dynamics[$m]))
-			return call_user_func_array($this->dynamics[$m], $a);
+		else if(isset($this->»dynamics[$m]) && is_callable($this->»dynamics[$m]))
+			return call_user_func_array($this->»dynamics[$m], $a);
 		else if('toString' == $m)
 			return $this->__toString();
 		else
-			throw new HException('Unable to call '.$m.'');
+			throw new HException('Unable to call «'.$m.'»');
 	}
 	static function concatPath($s1, $s2) {
 		if(_hx_last_index_of($s1, "/", null) === strlen($s1) - 1) {
