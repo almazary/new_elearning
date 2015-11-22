@@ -8,11 +8,14 @@
         <link type="text/css" href="{{ base_url_theme }}bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link type="text/css" href="{{ base_url_theme }}css/theme.css" rel="stylesheet">
         <link type="text/css" href="{{ base_url_theme }}images/icons/css/font-awesome.css" rel="stylesheet">
+        <link type="text/css" href="{{ base_url('assets/comp/pace/flash.css') }}" rel="stylesheet">
+        <link type="text/css" href="{{ base_url('assets/comp/offline/offline-theme-chrome.css') }}" rel="stylesheet">
+        <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         {% block css %}{% endblock %}
         {{ comp_css|raw }}
         <link rel="shortcut icon" type="image/x-icon" href="{{ favicon_url }}">
     </head>
-    <body>
+    <body style="display: none;">
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -30,12 +33,16 @@
                             </button>
                         </form>
                         <ul class="nav pull-right">
+                            {% if is_admin() %}
+                            <li><a href="{{ site_url('welcome/donation') }}">DONASI</a></li>
+                            {% endif %}
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 {{ nama_panggilan(get_sess_data('user', 'nama')) }}
 
-                                <img src="{{ get_url_image_pengajar(get_sess_data('user', 'foto'), 'medium', get_sess_data('user', 'jenis_kelamin')) }}" class="nav-avatar img-polaroid" />
-
+                                <span class="pull-right">
+                                <img src="{{ get_url_image_session(get_sess_data('user', 'foto'), 'medium', get_sess_data('user', 'jenis_kelamin')) }}" class="nav-avatar img-polaroid" />
                                 <b class="caret"></b></a>
+                                </span>
                                 <ul class="dropdown-menu">
                                     {% if is_admin() %}
                                     <li>{{ anchor('pengajar/detail/'~ get_sess_data('user', 'status_id') ~'/' ~ get_sess_data('user', 'id'), 'Detail Profil', {'title' : 'Detail Profil'})|raw }}</li>
@@ -81,6 +88,7 @@
                             <ul class="widget widget-menu unstyled">
                                 <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
                                 <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
+                                <li><a href="{{ site_url('materi/komentar') }}"><i class="menu-icon icon-comments"></i>Komentar Materi </a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
@@ -107,6 +115,7 @@
                             <ul class="widget widget-menu unstyled">
                                 <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
                                 <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
+                                <li><a href="{{ site_url('materi/komentar') }}"><i class="menu-icon icon-comments"></i>Komentar Materi </a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
@@ -126,6 +135,7 @@
                             <ul class="widget widget-menu unstyled">
                                 <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
                                 <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
+                                <li><a href="{{ site_url('materi/komentar') }}"><i class="menu-icon icon-comments"></i>Komentar Materi </a></li>
                             </ul>
 
                             <ul class="widget widget-menu unstyled">
@@ -165,11 +175,18 @@
         var site_url = "{{ site_url() }}";
         var base_url = "{{ base_url() }}";
         </script>
+        <script data-pace-options='{ "ajax": false }' src="{{ base_url('assets/comp/pace/pace.min.js') }}" type="text/javascript"></script>
+        <script src="{{ base_url('assets/comp/offline/offline.min.js') }}" type="text/javascript"></script>
         <script src="{{ base_url_theme }}scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
         <script src="{{ base_url_theme }}scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
         <script src="{{ base_url_theme }}bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         {{ comp_js|raw }}
         <script src="{{ base_url_theme }}scripts/script.js" type="text/javascript"></script>
         {% block js %}{% endblock %}
+        <script type="text/javascript">
+            $( document ).ready(function() {
+                $("body").show();
+            });
+        </script>
     </body>
 </html>

@@ -49,38 +49,49 @@ class __TwigTemplate_0410b18943fbab5aac2b10ae65165d7955236ae6d4912fac9e991bb53bb
         echo get_flashdata("kelas");
         echo "
 
+        ";
+        // line 15
+        if (is_demo_app()) {
+            // line 16
+            echo "            ";
+            echo get_alert("warning", get_demo_msg());
+            echo "
+        ";
+        }
+        // line 18
+        echo "
         <div class=\"panel panel-info\">
             <div class=\"panel-heading\">
                 Edit Kelas
             </div>
             <div class=\"panel-body\">
                 ";
-        // line 20
+        // line 24
         echo form_open(("kelas/edit/" . $this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "id")), array("class" => "form-horizontal row-fluid"));
         echo "
                     <div class=\"control-group\">
                         <label class=\"control-label\">Nama Kelas <span class=\"text-error\">*</span></label>
                         <div class=\"controls\">
                             <input type=\"text\" name=\"nama\" class=\"span5\" placeholder=\"Nama Kelas\" value=\"";
-        // line 24
+        // line 28
         echo twig_escape_filter($this->env, set_value("nama", $this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "nama")), "html", null, true);
         echo "\">
                             ";
-        // line 25
+        // line 29
         echo form_error("nama");
         echo "
                         </div>
                     </div>
                     ";
-        // line 28
+        // line 32
         if ((!(null === $this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "parent_id")))) {
-            // line 29
+            // line 33
             echo "                    <div class=\"control-group\">
                         <label class=\"control-label\">Status</label>
                         <div class=\"controls\">
                             <label class=\"checkbox inline\">
                                 <input type=\"checkbox\" value=\"1\" name=\"status\" ";
-            // line 33
+            // line 37
             echo twig_escape_filter($this->env, set_checkbox("status", "1", ((($this->getAttribute((isset($context["kelas"]) ? $context["kelas"] : null), "aktif") == 1)) ? (true) : (false))), "html", null, true);
             echo ">
                                 Aktif
@@ -89,18 +100,24 @@ class __TwigTemplate_0410b18943fbab5aac2b10ae65165d7955236ae6d4912fac9e991bb53bb
                     </div>
                     ";
         }
-        // line 39
+        // line 43
         echo "                    <div class=\"control-group\">
                         <div class=\"controls\">
-                            <button type=\"submit\" class=\"btn btn-primary\">Simpan</button>
-                            <a href=\"";
-        // line 42
+                            ";
+        // line 45
+        if ((is_demo_app() == false)) {
+            // line 46
+            echo "                            <button type=\"submit\" class=\"btn btn-primary\">Simpan</button>
+                            ";
+        }
+        // line 48
+        echo "                            <a href=\"";
         echo twig_escape_filter($this->env, site_url("kelas"), "html", null, true);
         echo "\" class=\"btn\">Batal</a>
                         </div>
                     </div>
                 ";
-        // line 45
+        // line 51
         echo form_close();
         echo "
             </div>
@@ -109,7 +126,7 @@ class __TwigTemplate_0410b18943fbab5aac2b10ae65165d7955236ae6d4912fac9e991bb53bb
         <p class=\"text-warning\"><b>NB:</b> Kelas tidak dapat di hapus namun dapat di ubah menjadi tidak aktif.</p>
 
         ";
-        // line 51
+        // line 57
         echo (isset($context["kelas_hirarki"]) ? $context["kelas_hirarki"] : null);
         echo "
 
@@ -133,6 +150,6 @@ class __TwigTemplate_0410b18943fbab5aac2b10ae65165d7955236ae6d4912fac9e991bb53bb
 
     public function getDebugInfo()
     {
-        return array (  113 => 51,  104 => 45,  98 => 42,  93 => 39,  84 => 33,  78 => 29,  76 => 28,  70 => 25,  66 => 24,  59 => 20,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  130 => 57,  121 => 51,  114 => 48,  110 => 46,  108 => 45,  104 => 43,  95 => 37,  89 => 33,  87 => 32,  81 => 29,  77 => 28,  70 => 24,  62 => 18,  56 => 16,  54 => 15,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

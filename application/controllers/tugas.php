@@ -979,18 +979,21 @@ class Tugas extends MY_Controller
             $pertanyaan = array();
             if ($tugas['type_id'] != 1) {
                 # ambil pertanyaan ditugas ini
-                $pertanyaan = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'random');
-                # jika pilihan ganda, ambil pilihannya
-                if ($tugas['type_id'] == 3) {
-                    foreach ($pertanyaan as $key => $val) {
-                        $val['pilihan'] = $this->tugas_model->retrieve_all_pilihan($val['id']);
-                        $pertanyaan[$key] = $val;
-                    }
+                $pertanyaan    = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'random');
+                $pertanyaan_id = array();
+                foreach ($pertanyaan as $key => $val) {
+                    $pertanyaan_id[$key] = $val['id'];
                 }
 
-                $field_value['pertanyaan'] = $pertanyaan;
-                $field_value['tugas']      = $tugas;
-                $field_value['unix_id']    = md5($field_id) . rand(9, 999999);
+                # jika pertanyaan masih kosong
+                if (empty($pertanyaan_id)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Pertanyaan tugas masih kosong.'));
+                    redirect('tugas');
+                }
+
+                $field_value['pertanyaan_id'] = $pertanyaan_id;
+                $field_value['tugas']         = $tugas;
+                $field_value['unix_id']       = md5($field_id) . rand(9, 999999);
                 create_field($field_id, $field_name, json_encode($field_value));
 
             } else {
@@ -1004,7 +1007,23 @@ class Tugas extends MY_Controller
 
         $check_field       = retrieve_field($field_id);
         $check_field_value = json_decode($check_field['value'], 1);
-        $data['data']      = $check_field_value;
+
+        # ini untuk mendapatkan data soal lengkapnya
+        $soal = array();
+        foreach ($check_field_value['pertanyaan_id'] as $key => $p_id) {
+            $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
+
+            # jika pilihan ganda ambil pilihannya
+            if ($check_field_value['tugas']['type_id'] == 3) {
+                $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+            }
+
+            $soal[$key] = $pertanyaan;
+        }
+        $check_field_value['pertanyaan'] = $soal;
+
+        # save data
+        $data['data'] = $check_field_value;
 
         $html_js = '';
 
@@ -1016,17 +1035,11 @@ class Tugas extends MY_Controller
         }
 
         if ($tugas['type_id'] == 2) {
-            # cari id pertanyaan, untuk keperluan auto save
-            $arr_pertanyaan_id = array();
-            foreach ($check_field_value['pertanyaan'] as $p) {
-                $arr_pertanyaan_id[] = $p['id'];
-            }
-
-            $html_js .= get_tinymce('jawaban, textarea#jawaban-' . implode(', textarea#jawaban-', $arr_pertanyaan_id), 'advanced', array('autosave'));
+            $html_js .= get_tinymce('jawaban, textarea#jawaban-' . implode(', textarea#jawaban-', $check_field_value['pertanyaan_id']), 'advanced', array('autosave'));
             $html_js .= load_comp_js(array(
                 base_url('assets/comp/jquery/tinymce.autosave.js'),
             ));
-            $data['data']['str_id'] = implode(',', $arr_pertanyaan_id);
+            $data['data']['str_id'] = implode(',', $check_field_value['pertanyaan_id']);
         }
 
         $data['comp_js'] = $html_js;
@@ -1068,18 +1081,16 @@ class Tugas extends MY_Controller
 
             # jika pilihan ganda langsung di hitung benar salahnya
             if ($tugas['type_id'] == 3) {
-                $jml_soal = 0;
+                $jml_soal = count($check_field_value['pertanyaan_id']);
 
                 # cari kunci jawaban
                 $data_kunci = array();
-                foreach ($check_field_value['pertanyaan'] as $pertanyaan) {
-                    # cari kuncinya
-                    foreach ($pertanyaan['pilihan'] as $pilihan) {
+                foreach ($check_field_value['pertanyaan_id'] as $p_id) {
+                    foreach ($this->tugas_model->retrieve_all_pilihan($p_id) as $pilihan) {
                         if ($pilihan['kunci'] == 1) {
-                            $data_kunci[$pertanyaan['id']] = $pilihan['id'];
+                            $data_kunci[$p_id] = $pilihan['id'];
                         }
                     }
-                    $jml_soal++;
                 }
 
                 $jml_benar = 0;
@@ -1260,7 +1271,7 @@ class Tugas extends MY_Controller
         redirect('tugas');
     }
 
-    function nilai($tugas_id = '')
+    function nilai($tugas_id = '', $mode = '')
     {
         $tugas_id = (int)$tugas_id;
         $tugas    = $this->tugas_model->retrieve($tugas_id);
@@ -1277,6 +1288,9 @@ class Tugas extends MY_Controller
                 redirect('tugas');
             }
 
+            # kelas
+            $kelas_nilai = array();
+
             # ambil nilai
             $data_nilai     = array();
             $retrieve_nilai = $this->tugas_model->retrieve_all_nilai($tugas['id']);
@@ -1292,6 +1306,7 @@ class Tugas extends MY_Controller
                 }
 
                 $nilai['history'] = $history;
+                $nilai['history']['value'] = json_decode($history['value'], 1);
 
                 # cari siswa
                 $siswa = $this->siswa_model->retrieve($nilai['siswa_id']);
@@ -1304,28 +1319,47 @@ class Tugas extends MY_Controller
                 $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
                 $siswa['kelas_aktif'] = $kelas;
 
+                if (!isset($kelas_nilai[$kelas['id']])) {
+                    $kelas_nilai[$kelas['id']] = $kelas;
+                }
+
                 $nilai['siswa'] = $siswa;
 
-                $data_nilai[] = $nilai;
+                if (!empty($_POST['kelas_id'])) {
+                    if ($_POST['kelas_id'] == 'all' OR $kelas['id'] == $_POST['kelas_id']) {
+                        $data_nilai[] = $nilai;
+                    }
+                } else {
+                    $data_nilai[] = $nilai;
+                }
             }
 
-            $data['data_nilai'] = $data_nilai;
+            $data['data_nilai']  = $data_nilai;
+            $data['kelas_nilai'] = $kelas_nilai;
 
-            # panggil datatables dan combobox
-            $data['comp_js'] = load_comp_js(array(
-                base_url('assets/comp/datatables/jquery.dataTables.js'),
-                base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-                base_url('assets/comp/datatables/script.js'),
-                base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                base_url('assets/comp/colorbox/act-tugas.js'),
-            ));
+            if ($mode == 'print') {
+                $this->twig->display('print-nilai.html', $data);
+            } elseif ($mode == 'export_excel') {
+                header("Content-type: application/vnd-ms-excel");
+                header("Content-Disposition: attachment; filename=nilai-" . url_title($data['tugas']['judul'], '-', true)  . ".xls");
+                $this->twig->display('export-excel-nilai.html', $data);
+            } else {
+                # panggil datatables dan combobox
+                $data['comp_js'] = load_comp_js(array(
+                    base_url('assets/comp/datatables/jquery.dataTables.js'),
+                    base_url('assets/comp/datatables/datatable-bootstrap2.js'),
+                    base_url('assets/comp/datatables/script.js'),
+                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    base_url('assets/comp/colorbox/act-tugas.js'),
+                ));
 
-            $data['comp_css'] = load_comp_css(array(
-                base_url('assets/comp/datatables/datatable-bootstrap2.css'),
-                base_url('assets/comp/colorbox/colorbox.css'),
-            ));
+                $data['comp_css'] = load_comp_css(array(
+                    base_url('assets/comp/datatables/datatable-bootstrap2.css'),
+                    base_url('assets/comp/colorbox/colorbox.css'),
+                ));
 
-            $this->twig->display('list-nilai.html', $data);
+                $this->twig->display('list-nilai.html', $data);
+            }
         }
 
         if (is_siswa()) {
@@ -1347,7 +1381,7 @@ class Tugas extends MY_Controller
         }
     }
 
-    function koreksi($tugas_id = '')
+    function koreksi($tugas_id = '', $mode = '')
     {
         if (is_siswa()) {
             redirect('tugas');
@@ -1367,6 +1401,9 @@ class Tugas extends MY_Controller
         $data['tugas'] = $this->formatData($tugas);
 
         $data_siswa = array();
+
+        # kelas
+        $kelas_nilai = array();
 
         # ambil history
         $retrieve_all_history = $this->tugas_model->retrieve_all_history($tugas_id);
@@ -1392,30 +1429,49 @@ class Tugas extends MY_Controller
             $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
             $siswa['kelas_aktif'] = $kelas;
             $siswa['history']     = $history;
+            $siswa['history']['value'] = json_decode($history['value'], 1);
+
+            if (!isset($kelas_nilai[$kelas['id']])) {
+                $kelas_nilai[$kelas['id']] = $kelas;
+            }
 
             # cari nilai
             $siswa['nilai'] = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
 
-            $data_siswa[] = $siswa;
+            if (!empty($_POST['kelas_id'])) {
+                if ($_POST['kelas_id'] == 'all' OR $kelas['id'] == $_POST['kelas_id']) {
+                    $data_siswa[] = $siswa;
+                }
+            } else {
+                $data_siswa[] = $siswa;
+            }
         }
-        $data['data_siswa'] = $data_siswa;
-        // pr($data_siswa);die;
+        $data['data_siswa']  = $data_siswa;
+        $data['kelas_nilai'] = $kelas_nilai;
 
-        # panggil datatables dan combobox
-        $data['comp_js'] = load_comp_js(array(
-            base_url('assets/comp/datatables/jquery.dataTables.js'),
-            base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-            base_url('assets/comp/datatables/script.js'),
-            base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-tugas.js'),
-        ));
+        if ($mode == 'print') {
+            $this->twig->display('print-nilai.html', $data);
+        } elseif ($mode == 'export_excel') {
+            header("Content-type: application/vnd-ms-excel");
+            header("Content-Disposition: attachment; filename=nilai-" . url_title($data['tugas']['judul'], '-', true)  . ".xls");
+            $this->twig->display('export-excel-nilai.html', $data);
+        } else {
+            # panggil datatables dan combobox
+            $data['comp_js'] = load_comp_js(array(
+                base_url('assets/comp/datatables/jquery.dataTables.js'),
+                base_url('assets/comp/datatables/datatable-bootstrap2.js'),
+                base_url('assets/comp/datatables/script.js'),
+                base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                base_url('assets/comp/colorbox/act-tugas.js'),
+            ));
 
-        $data['comp_css'] = load_comp_css(array(
-            base_url('assets/comp/datatables/datatable-bootstrap2.css'),
-            base_url('assets/comp/colorbox/colorbox.css'),
-        ));
+            $data['comp_css'] = load_comp_css(array(
+                base_url('assets/comp/datatables/datatable-bootstrap2.css'),
+                base_url('assets/comp/colorbox/colorbox.css'),
+            ));
 
-        $this->twig->display('list-peserta.html', $data);
+            $this->twig->display('list-peserta.html', $data);
+        }
     }
 
     function detail_jawaban($siswa_id = '', $tugas_id = '')
@@ -1448,8 +1504,20 @@ class Tugas extends MY_Controller
             exit('Tugas belum dikerjakan');
         }
 
-        $history_value   = json_decode($history['value'], 1);
-        $data['history'] = $history_value;
+        $history_value = json_decode($history['value'], 1);
+        $soal          = array();
+        foreach ($history_value['pertanyaan_id'] as $key => $p_id) {
+            $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
+
+            # jika pilihan ganda ambil pilihannya
+            if ($history_value['tugas']['type_id'] == 3) {
+                $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+            }
+
+            $soal[$key] = $pertanyaan;
+        }
+        $history_value['pertanyaan'] = $soal;
+        $data['history']             = $history_value;
 
         if ($tugas['type_id'] == 3) {
             $this->twig->display('detail-jawaban-ganda.html', $data);
@@ -1462,8 +1530,11 @@ class Tugas extends MY_Controller
                 }
 
                 # update history
-                $history_value['nilai'] = $_POST['nilai'];
-                update_field($history_id, $history['nama'], json_encode($history_value));
+                $new_history          = $history_value;
+                $new_history['nilai'] = $_POST['nilai'];
+                unset($new_history['pertanyaan']);
+
+                update_field($history_id, $history['nama'], json_encode($new_history));
 
                 # simpan atau update nilai
                 $check = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
@@ -1487,8 +1558,11 @@ class Tugas extends MY_Controller
                 $nilai = $this->input->post('nilai', true);
 
                 # update history
-                $history_value['nilai'] = $nilai;
-                update_field($history_id, $history['nama'], json_encode($history_value));
+                $new_history          = $history_value;
+                $new_history['nilai'] = $nilai;
+                unset($new_history['pertanyaan']);
+
+                update_field($history_id, $history['nama'], json_encode($new_history));
 
                 # simpan atau update nilai
                 $check = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
@@ -1533,8 +1607,8 @@ class Tugas extends MY_Controller
             }
 
             # hapus history
-            $history_id = 'history-mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
-            $history    = retrieve_field($history_id);
+            $history_id    = 'history-mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
+            $history       = retrieve_field($history_id);
             $history_value = json_decode($history['value'], 1);
             delete_field($history_id);
 

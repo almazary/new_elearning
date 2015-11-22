@@ -36,10 +36,21 @@ class __TwigTemplate_64767e7dd1c2c76e2346651e10d95c228f0b3ece0219bc41dce4514d366
 
 ";
         // line 7
+        if ((is_demo_app() && ($this->getAttribute((isset($context["login"]) ? $context["login"] : null), "is_admin") == true))) {
+            // line 8
+            echo "    ";
+            echo get_alert("warning", get_demo_msg());
+            echo "
+";
+        }
+        // line 10
+        echo "
+";
+        // line 11
         echo form_open(((("pengajar/edit_username/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . (isset($context["pengajar_id"]) ? $context["pengajar_id"] : null)));
         echo "
 <input type=\"hidden\" name=\"login_id\" value=\"";
-        // line 8
+        // line 12
         echo twig_escape_filter($this->env, $this->getAttribute((isset($context["login"]) ? $context["login"] : null), "id"), "html", null, true);
         echo "\">
 <table class=\"table table-striped\">
@@ -47,22 +58,29 @@ class __TwigTemplate_64767e7dd1c2c76e2346651e10d95c228f0b3ece0219bc41dce4514d366
         <tr>
             <td>
                 <input type=\"text\" name=\"username\" value=\"";
-        // line 13
+        // line 17
         echo twig_escape_filter($this->env, set_value("username", $this->getAttribute((isset($context["login"]) ? $context["login"] : null), "username")), "html", null, true);
         echo "\">
                 <br>";
-        // line 14
+        // line 18
         echo form_error("username");
         echo "
             </td>
-            <td width=\"20%\">
+            ";
+        // line 20
+        if (((is_demo_app() == false) || ($this->getAttribute((isset($context["login"]) ? $context["login"] : null), "is_admin") == false))) {
+            // line 21
+            echo "            <td width=\"20%\">
                 <button type=\"submit\" class=\"btn btn-primary\">Update</button>
             </td>
-        </tr>
+            ";
+        }
+        // line 25
+        echo "        </tr>
     </tbody>
 </table>
 ";
-        // line 22
+        // line 28
         echo form_close();
         echo "
 ";
@@ -80,6 +98,6 @@ class __TwigTemplate_64767e7dd1c2c76e2346651e10d95c228f0b3ece0219bc41dce4514d366
 
     public function getDebugInfo()
     {
-        return array (  66 => 22,  55 => 14,  51 => 13,  43 => 8,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
+        return array (  84 => 28,  79 => 25,  73 => 21,  71 => 20,  66 => 18,  62 => 17,  54 => 12,  50 => 11,  47 => 10,  41 => 8,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
     }
 }

@@ -49,6 +49,17 @@ class __TwigTemplate_cf6634a8e24be1c5c6ee4744926a5595621a3bc376f543c98df50f0a975
         echo get_flashdata("mapel");
         echo "
 
+        ";
+        // line 15
+        if (is_demo_app()) {
+            // line 16
+            echo "            ";
+            echo get_alert("warning", get_demo_msg());
+            echo "
+        ";
+        }
+        // line 18
+        echo "
         <div class=\"row-fluid\">
             <div class=\"span6\">
                 <div class=\"panel panel-default\">
@@ -58,7 +69,7 @@ class __TwigTemplate_cf6634a8e24be1c5c6ee4744926a5595621a3bc376f543c98df50f0a975
                     <div id=\"form-filter\" class=\"collapse\">
                         <div class=\"panel-body\">
                             <form class=\"form-horizontal row-fluid\" method=\"post\" action=\"";
-        // line 23
+        // line 27
         echo twig_escape_filter($this->env, site_url("kelas/mapel_kelas/list"), "html", null, true);
         echo "\">
                                 <table class=\"table table-form table-condensed\">
@@ -68,11 +79,11 @@ class __TwigTemplate_cf6634a8e24be1c5c6ee4744926a5595621a3bc376f543c98df50f0a975
                                             <select name=\"parent_kelas\" id=\"parent-kelas\">
                                                 <option>--pilih--</option>
                                                 ";
-        // line 30
+        // line 34
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["parent_kelas"]) ? $context["parent_kelas"] : null));
         foreach ($context['_seq'] as $context["_key"] => $context["pk"]) {
-            // line 31
+            // line 35
             echo "                                                <option value=\"";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["pk"]) ? $context["pk"] : null), "id"), "html", null, true);
             echo "\" ";
@@ -85,7 +96,7 @@ class __TwigTemplate_cf6634a8e24be1c5c6ee4744926a5595621a3bc376f543c98df50f0a975
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['pk'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 33
+        // line 37
         echo "                                            </select>
                                         </td>
                                     </tr>
@@ -95,14 +106,14 @@ class __TwigTemplate_cf6634a8e24be1c5c6ee4744926a5595621a3bc376f543c98df50f0a975
                                             <select name=\"sub_kelas\" id=\"sub-kelas\">
                                                 <option>--pilih--</option>
                                                 ";
-        // line 41
+        // line 45
         if ((!twig_test_empty((isset($context["sub_kelas"]) ? $context["sub_kelas"] : null)))) {
-            // line 42
+            // line 46
             echo "                                                    ";
             $context['_parent'] = (array) $context;
             $context['_seq'] = twig_ensure_traversable((isset($context["sub_kelas"]) ? $context["sub_kelas"] : null));
             foreach ($context['_seq'] as $context["_key"] => $context["sk"]) {
-                // line 43
+                // line 47
                 echo "                                                    <option value=\"";
                 echo twig_escape_filter($this->env, $this->getAttribute((isset($context["sk"]) ? $context["sk"] : null), "id"), "html", null, true);
                 echo "\" ";
@@ -115,10 +126,10 @@ class __TwigTemplate_cf6634a8e24be1c5c6ee4744926a5595621a3bc376f543c98df50f0a975
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['sk'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 45
+            // line 49
             echo "                                                ";
         }
-        // line 46
+        // line 50
         echo "                                            </select>
                                         </td>
                                     </tr>
@@ -140,7 +151,7 @@ class __TwigTemplate_cf6634a8e24be1c5c6ee4744926a5595621a3bc376f543c98df50f0a975
         </div>
 
         ";
-        // line 66
+        // line 70
         echo (isset($context["mapel_kelas_hirarki"]) ? $context["mapel_kelas_hirarki"] : null);
         echo "
 
@@ -161,6 +172,6 @@ class __TwigTemplate_cf6634a8e24be1c5c6ee4744926a5595621a3bc376f543c98df50f0a975
 
     public function getDebugInfo()
     {
-        return array (  144 => 66,  122 => 46,  119 => 45,  106 => 43,  101 => 42,  99 => 41,  89 => 33,  76 => 31,  72 => 30,  62 => 23,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  155 => 70,  133 => 50,  130 => 49,  117 => 47,  112 => 46,  110 => 45,  100 => 37,  87 => 35,  83 => 34,  73 => 27,  62 => 18,  56 => 16,  54 => 15,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

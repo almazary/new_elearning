@@ -12,6 +12,10 @@ Email Template - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('mapel')|raw }}
 
+        {% if is_demo_app() %}
+            {{ get_alert('warning', get_demo_msg())|raw }}
+        {% endif %}
+
         <table class="table table-striped datatable">
             <thead>
                 <tr>

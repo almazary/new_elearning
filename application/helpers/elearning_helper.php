@@ -60,7 +60,7 @@ function default_parser_item($add_item = array())
         'base_url'          => base_url(),
         'site_url'          => site_url(),
         'favicon_url'       => base_url('assets/images/favicon.ico'),
-        'copyright_setup'   => 'Copyright &copy; 2014 Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
+        'copyright_setup'   => 'Copyright &copy; 2014 - ' . date('Y') . ' Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>',
         'current_url'       => current_url(),
         'logo_url_small'    => get_logo_url(),
         'logo_url_medium'   => get_logo_url('medium'),
@@ -75,7 +75,7 @@ function default_parser_item($add_item = array())
 
     # cek proses install tidak
     if ($CI->uri->segment(1) != 'setup') {
-        $return['copyright'] = 'Copyright &copy; 2014 '.get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>';
+        $return['copyright'] = 'Copyright &copy; 2014 - ' . date('Y') . ' ' . get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>';
         $return['site_name'] = 'E-Learning '.get_pengaturan('nama-sekolah', 'value');
         $return['version']   = '<a href="https://github.com/almazary/new_elearning">versi ' . get_pengaturan('versi', 'value') . '</a>';
     }
@@ -202,9 +202,9 @@ function get_alert($notif = 'success', $msg = '')
  * @param  string $element_id
  * @return string
  */
-function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array())
+function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array(), $str_options = null)
 {
-    $tiny_plugins = array('pdw','emotions','syntaxhl','wordcount','pagebreak','style','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','searchreplace','contextmenu','paste','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
+    $tiny_plugins = array('emotions','syntaxhl','wordcount','pagebreak','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','searchreplace','contextmenu','paste','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
     if (!empty($remove_plugins)) {
         $copy_tiny_plugins = $tiny_plugins;
         $combine           = array_combine($tiny_plugins, $copy_tiny_plugins);
@@ -219,26 +219,27 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
         tinyMCE.init({
             selector: "textarea#'.$element_id.'",
             theme : "'.$theme.'",
-            plugins : "'.implode(',', $tiny_plugins).'",
+            plugins : "'.implode(',', $tiny_plugins).'",';
 
-            // Theme options
-            theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,advhr,hr,|,link,unlink,|,sub,sup,charmap,tiny_mce_wiris_formulaEditor,|,code,|,pdw_toggle",
-            theme_advanced_buttons2 : "forecolor,backcolor,|,undo,redo,|,search,replace,outdent,indent,ltr,rtl,blockquote,|,emotions,image,media,youtubeIframe,syntaxhl,|,print,preview,fullscreen",
-            theme_advanced_buttons3 : "",
-            theme_advanced_toolbar_location : "top",
-            theme_advanced_toolbar_align : "left",
-            theme_advanced_statusbar_location : "bottom",
-            pdw_toggle_on : 1,
-            pdw_toggle_toolbars : "2,3",
-            file_browser_callback : "openKCFinder",
-            theme_advanced_resizing : false,
-            content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
-            convert_urls: false,
-            force_br_newlines : false,
-            force_p_newlines : false,
-        });
+            if (empty($str_options)) {
+                $return .= 'theme_advanced_buttons1 : "undo,redo,bold,italic,underline,strikethrough,bullist,numlist,justifyleft,justifycenter,justifyright,justifyfull,blockquote,link,unlink,sub,sup,charmap,tiny_mce_wiris_formulaEditor,emotions,image,media,youtubeIframe,syntaxhl,code",
+                    theme_advanced_buttons2 : "",
+                    theme_advanced_buttons3 : "",
+                    theme_advanced_toolbar_location : "top",
+                    theme_advanced_toolbar_align : "left",
+                    theme_advanced_statusbar_location : "bottom",
+                    file_browser_callback : "openKCFinder",
+                    theme_advanced_resizing : false,
+                    content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
+                    convert_urls: false,
+                    force_br_newlines : false,
+                    force_p_newlines : false';
+            } else {
+                $return .= $str_options;
+            }
+    $return .= '});';
 
-        function openKCFinder(field_name, url, type, win) {
+    $return .= 'function openKCFinder(field_name, url, type, win) {
             tinyMCE.activeEditor.windowManager.open({
                 file: "'.base_url('assets/comp/kcfinder/browse.php?opener=tinymce&type=').'" + type,
                 title: "KCFinder",
@@ -459,6 +460,22 @@ function get_url_image_pengajar($img = '', $size = 'medium', $jk = 'Laki-laki') 
 }
 
 /**
+ * Method untuk mendapatkan link foto pengajar/admin/siswa ketika sudah login
+ *
+ * @param  string $img
+ * @param  string $size
+ * @param  string $jk
+ * @return string url
+ */
+function get_url_image_session($img = '', $size = 'medium', $jk = 'Laki-laki') {
+    if (is_pengajar() OR is_admin()) {
+        return get_url_image_pengajar($img, $size, $jk);
+    } elseif (is_siswa()) {
+        return get_url_image_siswa($img, $size, $jk);
+    }
+}
+
+/**
  * Method untuk mendapatkan path image
  *
  * @param  string $img
@@ -568,9 +585,11 @@ function tgl_jam_indo($tgl_jam = '') {
  * @return string
  */
 function get_post_data($key = '') {
-    if (!empty($_POST)) {
+    if (isset($_POST[$key])) {
         return $_POST[$key];
     }
+
+    return;
 }
 
 /**
@@ -738,7 +757,7 @@ function get_email_admin()
     return $results;
 }
 
-function kirim_email($nama_email, $to = array(), $array_data = array())
+function kirim_email($nama_email, $to, $array_data = array())
 {
     # cari email
     $template = get_pengaturan($nama_email, 'value');
@@ -761,6 +780,18 @@ function kirim_email($nama_email, $to = array(), $array_data = array())
     $CI->email->clear(true);
 
     $config['mailtype'] = 'html';
+    # cek pakai smtp tidak
+    if (!empty(get_pengaturan('smtp-host', 'value'))) {
+        $config['protocol']  = 'smtp';
+        $config['smtp_host'] = get_pengaturan('smtp-host', 'value');
+        $config['smtp_user'] = get_pengaturan('smtp-username', 'value');
+        $config['smtp_pass'] = get_pengaturan('smtp-pass', 'value');
+
+        # cek port
+        if (!empty(get_pengaturan('smtp-port', 'value'))) {
+            $config['smtp_port'] = get_pengaturan('smtp-port', 'value');
+        }
+    }
     $CI->email->initialize($config);
 
     $CI->email->to($to);
@@ -768,6 +799,7 @@ function kirim_email($nama_email, $to = array(), $array_data = array())
     $CI->email->subject($email_subject);
     $CI->email->message($email_body);
     $CI->email->send();
+    $CI->email->clear(true);
 
     return true;
 }
@@ -860,4 +892,30 @@ function get_email_from_string($str) {
     preg_match_all($pattern, $str, $results);
 
     return $results[0];
+}
+
+function is_demo_app() {
+    $CI =& get_instance();
+    $CI->load->config();
+    return $CI->config->item('is_demo_app');
+}
+
+function get_demo_msg() {
+    return "Maaf, untuk keperluan demo aplikasi, halaman ini tidak dapat diperbaharui.";
+}
+
+/**
+ * http://stackoverflow.com/questions/3475646/undefined-date-diff
+ */
+if (!function_exists('date_diff')) {
+    function date_diff($date1, $date2) {
+        $current = $date1;
+        $datetime2 = date_create($date2);
+        $count = 0;
+        while(date_create($current) < $datetime2){
+            $current = gmdate("Y-m-d", strtotime("+1 day", strtotime($current)));
+            $count++;
+        }
+        return $count;
+    }
 }

@@ -1,0 +1,40 @@
+{% extends "layout-iframe.html" %}
+
+{% block content %}
+<h4>Alasan laporan</h4>
+{{ get_flashdata('laporkan')|raw }}
+
+<p>Mengapa anda melaporkan komentar tersebut?</p>
+
+{{ form_open('materi/detail/' ~ materi.id ~ '/laporkan/' ~ komentar.id)|raw }}
+{{ form_error('alasan')|raw }}
+<label class="radio">
+  <input type="radio" {{ set_radio('alasan', 'SARA') }} class="hide-lain" name="alasan" value="SARA"> SARA
+</label>
+<label class="radio">
+  <input type="radio" {{ set_radio('alasan', 'Pornografi') }} class="hide-lain" name="alasan" value="Pornografi"> Pornografi
+</label>
+<label class="radio">
+  <input type="radio" {{ set_radio('alasan', 'Profokasi/Intimidasi') }} class="hide-lain" name="alasan" value="Profokasi/Intimidasi"> Profokasi/Intimidasi
+</label>
+<label class="radio">
+  <input type="radio" {{ set_radio('alasan', 'tulis') }} class="show-lain" name="alasan" value="tulis"> Tulis alasan
+</label>
+<div class="form-lain {{ (get_post_data('alasan') is empty or get_post_data('alasan') != 'tulis') ? 'hide' }}">
+    <textarea class="span12" name="alasan_lain" placeholder="Tulis alasan anda">{{ set_value('alasan_lain') }}</textarea>
+    {{ form_error('alasan_lain')|raw }}
+</div>
+<p><button type="submit" class="btn btn-primary">Submit</button></p>
+{{ form_close()|raw }}
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$(".hide-lain").on('click', function() {
+    $(".form-lain").hide();
+});
+$(".show-lain").on('click', function() {
+    $(".form-lain").show();
+});
+</script>
+{% endblock %}

@@ -191,7 +191,7 @@ class Materi_model extends CI_Model
             $where['materi.konten'] = array($like, 'like');
         }
         if (!empty($tgl_posting)) {
-            $where['DATE(materi.tgl_posting)'] = array($tgl_posting, 'where');
+            $where['DATE(tgl_posting)'] = array($tgl_posting, 'where');
         }
         if (!is_null($publish)) {
             $publish = (int)$publish;

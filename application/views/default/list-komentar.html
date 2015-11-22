@@ -1,0 +1,71 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Komentar Materi - {{ parent() }}
+{% endblock %}
+
+{% block css %}
+<style type="text/css">
+    .komentar img {
+        height: auto;
+        max-width: 100%;
+        width: auto;
+    }
+    table {
+        table-layout: fixed;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Komentar Materi</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('komentar')|raw }}
+
+        {% if is_admin() %}
+        <div class="btn-group">
+            <a href="{{ site_url('materi/komentar') }}" class="btn btn-sm btn-primary">Semua</a>
+            <a href="{{ site_url('materi/komentar/laporan') }}" class="btn btn-sm btn-default">Laporan ({{ jml_laporan }})</a>
+        </div>
+        <br><br>
+        {% endif %}
+
+        <table class="table table-striped datatable">
+            <thead>
+                <tr>
+                    <th width="5%">ID</th>
+                    <th>Komentar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for k in komentar %}
+                <tr>
+                    <td>
+                        <b>{{ k.id }}</b>
+                        {% if is_admin() %}
+                        <br>
+                        <a href="{{ site_url('materi/komentar/delete/' ~ k.id) }}" onclick="return confirm('Anda yakin ingin menghapus komentar ini?')"><i class="icon icon-trash"></i></a>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="media">
+                            <div class="pull-right">
+                                <img src="{{ k.login.link_image }}" style="height:25px;width:25px;" class="img-circle img-polaroid">
+                            </div>
+                            <div class="media-body">
+                                <p><a href="{{ k.login.link_profil }}"><b>{{ k.login.nama }}</b></a>, <small>{{ k.tgl_posting|date('d F Y') }}</small> | <b><a href="{{ site_url('materi/detail/' ~ k.materi.id) }}" target="_blank">{{ k.materi.judul }}</a></b></p>
+                                {{ k.konten|raw_youtube|raw }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}

@@ -61,6 +61,12 @@ Lihat Nilai - {{ parent() }}
         </div>
         <br>
 
+        <div class="btn-group">
+            <a data-original-title="Print Query" href="#" class="btn btn-primary" data-toggle="popover" data-html="true" data-placement="top" data-content="<form method='post' target='_blank' action='{{ site_url('tugas/nilai/' ~ tugas.id ~ '/print') }}'><select name='kelas_id'><option value='all'>--Semua Kelas--</option>{% for k in kelas_nilai %} <option value='{{ k.id }}'>{{ k.nama }}</option> {% endfor %}</select><button class='btn btn-primary btn-sm'>Print</button</form>">Print</a>
+            <a data-original-title="Export Query" href="#" class="btn btn-primary" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<form method='post' target='_blank' action='{{ site_url('tugas/nilai/' ~ tugas.id ~ '/export_excel') }}'><select name='kelas_id'><option value='all'>--Semua Kelas--</option>{% for k in kelas_nilai %} <option value='{{ k.id }}'>{{ k.nama }}</option> {% endfor %}</select><button class='btn btn-primary btn-sm'>Export Excel</button</form>">Export Excel</a>
+        </div>
+
+        <br><br>
         <table class="table table-striped datatable">
             <thead>
                 <tr>
@@ -77,7 +83,7 @@ Lihat Nilai - {{ parent() }}
                         <img style="height:20px;width:20px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(n.siswa.foto, 'medium', n.siswa.jenis_kelamin) }}">
                         <a href="{{ site_url('siswa/detail/' ~ n.siswa.id) }}"><b>{{ n.siswa.nama }} {{ ((n.siswa.nis is not empty) ? '<span class="text-muted">(' ~ n.siswa.nis ~ ')</span>')|raw }}</b></a>
                     </td>
-                    <td>{{ n.siswa.kelas_aktif.nama }}</td>
+                    <td>{{ n.siswa.kelas_aktif.nama }} <span class="text-muted">({{ n.siswa.kelas_aktif.id }})</span></td>
                     <td>{{ n.nilai }}</td>
                     <td>
                         <div class="btn-group">

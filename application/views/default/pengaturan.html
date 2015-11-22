@@ -12,6 +12,10 @@ Pengaturan - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('pengaturan')|raw }}
 
+        {% if is_demo_app() %}
+            {{ get_alert('warning', get_demo_msg())|raw }}
+        {% endif %}
+
         {{ form_open_multipart('welcome/pengaturan', {'class' : 'form-horizontal row-fluid'})|raw }}
             <div class="control-group">
                 <label class="control-label">Nama sekolah <span class="text-error">*</span></label>
@@ -73,6 +77,36 @@ Pengaturan - {{ parent() }}
                 <div class="controls">
                     <input type="text" name="email-server" class="span5" value="{{ set_value('email-server', get_pengaturan('email-server', 'value')) }}">
                     <br>{{ form_error('email-server')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">SMTP host</label>
+                <div class="controls">
+                    <input type="text" name="smtp-host" class="span5" value="{{ set_value('smtp-host', get_pengaturan('smtp-host', 'value')) }}">
+                    <br>{{ form_error('smtp-host')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">SMTP username</label>
+                <div class="controls">
+                    <input type="text" name="smtp-username" class="span5" value="{{ set_value('smtp-username', get_pengaturan('smtp-username', 'value')) }}">
+                    <br>{{ form_error('smtp-username')|raw }}
+                </div>
+            </div>
+            {% if is_demo_app() == false %}
+            <div class="control-group">
+                <label class="control-label">SMTP password</label>
+                <div class="controls">
+                    <input type="text" name="smtp-pass" class="span5" value="{{ set_value('smtp-pass', get_pengaturan('smtp-pass', 'value')) }}">
+                    <br>{{ form_error('smtp-pass')|raw }}
+                </div>
+            </div>
+            {% endif %}
+            <div class="control-group">
+                <label class="control-label">SMTP port</label>
+                <div class="controls">
+                    <input type="text" name="smtp-port" class="span5" value="{{ set_value('smtp-port', get_pengaturan('smtp-port', 'value')) }}">
+                    <br>{{ form_error('smtp-port')|raw }}
                 </div>
             </div>
             <div class="control-group">
@@ -183,11 +217,13 @@ Pengaturan - {{ parent() }}
                 </div>
             </div>
 
+            {% if is_demo_app() == false %}
             <div class="control-group">
                 <div class="controls">
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </div>
+            {% endif %}
         {{ form_close()|raw }}
 
     </div>

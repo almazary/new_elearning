@@ -12,6 +12,10 @@ Edit Email Template - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('email')|raw }}
 
+        {% if is_demo_app() %}
+            {{ get_alert('warning', get_demo_msg())|raw }}
+        {% endif %}
+
         {{ get_alert('success', 'Ubah bentuk atau kata - kata template email selain {$...}')|raw }}
 
         {{ form_open('email/edit/' ~ template.id, {'class' : 'form-horizontal row-fluid'})|raw }}
@@ -43,7 +47,9 @@ Edit Email Template - {{ parent() }}
             </div>
             <div class="control-group">
                 <div class="controls">
+                    {% if is_demo_app() == false %}
                     <button type="submit" class="btn btn-primary">Update</button>
+                    {% endif %}
                     <a href="{{ site_url('email') }}" class="btn btn-default">Kembali</a>
                 </div>
             </div>

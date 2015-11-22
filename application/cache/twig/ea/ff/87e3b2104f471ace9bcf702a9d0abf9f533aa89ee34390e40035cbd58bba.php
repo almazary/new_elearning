@@ -54,17 +54,28 @@ class __TwigTemplate_eaff87e3b2104f471ace9bcf702a9d0abf9f533aa89ee34390e40035cbd
 
         ";
         // line 15
+        if (is_demo_app()) {
+            // line 16
+            echo "            ";
+            echo get_alert("warning", get_demo_msg());
+            echo "
+        ";
+        }
+        // line 18
+        echo "
+        ";
+        // line 19
         echo form_open(((("mapel/edit/" . $this->getAttribute((isset($context["mapel"]) ? $context["mapel"] : null), "id")) . "/") . enurl_redirect((isset($context["uri_back"]) ? $context["uri_back"] : null))), array("class" => "form-horizontal row-fluid"));
         echo "
             <div class=\"control-group\">
                 <label class=\"control-label\">Nama <span class=\"text-error\">*</span></label>
                 <div class=\"controls\">
                     <input type=\"text\" name=\"nama\" class=\"span8\" value=\"";
-        // line 19
+        // line 23
         echo twig_escape_filter($this->env, set_value("nama", $this->getAttribute((isset($context["mapel"]) ? $context["mapel"] : null), "nama")), "html", null, true);
         echo "\">
                     <br>";
-        // line 20
+        // line 24
         echo form_error("nama");
         echo "
                 </div>
@@ -73,7 +84,7 @@ class __TwigTemplate_eaff87e3b2104f471ace9bcf702a9d0abf9f533aa89ee34390e40035cbd
                 <label class=\"control-label\">Deskripsi</label>
                 <div class=\"controls\">
                     <textarea name=\"info\" class=\"span12\" rows=\"5\">";
-        // line 26
+        // line 30
         echo set_value("info", $this->getAttribute((isset($context["mapel"]) ? $context["mapel"] : null), "info"));
         echo "</textarea>
                 </div>
@@ -83,7 +94,7 @@ class __TwigTemplate_eaff87e3b2104f471ace9bcf702a9d0abf9f533aa89ee34390e40035cbd
                 <div class=\"controls\">
                     <label class=\"checkbox inline\">
                         <input type=\"checkbox\" value=\"1\" name=\"status\" ";
-        // line 33
+        // line 37
         echo twig_escape_filter($this->env, set_checkbox("status", "1", ((($this->getAttribute((isset($context["mapel"]) ? $context["mapel"] : null), "aktif") == 1)) ? (true) : (false))), "html", null, true);
         echo ">
                         Aktif
@@ -92,15 +103,21 @@ class __TwigTemplate_eaff87e3b2104f471ace9bcf702a9d0abf9f533aa89ee34390e40035cbd
             </div>
             <div class=\"control-group\">
                 <div class=\"controls\">
-                    <button type=\"submit\" class=\"btn btn-primary\">Update</button>
-                    <a href=\"";
-        // line 41
+                    ";
+        // line 44
+        if ((is_demo_app() == false)) {
+            // line 45
+            echo "                    <button type=\"submit\" class=\"btn btn-primary\">Update</button>
+                    ";
+        }
+        // line 47
+        echo "                    <a href=\"";
         echo twig_escape_filter($this->env, (isset($context["uri_back"]) ? $context["uri_back"] : null), "html", null, true);
         echo "\" class=\"btn\">Batal</a>
                 </div>
             </div>
         ";
-        // line 44
+        // line 50
         echo form_close();
         echo "
 
@@ -121,6 +138,6 @@ class __TwigTemplate_eaff87e3b2104f471ace9bcf702a9d0abf9f533aa89ee34390e40035cbd
 
     public function getDebugInfo()
     {
-        return array (  104 => 44,  98 => 41,  87 => 33,  77 => 26,  68 => 20,  64 => 19,  57 => 15,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  121 => 50,  114 => 47,  110 => 45,  108 => 44,  98 => 37,  88 => 30,  79 => 24,  75 => 23,  68 => 19,  65 => 18,  59 => 16,  57 => 15,  52 => 13,  46 => 10,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

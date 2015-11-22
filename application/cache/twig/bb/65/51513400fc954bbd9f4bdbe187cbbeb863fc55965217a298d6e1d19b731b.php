@@ -49,10 +49,21 @@ class __TwigTemplate_bb6551513400fc954bbd9f4bdbe187cbbeb863fc55965217a298d6e1d19
         echo get_flashdata("mapel");
         echo "
 
+        ";
+        // line 15
+        if (is_demo_app()) {
+            // line 16
+            echo "            ";
+            echo get_alert("warning", get_demo_msg());
+            echo "
+        ";
+        }
+        // line 18
+        echo "
         <div class=\"row-fluid\">
             <div class=\"span2\">
                 <a href=\"";
-        // line 17
+        // line 21
         echo twig_escape_filter($this->env, site_url("mapel/add"), "html", null, true);
         echo "\" class=\"btn btn-primary\">Tambah Mapel</a>
             </div>
@@ -74,43 +85,43 @@ class __TwigTemplate_bb6551513400fc954bbd9f4bdbe187cbbeb863fc55965217a298d6e1d19
             </thead>
             <tbody>
                 ";
-        // line 36
+        // line 40
         $context['_parent'] = (array) $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["mapels"]) ? $context["mapels"] : null));
         foreach ($context['_seq'] as $context["no"] => $context["v"]) {
-            // line 37
+            // line 41
             echo "                <tr>
                     <td>";
-            // line 38
+            // line 42
             echo twig_escape_filter($this->env, (isset($context["no"]) ? $context["no"] : null), "html", null, true);
             echo ".</td>
                     <td>
                         ";
-            // line 40
+            // line 44
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "nama"), "html", null, true);
             echo "
                         <br><small>";
-            // line 41
+            // line 45
             echo nl2br(twig_escape_filter($this->env, $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "info"), "html", null, true));
             echo "</small>
                     </td>
                     <td>
                         ";
-            // line 44
+            // line 48
             if (($this->getAttribute((isset($context["v"]) ? $context["v"] : null), "aktif") == 1)) {
-                // line 45
+                // line 49
                 echo "                        <i class=\"icon-ok\"></i>
                         ";
             } else {
-                // line 47
+                // line 51
                 echo "                        <i class=\"icon-minus\"></i>
                         ";
             }
-            // line 49
+            // line 53
             echo "                    </td>
                     <td>
                         <a class=\"btn btn-default\" href=\"";
-            // line 51
+            // line 55
             echo twig_escape_filter($this->env, site_url(((("mapel/edit/" . $this->getAttribute((isset($context["v"]) ? $context["v"] : null), "id")) . "/") . enurl_redirect(current_url()))), "html", null, true);
             echo "\"><i class=\"icon-edit\"></i> Edit</a>
                     </td>
@@ -120,13 +131,13 @@ class __TwigTemplate_bb6551513400fc954bbd9f4bdbe187cbbeb863fc55965217a298d6e1d19
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['no'], $context['v'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 55
+        // line 59
         echo "            </tbody>
         </table>
 
         <br>
         ";
-        // line 59
+        // line 63
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
     </div>
@@ -146,6 +157,6 @@ class __TwigTemplate_bb6551513400fc954bbd9f4bdbe187cbbeb863fc55965217a298d6e1d19
 
     public function getDebugInfo()
     {
-        return array (  130 => 59,  124 => 55,  114 => 51,  110 => 49,  106 => 47,  102 => 45,  100 => 44,  94 => 41,  90 => 40,  85 => 38,  82 => 37,  78 => 36,  56 => 17,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  141 => 63,  135 => 59,  125 => 55,  121 => 53,  117 => 51,  113 => 49,  111 => 48,  105 => 45,  101 => 44,  96 => 42,  93 => 41,  89 => 40,  67 => 21,  62 => 18,  56 => 16,  54 => 15,  49 => 13,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
     }
 }

@@ -12,6 +12,10 @@ Manajemen Kelas - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('kelas')|raw }}
 
+        {% if is_demo_app() %}
+            {{ get_alert('warning', get_demo_msg())|raw }}
+        {% endif %}
+
         <div class="panel panel-info">
             <div class="panel-heading">
                 Edit Kelas
@@ -38,7 +42,9 @@ Manajemen Kelas - {{ parent() }}
                     {% endif %}
                     <div class="control-group">
                         <div class="controls">
+                            {% if is_demo_app() == false %}
                             <button type="submit" class="btn btn-primary">Simpan</button>
+                            {% endif %}
                             <a href="{{ site_url('kelas') }}" class="btn">Batal</a>
                         </div>
                     </div>

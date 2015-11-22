@@ -19,7 +19,7 @@ Materi - {{ parent() }}
                 {{ anchor('materi/add/file', 'Tambah Materi File', {'class' : 'btn btn-primary'})|raw }}
             </div>
             {% endif %}
-            <b><a class="as-link" data-toggle="collapse" data-target="#form-filter"><i class="icon-search" style="line-height: 0px;"></i> Filter</a></b>
+            <b><a class="as-link" data-toggle="collapse" data-target="#form-filter"><i class="icon-search" style="line-height: 0px;"></i> PARAMETER PENCARIAN</a></b>
 
             <div id="form-filter" class="collapse" style="margin-top: 5px;">
                 {{ form_open('materi')|raw }}
@@ -137,15 +137,40 @@ Materi - {{ parent() }}
                 <tr>
                     <td><b>{{ m.id }}</b></td>
                     <td>
-                        <strong class="text-warning">{{ m.judul }}</strong>
-                        <br><small><b>{{ m.mapel.nama }}</b>
-
-                        {% for mk in m.materi_kelas %}
-                            , {{ mk.nama }}
-                        {% endfor %}
-
-                        </small>
-                        <br><small><b>Pembuat : </b> <a href="{{ m.pembuat.link_profil }}">{{ m.pembuat.nama }}</a>, {{ tgl_jam_indo(m.tgl_posting) }} , <b>{{ (m.file is empty) ? 'Dibaca' : 'Diunduh' }} : </b> {{ m.views }}</small>
+                        <strong class="text-warning">
+                            {{ m.judul }}
+                            <span class="as-link caret" data-toggle="collapse" data-target="#toggle-{{ m.id }}" style="margin-top:10px;"></span>
+                        </strong>
+                        <div class="collapse" id="toggle-{{ m.id }}">
+                            <table class="table table-condensed table-bordered">
+                                <tr>
+                                    <td width="20%">Mapel</td>
+                                    <td>{{ m.mapel.nama }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Kelas</td>
+                                    <td>
+                                        {% for mk in m.materi_kelas %}
+                                            {{ mk.nama }}&nbsp;
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Pembuat</td>
+                                    <td>
+                                        <a href="{{ m.pembuat.link_profil }}">{{ m.pembuat.nama }}</a>, <small>{{ tgl_jam_indo(m.tgl_posting) }}</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{{ (m.file is empty) ? 'Dibaca' : 'Diunduh' }}</td>
+                                    <td>{{ m.views }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Komentar</td>
+                                    <td>{{ m.jml_komentar }}</td>
+                                </tr>
+                            </table>
+                        </div>
                     </td>
                     <td>
                         {{ (m.file is not empty) ? '<span class="label label-info">File</span>' : '<span class="label label-success">Tertulis</span>' }}

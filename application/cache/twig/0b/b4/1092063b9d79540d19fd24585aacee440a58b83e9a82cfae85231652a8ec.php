@@ -36,6 +36,17 @@ class __TwigTemplate_0bb41092063b9d79540d19fd24585aacee440a58b83e9a82cfae8523165
 
 ";
         // line 7
+        if ((is_demo_app() && ($this->getAttribute((isset($context["login"]) ? $context["login"] : null), "is_admin") == true))) {
+            // line 8
+            echo "    ";
+            echo get_alert("warning", get_demo_msg());
+            echo "
+";
+        }
+        // line 10
+        echo "
+";
+        // line 11
         echo form_open(((("pengajar/edit_password/" . (isset($context["status_id"]) ? $context["status_id"] : null)) . "/") . (isset($context["pengajar_id"]) ? $context["pengajar_id"] : null)));
         echo "
 <table class=\"table table-striped\">
@@ -45,7 +56,7 @@ class __TwigTemplate_0bb41092063b9d79540d19fd24585aacee440a58b83e9a82cfae8523165
             <td>
                 <input type=\"password\" name=\"password\">
                 <br>";
-        // line 14
+        // line 18
         echo form_error("password");
         echo "
             </td>
@@ -55,20 +66,27 @@ class __TwigTemplate_0bb41092063b9d79540d19fd24585aacee440a58b83e9a82cfae8523165
             <td>
                 <input type=\"password\" name=\"password2\">
                 <br>";
-        // line 21
+        // line 25
         echo form_error("password2");
         echo "
             </td>
         <tr>
-        <tr>
+        ";
+        // line 28
+        if (((is_demo_app() == false) || ($this->getAttribute((isset($context["login"]) ? $context["login"] : null), "is_admin") == false))) {
+            // line 29
+            echo "        <tr>
             <td colspan=\"2\">
                 <button type=\"submit\" class=\"btn btn-primary\">Update</button>
             </td>
         </tr>
-    </tbody>
+        ";
+        }
+        // line 35
+        echo "    </tbody>
 </table>
 ";
-        // line 31
+        // line 37
         echo form_close();
         echo "
 ";
@@ -86,6 +104,6 @@ class __TwigTemplate_0bb41092063b9d79540d19fd24585aacee440a58b83e9a82cfae8523165
 
     public function getDebugInfo()
     {
-        return array (  72 => 31,  59 => 21,  49 => 14,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
+        return array (  90 => 37,  86 => 35,  78 => 29,  76 => 28,  70 => 25,  60 => 18,  50 => 11,  47 => 10,  41 => 8,  39 => 7,  34 => 5,  31 => 4,  28 => 3,);
     }
 }

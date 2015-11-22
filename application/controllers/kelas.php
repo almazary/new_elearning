@@ -141,7 +141,7 @@ class Kelas extends MY_Controller
                         </div>';
                         if ($s['aktif'] == 1) {
                             $return .= '<div class="panel-body">';
-                            
+
                             $return .= get_flashdata('edit-mapel-kelas-'.$s['id']);
 
                             $retrieve_all = $this->mapel_model->retrieve_all_kelas(null, $s['id']);
@@ -162,7 +162,7 @@ class Kelas extends MY_Controller
                                             }
                                         $return .= '</div>
                                         <b>
-                                        '.$m['nama'].' 
+                                        '.$m['nama'].'
                                         '.(($v['aktif'] == 0) ? '<span class="text-error"><i class="icon-info-sign"></i> Matapelajaran Kelas tidak aktif' : '').'
                                         </b>
 
@@ -230,8 +230,10 @@ class Kelas extends MY_Controller
                     $uri_back = $uri_back.'/#subkelas-'.$kelas_id;
                 }
 
-                # update
-                $this->mapel_model->update_kelas($mapel_kelas_id, $mapel_kelas['kelas_id'], $mapel_kelas['mapel_id'], 1);
+                if (!is_demo_app()) {
+                    # update
+                    $this->mapel_model->update_kelas($mapel_kelas_id, $mapel_kelas['kelas_id'], $mapel_kelas['mapel_id'], 1);
+                }
 
                 $this->session->set_flashdata('edit-mapel-kelas-'.$kelas['id'], get_alert('success', 'Matapelajaran kelas berhasil diaktifkan.'));
                 redirect($uri_back);
@@ -262,8 +264,10 @@ class Kelas extends MY_Controller
                     $uri_back = $uri_back.'/#subkelas-'.$kelas_id;
                 }
 
-                # hapus data
-                $this->mapel_model->delete_kelas($mapel_kelas_id);
+                if (!is_demo_app()) {
+                    # hapus data
+                    $this->mapel_model->delete_kelas($mapel_kelas_id);
+                }
 
                 $this->session->set_flashdata('edit-mapel-kelas-'.$kelas['id'], get_alert('warning', 'Matapelajaran kelas berhasil dihapus.'));
                 redirect($uri_back);
@@ -307,7 +311,7 @@ class Kelas extends MY_Controller
                     $mapel_kelas_id[] = $v['mapel_id'];
                 }
 
-                if ($this->form_validation->run('kelas/mapel_kelas/add') == TRUE) {
+                if ($this->form_validation->run('kelas/mapel_kelas/add') == TRUE AND !is_demo_app()) {
 
                     $mapel = $this->input->post('mapel', TRUE);
 
@@ -372,7 +376,7 @@ class Kelas extends MY_Controller
 
                 $data['mapel_kelas_hirarki'] = $this->mapel_kelas_hirarki('', array('parent_id' => $parent_kelas_id, 'sub_id' => $sub_kelas_id));
                 $data['parent_kelas']        = $this->kelas_model->retrieve_all(null, array('aktif' => 1));
-                
+
             break;
         }
 

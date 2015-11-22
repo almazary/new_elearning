@@ -8,6 +8,14 @@ $(function() {
     // }});
 
     $("#popover").popover();
+
+    // popover demo
+    $("a[data-toggle=popover]")
+      .popover()
+      .click(function(e) {
+        e.preventDefault()
+    });
+
     $('[data-toggle="tooltip"]').tooltip({html:true});
 
     $(".clickable-row").click(function() {
