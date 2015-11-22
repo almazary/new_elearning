@@ -204,7 +204,7 @@ function get_alert($notif = 'success', $msg = '')
  */
 function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array(), $str_options = null)
 {
-    $tiny_plugins = array('pdw','emotions','syntaxhl','wordcount','pagebreak','style','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','searchreplace','contextmenu','paste','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
+    $tiny_plugins = array('emotions','syntaxhl','wordcount','pagebreak','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','searchreplace','contextmenu','paste','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
     if (!empty($remove_plugins)) {
         $copy_tiny_plugins = $tiny_plugins;
         $combine           = array_combine($tiny_plugins, $copy_tiny_plugins);
@@ -222,20 +222,18 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
             plugins : "'.implode(',', $tiny_plugins).'",';
 
             if (empty($str_options)) {
-                $return .= 'theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,justifyleft,justifycenter,justifyright,justifyfull,formatselect,advhr,hr,|,link,unlink,|,sub,sup,charmap,tiny_mce_wiris_formulaEditor,tinymath,|,code,|,pdw_toggle",
-                    theme_advanced_buttons2 : "forecolor,backcolor,|,undo,redo,|,search,replace,outdent,indent,ltr,rtl,blockquote,|,emotions,image,media,youtubeIframe,syntaxhl",
+                $return .= 'theme_advanced_buttons1 : "undo,redo,bold,italic,underline,strikethrough,bullist,numlist,justifyleft,justifycenter,justifyright,justifyfull,blockquote,link,unlink,sub,sup,charmap,tiny_mce_wiris_formulaEditor,emotions,image,media,youtubeIframe,syntaxhl,code",
+                    theme_advanced_buttons2 : "",
                     theme_advanced_buttons3 : "",
                     theme_advanced_toolbar_location : "top",
                     theme_advanced_toolbar_align : "left",
                     theme_advanced_statusbar_location : "bottom",
-                    pdw_toggle_on : 1,
-                    pdw_toggle_toolbars : "2,3",
                     file_browser_callback : "openKCFinder",
                     theme_advanced_resizing : false,
                     content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
                     convert_urls: false,
                     force_br_newlines : false,
-                    force_p_newlines : false,';
+                    force_p_newlines : false';
             } else {
                 $return .= $str_options;
             }
@@ -904,4 +902,20 @@ function is_demo_app() {
 
 function get_demo_msg() {
     return "Maaf, untuk keperluan demo aplikasi, halaman ini tidak dapat diperbaharui.";
+}
+
+/**
+ * http://stackoverflow.com/questions/3475646/undefined-date-diff
+ */
+if (!function_exists('date_diff')) {
+    function date_diff($date1, $date2) {
+        $current = $date1;
+        $datetime2 = date_create($date2);
+        $count = 0;
+        while(date_create($current) < $datetime2){
+            $current = gmdate("Y-m-d", strtotime("+1 day", strtotime($current)));
+            $count++;
+        }
+        return $count;
+    }
 }
