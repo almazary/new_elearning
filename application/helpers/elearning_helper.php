@@ -759,7 +759,7 @@ function get_email_admin()
     return $results;
 }
 
-function kirim_email($nama_email, $to = array(), $array_data = array())
+function kirim_email($nama_email, $to, $array_data = array())
 {
     # cari email
     $template = get_pengaturan($nama_email, 'value');
@@ -801,6 +801,7 @@ function kirim_email($nama_email, $to = array(), $array_data = array())
     $CI->email->subject($email_subject);
     $CI->email->message($email_body);
     $CI->email->send();
+    $CI->email->clear(true);
 
     return true;
 }
