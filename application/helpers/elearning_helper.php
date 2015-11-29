@@ -776,27 +776,33 @@ function kirim_email($nama_email, $to, $array_data = array())
 
     $email_subject = str_replace($arr_old, $arr_new, $template['subject']);
     $email_body    = str_replace($arr_old, $arr_new, $template['body']);
+    $email_server  = get_pengaturan('email-server', 'value');
+    $nama_sekolah  = get_pengaturan('nama-sekolah', 'value');
 
     $CI =& get_instance();
     $CI->email->clear(true);
 
     $config['mailtype'] = 'html';
     # cek pakai smtp tidak
-    if (!empty(get_pengaturan('smtp-host', 'value'))) {
+    $smtp_host = get_pengaturan('smtp-host', 'value');
+    $smtp_user = get_pengaturan('smtp-username', 'value');
+    $smtp_pass = get_pengaturan('smtp-pass', 'value');
+    $smtp_port = get_pengaturan('smtp-port', 'value');
+    if (!empty($smtp_host)) {
         $config['protocol']  = 'smtp';
-        $config['smtp_host'] = get_pengaturan('smtp-host', 'value');
-        $config['smtp_user'] = get_pengaturan('smtp-username', 'value');
-        $config['smtp_pass'] = get_pengaturan('smtp-pass', 'value');
+        $config['smtp_host'] = $smtp_host;
+        $config['smtp_user'] = $smtp_user;
+        $config['smtp_pass'] = $smtp_pass;
 
         # cek port
-        if (!empty(get_pengaturan('smtp-port', 'value'))) {
-            $config['smtp_port'] = get_pengaturan('smtp-port', 'value');
+        if (!empty($smtp_port)) {
+            $config['smtp_port'] = $smtp_port;
         }
     }
     $CI->email->initialize($config);
 
     $CI->email->to($to);
-    $CI->email->from(get_pengaturan('email-server', 'value'), '[E-learning] - ' . get_pengaturan('nama-sekolah', 'value'));
+    $CI->email->from($email_server, '[E-learning] - ' . $nama_sekolah);
     $CI->email->subject($email_subject);
     $CI->email->message($email_body);
     $CI->email->send();
