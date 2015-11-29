@@ -476,12 +476,34 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
+        # post soal
+        if (!empty($_POST)) {
+            $pertanyaan = $this->input->post('pertanyaan', true);
+            if (!empty($pertanyaan)) {
+                # simpan pertanyaan
+                $pertanyaan_id = $this->tugas_model->create_pertanyaan($pertanyaan, $tugas['id']);
+                $post_pilihan  = $this->input->post('pilihan', true);
+                $post_kunci    = $this->input->post('kunci', true);
+                if (!empty($post_pilihan)) {
+                    foreach ($post_pilihan as $key => $val) {
+                        $kunci = 0;
+                        if ($post_kunci == $key) {
+                            $kunci = 1;
+                        }
+                        $this->tugas_model->create_pilihan($pertanyaan_id, $val, $kunci);
+                    }
+                }
+            }
+        }
+
         $data['tugas'] = $this->formatData($tugas);
 
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-manajamen-soal.js')
+            base_url('assets/comp/tinymce/tiny_mce.js'),
+            base_url('assets/comp/colorbox/act-manajamen-soal.js'),
+            base_url('assets/comp/tinymce/pertanyaan.js'),
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -976,10 +998,9 @@ class Tugas extends MY_Controller
 
         # jika masih kosong, berarti belum mengerjakan sama sekali
         else {
-            $pertanyaan = array();
             if ($tugas['type_id'] != 1) {
                 # ambil pertanyaan ditugas ini
-                $pertanyaan    = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'random');
+                $pertanyaan    = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'RANDOM');
                 $pertanyaan_id = array();
                 foreach ($pertanyaan as $key => $val) {
                     $pertanyaan_id[$key] = $val['id'];
@@ -1007,6 +1028,18 @@ class Tugas extends MY_Controller
 
         $check_field       = retrieve_field($field_id);
         $check_field_value = json_decode($check_field['value'], 1);
+
+        # kondisi untuk versi tugas yang terlanjur dibuat di versi < 1.5
+        if (!isset($check_field_value['pertanyaan_id']) AND isset($check_field_value['pertanyaan'])) {
+            $check_field_value['pertanyaan_id'] = array();
+            foreach ($check_field_value['pertanyaan'] as $key => $p) {
+                $check_field_value[$key] = $p['id'];
+            }
+
+            # update
+            unset($check_field_value['pertanyaan']);
+            update_field($field_id, $check_field['nama'], json_encode($check_field_value));
+        }
 
         # ini untuk mendapatkan data soal lengkapnya
         $soal = array();
@@ -1081,6 +1114,16 @@ class Tugas extends MY_Controller
 
             # jika pilihan ganda langsung di hitung benar salahnya
             if ($tugas['type_id'] == 3) {
+                # kondisi untuk versi tugas yang terlanjur dibuat di versi < 1.5
+                if (!isset($check_field_value['pertanyaan_id']) AND isset($check_field_value['pertanyaan'])) {
+                    $check_field_value['pertanyaan_id'] = array();
+                    foreach ($check_field_value['pertanyaan'] as $key => $p) {
+                        $check_field_value[$key] = $p['id'];
+                    }
+
+                    unset($check_field_value['pertanyaan']);
+                }
+
                 $jml_soal = count($check_field_value['pertanyaan_id']);
 
                 # cari kunci jawaban
@@ -1179,6 +1222,16 @@ class Tugas extends MY_Controller
             if ($unix_id != $check_field_value['unix_id']) {
                 $this->session->set_flashdata('tugas', get_alert('warning', 'Anda tidak mengerjakan tugas ini.'));
                 redirect('tugas');
+            }
+
+            # kondisi untuk versi tugas yang terlanjur dibuat di versi < 1.5
+            if (!isset($check_field_value['pertanyaan_id']) AND isset($check_field_value['pertanyaan'])) {
+                $check_field_value['pertanyaan_id'] = array();
+                foreach ($check_field_value['pertanyaan'] as $key => $p) {
+                    $check_field_value[$key] = $p['id'];
+                }
+
+                unset($check_field_value['pertanyaan']);
             }
 
             $post_jawaban = $this->input->post('jawaban');
@@ -1418,6 +1471,16 @@ class Tugas extends MY_Controller
                 continue;
             }
 
+            # kondisi untuk versi tugas yang terlanjur dibuat di versi < 1.5
+            if (!isset($history['pertanyaan_id']) AND isset($history['pertanyaan'])) {
+                $history['pertanyaan_id'] = array();
+                foreach ($history['pertanyaan'] as $key => $p) {
+                    $history[$key] = $p['id'];
+                }
+
+                unset($history['pertanyaan']);
+            }
+
             # cari siswa
             $siswa = $this->siswa_model->retrieve($siswa_id);
 
@@ -1505,19 +1568,24 @@ class Tugas extends MY_Controller
         }
 
         $history_value = json_decode($history['value'], 1);
-        $soal          = array();
-        foreach ($history_value['pertanyaan_id'] as $key => $p_id) {
-            $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
 
-            # jika pilihan ganda ambil pilihannya
-            if ($history_value['tugas']['type_id'] == 3) {
-                $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+        # ini utnuk mengantisipasi versi < 1.5
+        if (!empty($history_value['pertanyaan_id'])) {
+            $soal = array();
+            foreach ($history_value['pertanyaan_id'] as $key => $p_id) {
+                $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
+
+                # jika pilihan ganda ambil pilihannya
+                if ($history_value['tugas']['type_id'] == 3) {
+                    $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+                }
+
+                $soal[$key] = $pertanyaan;
             }
-
-            $soal[$key] = $pertanyaan;
+            $history_value['pertanyaan'] = $soal;
         }
-        $history_value['pertanyaan'] = $soal;
-        $data['history']             = $history_value;
+
+        $data['history'] = $history_value;
 
         if ($tugas['type_id'] == 3) {
             $this->twig->display('detail-jawaban-ganda.html', $data);
