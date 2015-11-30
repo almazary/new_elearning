@@ -135,7 +135,7 @@ class __TwigTemplate_e90fa57625215670b6cadf6ca7ed17e0cf12b9d2d310477f3e4d8bec958
     <script src=\"";
         // line 58
         echo twig_escape_filter($this->env, base_url("assets/comp/pace/pace.min.js"), "html", null, true);
-        echo "\" type=\"text/javascript\"></script>
+        echo "\" data-pace-options='{ \"ajax\": false }' type=\"text/javascript\"></script>
     <script src=\"";
         // line 59
         echo twig_escape_filter($this->env, base_url("assets/comp/offline/offline.min.js"), "html", null, true);

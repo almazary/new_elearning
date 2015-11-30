@@ -1,0 +1,64 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Tugas - {{ parent() }}
+{% endblock %}
+
+{% block css %}
+<style type="text/css">
+    .box-area-pertanyaan {
+        padding: 15px;
+        background-color: #F6F6F6;
+        border-radius: 3px;
+    }
+    .box-pilihan {
+        padding: 5px 15px;
+        background-color: #fafafa;
+        border-radius: 3px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>{{ anchor('tugas', 'Tugas')|raw }} / Bank Soal</h3>
+    </div>
+    <div class="module-body">
+        <form class="form-search pull-right" method="get" action="{{ site_url('tugas/bank_soal/' ~ page_no ~ '/') }}">
+            <div class="input-append">
+                <input type="text" class="span3 search-query" placeholder="cari soal..." name="q" value="{{ keyword }}">
+                <button type="submit" class="btn btn-primary"><i class="icon-search"></i></button>
+            </div>
+        </form>
+
+        <div class="btn-group">
+            <a href="javascript:void(0)" class="btn btn-primary btn-tambah-pertanyaan">Tambah Soal Ganda</a>
+            <a href="javascript:void(0)" class="btn btn-primary btn-tambah-pertanyaan-essay">Tambah Soal Essay</a>
+            {{ anchor('tugas/add/1', 'Ambil Soal Tugas', {'class' : 'btn btn-primary btn-copy-pertanyaan'})|raw }}
+        </div>
+
+        {{ get_flashdata('bank')|raw }}
+
+        <br><br>
+        {{ form_open('tugas/bank_soal/simpan', {'id': 'form-tambah-pertanyaan'})|raw }}
+            <div class="box-new-soal"></div>
+        {{ form_close()|raw }}
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th width="7%">ID</th>
+                    <th>Pertanyaan</th>
+                    <th width="10%"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+        {{ pagination|raw }}
+    </div>
+</div>
+{% endblock %}

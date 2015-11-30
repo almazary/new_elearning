@@ -62,6 +62,7 @@ $("#form-tambah-pertanyaan").submit(function(event) {
         tinymce.execCommand('mceFocus',false,'textarea-pertanyaan');
     } else {
         $(".btn-tambah-pertanyaan").removeAttr('disabled');
+        $(".btn-tambah-pertanyaan-essay").removeAttr('disabled');
         $(".btn-copy-pertanyaan").removeAttr('disabled');
     }
 });
