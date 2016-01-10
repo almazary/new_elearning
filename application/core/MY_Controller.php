@@ -14,7 +14,7 @@ class MY_Controller extends CI_Controller
         date_default_timezone_set('Asia/Jakarta');
 
         # load helper
-        $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download'));
+        $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download', 'plugins'));
 
         try {
             $success = install_success();
@@ -63,7 +63,7 @@ class MY_Controller extends CI_Controller
         // $this->output->enable_profiler(TRUE);
 
         # cek versi
-        $versi_install = '1.5';
+        $versi_install = '1.6';
         $versi = get_pengaturan('versi', 'value');
         if ($versi < $versi_install) {
             $this->config_model->update('versi', 'Versi', $versi_install);

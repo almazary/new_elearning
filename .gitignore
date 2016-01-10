@@ -7,3 +7,5 @@
 /application/config/config.php
 /application/config/database.php
 /nbproject/
+/plugins/src/
+/plugins/views/
