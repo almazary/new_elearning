@@ -4,21 +4,6 @@
 Manajemen Soal Tugas - {{ parent() }}
 {% endblock %}
 
-{% block css %}
-<style type="text/css">
-    .box-area-pertanyaan {
-        padding: 15px;
-        background-color: #F6F6F6;
-        border-radius: 3px;
-    }
-    .box-pilihan {
-        padding: 5px 15px;
-        background-color: #fafafa;
-        border-radius: 3px;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="module">
     <div class="module-head">
@@ -77,14 +62,10 @@ Manajemen Soal Tugas - {{ parent() }}
         <br>
 
         <div class="btn-group">
-            <a href="javascript:void(0)" class="btn btn-primary {{ (tugas.type_id == 3) ? 'btn-tambah-pertanyaan' : 'btn-tambah-pertanyaan-essay' }}" title="Tambah Pertanyaan">Tambah Pertanyaan</a>
-            <a href="{{ site_url('tugas/copy_soal/' ~ tugas.id) }}" class="btn-copy-pertanyaan btn btn-primary iframe-copy-pertanyaan" title="Copy Pertanyaan">Copy Pertanyaan</a>
+            <a href="{{ site_url('tugas/tambah_soal/' ~ tugas.id) }}" class="btn btn-primary iframe-pertanyaan" title="Tambah Pertanyaan">Tambah Pertanyaan</a>
+            <a href="{{ site_url('tugas/copy_soal/' ~ tugas.id) }}" class="btn btn-primary iframe-copy-pertanyaan" title="Copy Pertanyaan">Copy Pertanyaan</a>
         </div>
         <br><br>
-
-        {{ form_open('tugas/manajemen_soal/' ~ tugas.id, {'id': 'form-tambah-pertanyaan'})|raw }}
-            <div class="box-new-soal"></div>
-        {{ form_close()|raw }}
 
         <table class="table">
             <thead>

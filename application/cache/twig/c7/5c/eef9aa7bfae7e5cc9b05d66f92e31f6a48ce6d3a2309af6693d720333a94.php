@@ -140,7 +140,7 @@ class __TwigTemplate_c75ceef9aa7bfae7e5cc9b05d66f92e31f6a48ce6d3a2309af6693d7203
             </div>
         ";
         // line 53
-        echo form_close();
+        echo (isset($context["form_close"]) ? $context["form_close"] : null);
         echo "
     </div>
 </div>

@@ -476,34 +476,12 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
-        # post soal
-        if (!empty($_POST)) {
-            $pertanyaan = $this->input->post('pertanyaan', true);
-            if (!empty($pertanyaan)) {
-                # simpan pertanyaan
-                $pertanyaan_id = $this->tugas_model->create_pertanyaan($pertanyaan, $tugas['id']);
-                $post_pilihan  = $this->input->post('pilihan', true);
-                $post_kunci    = $this->input->post('kunci', true);
-                if (!empty($post_pilihan)) {
-                    foreach ($post_pilihan as $key => $val) {
-                        $kunci = 0;
-                        if ($post_kunci == $key) {
-                            $kunci = 1;
-                        }
-                        $this->tugas_model->create_pilihan($pertanyaan_id, $val, $kunci);
-                    }
-                }
-            }
-        }
-
         $data['tugas'] = $this->formatData($tugas);
 
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/tinymce/tiny_mce.js'),
-            base_url('assets/comp/colorbox/act-manajamen-soal.js'),
-            base_url('assets/comp/js/tinymce_pertanyaan.js'),
+            base_url('assets/comp/colorbox/act-manajamen-soal.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -998,9 +976,10 @@ class Tugas extends MY_Controller
 
         # jika masih kosong, berarti belum mengerjakan sama sekali
         else {
+            $pertanyaan = array();
             if ($tugas['type_id'] != 1) {
                 # ambil pertanyaan ditugas ini
-                $pertanyaan    = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'RANDOM');
+                $pertanyaan    = $this->tugas_model->retrieve_all_pertanyaan('all', 1, $tugas['id'], 'random');
                 $pertanyaan_id = array();
                 foreach ($pertanyaan as $key => $val) {
                     $pertanyaan_id[$key] = $val['id'];
@@ -1700,70 +1679,6 @@ class Tugas extends MY_Controller
         } else {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));
             redirect('tugas');
-        }
-    }
-
-    function bank_soal($segment_3 = '', $segment_4 = '')
-    {
-        switch ($segment_3) {
-            case 'simpan':
-                if (!empty($_POST['pertanyaan'])) {
-
-                }
-            break;
-
-            default:
-                $segment_4   = (int)$segment_4;
-                $segment_4   = empty($segment_4) ? 1 : $segment_4;
-                $pengajar_id = array();
-                $keyword     = null;
-
-                if (!empty($_GET['q'])) {
-                    $keyword = (string)$_GET['q'];
-                    # cari id pengajar dengan nama sesuai keyword
-                    $filter_pengajar = $this->pengajar_model->retrieve_all_filter(
-                        $nip           = '',
-                        $nama          = $keyword,
-                        $jenis_kelamin = array(),
-                        $tempat_lahir  = '',
-                        $tgl_lahir     = '',
-                        $bln_lahir     = '',
-                        $thn_lahir     = '',
-                        $alamat        = '',
-                        $status_id     = array(),
-                        $username      = '',
-                        $is_admin      = '',
-                        $page_no       = 1,
-                        $pagination    = false
-                    );
-                    foreach ($filter_pengajar as $p) {
-                        $pengajar_id[] = $p['id'];
-                    }
-                }
-                $retrieve_all = $this->bank_soal_model->retrieve_all(
-                    $no_of_records = 20,
-                    $page_no       = $segment_4,
-                    $pengajar_id,
-                    $keyword
-                );
-
-                $data['keyword']    = $keyword;
-                $data['page_no']    = $segment_4;
-                $data['pertanyaan'] = $retrieve_all['results'];
-                $data['pagination'] = $this->pager->view($retrieve_all, 'tugas/bank_soal/', array('q=' . $keyword));
-
-                # panggil component
-                $html_js = load_comp_js(array(
-                    base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                    base_url('assets/comp/tinymce/tiny_mce.js'),
-                    base_url('assets/comp/colorbox/act-manajamen-soal.js'),
-                    base_url('assets/comp/js/tinymce_bank_soal.js'),
-                ));
-                $data['comp_js']  = $html_js;
-                $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
-
-                $this->twig->display('bank-soal.html', $data);
-            break;
         }
     }
 }
