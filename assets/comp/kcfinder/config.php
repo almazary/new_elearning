@@ -32,7 +32,7 @@ $_CONFIG = array(
         'images'  =>  "*img",
         // TinyMCE types
         'file'    =>  "doc zip rar txt docx xls xlsx pdf tar gz jpg jpeg JPG JPEG png ppt pptx",
-        'media'   =>  "swf flv avi mpg mpeg qt mov wmv asf rm",
+        'media'   =>  "swf flv avi mpg mpeg qt mov wmv asf rm mp3 mp4 mp3 3gp",
         'image'   =>  "*img",
     ),
     'filenameChangeChars' => array(
