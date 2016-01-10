@@ -219,7 +219,13 @@ class Pager
         }
 
         foreach ($order_by as $field => $value) {
-            $CI->db->order_by($field, $value);
+            if ($value == 'protect_identifiers_false') {
+                $CI->db->_protect_identifiers = FALSE;
+                $CI->db->order_by($field);
+                $CI->db->_protect_identifiers = TRUE;
+            } else {
+                $CI->db->order_by($field, $value);
+            }
         }
     }
 
