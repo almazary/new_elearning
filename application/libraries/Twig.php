@@ -25,7 +25,7 @@ class Twig
         }
         $this->_cache_dir = $this->CI->config->item('cache_dir');
 
-        $loader = new Twig_Loader_Filesystem($this->_template_dir);
+        $loader = new Twig_Loader_Filesystem(array('./plugins/views/', $this->_template_dir));
 
         $this->_twig = new Twig_Environment($loader, array(
                 'cache' => $this->_cache_dir,
