@@ -76,15 +76,15 @@ class __TwigTemplate_35e5a628a8ea04528ec1abe306796622093d88686157145f6e5721b5e79
             // line 23
             echo "                        <div style=\"margin-top: 5px;\"><b>";
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["login"]) ? $context["login"] : null), "profil"), "nama"), "html", null, true);
-            echo " </b> &lt;";
+            echo " </b> [";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["login"]) ? $context["login"] : null), "username"), "html", null, true);
-            echo "&gt;</div>
+            echo "]</div>
                         <input type=\"hidden\" name=\"penerima\" value=\"";
             // line 24
             echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["login"]) ? $context["login"] : null), "profil"), "nama"), "html", null, true);
-            echo " <";
+            echo " [";
             echo twig_escape_filter($this->env, $this->getAttribute((isset($context["login"]) ? $context["login"] : null), "username"), "html", null, true);
-            echo ">\">
+            echo "]\">
                     ";
         }
         // line 26

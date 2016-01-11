@@ -119,7 +119,7 @@ class __TwigTemplate_0e76ab62e07afcd72ffe171409b0a6dbbb650bf91e8a072a4e9ac9dcbf4
             }
             // line 43
             echo "                            ";
-            echo character_limiter(strip_tags($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "content")), 80, "...");
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array(character_limiter(strip_tags($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "content")), 80, "...")));
             echo "
                         </td>
                     </tr>

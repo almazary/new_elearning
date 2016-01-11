@@ -20,8 +20,8 @@ Tulis pesan - {{ parent() }}
                         <input type="text" name="penerima" id="penerima" data-role="tagsinput" placeholder="Nama atau email" value="{{ html_entity_decode(set_value('penerima')) }}">
                         <br>{{ form_error('penerima')|raw }}
                     {% else %}
-                        <div style="margin-top: 5px;"><b>{{ login.profil.nama }} </b> &lt;{{ login.username }}&gt;</div>
-                        <input type="hidden" name="penerima" value="{{ login.profil.nama }} <{{ login.username }}>">
+                        <div style="margin-top: 5px;"><b>{{ login.profil.nama }} </b> [{{ login.username }}]</div>
+                        <input type="hidden" name="penerima" value="{{ login.profil.nama }} [{{ login.username }}]">
                     {% endif %}
                 </div>
             </div>
