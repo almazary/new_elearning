@@ -117,7 +117,7 @@ class __TwigTemplate_838deee775c0232495f19255d05db8c9109530106ca7d7e024684aecb7e
 
         ";
         // line 39
-        echo $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "konten");
+        echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "konten")));
         echo "
     </div>
 </div>

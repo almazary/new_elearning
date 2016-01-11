@@ -51,10 +51,12 @@ Koreksi - {{ parent() }}
                         <th>Info</th>
                         <td>{{ tugas.info|raw }}</td>
                     </tr>
+                    {% if tugas.type_id != 1 %}
                     <tr>
                         <th>Durasi</th>
                         <td>{{ tugas.durasi }} Menit</td>
                     </tr>
+                    {% endif %}
                 </table>
             </div>
 

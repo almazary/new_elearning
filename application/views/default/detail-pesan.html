@@ -49,7 +49,7 @@ Detail Percakapan - {{ parent() }}
                 </td>
                 <td class="msg-content">
                     <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ d.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
-                    {{ html_entity_decode(d.content)|raw }}
+                    {{ d.content|raw_media|raw }}
                 </td>
             </tr>
             {% endfor %}
@@ -62,7 +62,7 @@ Detail Percakapan - {{ parent() }}
                 </td>
                 <td class="msg-content">
                     <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ r.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
-                    {{ html_entity_decode(r.content)|raw }}
+                    {{ r.content|raw_media|raw }}
                 </td>
             </tr>
 
@@ -75,7 +75,7 @@ Detail Percakapan - {{ parent() }}
                 </td>
                 <td class="msg-content">
                     <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ n.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
-                    {{ html_entity_decode(n.content)|raw }}
+                    {{ n.content|raw_media|raw }}
                 </td>
             </tr>
             {% endfor %}

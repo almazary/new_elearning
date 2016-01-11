@@ -39,11 +39,41 @@ class Twig
             }
         }
 
-        # untuk decode iframe youtube yang di encode
-        $filter = new Twig_SimpleFilter('raw_youtube', function ($string) {
-            if (strpos($string, '&lt;iframe src="http://www.youtube.com/embed/') !== false) {
+        $filter = new Twig_SimpleFilter('raw_media', function ($string) {
+            # untuk decode iframe youtube yang di encode
+            if (strpos($string, "&lt;iframe src=\"http://www.youtube.com/embed/") !== false) {
                 $string = str_replace('&lt;iframe src="http://www.youtube.com/embed/', '<iframe src="http://www.youtube.com/embed/', $string);
-                $string .= str_replace('&gt;&lt;/iframe>', '></iframe>', $string);
+                $string = str_replace("&gt;&lt;/iframe>", "></iframe>", $string);
+                $string = str_replace("&gt;&lt;/iframe&gt;", "></iframe>", $string);
+            }
+
+            # untuk audio
+            if (strpos($string, "&lt;audio width=") !== false) {
+                $string = str_replace("&lt;audio width=", "<audio width=", $string);
+                $string = str_replace("&gt;&lt;/audio>", "></audio>", $string);
+                $string = str_replace("&gt;&lt;/audio&gt;", "></audio>", $string);
+            }
+
+            # untuk video
+            if (strpos($string, "&lt;video width=") !== false) {
+                $string = str_replace("&lt;video width=", "<video width=", $string);
+                $string = str_replace("&gt;&lt;/video>", "></video>", $string);
+                $string = str_replace("&gt;&lt;/video&gt;", "></video>", $string);
+            }
+
+            # untuk object
+            if (strpos($string, "&lt;object width=") !== false) {
+                $string = str_replace("&lt;object width=", "<object width=", $string);
+                $string = str_replace("&gt;&lt;/object>", "></object>", $string);
+                $string = str_replace("&gt;&lt;/object&gt;", "></object>", $string);
+            }
+
+            # untuk decode iframe
+            $base_url = base_url();
+            if (strpos($string, "&lt;iframe src=\"{$base_url}") !== false) {
+                $string = str_replace("&lt;iframe src=\"{$base_url}", "<iframe src=\"{$base_url}", $string);
+                $string = str_replace("&gt;&lt;/iframe>", "></iframe>", $string);
+                $string = str_replace("&gt;&lt;/iframe&gt;", "></iframe>", $string);
             }
             return $string;
         });

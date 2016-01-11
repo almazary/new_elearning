@@ -142,7 +142,7 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                 <div class=\"controls\">
                     <textarea name=\"info-registrasi\" class=\"tinymce\" style=\"width:100%; height:300px;\">";
         // line 66
-        echo set_value("info-registrasi", get_pengaturan("info-registrasi", "value"));
+        echo set_value("info-registrasi", call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array(get_pengaturan("info-registrasi", "value"))));
         echo "</textarea>
                 </div>
             </div>
@@ -151,7 +151,7 @@ class __TwigTemplate_8f9d7c6785edc4eca16ab1544d48104c49727a1d4b532f8759711570632
                 <div class=\"controls\">
                     <textarea name=\"peraturan-elearning\" class=\"tinymce\" style=\"width:100%; height:300px;\">";
         // line 72
-        echo set_value("peraturan-elearning", get_pengaturan("peraturan-elearning", "value"));
+        echo set_value("peraturan-elearning", call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array(get_pengaturan("peraturan-elearning", "value"))));
         echo "</textarea>
                 </div>
             </div>

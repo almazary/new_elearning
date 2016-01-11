@@ -119,7 +119,7 @@ class __TwigTemplate_035397b75d78d15e17a7eee923ddaf940e7fc82502e9cd2669f77751779
             echo "</a></b></p>
                                 ";
             // line 51
-            echo call_user_func_array($this->env->getFilter('raw_youtube')->getCallable(), array($this->getAttribute($this->getAttribute((isset($context["l"]) ? $context["l"] : null), "komentar"), "konten")));
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute($this->getAttribute((isset($context["l"]) ? $context["l"] : null), "komentar"), "konten")));
             echo "
                             </div>
                         </div>

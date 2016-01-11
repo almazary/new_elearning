@@ -105,7 +105,7 @@ class __TwigTemplate_29e7abeb6ab234c92e133b9be5c71e9d4a095ced90650a15dacb2b1805b
             if (((isset($context["type"]) ? $context["type"] : null) == "tertulis")) {
                 // line 29
                 echo "                        ";
-                echo call_user_func_array($this->env->getFilter('raw_youtube')->getCallable(), array($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "konten")));
+                echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["materi"]) ? $context["materi"] : null), "konten")));
                 echo "
                     ";
             } elseif (((isset($context["type"]) ? $context["type"] : null) == "file")) {
@@ -209,7 +209,7 @@ class __TwigTemplate_29e7abeb6ab234c92e133b9be5c71e9d4a095ced90650a15dacb2b1805b
                     echo "\" class=\"text-muted iframe-laporkan\"><i class=\"fa fa-bug\"></i> laporkan</a></small></p>
                                     ";
                     // line 72
-                    echo call_user_func_array($this->env->getFilter('raw_youtube')->getCallable(), array($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "konten")));
+                    echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["k"]) ? $context["k"] : null), "konten")));
                     echo "
                                 </div>
                                 ";

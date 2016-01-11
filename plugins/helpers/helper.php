@@ -38,3 +38,30 @@ function data_excel($path_file, $baris_mulai_data = 2)
 
     return $data_return;
 }
+
+/**
+ * Method untuk memanggil helper plugin tertentu
+ *
+ * @param  string $plugin
+ * @param  string $func
+ * @param  array  $params
+ */
+function plugin_helper($plugin_name, $func, $params = array())
+{
+    $plugin_dir = './plugins/';
+
+    # cek plugin folder
+    if (!is_dir($plugin_dir . 'src/' . $plugin_name)) {
+        throw new Exception("Plugin tidak ditemukan.");
+    }
+
+    # cek file ada tidak
+    if (!is_file($plugin_dir . 'src/' . $plugin_name . '/helper.php')) {
+        throw new Exception("Plugin helper tidak ditemukan.");
+    }
+
+    # include
+    include $plugin_dir . 'src/' . $plugin_name . '/helper.php';
+
+    return call_user_func_array($func, $params);
+}

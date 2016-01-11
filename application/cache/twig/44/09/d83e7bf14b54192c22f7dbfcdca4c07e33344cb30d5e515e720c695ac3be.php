@@ -117,7 +117,7 @@ class __TwigTemplate_4409d83e7bf14b54192c22f7dbfcdca4c07e33344cb30d5e515e720c695
             echo "\" onclick=\"return confirm('Anda yakin ingin menghapus?')\"><i class=\"icon-trash\"></i></a>
                     ";
             // line 52
-            echo html_entity_decode($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "content"));
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["d"]) ? $context["d"] : null), "content")));
             echo "
                 </td>
             </tr>
@@ -155,7 +155,7 @@ class __TwigTemplate_4409d83e7bf14b54192c22f7dbfcdca4c07e33344cb30d5e515e720c695
         echo "\" onclick=\"return confirm('Anda yakin ingin menghapus?')\"><i class=\"icon-trash\"></i></a>
                     ";
         // line 65
-        echo html_entity_decode($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "content"));
+        echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["r"]) ? $context["r"] : null), "content")));
         echo "
                 </td>
             </tr>
@@ -192,7 +192,7 @@ class __TwigTemplate_4409d83e7bf14b54192c22f7dbfcdca4c07e33344cb30d5e515e720c695
             echo "\" onclick=\"return confirm('Anda yakin ingin menghapus?')\"><i class=\"icon-trash\"></i></a>
                     ";
             // line 78
-            echo html_entity_decode($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "content"));
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "content")));
             echo "
                 </td>
             </tr>
