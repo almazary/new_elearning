@@ -195,7 +195,7 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
                 <b>Peraturan E-learning : </b><br>
                 ";
             // line 84
-            echo get_pengaturan("peraturan-elearning", "value");
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array(get_pengaturan("peraturan-elearning", "value")));
             echo "
             </div>
         </div>
@@ -297,7 +297,7 @@ class __TwigTemplate_eac5bd087f7d7ce830ba114e3d5059d5d345ccf707b1b3ae165ebebcc76
                 <b>Peraturan E-learning : </b><br>
                 ";
             // line 135
-            echo get_pengaturan("peraturan-elearning", "value");
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array(get_pengaturan("peraturan-elearning", "value")));
             echo "
             </div>
         </div>
