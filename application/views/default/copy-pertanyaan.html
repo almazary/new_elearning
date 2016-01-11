@@ -18,7 +18,7 @@
         <tr>
             <td><b>{{ p.id }}</b></td>
             <td>
-                {{ html_entity_decode(p.pertanyaan)|raw }}
+                {{ p.pertanyaan|raw_media|raw }}
 
                 {% if p.pilihan is not empty %}
                 <table class="table table-condensed table-striped">
@@ -27,7 +27,7 @@
                         <tr {{ (pil.kunci == 1) ? 'class="success"' }}>
                             <td width="3%"><b>({{ get_abjad(pil.urutan) }})</b></td>
                             <td>
-                                {{ html_entity_decode(pil.konten)|raw }}
+                                {{ pil.konten|raw_media|raw }}
 
                                 {% if pil.kunci == 1 %}
                                 <b class="text-warning"><i class="icon-star"></i> Kunci Jawaban</b>
