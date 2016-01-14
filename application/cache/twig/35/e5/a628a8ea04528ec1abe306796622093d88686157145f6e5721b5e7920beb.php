@@ -65,7 +65,7 @@ class __TwigTemplate_35e5a628a8ea04528ec1abe306796622093d88686157145f6e5721b5e79
         if (twig_test_empty((isset($context["login"]) ? $context["login"] : null))) {
             // line 20
             echo "                        <input type=\"text\" name=\"penerima\" id=\"penerima\" data-role=\"tagsinput\" placeholder=\"Nama atau email\" value=\"";
-            echo twig_escape_filter($this->env, html_entity_decode(set_value("penerima")), "html", null, true);
+            echo twig_escape_filter($this->env, set_value("penerima"), "html", null, true);
             echo "\">
                         <br>";
             // line 21
@@ -132,7 +132,7 @@ class __TwigTemplate_35e5a628a8ea04528ec1abe306796622093d88686157145f6e5721b5e79
         typeahead: {
             source: [";
         // line 52
-        echo html_entity_decode((isset($context["all_users"]) ? $context["all_users"] : null));
+        echo (isset($context["all_users"]) ? $context["all_users"] : null);
         echo "],
         },
     });

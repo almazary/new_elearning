@@ -152,7 +152,7 @@ class __TwigTemplate_bfd99ffb45f56909ebc15c4e7a9db71163bb2ed62b80fabdc39b5176baf
                     <td>
                         ";
             // line 66
-            echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan"));
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan")));
             echo "
 
                         ";
@@ -165,7 +165,7 @@ class __TwigTemplate_bfd99ffb45f56909ebc15c4e7a9db71163bb2ed62b80fabdc39b5176baf
                                 <td>
                                     ";
                 // line 73
-                echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_a"));
+                echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_a")));
                 echo "
                                     ";
                 // line 74
@@ -182,7 +182,7 @@ class __TwigTemplate_bfd99ffb45f56909ebc15c4e7a9db71163bb2ed62b80fabdc39b5176baf
                                 <td>
                                     ";
                 // line 82
-                echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_b"));
+                echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_b")));
                 echo "
                                     ";
                 // line 83
@@ -199,7 +199,7 @@ class __TwigTemplate_bfd99ffb45f56909ebc15c4e7a9db71163bb2ed62b80fabdc39b5176baf
                                 <td>
                                     ";
                 // line 91
-                echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_c"));
+                echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_c")));
                 echo "
                                     ";
                 // line 92
@@ -216,7 +216,7 @@ class __TwigTemplate_bfd99ffb45f56909ebc15c4e7a9db71163bb2ed62b80fabdc39b5176baf
                                 <td>
                                     ";
                 // line 100
-                echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_d"));
+                echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_d")));
                 echo "
                                     ";
                 // line 101
@@ -233,7 +233,7 @@ class __TwigTemplate_bfd99ffb45f56909ebc15c4e7a9db71163bb2ed62b80fabdc39b5176baf
                                 <td>
                                     ";
                 // line 109
-                echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_e"));
+                echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_e")));
                 echo "
                                     ";
                 // line 110

@@ -144,7 +144,7 @@ class __TwigTemplate_8a507ebcbfe8a2e9ccb9317cd4b8e7ba0fa0c132e33467c388ee1dcc274
                 <div class=\"controls\">
                     <textarea name=\"info\" id=\"info\" style=\"width:100%; height:300px;\">";
         // line 53
-        echo set_value("info", html_entity_decode($this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info")));
+        echo set_value("info", call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info"))));
         echo "</textarea>
                     ";
         // line 54

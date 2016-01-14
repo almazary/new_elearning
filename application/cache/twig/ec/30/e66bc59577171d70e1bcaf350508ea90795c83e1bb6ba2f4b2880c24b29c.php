@@ -94,7 +94,7 @@ class __TwigTemplate_ec30e66bc59577171d70e1bcaf350508ea90795c83e1bb6ba2f4b2880c2
                 <div class=\"controls\">
                     <textarea name=\"pertanyaan\" id=\"pertanyaan\" style=\"width: 100%; height:300px;\">";
         // line 31
-        echo set_value("pertanyaan", html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan")));
+        echo set_value("pertanyaan", call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan"))));
         echo "</textarea>
                     ";
         // line 32
@@ -111,7 +111,7 @@ class __TwigTemplate_ec30e66bc59577171d70e1bcaf350508ea90795c83e1bb6ba2f4b2880c2
                 <div class=\"controls\">
                     <textarea name=\"pilihan_a\" id=\"pilihan_a\" style=\"width: 100%; height:200px;\">";
             // line 39
-            echo set_value("pilihan_a", html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_a")));
+            echo set_value("pilihan_a", call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_a"))));
             echo "</textarea>
                     ";
             // line 40
@@ -128,7 +128,7 @@ class __TwigTemplate_ec30e66bc59577171d70e1bcaf350508ea90795c83e1bb6ba2f4b2880c2
                 <div class=\"controls\">
                     <textarea name=\"pilihan_b\" id=\"pilihan_b\" style=\"width: 100%; height:200px;\">";
             // line 47
-            echo set_value("pilihan_b", html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_b")));
+            echo set_value("pilihan_b", call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_b"))));
             echo "</textarea>
                     ";
             // line 48
@@ -145,7 +145,7 @@ class __TwigTemplate_ec30e66bc59577171d70e1bcaf350508ea90795c83e1bb6ba2f4b2880c2
                 <div class=\"controls\">
                     <textarea name=\"pilihan_c\" id=\"pilihan_c\" style=\"width: 100%; height:200px;\">";
             // line 55
-            echo set_value("pilihan_c", html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_c")));
+            echo set_value("pilihan_c", call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_c"))));
             echo "</textarea>
                     ";
             // line 56
@@ -162,7 +162,7 @@ class __TwigTemplate_ec30e66bc59577171d70e1bcaf350508ea90795c83e1bb6ba2f4b2880c2
                 <div class=\"controls\">
                     <textarea name=\"pilihan_d\" id=\"pilihan_d\" style=\"width: 100%; height:200px;\">";
             // line 63
-            echo set_value("pilihan_d", html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_d")));
+            echo set_value("pilihan_d", call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_d"))));
             echo "</textarea>
                     ";
             // line 64
@@ -179,7 +179,7 @@ class __TwigTemplate_ec30e66bc59577171d70e1bcaf350508ea90795c83e1bb6ba2f4b2880c2
                 <div class=\"controls\">
                     <textarea name=\"pilihan_e\" id=\"pilihan_e\" style=\"width: 100%; height:200px;\">";
             // line 71
-            echo set_value("pilihan_e", html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_e")));
+            echo set_value("pilihan_e", call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pilihan_e"))));
             echo "</textarea>
                     ";
             // line 72
