@@ -1,0 +1,51 @@
+{% extends "layout-private.html" %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Plugins</h3>
+    </div>
+    <div class="module-body">
+        <table class="table datatable">
+        <thead>
+            <tr>
+                <th>Plugin Info</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for key, p in plugins %}
+        <tr>
+            <td>
+                <div class="media">
+                    <a class="pull-left" href="{{ p.link_detail }}" target="_blank">
+                        <img src="{{ p.icon }}" style="width: 64px; height: 64px;" alt="icon" class="media-object">
+                    </a>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ p.nama }}</h4>
+                        {{ p.deskripsi }}
+                        <p>
+                        <ul class="unstyled inline" style="margin-left: -5px;">
+
+                            {% if plugin_installed(p.dir_name) %}
+                            <li><span class="text-success"><i class="icon icon-ok"></i> Plugin terpasang</span></li>
+                            {% endif %}
+                            <li>Pembuat: <a href="{{ p.author_link }}" target="_blank">{{ p.author }}</a></li>
+                        </ul>
+                        </p>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <p><b>{{ p.labelharga }}</b></p>
+                <div class="btn-group">
+                    <a href="{{ p.link_detail }}" class="btn btn-primary" target="_blank"><i class="icon icon-zoom-in"></i> Detail Plugin</a>
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

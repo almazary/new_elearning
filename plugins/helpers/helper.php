@@ -65,3 +65,21 @@ function plugin_helper($plugin_name, $func, $params = array())
 
     return call_user_func_array($func, $params);
 }
+
+/**
+ * Method untuk ngecek plugin terinstall atau tidak
+ *
+ * @param  string $plugin_name
+ * @return boolan
+ */
+function plugin_installed($plugin_name)
+{
+    $plugin_dir = './plugins/';
+
+    # cek plugin folder
+    if (is_dir($plugin_dir . 'src/' . $plugin_name)) {
+        return true;
+    }
+
+    return false;
+}
