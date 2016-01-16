@@ -75,6 +75,13 @@ class Twig
                 $string = str_replace("&gt;&lt;/iframe>", "></iframe>", $string);
                 $string = str_replace("&gt;&lt;/iframe&gt;", "></iframe>", $string);
             }
+
+            # ini untuk wiris
+            if (strpos($string, "&lt;math xmlns=\"http://www.w3.org/1998/Math") !== false) {
+                $string = str_replace("&lt;math xmlns=\"http://www.w3.org/1998/Math", "<math xmlns=\"http://www.w3.org/1998/Math", $string);
+                $string = str_replace("/MathML\"&gt;", "/MathML\">", $string);
+                $string = str_replace("&lt;/math&gt;", "</math>", $string);
+            }
             return $string;
         });
 
