@@ -20,7 +20,7 @@
         <tr>
             <td>{{ tgl_jam_indo(history.mulai) }}</td>
             {% if sudah_dikoreksi == true %}
-            <th>{{ nilai.nilai }}</th>
+            <th>{{ round(nilai.nilai, 2) }}</th>
             {% endif %}
         </tr>
     </tbody>

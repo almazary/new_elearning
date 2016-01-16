@@ -86,7 +86,7 @@ Koreksi - {{ parent() }}
                         <a href="{{ site_url('siswa/detail/' ~ s.id) }}"><b>{{ s.nama }} {{ ((s.nis is not empty) ? '<span class="text-muted">(' ~ s.nis ~ ')</span>')|raw }}</b></a>
                     </td>
                     <td>{{ s.kelas_aktif.nama }} <span class="text-muted">({{ s.kelas_aktif.id }})</span></td>
-                    <td>{{ s.nilai.nilai }}</td>
+                    <td>{{ round(s.nilai.nilai, 2) }}</td>
                     <td>
                         <div class="btn-group">
                             {% if s.nilai is empty %}

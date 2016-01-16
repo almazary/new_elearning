@@ -87,7 +87,7 @@ class __TwigTemplate_90cb90bfa39574e7efe60106c53f47fe6a74c02ddf27e8e85e61b126b2d
         echo "</td>
             <td><b>";
         // line 40
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["history"]) ? $context["history"] : null), "nilai"), "html", null, true);
+        echo twig_escape_filter($this->env, round($this->getAttribute((isset($context["history"]) ? $context["history"] : null), "nilai"), 2), "html", null, true);
         echo "</b></td>
         </tr>
     </tbody>

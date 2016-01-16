@@ -710,19 +710,29 @@ function get_ip() {
 }
 
 function sudah_ngerjakan($tugas_id, $siswa_id) {
+    $sudah = false;
+
     # cek sudah mengerjakan belum
     $nilai = get_row_data('tugas_model', 'retrieve_nilai', array(null, $tugas_id, $siswa_id));
     if (!empty($nilai)) {
-        return true;
+        $sudah = true;
     }
 
-    # cek history untuk tugas essay, karna harus dikoreksi dl
+    # cek history, kalo sudah ada berarti sudah mengerjakan
     $check_history = retrieve_field('history-mengerjakan-' . $siswa_id . '-' . $tugas_id);
     if (!empty($check_history)) {
-        return true;
+        $sudah = true;
     }
 
-    return false;
+    # kalo true coba cek sekali lagi
+    if ($sudah == true) {
+        $check_history = retrieve_field('history-mengerjakan-' . $siswa_id . '-' . $tugas_id);
+        if (empty($check_history)) {
+            $sudah = false;
+        }
+    }
+
+    return $sudah;
 }
 
 function lama_pengerjaan($start, $finish) {

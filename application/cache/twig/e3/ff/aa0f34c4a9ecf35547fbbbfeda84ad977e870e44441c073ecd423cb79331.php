@@ -129,7 +129,7 @@ class __TwigTemplate_e3ffaa0f34c4a9ecf35547fbbbfeda84ad977e870e44441c073ecd423cb
                         <th>Info</th>
                         <td>";
         // line 52
-        echo $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info");
+        echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info")));
         echo "</td>
                     </tr>
                     ";
@@ -253,7 +253,7 @@ class __TwigTemplate_e3ffaa0f34c4a9ecf35547fbbbfeda84ad977e870e44441c073ecd423cb
             echo ")</span></td>
                     <td>";
             // line 102
-            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["s"]) ? $context["s"] : null), "nilai"), "nilai"), "html", null, true);
+            echo twig_escape_filter($this->env, round($this->getAttribute($this->getAttribute((isset($context["s"]) ? $context["s"] : null), "nilai"), "nilai"), 2), "html", null, true);
             echo "</td>
                     <td>
                         <div class=\"btn-group\">

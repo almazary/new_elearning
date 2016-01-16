@@ -247,7 +247,7 @@ class __TwigTemplate_5e8106efe22f9dd62384a812372e9317a3e54a4fcb1a2af7bc0dc9dca19
             echo ")</span></td>
                     <td>";
             // line 100
-            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["n"]) ? $context["n"] : null), "nilai"), "html", null, true);
+            echo twig_escape_filter($this->env, round($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "nilai"), 2), "html", null, true);
             echo "</td>
                     <td>
                         <div class=\"btn-group\">

@@ -945,8 +945,11 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
+        # dibuat variabel baru untuk php versi < 5.5
+        $sudah_mengerjakan = sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'));
+
         # cek sudah mengerjakan belum
-        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
+        if ($sudah_mengerjakan == true) {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
             redirect('tugas');
         }
@@ -1074,8 +1077,11 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
+        # dibuat variabel baru untuk php versi < 5.5
+        $sudah_mengerjakan = sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'));
+
         # cek sudah mengerjakan belum
-        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
+        if ($sudah_mengerjakan == true) {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
             redirect('tugas');
         }
@@ -1186,8 +1192,11 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
+        # dibuat variabel baru untuk php versi < 5.5
+        $sudah_mengerjakan = sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'));
+
         # cek sudah mengerjakan belum
-        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
+        if ($sudah_mengerjakan == true) {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
             redirect('tugas');
         }
@@ -1253,8 +1262,11 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
+        # dibuat variabel baru untuk php versi < 5.5
+        $sudah_mengerjakan = sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'));
+
         # cek sudah mengerjakan belum
-        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
+        if ($sudah_mengerjakan == true) {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
             redirect('tugas');
         }

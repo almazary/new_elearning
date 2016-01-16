@@ -37,7 +37,7 @@
             <td>{{ history.jml_benar }}</td>
             <td>{{ history.jml_salah }}</td>
             <td>{{ (count(history.pertanyaan) != (history.jml_benar + history.jml_salah)) ? count(history.pertanyaan) - (history.jml_benar + history.jml_salah) : 0 }}</td>
-            <td><b>{{ history.nilai }}</b></td>
+            <td><b>{{ round(history.nilai, 2) }}</b></td>
         </tr>
     </tbody>
 </table>

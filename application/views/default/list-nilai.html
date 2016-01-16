@@ -84,7 +84,7 @@ Lihat Nilai - {{ parent() }}
                         <a href="{{ site_url('siswa/detail/' ~ n.siswa.id) }}"><b>{{ n.siswa.nama }} {{ ((n.siswa.nis is not empty) ? '<span class="text-muted">(' ~ n.siswa.nis ~ ')</span>')|raw }}</b></a>
                     </td>
                     <td>{{ n.siswa.kelas_aktif.nama }} <span class="text-muted">({{ n.siswa.kelas_aktif.id }})</span></td>
-                    <td>{{ n.nilai }}</td>
+                    <td>{{ round(n.nilai, 2) }}</td>
                     <td>
                         <div class="btn-group">
                             {{ anchor('tugas/detail_jawaban/' ~ n.siswa.id ~ '/' ~ tugas.id, 'Detail',{'class' : 'btn btn-small btn-primary iframe-detail-jawaban'})|raw }}

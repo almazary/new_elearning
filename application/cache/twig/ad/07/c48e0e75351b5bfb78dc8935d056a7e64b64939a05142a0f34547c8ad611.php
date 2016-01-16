@@ -126,11 +126,11 @@ class __TwigTemplate_ad07c48e0e75351b5bfb78dc8935d056a7e64b64939a05142a0f34547c8
                 echo "</td>
                 <td>";
                 // line 44
-                echo twig_escape_filter($this->env, (((count($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "pertanyaan")) != ($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "jml_benar") + $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "jml_salah")))) ? ((count($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "pertanyaan")) - ($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "jml_benar") + $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "jml_salah")))) : (0)), "html", null, true);
+                echo twig_escape_filter($this->env, (((count($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "pertanyaan")) != ($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "jml_benar") + $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "jml_salah")))) ? (abs((count($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "pertanyaan")) - ($this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "jml_benar") + $this->getAttribute($this->getAttribute($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "history"), "value"), "jml_salah"))))) : (0)), "html", null, true);
                 echo "</td>
                 <td>";
                 // line 45
-                echo twig_escape_filter($this->env, $this->getAttribute((isset($context["n"]) ? $context["n"] : null), "nilai"), "html", null, true);
+                echo twig_escape_filter($this->env, round($this->getAttribute((isset($context["n"]) ? $context["n"] : null), "nilai"), 2), "html", null, true);
                 echo "</td>
             </tr>
             ";
@@ -206,7 +206,7 @@ class __TwigTemplate_ad07c48e0e75351b5bfb78dc8935d056a7e64b64939a05142a0f34547c8
                 echo "</td>
                 <td>";
                 // line 70
-                echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute((isset($context["s"]) ? $context["s"] : null), "nilai"), "nilai"), "html", null, true);
+                echo twig_escape_filter($this->env, round($this->getAttribute($this->getAttribute((isset($context["s"]) ? $context["s"] : null), "nilai"), "nilai"), 2), "html", null, true);
                 echo "</td>
             </tr>
             ";

@@ -24,7 +24,7 @@
             <td>{{ tgl_jam_indo(history.tgl_submit) }}</td>
             <td>{{ history.total_waktu }}</td>
             {% if sudah_dikoreksi == true %}
-            <th>{{ nilai.nilai }}</th>
+            <th>{{ round(nilai.nilai, 2) }}</th>
             {% endif %}
         </tr>
     </tbody>

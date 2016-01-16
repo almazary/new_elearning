@@ -42,7 +42,7 @@
                 <td>{{ n.history.value.jml_benar }}</td>
                 <td>{{ n.history.value.jml_salah }}</td>
                 <td>{{ (count(n.history.value.pertanyaan) != (n.history.value.jml_benar + n.history.value.jml_salah)) ? (count(n.history.value.pertanyaan) - (n.history.value.jml_benar + n.history.value.jml_salah))|abs : 0 }}</td>
-                <td>{{ n.nilai }}</td>
+                <td>{{ round(n.nilai, 2) }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -67,7 +67,7 @@
                 <td>{{ s.nis }}</td>
                 <td>{{ s.nama }}</td>
                 <td>{{ s.kelas_aktif.nama }}</td>
-                <td>{{ s.nilai.nilai }}</td>
+                <td>{{ round(s.nilai.nilai, 2) }}</td>
             </tr>
             {% endfor %}
         </tbody>
