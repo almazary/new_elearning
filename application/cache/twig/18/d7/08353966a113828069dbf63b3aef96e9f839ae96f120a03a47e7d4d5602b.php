@@ -96,6 +96,7 @@ class __TwigTemplate_18d708353966a113828069dbf63b3aef96e9f839ae96f120a03a47e7d4d
         <script type=\"text/javascript\">
             function inIframe ()
             {
+                \$(\"#body-content\").hide();
                 var is_iframe = true;
                 try {
                     is_iframe = window.self !== window.top;
@@ -106,19 +107,21 @@ class __TwigTemplate_18d708353966a113828069dbf63b3aef96e9f839ae96f120a03a47e7d4d
                 if (!is_iframe) {
                     \$(\"#body-content\").html('redirect...');
                     window.location.replace(\"";
-        // line 42
+        // line 43
         echo twig_escape_filter($this->env, (isset($context["url_referrer"]) ? $context["url_referrer"] : null), "html", null, true);
         echo "\")
+                } else {
+                    \$(\"#body-content\").show();
                 }
             }
         </script>
         ";
-        // line 46
+        // line 49
         $this->displayBlock('js', $context, $blocks);
-        // line 47
+        // line 50
         echo "
         ";
-        // line 48
+        // line 51
         echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
         echo "
     </body>
@@ -142,7 +145,7 @@ class __TwigTemplate_18d708353966a113828069dbf63b3aef96e9f839ae96f120a03a47e7d4d
     {
     }
 
-    // line 46
+    // line 49
     public function block_js($context, array $blocks = array())
     {
     }
@@ -159,6 +162,6 @@ class __TwigTemplate_18d708353966a113828069dbf63b3aef96e9f839ae96f120a03a47e7d4d
 
     public function getDebugInfo()
     {
-        return array (  146 => 46,  141 => 19,  136 => 12,  130 => 6,  122 => 48,  119 => 47,  117 => 46,  110 => 42,  90 => 28,  86 => 27,  77 => 24,  73 => 23,  68 => 20,  66 => 19,  58 => 14,  53 => 13,  38 => 8,  34 => 7,  30 => 6,  23 => 1,  97 => 32,  94 => 29,  88 => 28,  82 => 26,  78 => 24,  74 => 23,  69 => 21,  63 => 18,  57 => 15,  51 => 12,  46 => 10,  42 => 9,  35 => 5,  32 => 4,  29 => 3,);
+        return array (  149 => 49,  144 => 19,  139 => 12,  133 => 6,  125 => 51,  122 => 50,  120 => 49,  111 => 43,  94 => 29,  90 => 28,  86 => 27,  82 => 26,  77 => 24,  73 => 23,  68 => 20,  66 => 19,  58 => 14,  53 => 13,  51 => 12,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
     }
 }

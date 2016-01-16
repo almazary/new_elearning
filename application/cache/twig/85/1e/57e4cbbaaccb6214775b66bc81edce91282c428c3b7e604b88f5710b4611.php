@@ -40,7 +40,7 @@ class __TwigTemplate_851e57e4cbbaaccb6214775b66bc81edce91282c428c3b7e604b88f5710
             <th width=\"35%\">Nilai</th>
             <td>";
         // line 11
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["nilai"]) ? $context["nilai"] : null), "nilai"), "html", null, true);
+        echo twig_escape_filter($this->env, round($this->getAttribute((isset($context["nilai"]) ? $context["nilai"] : null), "nilai"), 2), "html", null, true);
         echo "</td>
         <tr>
         <tr>
