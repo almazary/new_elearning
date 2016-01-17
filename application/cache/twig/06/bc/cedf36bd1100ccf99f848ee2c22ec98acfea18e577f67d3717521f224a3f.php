@@ -74,7 +74,7 @@ class __TwigTemplate_06bccedf36bd1100ccf99f848ee2c22ec98acfea18e577f67d3717521f2
         if (((isset($context["sudah_dikoreksi"]) ? $context["sudah_dikoreksi"] : null) == true)) {
             // line 27
             echo "            <th>";
-            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["nilai"]) ? $context["nilai"] : null), "nilai"), "html", null, true);
+            echo twig_escape_filter($this->env, round($this->getAttribute((isset($context["nilai"]) ? $context["nilai"] : null), "nilai"), 2), "html", null, true);
             echo "</th>
             ";
         }
@@ -114,14 +114,14 @@ class __TwigTemplate_06bccedf36bd1100ccf99f848ee2c22ec98acfea18e577f67d3717521f2
                 <div class=\"pertanyaan\">
                     ";
             // line 49
-            echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan"));
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan")));
             echo "
                 </div>
 
                 <b>Jawaban :</b>
                 ";
             // line 53
-            echo html_entity_decode(get_jawaban($this->getAttribute((isset($context["history"]) ? $context["history"] : null), "jawaban"), $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id")));
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array(get_jawaban($this->getAttribute((isset($context["history"]) ? $context["history"] : null), "jawaban"), $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"))));
             echo "
 
                 <b>Nilai :</b>

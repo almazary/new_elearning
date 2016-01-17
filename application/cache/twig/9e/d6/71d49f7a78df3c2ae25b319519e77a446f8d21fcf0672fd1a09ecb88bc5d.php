@@ -64,7 +64,7 @@ class __TwigTemplate_9ed671d49f7a78df3c2ae25b319519e77a446f8d21fcf0672fd1a09ecb8
             <td>
                 <textarea name=\"pertanyaan\" id=\"pertanyaan\" style=\"height:400px;width:100%;\">";
         // line 19
-        echo set_value("pertanyaan", html_entity_decode($this->getAttribute((isset($context["pertanyaan"]) ? $context["pertanyaan"] : null), "pertanyaan")));
+        echo set_value("pertanyaan", call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["pertanyaan"]) ? $context["pertanyaan"] : null), "pertanyaan"))));
         echo "</textarea>
                 ";
         // line 20

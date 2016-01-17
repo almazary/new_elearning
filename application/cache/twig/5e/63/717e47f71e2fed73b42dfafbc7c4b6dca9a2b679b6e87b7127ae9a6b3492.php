@@ -87,7 +87,7 @@ class __TwigTemplate_5e63717e47f71e2fed73b42dfafbc7c4b6dca9a2b679b6e87b7127ae9a6
         echo "</td>
             <td><b>";
         // line 40
-        echo twig_escape_filter($this->env, $this->getAttribute((isset($context["history"]) ? $context["history"] : null), "nilai"), "html", null, true);
+        echo twig_escape_filter($this->env, round($this->getAttribute((isset($context["history"]) ? $context["history"] : null), "nilai"), 2), "html", null, true);
         echo "</b></td>
         </tr>
     </tbody>
@@ -133,7 +133,7 @@ class __TwigTemplate_5e63717e47f71e2fed73b42dfafbc7c4b6dca9a2b679b6e87b7127ae9a6
                 <div class=\"pertanyaan\">
                     ";
             // line 66
-            echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan"));
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan")));
             echo "
                 </div>
 
@@ -157,7 +157,7 @@ class __TwigTemplate_5e63717e47f71e2fed73b42dfafbc7c4b6dca9a2b679b6e87b7127ae9a6
                                 <td>
                                     ";
                 // line 76
-                echo html_entity_decode($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "konten"));
+                echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "konten")));
                 echo "
 
                                     <ul class=\"unstyled inline\" style=\"margin-bottom: 0px;margin-left: -5px;\">

@@ -129,7 +129,7 @@ class __TwigTemplate_7a536c140678820f92a9bd036d430ad0b4a158cc409334292dedc2b448a
                         <th>Info</th>
                         <td>";
         // line 52
-        echo $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info");
+        echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "info")));
         echo "</td>
                     </tr>
                     <tr>
@@ -205,7 +205,7 @@ class __TwigTemplate_7a536c140678820f92a9bd036d430ad0b4a158cc409334292dedc2b448a
 
                             ";
             // line 91
-            echo html_entity_decode($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan"));
+            echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["p"]) ? $context["p"] : null), "pertanyaan")));
             echo "
                         </div>
 
@@ -253,7 +253,7 @@ class __TwigTemplate_7a536c140678820f92a9bd036d430ad0b4a158cc409334292dedc2b448a
                                             </div>
                                             ";
                     // line 109
-                    echo html_entity_decode($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "konten"));
+                    echo call_user_func_array($this->env->getFilter('raw_media')->getCallable(), array($this->getAttribute((isset($context["pil"]) ? $context["pil"] : null), "konten")));
                     echo "
 
                                             ";

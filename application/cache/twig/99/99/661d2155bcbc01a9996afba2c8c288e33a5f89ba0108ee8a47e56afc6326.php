@@ -1,7 +1,7 @@
 <?php
 
-/* copy-pertanyaan.html */
-class __TwigTemplate_8ba0453f8b8dd0525f3ee85dd9ca0d848d889bd5aeb176b2ac7e30bd8d580b59 extends Twig_Template
+/* copy-soal-tugas.html */
+class __TwigTemplate_9999661d2155bcbc01a9996afba2c8c288e33a5f89ba0108ee8a47e56afc6326 extends Twig_Template
 {
     public function __construct(Twig_Environment $env)
     {
@@ -28,7 +28,7 @@ class __TwigTemplate_8ba0453f8b8dd0525f3ee85dd9ca0d848d889bd5aeb176b2ac7e30bd8d5
     public function block_content($context, array $blocks = array())
     {
         // line 4
-        echo "<h4>Copy Pertanyaan</h4>
+        echo "<h4>Copy Soal Tugas</h4>
 <hr style=\"margin-top: 5px; margin-bottom: 10px;\">
 ";
         // line 6
@@ -128,7 +128,7 @@ class __TwigTemplate_8ba0453f8b8dd0525f3ee85dd9ca0d848d889bd5aeb176b2ac7e30bd8d5
             <td>
                 <a class=\"btn btn-sm btn-primary\" href=\"";
             // line 50
-            echo twig_escape_filter($this->env, site_url(((("tugas/copy_soal/" . $this->getAttribute((isset($context["tugas"]) ? $context["tugas"] : null), "id")) . "/?copy=") . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"))), "html", null, true);
+            echo twig_escape_filter($this->env, site_url(("plugins/bank_soal/copy_soal_tugas/?copy=" . $this->getAttribute((isset($context["p"]) ? $context["p"] : null), "id"))), "html", null, true);
             echo "\">Copy</a>
             </td>
         </tr>
@@ -145,7 +145,7 @@ class __TwigTemplate_8ba0453f8b8dd0525f3ee85dd9ca0d848d889bd5aeb176b2ac7e30bd8d5
 
     public function getTemplateName()
     {
-        return "copy-pertanyaan.html";
+        return "copy-soal-tugas.html";
     }
 
     public function isTraitable()
