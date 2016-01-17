@@ -74,7 +74,7 @@ class __TwigTemplate_fc0dda706cc55caa26285f93ac7be6e541695c76912c2d80108d9920f9a
         if (((isset($context["sudah_dikoreksi"]) ? $context["sudah_dikoreksi"] : null) == true)) {
             // line 27
             echo "            <th>";
-            echo twig_escape_filter($this->env, $this->getAttribute((isset($context["nilai"]) ? $context["nilai"] : null), "nilai"), "html", null, true);
+            echo twig_escape_filter($this->env, round($this->getAttribute((isset($context["nilai"]) ? $context["nilai"] : null), "nilai"), 2), "html", null, true);
             echo "</th>
             ";
         }

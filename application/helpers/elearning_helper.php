@@ -268,7 +268,6 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
 function is_login()
 {
     $CI =& get_instance();
-    $CI->load->library('session');
 
     $sess_data = $CI->session->userdata('login_' . APP_PREFIX);
     if (!empty($sess_data)) {
@@ -300,7 +299,6 @@ function is_admin()
     }
 
     $CI =& get_instance();
-    $CI->load->library('session');
 
     $sess = $CI->session->userdata('login_' . APP_PREFIX);
     if (!empty($sess['admin'])) {
@@ -321,7 +319,6 @@ function is_pengajar()
     }
 
     $CI =& get_instance();
-    $CI->load->library('session');
 
     $sess = $CI->session->userdata('login_' . APP_PREFIX);
     if (!empty($sess['pengajar'])) {
@@ -342,7 +339,6 @@ function is_siswa()
     }
 
     $CI =& get_instance();
-    $CI->load->library('session');
 
     $sess = $CI->session->userdata('login_' . APP_PREFIX);
     if (!empty($sess['siswa'])) {
@@ -362,7 +358,6 @@ function is_siswa()
 function get_sess_data($key1, $key2)
 {
     $CI =& get_instance();
-    $CI->load->library('session');
 
     $sess_data = $CI->session->userdata('login_' . APP_PREFIX);
     if (!empty($sess_data)) {
@@ -391,7 +386,7 @@ function get_sess_data($key1, $key2)
 function is_ajax()
 {
     /* AJAX check  */
-    if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
         return true;
     }
     return false;
@@ -410,8 +405,8 @@ function get_url_image($img, $size = '')
     if (empty($size)) {
         return base_url('userfiles/images/'.$img);
     } else {
-        $pisah = explode('.', $img);
-        $ext = end($pisah);
+        $pisah     = explode('.', $img);
+        $ext       = end($pisah);
         $nama_file = $pisah[0];
 
         return base_url('userfiles/images/'.$nama_file.'_'.$size.'.'.$ext);
@@ -516,7 +511,6 @@ function get_path_file($file = '')
  */
 function get_flashdata($key) {
     $CI =& get_instance();
-    $CI->load->library('session');
 
     return $CI->session->flashdata($key);
 }

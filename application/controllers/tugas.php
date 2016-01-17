@@ -958,12 +958,26 @@ class Tugas extends MY_Controller
         $field_name  = 'Mengerjakan Tugas';
 
         $mulai   = date('Y-m-d H:i:s');
-        $selesai = date('Y-m-d H:i:s', strtotime("+ $tugas[durasi] minutes", strtotime($mulai)));
+        $durasi  = $tugas['durasi'];
+        $selesai = date('Y-m-d H:i:s', strtotime("+$durasi minutes", strtotime($mulai)));
 
         $field_value = array(
-            'mulai'   => $mulai,
-            'selesai' => $selesai
+            'mulai'      => $mulai,
+            'selesai'    => $selesai,
+            'uri_string' => uri_string()
         );
+
+        # untuk keperluan check sedang ujian
+        $field_value['valid_route'] = array(
+            '/tugas/mengerjakan',
+            '/tugas/finish',
+            '/tugas/submit_essay',
+            '/tugas/submit_upload',
+        );
+
+        # simpan tugas dan unix_id nya
+        $field_value['tugas']   = $tugas;
+        $field_value['unix_id'] = md5($field_id) . rand(9, 999999);
 
         # cek sudah pernah mengerjakan belum, untuk keamanan.
         # karna bisa saja dibuka 2 kali dikomputer yang berbeda
@@ -995,17 +1009,12 @@ class Tugas extends MY_Controller
                 }
 
                 $field_value['pertanyaan_id'] = $pertanyaan_id;
-                $field_value['tugas']         = $tugas;
-                $field_value['unix_id']       = md5($field_id) . rand(9, 999999);
-                create_field($field_id, $field_name, json_encode($field_value));
-
             } else {
-                create_field($field_id, $field_name, json_encode(array(
-                    'mulai'   => $mulai,
-                    'tugas'   => $tugas,
-                    'unix_id' => md5($field_id) . rand(9, 999999)
-                )));
+                unset($field_value['selesai']);
             }
+
+            # simpan
+            create_field($field_id, $field_name, json_encode($field_value));
         }
 
         $check_field       = retrieve_field($field_id);

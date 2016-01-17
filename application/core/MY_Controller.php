@@ -54,6 +54,9 @@ class MY_Controller extends CI_Controller
             }
 
             $this->siswa_kelas_aktif = $kelas_aktif;
+
+            # cek sedang ujian tidak
+            $this->cek_mode_ujian();
         }
 
         $this->update_link        = 'http://www.dokumenary.net/category/new-elearning/feed/';
@@ -70,7 +73,14 @@ class MY_Controller extends CI_Controller
         }
     }
 
-    function update_nis($nis = '') {
+    /**
+     * Validasi saat update nis, sudah digunakan atau belum
+     *
+     * @param  string $nis
+     * @return boolean
+     */
+    function update_nis($nis = '')
+    {
         if (!empty($nis)) {
             $this->db->where('id !=', $this->input->post('siswa_id', TRUE));
             $this->db->where('nis', $nis);
@@ -87,7 +97,14 @@ class MY_Controller extends CI_Controller
         }
     }
 
-    function update_nip($nip = '') {
+    /**
+     * Validasi update nip, cek sudah digunakan atau belum
+     *
+     * @param  string $nip
+     * @return boolean
+     */
+    function update_nip($nip = '')
+    {
         if (!empty($nip)) {
             $this->db->where('id !=', $this->input->post('pengajar_id', TRUE));
             $this->db->where('nip', $nip);
@@ -101,7 +118,14 @@ class MY_Controller extends CI_Controller
         }
     }
 
-    function check_username_exist($username) {
+    /**
+     * Method untuk ngecek username sudah digunakan atau belum
+     *
+     * @param  string $username
+     * @return boolean
+     */
+    function check_username_exist($username)
+    {
         $this->db->where('username', $username);
         $result = $this->db->get('login');
         $result = $result->num_rows();
@@ -113,7 +137,14 @@ class MY_Controller extends CI_Controller
         }
     }
 
-    function check_penerima_pesan($username = '') {
+    /**
+     * Method untuk ngecek username penerima pesan, valid tidak.
+     *
+     * @param  string $username
+     * @return boolean
+     */
+    function check_penerima_pesan($username = '')
+    {
         $get_email = get_email_from_string($username);
 
         if (empty($get_email)) {
@@ -139,6 +170,12 @@ class MY_Controller extends CI_Controller
         }
     }
 
+    /**
+     * Method untuk ngecek valid atau tidak tgl tampil pengumuman
+     *
+     * @param  string $tgl_tampil
+     * @return boolean
+     */
     function check_tgl_tampil($tgl_tampil = '')
     {
         $valid = true;
@@ -167,6 +204,15 @@ class MY_Controller extends CI_Controller
         return true;
     }
 
+    /**
+     * Method untuk resize image, menggunakan library ci
+     *
+     * @param  string $source_path
+     * @param  string $marker
+     * @param  string $width
+     * @param  string $height
+     * @return boolean
+     */
     function create_img_thumb($source_path = '', $marker = '_thumb', $width = '90', $height = '90')
     {
         $config['image_library']  = 'gd2';
@@ -181,8 +227,16 @@ class MY_Controller extends CI_Controller
         $this->image_lib->resize();
         $this->image_lib->clear();
         unset($config);
+
+        return true;
     }
 
+    /**
+     * Method untuk mendapatkan jawal matapelajaran untuk siswa
+     *
+     * @param  integer $siswa_id
+     * @return array
+     */
     function get_jadwal_mapel_siswa($siswa_id)
     {
         $siswa = $this->siswa_model->retrieve($siswa_id);
@@ -228,6 +282,12 @@ class MY_Controller extends CI_Controller
         return $jadwal;
     }
 
+    /**
+     * Method untuk mendapatkan data yang sedang login berdasarkan login_id
+     *
+     * @param  integer $login_id
+     * @return array
+     */
     function get_user_data($login_id)
     {
         # cari sender/receiver
@@ -254,6 +314,12 @@ class MY_Controller extends CI_Controller
         return $user;
     }
 
+    /**
+     * Method untuk memformat data pesan
+     *
+     * @param  array $retrieve
+     * @return array
+     */
     function format_msg($retrieve)
     {
         # jika inbox yang dicari pengirimnya
@@ -288,9 +354,75 @@ class MY_Controller extends CI_Controller
         return $retrieve;
     }
 
+    /**
+     * Method untuk memformat data komentar
+     *
+     * @param  array $retrieve
+     * @return array
+     */
     function format_komentar($retrieve)
     {
         $retrieve['login'] = $this->get_user_data($retrieve['login_id']);
         return $retrieve;
+    }
+
+    /**
+     * Method untuk ngecek apakah siswa sedang ujian atau tidak
+     * @return boolean
+     */
+    function sedang_ujian()
+    {
+        # cek login siswa
+        if (!is_siswa()) {
+            return false;
+        }
+
+        $field_id = 'mengerjakan-' . get_sess_data('user', 'id') . '-';
+        $table    = 'field_tambahan';
+
+        # cek tabel
+        $this->db->like('id', $field_id, 'after');
+        $result     = $this->db->get($table);
+        $data_field = $result->row_array();
+        if (!empty($data_field)) {
+            return true;
+        }
+    }
+
+    /**
+     * Jika sedang ujian, dan mengakses halaman selain yang divalidkan, maka akan diredirect ke halaman ujian
+     */
+    function cek_mode_ujian()
+    {
+        $sedang_ujian = $this->sedang_ujian();
+        # jika sedang ujian dan bukan request ajax
+        if ($sedang_ujian == true AND !is_ajax()) {
+            $field_id = 'mengerjakan-' . get_sess_data('user', 'id') . '-';
+            $table    = 'field_tambahan';
+
+            # cek tabel
+            $this->db->like('id', $field_id, 'after');
+            $result     = $this->db->get($table);
+            $data_field = $result->row_array();
+            if (empty($data_field)) {
+                return true;
+            }
+
+            $decode_value = json_decode($data_field['value'], 1);
+
+            # cek valid route
+            $valid_route = false;
+            foreach ($decode_value['valid_route'] as $route) {
+                $route = rtrim($route, '/');
+                if (strpos(current_url(), $route) !== false) {
+                    $valid_route = true;
+                    break;
+                }
+            }
+
+            if ($valid_route == false) {
+                redirect($decode_value['uri_string'], true);
+            }
+        }
     }
 }
