@@ -509,7 +509,8 @@ function get_path_file($file = '')
  * @param  string $key
  * @return string
  */
-function get_flashdata($key) {
+function get_flashdata($key)
+{
     $CI =& get_instance();
 
     return $CI->session->flashdata($key);
@@ -521,7 +522,8 @@ function get_flashdata($key) {
  * @param  string $bln
  * @return string
  */
-function get_indo_bulan($bln = '') {
+function get_indo_bulan($bln = '')
+{
     $data = array(1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
     if (empty($bln)) {
         return $data;
@@ -537,7 +539,8 @@ function get_indo_bulan($bln = '') {
  * @param  string $hari
  * @return string
  */
-function get_indo_hari($hari = '') {
+function get_indo_hari($hari = '')
+{
     $data = array(1 => 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu', 'Minggu');
     if (empty($hari)) {
         return $data;
@@ -553,7 +556,8 @@ function get_indo_hari($hari = '') {
  * @param  string $tgl
  * @return string
  */
-function tgl_indo($tgl = '') {
+function tgl_indo($tgl = '')
+{
     if (!empty($tgl)) {
         $pisah = explode('-', $tgl);
         return $pisah[2].' '.get_indo_bulan($pisah[1]).' '.$pisah[0];
@@ -566,7 +570,8 @@ function tgl_indo($tgl = '') {
  * @param  string $tgl_jam
  * @return string
  */
-function tgl_jam_indo($tgl_jam = '') {
+function tgl_jam_indo($tgl_jam = '')
+{
     if (!empty($tgl_jam)) {
         $pisah = explode(' ', $tgl_jam);
         return tgl_indo($pisah[0]).' '.date('H:i', strtotime($tgl_jam));
@@ -579,7 +584,8 @@ function tgl_jam_indo($tgl_jam = '') {
  * @param  string $key
  * @return string
  */
-function get_post_data($key = '') {
+function get_post_data($key = '')
+{
     if (isset($_POST[$key])) {
         return $_POST[$key];
     }
@@ -593,7 +599,8 @@ function get_post_data($key = '') {
  * @param  integer $index
  * @return string
  */
-function get_abjad($index) {
+function get_abjad($index)
+{
     $abjad = array(1 => 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
     return $abjad[$index];
 }
@@ -604,7 +611,8 @@ function get_abjad($index) {
  * @param  string $current_url
  * @return string
  */
-function enurl_redirect($current_url) {
+function enurl_redirect($current_url)
+{
     return str_replace(array("%2F","%5C"), array("%252F","%255C"), urlencode($current_url));
 }
 
@@ -614,7 +622,8 @@ function enurl_redirect($current_url) {
  * @param  string $url
  * @return string
  */
-function deurl_redirect($url) {
+function deurl_redirect($url)
+{
     return urldecode(urldecode($url));
 }
 
@@ -639,9 +648,28 @@ function nama_panggilan($str_nama) {
     return $split[0];
 }
 
+/**
+ * Method untuk mengaktifkan natif session
+ * http://stackoverflow.com/questions/6249707/check-if-php-session-has-already-started
+ */
+function start_native_session()
+{
+    if (session_id() == '' OR session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+}
+
+/**
+ * Method untuk membuat session kcfinder, karena kcfinder masih menggunakan natif session
+ *
+ * @param  integer $login_id
+ */
 function create_sess_kcfinder($login_id)
 {
     if (is_login()) {
+        # start natif session
+        start_native_session();
+
         $_SESSION['E-LEARNING']['KCFINDER']              = array();
         $_SESSION['E-LEARNING']['KCFINDER']['disabled']  = false;
         $_SESSION['E-LEARNING']['KCFINDER']['uploadDir'] = "";
@@ -658,40 +686,92 @@ function create_sess_kcfinder($login_id)
     }
 }
 
+/**
+ * Method untuk mendapatkan satu record tambahan
+ *
+ * @param  string $id
+ * @return array
+ */
 function retrieve_field($id)
 {
     return get_row_data('config_model', 'retrieve_field', array('id' => $id));
 }
 
+/**
+ * Method untuk update field tambahan
+ *
+ * @param  string $id
+ * @param  string $nama
+ * @param  string $value
+ * @return boolean
+ */
 function update_field($id, $nama = null, $value = null)
 {
     return get_row_data('config_model', 'update_field', array($id, $nama, $value));
 }
 
+/**
+ * Method untuk menghapus field tambahan berdasarkan id
+ *
+ * @param  string $id
+ * @return boolean
+ */
 function delete_field($id)
 {
     return get_row_data('config_model', 'delete_field', array('id' => $id));
 }
 
+/**
+ * Method untuk membuat field tambahan
+ *
+ * @param  string $id
+ * @param  string $nama
+ * @param  string $value
+ * @return boolean
+ */
 function create_field($id, $nama = null, $value = null)
 {
     return get_row_data('config_model', 'create_field', array('id' => $id, 'nama' => $nama, 'value' => $value));
 }
 
-function is_pilih($array, $pertanyaan_id, $pilihan_id) {
+/**
+ * Method untuk ngecek apakah pilihan ganda pertanyaan terpilih atau tidak
+ *
+ * @param  array    $array
+ * @param  integer  $pertanyaan_id
+ * @param  integer  $pilihan_id
+ * @return boolean
+ */
+function is_pilih($array, $pertanyaan_id, $pilihan_id)
+{
     if (isset($array[$pertanyaan_id]) AND $array[$pertanyaan_id] == $pilihan_id) {
         return true;
     }
     return false;
 }
 
-function get_jawaban($array, $pertanyaan_id) {
+/**
+ * Method untuk mendapatkan jawaban siswa berdasarkan pertanyaan_id
+ *
+ * @param  array   $array
+ * @param  integer $pertanyaan_id
+ * @return string
+ */
+function get_jawaban($array, $pertanyaan_id)
+{
     if (!empty($array[$pertanyaan_id])) {
         return $array[$pertanyaan_id];
     }
 }
 
-function get_kunci_pilihan($pilihan) {
+/**
+ * Method untuk mendapatkan kunci pada pilihan
+ *
+ * @param  array $pilihan
+ * @return integer id pilihan
+ */
+function get_kunci_pilihan($pilihan)
+{
     foreach ($pilihan as $value) {
         if ($value['kunci'] == 1) {
             return $value['id'];
@@ -699,11 +779,24 @@ function get_kunci_pilihan($pilihan) {
     }
 }
 
-function get_ip() {
+/**
+ * Method untuk mendapatkan ip pengakses
+ * @return string
+ */
+function get_ip()
+{
     return $_SERVER['REMOTE_ADDR'];
 }
 
-function sudah_ngerjakan($tugas_id, $siswa_id) {
+/**
+ * Method untuk ngecek apakah siswa sudah mengerjakan tugas tertentu
+ *
+ * @param  integer $tugas_id
+ * @param  integer $siswa_id
+ * @return boolean
+ */
+function sudah_ngerjakan($tugas_id, $siswa_id)
+{
     $sudah = false;
 
     # cek sudah mengerjakan belum
@@ -729,7 +822,15 @@ function sudah_ngerjakan($tugas_id, $siswa_id) {
     return $sudah;
 }
 
-function lama_pengerjaan($start, $finish) {
+/**
+ * Method untuk mendapatkan lama pengerjaan berdasarkan waktu mulai dan selesai
+ *
+ * @param  string $start
+ * @param  string $finish
+ * @return string
+ */
+function lama_pengerjaan($start, $finish)
+{
     $date_a = new DateTime($start);
     $date_b = new DateTime($finish);
 
@@ -741,6 +842,11 @@ function lama_pengerjaan($start, $finish) {
     return trim($result);
 }
 
+/**
+ * Method untuk mendapatkan semua data email user yang berkedudukan sebagai admin
+ *
+ * @return array
+ */
 function get_email_admin()
 {
     $results = array();
@@ -762,6 +868,14 @@ function get_email_admin()
     return $results;
 }
 
+/**
+ * Method untuk mengirimkan email
+ *
+ * @param  string $nama_email
+ * @param  string $to
+ * @param  array  $array_data
+ * @return boolean
+ */
 function kirim_email($nama_email, $to, $array_data = array())
 {
     # cari email
@@ -815,6 +929,11 @@ function kirim_email($nama_email, $to, $array_data = array())
     return true;
 }
 
+/**
+ * Method untuk mengirimkan email approve siswa
+ *
+ * @param  string $siswa_id
+ */
 function kirim_email_approve_siswa($siswa_id)
 {
     $retrieve_siswa = get_row_data('siswa_model', 'retrieve', array($siswa_id));
@@ -855,7 +974,11 @@ function kirim_email_approve_siswa($siswa_id)
     ));
 }
 
-
+/**
+ * Method untuk mengirimkan email approve pengajar
+ *
+ * @param  integer $pengajar_id
+ */
 function kirim_email_approve_pengajar($pengajar_id)
 {
     $pengajar = get_row_data('pengajar_model', 'retrieve', array($pengajar_id));
@@ -897,7 +1020,14 @@ function kirim_email_approve_pengajar($pengajar_id)
 }
 
 
-function get_email_from_string($str) {
+/**
+ * Method untuk mendapatkan email dari string
+ *
+ * @param  string $str
+ * @return array
+ */
+function get_email_from_string($str)
+{
     $pattern = '/[a-z\d._%+-]+@[a-z\d.-]+\.[a-z]{2,4}\b/i';
 
     preg_match_all($pattern, $str, $results);
@@ -905,13 +1035,24 @@ function get_email_from_string($str) {
     return $results[0];
 }
 
-function is_demo_app() {
+/**
+ * Method untuk ngecek sedang demo aplikasi atau tidak
+ *
+ * @return boolean
+ */
+function is_demo_app()
+{
     $CI =& get_instance();
     $CI->load->config();
     return $CI->config->item('is_demo_app');
 }
 
-function get_demo_msg() {
+/**
+ * Method untuk mendapatkan pesan jika sedang demo
+ * @return string
+ */
+function get_demo_msg()
+{
     return "Maaf, untuk keperluan demo aplikasi, halaman ini tidak dapat diperbaharui.";
 }
 
@@ -919,7 +1060,8 @@ function get_demo_msg() {
  * http://stackoverflow.com/questions/3475646/undefined-date-diff
  */
 if (!function_exists('date_diff')) {
-    function date_diff($date1, $date2) {
+    function date_diff($date1, $date2)
+    {
         $current = $date1;
         $datetime2 = date_create($date2);
         $count = 0;
@@ -937,7 +1079,8 @@ if (!function_exists('date_diff')) {
  * @param  string $url
  * @return string body
  */
-function get_url_data($url) {
+function get_url_data($url)
+{
     # jika curl hidup
     if (function_exists('curl_version')) {
         $ch = curl_init($url);
@@ -957,4 +1100,35 @@ function get_url_data($url) {
     }
 
     return $body;
+}
+
+/**
+ * Method untuk cek apakah password siswa sama dengan nis
+ *
+ * @return boolean
+ */
+function pass_siswa_equal_nis()
+{
+    if (is_siswa() AND !empty(get_sess_data('user', 'nis'))) {
+        # ambil nis siswa
+        $nis = get_row_data('siswa_model', 'retrieve', array(
+            'id' => get_sess_data('user', 'id')
+        ), 'nis');
+        if (empty($nis)) {
+            return false;
+        }
+
+        $md5_nis = md5($nis);
+
+        # dapatkan password siswa
+        $md5_pass = get_row_data('login_model', 'retrieve', array(
+            'id' => get_sess_data('login', 'id')
+        ), 'password');
+
+        if ($md5_nis == $md5_pass) {
+            return true;
+        }
+    }
+
+    return false;
 }

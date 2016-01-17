@@ -373,8 +373,19 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
                         <div class=\"content\">
                             ";
         // line 158
+        if ((pass_siswa_equal_nis() == true)) {
+            // line 159
+            echo "                                ";
+            echo get_alert("warning", ("Dimohon untuk segera mengganti password anda untuk alasan keamanan. " . anchor("login/pp#akun", "Profilku")));
+            echo "
+                            ";
+        }
+        // line 161
+        echo "
+                            ";
+        // line 162
         $this->displayBlock('content', $context, $blocks);
-        // line 159
+        // line 163
         echo "                        </div>
                     </div>
                     <!--/.span9-->
@@ -387,11 +398,11 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
             <div class=\"container\">
                 <center>
                     <b class=\"copyright\">";
-        // line 170
+        // line 174
         echo (isset($context["copyright"]) ? $context["copyright"] : null);
         echo " </b> All rights reserved.<br>
                     ";
-        // line 171
+        // line 175
         echo (isset($context["version"]) ? $context["version"] : null);
         echo " | Page loaded in ";
         echo twig_escape_filter($this->env, (isset($context["elapsed_time"]) ? $context["elapsed_time"] : null), "html", null, true);
@@ -401,46 +412,46 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
         </div>
         <script type=\"text/javascript\">
         var site_url = \"";
-        // line 176
+        // line 180
         echo twig_escape_filter($this->env, site_url(), "html", null, true);
         echo "\";
         var base_url = \"";
-        // line 177
+        // line 181
         echo twig_escape_filter($this->env, base_url(), "html", null, true);
         echo "\";
         </script>
         <script data-pace-options='{ \"ajax\": false }' src=\"";
-        // line 179
+        // line 183
         echo twig_escape_filter($this->env, base_url("assets/comp/pace/pace.min.js"), "html", null, true);
         echo "\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 180
+        // line 184
         echo twig_escape_filter($this->env, base_url("assets/comp/offline/offline.min.js"), "html", null, true);
         echo "\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 181
+        // line 185
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 182
+        // line 186
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-ui-1.10.1.custom.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 183
+        // line 187
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "bootstrap/js/bootstrap.min.js\" type=\"text/javascript\"></script>
         ";
-        // line 184
+        // line 188
         echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
         echo "
         <script src=\"";
-        // line 185
+        // line 189
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/script.js\" type=\"text/javascript\"></script>
         ";
-        // line 186
+        // line 190
         $this->displayBlock('js', $context, $blocks);
-        // line 187
+        // line 191
         echo "        <script type=\"text/javascript\">
             \$( document ).ready(function() {
                 \$(\"body\").show();
@@ -462,12 +473,12 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
     {
     }
 
-    // line 158
+    // line 162
     public function block_content($context, array $blocks = array())
     {
     }
 
-    // line 186
+    // line 190
     public function block_js($context, array $blocks = array())
     {
     }
@@ -484,6 +495,6 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
 
     public function getDebugInfo()
     {
-        return array (  471 => 186,  466 => 158,  461 => 14,  455 => 6,  444 => 187,  442 => 186,  438 => 185,  434 => 184,  430 => 183,  426 => 182,  422 => 181,  418 => 180,  414 => 179,  409 => 177,  405 => 176,  395 => 171,  391 => 170,  378 => 159,  376 => 158,  365 => 150,  360 => 147,  354 => 144,  350 => 143,  343 => 139,  339 => 138,  335 => 137,  328 => 133,  324 => 132,  320 => 131,  316 => 130,  313 => 129,  311 => 128,  308 => 127,  302 => 124,  298 => 123,  291 => 119,  287 => 118,  283 => 117,  276 => 113,  272 => 112,  268 => 111,  264 => 110,  260 => 109,  257 => 108,  255 => 107,  252 => 106,  246 => 103,  242 => 102,  235 => 98,  231 => 97,  227 => 96,  220 => 92,  216 => 91,  212 => 90,  205 => 86,  201 => 85,  194 => 81,  190 => 80,  186 => 79,  183 => 78,  181 => 77,  161 => 60,  158 => 59,  152 => 57,  150 => 56,  147 => 55,  141 => 53,  139 => 52,  136 => 51,  130 => 49,  128 => 48,  121 => 44,  115 => 41,  112 => 40,  107 => 38,  102 => 37,  100 => 36,  90 => 29,  82 => 26,  78 => 25,  66 => 16,  61 => 15,  59 => 14,  54 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
+        return array (  482 => 190,  477 => 162,  472 => 14,  466 => 6,  455 => 191,  453 => 190,  449 => 189,  445 => 188,  441 => 187,  437 => 186,  433 => 185,  429 => 184,  425 => 183,  420 => 181,  416 => 180,  406 => 175,  402 => 174,  389 => 163,  387 => 162,  384 => 161,  378 => 159,  376 => 158,  365 => 150,  360 => 147,  354 => 144,  350 => 143,  343 => 139,  339 => 138,  335 => 137,  328 => 133,  324 => 132,  320 => 131,  316 => 130,  313 => 129,  311 => 128,  308 => 127,  302 => 124,  298 => 123,  291 => 119,  287 => 118,  283 => 117,  276 => 113,  272 => 112,  268 => 111,  264 => 110,  260 => 109,  257 => 108,  255 => 107,  252 => 106,  246 => 103,  242 => 102,  235 => 98,  231 => 97,  227 => 96,  220 => 92,  216 => 91,  212 => 90,  205 => 86,  201 => 85,  194 => 81,  190 => 80,  186 => 79,  183 => 78,  181 => 77,  161 => 60,  158 => 59,  152 => 57,  150 => 56,  147 => 55,  141 => 53,  139 => 52,  136 => 51,  130 => 49,  128 => 48,  121 => 44,  115 => 41,  112 => 40,  107 => 38,  102 => 37,  100 => 36,  90 => 29,  82 => 26,  78 => 25,  66 => 16,  61 => 15,  59 => 14,  54 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
     }
 }

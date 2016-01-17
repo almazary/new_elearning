@@ -155,6 +155,10 @@
                     <!--/.span3-->
                     <div class="span9">
                         <div class="content">
+                            {% if pass_siswa_equal_nis() == true %}
+                                {{ get_alert('warning', "Dimohon untuk segera mengganti password anda untuk alasan keamanan. " ~ anchor('login/pp#akun', 'Profilku'))|raw }}
+                            {% endif %}
+
                             {% block content %}{% endblock %}
                         </div>
                     </div>
