@@ -137,3 +137,25 @@ Profilku - {{ parent() }}
     </div>
 </div>
 {% endblock %}
+
+{% if show is not empty %}
+    {% block js %}
+        {% if show == 'edit-password' %}
+        <script type="text/javascript">
+        $(document).ready(function(){
+            $.colorbox({
+                iframe:true,
+                width:"500",
+                height:"305",
+                fixed:true,
+                onClosed : function() {
+                    location.href = site_url + '/login/pp';
+                },
+                href: $(".iframe-3").attr('href'),
+                transition: "none"
+            });
+        });
+        </script>
+        {% endif %}
+    {% endblock %}
+{% endif %}

@@ -12,6 +12,7 @@ class __TwigTemplate_ddbe86978e31e34bdf8da20ae6e19aaf6c259042e87caf47a7fd947e081
         $this->blocks = array(
             'title' => array($this, 'block_title'),
             'content' => array($this, 'block_content'),
+            'js' => array($this, 'block_js'),
         );
     }
 
@@ -22,6 +23,9 @@ class __TwigTemplate_ddbe86978e31e34bdf8da20ae6e19aaf6c259042e87caf47a7fd947e081
 
     protected function doDisplay(array $context, array $blocks = array())
     {
+        // line 141
+        if ((!twig_test_empty((isset($context["show"]) ? $context["show"] : null)))) {
+        }
         $this->parent->display($context, array_merge($this->blocks, $blocks));
     }
 
@@ -257,6 +261,34 @@ class __TwigTemplate_ddbe86978e31e34bdf8da20ae6e19aaf6c259042e87caf47a7fd947e081
 ";
     }
 
+    // line 142
+    public function block_js($context, array $blocks = array())
+    {
+        // line 143
+        echo "        ";
+        if (((isset($context["show"]) ? $context["show"] : null) == "edit-password")) {
+            // line 144
+            echo "        <script type=\"text/javascript\">
+        \$(document).ready(function(){
+            \$.colorbox({
+                iframe:true,
+                width:\"500\",
+                height:\"305\",
+                fixed:true,
+                onClosed : function() {
+                    location.href = site_url + '/login/pp';
+                },
+                href: \$(\".iframe-3\").attr('href'),
+                transition: \"none\"
+            });
+        });
+        </script>
+        ";
+        }
+        // line 160
+        echo "    ";
+    }
+
     public function getTemplateName()
     {
         return "pp-siswa.html";
@@ -269,6 +301,6 @@ class __TwigTemplate_ddbe86978e31e34bdf8da20ae6e19aaf6c259042e87caf47a7fd947e081
 
     public function getDebugInfo()
     {
-        return array (  241 => 124,  229 => 115,  225 => 114,  213 => 104,  206 => 102,  202 => 100,  198 => 98,  196 => 97,  193 => 96,  191 => 95,  186 => 93,  181 => 91,  178 => 90,  174 => 89,  169 => 86,  165 => 84,  163 => 83,  143 => 65,  139 => 63,  135 => 61,  131 => 59,  127 => 57,  125 => 56,  117 => 51,  110 => 47,  103 => 43,  96 => 39,  89 => 35,  82 => 31,  75 => 27,  67 => 22,  62 => 20,  52 => 13,  48 => 12,  42 => 8,  39 => 7,  32 => 4,  29 => 3,);
+        return array (  289 => 160,  271 => 144,  268 => 143,  265 => 142,  245 => 124,  233 => 115,  229 => 114,  217 => 104,  210 => 102,  206 => 100,  202 => 98,  200 => 97,  197 => 96,  195 => 95,  190 => 93,  185 => 91,  182 => 90,  178 => 89,  173 => 86,  169 => 84,  167 => 83,  147 => 65,  143 => 63,  139 => 61,  135 => 59,  131 => 57,  129 => 56,  121 => 51,  114 => 47,  107 => 43,  100 => 39,  93 => 35,  86 => 31,  79 => 27,  71 => 22,  66 => 20,  56 => 13,  52 => 12,  46 => 8,  43 => 7,  36 => 4,  33 => 3,  27 => 141,);
     }
 }
