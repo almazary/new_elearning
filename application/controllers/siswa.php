@@ -478,6 +478,11 @@ class Siswa extends MY_Controller
             exit('Akses ditolak');
         }
 
+        # cek pengaturan
+        if (is_siswa() AND get_pengaturan('edit-foto-siswa', 'value') == '0') {
+            exit('Maaf fitur dinonaktifkan oleh administrator');
+        }
+
         $status_id      = (int)$segment_3;
         $siswa_id       = (int)$segment_4;
         $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
@@ -608,6 +613,11 @@ class Siswa extends MY_Controller
     {
         if (is_pengajar()) {
             exit('Akses ditolak');
+        }
+
+        # cek pengaturan
+        if (is_siswa() AND get_pengaturan('edit-username-siswa', 'value') == '0') {
+            exit('Maaf fitur dinonaktifkan oleh administrator');
         }
 
         $status_id      = (int)$segment_3;

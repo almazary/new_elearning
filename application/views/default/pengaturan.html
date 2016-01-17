@@ -110,6 +110,28 @@ Pengaturan - {{ parent() }}
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label">Edit username siswa</label>
+                <div class="controls">
+                    <label class="radio inline">
+                        <input type="radio" name="edit-username-siswa" value="1" {{ set_radio('edit-username-siswa', '1', ((in_array(get_pengaturan('edit-username-siswa', 'value'), ['', '1'])) ? true)) }}> Siswa dapat mengganti username
+                    </label>
+                    <label class="radio inline">
+                        <input type="radio" name="edit-username-siswa" value="0" {{ set_radio('edit-username-siswa', '0', ((get_pengaturan('edit-username-siswa', 'value') == '0') ? true)) }}> Siswa tidak dapat mengganti username
+                    </label>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Edit foto siswa</label>
+                <div class="controls">
+                    <label class="radio inline">
+                        <input type="radio" name="edit-foto-siswa" value="1" {{ set_radio('edit-foto-siswa', '1', ((in_array(get_pengaturan('edit-foto-siswa', 'value'), ['', '1'])) ? true)) }}> Siswa dapat mengganti foto
+                    </label>
+                    <label class="radio inline">
+                        <input type="radio" name="edit-foto-siswa" value="0" {{ set_radio('edit-foto-siswa', '0', ((get_pengaturan('edit-foto-siswa', 'value') == '0') ? true)) }}> Siswa tidak dapat mengganti foto
+                    </label>
+                </div>
+            </div>
+            <div class="control-group">
                 <label class="control-label">Slider halaman login</label>
                 <div class="controls" style="background-color: #FBFBFB; padding: 10px;border-radius: 5px;">
                     <table class="table table-condensed">
