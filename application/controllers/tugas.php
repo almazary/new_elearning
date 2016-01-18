@@ -1053,6 +1053,9 @@ class Tugas extends MY_Controller
 
         if ($tugas['type_id'] != 1) {
             $html_js = load_comp_js(array(
+                base_url('assets/comp/moment/moment.js'),
+                base_url('assets/comp/moment/moment-timezone-with-data.js'),
+                base_url('assets/comp/moment/tzdetect.js'),
                 base_url('assets/comp/jquery.countdown/jquery.countdown.min.js'),
                 base_url('assets/comp/jquery.countdown/script.js'),
             ));
