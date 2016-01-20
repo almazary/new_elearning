@@ -6,12 +6,13 @@ class MY_Controller extends CI_Controller
     public $update_link;
     public $portal_update_link;
     public $bug_tracker_link;
+    public $default_timezone = "Asia/Jakarta";
 
     function __construct()
     {
         parent::__construct();
 
-        date_default_timezone_set('Asia/Jakarta');
+        date_default_timezone_set($this->default_timezone);
 
         # load helper
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download', 'plugins'));

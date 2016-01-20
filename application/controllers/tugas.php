@@ -958,6 +958,7 @@ class Tugas extends MY_Controller
         $field_name  = 'Mengerjakan Tugas';
 
         $mulai   = date('Y-m-d H:i:s');
+        $mulai   = get_time_convert_zone_user($mulai);
         $durasi  = $tugas['durasi'];
         $selesai = date('Y-m-d H:i:s', strtotime("+$durasi minutes", strtotime($mulai)));
 
@@ -986,7 +987,7 @@ class Tugas extends MY_Controller
             $check_field_value = json_decode($check_field['value'], 1);
 
             # cek upload tidak dan sudah selesai belum dari segi waktunya
-            if ($tugas['type_id'] != 1 AND strtotime(date('Y-m-d H:i:s')) >= strtotime($check_field_value['selesai'])) {
+            if ($tugas['type_id'] != 1 AND strtotime($mulai) >= strtotime($check_field_value['selesai'])) {
                 redirect('tugas/finish/' . $tugas['id'] . '/' . $check_field_value['unix_id']);
             }
         }
@@ -1053,9 +1054,6 @@ class Tugas extends MY_Controller
 
         if ($tugas['type_id'] != 1) {
             $html_js = load_comp_js(array(
-                base_url('assets/comp/moment/moment.js'),
-                base_url('assets/comp/moment/moment-timezone-with-data.js'),
-                base_url('assets/comp/moment/tzdetect.js'),
                 base_url('assets/comp/jquery.countdown/jquery.countdown.min.js'),
                 base_url('assets/comp/jquery.countdown/script.js'),
             ));

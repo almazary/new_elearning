@@ -48,6 +48,24 @@ class Ajax extends MY_Controller
     function post_data($page)
     {
         switch ($page) {
+            case 'save-time-zone':
+                $tz = $this->input->post('tz', true);
+                $ip = get_ip();
+
+                # cek valid atau tidak timezonennya
+                if (!in_array($tz, DateTimeZone::listIdentifiers())) {
+                    die;
+                }
+
+                $field_id = "tz-" . $ip;
+                $retrieve = retrieve_field($field_id);
+                if (empty($retrieve)) {
+                    create_field($field_id, "Timezone IP $ip", $tz);
+                } else {
+                    update_field($field_id, "Timezone IP $ip", $tz);
+                }
+            break;
+
             case 'hirarki_kelas':
                 $o = 1;
                 foreach ((array)$_POST['list'] as $id => $parent_id){
