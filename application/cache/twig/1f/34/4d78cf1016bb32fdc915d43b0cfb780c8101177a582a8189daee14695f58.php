@@ -470,10 +470,17 @@ class __TwigTemplate_1f344d78cf1016bb32fdc915d43b0cfb780c8101177a582a8189daee146
         if ((is_admin() && (!twig_test_empty((isset($context["siswas"]) ? $context["siswas"] : null))))) {
             // line 210
             echo "        <br>
-        <a class=\"pull-right btn btn-default\" href=\"";
-            // line 211
+        <div class=\"btn-group pull-right\">
+            <a class=\"btn btn-default\" href=\"";
+            // line 212
             echo twig_escape_filter($this->env, site_url("plugins/import_export_siswa/export_excel"), "html", null, true);
             echo "\" target=\"_blank\">Export excel</a>
+            <a data-original-title=\"Informasi\" href=\"#\" class=\"btn btn-default\" data-toggle=\"popover\" data-html=\"true\" data-placement=\"left\" data-content=\"Password siswa hasil filter akan diubah ke NIS. Jika NIS kosong akan diubah menjadi *123<br><br><a href='";
+            // line 213
+            echo twig_escape_filter($this->env, site_url("plugins/cetak_info_login/index"), "html", null, true);
+            echo "' class='btn btn-primary' target='_blank'>Ok Cetak</a>\">Cetak info login</a>
+        </div>
+
         <div class=\"row-fluid\">
             <div class=\"span8\">
                 <table cellpadding=\"5\">
@@ -491,11 +498,11 @@ class __TwigTemplate_1f344d78cf1016bb32fdc915d43b0cfb780c8101177a582a8189daee146
                             <select name=\"kelas_id\" style=\"width:auto;\">
                                 <option value=\"\">--Pindah Kelas--</option>
                                 ";
-            // line 228
+            // line 232
             $context['_parent'] = (array) $context;
             $context['_seq'] = twig_ensure_traversable((isset($context["kelas"]) ? $context["kelas"] : null));
             foreach ($context['_seq'] as $context["_key"] => $context["k"]) {
-                // line 229
+                // line 233
                 echo "                                    <option value=\"";
                 echo twig_escape_filter($this->env, $this->getAttribute((isset($context["k"]) ? $context["k"] : null), "id"), "html", null, true);
                 echo "\">";
@@ -506,7 +513,7 @@ class __TwigTemplate_1f344d78cf1016bb32fdc915d43b0cfb780c8101177a582a8189daee146
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['k'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 231
+            // line 235
             echo "                            </select>
                         </td>
                         <td valign=\"top\">
@@ -518,16 +525,16 @@ class __TwigTemplate_1f344d78cf1016bb32fdc915d43b0cfb780c8101177a582a8189daee146
         </div>
         ";
         }
-        // line 241
+        // line 245
         echo "
         ";
-        // line 242
+        // line 246
         echo form_close();
         echo "
 
         <br>
         ";
-        // line 245
+        // line 249
         echo (isset($context["pagination"]) ? $context["pagination"] : null);
         echo "
 
@@ -536,23 +543,23 @@ class __TwigTemplate_1f344d78cf1016bb32fdc915d43b0cfb780c8101177a582a8189daee146
 ";
     }
 
-    // line 251
+    // line 255
     public function block_js($context, array $blocks = array())
     {
-        // line 252
+        // line 256
         echo "<script type=\"text/javascript\">
 \$(function() {
     function view_form_search() {
         \$(\"#form-search\").toggle();
     }
     ";
-        // line 257
+        // line 261
         if ((!twig_test_empty((isset($context["filter"]) ? $context["filter"] : null)))) {
-            // line 258
+            // line 262
             echo "    view_form_search();
     ";
         }
-        // line 260
+        // line 264
         echo "    \$( \"#button\" ).click(function() {
     view_form_search();
     });
@@ -580,6 +587,6 @@ function ch_uch_checkbox(source){
 
     public function getDebugInfo()
     {
-        return array (  556 => 260,  552 => 258,  550 => 257,  543 => 252,  540 => 251,  531 => 245,  525 => 242,  522 => 241,  510 => 231,  499 => 229,  495 => 228,  475 => 211,  472 => 210,  470 => 209,  465 => 206,  456 => 202,  450 => 200,  443 => 196,  438 => 195,  432 => 193,  430 => 192,  426 => 191,  422 => 190,  418 => 189,  414 => 188,  408 => 186,  406 => 185,  395 => 181,  389 => 180,  385 => 179,  378 => 176,  370 => 174,  368 => 173,  364 => 171,  360 => 170,  351 => 163,  347 => 161,  345 => 160,  337 => 155,  329 => 150,  320 => 143,  313 => 139,  308 => 136,  306 => 135,  298 => 131,  293 => 129,  289 => 128,  284 => 127,  282 => 126,  273 => 119,  260 => 117,  256 => 116,  245 => 108,  241 => 107,  237 => 106,  233 => 105,  229 => 104,  219 => 97,  210 => 91,  207 => 90,  194 => 88,  190 => 87,  185 => 84,  172 => 82,  168 => 81,  157 => 73,  148 => 67,  137 => 59,  131 => 56,  120 => 48,  111 => 42,  103 => 37,  98 => 34,  89 => 28,  85 => 27,  81 => 26,  77 => 25,  73 => 24,  65 => 19,  61 => 18,  57 => 16,  55 => 15,  50 => 13,  43 => 8,  40 => 7,  33 => 4,  30 => 3,);
+        return array (  563 => 264,  559 => 262,  557 => 261,  550 => 256,  547 => 255,  538 => 249,  532 => 246,  529 => 245,  517 => 235,  506 => 233,  502 => 232,  480 => 213,  476 => 212,  472 => 210,  470 => 209,  465 => 206,  456 => 202,  450 => 200,  443 => 196,  438 => 195,  432 => 193,  430 => 192,  426 => 191,  422 => 190,  418 => 189,  414 => 188,  408 => 186,  406 => 185,  395 => 181,  389 => 180,  385 => 179,  378 => 176,  370 => 174,  368 => 173,  364 => 171,  360 => 170,  351 => 163,  347 => 161,  345 => 160,  337 => 155,  329 => 150,  320 => 143,  313 => 139,  308 => 136,  306 => 135,  298 => 131,  293 => 129,  289 => 128,  284 => 127,  282 => 126,  273 => 119,  260 => 117,  256 => 116,  245 => 108,  241 => 107,  237 => 106,  233 => 105,  229 => 104,  219 => 97,  210 => 91,  207 => 90,  194 => 88,  190 => 87,  185 => 84,  172 => 82,  168 => 81,  157 => 73,  148 => 67,  137 => 59,  131 => 56,  120 => 48,  111 => 42,  103 => 37,  98 => 34,  89 => 28,  85 => 27,  81 => 26,  77 => 25,  73 => 24,  65 => 19,  61 => 18,  57 => 16,  55 => 15,  50 => 13,  43 => 8,  40 => 7,  33 => 4,  30 => 3,);
     }
 }

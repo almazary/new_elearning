@@ -2096,3 +2096,29 @@ filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', end
 .as-link {
 	cursor: pointer;
 }
+
+@media (min-width:992px) {
+    .desktop-only {
+        display:block !important;
+    }
+}
+
+.brand-txt {
+	float:right;
+	margin-top: 10px;
+	margin-left: 5px;
+}
+
+@media (max-width: 991px) {
+    .mobile-only {
+        display:block !important;
+    }
+
+    .desktop-only {
+        display:none !important;
+    }
+
+    .mobile-12 {
+    	width:100%;
+    }
+}
