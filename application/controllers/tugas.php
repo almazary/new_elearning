@@ -1143,16 +1143,22 @@ class Tugas extends MY_Controller
                 $jml_salah = 0;
 
                 # cari jawabannya
-                foreach ($check_field_value['jawaban'] as $pertanyaan_id => $pilihan_id) {
-                    # cek jawaban benar tidak
-                    if (isset($data_kunci[$pertanyaan_id]) && $data_kunci[$pertanyaan_id] == $pilihan_id) {
-                        $jml_benar++;
-                    } else {
-                        $jml_salah++;
+                if (!empty($check_field_value['jawaban'])) {
+                    foreach ($check_field_value['jawaban'] as $pertanyaan_id => $pilihan_id) {
+                        # cek jawaban benar tidak
+                        if (isset($data_kunci[$pertanyaan_id]) && $data_kunci[$pertanyaan_id] == $pilihan_id) {
+                            $jml_benar++;
+                        } else {
+                            $jml_salah++;
+                        }
                     }
-                }
 
-                $nilai = ($jml_benar / $jml_soal) * 100;
+                    $nilai = ($jml_benar / $jml_soal) * 100;
+                } else {
+                    $jml_benar = 0;
+                    $jml_salah = 0;
+                    $nilai     = 0;
+                }
 
                 # simpan nilai
                 $this->tugas_model->create_nilai($nilai, $tugas['id'], get_sess_data('user', 'id'));
