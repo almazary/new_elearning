@@ -1,4 +1,7 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 # include plugin helper file
-include './plugins/helpers/helper.php';
+$path_plugin_helper = './plugins/helpers/helper.php';
+if (is_file($path_plugin_helper)) {
+    include $path_plugin_helper;
+}

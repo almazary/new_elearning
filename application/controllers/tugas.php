@@ -969,7 +969,7 @@ class Tugas extends MY_Controller
 
         # untuk keperluan check sedang ujian
         $field_value['valid_route'] = array(
-            '/tugas/mengerjakan',
+            '/tugas/kerjakan',
             '/tugas/finish',
             '/tugas/submit_essay',
             '/tugas/submit_upload',
