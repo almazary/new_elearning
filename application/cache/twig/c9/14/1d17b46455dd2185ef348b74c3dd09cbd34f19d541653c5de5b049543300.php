@@ -250,38 +250,30 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
         echo "\" type=\"text/javascript\"></script>
         <script src=\"";
         // line 113
-        echo twig_escape_filter($this->env, base_url("assets/comp/jquery/jstz.min.js"), "html", null, true);
-        echo "\" type=\"text/javascript\"></script>
-        <script src=\"";
-        // line 114
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-1.9.1.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 115
+        // line 114
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/jquery-ui-1.10.1.custom.min.js\" type=\"text/javascript\"></script>
         <script src=\"";
-        // line 116
+        // line 115
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "bootstrap/js/bootstrap.min.js\" type=\"text/javascript\"></script>
         ";
-        // line 117
+        // line 116
         echo (isset($context["comp_js"]) ? $context["comp_js"] : null);
         echo "
         <script src=\"";
-        // line 118
+        // line 117
         echo twig_escape_filter($this->env, (isset($context["base_url_theme"]) ? $context["base_url_theme"] : null), "html", null, true);
         echo "scripts/script.js\" type=\"text/javascript\"></script>
         ";
-        // line 119
+        // line 118
         $this->displayBlock('js', $context, $blocks);
-        // line 120
+        // line 119
         echo "        <script type=\"text/javascript\">
             \$( document ).ready(function() {
-                var tz = jstz.determine();
-                var timezone = tz.name();
-                \$.post(site_url + \"/ajax/post_data/save-time-zone\", {tz: timezone});
-
                 \$(\"body\").show();
             });
         </script>
@@ -306,7 +298,7 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
     {
     }
 
-    // line 119
+    // line 118
     public function block_js($context, array $blocks = array())
     {
     }
@@ -323,6 +315,6 @@ class __TwigTemplate_c9141d17b46455dd2185ef348b74c3dd09cbd34f19d541653c5de5b0495
 
     public function getDebugInfo()
     {
-        return array (  310 => 119,  305 => 90,  300 => 14,  294 => 6,  279 => 120,  277 => 119,  273 => 118,  269 => 117,  265 => 116,  261 => 115,  257 => 114,  253 => 113,  249 => 112,  245 => 111,  240 => 109,  236 => 108,  226 => 103,  222 => 102,  209 => 91,  207 => 90,  204 => 89,  198 => 87,  196 => 86,  188 => 80,  186 => 79,  166 => 62,  163 => 61,  157 => 59,  155 => 58,  152 => 57,  146 => 55,  144 => 54,  141 => 53,  135 => 51,  133 => 50,  126 => 46,  120 => 43,  117 => 42,  112 => 40,  107 => 39,  105 => 38,  102 => 37,  100 => 36,  90 => 29,  82 => 26,  78 => 25,  66 => 16,  61 => 15,  59 => 14,  54 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
+        return array (  302 => 118,  297 => 90,  292 => 14,  286 => 6,  275 => 119,  273 => 118,  269 => 117,  265 => 116,  261 => 115,  257 => 114,  253 => 113,  249 => 112,  245 => 111,  240 => 109,  236 => 108,  226 => 103,  222 => 102,  209 => 91,  207 => 90,  204 => 89,  198 => 87,  196 => 86,  188 => 80,  186 => 79,  166 => 62,  163 => 61,  157 => 59,  155 => 58,  152 => 57,  146 => 55,  144 => 54,  141 => 53,  135 => 51,  133 => 50,  126 => 46,  120 => 43,  117 => 42,  112 => 40,  107 => 39,  105 => 38,  102 => 37,  100 => 36,  90 => 29,  82 => 26,  78 => 25,  66 => 16,  61 => 15,  59 => 14,  54 => 12,  50 => 11,  46 => 10,  42 => 9,  38 => 8,  34 => 7,  30 => 6,  23 => 1,);
     }
 }

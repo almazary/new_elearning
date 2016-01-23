@@ -958,7 +958,6 @@ class Tugas extends MY_Controller
         $field_name  = 'Mengerjakan Tugas';
 
         $mulai   = date('Y-m-d H:i:s');
-        $mulai   = get_time_convert_zone_user($mulai);
         $durasi  = $tugas['durasi'];
         $selesai = date('Y-m-d H:i:s', strtotime("+$durasi minutes", strtotime($mulai)));
 
@@ -1047,15 +1046,23 @@ class Tugas extends MY_Controller
         }
         $check_field_value['pertanyaan'] = $soal;
 
+        # cari sisa waktu dalam menit
+        $sisa_menit = (strtotime($check_field_value['selesai']) - strtotime($mulai));
+        $check_field_value['sisa_menit'] = ceil($sisa_menit);
+
         # save data
         $data['data'] = $check_field_value;
-
-        $html_js = '';
+        $html_js      = '';
+        $html_css     = '';
 
         if ($tugas['type_id'] != 1) {
             $html_js = load_comp_js(array(
-                base_url('assets/comp/jquery.countdown/jquery.countdown.min.js'),
-                base_url('assets/comp/jquery.countdown/script.js'),
+                base_url('assets/comp/jcounter/js/jquery.jCounter-0.1.4.js'),
+                base_url('assets/comp/jquery/ujian.js'),
+            ));
+
+            $html_css .= load_comp_css(array(
+                base_url('assets/comp/jcounter/css/jquery.jCounter-iosl.css'),
             ));
         }
 
@@ -1067,7 +1074,8 @@ class Tugas extends MY_Controller
             $data['data']['str_id'] = implode(',', $check_field_value['pertanyaan_id']);
         }
 
-        $data['comp_js'] = $html_js;
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = $html_css;
         $this->twig->display('ujian-online.html', $data);
     }
 

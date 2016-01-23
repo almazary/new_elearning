@@ -1132,38 +1132,3 @@ function pass_siswa_equal_nis()
 
     return false;
 }
-
-/**
- * Method untuk mengambil timezone berdasarkan ip user yang login
- *
- * @return string
- */
-function get_timezone_user()
-{
-    if (is_login()) {
-        $ip = get_ip();
-        $field_id = "tz-" . $ip;
-        $retrieve = retrieve_field($field_id);
-        if (!empty($retrieve)) {
-            return $retrieve['value'];
-        }
-    }
-}
-
-/**
- * Method untuk mengkonversi tgl dari zone Asia/Jakarta ke zone user
- *
- * @param  string $datetime Y-m-d H:i:s
- * @return string
- */
-function get_time_convert_zone_user($datetime)
-{
-    $tz_user = get_timezone_user();
-    if (empty($tz_user) OR $tz_user == "Asia/Jakarta") {
-        return $datetime;
-    }
-
-    $obj_date = new DateTime($datetime, new DateTimeZone("Asia/Jakarta") );
-    $obj_date->setTimeZone(new DateTimeZone($tz_user));
-    return $obj_date->format('Y-m-d H:i:s');
-}

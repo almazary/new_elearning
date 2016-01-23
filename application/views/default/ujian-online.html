@@ -6,15 +6,6 @@
 
 {% block css %}
 <style type="text/css">
-    #clock {
-        font-size: 25px;
-        margin-top: 5px;
-        font-weight: bold;
-        text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.2);
-    }
-    .clock-info {
-        font-weight: normal;
-    }
     img.nav-avatar {
         width: 30px;
         height: 30px;
@@ -35,18 +26,12 @@
     .p-info {
         font-size: 18px;
     }
-    .box-clock {
-        background: rgb(245, 239, 230);
-        border:1px dashed red;
-        padding: 5px 10px 10px;
-        border-radius: 5px;
-    }
-    .affix {
-        position: fixed;
-        margin-top: -60px;
-    }
     hr.hr1 {
         margin-top: 5px;
+    }
+    .clock.affix {
+        margin-top: -50px;
+        margin-left: 60px;
     }
 </style>
 {% endblock %}
@@ -75,9 +60,23 @@
                         {{ data.tugas.info|raw_media|raw }}
                     </div>
                     <div class="span4">
-                        <div class="box-clock" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
-                            <b>Siswa waktu : </b><br>
-                            <div id="clock"></div>
+                        <div class="pull-right clock" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+                            <div class="iosl-theme-wrapper countdown">
+                                <div class="iosl-theme">
+                                    <ul>
+                                        <li><p><span><em><b class="hours">00</b><i class="hoursSlider"><u>00</u><u>00</u></i></em></span></p></li>
+                                        <li><p><span><em><b class="minutes">00</b><i class="minutesSlider"><u>00</u><u>00</u></i></em></span></p></li>
+                                        <li><p><span><em><b class="seconds">00</b><i class="secondsSlider"><u>00</u><u>00</u></i></em></span></p></li>
+                                    </ul>
+                                    <div class="jC-clear"></div>
+                                    <p class="jCtext">
+                                        <span><em class="textSeconds">SECONDS</em></span>
+                                        <span><em class="textMinutes">MINUTES</em></span>
+                                        <span><em class="textHours">HOURS</em></span>
+                                    </p>
+                                    <div class="jC-clear"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {% else %}
@@ -201,7 +200,7 @@
 </div>
 {% if data.tugas.type_id != 1 %}
 <input type="hidden" id="tugas_id" value="{{ data.tugas.id }}">
-<input type="hidden" id="final_date" value="{{ data.selesai }}">
+<input type="hidden" id="sisa_menit" value="{{ data.sisa_menit }}">
 <input type="hidden" id="finish_url" value="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}">
 {% endif %}
 {% endblock %}

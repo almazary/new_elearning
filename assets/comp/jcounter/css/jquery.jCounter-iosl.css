@@ -1,0 +1,164 @@
+/***************************************************
+* Stylesheet: Part of the jCounter jQuery plugin
+* Official page: http://devingredients.com/jcounter
+* Author: Catalin Berta
+* Licensed under the MIT license
+* NOTE: To resize the counter, you can do so by just changing the main font-size from .dsb-theme-wrapper (line 16);
+***************************************************/
+
+/* iOS Light theme */
+.iosl-theme * {
+	margin: 0;
+	padding: 0;
+}
+.iosl-theme-wrapper {
+	display: inline-block;
+	font: normal normal 40px helvetica-light, helvetica, arial, sans-serif !important; /* change font-size to resize counter */
+	zoom: 1;
+  	*display: inline;
+}
+.iosl-theme, .iosl-btn {
+	background-color: #e2e7ec;
+	border: 0.02em solid #e7e7e7;
+	padding: 0.4em 0.3em;
+	text-align: center;
+	background: -moz-linear-gradient(top, #f6f7f7 0%, #dfe5ea 100%);
+	background: -ms-linear-gradient(top, #f6f7f7 0%, #dfe5ea 100%);
+	background: -o-linear-gradient(top, #f6f7f7 0%, #dfe5ea 100%);
+	background: -webkit-linear-gradient(top, #f6f7f7 0%, #dfe5ea 100%);
+	background: linear-gradient(top, #f6f7f7 0%, #dfe5ea 100%);
+	-moz-border-radius: 0.12em;
+	-ms-border-radius: 0.12em;
+	-o-border-radius: 0.12em;
+	-webkit-border-radius: 0.12em;
+	border-radius: 0.12em;
+	-moz-box-shadow: 0 0.03em 0.10em rgba(0,0,0,0.20), 0 -0.03em 0 rgba(0,0,0,0.15) inset;
+	-ms-box-shadow: 0 0.03em 0.10em rgba(0,0,0,0.20), 0 -0.03em 0 rgba(0,0,0,0.15) inset;
+	-o-box-shadow: 0 0.03em 0.10em rgba(0,0,0,0.20), 0 -0.03em 0 rgba(0,0,0,0.15) inset;
+	-webkit-box-shadow: 0 0.03em 0.10em rgba(0,0,0,0.20), 0 -0.03em 0 rgba(0,0,0,0.15) inset;
+	box-shadow: 0 0.03em 0.10em rgba(0,0,0,0.20), 0 -0.03em 0 rgba(0,0,0,0.15) inset;
+}
+.iosl-theme ul li {
+	background-color: #b3c0cb;
+	color: #6d7f8f;
+	float: left;
+	font-size: inherit !important;
+	height: 1.3em;
+	list-style-type: none;
+	margin: 0 0.12em;
+	min-width: 1.42em;
+	padding-right: 0.02em;
+	-moz-border-radius: 0.04em;
+	-ms-border-radius: 0.04em;
+	-o-border-radius: 0.04em;
+	-webkit-border-radius: 0.04em;
+	border-radius: 0.04em;
+	-moz-box-shadow: 0 0.02em 0 rgba(0,0,0,0.10);
+	-ms-box-shadow: 0 0.02em 0 rgba(0,0,0,0.10);
+	-o-box-shadow: 0 0.02em 0 rgba(0,0,0,0.10);
+	-webkit-box-shadow: 0 0.02em 0 rgba(0,0,0,0.10);
+	box-shadow: 0 0.02em 0 rgba(0,0,0,0.10);
+}
+
+.iosl-theme ul li p {
+	background: #c3c7c8;
+	float: left;
+	font-size: inherit !important;
+	height: 1.26em;
+	margin: 0.02em 0 0 0.02em;
+	padding-right: 0.02em;
+	position: relative;
+	min-width: 1.38em;
+	-moz-border-radius: 0.02em;
+	-ms-border-radius: 0.02em;
+	-o-border-radius: 0.02em;
+	-webkit-border-radius: 0.02em;
+	border-radius: 0.02em;
+	text-shadow: 0 0.02em 0 rgba(255,255,255,0.80);
+}
+
+.iosl-theme ul li p span {
+	display: block;
+	float: left;
+	font-size: inherit !important;
+	height: 1.24em;
+	margin: 0.02em 0 0 0.02em;
+	min-width: 1.34em;
+	padding-right: 0.02em;
+	background: -moz-linear-gradient(top, #aebbc5 0%, #fff 50%, #aebbc5 100%);
+	background: -ms-linear-gradient(top, #aebbc5 0%, #fff 50%, #aebbc5 100%);
+	background: -o-linear-gradient(top, #aebbc5 0%, #fff 50%, #aebbc5 100%);
+	background: -webkit-linear-gradient(top, #aebbc5 0%, #fff 50%, #aebbc5 100%);
+	background: linear-gradient(top, #aebbc5 0%, #fff 50%, #aebbc5 100%);
+}
+
+.iosl-theme ul li p span em {
+	display: block;
+	float: left;
+	font-size: inherit !important;
+	font-style: inherit;
+	height: 1.24em;
+	margin: 0 0 0 0.02em;
+	min-width: 1.32em;
+	overflow: hidden;
+	position: relative;
+	background: -moz-linear-gradient(top, #c7d3d7 0%, #fff 50%, #c7d3d7 100%);
+	background: -ms-linear-gradient(top, #c7d3d7 0%, #fff 50%, #c7d3d7 100%);
+	background: -o-linear-gradient(top, #c7d3d7 0%, #fff 50%, #c7d3d7 100%);
+	background: -webkit-linear-gradient(top, #c7d3d7 0%, #fff 50%, #c7d3d7 100%);
+	background: linear-gradient(top, #c7d3d7 0%, #fff 50%, #c7d3d7 100%);
+}
+.iosl-theme ul li p span em b, .iosl-theme ul li p span em i {
+	display: block;
+	font-size: inherit !important;
+	font-weight: inherit;
+	height: 1.22em;
+	margin: 0.35em auto 0;
+	min-width: 1.12em;
+	padding: 0 0.13em;
+	z-index: 1;
+}
+.iosl-theme ul li p span em b {
+	visibility: hidden;
+}
+.iosl-theme ul li p span em i {
+	font-style: normal;
+	height: auto !important;
+	position: absolute;
+		top: -1.24em;
+		left: 0;
+}
+.iosl-theme ul li p span em i u {
+	display: block;
+	font-size: inherit !important;
+	height: 1.24em;
+	min-width: 1.12em;
+	text-decoration: none;
+}
+
+.iosl-theme .jCtext, .iosl-btn {
+	color: #6d7f8f;
+	font-size: inherit !important;
+	position: relative;
+		top: 0.05em;
+	text-decoration: none;
+	text-shadow: 0 0.02em 0 rgba(255,255,255,0.7);
+}
+.iosl-theme .jCtext span {
+	display: block;
+	float: right;
+	font-size: inherit !important;
+	line-height: 0.01em;
+	margin: 0 0.12em;
+	min-width: 1.5em;
+}
+.iosl-theme .jCtext span em {
+	font: normal bold 0.25em arial !important;
+}
+
+.iosl-theme .jC-clear {
+	clear: both;
+}
+.iosl-btn {
+	text-shadow: 0 0.05em 0 rgba(255,255,255,0.1);
+}
