@@ -48,7 +48,7 @@ Laporan Komentar Materi - {{ parent() }}
                             </div>
                             <div class="media-body">
                                 <p><a href="{{ l.komentar.login.link_profil }}"><b>{{ l.komentar.login.nama }}</b></a>, <small>{{ l.komentar.tgl_posting|date('d F Y') }}</small> | <b><a href="{{ site_url('materi/detail/' ~ l.materi.id) }}" target="_blank">{{ l.materi.judul }}</a></b></p>
-                                {{ l.komentar.konten|raw_youtube|raw }}
+                                {{ l.komentar.konten|raw_media|raw }}
                             </div>
                         </div>
                     </td>

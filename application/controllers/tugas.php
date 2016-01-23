@@ -945,8 +945,11 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
+        # dibuat variabel baru untuk php versi < 5.5
+        $sudah_mengerjakan = sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'));
+
         # cek sudah mengerjakan belum
-        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
+        if ($sudah_mengerjakan == true) {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
             redirect('tugas');
         }
@@ -955,12 +958,26 @@ class Tugas extends MY_Controller
         $field_name  = 'Mengerjakan Tugas';
 
         $mulai   = date('Y-m-d H:i:s');
-        $selesai = date('Y-m-d H:i:s', strtotime("+ $tugas[durasi] minutes", strtotime($mulai)));
+        $durasi  = $tugas['durasi'];
+        $selesai = date('Y-m-d H:i:s', strtotime("+$durasi minutes", strtotime($mulai)));
 
         $field_value = array(
-            'mulai'   => $mulai,
-            'selesai' => $selesai
+            'mulai'      => $mulai,
+            'selesai'    => $selesai,
+            'uri_string' => uri_string()
         );
+
+        # untuk keperluan check sedang ujian
+        $field_value['valid_route'] = array(
+            '/tugas/kerjakan',
+            '/tugas/finish',
+            '/tugas/submit_essay',
+            '/tugas/submit_upload',
+        );
+
+        # simpan tugas dan unix_id nya
+        $field_value['tugas']   = $tugas;
+        $field_value['unix_id'] = md5($field_id) . rand(9, 999999);
 
         # cek sudah pernah mengerjakan belum, untuk keamanan.
         # karna bisa saja dibuka 2 kali dikomputer yang berbeda
@@ -969,7 +986,7 @@ class Tugas extends MY_Controller
             $check_field_value = json_decode($check_field['value'], 1);
 
             # cek upload tidak dan sudah selesai belum dari segi waktunya
-            if ($tugas['type_id'] != 1 AND strtotime(date('Y-m-d H:i:s')) >= strtotime($check_field_value['selesai'])) {
+            if ($tugas['type_id'] != 1 AND strtotime($mulai) >= strtotime($check_field_value['selesai'])) {
                 redirect('tugas/finish/' . $tugas['id'] . '/' . $check_field_value['unix_id']);
             }
         }
@@ -992,21 +1009,28 @@ class Tugas extends MY_Controller
                 }
 
                 $field_value['pertanyaan_id'] = $pertanyaan_id;
-                $field_value['tugas']         = $tugas;
-                $field_value['unix_id']       = md5($field_id) . rand(9, 999999);
-                create_field($field_id, $field_name, json_encode($field_value));
-
             } else {
-                create_field($field_id, $field_name, json_encode(array(
-                    'mulai'   => $mulai,
-                    'tugas'   => $tugas,
-                    'unix_id' => md5($field_id) . rand(9, 999999)
-                )));
+                unset($field_value['selesai']);
             }
+
+            # simpan
+            create_field($field_id, $field_name, json_encode($field_value));
         }
 
         $check_field       = retrieve_field($field_id);
         $check_field_value = json_decode($check_field['value'], 1);
+
+        # kondisi untuk versi tugas yang terlanjur dibuat di versi < 1.5
+        if (!isset($check_field_value['pertanyaan_id']) AND isset($check_field_value['pertanyaan'])) {
+            $check_field_value['pertanyaan_id'] = array();
+            foreach ($check_field_value['pertanyaan'] as $key => $p) {
+                $check_field_value[$key] = $p['id'];
+            }
+
+            # update
+            unset($check_field_value['pertanyaan']);
+            update_field($field_id, $check_field['nama'], json_encode($check_field_value));
+        }
 
         # ini untuk mendapatkan data soal lengkapnya
         $soal = array();
@@ -1022,15 +1046,23 @@ class Tugas extends MY_Controller
         }
         $check_field_value['pertanyaan'] = $soal;
 
+        # cari sisa waktu dalam menit
+        $sisa_menit = (strtotime($check_field_value['selesai']) - strtotime($mulai));
+        $check_field_value['sisa_menit'] = ceil($sisa_menit);
+
         # save data
         $data['data'] = $check_field_value;
-
-        $html_js = '';
+        $html_js      = '';
+        $html_css     = '';
 
         if ($tugas['type_id'] != 1) {
             $html_js = load_comp_js(array(
-                base_url('assets/comp/jquery.countdown/jquery.countdown.min.js'),
-                base_url('assets/comp/jquery.countdown/script.js'),
+                base_url('assets/comp/jcounter/js/jquery.jCounter-0.1.4.js'),
+                base_url('assets/comp/jquery/ujian.js'),
+            ));
+
+            $html_css .= load_comp_css(array(
+                base_url('assets/comp/jcounter/css/jquery.jCounter-iosl.css'),
             ));
         }
 
@@ -1042,7 +1074,8 @@ class Tugas extends MY_Controller
             $data['data']['str_id'] = implode(',', $check_field_value['pertanyaan_id']);
         }
 
-        $data['comp_js'] = $html_js;
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = $html_css;
         $this->twig->display('ujian-online.html', $data);
     }
 
@@ -1062,8 +1095,11 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
+        # dibuat variabel baru untuk php versi < 5.5
+        $sudah_mengerjakan = sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'));
+
         # cek sudah mengerjakan belum
-        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
+        if ($sudah_mengerjakan == true) {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
             redirect('tugas');
         }
@@ -1081,6 +1117,16 @@ class Tugas extends MY_Controller
 
             # jika pilihan ganda langsung di hitung benar salahnya
             if ($tugas['type_id'] == 3) {
+                # kondisi untuk versi tugas yang terlanjur dibuat di versi < 1.5
+                if (!isset($check_field_value['pertanyaan_id']) AND isset($check_field_value['pertanyaan'])) {
+                    $check_field_value['pertanyaan_id'] = array();
+                    foreach ($check_field_value['pertanyaan'] as $key => $p) {
+                        $check_field_value[$key] = $p['id'];
+                    }
+
+                    unset($check_field_value['pertanyaan']);
+                }
+
                 $jml_soal = count($check_field_value['pertanyaan_id']);
 
                 # cari kunci jawaban
@@ -1097,16 +1143,22 @@ class Tugas extends MY_Controller
                 $jml_salah = 0;
 
                 # cari jawabannya
-                foreach ($check_field_value['jawaban'] as $pertanyaan_id => $pilihan_id) {
-                    # cek jawaban benar tidak
-                    if (isset($data_kunci[$pertanyaan_id]) && $data_kunci[$pertanyaan_id] == $pilihan_id) {
-                        $jml_benar++;
-                    } else {
-                        $jml_salah++;
+                if (!empty($check_field_value['jawaban'])) {
+                    foreach ($check_field_value['jawaban'] as $pertanyaan_id => $pilihan_id) {
+                        # cek jawaban benar tidak
+                        if (isset($data_kunci[$pertanyaan_id]) && $data_kunci[$pertanyaan_id] == $pilihan_id) {
+                            $jml_benar++;
+                        } else {
+                            $jml_salah++;
+                        }
                     }
-                }
 
-                $nilai = ($jml_benar / $jml_soal) * 100;
+                    $nilai = ($jml_benar / $jml_soal) * 100;
+                } else {
+                    $jml_benar = 0;
+                    $jml_salah = 0;
+                    $nilai     = 0;
+                }
 
                 # simpan nilai
                 $this->tugas_model->create_nilai($nilai, $tugas['id'], get_sess_data('user', 'id'));
@@ -1164,8 +1216,11 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
+        # dibuat variabel baru untuk php versi < 5.5
+        $sudah_mengerjakan = sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'));
+
         # cek sudah mengerjakan belum
-        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
+        if ($sudah_mengerjakan == true) {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
             redirect('tugas');
         }
@@ -1179,6 +1234,16 @@ class Tugas extends MY_Controller
             if ($unix_id != $check_field_value['unix_id']) {
                 $this->session->set_flashdata('tugas', get_alert('warning', 'Anda tidak mengerjakan tugas ini.'));
                 redirect('tugas');
+            }
+
+            # kondisi untuk versi tugas yang terlanjur dibuat di versi < 1.5
+            if (!isset($check_field_value['pertanyaan_id']) AND isset($check_field_value['pertanyaan'])) {
+                $check_field_value['pertanyaan_id'] = array();
+                foreach ($check_field_value['pertanyaan'] as $key => $p) {
+                    $check_field_value[$key] = $p['id'];
+                }
+
+                unset($check_field_value['pertanyaan']);
             }
 
             $post_jawaban = $this->input->post('jawaban');
@@ -1221,8 +1286,11 @@ class Tugas extends MY_Controller
             redirect('tugas');
         }
 
+        # dibuat variabel baru untuk php versi < 5.5
+        $sudah_mengerjakan = sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'));
+
         # cek sudah mengerjakan belum
-        if (sudah_ngerjakan($tugas['id'], get_sess_data('user', 'id'))) {
+        if ($sudah_mengerjakan == true) {
             $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
             redirect('tugas');
         }
@@ -1418,6 +1486,16 @@ class Tugas extends MY_Controller
                 continue;
             }
 
+            # kondisi untuk versi tugas yang terlanjur dibuat di versi < 1.5
+            if (!isset($history['pertanyaan_id']) AND isset($history['pertanyaan'])) {
+                $history['pertanyaan_id'] = array();
+                foreach ($history['pertanyaan'] as $key => $p) {
+                    $history[$key] = $p['id'];
+                }
+
+                unset($history['pertanyaan']);
+            }
+
             # cari siswa
             $siswa = $this->siswa_model->retrieve($siswa_id);
 
@@ -1505,19 +1583,24 @@ class Tugas extends MY_Controller
         }
 
         $history_value = json_decode($history['value'], 1);
-        $soal          = array();
-        foreach ($history_value['pertanyaan_id'] as $key => $p_id) {
-            $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
 
-            # jika pilihan ganda ambil pilihannya
-            if ($history_value['tugas']['type_id'] == 3) {
-                $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+        # ini utnuk mengantisipasi versi < 1.5
+        if (!empty($history_value['pertanyaan_id'])) {
+            $soal = array();
+            foreach ($history_value['pertanyaan_id'] as $key => $p_id) {
+                $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
+
+                # jika pilihan ganda ambil pilihannya
+                if ($history_value['tugas']['type_id'] == 3) {
+                    $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+                }
+
+                $soal[$key] = $pertanyaan;
             }
-
-            $soal[$key] = $pertanyaan;
+            $history_value['pertanyaan'] = $soal;
         }
-        $history_value['pertanyaan'] = $soal;
-        $data['history']             = $history_value;
+
+        $data['history'] = $history_value;
 
         if ($tugas['type_id'] == 3) {
             $this->twig->display('detail-jawaban-ganda.html', $data);

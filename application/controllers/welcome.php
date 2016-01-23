@@ -334,6 +334,28 @@ class Welcome extends MY_Controller
     {
         $this->twig->display('donation.html');
     }
+
+    function get_plugin()
+    {
+        $plugin_url  = 'http://elearningplugin.dokumenary.net/index.php';
+        $plugin_data = get_url_data($plugin_url);
+        $result_body = json_decode($plugin_data, true);
+
+        $data['plugins'] = $result_body;
+
+        # panggil datatables
+        $data['comp_js'] = load_comp_js(array(
+            base_url('assets/comp/datatables/jquery.dataTables.js'),
+            base_url('assets/comp/datatables/datatable-bootstrap2.js'),
+            base_url('assets/comp/datatables/script.js'),
+        ));
+
+        $data['comp_css'] = load_comp_css(array(
+            base_url('assets/comp/datatables/datatable-bootstrap2.css'),
+        ));
+
+        $this->twig->display('get-plugin.html', $data);
+    }
 }
 
 /* End of file welcome.php */

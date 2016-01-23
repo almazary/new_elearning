@@ -7,3 +7,7 @@
 /application/config/config.php
 /application/config/database.php
 /nbproject/
+/plugins/src/
+/plugins/views/
+/application/cache/twig/*
+!/application/cache/twig/index.html

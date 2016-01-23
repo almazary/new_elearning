@@ -63,13 +63,13 @@ Pengaturan - {{ parent() }}
             <div class="control-group">
                 <label class="control-label">Info Registrasi</label>
                 <div class="controls">
-                    <textarea name="info-registrasi" class="tinymce" style="width:100%; height:300px;">{{ set_value('info-registrasi', get_pengaturan('info-registrasi', 'value'))|raw }}</textarea>
+                    <textarea name="info-registrasi" class="tinymce" style="width:100%; height:300px;">{{ set_value('info-registrasi', get_pengaturan('info-registrasi', 'value')|raw_media)|raw }}</textarea>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">Peraturan E-learning</label>
                 <div class="controls">
-                    <textarea name="peraturan-elearning" class="tinymce" style="width:100%; height:300px;">{{ set_value('peraturan-elearning', get_pengaturan('peraturan-elearning', 'value'))|raw }}</textarea>
+                    <textarea name="peraturan-elearning" class="tinymce" style="width:100%; height:300px;">{{ set_value('peraturan-elearning', get_pengaturan('peraturan-elearning', 'value')|raw_media)|raw }}</textarea>
                 </div>
             </div>
             <div class="control-group">
@@ -107,6 +107,28 @@ Pengaturan - {{ parent() }}
                 <div class="controls">
                     <input type="text" name="smtp-port" class="span5" value="{{ set_value('smtp-port', get_pengaturan('smtp-port', 'value')) }}">
                     <br>{{ form_error('smtp-port')|raw }}
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Edit username siswa</label>
+                <div class="controls">
+                    <label class="radio inline">
+                        <input type="radio" name="edit-username-siswa" value="1" {{ set_radio('edit-username-siswa', '1', ((in_array(get_pengaturan('edit-username-siswa', 'value'), ['', '1'])) ? true)) }}> Siswa dapat mengganti username
+                    </label>
+                    <label class="radio inline">
+                        <input type="radio" name="edit-username-siswa" value="0" {{ set_radio('edit-username-siswa', '0', ((get_pengaturan('edit-username-siswa', 'value') == '0') ? true)) }}> Siswa tidak dapat mengganti username
+                    </label>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Edit foto siswa</label>
+                <div class="controls">
+                    <label class="radio inline">
+                        <input type="radio" name="edit-foto-siswa" value="1" {{ set_radio('edit-foto-siswa', '1', ((in_array(get_pengaturan('edit-foto-siswa', 'value'), ['', '1'])) ? true)) }}> Siswa dapat mengganti foto
+                    </label>
+                    <label class="radio inline">
+                        <input type="radio" name="edit-foto-siswa" value="0" {{ set_radio('edit-foto-siswa', '0', ((get_pengaturan('edit-foto-siswa', 'value') == '0') ? true)) }}> Siswa tidak dapat mengganti foto
+                    </label>
                 </div>
             </div>
             <div class="control-group">

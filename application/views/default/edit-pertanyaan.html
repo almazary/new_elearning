@@ -16,7 +16,7 @@
     <tbody>
         <tr>
             <td>
-                <textarea name="pertanyaan" id="pertanyaan" style="height:400px;width:100%;">{{ set_value('pertanyaan', html_entity_decode(pertanyaan.pertanyaan))|raw }}</textarea>
+                <textarea name="pertanyaan" id="pertanyaan" style="height:400px;width:100%;">{{ set_value('pertanyaan', pertanyaan.pertanyaan|raw_media)|raw }}</textarea>
                 {{ form_error('pertanyaan')|raw }}
             </td>
         <tr>

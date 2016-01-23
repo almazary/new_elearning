@@ -24,7 +24,7 @@
             <td>{{ tgl_jam_indo(history.tgl_submit) }}</td>
             <td>{{ history.total_waktu }}</td>
             {% if sudah_dikoreksi == true %}
-            <th>{{ nilai.nilai }}</th>
+            <th>{{ round(nilai.nilai, 2) }}</th>
             {% endif %}
         </tr>
     </tbody>
@@ -46,11 +46,11 @@
             </td>
             <td>
                 <div class="pertanyaan">
-                    {{ html_entity_decode(p.pertanyaan)|raw }}
+                    {{ p.pertanyaan|raw_media|raw }}
                 </div>
 
                 <b>Jawaban :</b>
-                {{ html_entity_decode(get_jawaban(history.jawaban, p.id))|raw }}
+                {{ get_jawaban(history.jawaban, p.id)|raw_media|raw }}
 
                 <b>Nilai :</b>
                 <br>

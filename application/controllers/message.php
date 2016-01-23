@@ -147,9 +147,11 @@ class Message extends MY_Controller
                 $user_receiver = $this->pengajar_model->retrieve($login_receiver['pengajar_id']);
             }
 
-            $data['receiver_name'] = $user_receiver['nama'] . " <$login_receiver[username]>";
+            $login_username = $login_receiver['username'];
+            $data['receiver_name'] = $user_receiver['nama'] . " [$login_username]";
         } else {
-            $data['receiver_name'] = $data['r']['profil']['nama'] . " <$data[r][login][username]>";
+            $login_username = $login_receiver['username'];
+            $data['receiver_name'] = $data['r']['profil']['nama'] . " [$login_username]>";
         }
 
         $html_js = get_tinymce('content');

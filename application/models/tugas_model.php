@@ -10,7 +10,8 @@ class Tugas_model extends CI_Model
 {
     public function retrieve_all_history($tugas_id)
     {
-        $this->db->like('id', $tugas_id, 'before');
+        $this->db->like('id', 'history-mengerjakan-');
+        $this->db->like('id', "-$tugas_id", 'before');
         $result = $this->db->get('field_tambahan');
         return $result->result_array();
     }
@@ -284,8 +285,9 @@ class Tugas_model extends CI_Model
         $kunci         = (int)$kunci;
 
         if (empty($urutan)) {
-            $this->db->selet('MAX(urutan) AS max');
+            $this->db->select('MAX(urutan) AS max');
             $this->db->where('pertanyaan_id', $pertanyaan_id);
+            $this->db->where('aktif', 1);
             $query = $this->db->get('pilihan');
             $row = $query->row_array();
             if (!isset($row['max']) OR empty($row['max'])) {
@@ -480,6 +482,7 @@ class Tugas_model extends CI_Model
         if (empty($urutan)) {
             $this->db->select('MAX(urutan) AS max');
             $this->db->where('tugas_id', $tugas_id);
+            $this->db->where('aktif', 1);
             $query = $this->db->get('tugas_pertanyaan');
             $row = $query->row_array();
             if (!isset($row['max']) OR empty($row['max'])) {

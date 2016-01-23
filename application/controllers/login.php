@@ -118,6 +118,8 @@ class Login extends MY_Controller
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
+            $data['show'] = !empty($_GET['show']) ? $_GET['show'] : '';
+
             $this->twig->display('pp-siswa.html', $data);
         }
     }
