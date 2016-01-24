@@ -1033,22 +1033,20 @@ class Tugas extends MY_Controller
         }
 
         # ini untuk mendapatkan data soal lengkapnya
-        $soal = array();
-        foreach ($check_field_value['pertanyaan_id'] as $key => $p_id) {
-            $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
+        if (!empty($check_field_value['pertanyaan_id'])) {
+            $soal = array();
+            foreach ($check_field_value['pertanyaan_id'] as $key => $p_id) {
+                $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
 
-            # jika pilihan ganda ambil pilihannya
-            if ($check_field_value['tugas']['type_id'] == 3) {
-                $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+                # jika pilihan ganda ambil pilihannya
+                if ($check_field_value['tugas']['type_id'] == 3) {
+                    $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+                }
+
+                $soal[$key] = $pertanyaan;
             }
-
-            $soal[$key] = $pertanyaan;
+            $check_field_value['pertanyaan'] = $soal;
         }
-        $check_field_value['pertanyaan'] = $soal;
-
-        # cari sisa waktu dalam menit
-        $sisa_menit = (strtotime($check_field_value['selesai']) - strtotime($mulai));
-        $check_field_value['sisa_menit'] = ceil($sisa_menit);
 
         # save data
         $data['data'] = $check_field_value;
@@ -1064,6 +1062,10 @@ class Tugas extends MY_Controller
             $html_css .= load_comp_css(array(
                 base_url('assets/comp/jcounter/css/jquery.jCounter-iosl.css'),
             ));
+
+            # cari sisa waktu dalam menit
+            $sisa_menit = (strtotime($check_field_value['selesai']) - strtotime($mulai));
+            $check_field_value['sisa_menit'] = ceil($sisa_menit);
         }
 
         if ($tugas['type_id'] == 2) {
