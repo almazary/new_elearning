@@ -654,7 +654,7 @@ function nama_panggilan($str_nama) {
  */
 function start_native_session()
 {
-    if (session_id() == '' OR session_status() == PHP_SESSION_NONE) {
+    if (session_id() == '') {
         session_start();
     }
 }
