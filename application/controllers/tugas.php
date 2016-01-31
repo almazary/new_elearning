@@ -1048,6 +1048,12 @@ class Tugas extends MY_Controller
             $check_field_value['pertanyaan'] = $soal;
         }
 
+        if ($tugas['type_id'] != 1) {
+            # cari sisa waktu dalam menit
+            $sisa_menit = (strtotime($check_field_value['selesai']) - strtotime($mulai));
+            $check_field_value['sisa_menit'] = ceil($sisa_menit);
+        }
+
         # save data
         $data['data'] = $check_field_value;
         $html_js      = '';
@@ -1062,10 +1068,6 @@ class Tugas extends MY_Controller
             $html_css .= load_comp_css(array(
                 base_url('assets/comp/jcounter/css/jquery.jCounter-iosl.css'),
             ));
-
-            # cari sisa waktu dalam menit
-            $sisa_menit = (strtotime($check_field_value['selesai']) - strtotime($mulai));
-            $check_field_value['sisa_menit'] = ceil($sisa_menit);
         }
 
         if ($tugas['type_id'] == 2) {
