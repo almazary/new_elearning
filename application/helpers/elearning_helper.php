@@ -654,7 +654,7 @@ function nama_panggilan($str_nama) {
  */
 function start_native_session()
 {
-    if (session_id() == '' OR session_status() == PHP_SESSION_NONE) {
+    if (session_id() == '') {
         session_start();
     }
 }
@@ -1109,7 +1109,12 @@ function get_url_data($url)
  */
 function pass_siswa_equal_nis()
 {
-    if (is_siswa() AND !empty(get_sess_data('user', 'nis'))) {
+    if (is_siswa()) {
+        $nis_siswa = get_sess_data('user', 'nis');
+        if (empty($nis_siswa)) {
+            return false;
+        }
+
         # ambil nis siswa
         $nis = get_row_data('siswa_model', 'retrieve', array(
             'id' => get_sess_data('user', 'id')
