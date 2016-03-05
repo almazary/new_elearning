@@ -40,6 +40,13 @@ $config['encryption_key'] = '';
  */
 $config['is_demo_app'] = false;
 
+/**
+ * @since 1.6
+ *
+ * Menonaktifkan semua plugin
+ */
+$config['turn_off_all_plugin'] = false;
+
 /*
 |--------------------------------------------------------------------------
 | Index File

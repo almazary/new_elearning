@@ -799,24 +799,14 @@ function sudah_ngerjakan($tugas_id, $siswa_id)
 {
     $sudah = false;
 
-    # cek sudah mengerjakan belum
-    $nilai = get_row_data('tugas_model', 'retrieve_nilai', array(null, $tugas_id, $siswa_id));
-    if (!empty($nilai)) {
-        $sudah = true;
-    }
-
     # cek history, kalo sudah ada berarti sudah mengerjakan
     $check_history = retrieve_field('history-mengerjakan-' . $siswa_id . '-' . $tugas_id);
     if (!empty($check_history)) {
-        $sudah = true;
-    }
+        # hapus field mengerjakan supaya lebih memastikan
+        $mengerjakan_field_id = 'mengerjakan-' . $siswa_id . '-' . $tugas_id;
+        delete_field($mengerjakan_field_id);
 
-    # kalo true coba cek sekali lagi
-    if ($sudah == true) {
-        $check_history = retrieve_field('history-mengerjakan-' . $siswa_id . '-' . $tugas_id);
-        if (empty($check_history)) {
-            $sudah = false;
-        }
+        $sudah = true;
     }
 
     return $sudah;

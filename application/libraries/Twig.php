@@ -27,7 +27,13 @@ class Twig
 
         $path_plugin_view = './plugins/views/';
         if (is_dir($path_plugin_view)) {
-            $twig_template_dir = array($path_plugin_view, $this->_template_dir);
+            # lihat pengaturan off plugin
+            $turn_off_all_plugin = $this->CI->config->item('turn_off_all_plugin');
+            if ($turn_off_all_plugin) {
+                $twig_template_dir = array($this->_template_dir);
+            } else {
+                $twig_template_dir = array($path_plugin_view, $this->_template_dir);
+            }
         } else {
             $twig_template_dir = array($this->_template_dir);
         }

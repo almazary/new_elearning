@@ -925,24 +925,22 @@ class Tugas extends MY_Controller
     function kerjakan($tugas_id = '')
     {
         if (!is_siswa()) {
-            redirect('tugas');
+            show_error("Anda tidak login sebagai siswa.");
         }
 
         $tugas_id = (int)$tugas_id;
         $tugas    = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas)) {
-            redirect('tugas');
+            show_error("Tugas tidak ditemukan.");
         }
 
         # cek aktif tidak dan tampil siswa tidak
         if (empty($tugas['aktif'])) {
-            $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas belum aktif.'));
-            redirect('tugas');
+            show_error("Tugas belum aktif.");
         }
 
         if (empty($tugas['tampil_siswa'])) {
-            $this->session->set_flashdata('tugas', get_alert('warning', 'Tugas belum aktif.'));
-            redirect('tugas');
+            show_error("Tugas belum aktif.");
         }
 
         # dibuat variabel baru untuk php versi < 5.5
@@ -950,8 +948,7 @@ class Tugas extends MY_Controller
 
         # cek sudah mengerjakan belum
         if ($sudah_mengerjakan == true) {
-            $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
-            redirect('tugas');
+            show_error("Anda sudah mengerjakan tugas ini.");
         }
 
         $field_id    = 'mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
@@ -1004,8 +1001,7 @@ class Tugas extends MY_Controller
 
                 # jika pertanyaan masih kosong
                 if (empty($pertanyaan_id)) {
-                    $this->session->set_flashdata('tugas', get_alert('warning', 'Pertanyaan tugas masih kosong.'));
-                    redirect('tugas');
+                    show_error("Pertanyaan tugas masih kosong.");
                 }
 
                 $field_value['pertanyaan_id'] = $pertanyaan_id;
@@ -1013,8 +1009,15 @@ class Tugas extends MY_Controller
                 unset($field_value['selesai']);
             }
 
+            # start transaksi
+            $this->db->trans_start();
             # simpan
             create_field($field_id, $field_name, json_encode($field_value));
+
+            $this->db->trans_complete();
+            if ($this->db->trans_status() === FALSE) {
+                show_error("Proses simpan field gagal.");
+            }
         }
 
         $check_field       = retrieve_field($field_id);
@@ -1029,7 +1032,15 @@ class Tugas extends MY_Controller
 
             # update
             unset($check_field_value['pertanyaan']);
+
+            # start transaksi
+            $this->db->trans_start();
             update_field($field_id, $check_field['nama'], json_encode($check_field_value));
+
+            $this->db->trans_complete();
+            if ($this->db->trans_status() === FALSE) {
+                show_error("Proses update field gagal.");
+            }
         }
 
         # ini untuk mendapatkan data soal lengkapnya
@@ -1086,17 +1097,17 @@ class Tugas extends MY_Controller
     function finish($tugas_id = '', $unix_id = '')
     {
         if (!is_siswa()) {
-            redirect('tugas');
+            show_error("Anda tidak login sebagai siswa.");
         }
 
         $tugas_id = (int)$tugas_id;
         $tugas    = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas) OR $tugas['type_id'] == 1) {
-            redirect('tugas');
+            show_error("Tugas tidak ditemukan.");
         }
 
         if (empty($unix_id)) {
-            redirect('tugas');
+            show_error("Parameter Unix ID dibutuhkan.");
         }
 
         # dibuat variabel baru untuk php versi < 5.5
@@ -1104,8 +1115,7 @@ class Tugas extends MY_Controller
 
         # cek sudah mengerjakan belum
         if ($sudah_mengerjakan == true) {
-            $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
-            redirect('tugas');
+            show_error("Anda sudah mengerjakan tugas ini.");
         }
 
         $field_id    = 'mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
@@ -1115,8 +1125,7 @@ class Tugas extends MY_Controller
             # bandingkan unix_id nya
             $check_field_value = json_decode($check_field['value'], 1);
             if ($unix_id != $check_field_value['unix_id']) {
-                $this->session->set_flashdata('tugas', get_alert('warning', 'Anda tidak mengerjakan tugas ini.'));
-                redirect('tugas');
+                show_error("Anda tidak mengerjakan tugas ini.");
             }
 
             # jika pilihan ganda langsung di hitung benar salahnya
@@ -1164,6 +1173,9 @@ class Tugas extends MY_Controller
                     $nilai     = 0;
                 }
 
+                # start transaksi
+                $this->db->trans_start();
+
                 # simpan nilai
                 $this->tugas_model->create_nilai($nilai, $tugas['id'], get_sess_data('user', 'id'));
 
@@ -1181,10 +1193,19 @@ class Tugas extends MY_Controller
                 $check_field_value['total_waktu'] = lama_pengerjaan($check_field_value['mulai'], $sekarang);
 
                 create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
+
+                $this->db->trans_complete();
+
+                if ($this->db->trans_status() === FALSE) {
+                    show_error("Proses simpan jawaban gagal, mohon coba submit kembali.");
+                }
             }
 
             # jika essay dan upload, biar dikoreksi dl
             else {
+                # start transaksi
+                $this->db->trans_start();
+
                 # hapus field tambahan
                 delete_field($field_id);
 
@@ -1195,29 +1216,37 @@ class Tugas extends MY_Controller
                 $check_field_value['total_waktu'] = lama_pengerjaan($check_field_value['mulai'], $sekarang);
 
                 create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
+
+                $this->db->trans_complete();
+
+                if ($this->db->trans_status() === FALSE) {
+                    show_error("Proses simpan jawaban gagal, mohon coba submit kembali.");
+                }
             }
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
             redirect('tugas');
         }
-
-        redirect('tugas');
+        # ini belum mengerjakan
+        else {
+            show_error("Anda belum mengerjakan tugas ini.");
+        }
     }
 
     function submit_essay($tugas_id = '', $unix_id = '')
     {
         if (!is_siswa()) {
-            redirect('tugas');
+            show_error("Anda tidak login sebagai siswa.");
         }
 
         $tugas_id = (int)$tugas_id;
         $tugas    = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas) OR $tugas['type_id'] != 2) {
-            redirect('tugas');
+            show_error("Tugas tidak ditemukan.");
         }
 
         if (empty($unix_id)) {
-            redirect('tugas');
+            show_error("Parameter Unix ID dibutuhkan.");
         }
 
         # dibuat variabel baru untuk php versi < 5.5
@@ -1225,8 +1254,7 @@ class Tugas extends MY_Controller
 
         # cek sudah mengerjakan belum
         if ($sudah_mengerjakan == true) {
-            $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
-            redirect('tugas');
+            show_error("Anda sudah mengerjakan tugas ini.");
         }
 
         $field_id    = 'mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
@@ -1256,6 +1284,9 @@ class Tugas extends MY_Controller
                 $check_field_value['jawaban'][$pertanyaan_id] = $jawaban;
             }
 
+            # start transaksi
+            $this->db->trans_start();
+
             # hapus field tambahan
             delete_field($field_id);
 
@@ -1267,27 +1298,35 @@ class Tugas extends MY_Controller
 
             create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
 
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE) {
+                show_error("Proses simpan jawaban gagal, mohon coba submit kembali.");
+            }
+
             $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
             redirect('tugas');
         }
-
-        redirect('tugas');
+        # ini belum mengerjakan
+        else {
+            show_error("Anda belum mengerjakan tugas ini.");
+        }
     }
 
     function submit_upload($tugas_id = '', $unix_id = '')
     {
         if (!is_siswa()) {
-            redirect('tugas');
+            show_error("Anda tidak login sebagai siswa.");
         }
 
         $tugas_id = (int)$tugas_id;
         $tugas    = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas) OR $tugas['type_id'] != 1) {
-            redirect('tugas');
+            show_error("Tugas tidak ditemukan.");
         }
 
         if (empty($unix_id)) {
-            redirect('tugas');
+            show_error("Parameter Unix ID dibutuhkan.");
         }
 
         # dibuat variabel baru untuk php versi < 5.5
@@ -1295,8 +1334,7 @@ class Tugas extends MY_Controller
 
         # cek sudah mengerjakan belum
         if ($sudah_mengerjakan == true) {
-            $this->session->set_flashdata('tugas', get_alert('warning', 'Anda sudah mengerjakan tugas ini.'));
-            redirect('tugas');
+            show_error("Anda sudah mengerjakan tugas ini.");
         }
 
         $field_id    = 'mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
@@ -1306,8 +1344,7 @@ class Tugas extends MY_Controller
             # bandingkan unix_id nya
             $check_field_value = json_decode($check_field['value'], 1);
             if ($unix_id != $check_field_value['unix_id']) {
-                $this->session->set_flashdata('tugas', get_alert('warning', 'Anda tidak mengerjakan tugas ini.'));
-                redirect('tugas');
+                show_error("Anda tidak mengerjakan tugas ini.");
             }
 
             $config['upload_path']   = get_path_file();
@@ -1326,6 +1363,9 @@ class Tugas extends MY_Controller
                 redirect('tugas/kerjakan/' . $tugas['id']);
             }
 
+            # start transaksi
+            $this->db->trans_start();
+
             # hapus field tambahan
             delete_field($field_id);
 
@@ -1336,11 +1376,19 @@ class Tugas extends MY_Controller
 
             create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
 
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE) {
+                show_error("Proses simpan jawaban gagal, mohon coba submit kembali.");
+            }
+
             $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
             redirect('tugas');
         }
-
-        redirect('tugas');
+        # ini belum mengerjakan
+        else {
+            show_error("Anda belum mengerjakan tugas ini.");
+        }
     }
 
     function nilai($tugas_id = '', $mode = '')
@@ -1621,6 +1669,9 @@ class Tugas extends MY_Controller
                 $new_history['nilai'] = $_POST['nilai'];
                 unset($new_history['pertanyaan']);
 
+                # start transaksi
+                $this->db->trans_start();
+
                 update_field($history_id, $history['nama'], json_encode($new_history));
 
                 # simpan atau update nilai
@@ -1629,6 +1680,12 @@ class Tugas extends MY_Controller
                     $this->tugas_model->create_nilai($total_nilai, $tugas['id'], $siswa['id']);
                 } else {
                     $this->tugas_model->update_nilai($check['id'], $total_nilai, $tugas['id'], $siswa['id']);
+                }
+
+                $this->db->trans_complete();
+
+                if ($this->db->trans_status() === FALSE) {
+                    show_error("Proses simpan/update nilai gagal, mohon coba kembali.");
                 }
 
                 redirect('tugas/detail_jawaban/' . $siswa['id'] . '/' . $tugas['id']);
@@ -1649,6 +1706,9 @@ class Tugas extends MY_Controller
                 $new_history['nilai'] = $nilai;
                 unset($new_history['pertanyaan']);
 
+                # start transaksi
+                $this->db->trans_start();
+
                 update_field($history_id, $history['nama'], json_encode($new_history));
 
                 # simpan atau update nilai
@@ -1657,6 +1717,12 @@ class Tugas extends MY_Controller
                     $this->tugas_model->create_nilai($nilai, $tugas['id'], $siswa['id']);
                 } else {
                     $this->tugas_model->update_nilai($check['id'], $nilai, $tugas['id'], $siswa['id']);
+                }
+
+                $this->db->trans_complete();
+
+                if ($this->db->trans_status() === FALSE) {
+                    show_error("Proses simpan/update nilai gagal, mohon coba kembali.");
                 }
 
                 redirect('tugas/detail_jawaban/' . $siswa['id'] . '/' . $tugas['id']);
@@ -1685,13 +1751,16 @@ class Tugas extends MY_Controller
             $tugas_id = (int)$tugas_id;
             $tugas    = $this->tugas_model->retrieve($tugas_id);
             if (empty($tugas)) {
-                redirect('tugas');
+                show_error("Tugas tidak ditemukan.");
             }
 
             $siswa = $this->siswa_model->retrieve($siswa_id);
             if (empty($siswa)) {
-                redirect('tugas');
+                show_error("Siswa tidak ditemukan.");
             }
+
+            # start transaksi
+            $this->db->trans_start();
 
             # hapus history
             $history_id    = 'history-mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
@@ -1699,9 +1768,19 @@ class Tugas extends MY_Controller
             $history_value = json_decode($history['value'], 1);
             delete_field($history_id);
 
+            # hapus field mengerjakan
+            $mengerjakan_field_id = 'mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
+            delete_field($mengerjakan_field_id);
+
             # hapus nilai
             $retrieve_nilai = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
             $this->tugas_model->delete_nilai($retrieve_nilai['id']);
+
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE) {
+                show_error("Proses reset jawaban gagal, mohon coba kembali.");
+            }
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Siswa berhasil dianggap belum mengerjakan.'));
 
@@ -1715,10 +1794,9 @@ class Tugas extends MY_Controller
 
                 redirect('tugas/koreksi/' . $tugas['id']);
             }
-
-        } else {
-            $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));
-            redirect('tugas');
+        }
+        else {
+            show_error("Akses ditolak.");
         }
     }
 }
