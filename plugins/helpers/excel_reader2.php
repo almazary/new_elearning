@@ -64,6 +64,12 @@ define('START_BLOCK_POS', 0x74);
 define('SIZE_POS', 0x78);
 define('IDENTIFIER_OLE', pack("CCCCCCCC",0xd0,0xcf,0x11,0xe0,0xa1,0xb1,0x1a,0xe1));
 
+# This function was DEPRECATED in PHP 5.3.0
+if (!function_exists('split')) {
+    function split($param1, $param2) {
+        return explode($param1, $param2);
+    }
+}
 
 function GetInt4d($data, $pos) {
     $value = ord($data[$pos]) | (ord($data[$pos+1]) << 8) | (ord($data[$pos+2]) << 16) | (ord($data[$pos+3]) << 24);
