@@ -973,8 +973,10 @@ class Tugas extends MY_Controller
         );
 
         # simpan tugas dan unix_id nya
-        $field_value['tugas']   = $tugas;
-        $field_value['unix_id'] = md5($field_id) . rand(9, 999999);
+        $field_value['tugas']        = $tugas;
+        $field_value['unix_id']      = md5($field_id) . rand(9, 999999);
+        $field_value['ip']           = get_ip();
+        $field_value['agent_string'] = $this->agent->agent_string();
 
         # cek sudah pernah mengerjakan belum, untuk keamanan.
         # karna bisa saja dibuka 2 kali dikomputer yang berbeda
@@ -1188,9 +1190,11 @@ class Tugas extends MY_Controller
                 $check_field_value['jml_benar']   = $jml_benar;
                 $check_field_value['jml_salah']   = $jml_salah;
 
-                $sekarang                         = date('Y-m-d H:i:s');
-                $check_field_value['tgl_submit']  = $sekarang;
-                $check_field_value['total_waktu'] = lama_pengerjaan($check_field_value['mulai'], $sekarang);
+                $sekarang                          = date('Y-m-d H:i:s');
+                $check_field_value['tgl_submit']   = $sekarang;
+                $check_field_value['total_waktu']  = lama_pengerjaan($check_field_value['mulai'], $sekarang);
+                $check_field_value['ip']           = get_ip();
+                $check_field_value['agent_string'] = $this->agent->agent_string();
 
                 create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
 
@@ -1210,10 +1214,12 @@ class Tugas extends MY_Controller
                 delete_field($field_id);
 
                 # simpan history
-                $new_field_id                     = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
-                $sekarang                         = date('Y-m-d H:i:s');
-                $check_field_value['tgl_submit']  = $sekarang;
-                $check_field_value['total_waktu'] = lama_pengerjaan($check_field_value['mulai'], $sekarang);
+                $new_field_id                      = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+                $sekarang                          = date('Y-m-d H:i:s');
+                $check_field_value['tgl_submit']   = $sekarang;
+                $check_field_value['total_waktu']  = lama_pengerjaan($check_field_value['mulai'], $sekarang);
+                $check_field_value['ip']           = get_ip();
+                $check_field_value['agent_string'] = $this->agent->agent_string();
 
                 create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
 
@@ -1291,10 +1297,12 @@ class Tugas extends MY_Controller
             delete_field($field_id);
 
             # simpan history
-            $new_field_id                     = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
-            $sekarang                         = date('Y-m-d H:i:s');
-            $check_field_value['tgl_submit']  = $sekarang;
-            $check_field_value['total_waktu'] = lama_pengerjaan($check_field_value['mulai'], $sekarang);
+            $new_field_id                      = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+            $sekarang                          = date('Y-m-d H:i:s');
+            $check_field_value['tgl_submit']   = $sekarang;
+            $check_field_value['total_waktu']  = lama_pengerjaan($check_field_value['mulai'], $sekarang);
+            $check_field_value['ip']           = get_ip();
+            $check_field_value['agent_string'] = $this->agent->agent_string();
 
             create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
 
@@ -1370,9 +1378,11 @@ class Tugas extends MY_Controller
             delete_field($field_id);
 
             # simpan history
-            $new_field_id                    = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
-            $sekarang                        = date('Y-m-d H:i:s');
-            $check_field_value['tgl_submit'] = $sekarang;
+            $new_field_id                      = 'history-mengerjakan-' . get_sess_data('user', 'id') . '-' . $tugas['id'];
+            $sekarang                          = date('Y-m-d H:i:s');
+            $check_field_value['tgl_submit']   = $sekarang;
+            $check_field_value['ip']           = get_ip();
+            $check_field_value['agent_string'] = $this->agent->agent_string();
 
             create_field($new_field_id, 'History pengerjaan tugas', json_encode($check_field_value));
 

@@ -337,6 +337,12 @@ class Welcome extends MY_Controller
 
     function get_plugin()
     {
+        must_login();
+
+        if (!is_admin()) {
+            redirect('welcome');
+        }
+
         $plugin_url  = 'http://elearningplugin.dokumenary.net/index.php';
         $plugin_data = get_url_data($plugin_url);
         $result_body = json_decode($plugin_data, true);
