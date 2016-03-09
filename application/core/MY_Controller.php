@@ -64,7 +64,9 @@ class MY_Controller extends CI_Controller
         $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
         $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
 
-        // $this->output->enable_profiler(TRUE);
+        if (!is_ajax()) {
+            $this->output->enable_profiler(TRUE);
+        }
 
         # cek versi
         $versi_install = '1.6';
@@ -411,18 +413,23 @@ class MY_Controller extends CI_Controller
 
             $decode_value = json_decode($data_field['value'], 1);
 
-            # cek valid route
-            $valid_route = false;
-            foreach ($decode_value['valid_route'] as $route) {
-                $route = rtrim($route, '/');
-                if (strpos(current_url(), $route) !== false) {
-                    $valid_route = true;
-                    break;
+            if (isset($decode_value['valid_route']) AND isset($decode_value['uri_string'])) {
+                # cek valid route
+                $valid_route = false;
+                foreach ($decode_value['valid_route'] as $route) {
+                    $route = rtrim($route, '/');
+                    if (strpos(current_url(), $route) !== false) {
+                        $valid_route = true;
+                        break;
+                    }
+                }
+
+                if ($valid_route == false) {
+                    redirect($decode_value['uri_string'], true);
                 }
             }
-
-            if ($valid_route == false) {
-                redirect($decode_value['uri_string'], true);
+            else {
+                return true;
             }
         }
     }

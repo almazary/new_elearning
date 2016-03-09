@@ -1478,9 +1478,9 @@ class Tugas extends MY_Controller
                 $data['comp_js'] = load_comp_js(array(
                     base_url('assets/comp/datatables/jquery.dataTables.js'),
                     base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-                    base_url('assets/comp/datatables/script.js'),
+                    // base_url('assets/comp/datatables/script.js'),
                     base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                    base_url('assets/comp/colorbox/act-tugas.js'),
+                    // base_url('assets/comp/colorbox/act-tugas.js'),
                 ));
 
                 $data['comp_css'] = load_comp_css(array(
@@ -1600,9 +1600,9 @@ class Tugas extends MY_Controller
             $data['comp_js'] = load_comp_js(array(
                 base_url('assets/comp/datatables/jquery.dataTables.js'),
                 base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-                base_url('assets/comp/datatables/script.js'),
+                // base_url('assets/comp/datatables/script.js'),
                 base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                base_url('assets/comp/colorbox/act-tugas.js'),
+                // base_url('assets/comp/colorbox/act-tugas.js'),
             ));
 
             $data['comp_css'] = load_comp_css(array(

@@ -62,14 +62,17 @@ Lihat Nilai - {{ parent() }}
         <br>
 
         <div class="btn-group">
+            <a href="" class="btn btn-primary">Pantau Ujian</a>
             <a data-original-title="Print Query" href="#" class="btn btn-primary" data-toggle="popover" data-html="true" data-placement="top" data-content="<form method='post' target='_blank' action='{{ site_url('tugas/nilai/' ~ tugas.id ~ '/print') }}'><select name='kelas_id'><option value='all'>--Semua Kelas--</option>{% for k in kelas_nilai %} <option value='{{ k.id }}'>{{ k.nama }}</option> {% endfor %}</select><button class='btn btn-primary btn-sm'>Print</button</form>">Print</a>
             <a data-original-title="Export Query" href="#" class="btn btn-primary" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<form method='post' target='_blank' action='{{ site_url('tugas/nilai/' ~ tugas.id ~ '/export_excel') }}'><select name='kelas_id'><option value='all'>--Semua Kelas--</option>{% for k in kelas_nilai %} <option value='{{ k.id }}'>{{ k.nama }}</option> {% endfor %}</select><button class='btn btn-primary btn-sm'>Export Excel</button</form>">Export Excel</a>
         </div>
 
         <br><br>
+        {{ form_open('tugas/bulk_reset_jawaban/' ~ tugas.id, {"id" : "form-bulk"})|raw }}
         <table class="table table-striped datatable">
             <thead>
                 <tr>
+                    <th width="3%"></th>
                     <th>Siswa</th>
                     <th>Kelas</th>
                     <th>Nilai</th>
@@ -80,6 +83,9 @@ Lihat Nilai - {{ parent() }}
                 {% for n in data_nilai %}
                 <tr>
                     <td>
+                        <input type="checkbox" name="siswa_id[]" value="{{ n.siswa_id }}" style="margin-top:-2px;">
+                    </td>
+                    <td>
                         <img style="height:20px;width:20px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(n.siswa.foto, 'medium', n.siswa.jenis_kelamin) }}">
                         <a href="{{ site_url('siswa/detail/' ~ n.siswa.status_id ~ '/' ~ n.siswa.id) }}"><b>{{ n.siswa.nama }} {{ ((n.siswa.nis is not empty) ? '<span class="text-muted">(' ~ n.siswa.nis ~ ')</span>')|raw }}</b></a>
                     </td>
@@ -88,7 +94,7 @@ Lihat Nilai - {{ parent() }}
                     <td>
                         <div class="btn-group">
                             {{ anchor('tugas/detail_jawaban/' ~ n.siswa.id ~ '/' ~ tugas.id, 'Detail',{'class' : 'btn btn-small btn-primary iframe-detail-jawaban'})|raw }}
-                            <a href="{{ site_url('tugas/reset_jawaban/' ~ tugas.id ~ '/' ~ n.siswa_id) }}" class="btn btn-small btn-default" onclick="return confirm('Anda yakin ingin menganggap siswa belum mengerjakan?')" data-toggle="tooltip" title="Reset jawaban siswa, <br>anggap siswa menjadi belum mengerjakan.">Reset</a>
+                            <a href="{{ site_url('tugas/reset_jawaban/' ~ tugas.id ~ '/' ~ n.siswa_id) }}" class="btn btn-small btn-default" onclick="return confirm('Anda yakin ingin menganggap siswa belum mengerjakan?')" data-toggle="tooltip" title="Reset jawaban siswa, <br>anggap siswa menjadi belum <br>mengerjakan.">Reset</a>
                         </div>
                     </td>
                 </tr>
@@ -96,6 +102,40 @@ Lihat Nilai - {{ parent() }}
             </tbody>
         </table>
 
+        <div class="btn-group">
+            <button name="reset_terpilih" type="submit" onclick="return confirm('Reset jawaban siswa terpilih?')" class="btn btn-primary">Reset jawaban siswa terpilih</button>
+            <button name="reset_all" type="submit" onclick="return confirm('Reset jawaban semua siswa?')" class="btn btn-primary">Reset jawaban semua siswa</button>
+        </div>
+
+        {{ form_close()|raw }}
+        <br>
+
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    $('.datatable').dataTable({
+        "language": {
+            "url": base_url + "assets/comp/datatables/lang.id.json"
+        },
+        "aaSorting" : [],
+        "aoColumnDefs": [
+                  { 'bSortable': false, 'aTargets': [ 0 ] }
+        ],
+        "fnDrawCallback" : function( oSettings ) {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+
+            $(".iframe-detail-jawaban").colorbox({
+                iframe:true,
+                width:"700",
+                height:"600",
+                fixed:true,
+            });
+
+            $('[data-toggle="tooltip"]').tooltip({html:true});
+        }
+    });
+</script>
 {% endblock %}

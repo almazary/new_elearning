@@ -169,11 +169,8 @@ class Msg_model extends CI_Model
         }
 
         $orderby = array('id' => 'DESC');
-        if (!$pagination) {
-            $no_of_records = $this->db->count_all($this->table);
-        }
 
-        $data = $this->pager->set($this->table, $no_of_records, $page_no, $where, $orderby, $this->table.'.*', $group_by);
+        $data = $this->pager->set($this->table, $this->db->count_all($this->table), 1, $where, $orderby, $this->table.'.*', $group_by);
 
         if (empty($search)) {
             foreach ($data['results'] as $key => $val) {
@@ -200,6 +197,11 @@ class Msg_model extends CI_Model
             $where       = array();
             $where['id'] = array($arr_msg_id, 'where_in');
             $order_by    = array('id', 'DESC');
+
+            if (!$pagination) {
+                $no_of_records = $this->db->count_all($this->table);
+            }
+
             $data = $this->pager->set($this->table, $no_of_records, $page_no, $where, $orderby, $this->table.'.*');
         }
 

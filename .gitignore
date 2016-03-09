@@ -1,4 +1,5 @@
-/userfiles/files/
+/userfiles/files/*
+!/userfiles/files/index.html
 /userfiles/images/
 /userfiles/uploads/
 /user_guide/

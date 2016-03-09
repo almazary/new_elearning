@@ -94,7 +94,7 @@ Koreksi - {{ parent() }}
                             {% else %}
                                 {{ anchor('tugas/detail_jawaban/' ~ s.id ~ '/' ~ tugas.id, 'Detail',{'class' : 'btn btn-small btn-primary iframe-koreksi-jawaban'})|raw }}
                             {% endif %}
-                            <a href="{{ site_url('tugas/reset_jawaban/' ~ tugas.id ~ '/' ~ s.id) }}" class="btn btn-small btn-default" onclick="return confirm('Anda yakin ingin menganggap siswa belum mengerjakan?')" data-toggle="tooltip" title="Reset jawaban siswa, <br>anggap siswa menjadi belum mengerjakan.">Reset</a>
+                            <a href="{{ site_url('tugas/reset_jawaban/' ~ tugas.id ~ '/' ~ s.id) }}" class="btn btn-small btn-default" onclick="return confirm('Anda yakin ingin menganggap siswa belum mengerjakan?')" data-toggle="tooltip" title="Reset jawaban siswa, <br>anggap siswa menjadi belum <br>mengerjakan.">Reset</a>
                         </div>
                     </td>
                 </tr>
@@ -104,4 +104,28 @@ Koreksi - {{ parent() }}
 
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    $('.datatable').dataTable({
+        "language": {
+            "url": base_url + "assets/comp/datatables/lang.id.json"
+        },
+        "aaSorting" : [],
+        "fnDrawCallback" : function( oSettings ) {
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+
+            $(".iframe-koreksi-jawaban").colorbox({
+                iframe:true,
+                width:"700",
+                height:"550",
+                fixed:true,
+                onClosed : function() {
+                    location.reload();
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

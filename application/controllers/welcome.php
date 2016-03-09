@@ -362,6 +362,166 @@ class Welcome extends MY_Controller
 
         $this->twig->display('get-plugin.html', $data);
     }
+
+    function backup_restore($act = "")
+    {
+        must_login();
+
+        if (!is_admin()) {
+            redirect('welcome');
+        }
+
+        $data = array();
+
+        $field_id    = "last-backup-date";
+        $last_backup = retrieve_field($field_id);
+        if (!empty($last_backup)) {
+            $data['last_backup_date'] = $last_backup['value'];
+        }
+
+        switch ($act) {
+            case 'backup':
+                # catat backup
+                $date_backup = date('Y-m-d H:i:s');
+                $last_backup = retrieve_field($field_id);
+                if (empty($last_backup)) {
+                    create_field($field_id, "Last backup database", $date_backup);
+                } else {
+                    update_field($field_id, "Last backup database", $date_backup);
+                }
+
+                $prefix = $this->db->dbprefix;
+
+                # backup template
+                $backup_template = file_get_contents(APPPATH . 'install/backup-table');
+                $backup_template = str_replace('{$prefix}', $prefix, $backup_template);
+                $backup_template = str_replace('{$versi}', get_pengaturan('versi', 'value'), $backup_template);
+                $backup_template = str_replace('{$tgl_backup}', $date_backup, $backup_template);
+                $backup_template = str_replace('{$site_url}', site_url(), $backup_template);
+
+                # insert
+                $table_list = array(
+                    'bank_soal',
+                    'field_tambahan',
+                    'kelas',
+                    'kelas_siswa',
+                    'komentar',
+                    'login',
+                    'mapel',
+                    'mapel_ajar',
+                    'mapel_kelas',
+                    'materi',
+                    'materi_kelas',
+                    'messages',
+                    'nilai_tugas',
+                    'pengajar',
+                    'pengaturan',
+                    'pengumuman',
+                    'pilihan',
+                    'siswa',
+                    'tugas',
+                    'tugas_kelas',
+                    'tugas_pertanyaan',
+                );
+
+                foreach ($table_list as $table) {
+                    # cek isi table
+                    $results = $this->db->get($table);
+                    $results = $results->result_array();
+                    if (empty($results)) {
+                        $backup_template = str_replace('{$insert_' . $table . '}', "", $backup_template);
+                        continue;
+                    }
+
+                    # cari list field
+                    $fields = $this->db->list_fields($table);
+
+                    $data_values = array();
+                    foreach ($results as $row) {
+                        $data_row = array();
+                        foreach ($row as $key => $val) {
+                            if (in_array($key, $fields)) {
+                                $data_row[] = is_null($val) ? "NULL" : "'" . $this->db->escape_str($val) . "'";
+                            }
+                        }
+
+                        $data_values[] = "(" . implode(", ", $data_row) . ")";
+                    }
+
+                    $sql_insert = "";
+
+                    # limit 500 insert
+                    $i  = 1;
+                    $ii = 1;
+                    $limit = 500;
+                    foreach ($data_values as $value) {
+                        if ($i == 1) {
+                            $sql_insert .= "\n\n";
+                            $sql_insert .= "INSERT INTO `{$prefix}{$table}` (`" . implode("`, `", $fields) . "`) VALUES \n";
+                        }
+
+                        $sql_insert .= $value;
+
+                        if ($i == $limit OR $ii == count($data_values)) {
+                            $i = 0;
+                            $sql_insert .= "; \n";
+                        } else {
+                            $sql_insert .= ", \n";
+                        }
+
+                        $i++;
+                        $ii++;
+                    }
+
+                    $backup_template = str_replace('{$insert_' . $table . '}', $sql_insert, $backup_template);
+                }
+
+                $file_name = "backup-elearning-" . date('Y-m-d-H-i') . ".sql";
+                force_download($file_name, $backup_template);
+            break;
+
+            case 'restore':
+                if (!empty($_FILES['userfile']['tmp_name'])) {
+                    $split_name = explode('.', $_FILES['userfile']['name']);
+                    $file_ext   = end($split_name);
+                    if ($file_ext != 'sql') {
+                        $data['restore_msg'] = "File harus bertipe .sql";
+                    } else {
+                        $this->db->trans_start();
+
+                        $templine = "";
+                        $lines    = file($_FILES['userfile']['tmp_name']);
+                        foreach ($lines as $line) {
+                            if ($line == "" OR substr($line, 0, 2) == "--" OR substr($line, 0, 1) == "#") {
+                                continue;
+                            }
+
+                            $templine .= $line;
+
+                            if (substr(trim($line), -1, 1) == ';') {
+                                $this->db->query($templine);
+                                $templine = '';
+                            }
+                        }
+
+                        $this->db->trans_complete();
+
+                        if ($this->db->trans_status() === FALSE) {
+                            $data['restore_msg'] = "Restore error : " . $this->db->_error_message() . " " . $this->db->_error_number();
+                        }
+
+                        # redirect berhasil
+                        $this->session->set_flashdata('backup_restore', get_alert('success', 'Restore data berhasil.'));
+                        redirect('welcome/backup_restore');
+                    }
+                } else {
+                    $data['restore_msg'] = "Tidak ada file yang diupload.";
+                }
+            break;
+        }
+
+        $this->twig->display('backup-restore.html', $data);
+    }
 }
 
 /* End of file welcome.php */
