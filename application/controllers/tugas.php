@@ -1478,9 +1478,7 @@ class Tugas extends MY_Controller
                 $data['comp_js'] = load_comp_js(array(
                     base_url('assets/comp/datatables/jquery.dataTables.js'),
                     base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-                    // base_url('assets/comp/datatables/script.js'),
                     base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                    // base_url('assets/comp/colorbox/act-tugas.js'),
                 ));
 
                 $data['comp_css'] = load_comp_css(array(
@@ -1600,9 +1598,7 @@ class Tugas extends MY_Controller
             $data['comp_js'] = load_comp_js(array(
                 base_url('assets/comp/datatables/jquery.dataTables.js'),
                 base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-                // base_url('assets/comp/datatables/script.js'),
-                base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                // base_url('assets/comp/colorbox/act-tugas.js'),
+                base_url('assets/comp/colorbox/jquery.colorbox-min.js')
             ));
 
             $data['comp_css'] = load_comp_css(array(
@@ -1769,40 +1765,197 @@ class Tugas extends MY_Controller
                 show_error("Siswa tidak ditemukan.");
             }
 
-            # start transaksi
-            $this->db->trans_start();
-
-            # hapus history
-            $history_id    = 'history-mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
-            $history       = retrieve_field($history_id);
-            $history_value = json_decode($history['value'], 1);
-            delete_field($history_id);
-
-            # hapus field mengerjakan
-            $mengerjakan_field_id = 'mengerjakan-' . $siswa['id'] . '-' . $tugas['id'];
-            delete_field($mengerjakan_field_id);
-
-            # hapus nilai
-            $retrieve_nilai = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa['id']);
-            $this->tugas_model->delete_nilai($retrieve_nilai['id']);
-
-            $this->db->trans_complete();
-
-            if ($this->db->trans_status() === FALSE) {
+            $result_reset = $this->reset_nilai_jawaban($siswa['id'], $tugas['id'], $tugas);
+            if (!$result_reset) {
                 show_error("Proses reset jawaban gagal, mohon coba kembali.");
             }
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Siswa berhasil dianggap belum mengerjakan.'));
-
             if ($tugas['type_id'] == 3) {
                 redirect('tugas/nilai/' . $tugas['id']);
             } else {
-                # jika tugas upload, dihapus juga file uploadnya biar g menuh-menuhin space
-                if ($tugas['type_id'] == 1 && is_file(get_path_file($history_value['file_name']))) {
-                    @unlink(get_path_file($history_value['file_name']));
+                redirect('tugas/koreksi/' . $tugas['id']);
+            }
+        }
+        else {
+            show_error("Akses ditolak.");
+        }
+    }
+
+    function bulk_reset_jawaban($tugas_id)
+    {
+        # jika pengajar atau admin
+        if (is_pengajar() OR is_admin()) {
+            $tugas_id = (int)$tugas_id;
+            $tugas    = $this->tugas_model->retrieve($tugas_id);
+            if (empty($tugas)) {
+                show_error("Tugas tidak ditemukan.");
+            }
+
+            $reset_tipe = $this->input->post("reset_tipe", true);
+            $siswa_ids  = $this->input->post("siswa_id", true);
+            $url_back   = $this->input->post("url_back", true);
+
+            if ($reset_tipe == "terpilih") {
+                if (empty($siswa_ids)) {
+                    $this->session->set_flashdata('tugas', get_alert('warning', 'Pilih siswa yang ingin direset.'));
+                    redirect($url_back);
                 }
 
-                redirect('tugas/koreksi/' . $tugas['id']);
+                foreach ($siswa_ids as $siswa_id) {
+                    $siswa = $this->siswa_model->retrieve($siswa_id);
+                    if (empty($siswa)) {
+                        continue;
+                    }
+
+                    $this->reset_nilai_jawaban($siswa['id'], $tugas['id'], $tugas);
+                }
+
+                $this->session->set_flashdata('tugas', get_alert('success', 'Siswa berhasil dianggap belum mengerjakan.'));
+                redirect($url_back);
+            }
+            elseif ($reset_tipe == "semua") {
+                # cari yang sudah selesai mengerjakan
+                $retrieve_nilai = $this->tugas_model->retrieve_all_nilai($tugas['id']);
+                foreach ($retrieve_nilai as $nilai) {
+                    $this->reset_nilai_jawaban($nilai['siswa_id'], $tugas['id'], $tugas);
+                }
+
+                $this->session->set_flashdata('tugas', get_alert('success', 'Semua siswa berhasil dianggap belum mengerjakan.'));
+                redirect($url_back);
+            }
+            else {
+                show_error("Tipe reset tidak ditemukan.");
+            }
+        }
+        else {
+            show_error("Akses ditolak.");
+        }
+    }
+
+    function pantau($tugas_id = '', $aksi = 'list', $param1 = '')
+    {
+        $tugas_id = (int)$tugas_id;
+        $tugas    = $this->tugas_model->retrieve($tugas_id);
+        if (empty($tugas)) {
+            redirect('tugas');
+        }
+
+        # jika tugas bertipe upload tidak dapat dipantau
+        if ($tugas['type_id'] == 1) {
+            show_error("Maaf tipe tugas tidak dapat dipantau.");
+        }
+
+        $data['tugas'] = $this->formatData($tugas);
+
+        # jika pengajar atau admin
+        if (is_pengajar() OR is_admin()) {
+
+            switch ($aksi) {
+                case 'reset':
+                    $siswa_id = (int)$param1;
+
+                    $field_id = 'mengerjakan-' . $siswa_id . '-' . $tugas['id'];
+                    delete_field($field_id);
+
+                    $this->session->set_flashdata('tugas', get_alert('success', 'Proses ujian siswa berhasil diulang.'));
+                    redirect('tugas/pantau/' . $tugas['id']);
+                break;
+
+                case 'jawaban_sementara':
+                    $siswa_id = (int)$param1;
+
+                    $field_id = 'mengerjakan-' . $siswa_id . '-' . $tugas['id'];
+                    $mengerjakan = retrieve_field($field_id);
+                    if (empty($mengerjakan)) {
+                        show_error("Data tidak ditemukan.");
+                    }
+
+                    $de_val = json_decode($mengerjakan['value'], 1);
+                    if (empty($de_val['pertanyaan_id'])) {
+                        show_error("Maaf jawaban tidak dapat ditampilkan, karena dikerjakan pada e-learning dibawah versi 1.6.");
+                    }
+
+                    $soal  = array();
+                    $benar = 0;
+                    $salah = 0;
+                    foreach ($de_val['pertanyaan_id'] as $key => $p_id) {
+                        $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
+
+                        # jika pilihan ganda ambil pilihannya
+                        if ($de_val['tugas']['type_id'] == 3) {
+                            $pertanyaan['pilihan'] = $this->tugas_model->retrieve_all_pilihan($pertanyaan['id']);
+
+                            if (!empty($de_val['jawaban']) AND get_jawaban($de_val['jawaban'], $p_id) == get_kunci_pilihan($pertanyaan['pilihan'])) {
+                                $benar++;
+                            } elseif (!empty($de_val['jawaban'][$p_id])) {
+                                $salah++;
+                            }
+                        }
+
+                        $soal[$key] = $pertanyaan;
+                    }
+
+                    $de_val['jml_benar']  = $benar;
+                    $de_val['jml_salah']  = $salah;
+                    $de_val['pertanyaan'] = $soal;
+                    $data = array_merge($data, $de_val);
+
+                    $this->twig->display('pantau-jawaban-sementara.html', $data);
+                break;
+
+                case 'list':
+                default:
+                    # cari semua yang sedang ujian pada tugas ini
+                    $retrieve_all = $this->tugas_model->retrieve_all_mengerjakan($tugas_id);
+                    foreach ($retrieve_all as $key => $mengerjakan) {
+                        $split_id = explode("-", $mengerjakan['id']);
+                        $siswa_id = $split_id[1];
+
+                        # cari siswa
+                        $siswa = $this->siswa_model->retrieve($siswa_id);
+
+                        # kelas siswa
+                        $kelas_siswa = $this->kelas_model->retrieve_siswa(null, array(
+                            'siswa_id' => $siswa_id,
+                            'aktif'    => 1
+                        ));
+                        $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
+                        $siswa['kelas_aktif'] = $kelas;
+
+                        $retrieve_all[$key]['value'] = json_decode($mengerjakan['value'], 1);
+                        $retrieve_all[$key]['value']['siswa'] = $siswa;
+
+                        if ($retrieve_all[$key]['value']['tugas']['type_id'] != 1) {
+                            # cari sisa waktu dalam menit
+                            $mulai = date('Y-m-d H:i:s');
+                            $sisa_menit = (strtotime($retrieve_all[$key]['value']['selesai']) - strtotime($mulai));
+                            $retrieve_all[$key]['value']['sisa_menit'] = ceil($sisa_menit);
+                            $retrieve_all[$key]['value']['sisa_menit_string'] = lama_pengerjaan($mulai, $retrieve_all[$key]['value']['selesai']);
+                        }
+
+                        # biar gampang, ditaruh diluar
+                        $all_value = $retrieve_all[$key]['value'];
+                        unset($mengerjakan['value']);
+                        $retrieve_all[$key] = array_merge($mengerjakan, $all_value);
+                    }
+
+                    $data['retrieve_all'] = $retrieve_all;
+
+                    # panggil datatables dan combobox
+                    $data['comp_js'] = load_comp_js(array(
+                        base_url('assets/comp/datatables/jquery.dataTables.js'),
+                        base_url('assets/comp/datatables/datatable-bootstrap2.js'),
+                        base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
+                    ));
+
+                    $data['comp_css'] = load_comp_css(array(
+                        base_url('assets/comp/datatables/datatable-bootstrap2.css'),
+                        base_url('assets/comp/colorbox/colorbox.css'),
+                    ));
+
+                    $this->twig->display('pantau-ujian.html', $data);
+                break;
             }
         }
         else {

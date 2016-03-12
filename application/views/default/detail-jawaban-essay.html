@@ -58,7 +58,7 @@
         {% for p in history.pertanyaan %}
         <tr id="pertanyaan-{{ p.id }}">
             <td style="width:30px;">
-                <b>{{ p.urutan }}.</b>
+                <b>{{ loop.index }}.</b>
             </td>
             <td>
                 <div class="pertanyaan">

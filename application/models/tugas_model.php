@@ -8,9 +8,30 @@
  */
 class Tugas_model extends CI_Model
 {
+
+    /**
+     * Method untuk mendapatkan semua siswa yang sedang ujian ditugas tertentu
+     *
+     * @param  integer $tugas_id
+     * @return array
+     */
+    public function retrieve_all_mengerjakan($tugas_id)
+    {
+        $this->db->like('id', 'mengerjakan-', 'after');
+        $this->db->like('id', "-$tugas_id", 'before');
+        $result = $this->db->get('field_tambahan');
+        return $result->result_array();
+    }
+
+    /**
+     * Method untuk mendapatkan semua history siswa yang mengerjakan tugas
+     *
+     * @param  integer $tugas_id
+     * @return array
+     */
     public function retrieve_all_history($tugas_id)
     {
-        $this->db->like('id', 'history-mengerjakan-');
+        $this->db->like('id', 'history-mengerjakan-', 'after');
         $this->db->like('id', "-$tugas_id", 'before');
         $result = $this->db->get('field_tambahan');
         return $result->result_array();

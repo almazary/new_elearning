@@ -12,7 +12,7 @@
 CREATE TABLE IF NOT EXISTS `{$prefix}field_tambahan` (
   `id` varchar(255) NOT NULL,
   `nama` varchar(255) DEFAULT NULL,
-  `value` text
+  `value` longtext
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

@@ -15,3 +15,17 @@ function update_ganda(tugas_id, pertanyaan_id, pilihan_id) {
         data : "tugas_id=" + tugas_id + "&pertanyaan_id=" + pertanyaan_id + "&pilihan_id=" + pilihan_id
     });
 }
+
+// cek status reset saat ujian
+setInterval(function() {
+    $.ajax({
+        method: "POST",
+        url: site_url + '/ajax/post_data/check_reset_status',
+        data: "siswa_id=" + $("#siswa_id").val() + "&tugas_id=" + $("#tugas_id").val(),
+        success: function(data) {
+            if (data == 'ok_reset') {
+                location.reload();
+            }
+        }
+    });
+}, 5000);
