@@ -21,4 +21,4 @@ Versi pertama dimulai dari 1.0
 <br>
 Versi terbaru : 1.7
 <br><br>
-<a href="http://dokumenary.net">PORTAL UPDATE</a> | <a href="http://www.dokumenary.net/2015/08/23/new-elearning-versi-1-0/">CARA INSTALL</a>
+<a href="http://www.dokumenary.net/demo-aplikasi-elearning/">DEMO</a> | <a href="http://dokumenary.net">PORTAL UPDATE</a> | <a href="http://www.dokumenary.net/2015/08/23/new-elearning-versi-1-0/">PANDUAN INSTALL</a>
