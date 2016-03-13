@@ -64,14 +64,19 @@ Koreksi - {{ parent() }}
         <br>
 
         <div class="btn-group">
+            {% if tugas.type_id == 2 %}
+            <a href="{{ site_url('tugas/pantau/' ~ tugas.id) }}" class="btn btn-primary">Pantau Ujian</a>
+            {% endif %}
             <a data-original-title="Print Query" href="#" class="btn btn-primary" data-toggle="popover" data-html="true" data-placement="top" data-content="<form method='post' target='_blank' action='{{ site_url('tugas/koreksi/' ~ tugas.id ~ '/print') }}'><select name='kelas_id'><option value='all'>--Semua Kelas--</option>{% for k in kelas_nilai %} <option value='{{ k.id }}'>{{ k.nama }}</option> {% endfor %}</select><button class='btn btn-primary btn-sm'>Print</button</form>">Print</a>
             <a data-original-title="Export Query" href="#" class="btn btn-primary" data-toggle="popover" data-html="true" data-placement="bottom" data-content="<form method='post' target='_blank' action='{{ site_url('tugas/koreksi/' ~ tugas.id ~ '/export_excel') }}'><select name='kelas_id'><option value='all'>--Semua Kelas--</option>{% for k in kelas_nilai %} <option value='{{ k.id }}'>{{ k.nama }}</option> {% endfor %}</select><button class='btn btn-primary btn-sm'>Export Excel</button</form>">Export Excel</a>
         </div>
 
         <br><br>
+        {{ form_open('tugas/bulk_reset_jawaban/' ~ tugas.id, {"id" : "form-bulk"})|raw }}
         <table class="table table-striped datatable">
             <thead>
                 <tr>
+                    <th width="3%"></th>
                     <th>Siswa</th>
                     <th>Kelas</th>
                     <th>Nilai</th>
@@ -82,8 +87,11 @@ Koreksi - {{ parent() }}
                 {% for s in data_siswa %}
                 <tr>
                     <td>
+                        <input type="checkbox" name="siswa_id[]" value="{{ s.id }}" style="margin-top:-2px;">
+                    </td>
+                    <td>
                         <img style="height:20px;width:20px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(s.foto, 'medium', s.jenis_kelamin) }}">
-                        <a href="{{ site_url('siswa/detail/' ~ s.id) }}"><b>{{ s.nama }} {{ ((s.nis is not empty) ? '<span class="text-muted">(' ~ s.nis ~ ')</span>')|raw }}</b></a>
+                        <a href="{{ site_url('siswa/detail/' ~ s.status_id ~ '/' ~ s.id) }}"><b>{{ s.nama }} {{ ((s.nis is not empty) ? '<span class="text-muted">(' ~ s.nis ~ ')</span>')|raw }}</b></a>
                     </td>
                     <td>{{ s.kelas_aktif.nama }} <span class="text-muted">({{ s.kelas_aktif.id }})</span></td>
                     <td>{{ round(s.nilai.nilai, 2) }}</td>
@@ -94,7 +102,7 @@ Koreksi - {{ parent() }}
                             {% else %}
                                 {{ anchor('tugas/detail_jawaban/' ~ s.id ~ '/' ~ tugas.id, 'Detail',{'class' : 'btn btn-small btn-primary iframe-koreksi-jawaban'})|raw }}
                             {% endif %}
-                            <a href="{{ site_url('tugas/reset_jawaban/' ~ tugas.id ~ '/' ~ s.id) }}" class="btn btn-small btn-default" onclick="return confirm('Anda yakin ingin menganggap siswa belum mengerjakan?')" data-toggle="tooltip" title="Reset jawaban siswa, <br>anggap siswa menjadi belum mengerjakan.">Reset</a>
+                            <a href="{{ site_url('tugas/reset_jawaban/' ~ tugas.id ~ '/' ~ s.id) }}" class="btn btn-small btn-default" onclick="return confirm('Anda yakin ingin menganggap siswa belum mengerjakan?')" data-toggle="tooltip" title="Reset jawaban siswa, <br>anggap siswa menjadi belum <br>mengerjakan.">Reset</a>
                         </div>
                     </td>
                 </tr>
@@ -102,6 +110,45 @@ Koreksi - {{ parent() }}
             </tbody>
         </table>
 
+        <div class="btn-group">
+            <button name="reset_tipe" value="terpilih" type="submit" onclick="return confirm('Reset jawaban siswa terpilih?')" class="btn btn-primary">Reset jawaban siswa terpilih</button>
+            <button name="reset_tipe" value="semua" type="submit" onclick="return confirm('Reset jawaban semua siswa?')" class="btn btn-primary">Reset jawaban semua siswa</button>
+        </div>
+        <input type="hidden" name="url_back" value="{{ current_url() }}">
+
+        {{ form_close()|raw }}
+        <br>
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    $('.datatable').dataTable({
+        "language": {
+            "url": base_url + "assets/comp/datatables/lang.id.json"
+        },
+        "aaSorting" : [],
+        "aoColumnDefs": [
+            { 'bSortable': false, 'aTargets': [ 0 ] }
+        ],
+        "fnDrawCallback" : function( oSettings ) {
+            if (typeof MathJax !== 'undefined') {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            }
+
+            $(".iframe-koreksi-jawaban").colorbox({
+                iframe:true,
+                width:"700",
+                height:"550",
+                fixed:true,
+                onClosed : function() {
+                    location.reload();
+                }
+            });
+
+            $('[data-toggle="tooltip"]').tooltip({html:true});
+        }
+    });
+</script>
 {% endblock %}

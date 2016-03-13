@@ -64,14 +64,37 @@ class MY_Controller extends CI_Controller
         $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
         $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
 
-        // $this->output->enable_profiler(TRUE);
+        if (!is_ajax()) {
+            // $this->output->enable_profiler(TRUE);
+        }
 
         # cek versi
-        $versi_install = '1.6';
+        $versi_install = '1.7';
         $versi = get_pengaturan('versi', 'value');
         if ($versi < $versi_install) {
             $this->config_model->update('versi', 'Versi', $versi_install);
+
+            # panggil perubahan tabel
+            $this->table_change();
         }
+    }
+
+    function table_change()
+    {
+        # ubah type field `value` pada tabel field_tambahan menjadi longtext
+        $fields = $this->db->field_data('field_tambahan');
+        foreach ($fields as $field) {
+            if ($field->name == 'value' && $field->type == 'text') {
+                $this->load->dbforge();
+                $this->dbforge->modify_column('field_tambahan', array(
+                    '`value`' => array(
+                        'type' => 'LONGTEXT'
+                    )
+                ));
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -411,19 +434,78 @@ class MY_Controller extends CI_Controller
 
             $decode_value = json_decode($data_field['value'], 1);
 
-            # cek valid route
-            $valid_route = false;
-            foreach ($decode_value['valid_route'] as $route) {
-                $route = rtrim($route, '/');
-                if (strpos(current_url(), $route) !== false) {
-                    $valid_route = true;
-                    break;
+            if (isset($decode_value['valid_route']) AND isset($decode_value['uri_string'])) {
+                # cek valid route
+                $valid_route = false;
+                foreach ($decode_value['valid_route'] as $route) {
+                    $route = rtrim($route, '/');
+                    if (strpos(current_url(), $route) !== false) {
+                        $valid_route = true;
+                        break;
+                    }
+                }
+
+                if ($valid_route == false) {
+                    redirect($decode_value['uri_string'], true);
                 }
             }
-
-            if ($valid_route == false) {
-                redirect($decode_value['uri_string'], true);
+            else {
+                return true;
             }
         }
+    }
+
+    /**
+     * Method untuk reset jawaban ujian siswa
+     *
+     * @param  integer $siswa_id
+     * @param  integer $tugas_id
+     * @param  array   $db_tugas  data tugas
+     * @return integer
+     */
+    function reset_nilai_jawaban($siswa_id, $tugas_id, $db_tugas = array())
+    {
+        # ambil data tugas
+        if (empty($db_tugas)) {
+            $tugas = $this->tugas_model->retrieve($tugas_id);
+            if (empty($tugas)) {
+                return false;
+            }
+        } else {
+            $tugas = $db_tugas;
+        }
+
+        # start transaksi
+        $this->db->trans_start();
+
+        # hapus history
+        $history_id    = 'history-mengerjakan-' . $siswa_id . '-' . $tugas['id'];
+        $history       = retrieve_field($history_id);
+        $history_value = json_decode($history['value'], 1);
+        delete_field($history_id);
+
+        # hapus field mengerjakan
+        $mengerjakan_field_id = 'mengerjakan-' . $siswa_id . '-' . $tugas['id'];
+        delete_field($mengerjakan_field_id);
+
+        # hapus nilai
+        $retrieve_nilai = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa_id);
+        $this->tugas_model->delete_nilai($retrieve_nilai['id']);
+
+        $this->db->trans_complete();
+
+        $sukses = true;
+        if ($this->db->trans_status() === FALSE) {
+            $sukses = false;
+        }
+
+        if ($sukses) {
+            # jika tugas upload, dihapus juga file uploadnya biar g menuh-menuhin space
+            if ($tugas['type_id'] == 1 && is_file(get_path_file($history_value['file_name']))) {
+                @unlink(get_path_file($history_value['file_name']));
+            }
+        }
+
+        return $sukses;
     }
 }

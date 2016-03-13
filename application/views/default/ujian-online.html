@@ -129,7 +129,7 @@
                                     <div id="pilihan-{{ p.id }}">
                                         <table class="table table-condensed table-striped">
                                             <tbody>
-                                                {% for pil in p.pilihan %}
+                                                {% for pil in p.pilihan if pil.konten is not empty %}
                                                 <tr>
                                                     <td width="5%"><label class="label-radio"><input {{ (is_pilih(data.jawaban, p.id, pil.id)) ? 'checked' }} type="radio" name="pilihan-{{ p.id }}" value="{{ pil.urutan }}" onclick="update_ganda({{ data.tugas.id }}, {{ p.id }}, {{ pil.id }})" class="radio"> {{ get_abjad(pil.urutan) }}</label></td>
                                                     <td>
@@ -202,5 +202,6 @@
 <input type="hidden" id="tugas_id" value="{{ data.tugas.id }}">
 <input type="hidden" id="sisa_menit" value="{{ data.sisa_menit }}">
 <input type="hidden" id="finish_url" value="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}">
+<input type="hidden" id="siswa_id" value="{{ get_sess_data('user', 'id') }}">
 {% endif %}
 {% endblock %}

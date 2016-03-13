@@ -27,6 +27,22 @@
 </table>
 <br>
 
+<table class="table table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>IP</th>
+            <th>Agent</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ history.ip }}</td>
+            <td>{{ history.agent_string }}</td>
+        </tr>
+    </tbody>
+</table>
+<br>
+
 {{ form_open('tugas/detail_jawaban/' ~ siswa.id ~ '/' ~ tugas.id)|raw }}
 <b>File upload</b>
 <table class="table table-condensed table-striped">

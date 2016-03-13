@@ -48,6 +48,17 @@ class Ajax extends MY_Controller
     function post_data($page)
     {
         switch ($page) {
+            case 'check_reset_status':
+                $siswa_id = $this->input->post('siswa_id', true);
+                $tugas_id = $this->input->post('tugas_id', true);
+
+                $field_id = 'mengerjakan-' . $siswa_id . '-' . $tugas_id;
+                $mengerjakan = retrieve_field($field_id);
+                if (empty($mengerjakan)) {
+                    echo "ok_reset";
+                }
+            break;
+
             case 'hirarki_kelas':
                 $o = 1;
                 foreach ((array)$_POST['list'] as $id => $parent_id){

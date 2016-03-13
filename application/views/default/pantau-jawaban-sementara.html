@@ -1,59 +1,27 @@
 {% extends "layout-iframe.html" %}
 
 {% block content %}
-<h4>Detail Jawaban</h4>
+<h4>Jawaban Sementara</h4>
 
-<table class="table table-condensed table-striped">
-    <thead>
-        <tr>
-            <th>Tgl Mengerjakan</th>
-            <th>Tgl Selesai</th>
-            <th>Lama Pengerjaan</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ tgl_jam_indo(history.mulai) }}</td>
-            <td>{{ tgl_jam_indo(history.tgl_submit) }}</td>
-            <td>{{ history.total_waktu }}</td>
-        </tr>
-    </tbody>
-</table>
-<br>
-
-<table class="table table-condensed table-striped">
-    <thead>
-        <tr>
-            <th>IP</th>
-            <th>Agent</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>{{ history.ip }}</td>
-            <td>{{ history.agent_string }}</td>
-        </tr>
-    </tbody>
-</table>
-<br>
+{% if tugas.type_id == 3 %}
 
 <table class="table table-condensed table-striped">
     <thead>
         <tr>
             <th>Jml soal</th>
-            <th>Jml benar</th>
-            <th>Jml salah</th>
-            <th>Jml kosong</th>
-            <th>Nilai</th>
+            <th>Terjawab</th>
+            <th>Kosong</th>
+            <th>Benar</th>
+            <th>Salah</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>{{ count(history.pertanyaan) }}</td>
-            <td>{{ history.jml_benar }}</td>
-            <td>{{ history.jml_salah }}</td>
-            <td>{{ (count(history.pertanyaan) != (history.jml_benar + history.jml_salah)) ? count(history.pertanyaan) - (history.jml_benar + history.jml_salah) : 0 }}</td>
-            <td><b>{{ round(history.nilai, 2) }}</b></td>
+            <td>{{ count(pertanyaan) }}</td>
+            <td>{{ count(jawaban) }}</td>
+            <td>{{ count(pertanyaan) - count(jawaban) }}</td>
+            <td>{{ jml_benar }}</td>
+            <td>{{ jml_salah }}</td>
         </tr>
     </tbody>
 </table>
@@ -66,12 +34,12 @@
         </tr>
     </thead>
     <tbody>
-        {% for p in history.pertanyaan %}
+        {% for p in pertanyaan %}
         <tr id="pertanyaan-{{ p.id }}">
             <td style="width:30px;">
                 <b>{{ loop.index }}.</b>
                 <br>
-                {% if get_jawaban(history.jawaban, p.id) == get_kunci_pilihan(p.pilihan) %}
+                {% if get_jawaban(jawaban, p.id) == get_kunci_pilihan(p.pilihan) %}
                 <span class="text-error"><i class="icon icon-ok"></i></span>
                 {% else %}
                 <span class="text-error"><i class="icon icon-remove"></i></span>
@@ -95,7 +63,7 @@
                                         {% if pil.kunci == 1 %}
                                             <li><small class="text-warning"><i class="icon icon-star"></i> Kunci Jawaban</small></li>
                                         {% endif %}
-                                        {% if is_pilih(history.jawaban, p.id, pil.id) == true %}
+                                        {% if is_pilih(jawaban, p.id, pil.id) == true %}
                                             <li><small class="text-success"><i class="icon-hand-up"></i> Jawaban Siswa</small></li>
                                         {% endif %}
                                     </ul>
@@ -112,5 +80,53 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% elseif tugas.type_id == 2 %}
+
+<table class="table table-condensed table-striped">
+    <thead>
+        <tr>
+            <th>Jml soal</th>
+            <th>Terjawab</th>
+            <th>Kosong</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ count(pertanyaan) }}</td>
+            <td>{{ jml_terjawab }}</td>
+            <td>{{ jml_kosong }}</td>
+        </tr>
+    </tbody>
+</table>
+<br>
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th colspan="2">List Jawaban</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in pertanyaan %}
+        <tr id="pertanyaan-{{ p.id }}">
+            <td style="width:30px;">
+                <b>{{ loop.index }}.</b>
+            </td>
+            <td>
+                <div class="pertanyaan">
+                    {{ p.pertanyaan|raw_media|raw }}
+                </div>
+
+                <b>Jawaban :</b>
+                {{ get_jawaban(jawaban, p.id)|raw_media|raw }}
+            </td>
+        </tr>
+
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endif %}
 
 {% endblock %}

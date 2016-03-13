@@ -1,0 +1,81 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Backup & Restore - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Backup & Restore Database</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('backup_restore')|raw }}
+
+        {% if is_demo_app() %}
+            {{ get_alert('warning', get_demo_msg())|raw }}
+        {% endif %}
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="bs-callout bs-callout-info">
+                    <h4>Backup</h4>
+                    <hr style="margin-top:0px;margin-bottom: 10px;">
+                    {% if last_backup_date is empty %}
+                        <span class="text-info">Database belum pernah dibackup</span>
+                    {% else %}
+                        <span class="text-info">Backup terahir tanggal {{ tgl_jam_indo(last_backup_date) }}</span>
+                    {% endif %}
+                    <br><br>
+                    <a href="{{ site_url('welcome/backup_restore/backup') }}" class="btn btn-primary">Backup</a>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="bs-callout bs-callout-warning">
+                    <h4>Restore</h4>
+                    <hr style="margin-top:0px;margin-bottom: 10px;">
+                    <p>Pilih salah satu dari tiga cara restore dibawah yang menurut anda paling mudah dan aman.</p>
+                    <ol>
+                        <li>
+                            <b>Phpmyadmin</b><br>
+                            Buat database baru, import file .sql hasil backup, kemudian sesuaikan pengaturan database pada application/config/database.php untuk database yang baru.
+                        </li>
+                        <li>
+                            <b>Command line</b><br>
+                            Untuk pengguna windows, contoh: <b>c:\xampp\mysql\bin\mysql.exe -u root -p dbnew_elearning < c:\xampp\htdocs\new_elearning\backup-file.sql</b>.<br>
+                            Untuk pengguna linux, contoh: <b>mysql -u root -p dbnew_elearning < /path/to/backup-file.sql</b>.
+                            <br>
+                            Kemudian tekan Enter dan masukkan password mysql anda.
+                        </li>
+                        <li>
+                            <b>Import file</b><br>
+                            <div class="well well-small">
+                            {{ form_open_multipart('welcome/backup_restore/restore')|raw }}
+
+                            <p>Tunggu sampai proses selesai, jangan melakukan refresh atau aksi lainnya sebelum proses restore selesai.
+                            <br>Cara ini dapat saja gagal dengan berbagai faktor, jika gagal ditengah jalan, silahkan lakukan langkah no 1 atau 2.</p>
+
+                            {% if restore_msg is not empty %}
+                                <span class="text-error"><i class="icon-info-sign"></i> {{ restore_msg|raw }}</span>
+                            {% endif %}
+
+                            {% if is_demo_app() == false %}
+                            <p><input type="file" name="userfile" accept=".sql"></p>
+                            <p>
+                                <span class="text-info pull-right">Upload file .sql hasil backup</span>
+                                <button class="btn btn-primary" type="submit">Restore</button>
+                            </p>
+                            {% endif %}
+                            {{ form_close()|raw }}
+                            </div>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
