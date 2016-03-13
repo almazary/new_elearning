@@ -1815,13 +1815,19 @@ class Tugas extends MY_Controller
                 redirect($url_back);
             }
             elseif ($reset_tipe == "semua") {
-                # cari yang sudah selesai mengerjakan
-                $retrieve_nilai = $this->tugas_model->retrieve_all_nilai($tugas['id']);
-                foreach ($retrieve_nilai as $nilai) {
-                    $this->reset_nilai_jawaban($nilai['siswa_id'], $tugas['id'], $tugas);
+                # ambil semua history
+                $retrieve_all_history = $this->tugas_model->retrieve_all_history($tugas['id']);
+                foreach ($retrieve_all_history as $history) {
+                    $split_id = explode("-", $history['id']);
+                    $siswa_id = $split_id[2];
+
+                    $this->reset_nilai_jawaban($siswa_id, $tugas['id'], $tugas);
                 }
 
-                $this->session->set_flashdata('tugas', get_alert('success', 'Semua siswa berhasil dianggap belum mengerjakan.'));
+                if (!empty($retrieve_all_history)) {
+                    $this->session->set_flashdata('tugas', get_alert('success', 'Semua siswa berhasil dianggap belum mengerjakan.'));
+                }
+
                 redirect($url_back);
             }
             else {
@@ -1879,6 +1885,8 @@ class Tugas extends MY_Controller
                     $soal  = array();
                     $benar = 0;
                     $salah = 0;
+                    $essay_kosong   = 0;
+                    $essay_terjawab = 0;
                     foreach ($de_val['pertanyaan_id'] as $key => $p_id) {
                         $pertanyaan = $this->tugas_model->retrieve_pertanyaan($p_id);
 
@@ -1892,8 +1900,26 @@ class Tugas extends MY_Controller
                                 $salah++;
                             }
                         }
+                        # essay
+                        elseif ($de_val['tugas']['type_id'] == 2) {
+                            if (!isset($de_val['jawaban'][$p_id])) {
+                                $essay_kosong++;
+                            } else {
+                                $jawaban_p_id = trim($de_val['jawaban'][$p_id]);
+                                if (empty($jawaban_p_id)) {
+                                    $essay_kosong++;
+                                } else {
+                                    $essay_terjawab++;
+                                }
+                            }
+                        }
 
                         $soal[$key] = $pertanyaan;
+                    }
+
+                    if ($de_val['tugas']['type_id'] == 2) {
+                        $de_val['jml_kosong']   = $essay_kosong;
+                        $de_val['jml_terjawab'] = $essay_terjawab;
                     }
 
                     $de_val['jml_benar']  = $benar;

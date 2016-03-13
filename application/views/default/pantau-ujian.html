@@ -7,7 +7,7 @@ Pantau Ujian - {{ parent() }}
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>{{ anchor('tugas', 'Tugas')|raw }} / {{ anchor('tugas/nilai/' ~ tugas.id, 'Lihat Nilai')|raw }} / Pantau Ujian</h3>
+        <h3>{{ anchor('tugas', 'Tugas')|raw }} / {{ anchor('tugas/' ~ ((tugas.type_id == 2) ? 'koreksi' : 'nilai') ~'/' ~ tugas.id, 'Lihat Nilai')|raw }} / Pantau Ujian</h3>
     </div>
     <div class="module-body">
         {{ get_flashdata('tugas')|raw }}
