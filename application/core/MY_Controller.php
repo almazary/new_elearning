@@ -65,7 +65,7 @@ class MY_Controller extends CI_Controller
         $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
 
         if (!is_ajax()) {
-            $this->output->enable_profiler(TRUE);
+            // $this->output->enable_profiler(TRUE);
         }
 
         # cek versi

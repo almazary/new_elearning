@@ -12,6 +12,10 @@ Backup & Restore - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('backup_restore')|raw }}
 
+        {% if is_demo_app() %}
+            {{ get_alert('warning', get_demo_msg())|raw }}
+        {% endif %}
+
         <div class="row-fluid">
             <div class="span12">
                 <div class="bs-callout bs-callout-info">
@@ -58,11 +62,13 @@ Backup & Restore - {{ parent() }}
                                 <span class="text-error"><i class="icon-info-sign"></i> {{ restore_msg|raw }}</span>
                             {% endif %}
 
+                            {% if is_demo_app() == false %}
                             <p><input type="file" name="userfile" accept=".sql"></p>
                             <p>
                                 <span class="text-info pull-right">Upload file .sql hasil backup</span>
                                 <button class="btn btn-primary" type="submit">Restore</button>
                             </p>
+                            {% endif %}
                             {{ form_close()|raw }}
                             </div>
                         </li>
