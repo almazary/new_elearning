@@ -96,7 +96,7 @@ Pantau Ujian - {{ parent() }}
                             </tr>
                             <tr>
                                 <td>Sisa waktu</td>
-                                <td>{{ n.sisa_menit_string }}</td>
+                                <td>{{ n.sisa_menit_string|raw }}</td>
                             </tr>
                             <tr>
                                 <td colspan="2">
@@ -128,9 +128,8 @@ Pantau Ujian - {{ parent() }}
                   { 'bSortable': false, 'aTargets': [ 0 ] }
         ],
         "fnDrawCallback" : function( oSettings ) {
-            try {
+            if (typeof MathJax !== 'undefined') {
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-            } catch(err) {
             }
 
             $(".iframe-jawaban-sementara").colorbox({

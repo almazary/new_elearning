@@ -1931,7 +1931,14 @@ class Tugas extends MY_Controller
                             $mulai = date('Y-m-d H:i:s');
                             $sisa_menit = (strtotime($retrieve_all[$key]['value']['selesai']) - strtotime($mulai));
                             $retrieve_all[$key]['value']['sisa_menit'] = ceil($sisa_menit);
-                            $retrieve_all[$key]['value']['sisa_menit_string'] = lama_pengerjaan($mulai, $retrieve_all[$key]['value']['selesai']);
+
+                            if (strtotime($retrieve_all[$key]['value']['selesai']) < strtotime($mulai)) {
+                                $sisa_menit_string = "<span class='text-error'><i class='icon-info-sign'></i> Harusnya sudah selesai.</span><br><span class='text-info'>Peserta terindikasi berhenti saat ujian berlangsung.</span>";
+                            } else {
+                                $sisa_menit_string = lama_pengerjaan($mulai, $retrieve_all[$key]['value']['selesai']);
+                            }
+
+                            $retrieve_all[$key]['value']['sisa_menit_string'] = $sisa_menit_string;
                         }
 
                         # biar gampang, ditaruh diluar

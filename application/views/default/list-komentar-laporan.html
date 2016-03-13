@@ -82,7 +82,9 @@ Laporan Komentar Materi - {{ parent() }}
         },
         "aaSorting" : [],
         "fnDrawCallback" : function( oSettings ) {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            if (typeof MathJax !== 'undefined') {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            }
         }
     });
 </script>

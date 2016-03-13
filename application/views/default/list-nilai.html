@@ -126,7 +126,9 @@ Lihat Nilai - {{ parent() }}
                   { 'bSortable': false, 'aTargets': [ 0 ] }
         ],
         "fnDrawCallback" : function( oSettings ) {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            if (typeof MathJax !== 'undefined') {
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+            }
 
             $(".iframe-detail-jawaban").colorbox({
                 iframe:true,
