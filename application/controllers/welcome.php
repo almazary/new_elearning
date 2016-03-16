@@ -425,6 +425,12 @@ class Welcome extends MY_Controller
                 );
 
                 foreach ($table_list as $table) {
+                    # cek tabel ada atau g
+                    if (!$this->db->table_exists($table)) {
+                        $backup_template = str_replace('{$insert_' . $table . '}', "", $backup_template);
+                        continue;
+                    }
+
                     # cek isi table
                     $results = $this->db->get($table);
                     $results = $results->result_array();
