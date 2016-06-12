@@ -19,7 +19,7 @@ function base_url_plugins($add_link = '') {
  */
 function data_excel($path_file, $baris_mulai_data = 2)
 {
-    include 'excel_reader2.php';
+    include_once 'excel_reader2.php';
 
     $file_excel = new Spreadsheet_Excel_Reader($path_file);
 
@@ -60,8 +60,8 @@ function plugin_helper($plugin_name, $func, $params = array())
         throw new Exception("Plugin helper tidak ditemukan.");
     }
 
-    # include
-    include $plugin_dir . 'src/' . $plugin_name . '/helper.php';
+    # include_once
+    include_once $plugin_dir . 'src/' . $plugin_name . '/helper.php';
 
     return call_user_func_array($func, $params);
 }

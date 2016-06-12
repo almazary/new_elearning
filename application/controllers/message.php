@@ -17,6 +17,8 @@ class Message extends MY_Controller
         }
 
         must_login();
+
+        $this->db->query("SET sql_mode = ''");
     }
 
     function index($segment_3 = '', $segment_4 = '')

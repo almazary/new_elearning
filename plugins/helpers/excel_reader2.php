@@ -64,13 +64,6 @@ define('START_BLOCK_POS', 0x74);
 define('SIZE_POS', 0x78);
 define('IDENTIFIER_OLE', pack("CCCCCCCC",0xd0,0xcf,0x11,0xe0,0xa1,0xb1,0x1a,0xe1));
 
-# This function was DEPRECATED in PHP 5.3.0
-if (!function_exists('split')) {
-    function split($param1, $param2) {
-        return explode($param1, $param2);
-    }
-}
-
 function GetInt4d($data, $pos) {
     $value = ord($data[$pos]) | (ord($data[$pos+1]) << 8) | (ord($data[$pos+2]) << 16) | (ord($data[$pos+3]) << 24);
     if ($value>=4294967294) {
@@ -82,7 +75,7 @@ function GetInt4d($data, $pos) {
 // http://uk.php.net/manual/en/function.getdate.php
 function gmgetdate($ts = null){
     $k = array('seconds','minutes','hours','mday','wday','mon','year','yday','weekday','month',0);
-    return(array_comb($k,split(":",gmdate('s:i:G:j:w:n:Y:z:l:F:U',is_null($ts)?time():$ts))));
+    return(array_comb($k,explode(":",gmdate('s:i:G:j:w:n:Y:z:l:F:U',is_null($ts)?time():$ts))));
     }
 
 // Added for PHP4 compatibility
@@ -847,7 +840,7 @@ class Spreadsheet_Excel_Reader {
 
         // Custom pattern can be POSITIVE;NEGATIVE;ZERO
         // The "text" option as 4th parameter is not handled
-        $parts = split(";",$format);
+        $parts = explode(";",$format);
         $pattern = $parts[0];
         // Negative pattern
         if (count($parts)>2 && $num==0) {
