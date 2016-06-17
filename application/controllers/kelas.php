@@ -311,6 +311,19 @@ class Kelas extends MY_Controller
                     $mapel_kelas_id[] = $v['mapel_id'];
                 }
 
+                $data['post_mapel'] = 0;
+                if (!empty($_POST['add-mapel'])) {
+                    if ($this->form_validation->run('mapel/add') == TRUE AND !is_demo_app()) {
+                        $nama = $this->input->post('nama', TRUE);
+                        $info = $this->input->post('info', TRUE);
+                        $this->mapel_model->create($nama, $info);
+
+                        $this->session->set_flashdata('mapel', get_alert('success', 'Matapelajaran baru berhasil ditambah.'));
+                        redirect('kelas/mapel_kelas/add/'.$parent_id.'/'.$kelas_id.'/'.enurl_redirect($uri_back));
+                    }
+                    $data['post_mapel'] = 1;
+                }
+
                 if ($this->form_validation->run('kelas/mapel_kelas/add') == TRUE AND !is_demo_app()) {
 
                     $mapel = $this->input->post('mapel', TRUE);
