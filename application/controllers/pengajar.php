@@ -33,6 +33,7 @@ class Pengajar extends MY_Controller
         $data['status_id']  = $status_id;
         $data['pengajar']   = $retrieve_all['results'];
         $data['pagination'] = $this->pager->view($retrieve_all, $base_url_module);
+        $data['count_pending'] = $this->pengajar_model->count('pending');
 
         # panggil colorbox
         $html_js = load_comp_js(array(

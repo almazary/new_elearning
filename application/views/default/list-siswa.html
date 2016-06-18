@@ -20,7 +20,7 @@ Data Siswa - {{ parent() }}
             <div class="span5">
                 <div class="btn-group">
                     {{ anchor('siswa/index/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/0', 'Pending', {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/0', 'Pending ' ~ ((count_pending > 0) ? '<span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/index/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/index/3', 'Alumni', {'class' : (status_id == 3) ? 'btn btn-info' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-default'})|raw }}

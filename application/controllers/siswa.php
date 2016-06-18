@@ -47,6 +47,7 @@ class Siswa extends MY_Controller
         $data['status_id']  = $status_id;
         $data['siswas']     = $retrieve_all['results'];
         $data['pagination'] = $this->pager->view($retrieve_all, 'siswa/index/'.$status_id.'/');
+        $data['count_pending'] = $this->siswa_model->count('pending');
 
         # panggil colorbox
         $html_js = load_comp_js(array(
