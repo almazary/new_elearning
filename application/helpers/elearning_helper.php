@@ -76,7 +76,7 @@ function default_parser_item($add_item = array())
     # cek proses install tidak
     if ($CI->uri->segment(1) != 'setup') {
         $return['copyright'] = 'Copyright &copy; 2014 - ' . date('Y') . ' ' . get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>';
-        $return['site_name'] = 'E-Learning '.get_pengaturan('nama-sekolah', 'value');
+        $return['site_name'] = 'e-Learning '.get_pengaturan('nama-sekolah', 'value');
         $return['version']   = '<a href="https://github.com/almazary/new_elearning">versi ' . get_pengaturan('versi', 'value') . '</a>';
     }
 
