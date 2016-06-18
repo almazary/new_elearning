@@ -23,7 +23,7 @@
                         <i class="icon-reorder shaded"></i>
                     </a>
                     <a class="brand" href="{{ site_url }}">
-                        <img src="{{ logo_url_medium }}"> <span class="visible-phone brand-txt">E-Learning App</span><span class="visible-desktop visible-tablet brand-txt">{{ site_name }}</span>
+                        <img src="{{ logo_url_medium }}"> <span class="visible-phone brand-txt">e-Learning</span><span class="visible-desktop visible-tablet brand-txt">{{ site_name }}</span>
                     </a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <form class="navbar-search pull-left input-append" method="get" action="{{ site_url('welcome/search') }}">
@@ -37,7 +37,6 @@
 
                             {% if is_admin() %}
                             <li><a href="{{ site_url('welcome/get_plugin') }}">PLUGINS</a></li>
-                            <li><a href="{{ site_url('welcome/donation') }}">DONASI</a></li>
                             {% endif %}
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 {{ nama_panggilan(get_sess_data('user', 'nama')) }}

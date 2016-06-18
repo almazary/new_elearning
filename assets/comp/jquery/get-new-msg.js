@@ -17,5 +17,5 @@ $(function() {
 
     setInterval(function() {
         get_new_msg();
-    }, 5000);
+    }, 10000);
 });

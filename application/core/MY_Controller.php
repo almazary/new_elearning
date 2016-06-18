@@ -69,7 +69,7 @@ class MY_Controller extends CI_Controller
         }
 
         # cek versi
-        $versi_install = '1.7';
+        $versi_install = '1.8';
         $versi = get_pengaturan('versi', 'value');
         if ($versi < $versi_install) {
             $this->config_model->update('versi', 'Versi', $versi_install);

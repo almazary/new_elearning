@@ -43,5 +43,5 @@ $(function() {
 
     setInterval(function() {
         check_new_msg();
-    }, 5000);
+    }, 10000);
 });
