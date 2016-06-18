@@ -63,7 +63,7 @@ class Pengajar extends MY_Controller
                     );
 
                     if ($retrieve_pengajar['status_id'] == 0 && $post_status_id == 1) {
-                        kirim_email_approve_pengajar($pengajar_id);
+                        @kirim_email_approve_pengajar($pengajar_id);
                     }
                 }
             }

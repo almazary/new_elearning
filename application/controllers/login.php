@@ -176,6 +176,9 @@ class Login extends MY_Controller
 
                 $foto = null;
 
+                $status_id = get_pengaturan('status-registrasi-siswa', 'value');
+                $status_id = (int)$status_id;
+
                 # simpan data siswa
                 $siswa_id = $this->siswa_model->create(
                     $nis,
@@ -187,7 +190,7 @@ class Login extends MY_Controller
                     $alamat,
                     $tahun_masuk,
                     $foto,
-                    0
+                    $status_id
                 );
 
                 # simpan data login
@@ -205,13 +208,23 @@ class Login extends MY_Controller
                     1
                 );
 
-                # kirim email registrasi
-                @kirim_email('email-template-register-siswa', $username, array(
-                    'nama'         => $nama,
-                    'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
-                ));
+                # jika langsung aktif
+                if ($status_id == 1) {
+                    # kirim email aktifasi
+                    @kirim_email_approve_siswa($siswa_id);
 
-                $this->session->set_flashdata('register', get_alert('success', 'Terimakasih telah melakukan registrasi sebagai siswa, tunggu pengaktifan akun oleh admin.'));
+                    $pesan = "Registrasi sebagai siswa berhasil, silakan " . anchor('login/index', 'LOG IN') . " ke sistem.";
+                } else {
+                    # kirim email registrasi
+                    @kirim_email('email-template-register-siswa', $username, array(
+                        'nama'         => $nama,
+                        'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
+                    ));
+
+                    $pesan = "Registrasi sebagai siswa berhasil, tunggu pengaktifan akun oleh admin.";
+                }
+
+                $this->session->set_flashdata('register', get_alert('success', $pesan));
                 redirect('login/register/siswa');
             }
 
@@ -240,7 +253,10 @@ class Login extends MY_Controller
                     $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
                 }
 
-                # simpan data siswa
+                $status_id = get_pengaturan('status-registrasi-pengajar', 'value');
+                $status_id = (int)$status_id;
+
+                # simpan data pengajar
                 $pengajar_id = $this->pengajar_model->create(
                     $nip,
                     $nama,
@@ -249,7 +265,7 @@ class Login extends MY_Controller
                     $tanggal_lahir,
                     $alamat,
                     $foto,
-                    0
+                    $status_id
                 );
 
                 # simpan data login
@@ -261,13 +277,21 @@ class Login extends MY_Controller
                     $is_admin
                 );
 
-                # kirim email registrasi
-                @kirim_email('email-template-register-pengajar', $username, array(
-                    'nama'         => $nama,
-                    'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
-                ));
+                if ($status_id == 1) {
+                    @kirim_email_approve_pengajar($pengajar_id);
 
-                $this->session->set_flashdata('register', get_alert('success', 'Terimakasih telah melakukan registrasi sebagai pengajar, tunggu pengaktifan akun oleh admin.'));
+                    $pesan = "Registrasi sebagai pengajar berhasil, silakan " . anchor('login/index', 'LOG IN') . " ke sistem.";
+                } else {
+                    # kirim email registrasi
+                    @kirim_email('email-template-register-pengajar', $username, array(
+                        'nama'         => $nama,
+                        'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
+                    ));
+
+                    $pesan = "Registrasi sebagai pengajar berhasil, tunggu pengaktifan akun oleh admin.";
+                }
+
+                $this->session->set_flashdata('register', get_alert('success', $pesan));
                 redirect('login/register/pengajar');
             }
         }
