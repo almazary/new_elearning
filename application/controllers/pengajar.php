@@ -264,6 +264,52 @@ class Pengajar extends MY_Controller
         $this->twig->display('edit-pengajar-profile.html', $data);
     }
 
+    /**
+     * Meghapus foto pengajar
+     * @since 1.8
+     */
+    function delete_foto($segment_3 = "", $segment_4 = "")
+    {
+        # siswa tidak diijinkan
+        if (is_siswa()) {
+            show_error('Akses ditolak');
+        }
+
+        $pengajar_id       = (int)$segment_3;
+        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        if (empty($retrieve_pengajar)) {
+            show_error('Data Pengajar tidak ditemukan');
+        }
+
+        # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
+        if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
+            show_error('Akses ditolak');
+        }
+
+        if (is_file(get_path_image($retrieve_pengajar['foto']))) {
+            unlink(get_path_image($retrieve_pengajar['foto']));
+        }
+
+        if (is_file(get_path_image($retrieve_pengajar['foto'], 'medium'))) {
+            unlink(get_path_image($retrieve_pengajar['foto'], 'medium'));
+        }
+
+        if (is_file(get_path_image($retrieve_pengajar['foto'], 'small'))) {
+            unlink(get_path_image($retrieve_pengajar['foto'], 'small'));
+        }
+
+        $this->pengajar_model->delete_foto($retrieve_pengajar['id']);
+
+        $uri_back = $segment_4;
+        if (!empty($uri_back)) {
+            $uri_back = deurl_redirect($uri_back);
+        } else {
+            $uri_back = site_url('pengajar');
+        }
+
+        redirect($uri_back);
+    }
+
     function edit_picture($segment_3 = '', $segment_4 = '')
     {
         # siswa tidak diijinkan

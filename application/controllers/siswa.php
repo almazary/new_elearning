@@ -472,6 +472,56 @@ class Siswa extends MY_Controller
         $this->twig->display('edit-siswa-profile.html', $data);
     }
 
+    /**
+     * Meghapus foto siswa
+     * @since 1.8
+     */
+    function delete_foto($segment_3 = '', $segment_4 = '')
+    {
+        if (is_pengajar()) {
+            show_error('Akses ditolak');
+        }
+
+        # cek pengaturan
+        if (is_siswa() AND get_pengaturan('edit-foto-siswa', 'value') == '0') {
+            show_error('Maaf fitur dinonaktifkan oleh administrator');
+        }
+
+        $siswa_id       = (int)$segment_3;
+        $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+        if (empty($retrieve_siswa)) {
+            show_error('Data siswa tidak ditemukan');
+        }
+
+        # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
+        if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
+            show_error('Akses ditolak');
+        }
+
+        if (is_file(get_path_image($retrieve_siswa['foto']))) {
+            unlink(get_path_image($retrieve_siswa['foto']));
+        }
+
+        if (is_file(get_path_image($retrieve_siswa['foto'], 'medium'))) {
+            unlink(get_path_image($retrieve_siswa['foto'], 'medium'));
+        }
+
+        if (is_file(get_path_image($retrieve_siswa['foto'], 'small'))) {
+            unlink(get_path_image($retrieve_siswa['foto'], 'small'));
+        }
+
+        $this->siswa_model->delete_foto($retrieve_siswa['id']);
+
+        $uri_back = $segment_4;
+        if (!empty($uri_back)) {
+            $uri_back = deurl_redirect($uri_back);
+        } else {
+            $uri_back = site_url('siswa');
+        }
+
+        redirect($uri_back);
+    }
+
     function edit_picture($segment_3 = '', $segment_4 = '')
     {
         if (is_pengajar()) {

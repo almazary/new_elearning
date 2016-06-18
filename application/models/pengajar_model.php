@@ -8,6 +8,20 @@
  */
 class Pengajar_model extends CI_Model
 {
+    /**
+     * Method untuk mengahpus foto
+     *
+     * @param  integer $id
+     * @return boolean
+     * @author Almazari <almazary@gmail.com>
+     * @since  1.8
+     */
+    public function delete_foto($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('pengajar', array('foto' => null));
+        return true;
+    }
 
     /**
      * Method untuk menghitung data jumlah berdasarkan parameter tertentu

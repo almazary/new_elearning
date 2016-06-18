@@ -23,6 +23,9 @@
         {% if is_demo_app() == false or pengajar.is_admin == false %}
         <tr>
             <td colspan="2">
+                {% if pengajar.foto != '' %}
+                <a href="{{ site_url('pengajar/delete_foto/' ~ pengajar_id ~ '/' ~ enurl_redirect(current_url())) }}" onclick="return confirm('Anda yakin ingin menghapus foto?')" class="pull-right btn btn-default"><i class="icon-trash"></i> Hapus foto</a>
+                {% endif %}
                 <button type="submit" class="btn btn-primary">Update</button>
             </td>
         </tr>
