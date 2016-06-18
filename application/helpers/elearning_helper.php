@@ -204,7 +204,7 @@ function get_alert($notif = 'success', $msg = '')
  */
 function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array(), $str_options = null)
 {
-    $tiny_plugins = array('emotions','syntaxhl','wordcount','pagebreak','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','searchreplace','contextmenu','paste','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
+    $tiny_plugins = array('emotions','syntaxhl','wordcount','pagebreak','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
     if (!empty($remove_plugins)) {
         $copy_tiny_plugins = $tiny_plugins;
         $combine           = array_combine($tiny_plugins, $copy_tiny_plugins);
