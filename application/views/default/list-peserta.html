@@ -132,6 +132,7 @@ Koreksi - {{ parent() }}
         "aoColumnDefs": [
             { 'bSortable': false, 'aTargets': [ 0 ] }
         ],
+        "bAutoWidth": false,
         "fnDrawCallback" : function( oSettings ) {
             if (typeof MathJax !== 'undefined') {
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);

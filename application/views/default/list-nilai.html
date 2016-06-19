@@ -123,8 +123,9 @@ Lihat Nilai - {{ parent() }}
         },
         "aaSorting" : [],
         "aoColumnDefs": [
-                  { 'bSortable': false, 'aTargets': [ 0 ] }
+            { 'bSortable': false, 'aTargets': [ 0 ] }
         ],
+        "bAutoWidth": false,
         "fnDrawCallback" : function( oSettings ) {
             if (typeof MathJax !== 'undefined') {
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);

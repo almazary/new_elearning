@@ -81,6 +81,7 @@ Laporan Komentar Materi - {{ parent() }}
             "url": base_url + "assets/comp/datatables/lang.id.json"
         },
         "aaSorting" : [],
+        "bAutoWidth": false,
         "fnDrawCallback" : function( oSettings ) {
             if (typeof MathJax !== 'undefined') {
                 MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
