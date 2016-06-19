@@ -160,7 +160,6 @@ class Message extends MY_Controller
         $html_js .= load_comp_js(array(
             base_url('assets/comp/autocomplete/jquery.autocomplete.min.js'),
             base_url('assets/comp/autocomplete/script.js'),
-            base_url('assets/comp/jquery/get-new-msg.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/autocomplete/autocomplete.css')));

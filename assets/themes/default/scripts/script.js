@@ -22,7 +22,14 @@ $(function() {
         window.document.location = $(this).data("href");
     });
 
-    // cek new message
+    // cek session
+    $(document).ajaxComplete(function( event, xhr, settings ) {
+        if (xhr.responseText == "403 Forbidden.") {
+            window.document.location = site_url;
+        }
+    });
+
+    // cek count new message
     function check_new_msg()
     {
         $.ajax({
@@ -41,7 +48,28 @@ $(function() {
 
     check_new_msg();
 
+    // get new message
+    function get_new_msg()
+    {
+        if ($("#active_msg_id").length > 0) {
+            var active_msg_id = $("#active_msg_id").val();
+
+            $.ajax({
+                method: 'POST',
+                url: site_url + '/ajax/post_data/new_msg',
+                data: 'active_msg_id=' + active_msg_id,
+                success: function(data) {
+                    if (data != '') {
+                        $('#list-msg tr:last').after(data);
+                    }
+                }
+            });
+        }
+    }
+
     setInterval(function() {
         check_new_msg();
+
+        get_new_msg();
     }, 10000);
 });

@@ -8,7 +8,7 @@ class Ajax extends MY_Controller
 
         # jika belum login die
         if (!is_login()) {
-            exit('Maaf anda harus login.');
+            exit('403 Forbidden.');
         }
 
         # jika bukan ajax
