@@ -36,6 +36,10 @@ class Login extends MY_Controller
                     redirect('login');
                 }
 
+                # create log
+                $log_id = $this->login_model->create_log($get_login['id']);
+                $get_login['log_id'] = $log_id;
+
                 $data_session['login_' . APP_PREFIX][$user_type] = array(
                     'login' => $get_login,
                     'user'  => $user
@@ -384,5 +388,10 @@ class Login extends MY_Controller
 
         $data['login'] = $login;
         $this->twig->display('reset-password.html', $data);
+    }
+
+    function login_log()
+    {
+
     }
 }

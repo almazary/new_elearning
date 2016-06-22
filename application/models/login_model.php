@@ -9,6 +9,42 @@
 class Login_model extends CI_Model
 {
     /**
+     * Method untuk mendapatkan satu data log berdasarkan id
+     * @param  integer $id
+     * @return array
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_log($id)
+    {
+        $this->db->where('id', $id);
+        $result = $this->db->get('login_log');
+        return $result->row_array();
+    }
+
+    /**
+     * Method untuk menambahkan riwayat log
+     * @param  integer $login_id
+     * @return integer insert id
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function create_log($login_id)
+    {
+        $this->db->insert('login_log', array(
+            'login_id' => $login_id,
+            'lasttime' => date('Y-m-d H:i:s'),
+            'agent'    => json_encode(array(
+                'is_mobile'    => ($this->agent->is_mobile()) ? 1 : 0,
+                'browser'      => ($this->agent->is_browser()) ? $this->agent->browser() . ' ' . $this->agent->version() : '',
+                'platform'     => $this->agent->platform(),
+                'agent_string' => $this->agent->agent_string(),
+                'ip'           => get_ip(),
+            ))
+        ));
+
+        return $this->db->insert_id();
+    }
+
+    /**
      * Method untuk mendapatkan semua data user
      * @return array
      */
@@ -244,5 +280,21 @@ class Login_model extends CI_Model
         );
         $this->db->insert('login', $data);
         return $this->db->insert_id();
+    }
+
+    /**
+     * Method tempat membuat tabel baru jika ada penambahan tabel
+     * @return boolean
+     * @since  1.8
+     */
+    public function alter_table()
+    {
+        $prefix = $this->db->dbprefix;
+
+        if ($this->db->table_exists('login_log') == false) {
+            $this->db->query("CREATE TABLE `{$prefix}login_log` ( `id` INT NOT NULL AUTO_INCREMENT , `login_id` INT NOT NULL , `lasttime` DATETIME NOT NULL , `agent` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
+        }
+
+        return true;
     }
 }

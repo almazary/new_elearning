@@ -79,6 +79,10 @@ class MY_Controller extends CI_Controller
         }
     }
 
+    /**
+     * Semua perubahan tabel pada versi yang baru ditaruh di fungsi ini
+     * @return boolean
+     */
     function table_change()
     {
         # ubah type field `value` pada tabel field_tambahan menjadi longtext
@@ -93,6 +97,9 @@ class MY_Controller extends CI_Controller
                 ));
             }
         }
+
+        # penambahan fitur login log
+        $this->login_model->alter_table();
 
         return true;
     }
@@ -358,24 +365,51 @@ class MY_Controller extends CI_Controller
 
         $retrieve['profil'] = $this->get_user_data($get_user);
         $retrieve['login']  = $this->login_model->retrieve($get_user);
-
-        # format tanggal, jika hari ini
-        if (date('Y-m-d') == date('Y-m-d', strtotime($retrieve['date']))) {
-            $retrieve['date'] = date('H:i', strtotime($retrieve['date']));
-        }
-        # kemarin
-        elseif (date('Y-m-d', strtotime('-1 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
-            $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' kemarin';
-        }
-        # lusa
-        elseif (date('Y-m-d', strtotime('-2 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
-            $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' lusa';
-        }
-        else {
-            $retrieve['date'] = tgl_jam_indo($retrieve['date']);
-        }
+        $retrieve['date']   = $this->format_datetime($retrieve['date']);
 
         return $retrieve;
+    }
+
+    /**
+     * Method untuk memforamt tanggal dan jam supaya lebih enak dibaca
+     * @param  datetime $datetime
+     * @return string
+     */
+    function format_datetime($datetime)
+    {
+        # format tanggal, jika hari ini
+        if (date('Y-m-d') == date('Y-m-d', strtotime($datetime))) {
+            $selisih = time() - strtotime($datetime) ;
+
+            $detik = $selisih ;
+            $menit = round($selisih / 60);
+            $jam   = round($selisih / 3600);
+
+            if ($detik <= 60) {
+                $waktu = $detik.' detik yang lalu';
+            } else if ($menit <= 60) {
+                $waktu = $menit.' menit yang lalu';
+            } else if ($jam <= 24) {
+                $waktu = $jam.' jam yang lalu';
+            } else {
+                $waktu = date('H:i', strtotime($datetime));
+            }
+
+            $datetime = $waktu;
+        }
+        # kemarin
+        elseif (date('Y-m-d', strtotime('-1 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($datetime))) {
+            $datetime = date('H:i', strtotime($datetime)) . ' kemarin';
+        }
+        # lusa
+        elseif (date('Y-m-d', strtotime('-2 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($datetime))) {
+            $datetime = date('H:i', strtotime($datetime)) . ' lusa';
+        }
+        else {
+            $datetime = tgl_jam_indo($datetime);
+        }
+
+        return $datetime;
     }
 
     /**
