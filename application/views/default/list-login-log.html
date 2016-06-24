@@ -1,0 +1,38 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Login log - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Login log</h3>
+    </div>
+    <div class="module-body">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th width="20%">Tgl</th>
+                    <th width="15%">IP</th>
+                    <th>Agent</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for l in log %}
+                {% set a = json_decode(l.agent, 1) %}
+                <tr>
+                    <td>{{ format_datetime(l.lasttime) }}</td>
+                    <td>{{ a.ip }}</td>
+                    <td>{{ a.agent_string }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br>
+        {{ pagination|raw }}
+    </div>
+</div>
+{% endblock %}

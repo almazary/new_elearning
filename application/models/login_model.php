@@ -9,6 +9,34 @@
 class Login_model extends CI_Model
 {
     /**
+     * Method untuk mendapatkan semua data login log
+     *
+     * @param  integer $no_of_records
+     * @param  integer $page_no
+     * @param  string  $login_id
+     * @return array
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_all_log(
+        $no_of_records = 10,
+        $page_no       = 1,
+        $login_id      = ""
+    ) {
+        $no_of_records = (int)$no_of_records;
+        $page_no       = (int)$page_no;
+
+        $where = array();
+        if (!is_null($login_id)) {
+            $where['login_id'] = array($login_id, 'where');
+        }
+
+        $orderby = array('id' => 'DESC');
+        $data = $this->pager->set('login_log', $no_of_records, $page_no, $where, $orderby);
+
+        return $data;
+    }
+
+    /**
      * Method untuk mendapatkan satu data log berdasarkan id
      * @param  integer $id
      * @return array

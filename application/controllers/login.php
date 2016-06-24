@@ -390,8 +390,36 @@ class Login extends MY_Controller
         $this->twig->display('reset-password.html', $data);
     }
 
-    function login_log()
+    function login_log($segment_3 = "", $segment_4 = "")
     {
+        must_login();
 
+        $login_id = (int)$segment_3;
+        if (empty($login_id)) {
+            $login_id = get_sess_data('login', 'id');
+            redirect('login/login_log/' . $login_id);
+        }
+
+        $login = $this->login_model->retrieve($login_id);
+        if (empty($login)) {
+            show_error("Login ID tidak ditemukan.");
+        }
+
+        if (!is_admin() AND $login['id'] != get_sess_data('login', 'id')) {
+            redirect('login/login_log/' . get_sess_data('login', 'id'));
+        }
+
+        $page_no = (int)$segment_4;
+        if (empty($page_no)) {
+            $page_no = 1;
+        }
+
+        # ambil data login log
+        $retrieve_all = $this->login_model->retrieve_all_log(20, $page_no, $login['id']);
+
+        $data['log'] = $retrieve_all['results'];
+        $data['pagination'] = $this->pager->view($retrieve_all, 'login/login_log/' . $login['id'] . '/');
+
+        $this->twig->display('list-login-log.html', $data);
     }
 }
