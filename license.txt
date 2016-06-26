@@ -1,8 +1,8 @@
-Copyright (c) 2008 - 2014, EllisLab, Inc.
+Copyright (c) 2013 - 2016, Dokumenary Net.
 All rights reserved.
 
-This license is a legal agreement between you and EllisLab Inc. for the use
-of CodeIgniter Software (the "Software").  By obtaining the Software you
+This license is a legal agreement between you and Dokumenary Net. for the use
+of e-Learning Dokumenary Software (the "Software").  By obtaining the Software you
 agree to comply with the terms and conditions of this license.
 
 PERMITTED USE
@@ -22,11 +22,11 @@ the following conditions are met:
    of the change and the names of those who changed them.
 
 5. Products derived from the Software must include an acknowledgment that
-   they are derived from CodeIgniter in their documentation and/or other
+   they are derived from e-Learning Dokumenary in their documentation and/or other
    materials provided with the distribution.
 
-6. Products derived from the Software may not be called "CodeIgniter",
-   nor may "CodeIgniter" appear in their name, without prior written
+6. Products derived from the Software may not be called "e-Learning Dokumenary",
+   nor may "e-Learning Dokumenary" appear in their name, without prior written
    permission from EllisLab, Inc.
 
 INDEMNITY
