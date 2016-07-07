@@ -1,0 +1,69 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Update Aplikasi - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Update Aplikasi</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('update')|raw }}
+
+        {% if new_update is empty %}
+            <div class="alert alert-success">
+                <h4><i class="icon-ok"></i> Anda menggunakan aplikasi e-Learning dokumenary.net versi {{ current_version }}</h4>
+            </div>
+        {% else %}
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td width="20%">
+                            <img src="{{ logo_url_medium }}" class="img-polaroid">
+                        </td>
+                        <td>
+                            <h4>Aplikasi e-Learning versi {{ new_update.result }} telah tersedia</h4>
+                            List perubahan:
+                            {{ new_update.change_log|raw }}
+
+                            <br>
+                            <div class="btn-group">
+                                <a class="btn btn-primary" id="btn-perbaharui">Perbaharui</a>
+                            </div>
+                            <span id="progress-perbaharui"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$("#btn-perbaharui").on('click', function() {
+    $("#progress-perbaharui").html('<img src="' + base_url + 'assets/images/loading.gif" style="width:30px;">');
+
+    $.ajax({
+        method: "GET",
+        url: site_url + '/ajax/get_data/download_update',
+        success: function (data) {
+            if (data == 0) {
+                $("#progress-perbaharui").html("Gagal mendownload file!");
+                setTimeout(function() {
+                    location.reload();
+                }, 2000);
+            } else if (data == 1) {
+                location.href = base_url + 'update-app.php';
+            } else {
+                $("#progress-perbaharui").html(data);
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

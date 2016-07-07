@@ -594,7 +594,11 @@ function format_datetime($datetime)
         $jam   = round($selisih / 3600);
 
         if ($detik <= 60) {
-            $waktu = $detik.' detik yang lalu';
+            if ($detik == 0) {
+                $waktu = "baru saja";
+            } else {
+                $waktu = $detik.' detik yang lalu';
+            }
         } else if ($menit <= 60) {
             $waktu = $menit.' menit yang lalu';
         } else if ($jam <= 24) {

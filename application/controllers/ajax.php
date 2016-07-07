@@ -73,6 +73,83 @@ class Ajax extends MY_Controller
             case 'new_msg':
                 echo $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
             break;
+
+            case 'check_update':
+                $ada_update = $this->check_new_version();
+                if ($ada_update) {
+                    $field_id  = "cek-versi";
+                    $cek_versi = retrieve_field($field_id);
+
+                    echo $cek_versi['value'];
+                }
+            break;
+
+            case 'count_new_update':
+                $count     = 0;
+                $field_id  = "cek-versi";
+                $cek_versi = retrieve_field($field_id);
+                if (!empty($cek_versi['value'])) {
+                    $cek_value = json_decode($cek_versi['value'], 1);
+                    if ($cek_value['result'] > $this->current_version) {
+                        $count = 1;
+                    }
+                }
+
+                echo $count;
+            break;
+
+            case 'download_update':
+                $field_id  = "cek-versi";
+                $cek_versi = retrieve_field($field_id);
+                if (empty($cek_versi['value'])) {
+                    echo 0;die;
+                }
+
+                $cek_value = json_decode($cek_versi['value'], 1);
+
+                # cek sudah ada belum file updatenya, kalo sudah ada hapus dulu
+                $path = './userfiles/updates';
+                if (!is_dir($path)) {
+                    if (!is_writable('./userfiles')) {
+                        echo "Folder userfiles tidak dapat ditulis!";die;
+                    } else {
+                        mkdir($path);
+                    }
+                }
+
+                $path_folder_update = $path . '/' . $cek_value['result'];
+                if (!is_dir($path_folder_update)) {
+                    mkdir($path_folder_update);
+                }
+
+                $path_file_update = $path_folder_update . '/' . $cek_value['result'] . '.zip';
+                if (is_file($path_file_update)) {
+                    if (!unlink($path_file_update)) {
+                        echo "File update lama tidak dapat diperbaharui!";die;
+                    }
+                }
+
+                # download file
+                @file_put_contents($path_file_update, fopen($cek_value['download_link'], 'r'));
+
+                # cek beneran kedownload belum
+                if (!is_file($path_file_update)) {
+                    echo "Download file update gagal!";die;
+                }
+
+                # ciptakan session update
+                $field_id    = "session-updates";
+                $field_name  = "Session Updates";
+                $field_value = json_encode(array('version' => $cek_value['result']));
+                $retrieve_session = retrieve_field($field_id);
+                if (empty($retrieve_session)) {
+                    create_field($field_id, $field_name, $field_value);
+                } else {
+                    update_field($field_id, $field_name, $field_value);
+                }
+
+                echo 1;
+            break;
         }
     }
 

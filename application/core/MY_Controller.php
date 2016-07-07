@@ -1,5 +1,36 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Class Controller yang extend dari ci_controller
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
+
 class MY_Controller extends CI_Controller
 {
     public $siswa_kelas_aktif = array();
@@ -7,6 +38,7 @@ class MY_Controller extends CI_Controller
     public $portal_update_link;
     public $bug_tracker_link;
     public $default_timezone = "Asia/Jakarta";
+    public $current_version;
 
     function __construct()
     {
@@ -71,11 +103,16 @@ class MY_Controller extends CI_Controller
         # cek versi
         $versi_install = '1.8';
         $versi = get_pengaturan('versi', 'value');
+
+        $this->current_version = $versi;
+
         if ($versi < $versi_install) {
             $this->config_model->update('versi', 'Versi', $versi_install);
 
             # panggil perubahan tabel
             $this->table_change();
+
+            $this->current_version = $versi_install;
         }
     }
 
@@ -499,5 +536,62 @@ class MY_Controller extends CI_Controller
         }
 
         return $sukses;
+    }
+
+    /**
+     * Method untuk cek versi terbaru
+     *
+     * @param  boolean $skip_check_time
+     * @return boolean
+     * @since  1.8
+     */
+    function check_new_version($skip_check_time = false)
+    {
+        $field_id  = "cek-versi";
+        $cek_versi = retrieve_field($field_id);
+
+        if ($skip_check_time) {
+            $ok_check = true;
+        } else {
+            $ok_check  = false;
+            if (empty($cek_versi)) {
+                $ok_check = true;
+            } else {
+                $cek_val = json_decode($cek_versi['value'], 1);
+                # bikin 5 menit sekali saja checknya
+                $date_plus = strtotime("+5 minute", strtotime($cek_val['last_check']));
+                if ($date_plus < strtotime(date('Y-m-d H:i:s'))) {
+                    $ok_check = true;
+                }
+            }
+        }
+
+        $ada_update = false;
+        if ($ok_check) {
+            # cari informasi update
+            $url_new_version = 'http://elearningupdates.dokumenary.net/index.php?current_version=' . $this->current_version;
+            $get_new_version = get_url_data($url_new_version);
+            $get_new_version = json_decode($get_new_version, 1);
+
+            # jika versi ditemukan
+            if (isset($get_new_version['version']) AND $get_new_version['version'] > $this->current_version) {
+                $arr_update = array(
+                    'result'        => $get_new_version['version'],
+                    'last_check'    => date('Y-m-d H:i:s'),
+                );
+                $arr_update   = array_merge($arr_update, $get_new_version);
+                $update_value = json_encode($arr_update);
+
+                if (empty($cek_versi)) {
+                    create_field($field_id, "Cek Versi", $update_value);
+                } else {
+                    update_field($field_id, "Cek Versi", $update_value);
+                }
+
+                $ada_update = true;
+            }
+        }
+
+        return $ada_update;
     }
 }

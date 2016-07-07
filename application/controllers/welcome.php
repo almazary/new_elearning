@@ -92,9 +92,11 @@ class Welcome extends MY_Controller
             $data['bug_tracker_link']   = $this->bug_tracker_link;
 
             $html_js = load_comp_js(array(
+                base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
                 base_url('assets/comp/jquery/info-update.js'),
             ));
-            $data['comp_js'] = $html_js;
+            $data['comp_js']  = $html_js;
+            $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
             $where_pengumuman = array(
                 'tgl_tampil <='   => date('Y-m-d'),
@@ -106,6 +108,46 @@ class Welcome extends MY_Controller
         $data['pengumuman'] = $this->pengumuman_model->retrieve_all(10, 1, $where_pengumuman, false);
 
         $this->twig->display('welcome.html', $data);
+    }
+
+    function new_version()
+    {
+        must_login();
+
+        if (!is_admin()) {
+            redirect('welcome');
+        }
+
+        $field_id  = "cek-versi";
+        $cek_versi = retrieve_field($field_id);
+        $data['n'] = json_decode($cek_versi['value'], 1);
+
+        $this->twig->display('new-version.html', $data);
+    }
+
+    function update_info()
+    {
+        must_login();
+
+        if (!is_admin()) {
+            redirect('welcome');
+        }
+
+        # ambil versi terbaru
+        $this->check_new_version(true);
+
+        $field_id  = "cek-versi";
+        $cek_versi = retrieve_field($field_id);
+
+        $new_update = array();
+        if (!empty($cek_versi['value'])) {
+            $new_update = json_decode($cek_versi['value'], 1);
+        }
+
+        $data['new_update']      = $new_update;
+        $data['current_version'] = $this->current_version;
+
+        $this->twig->display('update-info.html', $data);
     }
 
     function pengaturan()

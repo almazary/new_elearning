@@ -67,6 +67,27 @@ $(function() {
         }
     }
 
+    // count update versi
+    function count_new_update()
+    {
+        if ($("#count-new-update").length > 0) {
+            $.ajax({
+                method: "GET",
+                url: site_url + '/ajax/get_data/count_new_update',
+                success: function (data) {
+                    if (data > 0) {
+                        $("#count-new-update").html("");
+                        $("#count-new-update").html('<b class="label orange pull-right">' + data + '</b>');
+                    } else {
+                        $("#count-new-update").html("");
+                    }
+                }
+            });
+        }
+    }
+
+    count_new_update();
+
     setInterval(function() {
         check_new_msg();
 

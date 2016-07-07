@@ -1,0 +1,14 @@
+{% extends  'layout-iframe.html' %}
+
+{% block content %}
+<div class="bs-callout bs-callout-info">
+    <h4>Aplikasi e-Learning versi {{ n.result }} telah tersedia</h4>
+    List perubahan:
+    {{ n.change_log|raw }}
+
+    <br>
+    <div class="btn-group">
+        <a class="btn btn-primary">Perbaharui</a>
+    </div>
+</div>
+{% endblock %}
