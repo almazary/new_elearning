@@ -77,10 +77,9 @@ class Ajax extends MY_Controller
             case 'check_update':
                 $ada_update = $this->check_new_version();
                 if ($ada_update) {
-                    $field_id  = "cek-versi";
-                    $cek_versi = retrieve_field($field_id);
-
-                    echo $cek_versi['value'];
+                    echo "1";
+                } else {
+                    echo "0";
                 }
             break;
 

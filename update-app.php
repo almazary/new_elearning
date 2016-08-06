@@ -168,7 +168,7 @@ if (!empty($_GET['doupdate'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Update aplikasi e-Learning dokumenary.net</title>
+    <title>Update aplikasi e-Learning by dokumenary.net</title>
 </head>
 <body>
     <h3>Process update...</h3>

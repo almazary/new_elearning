@@ -25,8 +25,7 @@ $(function() {
             type: "GET",
             url: site_url + '/ajax/get_data/check_update',
             success: function (data) {
-                var obj = jQuery.parseJSON(data);
-                if (obj.result != "") {
+                if (data == 1) {
                     $.colorbox({href: site_url + "/welcome/new_version", fixed: true, width: 500});
                 }
             }

@@ -565,6 +565,7 @@ class MY_Controller extends CI_Controller
                 }
             }
         }
+        // $ok_check = true;
 
         $ada_update = false;
         if ($ok_check) {
