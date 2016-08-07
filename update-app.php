@@ -55,7 +55,10 @@ class updateElearning
         }
 
         $json = json_decode($str_json, 1);
-        foreach ($json as $row_path) {
+        foreach ($json as $j_val) {
+            $row_path  = $j_val[0];
+            $important = $j_val[1];
+
             $row_path = './' . $row_path;
 
             $split_path = explode("/", $row_path);
@@ -69,8 +72,12 @@ class updateElearning
 
             # jika file belum ada dicopy saja
             if (!is_file($row_path)) {
-                if (!copy($file_path, $row_path)) {
-                    throw new Exception("File update tidak dapat dipindah!");
+                if ($important == 1) {
+                    try {
+                        copy($file_path, $row_path);
+                    } catch (Exception $e) {
+                        throw new Exception("File {$row_path} update gagal dipindah!, error: " . $e->getMessage());
+                    }
                 }
             } else {
                 # rename dulu yang sebelumnya
@@ -84,7 +91,7 @@ class updateElearning
                     # kembalikan
                     rename($rename_path, $row_path);
 
-                    throw new Exception("File {$file_name} gagal diperbaharui!");
+                    throw new Exception("File {$file_name} gagal diperbaharui!, error: " . $e->getMessage());
                 }
 
                 # hapus bak
@@ -94,6 +101,29 @@ class updateElearning
 
         # hapus session
         $this->deleteSession();
+
+        # hapus file update
+        $this->rrmdir($path_folder);
+
+        # hapus cache twig
+        $this->rrmdir("./application/cache/twig/");
+    }
+
+    function rrmdir($dir) {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (is_dir($dir . "/" . $object)) {
+                        $this->rrmdir($dir . "/" . $object);
+                    } else {
+                        unlink($dir . "/" . $object);
+                    }
+                }
+            }
+
+            rmdir($dir);
+        }
     }
 
     function checkSession()
@@ -157,7 +187,11 @@ class updateElearning
 
 if (!empty($_GET['doupdate'])) {
     $src_update = new updateElearning();
-    $src_update->doUpdate();
+    try {
+        $src_update->doUpdate();
+    } catch (Exception $e) {
+        echo $e->getMessage();die;
+    }
 
     echo "1";
     die;
