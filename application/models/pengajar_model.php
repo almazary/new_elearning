@@ -35,15 +35,19 @@ class Pengajar_model extends CI_Model
     {
         switch ($by) {
             case 'total':
+                $this->db->select("COUNT(*) as jml");
                 $this->db->where('status_id !=', '0');
                 $result = $this->db->get('pengajar');
-                return $result->num_rows();
+                $result = $result->row_array();
+                return $result['jml'];
             break;
 
             case 'pending':
+                $this->db->select("COUNT(*) as jml");
                 $this->db->where('status_id', '0');
                 $result = $this->db->get('pengajar');
-                return $result->num_rows();
+                $result = $result->row_array();
+                return $result['jml'];
             break;
 
             default:
