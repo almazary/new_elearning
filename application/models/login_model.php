@@ -94,7 +94,7 @@ class Login_model extends CI_Model
             if (is_login() && $r['username'] == get_sess_data('login', 'username')) {
                 continue;
             }
-            $data[] = $r['nama'] . ' [' . $r['username'] . ']';
+            $data[] = addslashes($r['nama']) . ' [' . $r['username'] . ']';
         }
 
         return $data;
