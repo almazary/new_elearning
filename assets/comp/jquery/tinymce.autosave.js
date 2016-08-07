@@ -11,7 +11,8 @@ function simpanJawaban(tugas_id)
         $.ajax({
             type : "POST",
             url  : site_url + "/ajax/post_data/update_jawaban_essay",
-            data : {"tugas_id" : tugas_id, "pertanyaan_id" : arr_pertanyaan_id[i], "jawaban" : jawaban}
+            data : {"tugas_id" : tugas_id, "pertanyaan_id" : arr_pertanyaan_id[i], "jawaban" : jawaban},
+            async: false
         });
     }
 }

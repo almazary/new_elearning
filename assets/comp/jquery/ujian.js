@@ -4,7 +4,12 @@ $(".countdown").jCounter({
     twoDigits: 'on',
     customDuration: $("#sisa_menit").val(),
     callback: function() {
-        window.location.replace($("#finish_url").val());
+        $("#process-submit").val("1");
+        if ($("#form-essay").length) {
+            $("#form-essay").submit();
+        } else {
+            location.href = $("#finish_url").val();
+        }
     }
 });
 
@@ -12,9 +17,30 @@ function update_ganda(tugas_id, pertanyaan_id, pilihan_id) {
     $.ajax({
         type : "POST",
         url  : site_url + "/ajax/post_data/update_jawaban_ganda",
-        data : "tugas_id=" + tugas_id + "&pertanyaan_id=" + pertanyaan_id + "&pilihan_id=" + pilihan_id
+        data : "tugas_id=" + tugas_id + "&pertanyaan_id=" + pertanyaan_id + "&pilihan_id=" + pilihan_id,
+        async: false
     });
 }
+
+$("#btn-submit").on('click', function(e) {
+    if (confirm('Anda yakin ingin mengahiri pengerjaan tugas ini?')) {
+        $("#process-submit").val("1");
+        if ($("#form-essay").length) {
+            $("#form-essay").submit();
+        } else {
+            location.href = $(this).attr("href");
+        }
+    } else {
+        e.preventDefault();
+        if ($("#form-essay").length) {
+            simpanJawaban($("#tugas_id").val());
+        }
+
+        location.reload();
+    }
+
+    return false;
+});
 
 // cek status reset saat ujian
 setInterval(function() {
@@ -24,7 +50,10 @@ setInterval(function() {
         data: "siswa_id=" + $("#siswa_id").val() + "&tugas_id=" + $("#tugas_id").val(),
         success: function(data) {
             if (data == 'ok_reset') {
-                location.reload();
+                var proccess_submit = $("#process-submit").val();
+                if (proccess_submit == 0) {
+                    location.reload();
+                }
             }
         }
     });

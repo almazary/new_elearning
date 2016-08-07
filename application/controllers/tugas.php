@@ -1261,7 +1261,8 @@ class Tugas extends MY_Controller
             }
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
-            redirect('tugas');
+
+            $this->twig->display('redirect.html', array('redirect_to' => site_url('tugas')));
         }
         # ini belum mengerjakan
         else {
@@ -1343,7 +1344,8 @@ class Tugas extends MY_Controller
             }
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
-            redirect('tugas');
+
+            $this->twig->display('redirect.html', array('redirect_to' => site_url('tugas')));
         }
         # ini belum mengerjakan
         else {
@@ -1423,7 +1425,8 @@ class Tugas extends MY_Controller
             }
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
-            redirect('tugas');
+
+            $this->twig->display('redirect.html', array('redirect_to' => site_url('tugas')));
         }
         # ini belum mengerjakan
         else {
