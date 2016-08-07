@@ -186,8 +186,8 @@ class updateElearning
 }
 
 if (!empty($_GET['doupdate'])) {
-    $src_update = new updateElearning();
     try {
+        $src_update = new updateElearning();
         $src_update->doUpdate();
     } catch (Exception $e) {
         echo $e->getMessage();die;
@@ -205,7 +205,7 @@ if (!empty($_GET['doupdate'])) {
     <title>Update aplikasi e-Learning by dokumenary.net</title>
 </head>
 <body>
-    <h3>Process update...</h3>
+    <h3 id="title-update">Process update...</h3>
     <div id="result-update"></div>
 
     <script src="./assets/comp/jquery/jquery.min.js" type="text/javascript"></script>
@@ -220,6 +220,7 @@ if (!empty($_GET['doupdate'])) {
                     if (data == 1) {
                         location.href = "index.php";
                     } else {
+                        $("#title-update").remove();
                         $("#result-update").html(data);
                     }
                 }
