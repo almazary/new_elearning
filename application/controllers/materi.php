@@ -563,7 +563,12 @@ class Materi extends MY_Controller
             case 'download':
                 # jika request download
                 if ($segment_4 == 'download' AND !empty($materi['file'])) {
-                    $data_file = file_get_contents(get_path_file($materi['file'])); // Read the file's contents
+                    $target_file = get_path_file($materi['file']);
+                    if (!is_file($target_file)) {
+                        show_error("Maaf file tidak ditemukan.");
+                    }
+
+                    $data_file = file_get_contents($target_file); // Read the file's contents
                     $name_file = $materi['file'];
 
                     $this->materi_model->plus_views($materi['id']);
