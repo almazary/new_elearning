@@ -13,3 +13,4 @@
 /plugins/views/
 /application/cache/twig/*
 !/application/cache/twig/index.html
+/intall.txt
