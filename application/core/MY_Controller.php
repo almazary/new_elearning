@@ -46,17 +46,12 @@ class MY_Controller extends CI_Controller
 
         date_default_timezone_set($this->default_timezone);
 
+        $this->update_link        = 'http://www.dokumenary.net/category/new-elearning/feed/';
+        $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
+        $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
+
         # load helper
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download', 'plugins'));
-
-        try {
-            $success = install_success();
-            if (!$success) {
-                redirect('setup');
-            }
-        } catch (Exception $e) {
-            redirect('setup');
-        }
 
         $this->load->database();
 
@@ -69,35 +64,34 @@ class MY_Controller extends CI_Controller
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
-        if (is_login()) {
-            # cek session kcfindernya ada atau tidak
-            if (empty($_SESSION['E-LEARNING']['KCFINDER'])) {
-                create_sess_kcfinder(get_sess_data('login', 'id'));
-            }
-        }
-
-        if (is_siswa()) {
-            # jika kelas aktifnya kosong, sebaiknya di die jasa
-            $kelas_aktif = $this->kelas_model->retrieve_siswa(null, array(
-                'siswa_id' => get_sess_data('user', 'id'),
-                'aktif'    => 1
-            ));
-            if (empty($kelas_aktif)) {
-                exit('Kelas aktif anda tidak ditemukan, segera hubungi admin e-learning.');
-            }
-
-            $this->siswa_kelas_aktif = $kelas_aktif;
-
-            # cek sedang ujian tidak
-            $this->cek_mode_ujian();
-        }
-
-        $this->update_link        = 'http://www.dokumenary.net/category/new-elearning/feed/';
-        $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
-        $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
-
+        # jika bukan ajax
         if (!is_ajax()) {
-            // $this->output->enable_profiler(TRUE);
+            $this->output->enable_profiler(TRUE);
+
+            # jika sudah login
+            if (is_login()) {
+                # cek session kcfindernya ada atau tidak
+                if (empty($_SESSION['E-LEARNING']['KCFINDER'])) {
+                    create_sess_kcfinder(get_sess_data('login', 'id'));
+                }
+            }
+
+            # jika login sebagai siswa
+            if (is_siswa()) {
+                # jika kelas aktifnya kosong, sebaiknya di die jasa
+                $kelas_aktif = $this->kelas_model->retrieve_siswa(null, array(
+                    'siswa_id' => get_sess_data('user', 'id'),
+                    'aktif'    => 1
+                ));
+                if (empty($kelas_aktif)) {
+                    exit('Kelas aktif anda tidak ditemukan, segera hubungi admin e-learning.');
+                }
+
+                $this->siswa_kelas_aktif = $kelas_aktif;
+
+                # cek sedang ujian tidak
+                $this->cek_mode_ujian();
+            }
         }
 
         # cek versi

@@ -6,11 +6,6 @@
  */
 function install_success()
 {
-    $initial_file = './install.txt';
-    if (!file_exists($initial_file)) {
-        return true;
-    }
-
     $db_file = APPPATH . 'config/database.php';
     if (!is_file($db_file)) {
         throw new Exception(get_alert('error', 'File database.php in application/config/ not exists'));
@@ -39,8 +34,6 @@ function install_success()
     } else {
         return false;
     }
-
-    unlink($initial_file);
 
     return true;
 }
@@ -536,7 +529,7 @@ function get_indo_bulan($bln = '')
         return $data;
     } else {
         $bln = (int)$bln;
-        return $data[$bln];
+        return isset($data[$bln]) ? $data[$bln] : "";
     }
 }
 
