@@ -83,3 +83,25 @@ function plugin_installed($plugin_name)
 
     return false;
 }
+
+/**
+ * Method untuk mendapatkan daftar plugin yang ada
+ * @return array
+ * @since  1.8
+ */
+function plugin_list()
+{
+    $plugin_dir = './plugins/src';
+
+    $objects = scandir($plugin_dir);
+    $results = array();
+    foreach ($objects as $object) {
+        if ($object != "." && $object != "..") {
+            if (is_dir($plugin_dir . "/" . $object)) {
+                $results[] = $object;
+            }
+        }
+    }
+
+    return $results;
+}

@@ -564,7 +564,7 @@ class MY_Controller extends CI_Controller
         $ada_update = false;
         if ($ok_check) {
             # cari informasi update
-            $url_new_version = 'http://elearningupdates.dokumenary.net/index.php?current_version=' . $this->current_version;
+            $url_new_version = 'http://elearningupdates.dokumenary.net/index.php?referer=' . base_url() . '&current_version=' . $this->current_version . '&plugin_installed=' . implode(",", plugin_list());
             $get_new_version = get_url_data($url_new_version);
             $get_new_version = json_decode($get_new_version, 1);
 
