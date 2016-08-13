@@ -42,6 +42,26 @@ $("#btn-submit").on('click', function(e) {
     return false;
 });
 
+function hide_countdown() {
+    $(".countdown").hide();
+    $(".box-show-hide-countdown").html('<a href="javascript:void(0)" onclick="show_countdown()"><i class="icon icon-eye-open"></i> TAMPILKAN TIMER</a>');
+    $.ajax({
+        method: "POST",
+        url: site_url + '/ajax/post_data/hide_show_countdown',
+        data: {"tugas_id" : $("#tugas_id").val(), "hide" : "1"}
+    });
+}
+
+function show_countdown() {
+    $(".countdown").show();
+    $(".box-show-hide-countdown").html('<a href="javascript:void(0)" onclick="hide_countdown()"><i class="icon icon-eye-close"></i> SEMBUNYIKAN TIMER</a>');
+    $.ajax({
+        method: "POST",
+        url: site_url + '/ajax/post_data/hide_show_countdown',
+        data: {"tugas_id" : $("#tugas_id").val(), "hide" : "0"}
+    });
+}
+
 // cek status reset saat ujian
 setInterval(function() {
     $.ajax({

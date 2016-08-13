@@ -111,6 +111,7 @@ class Login extends MY_Controller
         $this->session->set_userdata('filter_tugas', null);
         $this->session->set_userdata('filter_siswa', null);
         $this->session->set_userdata('mengerjakan_tugas', null);
+        $this->session->set_userdata('hide_countdown', null);
 
         redirect('login/index');
     }

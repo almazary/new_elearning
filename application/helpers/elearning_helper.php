@@ -1173,3 +1173,28 @@ function pass_siswa_equal_nis()
 
     return false;
 }
+
+/**
+ * Method untuk menyimpan session tampilkan atau sembunyikan timeer saat ujian
+ *
+ * @param  string $act
+ * @param  string $tugas_id
+ * @param  string $hide
+ */
+function sess_hide_countdown($act, $tugas_id = "", $hide = "")
+{
+    $CI =& get_instance();
+    $sess_name = 'hide_countdown';
+    $currents  = $CI->session->userdata($sess_name);
+
+    switch ($act) {
+        case 'set':
+            $currents[$tugas_id] = $hide;
+            $CI->session->set_userdata($sess_name, $currents);
+        break;
+
+        case 'get':
+            return !empty($currents[$tugas_id]) ? 1 : 0;
+        break;
+    }
+}

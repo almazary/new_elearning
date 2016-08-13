@@ -155,6 +155,14 @@ class Ajax extends MY_Controller
     function post_data($page)
     {
         switch ($page) {
+            case 'hide_show_countdown':
+                $tugas_id = $this->input->post('tugas_id', true);
+                $hide     = $this->input->post('hide', true);
+                sess_hide_countdown('set', $tugas_id, $hide);
+
+                echo "1";
+            break;
+
             case 'check_reset_status':
                 $siswa_id = $this->input->post('siswa_id', true);
                 $tugas_id = $this->input->post('tugas_id', true);

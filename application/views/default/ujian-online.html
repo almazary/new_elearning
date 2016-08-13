@@ -33,6 +33,11 @@
         margin-top: -50px;
         margin-left: 60px;
     }
+    .box-show-hide-countdown {
+        margin-top:0px;
+        font-size:10px;
+        margin-bottom:4px;
+    }
 </style>
 {% endblock %}
 
@@ -61,7 +66,15 @@
                     </div>
                     <div class="span4">
                         <div class="pull-right clock" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
-                            <div class="iosl-theme-wrapper countdown">
+                            <div class="box-show-hide-countdown">
+                                {% set hide_countdown = sess_hide_countdown('get', data.tugas.id) %}
+                                {% if hide_countdown == 1 %}
+                                    <a href="javascript:void(0)" onclick="show_countdown()" class="text-muted"><i class="icon icon-eye-open"></i> TAMPILKAN TIMER</a>
+                                {% else %}
+                                    <a href="javascript:void(0)" onclick="hide_countdown()" class="text-muted"><i class="icon icon-eye-close"></i> SEMBUNYIKAN TIMER</a>
+                                {% endif %}
+                            </div>
+                            <div class="iosl-theme-wrapper countdown" {{ (hide_countdown == 1) ? 'style="display:none;"' }}>
                                 <div class="iosl-theme">
                                     <ul>
                                         <li><p><span><em><b class="hours">00</b><i class="hoursSlider"><u>00</u><u>00</u></i></em></span></p></li>
