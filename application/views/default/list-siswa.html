@@ -18,7 +18,7 @@ Data Siswa - {{ parent() }}
             </div>
 
             <div class="span5">
-                <div class="btn-group">
+                <div class="btn-group pull-right">
                     {{ anchor('siswa/index/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/index/0', 'Pending ' ~ ((count_pending > 0) ? '<span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/index/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn btn-default'})|raw }}
@@ -63,13 +63,13 @@ Data Siswa - {{ parent() }}
                             <li class="dropdown">
                                 <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
-                                    <li>{{ anchor('siswa/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
-                                    <li>{{ anchor('siswa/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'siswa-iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'siswa-iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>
                                     {% if status_id != 3 %}
                                     <li>{{ anchor('siswa/moved_class/' ~ status_id ~ '/' ~ v.id, 'Edit Kelas Aktif', {'class' : 'iframe', 'title' : 'Edit Kelas Aktif'})|raw }}</li>
                                     {% endif %}
-                                    <li>{{ anchor('siswa/edit_username/' ~ status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Siswa'})|raw }}</li>
-                                    <li>{{ anchor('siswa/edit_password/' ~ status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_username/' ~ status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'siswa-iframe-2', 'title' : 'Edit Username Siswa'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_password/' ~ status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'siswa-iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
                                 </ul>
                             </li>
                         </ul>

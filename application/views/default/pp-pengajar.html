@@ -9,8 +9,8 @@ Profilku - {{ parent() }}
     <div class="panel-heading">
         <strong>Profil Publik {{ ((pengajar_login.is_admin == 1) ? '<label class="label label-warning">Administrator</label>')|raw }}</strong>
         <div class="btn-group pull-right" style="margin-top:-4px;">
-            {{ anchor('pengajar/edit_profile/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Profil', {'class' : 'iframe-7 btn btn-small btn-primary', 'title' : 'Edit Profil Pengajar'})|raw }}
-            {{ anchor('pengajar/edit_picture/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Foto', {'class' : 'iframe-5 btn btn-small btn-primary', 'title' : 'Edit Foto Pengajar'})|raw }}
+            {{ anchor('pengajar/edit_profile/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Profil', {'class' : 'pengajar-iframe-7 btn btn-small btn-primary', 'title' : 'Edit Profil Pengajar'})|raw }}
+            {{ anchor('pengajar/edit_picture/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Foto', {'class' : 'pengajar-iframe-5 btn btn-small btn-primary', 'title' : 'Edit Foto Pengajar'})|raw }}
         </div>
     </div>
     <div class="panel-body">
@@ -64,8 +64,8 @@ Profilku - {{ parent() }}
             <div class="panel-heading">
                 <strong>Akun Login</strong>
                 <div class="btn-group pull-right" style="margin-top:-4px;">
-                    {{ anchor('pengajar/edit_username/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Username', {'class' : 'iframe-2 btn btn-small btn-primary', 'title' : 'Edit Username pengajar'})|raw }}
-                    {{ anchor('pengajar/edit_password/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Password', {'class' : 'iframe-3 btn btn-small btn-primary', 'title' : 'Edit Password pengajar'})|raw }}
+                    {{ anchor('pengajar/edit_username/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Username', {'class' : 'pengajar-iframe-2 btn btn-small btn-primary', 'title' : 'Edit Username pengajar'})|raw }}
+                    {{ anchor('pengajar/edit_password/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Password', {'class' : 'pengajar-iframe-3 btn btn-small btn-primary', 'title' : 'Edit Password pengajar'})|raw }}
                 </div>
             </div>
             <div class="panel-body">

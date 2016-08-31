@@ -186,13 +186,8 @@ class Message extends MY_Controller
             $data['receiver_name'] = $data['r']['profil']['nama'] . " [$login_username]>";
         }
 
-        $html_js = get_tinymce('content');
-        $html_js .= load_comp_js(array(
-            base_url('assets/comp/autocomplete/jquery.autocomplete.min.js'),
-            base_url('assets/comp/autocomplete/script.js'),
-        ));
-        $data['comp_js']  = $html_js;
-        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/autocomplete/autocomplete.css')));
+        $html_js         = get_tinymce('content');
+        $data['comp_js'] = $html_js;
 
         # update read
         $this->msg_model->update_read($msg_id);

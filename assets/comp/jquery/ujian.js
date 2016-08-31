@@ -1,3 +1,7 @@
+/**
+ * Javascript untuk ujian ganda dan essay
+ */
+
 $(".countdown").jCounter({
     animation: "slide",
     format: "dd:hh:mm:ss",
@@ -48,7 +52,8 @@ function hide_countdown() {
     $.ajax({
         method: "POST",
         url: site_url + '/ajax/post_data/hide_show_countdown',
-        data: {"tugas_id" : $("#tugas_id").val(), "hide" : "1"}
+        data: {"tugas_id" : $("#tugas_id").val(), "hide" : "1"},
+        async: false
     });
 }
 
@@ -58,16 +63,34 @@ function show_countdown() {
     $.ajax({
         method: "POST",
         url: site_url + '/ajax/post_data/hide_show_countdown',
-        data: {"tugas_id" : $("#tugas_id").val(), "hide" : "0"}
+        data: {"tugas_id" : $("#tugas_id").val(), "hide" : "0"},
+        async: false
     });
 }
 
-// cek status reset saat ujian
+function simpanJawaban(tugas_id) {
+    var arr_pertanyaan_id = $("#str_id").val();
+    var arr_pertanyaan_id = arr_pertanyaan_id.split(',');
+
+    for (var i = 0; i < arr_pertanyaan_id.length; i++) {
+        var tiny_obj = tinyMCE.get('jawaban-' + arr_pertanyaan_id[i]);
+        var jawaban  = tiny_obj.getContent();
+
+        $.ajax({
+            type : "POST",
+            url  : site_url + "/ajax/post_data/update_jawaban_essay",
+            data : {"tugas_id" : tugas_id, "pertanyaan_id" : arr_pertanyaan_id[i], "jawaban" : jawaban},
+            async: false
+        });
+    }
+}
+
+// cek status reset saat ujian & simpan jawaban jika essay
 setInterval(function() {
     $.ajax({
         method: "POST",
         url: site_url + '/ajax/post_data/check_reset_status',
-        data: "siswa_id=" + $("#siswa_id").val() + "&tugas_id=" + $("#tugas_id").val(),
+        data: {"siswa_id" : $("#siswa_id").val(), "tugas_id" : $("#tugas_id").val()},
         success: function(data) {
             if (data == 'ok_reset') {
                 var proccess_submit = $("#process-submit").val();
@@ -75,6 +98,13 @@ setInterval(function() {
                     location.reload();
                 }
             }
-        }
+        },
+        async: false
     });
-}, 5000);
+
+    var tugas_type_id = $("#type_id").val();
+    if (tugas_type_id == 2) {
+        simpanJawaban($("#tugas_id").val());
+    }
+
+}, 15000);

@@ -93,7 +93,6 @@ class Welcome extends MY_Controller
 
             $html_js = load_comp_js(array(
                 base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                base_url('assets/comp/jquery/info-update.js'),
             ));
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -122,6 +121,8 @@ class Welcome extends MY_Controller
         $cek_versi = retrieve_field($field_id);
         $data['n'] = json_decode($cek_versi['value'], 1);
 
+        $data['comp_js']  = load_comp_js(array(base_url('assets/comp/colorbox/jquery.colorbox-min.js')));
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
         $this->twig->display('new-version.html', $data);
     }
 
@@ -393,8 +394,6 @@ class Welcome extends MY_Controller
             # panggil colorbox
             $html_js = load_comp_js(array(
                 base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                base_url('assets/comp/colorbox/act-siswa.js'),
-                base_url('assets/comp/colorbox/act-pengajar.js')
             ));
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -426,7 +425,6 @@ class Welcome extends MY_Controller
         $data['comp_js'] = load_comp_js(array(
             base_url('assets/comp/datatables/jquery.dataTables.js'),
             base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-            base_url('assets/comp/datatables/script.js'),
         ));
 
         $data['comp_css'] = load_comp_css(array(

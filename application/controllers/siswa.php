@@ -82,10 +82,9 @@ class Siswa extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-siswa.js')
         ));
-        $data['comp_js']      = $html_js;
-        $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
         if (isset($_POST['status_id']) AND !empty($_POST['status_id'])) {
             $post_status_id = $this->input->post('status_id', TRUE);
@@ -347,7 +346,6 @@ class Siswa extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-siswa.js')
         ));
         $data['comp_js']    = $html_js;
         $data['comp_css']   = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -799,7 +797,6 @@ class Siswa extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-siswa.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));

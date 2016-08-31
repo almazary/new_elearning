@@ -32,8 +32,8 @@
                 <strong>Profil pengajar {{ ((pengajar_login.is_admin == 1) ? '<label class="label label-warning">Administrator</label>')|raw }}</strong>
                 {% if is_admin() == true %}
                 <div class="btn-group pull-right" style="margin-top:-4px;">
-                    {{ anchor('pengajar/edit_profile/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Profil', {'class' : 'iframe-4 btn btn-small btn-primary', 'title' : 'Edit Profil Pengajar'})|raw }}
-                    {{ anchor('pengajar/edit_picture/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Foto', {'class' : 'iframe-5 btn btn-small btn-primary', 'title' : 'Edit Foto Pengajar'})|raw }}
+                    {{ anchor('pengajar/edit_profile/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Profil', {'class' : 'pengajar-iframe-4 btn btn-small btn-primary', 'title' : 'Edit Profil Pengajar'})|raw }}
+                    {{ anchor('pengajar/edit_picture/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Foto', {'class' : 'pengajar-iframe-5 btn btn-small btn-primary', 'title' : 'Edit Foto Pengajar'})|raw }}
                     {% if is_admin() %}
                     {{ anchor('login/login_log/' ~ pengajar_login.id, 'Login log', {'class' : 'btn btn-small btn-default', 'title' : 'Login log'})|raw }}
                     {% endif %}
@@ -105,7 +105,7 @@
                                     <th width="15%">{{ h }}</th>
                                     <td>
                                         {% if is_admin() == true %}
-                                        {{ anchor('pengajar/add_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ hari_id, 'Tambah', {'class' : 'iframe btn btn-small btn-primary', 'title' : 'Tambah jadwal hari ' ~ h})|raw }}
+                                        {{ anchor('pengajar/add_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ hari_id, 'Tambah', {'class' : 'pengajar-iframe btn btn-small btn-primary', 'title' : 'Tambah jadwal hari ' ~ h})|raw }}
                                         {% endif %}
 
                                         {% set retrieve_all_ma = get_row_data('pengajar_model', 'retrieve_all_ma', [hari_id, pengajar.id, null, (is_pengajar() == true or is_siswa() == true) ? 1 : null]) %}
@@ -122,7 +122,7 @@
 
                                                     {% if is_admin() == true %}
                                                     <td width="10%">
-                                                        {{ anchor('pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ ma.id, '<i class="icon-edit"></i> Edit', {'title' : 'Edit Jadwal Ajar', 'class' : 'iframe-6'})|raw }}
+                                                        {{ anchor('pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ ma.id, '<i class="icon-edit"></i> Edit', {'title' : 'Edit Jadwal Ajar', 'class' : 'pengajar-iframe-6'})|raw }}
                                                     </td>
                                                     {% endif %}
 
@@ -146,8 +146,8 @@
                     <div class="panel-heading">
                         <strong>Akun Login</strong>
                         <div class="btn-group pull-right" style="margin-top:-4px;">
-                            {{ anchor('pengajar/edit_username/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Username', {'class' : 'iframe-2 btn btn-small btn-primary', 'title' : 'Edit Username pengajar'})|raw }}
-                            {{ anchor('pengajar/edit_password/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Password', {'class' : 'iframe-3 btn btn-small btn-primary', 'title' : 'Edit Password pengajar'})|raw }}
+                            {{ anchor('pengajar/edit_username/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Username', {'class' : 'pengajar-iframe-2 btn btn-small btn-primary', 'title' : 'Edit Username pengajar'})|raw }}
+                            {{ anchor('pengajar/edit_password/' ~ status_id ~ '/' ~ pengajar.id, 'Edit Password', {'class' : 'pengajar-iframe-3 btn btn-small btn-primary', 'title' : 'Edit Password pengajar'})|raw }}
                         </div>
                     </div>
                     <div class="panel-body">

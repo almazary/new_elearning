@@ -90,11 +90,3 @@ Matapelajaran Kelas - {{ parent() }}
     </div>
 </div>
 {% endblock %}
-
-{% block js %}
-<script type="text/javascript">
-    $(".checkAll").change(function () {
-        $(".checkbox-mapel").prop('checked', $(this).prop("checked"));
-    });
-</script>
-{% endblock %}

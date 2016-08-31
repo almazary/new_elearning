@@ -24,7 +24,7 @@ Jadwal Mengajar - {{ parent() }}
                         <tr>
                             <th width="15%">{{ h }}</th>
                             <td>
-                                {{ anchor('pengajar/add_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ hari_id, 'Tambah', {'class' : 'iframe btn btn-small btn-primary', 'title' : 'Tambah jadwal hari ' ~ h})|raw }}
+                                {{ anchor('pengajar/add_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ hari_id, 'Tambah', {'class' : 'pengajar-iframe btn btn-small btn-primary', 'title' : 'Tambah jadwal hari ' ~ h})|raw }}
                                 {% set retrieve_all_ma = get_row_data('pengajar_model', 'retrieve_all_ma', [hari_id, pengajar.id, null]) %}
                                 {% if retrieve_all_ma is not empty %}
                                 <table style="margin-top:10px;" class="table table-condensed">
@@ -37,7 +37,7 @@ Jadwal Mengajar - {{ parent() }}
                                             <td>{{ m.nama }}</td>
                                             <td width="20%">{{ k.nama }}</td>
                                             <td width="10%">
-                                                {{ anchor('pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ ma.id, '<i class="icon-edit"></i> Edit', {'title' : 'Edit Jadwal Ajar', 'class' : 'iframe-6'})|raw }}
+                                                {{ anchor('pengajar/edit_ampuan/' ~ status_id ~ '/' ~ pengajar.id ~ '/' ~ ma.id, '<i class="icon-edit"></i> Edit', {'title' : 'Edit Jadwal Ajar', 'class' : 'pengajar-iframe-6'})|raw }}
                                             </td>
                                         </tr>
                                     {% endfor %}

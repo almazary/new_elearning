@@ -1,44 +1,7 @@
-{% extends "layout-detail-materi.html" %}
+{% extends "layout-ujian.html" %}
 
 {% block title %}
 {{ data.tugas.judul }} - {{ parent() }}
-{% endblock %}
-
-{% block css %}
-<style type="text/css">
-    img.nav-avatar {
-        width: 30px;
-        height: 30px;
-    }
-    ul.user-info {
-        margin-top: 10px;
-        margin-bottom: 0px;
-    }
-    input.radio{
-        margin-top: -3px;
-    }
-    .label-radio {
-        font-weight: bold;
-    }
-    .well {
-        border:2px dashed red;
-    }
-    .p-info {
-        font-size: 18px;
-    }
-    hr.hr1 {
-        margin-top: 5px;
-    }
-    .clock.affix {
-        margin-top: -50px;
-        margin-left: 60px;
-    }
-    .box-show-hide-countdown {
-        margin-top:0px;
-        font-size:10px;
-        margin-bottom:4px;
-    }
-</style>
 {% endblock %}
 
 {% block content %}
@@ -94,15 +57,6 @@
                     </div>
                     {% else %}
                     <div class="span6">
-                        <b>Informasi : </b><br>
-                        {{ data.tugas.info|raw_media|raw }}
-                        <br>
-                        <small>
-                        <b>Ekstensi file :</b><br>
-                        doc, zip, rar, txt, docx, xls, xlsx, pdf, tar, gz, jpg, jpeg, JPG, JPEG, png, ppt, pptx
-                        </small>
-                    </div>
-                    <div class="span6">
                         <p><b>Upload file tugas anda : </b></p>
                         <div class="well well-sm">
                             {{ form_open_multipart('tugas/submit_upload/' ~ data.tugas.id ~ '/' ~ data.unix_id)|raw }}
@@ -118,6 +72,10 @@
                             </div>
                             {{ form_close()|raw }}
                         </div>
+                    </div>
+                    <div class="span6">
+                        <b>Informasi Tugas : </b><br>
+                        {{ data.tugas.info|raw_media|raw }}
                     </div>
                     {% endif %}
                 </div>
@@ -214,6 +172,7 @@
 {% if data.tugas.type_id != 1 %}
 <input type="hidden" id="process-submit" value="0">
 <input type="hidden" id="tugas_id" value="{{ data.tugas.id }}">
+<input type="hidden" id="type_id" value="{{ data.tugas.type_id }}">
 <input type="hidden" id="sisa_menit" value="{{ data.sisa_menit }}">
 <input type="hidden" id="finish_url" value="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}">
 <input type="hidden" id="siswa_id" value="{{ get_sess_data('user', 'id') }}">

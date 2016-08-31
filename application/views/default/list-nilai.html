@@ -114,32 +114,3 @@ Lihat Nilai - {{ parent() }}
     </div>
 </div>
 {% endblock %}
-
-{% block js %}
-<script type="text/javascript">
-    $('.datatable').dataTable({
-        "language": {
-            "url": base_url + "assets/comp/datatables/lang.id.json"
-        },
-        "aaSorting" : [],
-        "aoColumnDefs": [
-            { 'bSortable': false, 'aTargets': [ 0 ] }
-        ],
-        "bAutoWidth": false,
-        "fnDrawCallback" : function( oSettings ) {
-            if (typeof MathJax !== 'undefined') {
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-            }
-
-            $(".iframe-detail-jawaban").colorbox({
-                iframe:true,
-                width:"700",
-                height:"600",
-                fixed:true,
-            });
-
-            $('[data-toggle="tooltip"]').tooltip({html:true});
-        }
-    });
-</script>
-{% endblock %}

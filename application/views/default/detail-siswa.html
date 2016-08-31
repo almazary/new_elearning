@@ -32,8 +32,8 @@
                 <strong>Profil Siswa</strong>
                 {% if is_admin() %}
                 <div class="btn-group pull-right" style="margin-top:-4px;">
-                    {{ anchor('siswa/edit_profile/' ~ status_id ~ '/' ~ siswa.id, 'Edit Profil', {'class' : 'iframe-4 btn btn-small btn-primary', 'title' : 'Edit Profil Siswa'})|raw }}
-                    {{ anchor('siswa/edit_picture/' ~ status_id ~ '/' ~ siswa.id, 'Edit Foto', {'class' : 'iframe-5 btn btn-small btn-primary', 'title' : 'Edit Foto Siswa'})|raw }}
+                    {{ anchor('siswa/edit_profile/' ~ status_id ~ '/' ~ siswa.id, 'Edit Profil', {'class' : 'siswa-iframe-4 btn btn-small btn-primary', 'title' : 'Edit Profil Siswa'})|raw }}
+                    {{ anchor('siswa/edit_picture/' ~ status_id ~ '/' ~ siswa.id, 'Edit Foto', {'class' : 'siswa-iframe-5 btn btn-small btn-primary', 'title' : 'Edit Foto Siswa'})|raw }}
                     {% if is_admin() %}
                     {{ anchor('login/login_log/' ~ siswa_login.id, 'Login log', {'class' : 'btn btn-small btn-default', 'title' : 'Login log'})|raw }}
                     {% endif %}
@@ -102,7 +102,7 @@
                         <strong>Riwayat Kelas</strong>
                         {% if is_admin() and status_id != 3 %}
                         <div class="btn-group pull-right" style="margin-top:-4px;">
-                            {{ anchor('siswa/moved_class/' ~ status_id ~ '/' ~ siswa.id, 'Pindah Kelas', {'class' : 'iframe btn btn-small btn-primary', 'title' : 'Pindah siswa ke Kelas lain'})|raw }}
+                            {{ anchor('siswa/moved_class/' ~ status_id ~ '/' ~ siswa.id, 'Pindah Kelas', {'class' : 'siswa-iframe btn btn-small btn-primary', 'title' : 'Pindah siswa ke Kelas lain'})|raw }}
                         </div>
                         {% endif %}
                     </div>
@@ -144,8 +144,8 @@
                     <div class="panel-heading">
                         <strong>Akun Login</strong>
                         <div class="btn-group pull-right" style="margin-top:-4px;">
-                            {{ anchor('siswa/edit_username/' ~ status_id ~ '/' ~ siswa.id, 'Edit Username', {'class' : 'iframe-2 btn btn-small btn-primary', 'title' : 'Edit Username Siswa'})|raw }}
-                            {{ anchor('siswa/edit_password/' ~ status_id ~ '/' ~ siswa.id, 'Edit Password', {'class' : 'iframe-3 btn btn-small btn-primary', 'title' : 'Edit Password Siswa'})|raw }}
+                            {{ anchor('siswa/edit_username/' ~ status_id ~ '/' ~ siswa.id, 'Edit Username', {'class' : 'siswa-iframe-2 btn btn-small btn-primary', 'title' : 'Edit Username Siswa'})|raw }}
+                            {{ anchor('siswa/edit_password/' ~ status_id ~ '/' ~ siswa.id, 'Edit Password', {'class' : 'siswa-iframe-3 btn btn-small btn-primary', 'title' : 'Edit Password Siswa'})|raw }}
                         </div>
                     </div>
                     <div class="panel-body">

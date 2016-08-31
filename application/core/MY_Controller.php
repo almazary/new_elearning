@@ -394,9 +394,10 @@ class MY_Controller extends CI_Controller
             $retrieve['receiver'] = $this->get_user_data($retrieve['sender_receiver_id']);
         }
 
-        $retrieve['profil'] = $this->get_user_data($get_user);
-        $retrieve['login']  = $this->login_model->retrieve($get_user);
-        $retrieve['date']   = format_datetime($retrieve['date']);
+        $retrieve['profil']   = $this->get_user_data($get_user);
+        $retrieve['login']    = $this->login_model->retrieve($get_user);
+        $retrieve['raw_date'] = $retrieve['date'];
+        $retrieve['date']     = format_datetime($retrieve['date']);
 
         return $retrieve;
     }

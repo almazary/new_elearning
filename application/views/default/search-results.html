@@ -31,13 +31,13 @@ Pencarian - {{ parent() }}
                         <li class="dropdown">
                             <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
-                                <li>{{ anchor('siswa/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
-                                <li>{{ anchor('siswa/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>
+                                <li>{{ anchor('siswa/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'siswa-iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
+                                <li>{{ anchor('siswa/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'siswa-iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>
                                 {% if v.status_id != 3 %}
-                                <li>{{ anchor('siswa/moved_class/' ~ v.status_id ~ '/' ~ v.id, 'Edit Kelas Aktif', {'class' : 'iframe-kelas-aktif', 'title' : 'Edit Kelas Aktif'})|raw }}</li>
+                                <li>{{ anchor('siswa/moved_class/' ~ v.status_id ~ '/' ~ v.id, 'Edit Kelas Aktif', {'class' : 'siswa-iframe-kelas-aktif', 'title' : 'Edit Kelas Aktif'})|raw }}</li>
                                 {% endif %}
-                                <li>{{ anchor('siswa/edit_username/' ~ v.status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Siswa'})|raw }}</li>
-                                <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
+                                <li>{{ anchor('siswa/edit_username/' ~ v.status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'siswa-iframe-2', 'title' : 'Edit Username Siswa'})|raw }}</li>
+                                <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'siswa-iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
                             </ul>
                         </li>
                         {% else %}
@@ -72,10 +72,10 @@ Pencarian - {{ parent() }}
                         <li class="dropdown">
                             <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
-                                <li>{{ anchor('pengajar/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
-                                <li>{{ anchor('pengajar/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>
-                                <li>{{ anchor('pengajar/edit_username/' ~ v.status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Pengajar'})|raw }}</li>
-                                <li>{{ anchor('pengajar/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
+                                <li>{{ anchor('pengajar/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'pengajar-iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
+                                <li>{{ anchor('pengajar/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'pengajar-iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>
+                                <li>{{ anchor('pengajar/edit_username/' ~ v.status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'pengajar-iframe-2', 'title' : 'Edit Username Pengajar'})|raw }}</li>
+                                <li>{{ anchor('pengajar/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'pengajar-iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
                             </ul>
                         </li>
                         {% else %}

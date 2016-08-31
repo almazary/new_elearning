@@ -175,7 +175,6 @@ class Tugas extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-tugas.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -511,7 +510,6 @@ class Tugas extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-manajamen-soal.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -629,7 +627,6 @@ class Tugas extends MY_Controller
         $data['comp_js'] = load_comp_js(array(
             base_url('assets/comp/datatables/jquery.dataTables.js'),
             base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-            base_url('assets/comp/datatables/script.js'),
         ));
 
         $data['comp_css'] = load_comp_css(array(
@@ -1115,9 +1112,6 @@ class Tugas extends MY_Controller
 
         if ($tugas['type_id'] == 2) {
             $html_js .= get_tinymce('jawaban, textarea#jawaban-' . implode(', textarea#jawaban-', $check_field_value['pertanyaan_id']), 'advanced', array('autosave'));
-            $html_js .= load_comp_js(array(
-                base_url('assets/comp/jquery/tinymce.autosave.js'),
-            ));
             $data['data']['str_id'] = implode(',', $check_field_value['pertanyaan_id']);
         }
 

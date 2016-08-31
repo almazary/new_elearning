@@ -67,8 +67,6 @@ function default_parser_item($add_item = array())
         'logo_url_large'    => get_logo_url('large'),
         'base_url_theme'    => base_url_theme().'/',
         'site_name_default' => 'e-Learning system',
-        'comp_css'          => '',
-        'comp_js'           => '',
         'url_referrer'      => $url_referrer,
         'elapsed_time'      => $CI->benchmark->elapsed_time(),
     );
@@ -78,6 +76,55 @@ function default_parser_item($add_item = array())
         $return['copyright'] = 'Copyright &copy; 2014 - ' . date('Y') . ' ' . get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>';
         $return['site_name'] = 'e-Learning '.get_pengaturan('nama-sekolah', 'value');
         $return['version']   = '<a href="https://github.com/almazary/new_elearning">versi ' . get_pengaturan('versi', 'value') . '</a>';
+    }
+
+    # load komponen js aplikasi
+    $load_js_app = load_comp_js(array(
+        base_url('assets/comp/SyntaxHighlighter/scripts/shCore.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAppleScript.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAS3.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushBash.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushColdFusion.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCpp.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCSharp.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCss.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDelphi.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDiff.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushErlang.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushGroovy.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJava.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJavaFX.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJScript.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPerl.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPhp.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPlain.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPowerShell.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPython.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushRuby.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSass.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushScala.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSql.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushVb.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushXml.js'),
+        base_url('assets/comp/timeago/jquery.timeago.js'),
+        base_url('assets/comp/jquery/app.js'),
+    ));
+
+    if (isset($add_item['comp_js'])) {
+        $add_item['comp_js'] .= $load_js_app;
+    } else {
+        $add_item['comp_js'] = $load_js_app;
+    }
+
+    // load komponen css aplikasi
+    $load_css_app = load_comp_css(array(
+        base_url('assets/comp/SyntaxHighlighter/styles/shCoreEclipse.css'),
+    ));
+
+    if (isset($add_item['comp_css'])) {
+        $add_item['comp_css'] .= $load_css_app;
+    } else {
+        $add_item['comp_css'] = $load_css_app;
     }
 
     if (!empty($add_item) AND is_array($add_item)) {

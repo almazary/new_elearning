@@ -1,0 +1,11 @@
+<tr id="msg-{{ item_msg.id }}">
+    <td class="msg-user {{ (msg_flag_new == 1) ? 'msg-flag-new' }}">
+        <img class="img-msg-user img-polaroid img-circle pull-left" src="{{ item_msg.profil.link_image }}">
+        <a href="{{ item_msg.profil.link_profil }}">{{ character_limiter(item_msg.profil.nama, 23, '...') }}</a>
+        <br><small>{{ item_msg.date }}</small>
+    </td>
+    <td class="msg-content">
+        <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ item_msg.id ~ '/' ~ active_msg_id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
+        {{ item_msg.content|raw_media|raw }}
+    </td>
+</tr>

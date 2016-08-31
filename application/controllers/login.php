@@ -87,10 +87,9 @@ class Login extends MY_Controller
         $data['sliders'] = $this->config_model->get_all_slider_img();
 
         if (!empty($data['sliders'])) {
-            # panggil colorbox
+            # panggil nivoslider
             $html_js = load_comp_js(array(
                 base_url('assets/comp/nivoslider/jquery.nivo.slider.pack.js'),
-                base_url('assets/comp/nivoslider/setup.js'),
             ));
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(
@@ -124,7 +123,6 @@ class Login extends MY_Controller
             # panggil colorbox
             $html_js = load_comp_js(array(
                 base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                base_url('assets/comp/colorbox/act-pengajar.js')
             ));
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -149,7 +147,6 @@ class Login extends MY_Controller
             # panggil colorbox
             $html_js = load_comp_js(array(
                 base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                base_url('assets/comp/colorbox/act-siswa.js')
             ));
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -453,5 +450,34 @@ class Login extends MY_Controller
         $data['pagination'] = $this->pager->view($retrieve_all, 'login/login_log/' . $login['id'] . '/');
 
         $this->twig->display('list-login-log.html', $data);
+    }
+
+    /**
+     * Method untuk cek sudah login atau belum
+     * @return boolean
+     * @since  1.8
+     */
+    function data_onload()
+    {
+        if (!is_ajax()) {
+            die;
+        }
+
+        $return = array(
+            'is_user_logged_in' => is_login() ? '1' : '0',
+            'sedang_ujian' => $this->sedang_ujian() ? '1' : '0',
+        );
+
+        echo json_encode($return);
+    }
+
+    /**
+     * Method untuk redirect karna session telah expired
+     * @since  1.8
+     */
+    function sess_expired()
+    {
+        $this->session->set_flashdata('login', get_alert('warning', "Session login anda telah habis, silakan login kembali."));
+        $this->logout();
     }
 }

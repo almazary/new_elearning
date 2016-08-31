@@ -141,7 +141,6 @@ class Pengumuman extends MY_Controller
         $html_js .= load_comp_js(array(
             base_url('assets/comp/jquery/moment.min.js'),
             base_url('assets/comp/daterangepicker/jquery.daterangepicker.js'),
-            base_url('assets/comp/daterangepicker/setup.js'),
         ));
 
         $data['comp_js']  = $html_js;
@@ -192,7 +191,6 @@ class Pengumuman extends MY_Controller
         $html_js .= load_comp_js(array(
             base_url('assets/comp/jquery/moment.min.js'),
             base_url('assets/comp/daterangepicker/jquery.daterangepicker.js'),
-            base_url('assets/comp/daterangepicker/setup.js'),
         ));
 
         $data['comp_js']  = $html_js;

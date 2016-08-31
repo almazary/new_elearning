@@ -87,7 +87,6 @@ class Kelas extends MY_Controller
             'comp_js'  => load_comp_js(
                 array(
                     base_url('assets/comp/nestedSortable/jquery.mjs.nestedSortable.js'),
-                    base_url('assets/comp/nestedSortable/kelas.js'),
                 )
             )
         );
@@ -122,7 +121,6 @@ class Kelas extends MY_Controller
             'comp_js'  => load_comp_js(
                 array(
                     base_url('assets/comp/nestedSortable/jquery.mjs.nestedSortable.js'),
-                    base_url('assets/comp/nestedSortable/kelas.js'),
                 )
             )
         );
@@ -226,10 +224,6 @@ class Kelas extends MY_Controller
 
     function mapel_kelas($act = 'list', $segment_4 = '', $segment_5 = '', $segment_6 = '', $segment_7 = '')
     {
-        $data['comp_js']   = load_comp_js(array(
-            base_url('assets/comp/jquery/ajax.js')
-        ));
-
         switch ($act) {
             case 'aktifkan':
                 $parent_id      = (int)$segment_4;

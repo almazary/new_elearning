@@ -68,7 +68,6 @@ class Pengajar extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-pengajar.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -541,7 +540,6 @@ class Pengajar extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-pengajar.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -572,10 +570,6 @@ class Pengajar extends MY_Controller
         if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
             exit('Akses ditolak');
         }
-
-        $data['comp_js'] = load_comp_js(array(
-            base_url('assets/comp/jquery/ajax.js')
-        ));
 
         $data['status_id']   = $status_id;
         $data['pengajar_id'] = $pengajar_id;
@@ -628,10 +622,6 @@ class Pengajar extends MY_Controller
         }
 
         $retrieve_mk = $this->mapel_model->retrieve_kelas($retrieve_ma['mapel_kelas_id']);
-
-        $data['comp_js'] = load_comp_js(array(
-            base_url('assets/comp/jquery/ajax.js')
-        ));
 
         $data['status_id']    = $status_id;
         $data['pengajar_id']  = $pengajar_id;
@@ -746,13 +736,13 @@ class Pengajar extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-siswa.js')
         ));
-        $data['comp_js']      = $html_js;
-        $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
-        $data['pengajars']  = $retrieve_all['results'];
-        $data['pagination'] = $this->pager->view($retrieve_all, 'pengajar/filter/');
+        $data['pengajars']     = $retrieve_all['results'];
+        $data['pagination']    = $this->pager->view($retrieve_all, 'pengajar/filter/');
+        $data['count_pending'] = $this->pengajar_model->count('pending');
 
         $this->twig->display('filter-pengajar.html', $data);
     }
@@ -816,7 +806,6 @@ class Pengajar extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-pengajar.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));

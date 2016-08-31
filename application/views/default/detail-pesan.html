@@ -4,33 +4,6 @@
 Detail Percakapan - {{ parent() }}
 {% endblock %}
 
-{% block css %}
-<style type="text/css">
-    .msg-active {
-        border:1px solid #DDD; padding: 5px 10px;border-radius: 2px; background-color: #fbfbfb;
-        margin-bottom: 10px;
-    }
-    .hr-msg {
-        margin-top: 5px;margin-bottom: 5px;border:none;
-    }
-    .table tr td.user {
-        width: 250px;
-    }
-    .table tr td.flag-new {
-        border-left:3px solid #1793D2!important;
-    }
-    .table tr td.msg-content {
-        background-color: #f5f5f5;
-    }
-    .table tr td.msg-content img, .table tr td.msg-content iframe {
-        max-width: 520px;
-    }
-    img.img-user {
-        height:30px;width:30px; margin-right: 10px;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
 <div class="module">
     <div class="module-head">
@@ -38,46 +11,23 @@ Detail Percakapan - {{ parent() }}
     </div>
     <div class="module-body">
 
+        {% set active_msg_id = r.id %}
+
         <table class="table table-hover" id="list-msg">
-            {% for d in old_related_msg %}
-            <tr id="msg-{{ d.id }}">
-                <td class="user">
-                    <img class="img-user img-polaroid img-circle pull-left" src="{{ d.profil.link_image }}">
-                    <a href="{{ d.profil.link_profil }}">{{ character_limiter(d.profil.nama, 23, '...') }}</a>
-                    <br><small>{{ d.date }}</small>
-                </td>
-                <td class="msg-content">
-                    <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ d.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
-                    {{ d.content|raw_media|raw }}
-                </td>
-            </tr>
-            {% endfor %}
+            <tbody>
+                {% for d in old_related_msg %}
+                    {% set item_msg = d %}
+                    {% include 'detail-pesan-item.html' %}
+                {% endfor %}
 
-            <tr id="msg-{{ r.id }}">
-                <td class="user">
-                    <img class="img-user img-polaroid img-circle pull-left" src="{{ r.profil.link_image }}">
-                    <a href="{{ r.profil.link_profil }}">{{ character_limiter(r.profil.nama, 23, '...') }}</a>
-                    <br><small>{{ r.date }}</small>
-                </td>
-                <td class="msg-content">
-                    <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ r.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
-                    {{ r.content|raw_media|raw }}
-                </td>
-            </tr>
+                {% set item_msg = r %}
+                {% include 'detail-pesan-item.html' %}
 
-            {% for n in new_related_msg %}
-            <tr id="msg-{{ d.id }}">
-                <td class="user">
-                    <img class="img-user img-polaroid img-circle pull-left" src="{{ n.profil.link_image }}">
-                    <a href="{{ n.profil.link_profil }}">{{ character_limiter(n.profil.nama, 23, '...') }}</a>
-                    <br><small>{{ n.date }}</small>
-                </td>
-                <td class="msg-content">
-                    <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ n.id ~ '/' ~ r.id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
-                    {{ n.content|raw_media|raw }}
-                </td>
-            </tr>
-            {% endfor %}
+                {% for n in new_related_msg %}
+                    {% set item_msg = n %}
+                    {% include 'detail-pesan-item.html' %}
+                {% endfor %}
+            </tbody>
         </table>
 
         <br>

@@ -7,7 +7,7 @@
  *
  * @version
  * 3.0.83 (July 02 2010)
- * 
+ *
  * @copyright
  * Copyright (C) 2004-2010 Alex Gorbatchev.
  *
@@ -132,15 +132,16 @@
   display: inline !important;
 }
 .syntaxhighlighter .toolbar {
-  position: absolute !important;
+  /*position: absolute !important;
   right: 1px !important;
   top: 1px !important;
   width: 11px !important;
   height: 11px !important;
   font-size: 10px !important;
-  z-index: 10 !important;
+  z-index: 10 !important;*/
+  display: none;
 }
-.syntaxhighlighter .toolbar span.title {
+/*.syntaxhighlighter .toolbar span.title {
   display: inline !important;
 }
 .syntaxhighlighter .toolbar a {
@@ -151,17 +152,17 @@
 }
 .syntaxhighlighter .toolbar a.expandSource {
   display: none !important;
-}
+}*/
 .syntaxhighlighter.ie {
   font-size: .9em !important;
   padding: 1px 0 1px 0 !important;
 }
-.syntaxhighlighter.ie .toolbar {
+/*.syntaxhighlighter.ie .toolbar {
   line-height: 8px !important;
 }
 .syntaxhighlighter.ie .toolbar a {
   padding-top: 0px !important;
-}
+}*/
 .syntaxhighlighter.printing .line.alt1 .content,
 .syntaxhighlighter.printing .line.alt2 .content,
 .syntaxhighlighter.printing .line.highlighted .number,
@@ -336,4 +337,10 @@
 .syntaxhighlighter .xml .string {
   font-style: italic !important;
   color: #2a00ff !important;
+}
+.syntaxhighlighter {
+    max-width: 550px;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: auto;
 }

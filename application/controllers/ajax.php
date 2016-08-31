@@ -54,20 +54,23 @@ class Ajax extends MY_Controller
             case 'penerima':
                 $query =  !empty($_GET['query']) ? $_GET['query'] : '';
 
-                $sql = "SELECT " . $this->db->dbprefix('login') . ".username, " . $this->db->dbprefix('pengajar') . ".nama FROM " . $this->db->dbprefix('pengajar') . " INNER JOIN " . $this->db->dbprefix('login') . " ON " . $this->db->dbprefix('pengajar') . ".id = " . $this->db->dbprefix('login') . ".pengajar_id
-                        WHERE " . $this->db->dbprefix('login') . ".username LIKE '%" . $this->db->escape_like_str($query) . "%' OR " . $this->db->dbprefix('pengajar') . ".nama LIKE '%" . $this->db->escape_like_str($query) . "%'
-                        UNION
-                        SELECT " . $this->db->dbprefix('login') . ".username, " . $this->db->dbprefix('siswa') . ".nama FROM " . $this->db->dbprefix('siswa') . " INNER JOIN " . $this->db->dbprefix('login') . " ON " . $this->db->dbprefix('siswa') . ".id = " . $this->db->dbprefix('login') . ".siswa_id
-                        WHERE " . $this->db->dbprefix('login') . ".username LIKE '%" . $this->db->escape_like_str($query) . "%' OR " . $this->db->dbprefix('siswa') . ".nama LIKE '%" . $this->db->escape_like_str($query) . "%'";
+                # jika query tidak kosong
+                $results = array();
+                if (!empty($query)) {
+                    $sql = "(SELECT " . $this->db->dbprefix('login') . ".username, " . $this->db->dbprefix('pengajar') . ".nama FROM " . $this->db->dbprefix('pengajar') . " INNER JOIN " . $this->db->dbprefix('login') . " ON " . $this->db->dbprefix('pengajar') . ".id = " . $this->db->dbprefix('login') . ".pengajar_id
+                            WHERE " . $this->db->dbprefix('login') . ".username LIKE '%" . $this->db->escape_like_str($query) . "%' OR " . $this->db->dbprefix('pengajar') . ".nama LIKE '%" . $this->db->escape_like_str($query) . "%' LIMIT 20)
+                            UNION
+                            (SELECT " . $this->db->dbprefix('login') . ".username, " . $this->db->dbprefix('siswa') . ".nama FROM " . $this->db->dbprefix('siswa') . " INNER JOIN " . $this->db->dbprefix('login') . " ON " . $this->db->dbprefix('siswa') . ".id = " . $this->db->dbprefix('login') . ".siswa_id
+                            WHERE " . $this->db->dbprefix('login') . ".username LIKE '%" . $this->db->escape_like_str($query) . "%' OR " . $this->db->dbprefix('siswa') . ".nama LIKE '%" . $this->db->escape_like_str($query) . "%' LIMIT 20)";
 
-                $result = $this->db->query($sql);
+                    $result = $this->db->query($sql);
 
-                $data['suggestions'] = array();
-                foreach ($result->result_array() as $r) {
-                    $data['suggestions'][] = array('value' => $r['nama'] . ' <' . $r['username'] . '>');
+                    foreach ($result->result_array() as $r) {
+                        $results[] = addslashes($r['nama']) . ' [' . $r['username'] . ']';
+                    }
                 }
 
-                echo json_encode($data);
+                echo json_encode($results);
             break;
 
             case 'new_msg':
@@ -300,12 +303,12 @@ class Ajax extends MY_Controller
                 $active_msg_id = $this->input->post('active_msg_id', true);
                 $active_msg_id = (int)$active_msg_id;
                 if (empty($active_msg_id)) {
-                    echo '';
+                    die;
                 }
 
                 $msg = $this->msg_model->retrieve(get_sess_data('login', 'id'), $active_msg_id, false, false);
                 if (empty($msg)) {
-                    echo '';
+                    die;
                 }
                 $msg = $msg['retrieve'];
 
@@ -346,21 +349,14 @@ class Ajax extends MY_Controller
                         $user['link_image'] = get_url_image_pengajar($user['foto'], 'medium', $user['jenis_kelamin']);
                     }
 
-                    $retrieve['date'] = format_datetime($retrieve['date']);
+                    $retrieve['profil'] = $user;
+                    $retrieve['date']   = format_datetime($retrieve['date']);
 
-                    ?>
-                    <tr id="msg-<?php echo $val['id'] ?>">
-                        <td class="user flag-new">
-                            <img class="img-user img-polaroid img-circle pull-left" src="<?php echo $user['link_image']; ?>">
-                            <a href="{{ n.profil.link_profil }}"><?php echo character_limiter($user['nama'], 23, '...') ?></a>
-                            <br><small><?php echo $retrieve['date']; ?></small>
-                        </td>
-                        <td class="msg-content">
-                            <a class="pull-right" style="margin-left:10px;" href="<?php echo site_url('message/del/' . $retrieve['id'] . '/' . $msg['id']) ?>" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
-                            <?php echo html_entity_decode($retrieve['content']); ?>
-                        </td>
-                    </tr>
-                    <?php
+                    $this->twig->display('detail-pesan-item.html', array(
+                        'active_msg_id' => $msg['id'],
+                        'item_msg'      => $retrieve,
+                        'msg_flag_new'  => 1
+                    ));
                 }
             break;
         }
