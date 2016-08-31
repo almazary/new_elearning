@@ -22,7 +22,7 @@ Detail Pengumuman - {{ parent() }}
             {% endif %}
 
             {% if a == 'delete' %}
-            <a onclick="return confirm('Anda yakin ingin menghapus?')" class="btn btn-default btn-small" href="{{ site_url('pengumuman/delete/' ~ p.id) }}" data-toggle="tooltip" title="Edit"><i class="icon-trash"></i></a>
+            <a onclick="return confirm('Anda yakin ingin menghapus?')" class="btn btn-default btn-small" href="{{ site_url('pengumuman/delete/' ~ p.id) }}" data-toggle="tooltip" title="Hapus"><i class="icon-trash"></i></a>
             {% endif %}
         {% endfor %}
         </div>
