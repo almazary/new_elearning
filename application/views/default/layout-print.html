@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{{ site_name }}{% endblock %}</title>
+    <link type="text/css" href="{{ base_url('assets/comp/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link type="text/css" href="{{ base_url('assets/comp/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+    <link type="text/css" href="{{ base_url('assets/comp/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+    <style type="text/css">
+        h3.title {
+            margin-bottom: 0px;
+            line-height: 30px;
+        }
+        hr.top {
+            border: none;
+            border-bottom: 2px solid #333;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+    </style>
+    {% block css %}{% endblock %}
+    <link rel="shortcut icon" type="image/x-icon" href="{{ favicon_url }}">
+</head>
+<body>
+    <div class="container">
+        <br>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

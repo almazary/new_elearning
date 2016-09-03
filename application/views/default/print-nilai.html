@@ -1,78 +1,71 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Print Nilai</title>
-    <link type="text/css" href="{{ base_url_theme }}bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link type="text/css" href="{{ base_url_theme }}bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link type="text/css" href="{{ base_url_theme }}images/icons/css/font-awesome.css" rel="stylesheet">
-    {% block css %}{% endblock %}
-    <link rel="shortcut icon" type="image/x-icon" href="{{ favicon_url }}">
-</head>
-<body onload="window.print()">
-<div class="container">
-    <center>
-        <h3 style="margin-bottom: 0px;line-height: 30px;">{{ get_pengaturan('nama-sekolah', 'value') }}</h3>
-        {{ get_pengaturan('alamat', 'value') }}
-    </center>
-    <hr style="border: none;border-bottom: 2px solid #333;margin-bottom: 10px;margin-top: 10px;">
+{% extends 'layout-print.html' %}
 
-    <p><b>Nilai {{ tugas.judul }}, {{ tugas.mapel.nama }}</b></p>
+{% block title %}
+    Print nilai - {{ parent() }}
+{% endblock %}
 
-    {% if tugas.type_id == 3 %}
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th width="5%">No</th>
-                <th>Nis</th>
-                <th>Nama</th>
-                <th>Kelas</th>
-                <th>Benar</th>
-                <th>Salah</th>
-                <th>Kosong</th>
-                <th>Nilai</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for n in data_nilai %}
-            <tr>
-                <td>{{ loop.index }}.</td>
-                <td>{{ n.siswa.nis }}</td>
-                <td>{{ n.siswa.nama }}</td>
-                <td>{{ n.siswa.kelas_aktif.nama }}</td>
-                <td>{{ n.history.value.jml_benar }}</td>
-                <td>{{ n.history.value.jml_salah }}</td>
-                <td>{{ (count(n.history.value.pertanyaan_id) != (n.history.value.jml_benar + n.history.value.jml_salah)) ? (count(n.history.value.pertanyaan_id) - (n.history.value.jml_benar + n.history.value.jml_salah))|abs : 0 }}</td>
-                <td>{{ round(n.nilai, 2) }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
+{% block content %}
+<center>
+    <h3 class="title">{{ get_pengaturan('nama-sekolah', 'value') }}</h3>
+    {{ get_pengaturan('alamat', 'value') }}
+</center>
+<hr class="top">
 
-    {% if tugas.type_id == 2 or tugas.type_id == 1 %}
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th width="5%">No</th>
-                <th>Nis</th>
-                <th>Nama</th>
-                <th>Kelas</th>
-                <th>Nilai</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for s in data_siswa %}
-            <tr>
-                <td>{{ loop.index }}.</td>
-                <td>{{ s.nis }}</td>
-                <td>{{ s.nama }}</td>
-                <td>{{ s.kelas_aktif.nama }}</td>
-                <td>{{ round(s.nilai.nilai, 2) }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
-</div>
-</body>
-</html>
+<p><b>Nilai {{ tugas.judul }}, {{ tugas.mapel.nama }}</b></p>
+
+{% if tugas.type_id == 3 %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th width="5%">No</th>
+            <th>Nis</th>
+            <th>Nama</th>
+            <th>Kelas</th>
+            <th>Benar</th>
+            <th>Salah</th>
+            <th>Kosong</th>
+            <th>Nilai</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for n in data_nilai %}
+        <tr>
+            <td>{{ loop.index }}.</td>
+            <td>{{ n.siswa.nis }}</td>
+            <td>{{ n.siswa.nama }}</td>
+            <td>{{ n.siswa.kelas_aktif.nama }}</td>
+            <td>{{ n.history.value.jml_benar }}</td>
+            <td>{{ n.history.value.jml_salah }}</td>
+            <td>{{ (count(n.history.value.pertanyaan_id) != (n.history.value.jml_benar + n.history.value.jml_salah)) ? (count(n.history.value.pertanyaan_id) - (n.history.value.jml_benar + n.history.value.jml_salah))|abs : 0 }}</td>
+            <td>{{ round(n.nilai, 2) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% if tugas.type_id == 2 or tugas.type_id == 1 %}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th width="5%">No</th>
+            <th>Nis</th>
+            <th>Nama</th>
+            <th>Kelas</th>
+            <th>Nilai</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in data_siswa %}
+        <tr>
+            <td>{{ loop.index }}.</td>
+            <td>{{ s.nis }}</td>
+            <td>{{ s.nama }}</td>
+            <td>{{ s.kelas_aktif.nama }}</td>
+            <td>{{ round(s.nilai.nilai, 2) }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}
