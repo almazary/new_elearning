@@ -27,7 +27,7 @@ Laporan Komentar Materi - {{ parent() }}
 
         <div class="btn-group">
             <a href="{{ site_url('materi/komentar') }}" class="btn btn-sm btn-default">Semua</a>
-            <a href="{{ site_url('materi/komentar/laporan') }}" class="btn btn-sm btn-primary">Laporan ({{ count(laporan) }})</a>
+            <a href="{{ site_url('materi/komentar/laporan') }}" class="btn btn-sm btn-primary">Laporan {{ (jml_laporan_baru > 0) ? '(' ~ jml_laporan_baru ~ ')' }}</a>
         </div>
         <br><br>
 
@@ -40,7 +40,7 @@ Laporan Komentar Materi - {{ parent() }}
             </thead>
             <tbody>
                 {% for l in laporan %}
-                <tr>
+                <tr {{ (l.view_admin == 0) ? 'class="info"' }}>
                     <td>
                         <div class="media">
                             <div class="pull-left">

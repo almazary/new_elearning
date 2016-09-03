@@ -73,8 +73,47 @@ class Ajax extends MY_Controller
                 echo json_encode($results);
             break;
 
-            case 'new_msg':
-                echo $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
+            case 'count_new_data':
+                # pesan baru
+                $new_msg = $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
+
+                $count_update     = 0;
+                $pending_siswa    = 0;
+                $pending_pengajar = 0;
+                $unread_laporan   = 0;
+
+                # jika login admin
+                if (is_admin()) {
+                    # update terbaru
+                    $count_update = 0;
+                    $field_id     = "cek-versi";
+                    $cek_versi    = retrieve_field($field_id);
+                    if (!empty($cek_versi['value'])) {
+                        $cek_value = json_decode($cek_versi['value'], 1);
+                        if ($cek_value['result'] > $this->current_version) {
+                            $count_update = 1;
+                        }
+                    }
+
+                    # cari jumlah pending siswa
+                    $pending_siswa = $this->siswa_model->count('pending');
+
+                    # cari pending pengajar
+                    $pending_pengajar = $this->pengajar_model->count('pending');
+
+                    # laporan
+                    $unread_laporan = $this->materi_model->count('unread-laporan');
+                }
+
+                $result = array(
+                    'new_msg'          => $new_msg,
+                    'new_update'       => $count_update,
+                    'pending_siswa'    => $pending_siswa,
+                    'pending_pengajar' => $pending_pengajar,
+                    'unread_laporan'   => $unread_laporan,
+                );
+
+                echo json_encode($result);
             break;
 
             case 'check_update':
@@ -84,20 +123,6 @@ class Ajax extends MY_Controller
                 } else {
                     echo "0";
                 }
-            break;
-
-            case 'count_new_update':
-                $count     = 0;
-                $field_id  = "cek-versi";
-                $cek_versi = retrieve_field($field_id);
-                if (!empty($cek_versi['value'])) {
-                    $cek_value = json_decode($cek_versi['value'], 1);
-                    if ($cek_value['result'] > $this->current_version) {
-                        $count = 1;
-                    }
-                }
-
-                echo $count;
             break;
 
             case 'download_update':

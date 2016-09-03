@@ -9,6 +9,34 @@
 class Materi_model extends CI_Model
 {
     /**
+     * Method untuk menghitung data tertentu
+     * @param  string $by
+     */
+    public function count($by)
+    {
+        switch ($by) {
+            case 'unread-laporan':
+                $field_id       = 'laporkan-komentar';
+                $retrieve_field = retrieve_field($field_id);
+                if (isset($retrieve_field['value'])) {
+                    $field_value = json_decode($retrieve_field['value'], 1);
+                } else {
+                    $field_value = array();
+                }
+
+                $unread = 0;
+                foreach ($field_value as $val) {
+                    if (empty($val['view_admin'])) {
+                        $unread++;
+                    }
+                }
+
+                return $unread;
+            break;
+        }
+    }
+
+    /**
      * Method untuk menambah views materi
      *
      * @param  integer $materi_id

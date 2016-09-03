@@ -105,27 +105,63 @@
             }, 1000);
         }
 
-        // cek count new message
-        function check_new_msg()
+        // count new data
+        function count_new_data()
         {
             $.ajax({
                 method: "GET",
-                url: site_url + '/ajax/get_data/new_msg',
+                url: site_url + '/ajax/get_data/count_new_data',
                 success: function (data) {
-                    if (data > 0) {
+                    var result = $.parseJSON(data);
+
+                    // new msg
+                    if (result.new_msg > 0) {
                         $(".menu-count-new-msg").html("");
-                        $(".menu-count-new-msg").html('<b class="label orange pull-right">' + data + '</b>');
+                        $(".menu-count-new-msg").html('<b class="label orange pull-right">' + result.new_msg + '</b>');
                     } else {
                         $(".menu-count-new-msg").html("");
+                    }
+
+                    // new update
+                    if (result.new_update > 0) {
+                        $(".menu-count-new-update").html("");
+                        $(".menu-count-new-update").html('<b class="label orange pull-right">' + result.new_update + '</b>');
+                    } else {
+                        $(".menu-count-new-update").html("");
+                    }
+
+                    // pending siswa
+                    if (result.pending_siswa > 0) {
+                        $(".menu-count-pending-siswa").html("");
+                        $(".menu-count-pending-siswa").html('<b class="label orange pull-right">' + result.pending_siswa + '</b>');
+                    } else {
+                        $(".menu-count-pending-siswa").html("");
+                    }
+
+                    // pending pengajar
+                    if (result.pending_pengajar > 0) {
+                        $(".menu-count-pending-pengajar").html("");
+                        $(".menu-count-pending-pengajar").html('<b class="label orange pull-right">' + result.pending_pengajar + '</b>');
+                    } else {
+                        $(".menu-count-pending-pengajar").html("");
+                    }
+
+                    // pending laporan
+                    if (result.unread_laporan > 0) {
+                        $(".menu-count-unread-laporan").html("");
+                        $(".menu-count-unread-laporan").html('<b class="label orange pull-right">' + result.unread_laporan + '</b>');
+                    } else {
+                        $(".menu-count-unread-laporan").html("");
                     }
                 },
                 async: false
             });
         }
 
-        check_new_msg();
+        // panggil count new data
+        count_new_data();
 
-        // get new message
+        // get new message di percakapan
         function get_new_msg()
         {
             if ($("#active_msg_id").length) {
@@ -145,30 +181,8 @@
             }
         }
 
-        // count update versi
-        function count_new_update()
-        {
-            if ($(".menu-count-new-update").length) {
-                $.ajax({
-                    method: "GET",
-                    url: site_url + '/ajax/get_data/count_new_update',
-                    success: function (data) {
-                        if (data > 0) {
-                            $(".menu-count-new-update").html("");
-                            $(".menu-count-new-update").html('<b class="label orange pull-right">' + data + '</b>');
-                        } else {
-                            $(".menu-count-new-update").html("");
-                        }
-                    },
-                    async: false
-                });
-            }
-        }
-
-        count_new_update();
-
         setInterval(function() {
-            check_new_msg();
+            count_new_data();
 
             get_new_msg();
         }, 10000);

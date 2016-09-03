@@ -783,7 +783,15 @@ class Materi extends MY_Controller
                     }
                 }
 
+                # update view_admin
+                $cp_field_value = $field_value;
+                foreach ($cp_field_value as $id => $val) {
+                    $cp_field_value[$id]['view_admin'] = 1;
+                }
+                update_field($field_id, 'Laporan Komentar', json_encode($cp_field_value));
+
                 # format data
+                $data['jml_laporan_baru'] = 0;
                 $results = array();
                 foreach ($field_value as $id => $val) {
                     $val['id'] = $id;
@@ -812,7 +820,13 @@ class Materi extends MY_Controller
                     $val['komentar']['login'] = $this->get_user_data($komentar['login_id']);
 
                     $results[] = $val;
+
+                    if (empty($val['view_admin'])) {
+                        $data['jml_laporan_baru'] = $data['jml_laporan_baru'] + 1;
+                    }
                 }
+                $results = array_reverse($results);
+
                 $data['laporan'] = $results;
 
                 $this->twig->display('list-komentar-laporan.html', $data);
@@ -856,16 +870,7 @@ class Materi extends MY_Controller
                 $data['komentar'] = $retrieve_all;
 
                 if (is_admin()) {
-                    # hitung jumlah laporan
-                    $field_id       = 'laporkan-komentar';
-                    $retrieve_field = retrieve_field($field_id);
-                    if (isset($retrieve_field['value'])) {
-                        $field_value = json_decode($retrieve_field['value'], 1);
-                    } else {
-                        $field_value = array();
-                    }
-
-                    $data['jml_laporan'] = count($field_value);
+                    $data['jml_laporan_baru'] = $this->materi_model->count('unread-laporan');
                 }
 
                 $this->twig->display('list-komentar.html', $data);

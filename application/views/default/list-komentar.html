@@ -28,7 +28,7 @@ Komentar Materi - {{ parent() }}
         {% if is_admin() %}
         <div class="btn-group">
             <a href="{{ site_url('materi/komentar') }}" class="btn btn-sm btn-primary">Semua</a>
-            <a href="{{ site_url('materi/komentar/laporan') }}" class="btn btn-sm btn-default">Laporan ({{ jml_laporan }})</a>
+            <a href="{{ site_url('materi/komentar/laporan') }}" class="btn btn-sm btn-default">Laporan {{ (jml_laporan_baru > 0) ? '(' ~ jml_laporan_baru ~ ')' }}</a>
         </div>
         <br><br>
         {% endif %}
