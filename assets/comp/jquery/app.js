@@ -113,10 +113,10 @@
                 url: site_url + '/ajax/get_data/new_msg',
                 success: function (data) {
                     if (data > 0) {
-                        $("#count-new-msg").html("");
-                        $("#count-new-msg").html('<b class="label orange pull-right">' + data + '</b>');
+                        $(".menu-count-new-msg").html("");
+                        $(".menu-count-new-msg").html('<b class="label orange pull-right">' + data + '</b>');
                     } else {
-                        $("#count-new-msg").html("");
+                        $(".menu-count-new-msg").html("");
                     }
                 },
                 async: false
@@ -148,16 +148,16 @@
         // count update versi
         function count_new_update()
         {
-            if ($("#count-new-update").length) {
+            if ($(".menu-count-new-update").length) {
                 $.ajax({
                     method: "GET",
                     url: site_url + '/ajax/get_data/count_new_update',
                     success: function (data) {
                         if (data > 0) {
-                            $("#count-new-update").html("");
-                            $("#count-new-update").html('<b class="label orange pull-right">' + data + '</b>');
+                            $(".menu-count-new-update").html("");
+                            $(".menu-count-new-update").html('<b class="label orange pull-right">' + data + '</b>');
                         } else {
-                            $("#count-new-update").html("");
+                            $(".menu-count-new-update").html("");
                         }
                     },
                     async: false
