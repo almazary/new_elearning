@@ -21,7 +21,7 @@ Filter Siswa - {{ parent() }}
             <div class="span5">
                 <div class="btn-group pull-right">
                     {{ anchor('siswa/index/1', 'Aktif', {'class' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/0', 'Pending', {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/0', 'Pending ' ~ ((count_pending > 0) ? '<span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/index/2', 'Blocking', {'class' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/index/3', 'Alumni', {'class' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-info'})|raw }}

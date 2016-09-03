@@ -347,10 +347,11 @@ class Siswa extends MY_Controller
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
         ));
-        $data['comp_js']    = $html_js;
-        $data['comp_css']   = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
-        $data['siswas']     = $retrieve_all['results'];
-        $data['pagination'] = $this->pager->view($retrieve_all, 'siswa/filter/');
+        $data['comp_js']       = $html_js;
+        $data['comp_css']      = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+        $data['siswas']        = $retrieve_all['results'];
+        $data['pagination']    = $this->pager->view($retrieve_all, 'siswa/filter/');
+        $data['count_pending'] = $this->siswa_model->count('pending');
 
         $this->twig->display('filter-siswa.html', $data);
     }
