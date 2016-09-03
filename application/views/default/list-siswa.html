@@ -35,7 +35,7 @@ Data Siswa - {{ parent() }}
                 <tr>
                     <th width="7%">
                         {% if status_id == 0 or status_id == 2 %}
-                            <input type="checkbox" style="margin-top:-2px;" onclick="ch_uch_checkbox(this)">
+                            <input type="checkbox" style="margin-top:-2px;" onclick="filter_siswa_ch_uch_checkbox(this)">
                         {% endif %}
                         ID
                     </th>
@@ -113,15 +113,4 @@ Data Siswa - {{ parent() }}
 
     </div>
 </div>
-{% endblock %}
-
-{% block js %}
-<script type="text/javascript">
-function ch_uch_checkbox(source){
-    checkboxes = document.getElementsByName('siswa_id[]');
-    for(var i=0, n=checkboxes.length;i<n;i++) {
-      checkboxes[i].checked = source.checked;
-    }
-}
-</script>
 {% endblock %}

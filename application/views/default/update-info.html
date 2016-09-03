@@ -30,7 +30,7 @@ Update Aplikasi - {{ parent() }}
 
                             <br>
                             <div class="btn-group">
-                                <a class="btn btn-primary" id="btn-perbaharui">Perbaharui</a>
+                                <a class="btn btn-primary" id="btn-perbaharui-aplikasi">Perbaharui</a>
                             </div>
                             <span id="progress-perbaharui"></span>
                         </td>
@@ -41,29 +41,4 @@ Update Aplikasi - {{ parent() }}
 
     </div>
 </div>
-{% endblock %}
-
-{% block js %}
-<script type="text/javascript">
-$("#btn-perbaharui").on('click', function() {
-    $("#progress-perbaharui").html('<img src="' + base_url + 'assets/images/loading.gif" style="width:30px;">');
-
-    $.ajax({
-        method: "GET",
-        url: site_url + '/ajax/get_data/download_update',
-        success: function (data) {
-            if (data == 0) {
-                $("#progress-perbaharui").html("Gagal mendownload file!");
-                setTimeout(function() {
-                    location.reload();
-                }, 2000);
-            } else if (data == 1) {
-                location.href = base_url + 'update-app.php';
-            } else {
-                $("#progress-perbaharui").html(data);
-            }
-        }
-    });
-});
-</script>
 {% endblock %}

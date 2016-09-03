@@ -80,7 +80,7 @@ Tambah Pengajar - {{ parent() }}
                 <div class="controls">
                     <input type="text" id="username" name="username" class="span5" value="{{ set_value('username') }}" placeholder="example@example.sch.id">
 
-                    <label class="checkbox inline"><input type="checkbox" name="default_username" id="default_username" onclick="username_default()" value="1" {{ set_checkbox('default_username', '1') }}> Gunakan default username</label>
+                    <label class="checkbox inline"><input type="checkbox" name="default_username" id="default_username" onclick="username_default_pengajar()" value="1" {{ set_checkbox('default_username', '1') }}> Gunakan default username</label>
                     <br>{{ form_error('username')|raw }}
                 </div>
             </div>
@@ -115,20 +115,4 @@ Tambah Pengajar - {{ parent() }}
 
     </div>
 </div>
-{% endblock %}
-
-{% block js %}
-<script type="text/javascript">
-function username_default() {
-    if (document.getElementById("default_username").checked) {
-        var nis = $("#nip").val();
-        if (nis == '') {
-            nis = new Date().getTime();
-        }
-        $("#username").val(nis + '@example.sch.id');
-    } else {
-        $("#username").val('');
-    }
-}
-</script>
 {% endblock %}

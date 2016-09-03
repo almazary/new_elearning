@@ -491,6 +491,18 @@
             }
         }
 
+        function username_default_pengajar() {
+            if (document.getElementById("default_username").checked) {
+                var nip = $("#nip").val();
+                if (nip == '') {
+                    nip = new Date().getTime();
+                }
+                $("#username").val(nip + '@example.sch.id');
+            } else {
+                $("#username").val('');
+            }
+        }
+
         // filter siswa
         function filter_siswa_ch_uch_checkbox(source){
             checkboxes = document.getElementsByName('siswa_id[]');
@@ -563,6 +575,27 @@
                 fixed:true,
             });
         }
+
+        $("#btn-perbaharui-aplikasi").on('click', function() {
+            $("#progress-perbaharui").html('<img src="' + base_url + 'assets/images/loading.gif" style="width:30px;">');
+
+            $.ajax({
+                method: "GET",
+                url: site_url + '/ajax/get_data/download_update',
+                success: function (data) {
+                    if (data == 0) {
+                        $("#progress-perbaharui").html("Gagal mendownload file!");
+                        setTimeout(function() {
+                            location.reload();
+                        }, 2000);
+                    } else if (data == 1) {
+                        location.href = base_url + 'update-app.php';
+                    } else {
+                        $("#progress-perbaharui").html(data);
+                    }
+                }
+            });
+        });
 
     }
 
