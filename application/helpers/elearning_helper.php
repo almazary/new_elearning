@@ -1245,3 +1245,30 @@ function sess_hide_countdown($act, $tugas_id = "", $hide = "")
         break;
     }
 }
+
+/**
+ * Method untuk ngecek tgljam tertentu sudah lewat sehari belum
+ * @param  string $datetime
+ * @return boolean
+ */
+function belum_sehari($datetime)
+{
+    $sekarang       = strtotime(date("Y-m-d H:i:s"));
+    $sehari_yg_lalu = strtotime("-1 day", $sekarang);
+
+    if (strtotime($datetime) > $sehari_yg_lalu) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Untuk menciptakan datetime format ISO8601
+ * @param  string $datetime
+ * @return string
+ */
+function iso8601($datetime)
+{
+    return date(DateTime::ISO8601, strtotime($datetime));
+}

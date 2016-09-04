@@ -397,8 +397,12 @@ class MY_Controller extends CI_Controller
         $retrieve['profil']   = $this->get_user_data($get_user);
         $retrieve['login']    = $this->login_model->retrieve($get_user);
         $retrieve['raw_date'] = $retrieve['date'];
-        $retrieve['date']     = format_datetime($retrieve['date']);
 
+        if (belum_sehari($retrieve['date'])) {
+            $retrieve['timeago'] = iso8601($retrieve['date']);
+        }
+
+        $retrieve['date'] = format_datetime($retrieve['date']);
         return $retrieve;
     }
 

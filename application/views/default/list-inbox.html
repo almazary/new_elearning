@@ -33,7 +33,12 @@ Pesan - {{ parent() }}
                         <td class="cell-author">
                             <img style="height:30px;width:30px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ d.profil.link_image }}">
                             <a href="{{ d.profil.link_profil }}">{{ character_limiter(d.profil.nama, 23, '...') }}</a>
-                            <br><small>{{ d.date }}</small>
+                            <br>
+                            {% if d.timeago is not empty %}
+                                <time class="timeago" datetime="{{ d.timeago }}">{{ d.date }}</time>
+                            {% else %}
+                                <small>{{ d.date }}</small>
+                            {% endif %}
                         </td>
                         <td class="cell-title hidden-phone hidden-tablet">
                             <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/detail/' ~ d.id ~ '/?confirm=1#confirm') }}"><i class="icon-trash"></i></a>

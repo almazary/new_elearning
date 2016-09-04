@@ -30,6 +30,17 @@
         $('#slider-login').nivoSlider();
     }
 
+    // timeago
+    $.timeago.settings.strings.suffixAgo = "yang lalu";
+    $.timeago.settings.strings.seconds   = "kurang dari semenit";
+    $.timeago.settings.strings.minute    = "sekitar semenit";
+    $.timeago.settings.strings.minutes   = "%d menit";
+    $.timeago.settings.strings.hour      = "sekitar sejam";
+    $.timeago.settings.strings.hours     = "sekitar %d jam";
+    $.timeago.settings.strings.day       = "satu hari";
+    $.timeago.settings.strings.days      = "%d hari";
+    $("time.timeago").timeago();
+
     // fungsi yang dipanggil saat ajax success
     function on_ajax_success(xhr)
     {
@@ -47,10 +58,12 @@
         if (xhr.responseText == "403 Forbidden.") {
             location.href = site_url + '/login/sess_expired';
         }
-    }
 
-    // timeago
-    // $("time.timeago").timeago();
+        //timeago
+        try {
+            $("time.timeago").timeago();
+        } catch(e) {}
+    }
 
     // panggil fungsi setelah ajax success
     $(document).ajaxComplete(function( event, xhr, settings ) {

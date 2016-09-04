@@ -375,7 +375,11 @@ class Ajax extends MY_Controller
                     }
 
                     $retrieve['profil'] = $user;
-                    $retrieve['date']   = format_datetime($retrieve['date']);
+                    if (belum_sehari($retrieve['date'])) {
+                        $retrieve['timeago'] = iso8601($retrieve['date']);
+                    }
+
+                    $retrieve['date'] = format_datetime($retrieve['date']);
 
                     $this->twig->display('detail-pesan-item.html', array(
                         'active_msg_id' => $msg['id'],
