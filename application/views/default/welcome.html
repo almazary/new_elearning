@@ -49,6 +49,11 @@
                     {% endfor %}
                 </table>
             </div>
+
+            <div class="well well-small" style="box-shadow: none;background-color: #FFF;">
+                <b><i class="icon-signin"></i> 10 Login Pengguna Terahir</b>
+                <div id="show-last-login-list"></div>
+            </div>
         </div>
         <div class="span6">
             <div class="well well-small" style="box-shadow: none;background-color: #FFF;">
@@ -67,7 +72,7 @@
     {% if is_pengajar() %}
     <div class="btn-box-row row-fluid">
         <div class="span6">
-            <div class="widget-usage" style="padding: 10px 15px;">
+            <div class="widget-usage" style="padding: 10px 15px;margin-bottom: 20px;">
                 <b><i class="icon-bullhorn"></i> Pengumuman</b>
                 <table class="table table-striped table-condensed">
                     {% for p in pengumuman %}
@@ -77,9 +82,14 @@
                     {% endfor %}
                 </table>
             </div>
+
+            <div class="well well-small" style="box-shadow: none;background-color: #FFF;">
+                <b><i class="icon-signin"></i> 10 Login Pengguna Terahir</b>
+                <div id="show-last-login-list"></div>
+            </div>
         </div>
         <div class="span6">
-            <div class="widget-usage" style="padding: 10px 15px;">
+            <div class="widget-usage" style="padding: 10px 15px;margin-bottom: 20px;">
                 <b>Peraturan e-learning : </b><br>
                 {{ get_pengaturan('peraturan-elearning', 'value')|raw_media|raw }}
             </div>
@@ -92,7 +102,7 @@
         <div class="span6">
 
             <div class="widget-usage" style="padding: 10px 15px; margin-bottom: 20px;">
-                <b>Tugas terbaru</b>
+                <b><i class="icon-tasks"></i> Tugas terbaru</b>
                 <table class="table table-striped table-condensed">
                     {% for m in tugas_terbaru %}
                     <tr>
@@ -105,7 +115,7 @@
             </div>
 
             <div class="widget-usage" style="padding: 10px 15px; margin-bottom: 20px;">
-                <b>Materi terbaru</b>
+                <b><i class="icon-book"></i> Materi terbaru</b>
                 <table class="table table-striped table-condensed">
                     {% for m in materi_terbaru %}
                     <tr>
@@ -128,6 +138,11 @@
                     </tr>
                     {% endfor %}
                 </table>
+            </div>
+
+            <div class="well well-small" style="box-shadow: none;background-color: #FFF;">
+                <b><i class="icon-signin"></i> 10 Login Pengguna Terahir</b>
+                <div id="show-last-login-list"></div>
             </div>
 
             <div class="widget-usage" style="padding: 10px 15px;">

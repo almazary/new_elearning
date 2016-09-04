@@ -166,6 +166,14 @@
                     } else {
                         $(".menu-count-unread-laporan").html("");
                     }
+
+                    // last login
+                    if (result.last_login_list) {
+                        if ($("#show-last-login-list").length) {
+                            $("#show-last-login-list").html(result.last_login_list);
+                        }
+                    }
+
                 },
                 async: false
             });

@@ -9,6 +9,21 @@
 class Login_model extends CI_Model
 {
     /**
+     * Method untuk mendapatkan daftar login terahir
+     *
+     * @param  integer $limit
+     * @return array
+     * @since  1.8
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_new_log($limit = 10)
+    {
+        $this->db->order_by('lasttime', 'desc');
+        $results = $this->db->get('login_log', $limit);
+        return $results->result_array();
+    }
+
+    /**
      * Method untuk mendapatkan semua data login log
      *
      * @param  integer $no_of_records

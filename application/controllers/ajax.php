@@ -105,12 +105,27 @@ class Ajax extends MY_Controller
                     $unread_laporan = $this->materi_model->count('unread-laporan');
                 }
 
+                # ambil data login terahir
+                $retrieve_last_log = $this->login_model->retrieve_new_log();
+                foreach ($retrieve_last_log as $key => $val) {
+                    $retrieve_last_log[$key]['user'] = $this->get_user_data($val['login_id']);
+
+                    if (belum_sehari($val['lasttime'])) {
+                        $retrieve_last_log[$key]['timeago'] = iso8601($val['lasttime']);
+                    }
+
+                    $retrieve_last_log[$key]['lasttime'] = format_datetime($val['lasttime']);
+                }
+
+                $render_last_login = $this->twig->render('last-login-person.html', array('last_login_data' => $retrieve_last_log));
+
                 $result = array(
                     'new_msg'          => $new_msg,
                     'new_update'       => $count_update,
                     'pending_siswa'    => $pending_siswa,
                     'pending_pengajar' => $pending_pengajar,
                     'unread_laporan'   => $unread_laporan,
+                    'last_login_list'  => $render_last_login,
                 );
 
                 echo json_encode($result);

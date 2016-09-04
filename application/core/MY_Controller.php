@@ -557,8 +557,8 @@ class MY_Controller extends CI_Controller
                 $ok_check = true;
             } else {
                 $cek_val = json_decode($cek_versi['value'], 1);
-                # bikin 5 menit sekali saja checknya
-                $date_plus = strtotime("+5 minute", strtotime($cek_val['last_check']));
+                # bikin 15 menit sekali saja checknya
+                $date_plus = strtotime("+15 minute", strtotime($cek_val['last_check']));
                 if ($date_plus < strtotime(date('Y-m-d H:i:s'))) {
                     $ok_check = true;
                 }
