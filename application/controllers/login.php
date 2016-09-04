@@ -446,6 +446,15 @@ class Login extends MY_Controller
         # ambil data login log
         $retrieve_all = $this->login_model->retrieve_all_log(20, $page_no, $login['id']);
 
+        # format tgl
+        foreach ($retrieve_all['results'] as $key => $val) {
+            if (belum_sehari($val['lasttime'])) {
+                $retrieve_all['results'][$key]['timeago'] = iso8601($val['lasttime']);
+            }
+
+            $retrieve_all['results'][$key]['lasttime'] = format_datetime($val['lasttime']);
+        }
+
         $data['log'] = $retrieve_all['results'];
         $data['pagination'] = $this->pager->view($retrieve_all, 'login/login_log/' . $login['id'] . '/');
 

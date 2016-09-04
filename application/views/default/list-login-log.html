@@ -23,7 +23,13 @@ Login log - {{ parent() }}
                 {% for l in log %}
                 {% set a = json_decode(l.agent, 1) %}
                 <tr>
-                    <td>{{ format_datetime(l.lasttime) }}</td>
+                    <td>
+                    {% if l.timeago is not empty %}
+                        <time class="timeago" datetime="{{ l.timeago }}">{{ l.lasttime }}</time>
+                    {% else %}
+                        {{ l.lasttime }}
+                    {% endif %}
+                    </td>
                     <td>{{ a.ip }}</td>
                     <td>{{ a.agent_string }}</td>
                 </tr>
