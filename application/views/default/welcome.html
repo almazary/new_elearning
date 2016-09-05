@@ -17,9 +17,37 @@
     </div>
 
     {% if is_admin() %}
-    <div class="well well-small well-box">
-        <b><i class="icon-wrench"></i> Pengaturan data</b>
+    {% if count_mapel_kelas == 0 %}
+    <div class="well well-large well-box" style="border:2px solid #29b7d3;">
+        <b><i class="icon-wrench"></i> Atur data berikut supaya aplikasi e-learing dapat berjalan dengan baik:</b>
+        <table class="table table-hover" style="margin-top:10px;">
+            <tr>
+                <td width="30%">
+                    <a href="{{ site_url('mapel') }}"><b><i class="menu-icon icon-book"></i> Manajemen Matapelajaran</b></a>
+                </td>
+                <td>
+                    Input semua Matapelajaran yang ada di sekolah
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">
+                    <a href="{{ site_url('kelas') }}"><b><i class="menu-icon icon-tasks"></i> Manajemen Kelas</b></a>
+                </td>
+                <td>
+                    Input semua Kelas yang ada di sekolah
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">
+                    <a href="{{ site_url('kelas/mapel_kelas') }}"><b><i class="menu-icon icon-paste"></i> Matapelajaran Kelas</b></a>
+                </td>
+                <td>
+                    Atur Matapelajaran pada tiap-tiap Kelas
+                </td>
+            </tr>
+        </table>
     </div>
+    {% endif %}
 
     <div class="btn-box-row row-fluid">
         <a href="{{ site_url('siswa/index/1') }}" class="btn-box big span3">

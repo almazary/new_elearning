@@ -9,6 +9,22 @@
 class Mapel_model extends CI_Model
 {
     /**
+     * Method untuk mendapatkan jumlah matapelajaran kelas yang aktif
+     * @return integer
+     * @since  1.8
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function count_kelas()
+    {
+        $this->db->select('COUNT(*) as jml');
+        $this->db->where('aktif', 1);
+        $result = $this->db->get('mapel_kelas');
+        $result = $result->row_array();
+
+        return isset($result['jml']) ? $result['jml'] : 0;
+    }
+
+    /**
      * Method untuk menghapus record mapel kelas
      *
      * @param  integer $id

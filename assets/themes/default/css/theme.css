@@ -2148,3 +2148,7 @@ img.img-msg-user {
 .well-box {
     box-shadow: none;background-color: #FFF;
 }
+hr.hr-normal {
+    margin-top:5px;
+    margin-bottom: 10px;
+}

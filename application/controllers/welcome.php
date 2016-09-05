@@ -101,6 +101,8 @@ class Welcome extends MY_Controller
                 'tgl_tampil <='   => date('Y-m-d'),
                 'tgl_tutup >='    => date('Y-m-d')
             );
+
+            $data['count_mapel_kelas'] = $this->mapel_model->count_kelas();
         }
 
         # ambil pengumuman yang sudah tampil
