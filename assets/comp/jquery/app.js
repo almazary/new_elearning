@@ -75,23 +75,6 @@
 
         // home
         if ($("#info-update-link").length) {
-            url = $("#info-update-link").val();
-            $.ajax({
-                type: "GET",
-                url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=20&callback=?&q=' + encodeURIComponent(url),
-                dataType: 'json',
-                success: function(xml){
-                    values = xml.responseData.feed.entries;
-                    var l = 1;
-                    $.each( values, function( i, val ) {
-                        if (l <= 15) {
-                            $("#info-update").append("<tr><td><a href='"+val.link+"' target='_blank'>"+val.title+"</a></td></tr>");
-                        }
-                        l++;
-                    });
-                }
-            });
-
             // popup new version
             setTimeout(function() {
                 var ada_update = 0;
@@ -113,8 +96,24 @@
                             location.reload();
                         }
                     });
+                } else {
+                    url = $("#info-update-link").val();
+                    $.ajax({
+                        type: "GET",
+                        url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=20&callback=?&q=' + encodeURIComponent(url),
+                        dataType: 'json',
+                        success: function(xml){
+                            values = xml.responseData.feed.entries;
+                            var l = 1;
+                            $.each( values, function( i, val ) {
+                                if (l <= 15) {
+                                    $("#info-update").append("<tr><td><a href='"+val.link+"' target='_blank'>"+val.title+"</a></td></tr>");
+                                }
+                                l++;
+                            });
+                        }
+                    });
                 }
-
             }, 1000);
         }
 
