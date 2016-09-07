@@ -44,9 +44,9 @@ class updateElearning
         }
 
         # baca path.json
-        $json_path = $path_folder . $this->version . '/path.json';
+        $json_path = $path_folder . 'path.json';
         if (!is_file($json_path)) {
-            throw new Exception("File update tidak lengkap!");
+            throw new Exception("File update (path.json) tidak lengkap!");
         }
 
         $str_json = file_get_contents($json_path);
@@ -59,11 +59,11 @@ class updateElearning
             $row_path  = $j_val[0];
             $important = $j_val[1];
 
-            $row_path = './' . $row_path;
+            $file_row_path = './' . $row_path;
 
             $split_path = explode("/", $row_path);
             $file_name  = end($split_path);
-            $file_path  = $path_folder . $this->version . '/' . $file_name;
+            $file_path  = $path_folder . $row_path;
 
             # cek file disertakan tidak
             if (!is_file($file_path)) {
@@ -71,25 +71,32 @@ class updateElearning
             }
 
             # jika file belum ada dicopy saja
-            if (!is_file($row_path)) {
+            if (!is_file($file_row_path)) {
                 if ($important == 1) {
                     try {
-                        copy($file_path, $row_path);
+                        # cek directorey
+                        foreach (explode('/', $file_row_path) as $file_row_path_dir) {
+                            if (!is_dir('./' . $file_row_path_dir)) {
+                                mkdir('./' . $file_row_path_dir);
+                            }
+                        }
+
+                        copy($file_path, $file_row_path);
                     } catch (Exception $e) {
-                        throw new Exception("File {$row_path} update gagal dipindah!, error: " . $e->getMessage());
+                        throw new Exception("File {$file_row_path} update gagal dipindah!, error: " . $e->getMessage());
                     }
                 }
             } else {
                 # rename dulu yang sebelumnya
-                $rename_path = $row_path . '.bak';
+                $rename_path = $file_row_path . '.bak';
                 try {
-                    rename($row_path, $rename_path);
+                    rename($file_row_path, $rename_path);
 
                     # pindahkan
-                    copy($file_path, $row_path);
+                    copy($file_path, $file_row_path);
                 } catch (Exception $e) {
                     # kembalikan
-                    rename($rename_path, $row_path);
+                    rename($rename_path, $file_row_path);
 
                     throw new Exception("File {$file_name} gagal diperbaharui!, error: " . $e->getMessage());
                 }
