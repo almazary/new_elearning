@@ -12,17 +12,25 @@ Update Aplikasi - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('update')|raw }}
 
-        {% if purchase_plugins_key is empty %}
+        {% if purchase_plugins_key is empty and plugin_list is not empty %}
         <div class="alert alert-warning">
-            <b>PENTING!! SEBELUM MELAKUKAN UPDATE APLIKASI</b>
+            <b>PENTING!! </b>SEBELUM MELAKUKAN UPDATE APLIKASI
             <hr class="hr-normal">
-            <p>Untuk keperluan update plugin secara otomatis, kami membutuhkan konfirmasi pembelian plugin anda dengan cara mengirimkan email berikut ke <b>almazary@gmail.com</b></p>
+            <p>Untuk keperluan update plugin otomatis, kami membutuhkan konfirmasi pembelian plugin anda dengan cara mengirimkan email berikut ke <b>almazary@gmail.com</b></p>
             <p>
                 <b>Subjek : </b>KONFIRMASI PEMBELIAN PLUGIN APLIKASI E-LEARNING
                 <br>
                 <b>Isi email : </b>Saya telah membeli plugin : <b>{{ implode(', ', plugin_list) }}</b>
             </p>
-            <p>Usahakan menggunakan email yang digunakan untuk membeli plugin.</p>
+            <p>
+                Langkah ini kami perlukan untuk validasi bahwa anda benar - benar telah membeli plugin.<br>
+                Setelah melakukan konfirmasi dan melakukan tindakan yang kami intruksikan, notif ini akan hilang.
+            </p>
+            <p>
+                Terimakasih<br>
+                Salam<br>
+                Almazari (<a href="http://www.dokumenary.net">http://www.dokumenary.net</a>)
+            </p>
         </div>
         {% endif %}
 
