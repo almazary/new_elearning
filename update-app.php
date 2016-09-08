@@ -56,14 +56,14 @@ class updateElearning
 
         $json = json_decode($str_json, 1);
         foreach ($json as $j_val) {
-            $row_path  = $j_val[0];
-            $important = $j_val[1];
+            $destinantion = $j_val[0];
+            $important    = $j_val[1];
 
-            $file_row_path = './' . $row_path;
+            $path_tujuan = './' . $destinantion;
 
-            $split_path = explode("/", $row_path);
+            $split_path = explode("/", $destinantion);
             $file_name  = end($split_path);
-            $file_path  = $path_folder . $row_path;
+            $file_path  = $path_folder . $destinantion;
 
             # cek file disertakan tidak
             if (!is_file($file_path)) {
@@ -71,32 +71,44 @@ class updateElearning
             }
 
             # jika file belum ada dicopy saja
-            if (!is_file($file_row_path)) {
+            if (!is_file($path_tujuan)) {
                 if ($important == 1) {
                     try {
                         # cek directorey
-                        foreach (explode('/', $file_row_path) as $file_row_path_dir) {
-                            if (!is_dir('./' . $file_row_path_dir)) {
-                                mkdir('./' . $file_row_path_dir);
+                        $split_tujuan = explode('/', $path_tujuan);
+                        foreach ($split_tujuan as $path_tujuan_dir) {
+                            if ($path_tujuan_dir == ".") {
+                                $temp_path = "./";
+                                continue;
                             }
+
+                            if ($path_tujuan_dir == end($split_tujuan)) {
+                                break;
+                            }
+
+                            if (!is_dir($temp_path . $path_tujuan_dir)) {
+                                mkdir($temp_path . $path_tujuan_dir);
+                            }
+
+                            $temp_path = $temp_path . $path_tujuan_dir . "/";
                         }
 
-                        copy($file_path, $file_row_path);
+                        copy($file_path, $path_tujuan);
                     } catch (Exception $e) {
-                        throw new Exception("File {$file_row_path} update gagal dipindah!, error: " . $e->getMessage());
+                        throw new Exception("File {$path_tujuan} update gagal dipindah!, error: " . $e->getMessage());
                     }
                 }
             } else {
                 # rename dulu yang sebelumnya
-                $rename_path = $file_row_path . '.bak';
+                $rename_path = $path_tujuan . '.bak';
                 try {
-                    rename($file_row_path, $rename_path);
+                    rename($path_tujuan, $rename_path);
 
                     # pindahkan
-                    copy($file_path, $file_row_path);
+                    copy($file_path, $path_tujuan);
                 } catch (Exception $e) {
                     # kembalikan
-                    rename($rename_path, $file_row_path);
+                    rename($rename_path, $path_tujuan);
 
                     throw new Exception("File {$file_name} gagal diperbaharui!, error: " . $e->getMessage());
                 }
