@@ -12,6 +12,20 @@ Update Aplikasi - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('update')|raw }}
 
+        {% if purchase_plugins_key is empty %}
+        <div class="alert alert-warning">
+            <b>PENTING!! SEBELUM MELAKUKAN UPDATE APLIKASI</b>
+            <hr class="hr-normal">
+            <p>Untuk keperluan update plugin secara otomatis, kami membutuhkan konfirmasi pembelian plugin anda dengan cara mengirimkan email berikut ke <b>almazary@gmail.com</b></p>
+            <p>
+                <b>Subjek : </b>KONFIRMASI PEMBELIAN PLUGIN APLIKASI E-LEARNING
+                <br>
+                <b>Isi email : </b>Saya telah membeli plugin : <b>{{ implode(', ', plugin_list) }}</b>
+            </p>
+            <p>Usahakan menggunakan email yang digunakan untuk membeli plugin.</p>
+        </div>
+        {% endif %}
+
         {% if new_update is empty %}
             <div class="alert alert-success">
                 <h4><i class="icon-ok"></i> Terimakasih telah menggunakan aplikasi e-Learning dokumenary.net versi terbaru {{ current_version }}</h4>

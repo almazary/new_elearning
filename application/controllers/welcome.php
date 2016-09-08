@@ -147,6 +147,10 @@ class Welcome extends MY_Controller
             $new_update = json_decode($cek_versi['value'], 1);
         }
 
+        $purchase_plugins_key = $this->config->item('purchase_plugins_key');
+
+        $data['purchase_plugins_key'] = $purchase_plugins_key;
+        $data['plugin_list']     = plugin_list();
         $data['new_update']      = $new_update;
         $data['current_version'] = $this->current_version;
 

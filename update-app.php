@@ -57,7 +57,7 @@ class updateElearning
         $json = json_decode($str_json, 1);
         foreach ($json as $j_val) {
             $destinantion = $j_val[0];
-            $important    = $j_val[1];
+            $key_do       = $j_val[1]; # 1: dibutuhkan, 2: hapus yang ada
 
             $path_tujuan = './' . $destinantion;
 
@@ -72,7 +72,7 @@ class updateElearning
 
             # jika file belum ada dicopy saja
             if (!is_file($path_tujuan)) {
-                if ($important == 1) {
+                if ($key_do == 1) {
                     try {
                         # cek directorey
                         $split_tujuan = explode('/', $path_tujuan);
@@ -99,22 +99,31 @@ class updateElearning
                     }
                 }
             } else {
-                # rename dulu yang sebelumnya
-                $rename_path = $path_tujuan . '.bak';
-                try {
-                    rename($path_tujuan, $rename_path);
-
-                    # pindahkan
-                    copy($file_path, $path_tujuan);
-                } catch (Exception $e) {
-                    # kembalikan
-                    rename($rename_path, $path_tujuan);
-
-                    throw new Exception("File {$file_name} gagal diperbaharui!, error: " . $e->getMessage());
+                if ($key_do == 2) {
+                    try {
+                        unlink($path_tujuan);
+                    } catch (Exception $e) {
+                        throw new Exception("File {$path_tujuan} gagal dihapus!, error: " . $e->getMessage());
+                    }
                 }
+                else {
+                    # rename dulu yang sebelumnya
+                    $rename_path = $path_tujuan . '.bak';
+                    try {
+                        rename($path_tujuan, $rename_path);
 
-                # hapus bak
-                unlink($rename_path);
+                        # pindahkan
+                        copy($file_path, $path_tujuan);
+                    } catch (Exception $e) {
+                        # kembalikan
+                        rename($rename_path, $path_tujuan);
+
+                        throw new Exception("File {$file_name} gagal diperbaharui!, error: " . $e->getMessage());
+                    }
+
+                    # hapus bak
+                    unlink($rename_path);
+                }
             }
         }
 
