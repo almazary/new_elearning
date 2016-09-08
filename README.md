@@ -19,12 +19,12 @@ Secara umum, aplikasi ini memiliki fitur sebagai berikut:
 - Jadwal matapelajaran siswa
 
 Untuk pengguna terbagi menjadi tiga, yaitu:
-1. Siswa
-2. Pengajar
-3. Administrator (Pengajar yang bertindak sebagai administrator)
+- Siswa
+- Pengajar
+- Administrator (Pengajar yang bertindak sebagai administrator)
 
 Lisensi:
-Gratis untuk digunakan, disalin, dimodifikasi, didistribusikan. Selengkapnya terdapat pada file license.txt
+- Gratis untuk digunakan, disalin, dimodifikasi, didistribusikan. Selengkapnya terdapat pada file license.txt
 
 Kebutuhan:
 - PHP >= 5.5
