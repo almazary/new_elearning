@@ -95,7 +95,7 @@ class MY_Controller extends CI_Controller
         }
 
         # cek versi
-        $versi_install = '1.8';
+        $versi_install = '1.8.1';
         $versi = get_pengaturan('versi', 'value');
 
         $this->current_version = $versi;
@@ -589,6 +589,9 @@ class MY_Controller extends CI_Controller
                 }
 
                 $ada_update = true;
+            }
+            else {
+                delete_field($field_id);
             }
         }
 
