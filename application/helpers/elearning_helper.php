@@ -281,7 +281,12 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
                     content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
                     convert_urls: false,
                     force_br_newlines : false,
-                    force_p_newlines : false';
+                    force_p_newlines : false,
+                    inline_styles: false,
+                    formats: {
+                       underline: { inline: "u", exact : true },
+                       strikethrough: { inline: "del", exact : true }
+                    }';
             } else {
                 $return .= $str_options;
             }

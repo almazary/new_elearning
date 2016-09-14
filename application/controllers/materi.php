@@ -711,7 +711,12 @@ class Materi extends MY_Controller
                 content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
                 convert_urls: false,
                 force_br_newlines : false,
-                force_p_newlines : false,';
+                force_p_newlines : false,
+                inline_styles: false,
+                formats: {
+                   underline: { inline: "u", exact : true },
+                   strikethrough: { inline: "del", exact : true }
+                }';
                 $html_js = get_tinymce('komentar', 'advanced', array('pdw'), $tiny_option);
 
                 # setup colorbox
