@@ -605,6 +605,78 @@ class Welcome extends MY_Controller
 
         $this->twig->display('backup-restore.html', $data);
     }
+
+    function hapus_data($segment_3 = "")
+    {
+        $data = array();
+
+        switch ($segment_3) {
+            case 'siswa':
+                $this->form_validation->set_rules('siswa_id', 'Siswa ID', 'required|trim|xss_clean');
+                if ($this->form_validation->run() == true) {
+                    $siswa_ids = explode(",", $this->input->post('siswa_id', true));
+                    foreach ($siswa_ids as $siswa_id) {
+                        $siswa_id = trim($siswa_id);
+
+                        $this->db->trans_start();
+
+                        # hapus kelas_siswa
+                        $this->db->where('siswa_id', $siswa_id);
+                        $this->db->delete('kelas_siswa');
+
+                        $db_login = $this->db->get_where('login', array('siswa_id' => $siswa_id))->row_array();
+
+                        # hapus komentar
+                        $this->db->where('login_id', $db_login['id']);
+                        $this->db->delete('komentar');
+
+                        # hapus kelas materi dan materi
+                        $db_materi = $this->db->get_where('materi', array('siswa_id' => $siswa_id))->result_array();
+                        foreach ($db_materi as $row) {
+                            # hapus kelas_materi
+                            $this->db->where('materi_id', $row['id']);
+                            $this->db->delete('kelas_materi');
+
+                            # hapus komentar
+                            $this->db->where('materi_id', $row['id']);
+                            $this->db->delete('komentar');
+
+                            # hapus laporan
+
+
+                            # hapus materi
+                            $this->db->where('id', $row['id']);
+                            $this->db->delete('materi');
+                        }
+
+                        # hapus message
+                        $this->db->where('owner_id', $db_login['id']);
+                        $this->db->delete('messages');
+
+                        # hapus nilai tugas
+                        $this->db->where('siswa_id', $siswa_id);
+                        $this->db->delete('nilai_tugas');
+
+                        # hapus login log
+                        $this->db->where('login_id', $db_login['id']);
+                        $this->db->delete('login_log');
+
+                        # hapus login
+                        $this->db->where('siswa_id', $siswa_id);
+                        $this->db->delete('login');
+
+                        # hapus siswa
+                        $this->db->where('id', $siswa_id);
+                        $this->db->delete('siswa');
+
+                        $this->db->trans_complete();
+                    }
+                }
+            break;
+        }
+
+        $this->twig->display('hapus-data.html', $data);
+    }
 }
 
 /* End of file welcome.php */

@@ -1,0 +1,46 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Hapus Data - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Hapus Data</h3>
+    </div>
+    <div class="module-body">
+        <p><b>Note:</b> Data yang sudah dihapus tidak dapat dikembalikan lagi.</p>
+
+        {{ get_flashdata('hapus_data')|raw }}
+
+        {% if is_demo_app() %}
+            {{ get_alert('warning', get_demo_msg())|raw }}
+        {% endif %}
+
+        <form class="form-search" method="post" action="{{ site_url('welcome/hapus_data/siswa') }}">
+            <div class="input-append">
+                <input type="text" class="span7" placeholder="Siswa ID, pisah dengan koma jika lebih dari satu." name="siswa_id" value="{{ set_value('siswa_id') }}">
+                <button type="submit" class="btn btn-primary">Hapus siswa</button>
+            </div>
+            <br>{{ form_error('siswa_id')|raw }}
+        </form>
+        <br>
+        <form class="form-search" method="post" action="{{ site_url('welcome/hapus_data/pengajar') }}">
+            <div class="input-append">
+                <input type="text" class="span7" placeholder="Pengajar ID, pisah dengan koma jika lebih dari satu." name="pengajar_id" value="{{ set_value('pengajar_id') }}">
+                <button type="submit" class="btn btn-primary">Hapus pengajar</button>
+            </div>
+            <br>{{ form_error('pengajar_id')|raw }}
+        </form>
+        <br>
+        <form class="form-search" method="post" action="{{ site_url('welcome/hapus_data/tugas') }}">
+            <div class="input-append">
+                <input type="text" class="span7" placeholder="Tugas ID, pisah dengan koma jika lebih dari satu." name="tugas_id" value="{{ set_value('tugas_id') }}">
+                <button type="submit" class="btn btn-primary">Hapus tugas</button>
+            </div>
+            <br>{{ form_error('tugas_id')|raw }}
+        </form>
+    </div>
+</div>
+{% endblock %}
