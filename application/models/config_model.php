@@ -8,6 +8,63 @@
  */
 class Config_model extends CI_Model
 {
+
+    public function create_default_table($table = "all")
+    {
+        $default_table = array(
+            "field_tambahan",
+            "kelas",
+            "kelas_siswa",
+            "login",
+            "mapel",
+            "mapel_ajar",
+            "mapel_kelas",
+            "materi",
+            "materi_kelas",
+            "nilai_tugas",
+            "pengajar",
+            "pengaturan",
+            "pilihan",
+            "siswa",
+            "tugas",
+            "tugas_kelas",
+            "tugas_pertanyaan",
+            "field_tambahan",
+        );
+
+        if ($table == "all") {
+            foreach ($default_table as $table) {
+                switch ($table) {
+                    case 'field_tambahan':
+                        # code...
+                    break;
+                }
+            }
+        }
+    }
+
+    public function create_tb_field_tambahan()
+    {
+        $this->load->dbforge();
+        $fields = array(
+            'id' => array(
+                'type'       => 'VARCHAR',
+                'constraint' => 255,
+                'null'       => false,
+            ),
+            'nama' => array(
+                'type'       => 'VARCHAR',
+                'constraint' => 255,
+                'default'    => NULL,
+            ),
+            'value' => array(
+                'type' => 'LONGTEXT',
+            )
+        );
+        $this->dbforge->create_table('field_tambahan', true);
+    }
+
+
     /**
      * Method untuk mendapatkan semua gambar slider
      *
