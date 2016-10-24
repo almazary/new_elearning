@@ -614,9 +614,18 @@ class Welcome extends MY_Controller
             case 'siswa':
                 $this->form_validation->set_rules('siswa_id', 'Siswa ID', 'required|trim|xss_clean');
                 if ($this->form_validation->run() == true) {
-                    $siswa_ids = explode(",", $this->input->post('siswa_id', true));
+
+                    $data_gagal = array();
+                    $siswa_ids  = explode(",", $this->input->post('siswa_id', true));
                     foreach ($siswa_ids as $siswa_id) {
                         $siswa_id = trim($siswa_id);
+
+                        # check dulu
+                        $db_siswa = $this->siswa_model->retrieve($siswa_id);
+                        if (empty($db_siswa)) {
+                            $data_gagal[] = $siswa_id;
+                            continue;
+                        }
 
                         $this->db->trans_start();
 
@@ -630,7 +639,7 @@ class Welcome extends MY_Controller
                         $this->db->where('login_id', $db_login['id']);
                         $this->db->delete('komentar');
 
-                        # hapus kelas materi dan materi
+                        # hapus kelas_materi dan materi
                         $db_materi = $this->db->get_where('materi', array('siswa_id' => $siswa_id))->result_array();
                         foreach ($db_materi as $row) {
                             # hapus kelas_materi
@@ -641,9 +650,6 @@ class Welcome extends MY_Controller
                             $this->db->where('materi_id', $row['id']);
                             $this->db->delete('komentar');
 
-                            # hapus laporan
-
-
                             # hapus materi
                             $this->db->where('id', $row['id']);
                             $this->db->delete('materi');
@@ -651,6 +657,7 @@ class Welcome extends MY_Controller
 
                         # hapus message
                         $this->db->where('owner_id', $db_login['id']);
+                        $this->db->or_where('sender_receiver_id', $db_login['id']);
                         $this->db->delete('messages');
 
                         # hapus nilai tugas
@@ -670,7 +677,198 @@ class Welcome extends MY_Controller
                         $this->db->delete('siswa');
 
                         $this->db->trans_complete();
+
+                        if ($this->db->trans_status() === FALSE) {
+                            $data_gagal[] = $siswa_id;
+                        }
                     }
+
+                    # redirect berhasil
+                    if (empty($data_gagal)) {
+                        $this->session->set_flashdata('hapus_data', get_alert('success', 'Hapus data siswa berhasil.'));
+                    } else {
+                        $flash_msg = "Siswa ID " . implode(", ", $data_gagal) . " gagal dihapus.";
+                        $this->session->set_flashdata('hapus_data', get_alert('warning', $flash_msg));
+                    }
+
+                    redirect('welcome/hapus_data');
+                }
+            break;
+
+            case 'pengajar':
+                $this->form_validation->set_rules('pengajar_id', 'Pengajar ID', 'required|trim|xss_clean');
+                if ($this->form_validation->run() == true) {
+
+                    $data_gagal   = array();
+                    $pengajar_ids = explode(",", $this->input->post('pengajar_id', true));
+                    foreach ($pengajar_ids as $pengajar_id) {
+                        $pengajar_id = trim($pengajar_id);
+
+                        # cek dulu
+                        $db_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+                        if (empty($db_pengajar)) {
+                            $data_gagal[] = $pengajar_id;
+                            continue;
+                        }
+
+                        $this->db->trans_start();
+
+                        # hapus bank soal
+                        if ($this->db->table_exists('bank_soal')) {
+                            $this->db->where('pengajar_id', $pengajar_id);
+                            $this->db->delete('bank_soal');
+                        }
+
+                        $db_login = $this->db->get_where('login', array('pengajar_id' => $pengajar_id))->row_array();
+
+                        # hapus komentar
+                        $this->db->where('login_id', $db_login['id']);
+                        $this->db->delete('komentar');
+
+                        # hapus kelas_materi dan materi
+                        $db_materi = $this->db->get_where('materi', array('pengajar_id' => $pengajar_id))->result_array();
+                        foreach ($db_materi as $row) {
+                            # hapus kelas_materi
+                            $this->db->where('materi_id', $row['id']);
+                            $this->db->delete('kelas_materi');
+
+                            # hapus komentar
+                            $this->db->where('materi_id', $row['id']);
+                            $this->db->delete('komentar');
+
+                            # hapus materi
+                            $this->db->where('id', $row['id']);
+                            $this->db->delete('materi');
+                        }
+
+                        # hapus message
+                        $this->db->where('owner_id', $db_login['id']);
+                        $this->db->or_where('sender_receiver_id', $db_login['id']);
+                        $this->db->delete('messages');
+
+                        # hapus mapel ajar
+                        $this->db->where('pengajar_id', $pengajar_id);
+                        $this->db->delete('mapel_ajar');
+
+                        # hapus pengumuman
+                        $this->db->where('pengajar_id', $pengajar_id);
+                        $this->db->delete('pengumuman');
+
+                        # hapus tugas
+                        $db_tugas = $this->db->get_where('tugas', array('pengajar_id' => $pengajar_id))->result_array();
+                        foreach ($db_tugas as $row) {
+                            # hapus tugas kelas
+                            $this->db->where('tugas_id', $row['id']);
+                            $this->db->delete('tugas_kelas');
+
+                            # hapus tugas pertanyaan
+                            $db_pertanyaan = $this->db->get_where('tugas_pertanyaan', array('tugas_id' => $row['id']))->result_array();
+                            foreach ($db_pertanyaan as $pertanyaan) {
+                                # hapus semua pilihan
+                                $this->db->where('pertanyaan_id', $pertanyaan['id']);
+                                $this->db->delete('pilihan');
+
+                                $this->db->where('id', $pertanyaan['id']);
+                                $this->db->delete('tugas_pertanyaan');
+                            }
+
+                            # hapus nilai tugas
+                            $this->db->where('tugas_id', $row['id']);
+                            $this->db->delete('nilai_tugas');
+
+                            # hapus tugas
+                            $this->db->where('id', $row['id']);
+                            $this->db->delete('tugas');
+                        }
+
+                        # hapus login log
+                        $this->db->where('login_id', $db_login['id']);
+                        $this->db->delete('login_log');
+
+                        # hapus login
+                        $this->db->where('pengajar_id', $pengajar_id);
+                        $this->db->delete('login');
+
+                        # hapus pengajar
+                        $this->db->where('id', $pengajar_id);
+                        $this->db->delete('pengajar');
+
+                        $this->db->trans_complete();
+
+                        if ($this->db->trans_status() === FALSE) {
+                            $data_gagal[] = $pengajar_id;
+                        }
+                    }
+
+                    # redirect berhasil
+                    if (empty($data_gagal)) {
+                        $this->session->set_flashdata('hapus_data', get_alert('success', 'Hapus data pengajar berhasil.'));
+                    } else {
+                        $flash_msg = "Pengajar ID " . implode(", ", $data_gagal) . " gagal dihapus.";
+                        $this->session->set_flashdata('hapus_data', get_alert('warning', $flash_msg));
+                    }
+
+                    redirect('welcome/hapus_data');
+                }
+            break;
+
+            case 'tugas':
+                $this->form_validation->set_rules('tugas_id', 'Tugas ID', 'required|trim|xss_clean');
+                if ($this->form_validation->run() == true) {
+
+                    $data_gagal = array();
+                    $tugas_ids  = explode(",", $this->input->post('tugas_id', true));
+                    foreach ($tugas_ids as $tugas_id) {
+                        $tugas_id = trim($tugas_id);
+
+                        #cek dulu
+                        $db_tugas = $this->tugas_model->retrieve($tugas_id);
+                        if (empty($db_tugas)) {
+                            $data_gagal[] = $tugas_id;
+                            continue;
+                        }
+
+                        $this->db->trans_start();
+
+                        # hapus tugas kelas
+                        $this->db->where('tugas_id', $tugas_id);
+                        $this->db->delete('tugas_kelas');
+
+                        # hapus tugas pertanyaan
+                        $db_pertanyaan = $this->db->get_where('tugas_pertanyaan', array('tugas_id' => $tugas_id))->result_array();
+                        foreach ($db_pertanyaan as $pertanyaan) {
+                            # hapus semua pilihan
+                            $this->db->where('pertanyaan_id', $pertanyaan['id']);
+                            $this->db->delete('pilihan');
+
+                            $this->db->where('id', $pertanyaan['id']);
+                            $this->db->delete('tugas_pertanyaan');
+                        }
+
+                        # hapus nilai tugas
+                        $this->db->where('tugas_id', $tugas_id);
+                        $this->db->delete('nilai_tugas');
+
+                        # hapus tugas
+                        $this->db->where('id', $tugas_id);
+                        $this->db->delete('tugas');
+
+                        $this->db->trans_complete();
+
+                        if ($this->db->trans_status() === FALSE) {
+                            $data_gagal[] = $tugas_id;
+                        }
+                    }
+
+                    # redirect berhasil
+                    if (empty($data_gagal)) {
+                        $this->session->set_flashdata('hapus_data', get_alert('success', 'Hapus data tugas berhasil.'));
+                    } else {
+                        $flash_msg = "Tugas ID " . implode(", ", $data_gagal) . " gagal dihapus.";
+                        $this->session->set_flashdata('hapus_data', get_alert('warning', $flash_msg));
+                    }
+
+                    redirect('welcome/hapus_data');
                 }
             break;
         }
