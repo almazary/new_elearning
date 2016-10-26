@@ -304,7 +304,7 @@ class Setup extends CI_Controller
                             'value' => '1'
                         ),
                         array(
-                            'id'    => 'varsi',
+                            'id'    => 'versi',
                             'nama'  => 'Versi',
                             'value' => '1.8'
                         ),
