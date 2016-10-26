@@ -53,6 +53,12 @@ class MY_Controller extends CI_Controller
         # load helper
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download', 'plugins'));
 
+        try {
+            check_db_connection();
+        } catch (Exception $e) {
+            echo "Mohon periksa kembali pengaturan database anda.";die;
+        }
+
         $this->load->database();
 
         # load library

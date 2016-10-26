@@ -161,27 +161,11 @@ class Pengumuman_model extends CI_Model
      */
     public function create_table()
     {
-        include APPPATH . 'config/database.php';
-        $prefix = $db['default']['dbprefix'];
+        $CI =& get_instance();
+        $CI->load->model('config_model');
 
-        $this->db->query("CREATE TABLE IF NOT EXISTS `{$prefix}pengumuman` (
-          `id` int(11) NOT NULL,
-          `judul` varchar(255) NOT NULL,
-          `konten` text NOT NULL,
-          `tgl_tampil` date NOT NULL,
-          `tgl_tutup` date NOT NULL,
-          `tampil_siswa` tinyint(1) NOT NULL DEFAULT '1',
-          `tampil_pengajar` tinyint(1) NOT NULL DEFAULT '1',
-          `pengajar_id` int(11) NOT NULL
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+        $CI->config_model->create_tb_pengumuman();
 
-        $this->db->query("ALTER TABLE `{$prefix}pengumuman`
-        ADD PRIMARY KEY (`id`), ADD KEY `fk_pengumuman_pengajar1_idx` (`pengajar_id`);");
-
-        $this->db->query("ALTER TABLE `{$prefix}pengumuman`
-        MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
-
-        $this->db->query("ALTER TABLE `{$prefix}pengumuman`
-        ADD CONSTRAINT `fk_pengumuman_pengajar1` FOREIGN KEY (`pengajar_id`) REFERENCES `{$prefix}pengajar` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;");
+        return true;
     }
 }

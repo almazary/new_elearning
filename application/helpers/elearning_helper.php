@@ -6,9 +6,20 @@
  */
 function install_success()
 {
+    check_db_connection();
+
+    return check_success_install();
+}
+
+/**
+ * Fungsi untuk cek koneksi, kalo error throw new
+ * @return boolean
+ */
+function check_db_connection()
+{
     $db_file = APPPATH . 'config/database.php';
     if (!is_file($db_file)) {
-        throw new Exception(get_alert('error', 'File database.php in application/config/ not exists'));
+        throw new Exception('File database.php in application/config/ not exists');
     }
 
     # cek pengaturan database
@@ -16,12 +27,27 @@ function install_success()
 
     $link = @mysqli_connect($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
     if (!$link) {
-        throw new Exception(get_alert('error', 'Failed to connect to the server: ' . mysqli_connect_error()));
-    }
-    elseif (!@mysqli_select_db($link, $db['default']['database'])) {
-        throw new Exception(get_alert('error', 'Failed to connect to the database: ' . mysqli_error($link)));
+        throw new Exception('Failed to connect to the server: ' . mysqli_connect_error());
     }
 
+    $select_db = @mysqli_select_db($link, $db['default']['database']);
+    if (!$select_db) {
+        throw new Exception('Failed to connect to the database: ' . mysqli_error($link));
+    }
+
+    # ciptakan variable global supaya driver ci tidak melakukan konek-konek lagi
+    $GLOBALS['el_mysqli_connect']   = $link;
+    $GLOBALS['el_mysqli_select_db'] = $select_db;
+
+    return true;
+}
+
+/**
+ * Cek apakah sudah berhasil install
+ * @return boolean
+ */
+function check_success_install()
+{
     $CI =& get_instance();
     $CI->load->database();
 

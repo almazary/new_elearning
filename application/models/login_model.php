@@ -332,11 +332,10 @@ class Login_model extends CI_Model
      */
     public function alter_table()
     {
-        $prefix = $this->db->dbprefix;
+        $CI =& get_instance();
+        $CI->load->model('config_model');
 
-        if ($this->db->table_exists('login_log') == false) {
-            $this->db->query("CREATE TABLE `{$prefix}login_log` ( `id` INT NOT NULL AUTO_INCREMENT , `login_id` INT NOT NULL , `lasttime` DATETIME NOT NULL , `agent` TEXT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;");
-        }
+        $CI->config_model->create_tb_login_log();
 
         return true;
     }
