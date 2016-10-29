@@ -10,24 +10,36 @@ Backup & Restore - {{ parent() }}
         <h3>Backup & Restore Database</h3>
     </div>
     <div class="module-body">
-        {{ get_flashdata('backup_restore')|raw }}
-
-        {% if is_demo_app() %}
-            {{ get_alert('warning', get_demo_msg())|raw }}
-        {% endif %}
+        <p>Sejak versi 1.8, fitur backup & restore database sistem yang sebelumnya kami hilangkan, dan kami ganti dengan cara yang dijalaskan dibawah. Hal tersebut kami lakukan karena fitur backup & restore yang sebelumnya memiliki beberapa kekurangan dan berpotensi terjadi kesalahan.</p>
 
         <div class="row-fluid">
             <div class="span12">
                 <div class="bs-callout bs-callout-info">
-                    <h4>Backup</h4>
-                    <hr style="margin-top:0px;margin-bottom: 10px;">
-                    {% if last_backup_date is empty %}
-                        <span class="text-info">Database belum pernah dibackup</span>
-                    {% else %}
-                        <span class="text-info">Backup terahir tanggal {{ tgl_jam_indo(last_backup_date) }}</span>
-                    {% endif %}
-                    <br><br>
-                    <a href="{{ site_url('welcome/backup_restore/backup') }}" class="btn btn-primary">Backup</a>
+                    <h4><a class="as-link" data-toggle="collapse" data-target="#cara-backup">Cara backup</a></h4>
+                    <div id="cara-backup" class="collapse">
+                        <hr style="margin-top:0px;margin-bottom: 10px;">
+                        <ol>
+                            <li>
+                                <b>Masuk ke halaman phpmyadmin</b>
+                                <ul>
+                                    <li>Jika aplikasi masih dilocal, phpmyadmin dapat diakses dengan cara menuju ke alamat http://localhost/phpmyadmin</li>
+                                    <li>Jika sudah berada dihosting, silakan menuju ke cpanel kemudian pilih menu phpmyadmin</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <b>Pilih database yang anda gunakan</b><br>
+                                <img src="{{ base_url('assets/images/backup-pilih-database.png') }}" class="img-polaroid">
+                            </li>
+                            <li>
+                                <b>Pilih menu export</b><br>
+                                <img src="{{ base_url('assets/images/backup-pilih-export.png') }}" class="img-polaroid">
+                            </li>
+                            <li>
+                                <b>Klik tombol go</b><br>
+                                <img src="{{ base_url('assets/images/backup-pilih-go.png') }}" class="img-polaroid">
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,44 +47,77 @@ Backup & Restore - {{ parent() }}
         <div class="row-fluid">
             <div class="span12">
                 <div class="bs-callout bs-callout-warning">
-                    <h4>Restore</h4>
+                    <h4>Cara restore</h4>
                     <hr style="margin-top:0px;margin-bottom: 10px;">
-                    <p>Pilih salah satu dari tiga cara restore dibawah yang menurut anda paling mudah dan aman.</p>
-                    <ol>
-                        <li>
-                            <b>Phpmyadmin</b><br>
-                            Buat database baru, import file .sql hasil backup, kemudian sesuaikan pengaturan database pada application/config/database.php untuk database yang baru.
-                        </li>
-                        <li>
-                            <b>Command line</b><br>
-                            Untuk pengguna windows, contoh: <b>c:\xampp\mysql\bin\mysql.exe -u root -p dbnew_elearning < c:\xampp\htdocs\new_elearning\backup-file.sql</b>.<br>
-                            Untuk pengguna linux, contoh: <b>mysql -u root -p dbnew_elearning < /path/to/backup-file.sql</b>.
-                            <br>
-                            Kemudian tekan Enter dan masukkan password mysql anda.
-                        </li>
-                        <li>
-                            <b>Import file</b><br>
-                            <div class="well well-small">
-                            {{ form_open_multipart('welcome/backup_restore/restore')|raw }}
+                    <b><a class="as-link" data-toggle="collapse" data-target="#cara-restore-1">- Kondisi aplikasi masih dilocalhost</a></b>
+                    <div id="cara-restore-1" class="collapse">
+                        <ol>
+                            <li>
+                                <b>Masuk ke halaman phpmyadmin dengan cara menuju ke alamat http://localhost/phpmyadmin</b>
+                            </li>
+                            <li>
+                                <b>Buat database baru</b>
+                                <ul style="list-style: none;">
+                                    <li><img src="{{ base_url('assets/images/restore-local-buat-db.png') }}" class="img-polaroid"></li>
+                                    <li><br><img src="{{ base_url('assets/images/restore-local-buat-db-2.png') }}" class="img-polaroid"></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <b>Import file</b>
+                                <ul style="list-style: none;">
+                                    <li><img src="{{ base_url('assets/images/restore-local-import-file.png') }}" class="img-polaroid"></li>
+                                    <li><br><img src="{{ base_url('assets/images/restore-local-import-file-2.png') }}" class="img-polaroid"></li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
 
-                            <p>Tunggu sampai proses selesai, jangan melakukan refresh atau aksi lainnya sebelum proses restore selesai.
-                            <br>Cara ini dapat saja gagal dengan berbagai faktor, jika gagal ditengah jalan, silahkan lakukan langkah no 1 atau 2.</p>
+                    <b><a class="as-link" data-toggle="collapse" data-target="#cara-restore-2">- Kondisi aplikasi dihosting</a></b>
+                    <div id="cara-restore-2" class="collapse">
+                        <ol>
+                            <li><b>Masuk ke halaman cpanel</b></li>
+                            <li>
+                                <b>Buat database baru</b>
+                                <ul style="list-style: none;">
+                                    <li><img src="{{ base_url('assets/images/restore-host-1.png') }}" class="img-polaroid"></li>
+                                    <li><br><img src="{{ base_url('assets/images/restore-host-2.png') }}" class="img-polaroid"></li>
+                                    <li><br><img src="{{ base_url('assets/images/restore-host-3.png') }}" class="img-polaroid"></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <b>Pilih user database</b>
+                                <br>
+                                Jika menggunakan user yang sudah ada atau yang sebelumnya dipakai
+                                <ul style="list-style: none;">
+                                    <li><img src="{{ base_url('assets/images/restore-host-user-1.png') }}" class="img-polaroid"></li>
+                                    <li><br><img src="{{ base_url('assets/images/restore-host-user-2.png') }}" class="img-polaroid"></li>
+                                    <li><br><img src="{{ base_url('assets/images/restore-host-user-3.png') }}" class="img-polaroid"></li>
+                                </ul>
+                                <br>
+                                Jika ingin menggunakan user baru
+                                <ul style="list-style: none;">
+                                    <li><img src="{{ base_url('assets/images/restore-host-user-4.png') }}" class="img-polaroid"></li>
+                                </ul>
+                                <br>
+                                Setelah user baru dibuat, tambahkan user tersebut ke database seperti cara "menggunakan user yang sudah ada"
+                            </li>
+                            <li>
+                                <b>Masuk ke halaman phpmyadmin</b>
+                                <ul style="list-style: none;">
+                                    <li><img src="{{ base_url('assets/images/restore-host-phpmyadmin-1.png') }}" class="img-polaroid"></li>
+                                    <li><br><img src="{{ base_url('assets/images/restore-host-phpmyadmin-2.png') }}" class="img-polaroid"></li>
+                                    <li><br><img src="{{ base_url('assets/images/restore-host-phpmyadmin-3.png') }}" class="img-polaroid"></li>
+                                    <li><br><img src="{{ base_url('assets/images/restore-host-phpmyadmin-4.png') }}" class="img-polaroid"></li>
+                                </ul>
+                            </li>
+                        </ol>
+                    </div>
 
-                            {% if restore_msg is not empty %}
-                                <span class="text-error"><i class="icon-info-sign"></i> {{ restore_msg|raw }}</span>
-                            {% endif %}
-
-                            {% if is_demo_app() == false %}
-                            <p><input type="file" name="userfile" accept=".sql"></p>
-                            <p>
-                                <span class="text-info pull-right">Upload file .sql hasil backup</span>
-                                <button class="btn btn-primary" type="submit">Restore</button>
-                            </p>
-                            {% endif %}
-                            {{ form_close()|raw }}
-                            </div>
-                        </li>
-                    </ol>
+                    <b><a class="as-link" data-toggle="collapse" data-target="#cara-restore-3">- Sesuaikan konfigurasi database pada file application/config/database.php</a></b>
+                    <div id="cara-restore-3" class="collapse">
+                        <br>
+                        <img src="{{ base_url('assets/images/restore-host-config.png') }}" class="img-polaroid">
+                    </div>
                 </div>
             </div>
         </div>
