@@ -191,7 +191,7 @@ Filter Siswa - {{ parent() }}
                                     <li>{{ anchor('siswa/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'siswa-iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
                                     <li>{{ anchor('siswa/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'siswa-iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>
                                     {% if v.status_id != 3 %}
-                                    <li>{{ anchor('siswa/moved_class/' ~ v.status_id ~ '/' ~ v.id, 'Edit Kelas Aktif', {'class' : 'iframe', 'title' : 'Edit Kelas Aktif'})|raw }}</li>
+                                    <li>{{ anchor('siswa/moved_class/' ~ v.status_id ~ '/' ~ v.id, 'Edit Kelas Aktif', {'class' : 'siswa-iframe', 'title' : 'Edit Kelas Aktif'})|raw }}</li>
                                     {% endif %}
                                     <li>{{ anchor('siswa/edit_username/' ~ v.status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'siswa-iframe-2', 'title' : 'Edit Username Siswa'})|raw }}</li>
                                     <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'siswa-iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
