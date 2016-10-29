@@ -1,7 +1,39 @@
-{% extends "layout-iframe.html" %}
+{% if mode == 'print' %}
+    {% set set_layout = 'layout-print.html' %}
+{% else %}
+    {% set set_layout = 'layout-iframe.html' %}
+{% endif %}
+{% extends set_layout %}
 
 {% block content %}
+{% if mode is empty %}
+    <a class="btn btn-primary pull-right btn-xs" target="_blank" href="{{ site_url('tugas/detail_jawaban/' ~ siswa.id ~ '/' ~ tugas.id ~ '?mode=print') }}">Print</a>
+{% endif %}
 <h4>Detail Jawaban</h4>
+
+{% if mode == 'print' %}
+<table class="table table-condensed table-striped">
+    <tbody>
+        <tr>
+            <td><b>Nis</b></td>
+            <td>: {{ siswa.nis }}</td>
+        </tr>
+        <tr>
+            <td><b>Nama</b></td>
+            <td>: {{ siswa.nama }}</td>
+        </tr>
+        <tr>
+            <td><b>Kelas</b></td>
+            <td>: {{ siswa.kelas_aktif.nama }}</td>
+        </tr>
+        <tr>
+            <td><b>Tugas</b></td>
+            <td>: {{ tugas.judul }}</td>
+        </tr>
+    </tbody>
+</table>
+<br>
+{% endif %}
 
 <table class="table table-condensed table-striped">
     <thead>

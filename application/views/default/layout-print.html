@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% block title %}{{ site_name }}{% endblock %}</title>
-    <link type="text/css" href="{{ base_url('assets/comp/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link type="text/css" href="{{ base_url('assets/comp/bootstrap/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
-    <link type="text/css" href="{{ base_url('assets/comp/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
-    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    {% include 'layout-header.html' %}
     <style type="text/css">
         h3.title {
             margin-bottom: 0px;
@@ -19,7 +15,6 @@
         }
     </style>
     {% block css %}{% endblock %}
-    <link rel="shortcut icon" type="image/x-icon" href="{{ favicon_url }}">
 </head>
 <body>
     <div class="container">

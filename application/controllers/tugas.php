@@ -1482,6 +1482,45 @@ class Tugas extends MY_Controller
 
                 $nilai['siswa'] = $siswa;
 
+                # kalo ada filter tampil jawaban
+                if (!empty($_POST['tampil_jawaban'])) {
+                    # cari kunci
+                    $list_kunci = array();
+                    foreach ($nilai['history']['value']['pertanyaan_id'] as $h_pertanyaan_id) {
+                        $row_kunci   = array();
+                        $semua_kunci = $this->tugas_model->retrieve_all_pilihan($h_pertanyaan_id);
+                        foreach ($semua_kunci as $h_pilihan) {
+                            if ($h_pilihan['kunci'] == 1) {
+                                $row_kunci = $h_pilihan;
+                            }
+                        }
+
+                        $list_kunci[$h_pertanyaan_id] = $row_kunci;
+                    }
+
+                    $array_format_jawaban = array();
+
+                    $no_tampil = 1;
+                    foreach ($list_kunci as $h_pertanyaan_id => $h_pilihan) {
+                        $label_key = "";
+                        if (!empty($h_pilihan['urutan'])) {
+                            $label_key = get_abjad($h_pilihan['urutan']);
+                        }
+
+                        $label_jawaban = "";
+                        if (isset($nilai['history']['value']['jawaban'][$h_pertanyaan_id])) {
+                            $pilihan_jawaban = $this->tugas_model->retrieve_pilihan($nilai['history']['value']['jawaban'][$h_pertanyaan_id], $h_pertanyaan_id);
+                            $label_jawaban   = get_abjad($pilihan_jawaban['urutan']);
+                        }
+
+                        $array_format_jawaban[] = "{$no_tampil}. {$label_key}:{$label_jawaban}";
+                        $no_tampil++;
+                    }
+
+                    $nilai['tampil_jawaban'] = implode(", ", $array_format_jawaban);
+                }
+
+                # kalo ada filter kelas
                 if (!empty($_POST['kelas_id'])) {
                     if ($_POST['kelas_id'] == 'all' OR $kelas['id'] == $_POST['kelas_id']) {
                         $data_nilai[] = $nilai;
@@ -1489,6 +1528,10 @@ class Tugas extends MY_Controller
                 } else {
                     $data_nilai[] = $nilai;
                 }
+            }
+
+            if (!empty($_POST['tampil_jawaban'])) {
+                $data['tampil_jawaban'] = 1;
             }
 
             $data['data_nilai']  = $data_nilai;
@@ -1650,6 +1693,14 @@ class Tugas extends MY_Controller
             exit('Akses ditolak');
         }
 
+        # kelas siswa
+        $kelas_siswa = $this->kelas_model->retrieve_siswa(null, array(
+            'siswa_id' => $siswa_id,
+            'aktif'    => 1
+        ));
+        $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
+        $siswa['kelas_aktif'] = $kelas;
+
         $tugas_id = (int)$tugas_id;
         $tugas    = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas)) {
@@ -1686,6 +1737,10 @@ class Tugas extends MY_Controller
         }
 
         $data['history'] = $history_value;
+
+        if (!empty($_GET['mode'])) {
+            $data['mode'] = $_GET['mode'];
+        }
 
         if ($tugas['type_id'] == 3) {
             $this->twig->display('detail-jawaban-ganda.html', $data);
