@@ -524,7 +524,9 @@ class MY_Controller extends CI_Controller
 
         # hapus nilai
         $retrieve_nilai = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa_id);
-        $this->tugas_model->delete_nilai($retrieve_nilai['id']);
+        if (!empty($retrieve_nilai['id'])) {
+            $this->tugas_model->delete_nilai($retrieve_nilai['id']);
+        }
 
         $this->db->trans_complete();
 

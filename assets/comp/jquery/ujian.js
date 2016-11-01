@@ -27,23 +27,14 @@ function update_ganda(tugas_id, pertanyaan_id, pilihan_id) {
 }
 
 $("#btn-submit").on('click', function(e) {
-    if (confirm('Anda yakin ingin mengahiri pengerjaan tugas ini?')) {
-        $("#process-submit").val("1");
-        if ($("#form-essay").length) {
-            $("#form-essay").submit();
-        } else {
-            location.href = $(this).attr("href");
-        }
+    e.preventDefault();
+
+    $("#process-submit").val("1");
+    if ($("#form-essay").length) {
+        $("#form-essay").submit();
     } else {
-        e.preventDefault();
-        if ($("#form-essay").length) {
-            simpanJawaban($("#tugas_id").val());
-        }
-
-        location.reload();
+        location.href = $(this).attr("href");
     }
-
-    return false;
 });
 
 function hide_countdown() {

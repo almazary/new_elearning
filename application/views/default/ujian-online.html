@@ -120,11 +120,25 @@
                     </table>
 
                     <div class="well well-sm">
-                        <a class="btn btn-large btn-primary pull-right" href="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}" id="btn-submit">Selesai</a>
-                        <p class="p-info">Mohon periksa kembali jawaban anda sebelum menekan tombol <b>selesai</b>.</p>
-                        <br>
+                        <p class="p-info">Periksa kembali jawaban anda sebelum mengahiri pengerjaan tugas ini.</p>
+                        <button type="button" class="btn btn-large btn-primary" data-toggle="modal" data-target="#selesai-mengerjakan">
+                            Selesai Mengerjakan
+                        </button>
                     </div>
 
+                    <div class="modal fade" id="selesai-mengerjakan" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    Anda yakin ingin mengahiri pengerjaan tugas ini?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Nanti dulu</button>
+                                    <a class="btn btn-primary" href="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}" id="btn-submit">Ya, saya sudah selesai</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
 
 
@@ -157,12 +171,26 @@
                     </table>
 
                     <div class="well well-sm">
-                        <button type="button" class="btn btn-large btn-primary pull-right" id="btn-submit">Selesai</button>
-                        <p class="p-info">Mohon periksa kembali jawaban anda sebelum menekan tombol <b>selesai</b>.</p>
-                        <br>
+                        <p class="p-info">Periksa kembali jawaban anda sebelum mengahiri pengerjaan tugas ini.</p>
+                        <button type="button" class="btn btn-large btn-primary" data-toggle="modal" data-target="#selesai-mengerjakan">
+                            Selesai Mengerjakan
+                        </button>
                     </div>
                     {{ form_close()|raw }}
 
+                    <div class="modal fade" id="selesai-mengerjakan" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    Anda yakin ingin mengahiri pengerjaan tugas ini?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Nanti dulu</button>
+                                    <button type="button" class="btn btn-primary" id="btn-submit">Ya, saya sudah selesai</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
 
             </div>
