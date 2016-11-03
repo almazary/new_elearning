@@ -60,30 +60,34 @@ function show_countdown() {
 }
 
 function simpanJawaban(tugas_id) {
-    var arr_pertanyaan_id = $("#str_id").val();
-    var arr_pertanyaan_id = arr_pertanyaan_id.split(',');
+    if ($("#str_id").length) {
+        var arr_pertanyaan_id = $("#str_id").val();
+        var arr_pertanyaan_id = arr_pertanyaan_id.split(',');
 
-    var count_success = 0;
-    for (var i = 0; i < arr_pertanyaan_id.length; i++) {
-        var tiny_obj = tinyMCE.get('jawaban-' + arr_pertanyaan_id[i]);
-        var jawaban  = tiny_obj.getContent();
+        var count_success = 0;
+        for (var i = 0; i < arr_pertanyaan_id.length; i++) {
+            var tiny_obj = tinyMCE.get('jawaban-' + arr_pertanyaan_id[i]);
+            var jawaban  = tiny_obj.getContent();
 
-        $.ajax({
-            type : "POST",
-            url  : site_url + "/ajax/post_data/update_jawaban_essay",
-            data : {"tugas_id" : tugas_id, "pertanyaan_id" : arr_pertanyaan_id[i], "jawaban" : jawaban},
-            success: function () {
-                count_success++;
-            },
-            async: false
-        });
+            $.ajax({
+                type : "POST",
+                url  : site_url + "/ajax/post_data/update_jawaban_essay",
+                data : {"tugas_id" : tugas_id, "pertanyaan_id" : arr_pertanyaan_id[i], "jawaban" : jawaban},
+                success: function () {
+                    count_success++;
+                },
+                async: false
+            });
+        }
+
+        if (count_success == arr_pertanyaan_id.length) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    if (count_success == arr_pertanyaan_id.length) {
-        return true;
-    } else {
-        return false;
-    }
+    return true;
 }
 
 // cek status reset saat ujian & simpan jawaban jika essay
