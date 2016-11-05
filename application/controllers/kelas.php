@@ -91,7 +91,7 @@ class Kelas extends MY_Controller
             )
         );
 
-        if ($this->form_validation->run('kelas/index') == TRUE) {
+        if ($this->form_validation->run('kelas/index') == TRUE AND !is_demo_app()) {
             # insert kelas
             $nama = $this->input->post('nama', TRUE);
             $this->kelas_model->create($nama);
@@ -126,7 +126,7 @@ class Kelas extends MY_Controller
         );
 
         $data['kelas'] = $kelas;
-        if ($this->form_validation->run('kelas/edit') == TRUE) {
+        if ($this->form_validation->run('kelas/edit') == TRUE AND !is_demo_app()) {
             $nama  = $this->input->post('nama', TRUE);
             if (empty($kelas['parent_id'])) {
                 $aktif = 1;
