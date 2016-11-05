@@ -62,7 +62,7 @@ class MY_Controller extends CI_Controller
         $this->load->database();
 
         # load library
-        $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email'));
+        $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email', 'menu'));
 
         # load saja semua model
         $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model', 'msg_model', 'pengumuman_model', 'komentar_model'));
@@ -114,6 +114,9 @@ class MY_Controller extends CI_Controller
 
             $this->current_version = $versi_install;
         }
+
+        # autoload function plugin
+        autoload_function_plugin();
     }
 
     /**
@@ -566,7 +569,7 @@ class MY_Controller extends CI_Controller
             } else {
                 $cek_val = json_decode($cek_versi['value'], 1);
                 # bikin 15 menit sekali saja checknya
-                $date_plus = strtotime("+15 minute", strtotime($cek_val['last_check']));
+                $date_plus = strtotime("+30 minute", strtotime($cek_val['last_check']));
                 if ($date_plus < strtotime(date('Y-m-d H:i:s'))) {
                     $ok_check = true;
                 }

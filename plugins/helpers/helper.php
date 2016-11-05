@@ -1,6 +1,35 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
+ * Method untuk mengambil fungsi autoload plugin
+ */
+function autoload_function_plugin()
+{
+    # ambil semua folder didalam src
+    $base_load = './plugins/src';
+    if (!is_dir($base_load)) {
+        return true;
+    }
+
+    $objects = scandir($base_load);
+    foreach ($objects as $object) {
+        if ($object != "." && $object != "..") {
+            $autoload_file = $base_load . '/' . $object . '/autoload.php';
+            if (is_file($autoload_file)) {
+                include_once $autoload_file;
+
+                $autoload_function = "autoload_{$object}";
+                if (function_exists($autoload_function)) {
+                    $autoload_function();
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+/**
  * Method untuk mendapatkan base url plugins
  *
  * @param  string $add_link

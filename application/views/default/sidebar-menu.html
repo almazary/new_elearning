@@ -1,76 +1,8 @@
-{% if is_admin() %}
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url() }}"><i class="menu-icon icon-home"></i>Beranda</a></li>
-    <li><a href="{{ site_url('pengumuman') }}"><i class="menu-icon icon-bullhorn"></i>Pengumuman</a></li>
-    <li><a href="{{ site_url('message') }}"><i class="menu-icon icon-comments"></i>Pesan <span class="menu-count-new-msg"></span></a></li>
-</ul>
 
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url('siswa') }}"><i class="menu-icon icon-group"></i>Siswa <span class="menu-count-pending-siswa"></span></a></li>
-    <li><a href="{{ site_url('pengajar') }}"><i class="menu-icon icon-user"></i>Pengajar <span class="menu-count-pending-pengajar"></span></a></li>
-</ul>
-
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
-    <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
-    <li><a href="{{ site_url('materi/komentar') }}"><i class="menu-icon icon-comments"></i>Komentar Materi <span class="menu-count-unread-laporan"></span></a></li>
-</ul>
-
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url('kelas/mapel_kelas') }}"><i class="menu-icon icon-paste"></i>Matapelajaran Kelas </a></li>
-    <li><a href="{{ site_url('kelas') }}"><i class="menu-icon icon-tasks"></i>Manajemen Kelas </a></li>
-    <li><a href="{{ site_url('mapel') }}"><i class="menu-icon icon-book"></i>Manajemen Matapelajaran </a></li>
-</ul>
-
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url('welcome/pengaturan') }}"><i class="menu-icon icon-wrench"></i>Pengaturan</a></li>
-    <li><a href="{{ site_url('email') }}"><i class="menu-icon icon-envelope"></i>Email Template</a></li>
-    <li><a href="{{ site_url('welcome/backup_restore') }}"><i class="menu-icon icon-hdd"></i>Backup & Restore</a></li>
-    <li><a href="{{ site_url('welcome/hapus_data') }}"><i class="menu-icon icon-trash"></i>Hapus Data</a></li>
-    <li><a href="{{ site_url('welcome/update_info') }}"><i class="menu-icon icon-info-sign"></i>Update Aplikasi <span class="menu-count-new-update"></span></a></li>
-</ul>
-{% endif %}
-
-{% if is_pengajar() %}
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url() }}"><i class="menu-icon icon-home"></i>Beranda</a></li>
-    <li><a href="{{ site_url('pengumuman') }}"><i class="menu-icon icon-bullhorn"></i>Pengumuman</a></li>
-    <li><a href="{{ site_url('message') }}"><i class="menu-icon icon-comments"></i>Pesan <span class="menu-count-new-msg"></span></a></li>
-    <li><a href="{{ site_url('pengajar/jadwal') }}"><i class="menu-icon icon-tasks"></i>Jadwal Mengajar </a></li>
-</ul>
-
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
-    <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
-    <li><a href="{{ site_url('materi/komentar') }}"><i class="menu-icon icon-comments"></i>Komentar saya</a></li>
-</ul>
-
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url('pengajar/filter') }}"><i class="menu-icon icon-search"></i>Filter Pengajar </a></li>
-    <li><a href="{{ site_url('siswa/filter') }}"><i class="menu-icon icon-search"></i>Filter Siswa </a></li>
-</ul>
-{% endif %}
-
-{% if is_siswa() %}
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url() }}"><i class="menu-icon icon-home"></i>Beranda</a></li>
-    <li><a href="{{ site_url('message') }}"><i class="menu-icon icon-comments"></i>Pesan <span class="menu-count-new-msg"></span></a></li>
-    <li><a href="{{ site_url('siswa/jadwal_mapel') }}"><i class="menu-icon icon-tasks"></i>Jadwal Matapelajaran</a></li>
-</ul>
-
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url('tugas?clear_filter=true') }}"><i class="menu-icon icon-tasks"></i>Tugas </a></li>
-    <li><a href="{{ site_url('materi?clear_filter=true') }}"><i class="menu-icon icon-book"></i>Materi </a></li>
-    <li><a href="{{ site_url('materi/komentar') }}"><i class="menu-icon icon-comments"></i>Komentar saya </a></li>
-</ul>
-
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url('pengajar/filter') }}"><i class="menu-icon icon-search"></i>Filter Pengajar </a></li>
-    <li><a href="{{ site_url('siswa/filter') }}"><i class="menu-icon icon-search"></i>Filter Siswa </a></li>
-</ul>
-{% endif %}
-
-<!--/.widget-nav-->
-<ul class="widget widget-menu unstyled">
-    <li><a href="{{ site_url('login/logout') }}"><i class="menu-icon icon-signout"></i>Logout </a></li>
-</ul>
+{% for menus in list_menu %}
+    <ul class="widget widget-menu unstyled">
+    {% for menu in menus %}
+        <li>{{ menu|raw }}</li>
+    {% endfor %}
+    </ul>
+{% endfor %}

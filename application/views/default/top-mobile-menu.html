@@ -1,54 +1,6 @@
-{% if is_admin() %}
 
-<li class="visible-phone visible-tablet"><a href="{{ site_url() }}">Beranda</a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('pengumuman') }}">Pengumuman</a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('message') }}">Pesan <span class="menu-count-new-msg"></span></a></li>
-
-<li class="visible-phone visible-tablet"><a href="{{ site_url('siswa') }}">Siswa <span class="menu-count-pending-siswa"></span></a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('pengajar') }}">Pengajar <span class="menu-count-pending-pengajar"></span></a></li>
-
-<li class="visible-phone visible-tablet"><a href="{{ site_url('tugas?clear_filter=true') }}">Tugas </a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('materi?clear_filter=true') }}">Materi </a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('materi/komentar') }}">Komentar Materi </a></li>
-
-<li class="visible-phone visible-tablet"><a href="{{ site_url('kelas/mapel_kelas') }}">Matapelajaran Kelas </a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('kelas') }}">Manajemen Kelas </a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('mapel') }}">Manajemen Matapelajaran </a></li>
-
-<li class="visible-phone visible-tablet"><a href="{{ site_url('welcome/pengaturan') }}">Pengaturan</a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('email') }}">Email Template</a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('welcome/backup_restore') }}">Backup & Restore</a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('welcome/update_info') }}">Update Aplikasi <span class="menu-count-new-update"></span></a></li>
-
-{% endif %}
-
-{% if is_pengajar() %}
-
-<li class="visible-phone visible-tablet"><a href="{{ site_url() }}">Beranda</a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('pengumuman') }}">Pengumuman</a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('message') }}">Pesan <span class="menu-count-new-msg"></span></a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('pengajar/jadwal') }}">Jadwal Mengajar </a></li>
-
-<li class="visible-phone visible-tablet"><a href="{{ site_url('tugas?clear_filter=true') }}">Tugas </a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('materi?clear_filter=true') }}">Materi </a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('materi/komentar') }}">Komentar saya </a></li>
-
-<li class="visible-phone visible-tablet"><a href="{{ site_url('pengajar/filter') }}">Filter Pengajar </a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('siswa/filter') }}">Filter Siswa </a></li>
-
-{% endif %}
-
-{% if is_siswa() %}
-
-<li class="visible-phone visible-tablet"><a href="{{ site_url() }}">Beranda</a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('message') }}">Pesan <span class="menu-count-new-msg"></span></a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('siswa/jadwal_mapel') }}">Jadwal Matapelajaran</a></li>
-
-<li class="visible-phone visible-tablet"><a href="{{ site_url('tugas?clear_filter=true') }}">Tugas </a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('materi?clear_filter=true') }}">Materi </a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('materi/komentar') }}">Komentar saya </a></li>
-
-<li class="visible-phone visible-tablet"><a href="{{ site_url('pengajar/filter') }}">Filter Pengajar </a></li>
-<li class="visible-phone visible-tablet"><a href="{{ site_url('siswa/filter') }}">Filter Siswa </a></li>
-
-{% endif %}
+{% for menus in list_menu %}
+    {% for menu in menus %}
+        <li class="visible-phone visible-tablet">{{ menu|raw }}</li>
+    {% endfor %}
+{% endfor %}

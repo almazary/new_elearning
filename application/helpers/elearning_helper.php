@@ -102,6 +102,9 @@ function default_parser_item($add_item = array())
         $return['copyright'] = 'Copyright &copy; 2014 - ' . date('Y') . ' ' . get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>';
         $return['site_name'] = 'e-Learning '.get_pengaturan('nama-sekolah', 'value');
         $return['version']   = '<a href="https://github.com/almazary/new_elearning">versi ' . get_pengaturan('versi', 'value') . '</a>';
+
+        # load menu
+        $return['list_menu'] = $CI->menu->get();
     }
 
     # load komponen js aplikasi
