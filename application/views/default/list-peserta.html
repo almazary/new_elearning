@@ -121,34 +121,3 @@ Koreksi - {{ parent() }}
     </div>
 </div>
 {% endblock %}
-
-{% block js %}
-<script type="text/javascript">
-    $('.datatable').dataTable({
-        "language": {
-            "url": base_url + "assets/comp/datatables/lang.id.json"
-        },
-        "aaSorting" : [],
-        "aoColumnDefs": [
-            { 'bSortable': false, 'aTargets': [ 0 ] }
-        ],
-        "fnDrawCallback" : function( oSettings ) {
-            if (typeof MathJax !== 'undefined') {
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-            }
-
-            $(".iframe-koreksi-jawaban").colorbox({
-                iframe:true,
-                width:"700",
-                height:"550",
-                fixed:true,
-                onClosed : function() {
-                    location.reload();
-                }
-            });
-
-            $('[data-toggle="tooltip"]').tooltip({html:true});
-        }
-    });
-</script>
-{% endblock %}

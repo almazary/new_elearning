@@ -8,6 +8,20 @@
  */
 class Siswa_model extends CI_Model
 {
+    /**
+     * Method untuk mengahpus foto
+     *
+     * @param  integer $id
+     * @return boolean
+     * @author Almazari <almazary@gmail.com>
+     * @since  1.8
+     */
+    public function delete_foto($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->update('siswa', array('foto' => null));
+        return true;
+    }
 
     /**
      * Method untuk menghitung data siswa berdasarkan parameter tertentu
@@ -31,15 +45,19 @@ class Siswa_model extends CI_Model
             break;
 
             case 'total':
+                $this->db->select("COUNT(*) as jml");
                 $this->db->where('status_id !=', '0');
                 $result = $this->db->get('siswa');
-                return $result->num_rows();
+                $result = $result->row_array();
+                return $result['jml'];
             break;
 
             case 'pending':
+                $this->db->select("COUNT(*) as jml");
                 $this->db->where('status_id', '0');
                 $result = $this->db->get('siswa');
-                return $result->num_rows();
+                $result = $result->row_array();
+                return $result['jml'];
             break;
 
             default:

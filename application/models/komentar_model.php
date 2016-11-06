@@ -166,29 +166,10 @@ class Komentar_model extends CI_Model
      */
     public function create_table()
     {
-        include APPPATH . 'config/database.php';
-        $prefix = $db['default']['dbprefix'];
+        $CI =& get_instance();
+        $CI->load->model('config_model');
 
-        $this->db->query("CREATE TABLE IF NOT EXISTS `{$prefix}komentar` (
-          `id` int(11) NOT NULL,
-          `login_id` int(11) NOT NULL,
-          `materi_id` int(11) NOT NULL,
-          `tampil` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0=tidak,1=tampil',
-          `konten` text,
-          `tgl_posting` datetime DEFAULT NULL
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-
-        $this->db->query("ALTER TABLE `{$prefix}komentar`
-          ADD PRIMARY KEY (`id`),
-          ADD KEY `fk_komentar_login1_idx` (`login_id`),
-          ADD KEY `fk_komentar_materi1_idx` (`materi_id`);");
-
-        $this->db->query("ALTER TABLE `{$prefix}komentar`
-        MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;");
-
-        $this->db->query("ALTER TABLE `{$prefix}komentar`
-          ADD CONSTRAINT `fk_komentar_login1` FOREIGN KEY (`login_id`) REFERENCES `{$prefix}login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-          ADD CONSTRAINT `fk_komentar_materi1` FOREIGN KEY (`materi_id`) REFERENCES `{$prefix}materi` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;");
+        $CI->config_model->create_tb_komentar();
 
         return true;
     }

@@ -5,20 +5,31 @@ New Elearning (LMS) dokumenary
 By     : http://www.dokumenary.net
 Author : Almazari <almazary@gmail.com>
 
+Sebuah aplikasi yang dapat digunakan sebagai media untuk kegiatan belajar dan mengajar disekolah tingkat SMP/SMA/SMK sederajat atau instansi pendidikan lainnya, dan telah digunakan oleh banyak sekolah - sekolah di Indonesia sejak versi 1.0 dibagikan.
 
-Aplikasi ini didevelop bertujuan untuk menggantikan elearning sederhana yang sebelumnya, yang saya merasa banyak kekurangan.
-Elearning yang baru ini dibuat dengan framework Codeigniter versi 2.2 dan menggunakan aturan standar codeigniter dalam penulisan program, sehingga
-diharapkan pengembang dapat dengan mudah memahami alur sistem.
+Secara umum, aplikasi ini memiliki fitur sebagai berikut:
+- Pengumuman
+- Pesan antar pengguna
+- Pengolahan data siswa
+- Pengolahan data pengajar
+- Tugas (Pilihan Ganda, Essay dan Upload)
+- Ujian online
+- Berbagi materi
+- Diskusi materi
+- Jadwal matapelajaran siswa
 
-Pada aplikasi ini juga telah disediakan informasi update sistem dan bug tracker pada halaman home administrator.
+Untuk pengguna terbagi menjadi tiga, yaitu:
+- Siswa
+- Pengajar
+- Administrator (Pengajar yang bertindak sebagai administrator)
 
-Pengguna pada elearning terbagi menjadi :<br>
-1. Siswa<br>
-2. Pengajar<br>
-3. Administrator (Pengajar yang bertindak sebagai administrator)<br>
+Lisensi:
+- Gratis untuk digunakan, disalin, dimodifikasi, didistribusikan. Selengkapnya terdapat pada file license.txt
 
-Versi pertama dimulai dari 1.0
-<br>
-Versi terbaru : 1.7
-<br><br>
+Kebutuhan:
+- PHP >= 5.5
+- Mysql
+
+Versi terbaru: 1.8
+
 <a href="http://www.dokumenary.net/demo-aplikasi-elearning/">DEMO</a> | <a href="http://dokumenary.net">PORTAL UPDATE</a> | <a href="http://www.dokumenary.net/2015/08/23/new-elearning-versi-1-0/">PANDUAN INSTALL</a>

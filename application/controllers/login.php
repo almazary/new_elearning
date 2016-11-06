@@ -1,5 +1,36 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Class untuk resource login
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
+
 class Login extends MY_Controller
 {
     function index()
@@ -36,6 +67,10 @@ class Login extends MY_Controller
                     redirect('login');
                 }
 
+                # create log
+                $log_id = $this->login_model->create_log($get_login['id']);
+                $get_login['log_id'] = $log_id;
+
                 $data_session['login_' . APP_PREFIX][$user_type] = array(
                     'login' => $get_login,
                     'user'  => $user
@@ -52,10 +87,9 @@ class Login extends MY_Controller
         $data['sliders'] = $this->config_model->get_all_slider_img();
 
         if (!empty($data['sliders'])) {
-            # panggil colorbox
+            # panggil nivoslider
             $html_js = load_comp_js(array(
                 base_url('assets/comp/nivoslider/jquery.nivo.slider.pack.js'),
-                base_url('assets/comp/nivoslider/setup.js'),
             ));
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(
@@ -76,6 +110,7 @@ class Login extends MY_Controller
         $this->session->set_userdata('filter_tugas', null);
         $this->session->set_userdata('filter_siswa', null);
         $this->session->set_userdata('mengerjakan_tugas', null);
+        $this->session->set_userdata('hide_countdown', null);
 
         redirect('login/index');
     }
@@ -88,7 +123,6 @@ class Login extends MY_Controller
             # panggil colorbox
             $html_js = load_comp_js(array(
                 base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                base_url('assets/comp/colorbox/act-pengajar.js')
             ));
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -113,7 +147,6 @@ class Login extends MY_Controller
             # panggil colorbox
             $html_js = load_comp_js(array(
                 base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                base_url('assets/comp/colorbox/act-siswa.js')
             ));
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -176,6 +209,9 @@ class Login extends MY_Controller
 
                 $foto = null;
 
+                $status_id = get_pengaturan('status-registrasi-siswa', 'value');
+                $status_id = (int)$status_id;
+
                 # simpan data siswa
                 $siswa_id = $this->siswa_model->create(
                     $nis,
@@ -187,7 +223,7 @@ class Login extends MY_Controller
                     $alamat,
                     $tahun_masuk,
                     $foto,
-                    0
+                    $status_id
                 );
 
                 # simpan data login
@@ -205,13 +241,23 @@ class Login extends MY_Controller
                     1
                 );
 
-                # kirim email registrasi
-                @kirim_email('email-template-register-siswa', $username, array(
-                    'nama'         => $nama,
-                    'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
-                ));
+                # jika langsung aktif
+                if ($status_id == 1) {
+                    # kirim email aktifasi
+                    @kirim_email_approve_siswa($siswa_id);
 
-                $this->session->set_flashdata('register', get_alert('success', 'Terimakasih telah melakukan registrasi sebagai siswa, tunggu pengaktifan akun oleh admin.'));
+                    $pesan = "Registrasi sebagai siswa berhasil, silakan " . anchor('login/index', 'LOG IN') . " ke sistem.";
+                } else {
+                    # kirim email registrasi
+                    @kirim_email('email-template-register-siswa', $username, array(
+                        'nama'         => $nama,
+                        'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
+                    ));
+
+                    $pesan = "Registrasi sebagai siswa berhasil, tunggu pengaktifan akun oleh admin.";
+                }
+
+                $this->session->set_flashdata('register', get_alert('success', $pesan));
                 redirect('login/register/siswa');
             }
 
@@ -240,7 +286,10 @@ class Login extends MY_Controller
                     $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
                 }
 
-                # simpan data siswa
+                $status_id = get_pengaturan('status-registrasi-pengajar', 'value');
+                $status_id = (int)$status_id;
+
+                # simpan data pengajar
                 $pengajar_id = $this->pengajar_model->create(
                     $nip,
                     $nama,
@@ -249,7 +298,7 @@ class Login extends MY_Controller
                     $tanggal_lahir,
                     $alamat,
                     $foto,
-                    0
+                    $status_id
                 );
 
                 # simpan data login
@@ -261,13 +310,21 @@ class Login extends MY_Controller
                     $is_admin
                 );
 
-                # kirim email registrasi
-                @kirim_email('email-template-register-pengajar', $username, array(
-                    'nama'         => $nama,
-                    'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
-                ));
+                if ($status_id == 1) {
+                    @kirim_email_approve_pengajar($pengajar_id);
 
-                $this->session->set_flashdata('register', get_alert('success', 'Terimakasih telah melakukan registrasi sebagai pengajar, tunggu pengaktifan akun oleh admin.'));
+                    $pesan = "Registrasi sebagai pengajar berhasil, silakan " . anchor('login/index', 'LOG IN') . " ke sistem.";
+                } else {
+                    # kirim email registrasi
+                    @kirim_email('email-template-register-pengajar', $username, array(
+                        'nama'         => $nama,
+                        'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
+                    ));
+
+                    $pesan = "Registrasi sebagai pengajar berhasil, tunggu pengaktifan akun oleh admin.";
+                }
+
+                $this->session->set_flashdata('register', get_alert('success', $pesan));
                 redirect('login/register/pengajar');
             }
         }
@@ -360,5 +417,76 @@ class Login extends MY_Controller
 
         $data['login'] = $login;
         $this->twig->display('reset-password.html', $data);
+    }
+
+    function login_log($segment_3 = "", $segment_4 = "")
+    {
+        must_login();
+
+        $login_id = (int)$segment_3;
+        if (empty($login_id)) {
+            $login_id = get_sess_data('login', 'id');
+            redirect('login/login_log/' . $login_id);
+        }
+
+        $login = $this->login_model->retrieve($login_id);
+        if (empty($login)) {
+            show_error("Login ID tidak ditemukan.");
+        }
+
+        if (!is_admin() AND $login['id'] != get_sess_data('login', 'id')) {
+            redirect('login/login_log/' . get_sess_data('login', 'id'));
+        }
+
+        $page_no = (int)$segment_4;
+        if (empty($page_no)) {
+            $page_no = 1;
+        }
+
+        # ambil data login log
+        $retrieve_all = $this->login_model->retrieve_all_log(20, $page_no, $login['id']);
+
+        # format tgl
+        foreach ($retrieve_all['results'] as $key => $val) {
+            if (belum_sehari($val['lasttime'])) {
+                $retrieve_all['results'][$key]['timeago'] = iso8601($val['lasttime']);
+            }
+
+            $retrieve_all['results'][$key]['lasttime'] = format_datetime($val['lasttime']);
+        }
+
+        $data['log'] = $retrieve_all['results'];
+        $data['pagination'] = $this->pager->view($retrieve_all, 'login/login_log/' . $login['id'] . '/');
+
+        $this->twig->display('list-login-log.html', $data);
+    }
+
+    /**
+     * Method untuk cek sudah login atau belum
+     * @return boolean
+     * @since  1.8
+     */
+    function data_onload()
+    {
+        if (!is_ajax()) {
+            die;
+        }
+
+        $return = array(
+            'is_user_logged_in' => is_login() ? '1' : '0',
+            'sedang_ujian' => $this->sedang_ujian() ? '1' : '0',
+        );
+
+        echo json_encode($return);
+    }
+
+    /**
+     * Method untuk redirect karna session telah expired
+     * @since  1.8
+     */
+    function sess_expired()
+    {
+        $this->session->set_flashdata('login', get_alert('warning', "Session login anda telah habis, silakan login kembali."));
+        $this->logout();
     }
 }

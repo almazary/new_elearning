@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% include 'layout-header.html' %}
+    <style type="text/css">
+        h3.title {
+            margin-bottom: 0px;
+            line-height: 30px;
+        }
+        hr.top {
+            border: none;
+            border-bottom: 2px solid #333;
+            margin-bottom: 10px;
+            margin-top: 10px;
+        }
+    </style>
+    {% block css %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <br>
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

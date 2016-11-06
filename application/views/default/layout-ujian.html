@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% include 'layout-header.html' %}
+        <link type="text/css" href="{{ base_url_theme }}css/read.css" rel="stylesheet">
+        <link type="text/css" href="{{ base_url_theme }}css/ujian.css" rel="stylesheet">
+        {% block css %}{% endblock %}
+    </head>
+    <body>
+
+        {% block content %}{% endblock %}
+
+        <br><br>
+        <!--/.wrapper-->
+        <div class="footer">
+            <div class="container">
+                <center>
+                    <b class="copyright">{{ copyright|raw }} </b> All rights reserved.<br>
+                    {{ version|raw }} | Page loaded in {{ elapsed_time }} seconds.
+                </center>
+            </div>
+        </div>
+
+        {% include 'layout-footer.html' %}
+        {% block js %}{% endblock %}
+    </body>
+</html>

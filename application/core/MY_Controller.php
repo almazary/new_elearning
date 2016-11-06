@@ -1,5 +1,36 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Class Controller yang extend dari ci_controller
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
+
 class MY_Controller extends CI_Controller
 {
     public $siswa_kelas_aktif = array();
@@ -7,6 +38,7 @@ class MY_Controller extends CI_Controller
     public $portal_update_link;
     public $bug_tracker_link;
     public $default_timezone = "Asia/Jakarta";
+    public $current_version;
 
     function __construct()
     {
@@ -14,22 +46,23 @@ class MY_Controller extends CI_Controller
 
         date_default_timezone_set($this->default_timezone);
 
+        $this->update_link        = 'http://www.dokumenary.net/category/new-elearning/feed/';
+        $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
+        $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
+
         # load helper
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download', 'plugins'));
 
         try {
-            $success = install_success();
-            if (!$success) {
-                redirect('setup');
-            }
+            check_db_connection();
         } catch (Exception $e) {
-            redirect('setup');
+            echo "Mohon periksa kembali pengaturan database anda.";die;
         }
 
         $this->load->database();
 
         # load library
-        $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email'));
+        $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email', 'menu'));
 
         # load saja semua model
         $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model', 'msg_model', 'pengumuman_model', 'komentar_model'));
@@ -37,48 +70,59 @@ class MY_Controller extends CI_Controller
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
-        if (is_login()) {
-            # cek session kcfindernya ada atau tidak
-            if (empty($_SESSION['E-LEARNING']['KCFINDER'])) {
-                create_sess_kcfinder(get_sess_data('login', 'id'));
-            }
-        }
-
-        if (is_siswa()) {
-            # jika kelas aktifnya kosong, sebaiknya di die jasa
-            $kelas_aktif = $this->kelas_model->retrieve_siswa(null, array(
-                'siswa_id' => get_sess_data('user', 'id'),
-                'aktif'    => 1
-            ));
-            if (empty($kelas_aktif)) {
-                exit('Kelas aktif anda tidak ditemukan, segera hubungi admin e-learning.');
-            }
-
-            $this->siswa_kelas_aktif = $kelas_aktif;
-
-            # cek sedang ujian tidak
-            $this->cek_mode_ujian();
-        }
-
-        $this->update_link        = 'http://www.dokumenary.net/category/new-elearning/feed/';
-        $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
-        $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
-
+        # jika bukan ajax
         if (!is_ajax()) {
             // $this->output->enable_profiler(TRUE);
+
+            # jika sudah login
+            if (is_login()) {
+                # cek session kcfindernya ada atau tidak
+                if (empty($_SESSION['E-LEARNING']['KCFINDER'])) {
+                    create_sess_kcfinder(get_sess_data('login', 'id'));
+                }
+            }
+
+            # jika login sebagai siswa
+            if (is_siswa()) {
+                # jika kelas aktifnya kosong, sebaiknya di die jasa
+                $kelas_aktif = $this->kelas_model->retrieve_siswa(null, array(
+                    'siswa_id' => get_sess_data('user', 'id'),
+                    'aktif'    => 1
+                ));
+                if (empty($kelas_aktif)) {
+                    exit('Kelas aktif anda tidak ditemukan, segera hubungi admin e-learning.');
+                }
+
+                $this->siswa_kelas_aktif = $kelas_aktif;
+
+                # cek sedang ujian tidak
+                $this->cek_mode_ujian();
+            }
         }
 
         # cek versi
-        $versi_install = '1.7';
+        $versi_install = '1.8';
         $versi = get_pengaturan('versi', 'value');
+
+        $this->current_version = $versi;
+
         if ($versi < $versi_install) {
             $this->config_model->update('versi', 'Versi', $versi_install);
 
             # panggil perubahan tabel
             $this->table_change();
+
+            $this->current_version = $versi_install;
         }
+
+        # autoload function plugin
+        autoload_function_plugin();
     }
 
+    /**
+     * Semua perubahan tabel pada versi yang baru ditaruh di fungsi ini
+     * @return boolean
+     */
     function table_change()
     {
         # ubah type field `value` pada tabel field_tambahan menjadi longtext
@@ -93,6 +137,9 @@ class MY_Controller extends CI_Controller
                 ));
             }
         }
+
+        # penambahan fitur login log
+        $this->login_model->alter_table();
 
         return true;
     }
@@ -356,25 +403,15 @@ class MY_Controller extends CI_Controller
             $retrieve['receiver'] = $this->get_user_data($retrieve['sender_receiver_id']);
         }
 
-        $retrieve['profil'] = $this->get_user_data($get_user);
-        $retrieve['login']  = $this->login_model->retrieve($get_user);
+        $retrieve['profil']   = $this->get_user_data($get_user);
+        $retrieve['login']    = $this->login_model->retrieve($get_user);
+        $retrieve['raw_date'] = $retrieve['date'];
 
-        # format tanggal, jika hari ini
-        if (date('Y-m-d') == date('Y-m-d', strtotime($retrieve['date']))) {
-            $retrieve['date'] = date('H:i', strtotime($retrieve['date']));
-        }
-        # kemarin
-        elseif (date('Y-m-d', strtotime('-1 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
-            $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' kemarin';
-        }
-        # lusa
-        elseif (date('Y-m-d', strtotime('-2 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
-            $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' lusa';
-        }
-        else {
-            $retrieve['date'] = tgl_jam_indo($retrieve['date']);
+        if (belum_sehari($retrieve['date'])) {
+            $retrieve['timeago'] = iso8601($retrieve['date']);
         }
 
+        $retrieve['date'] = format_datetime($retrieve['date']);
         return $retrieve;
     }
 
@@ -490,7 +527,9 @@ class MY_Controller extends CI_Controller
 
         # hapus nilai
         $retrieve_nilai = $this->tugas_model->retrieve_nilai(null, $tugas['id'], $siswa_id);
-        $this->tugas_model->delete_nilai($retrieve_nilai['id']);
+        if (!empty($retrieve_nilai['id'])) {
+            $this->tugas_model->delete_nilai($retrieve_nilai['id']);
+        }
 
         $this->db->trans_complete();
 
@@ -507,5 +546,77 @@ class MY_Controller extends CI_Controller
         }
 
         return $sukses;
+    }
+
+    /**
+     * Method untuk cek versi terbaru
+     *
+     * @param  boolean $skip_check_time
+     * @return boolean
+     * @since  1.8
+     */
+    function check_new_version($skip_check_time = false)
+    {
+        $field_id  = "cek-versi";
+        $cek_versi = retrieve_field($field_id);
+
+        if ($skip_check_time) {
+            $ok_check = true;
+        } else {
+            $ok_check  = false;
+            if (empty($cek_versi)) {
+                $ok_check = true;
+            } else {
+                $cek_val = json_decode($cek_versi['value'], 1);
+                # bikin 15 menit sekali saja checknya
+                $date_plus = strtotime("+30 minute", strtotime($cek_val['last_check']));
+                if ($date_plus < strtotime(date('Y-m-d H:i:s'))) {
+                    $ok_check = true;
+                }
+            }
+        }
+        // $ok_check = true;
+
+        $ada_update = false;
+        if ($ok_check) {
+            $http_query = array(
+                'referer'          => base_url(),
+                'current_version'  => $this->current_version,
+                'plugin_installed' => implode(",", plugin_list()),
+            );
+
+            $purchase_plugins_key = $this->config->item('purchase_plugins_key');
+            if (!empty($purchase_plugins_key) AND is_array($purchase_plugins_key)) {
+                $http_query = array_merge($http_query, $purchase_plugins_key);
+            }
+
+            # cari informasi update
+            $url_new_version = 'http://elearningupdates.dokumenary.net/index.php?' . http_build_query($http_query);
+            $get_new_version = get_url_data($url_new_version);
+            $get_new_version = json_decode($get_new_version, 1);
+
+            # jika versi ditemukan
+            if (isset($get_new_version['version']) AND $get_new_version['version'] > $this->current_version) {
+                $arr_update = array(
+                    'result'        => $get_new_version['version'],
+                    'last_check'    => date('Y-m-d H:i:s'),
+                );
+                $arr_update   = array_merge($arr_update, $get_new_version);
+                $update_value = json_encode($arr_update);
+
+                if (empty($cek_versi)) {
+                    create_field($field_id, "Cek Versi", $update_value);
+                } else {
+                    update_field($field_id, "Cek Versi", $update_value);
+                }
+
+                $ada_update = true;
+            }
+            else {
+                delete_field($field_id);
+            }
+        }
+
+        return $ada_update;
     }
 }

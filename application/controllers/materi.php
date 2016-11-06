@@ -1,4 +1,34 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Class untuk resource Materi
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
 
 class Materi extends MY_Controller
 {
@@ -533,7 +563,12 @@ class Materi extends MY_Controller
             case 'download':
                 # jika request download
                 if ($segment_4 == 'download' AND !empty($materi['file'])) {
-                    $data_file = file_get_contents(get_path_file($materi['file'])); // Read the file's contents
+                    $target_file = get_path_file($materi['file']);
+                    if (!is_file($target_file)) {
+                        show_error("Maaf file tidak ditemukan.");
+                    }
+
+                    $data_file = file_get_contents($target_file); // Read the file's contents
                     $name_file = $materi['file'];
 
                     $this->materi_model->plus_views($materi['id']);
@@ -663,38 +698,6 @@ class Materi extends MY_Controller
 
                 $data['terkait'] = $data_terkait;
 
-                # setup componen SyntaxHighlighter
-                $html_js = load_comp_js(array(
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shCore.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAppleScript.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAS3.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushBash.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushColdFusion.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCpp.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCSharp.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCss.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDelphi.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDiff.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushErlang.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushGroovy.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJava.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJavaFX.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJScript.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPerl.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPhp.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPlain.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPowerShell.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPython.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushRuby.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSass.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushScala.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSql.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushVb.js'),
-                    base_url('assets/comp/SyntaxHighlighter/scripts/shBrushXml.js'),
-                    base_url('assets/comp/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML'),
-                ));
-                $html_js .= '<script type="text/javascript">SyntaxHighlighter.all();</script>';
-
                 # setup tinymce komentar
                 $tiny_option = 'theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,link,unlink,|,sub,sup,charmap,tiny_mce_wiris_formulaEditor,|,emotions,image,media,youtubeIframe,syntaxhl,code",
                 theme_advanced_buttons2 : "",
@@ -708,18 +711,21 @@ class Materi extends MY_Controller
                 content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
                 convert_urls: false,
                 force_br_newlines : false,
-                force_p_newlines : false,';
-                $html_js .= get_tinymce('komentar', 'advanced', array('pdw'), $tiny_option);
+                force_p_newlines : false,
+                inline_styles: false,
+                formats: {
+                   underline: { inline: "u", exact : true },
+                   strikethrough: { inline: "del", exact : true }
+                }';
+                $html_js = get_tinymce('komentar', 'advanced', array('pdw'), $tiny_option);
 
                 # setup colorbox
                 $html_js .= load_comp_js(array(
                     base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                    base_url('assets/comp/colorbox/act-materi.js')
                 ));
 
                 $data['comp_js']  = $html_js;
                 $data['comp_css'] = load_comp_css(array(
-                    base_url('assets/comp/SyntaxHighlighter/styles/shCoreEclipse.css'),
                     base_url('assets/comp/colorbox/colorbox.css')
                 ));
 
@@ -730,7 +736,7 @@ class Materi extends MY_Controller
 
     function komentar($segment_3 = '', $segment_4 = '')
     {
-        # panggil datatables dan combobox
+        # panggil datatables
         $data['comp_js'] = load_comp_js(array(
             base_url('assets/comp/datatables/jquery.dataTables.js'),
             base_url('assets/comp/datatables/datatable-bootstrap2.js'),
@@ -782,7 +788,15 @@ class Materi extends MY_Controller
                     }
                 }
 
+                # update view_admin
+                $cp_field_value = $field_value;
+                foreach ($cp_field_value as $id => $val) {
+                    $cp_field_value[$id]['view_admin'] = 1;
+                }
+                update_field($field_id, 'Laporan Komentar', json_encode($cp_field_value));
+
                 # format data
+                $data['jml_laporan_baru'] = 0;
                 $results = array();
                 foreach ($field_value as $id => $val) {
                     $val['id'] = $id;
@@ -811,7 +825,13 @@ class Materi extends MY_Controller
                     $val['komentar']['login'] = $this->get_user_data($komentar['login_id']);
 
                     $results[] = $val;
+
+                    if (empty($val['view_admin'])) {
+                        $data['jml_laporan_baru'] = $data['jml_laporan_baru'] + 1;
+                    }
                 }
+                $results = array_reverse($results);
+
                 $data['laporan'] = $results;
 
                 $this->twig->display('list-komentar-laporan.html', $data);
@@ -855,16 +875,7 @@ class Materi extends MY_Controller
                 $data['komentar'] = $retrieve_all;
 
                 if (is_admin()) {
-                    # hitung jumlah laporan
-                    $field_id       = 'laporkan-komentar';
-                    $retrieve_field = retrieve_field($field_id);
-                    if (isset($retrieve_field['value'])) {
-                        $field_value = json_decode($retrieve_field['value'], 1);
-                    } else {
-                        $field_value = array();
-                    }
-
-                    $data['jml_laporan'] = count($field_value);
+                    $data['jml_laporan_baru'] = $this->materi_model->count('unread-laporan');
                 }
 
                 $this->twig->display('list-komentar.html', $data);

@@ -1,10 +1,43 @@
-{% extends "layout-iframe.html" %}
+{% if mode == 'print' %}
+    {% set set_layout = 'layout-print.html' %}
+{% else %}
+    {% set set_layout = 'layout-iframe.html' %}
+{% endif %}
+{% extends set_layout %}
 
 {% block content %}
+{% if mode is empty %}
+    <a class="btn btn-primary pull-right btn-xs" target="_blank" href="{{ site_url('tugas/detail_jawaban/' ~ siswa.id ~ '/' ~ tugas.id ~ '?mode=print') }}">Print</a>
+{% endif %}
+
 {% if sudah_dikoreksi == false %}
     <h4>Koreksi Jawaban</h4>
 {% else %}
     <h4>Detail Jawaban</h4>
+{% endif %}
+
+{% if mode == 'print' %}
+<table class="table table-condensed table-striped">
+    <tbody>
+        <tr>
+            <td><b>Nis</b></td>
+            <td>: {{ siswa.nis }}</td>
+        </tr>
+        <tr>
+            <td><b>Nama</b></td>
+            <td>: {{ siswa.nama }}</td>
+        </tr>
+        <tr>
+            <td><b>Kelas</b></td>
+            <td>: {{ siswa.kelas_aktif.nama }}</td>
+        </tr>
+        <tr>
+            <td><b>Tugas</b></td>
+            <td>: {{ tugas.judul }}</td>
+        </tr>
+    </tbody>
+</table>
+<br>
 {% endif %}
 
 <table class="table table-condensed table-striped">
@@ -69,7 +102,11 @@
                 {{ get_jawaban(history.jawaban, p.id)|raw_media|raw }}
 
                 <p><b>Nilai :</b></p>
-                <input type="text" name="nilai[{{ p.id }}]" style="width:50px;" value="{{ get_jawaban(history.nilai, p.id) }}">
+                {% if mode == 'print' %}
+                    <b>{{ get_jawaban(history.nilai, p.id) }}</b>
+                {% else %}
+                    <input type="text" name="nilai[{{ p.id }}]" style="width:50px;" value="{{ get_jawaban(history.nilai, p.id) }}">
+                {% endif %}
             </td>
         </tr>
 

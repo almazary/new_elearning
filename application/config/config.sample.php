@@ -41,6 +41,11 @@ $config['encryption_key'] = '';
 $config['is_demo_app'] = false;
 
 /**
+ * @since 1.8  setiap pembelian plugin mendapatkan key untuk keperluan update plugin
+ */
+$config['purchase_plugins_key'] = array();
+
+/**
  * @since 1.6
  *
  * Menonaktifkan semua plugin

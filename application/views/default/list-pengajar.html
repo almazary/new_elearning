@@ -14,14 +14,14 @@ Data Pengajar - {{ parent() }}
 
         {% if is_admin() == true %}
         <div class="row-fluid">
-            <div class="span8">
+            <div class="span7">
                 <a href="{{ site_url('pengajar/add/' ~ status_id) }}" class="btn btn-primary">Tambah Pengajar</a>
             </div>
 
-            <div class="span4">
-                <div class="btn-group">
+            <div class="span5">
+                <div class="btn-group pull-right">
                     {{ anchor('pengajar/index/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn btn-default'})|raw }}
-                    {{ anchor('pengajar/index/0', 'Pending', {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('pengajar/index/0', 'Pending '  ~ ((count_pending > 0) ? '<span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
                     {{ anchor('pengajar/index/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn btn-default'})|raw }}
                     {{ anchor('pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-default'})|raw }}
                 </div>
@@ -113,7 +113,7 @@ Data Pengajar - {{ parent() }}
                 <tr>
                     <th width="7%">
                         {% if status_id == 0 or status_id == 2 %}
-                            <input type="checkbox" style="margin-top:-2px;" onclick="ch_uch_checkbox(this)">
+                            <input type="checkbox" style="margin-top:-2px;" onclick="filter_pengajar_ch_uch_checkbox(this)">
                         {% endif %}
                         ID
                     </th>
@@ -146,10 +146,10 @@ Data Pengajar - {{ parent() }}
                             <li class="dropdown">
                                 <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
-                                    <li>{{ anchor('pengajar/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
-                                    <li>{{ anchor('pengajar/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>
-                                    <li>{{ anchor('pengajar/edit_username/' ~ status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'iframe-2', 'title' : 'Edit Username Pengajar'})|raw }}</li>
-                                    <li>{{ anchor('pengajar/edit_password/' ~ status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'pengajar-iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'pengajar-iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_username/' ~ status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'pengajar-iframe-2', 'title' : 'Edit Username Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_password/' ~ status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'pengajar-iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
                                 </ul>
                             </li>
                             {% elseif is_pengajar() == true %}
@@ -194,15 +194,4 @@ Data Pengajar - {{ parent() }}
 
     </div>
 </div>
-{% endblock %}
-
-{% block js %}
-<script type="text/javascript">
-function ch_uch_checkbox(source){
-    checkboxes = document.getElementsByName('pengajar_id[]');
-    for(var i=0, n=checkboxes.length;i<n;i++) {
-      checkboxes[i].checked = source.checked;
-    }
-}
-</script>
 {% endblock %}

@@ -1,6 +1,35 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
+ * Method untuk mengambil fungsi autoload plugin
+ */
+function autoload_function_plugin()
+{
+    # ambil semua folder didalam src
+    $base_load = './plugins/src';
+    if (!is_dir($base_load)) {
+        return true;
+    }
+
+    $objects = scandir($base_load);
+    foreach ($objects as $object) {
+        if ($object != "." && $object != "..") {
+            $autoload_file = $base_load . '/' . $object . '/autoload.php';
+            if (is_file($autoload_file)) {
+                include_once $autoload_file;
+
+                $autoload_function = "autoload_{$object}";
+                if (function_exists($autoload_function)) {
+                    $autoload_function();
+                }
+            }
+        }
+    }
+
+    return true;
+}
+
+/**
  * Method untuk mendapatkan base url plugins
  *
  * @param  string $add_link
@@ -19,7 +48,7 @@ function base_url_plugins($add_link = '') {
  */
 function data_excel($path_file, $baris_mulai_data = 2)
 {
-    include 'excel_reader2.php';
+    include_once 'excel_reader2.php';
 
     $file_excel = new Spreadsheet_Excel_Reader($path_file);
 
@@ -60,8 +89,8 @@ function plugin_helper($plugin_name, $func, $params = array())
         throw new Exception("Plugin helper tidak ditemukan.");
     }
 
-    # include
-    include $plugin_dir . 'src/' . $plugin_name . '/helper.php';
+    # include_once
+    include_once $plugin_dir . 'src/' . $plugin_name . '/helper.php';
 
     return call_user_func_array($func, $params);
 }
@@ -82,4 +111,26 @@ function plugin_installed($plugin_name)
     }
 
     return false;
+}
+
+/**
+ * Method untuk mendapatkan daftar plugin yang ada
+ * @return array
+ * @since  1.8
+ */
+function plugin_list()
+{
+    $plugin_dir = './plugins/src';
+
+    $objects = scandir($plugin_dir);
+    $results = array();
+    foreach ($objects as $object) {
+        if ($object != "." && $object != "..") {
+            if (is_dir($plugin_dir . "/" . $object)) {
+                $results[] = $object;
+            }
+        }
+    }
+
+    return $results;
 }

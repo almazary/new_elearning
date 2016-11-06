@@ -1,39 +1,7 @@
-{% extends "layout-detail-materi.html" %}
+{% extends "layout-ujian.html" %}
 
 {% block title %}
 {{ data.tugas.judul }} - {{ parent() }}
-{% endblock %}
-
-{% block css %}
-<style type="text/css">
-    img.nav-avatar {
-        width: 30px;
-        height: 30px;
-    }
-    ul.user-info {
-        margin-top: 10px;
-        margin-bottom: 0px;
-    }
-    input.radio{
-        margin-top: -3px;
-    }
-    .label-radio {
-        font-weight: bold;
-    }
-    .well {
-        border:2px dashed red;
-    }
-    .p-info {
-        font-size: 18px;
-    }
-    hr.hr1 {
-        margin-top: 5px;
-    }
-    .clock.affix {
-        margin-top: -50px;
-        margin-left: 60px;
-    }
-</style>
 {% endblock %}
 
 {% block content %}
@@ -61,7 +29,15 @@
                     </div>
                     <div class="span4">
                         <div class="pull-right clock" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
-                            <div class="iosl-theme-wrapper countdown">
+                            <div class="box-show-hide-countdown">
+                                {% set hide_countdown = sess_hide_countdown('get', data.tugas.id) %}
+                                {% if hide_countdown == 1 %}
+                                    <a href="javascript:void(0)" onclick="show_countdown()" class="text-muted"><i class="icon icon-eye-open"></i> TAMPILKAN TIMER</a>
+                                {% else %}
+                                    <a href="javascript:void(0)" onclick="hide_countdown()" class="text-muted"><i class="icon icon-eye-close"></i> SEMBUNYIKAN TIMER</a>
+                                {% endif %}
+                            </div>
+                            <div class="iosl-theme-wrapper countdown" {{ (hide_countdown == 1) ? 'style="display:none;"' }}>
                                 <div class="iosl-theme">
                                     <ul>
                                         <li><p><span><em><b class="hours">00</b><i class="hoursSlider"><u>00</u><u>00</u></i></em></span></p></li>
@@ -81,15 +57,6 @@
                     </div>
                     {% else %}
                     <div class="span6">
-                        <b>Informasi : </b><br>
-                        {{ data.tugas.info|raw_media|raw }}
-                        <br>
-                        <small>
-                        <b>Ekstensi file :</b><br>
-                        doc, zip, rar, txt, docx, xls, xlsx, pdf, tar, gz, jpg, jpeg, JPG, JPEG, png, ppt, pptx
-                        </small>
-                    </div>
-                    <div class="span6">
                         <p><b>Upload file tugas anda : </b></p>
                         <div class="well well-sm">
                             {{ form_open_multipart('tugas/submit_upload/' ~ data.tugas.id ~ '/' ~ data.unix_id)|raw }}
@@ -105,6 +72,10 @@
                             </div>
                             {{ form_close()|raw }}
                         </div>
+                    </div>
+                    <div class="span6">
+                        <b>Informasi Tugas : </b><br>
+                        {{ data.tugas.info|raw_media|raw }}
                     </div>
                     {% endif %}
                 </div>
@@ -149,16 +120,30 @@
                     </table>
 
                     <div class="well well-sm">
-                        <a class="btn btn-large btn-primary pull-right" href="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}" onclick="return confirm('Anda yakin ingin mengahiri pengerjaan tugas ini?')">Selesai</a>
-                        <p class="p-info">Mohon periksa kembali jawaban anda sebelum menekan tombol <b>selesai</b>.</p>
-                        <br>
+                        <p class="p-info">Periksa kembali jawaban anda sebelum mengahiri pengerjaan tugas ini.</p>
+                        <button type="button" class="btn btn-large btn-primary" data-toggle="modal" data-target="#selesai-mengerjakan">
+                            Selesai Mengerjakan
+                        </button>
                     </div>
 
+                    <div class="modal fade" id="selesai-mengerjakan" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    Anda yakin ingin mengahiri pengerjaan tugas ini?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Nanti dulu</button>
+                                    <a class="btn btn-primary" href="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}" id="btn-submit">Ya, saya sudah selesai</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
 
 
                 {% if data.tugas.type_id == 2 %}
-                    {{ form_open('tugas/submit_essay/' ~ data.tugas.id ~ '/' ~ data.unix_id)|raw }}
+                    {{ form_open('tugas/submit_essay/' ~ data.tugas.id ~ '/' ~ data.unix_id, {'id' : 'form-essay'})|raw }}
                     <input type="hidden" id="str_id" value="{{ data.str_id }}">
                     <table class="table">
                         <thead>
@@ -186,12 +171,26 @@
                     </table>
 
                     <div class="well well-sm">
-                        <button type="submit" class="btn btn-large btn-primary pull-right" onclick="return confirm('Anda yakin ingin mengahiri pengerjaan tugas ini?')">Selesai</button>
-                        <p class="p-info">Mohon periksa kembali jawaban anda sebelum menekan tombol <b>selesai</b>.</p>
-                        <br>
+                        <p class="p-info">Periksa kembali jawaban anda sebelum mengahiri pengerjaan tugas ini.</p>
+                        <button type="button" class="btn btn-large btn-primary" data-toggle="modal" data-target="#selesai-mengerjakan">
+                            Selesai Mengerjakan
+                        </button>
                     </div>
                     {{ form_close()|raw }}
 
+                    <div class="modal fade" id="selesai-mengerjakan" tabindex="-1" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    Anda yakin ingin mengahiri pengerjaan tugas ini?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Nanti dulu</button>
+                                    <button type="button" class="btn btn-primary" id="btn-submit">Ya, saya sudah selesai</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {% endif %}
 
             </div>
@@ -199,7 +198,9 @@
     </div>
 </div>
 {% if data.tugas.type_id != 1 %}
+<input type="hidden" id="process-submit" value="0">
 <input type="hidden" id="tugas_id" value="{{ data.tugas.id }}">
+<input type="hidden" id="type_id" value="{{ data.tugas.type_id }}">
 <input type="hidden" id="sisa_menit" value="{{ data.sisa_menit }}">
 <input type="hidden" id="finish_url" value="{{ site_url('tugas/finish/' ~ data.tugas.id ~ '/' ~ data.unix_id) }}">
 <input type="hidden" id="siswa_id" value="{{ get_sess_data('user', 'id') }}">

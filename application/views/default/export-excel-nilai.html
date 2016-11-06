@@ -8,6 +8,9 @@
             <th>Nis</th>
             <th>Nama</th>
             <th>Kelas</th>
+            {% if tampil_jawaban == 1 %}
+            <th>Jawaban (no_soal. kunci:jawaban, ...)</th>
+            {% endif %}
             <th>Benar</th>
             <th>Salah</th>
             <th>Kosong</th>
@@ -21,6 +24,9 @@
             <td>{{ n.siswa.nis }}</td>
             <td>{{ n.siswa.nama }}</td>
             <td>{{ n.siswa.kelas_aktif.nama }}</td>
+            {% if tampil_jawaban == 1 %}
+            <td>{{ n.tampil_jawaban }}</td>
+            {% endif %}
             <td>{{ n.history.value.jml_benar }}</td>
             <td>{{ n.history.value.jml_salah }}</td>
             <td>{{ (count(n.history.value.pertanyaan_id) != (n.history.value.jml_benar + n.history.value.jml_salah)) ? count(n.history.value.pertanyaan_id) - (n.history.value.jml_benar + n.history.value.jml_salah) : 0 }}</td>

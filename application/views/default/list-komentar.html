@@ -28,7 +28,7 @@ Komentar Materi - {{ parent() }}
         {% if is_admin() %}
         <div class="btn-group">
             <a href="{{ site_url('materi/komentar') }}" class="btn btn-sm btn-primary">Semua</a>
-            <a href="{{ site_url('materi/komentar/laporan') }}" class="btn btn-sm btn-default">Laporan ({{ jml_laporan }})</a>
+            <a href="{{ site_url('materi/komentar/laporan') }}" class="btn btn-sm btn-default">Laporan {{ (jml_laporan_baru > 0) ? '(' ~ jml_laporan_baru ~ ')' }}</a>
         </div>
         <br><br>
         {% endif %}
@@ -68,20 +68,4 @@ Komentar Materi - {{ parent() }}
 
     </div>
 </div>
-{% endblock %}
-
-{% block js %}
-<script type="text/javascript">
-    $('.datatable').dataTable({
-        "language": {
-            "url": base_url + "assets/comp/datatables/lang.id.json"
-        },
-        "aaSorting" : [],
-        "fnDrawCallback" : function( oSettings ) {
-            if (typeof MathJax !== 'undefined') {
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-            }
-        }
-    });
-</script>
 {% endblock %}

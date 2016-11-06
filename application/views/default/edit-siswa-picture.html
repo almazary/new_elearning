@@ -18,6 +18,9 @@
         <tr>
         <tr>
             <td colspan="2">
+                {% if siswa.foto != '' %}
+                <a href="{{ site_url('siswa/delete_foto/' ~ siswa_id ~ '/' ~ enurl_redirect(current_url())) }}" onclick="return confirm('Anda yakin ingin menghapus foto?')" class="pull-right btn btn-default"><i class="icon-trash"></i> Hapus foto</a>
+                {% endif %}
                 <button type="submit" class="btn btn-primary">Update</button>
             </td>
         </tr>

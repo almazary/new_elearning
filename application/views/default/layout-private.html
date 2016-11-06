@@ -1,21 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}{{ site_name }}{% endblock %}</title>
-        <link type="text/css" href="{{ base_url_theme }}bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link type="text/css" href="{{ base_url_theme }}bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
-        <link type="text/css" href="{{ base_url_theme }}css/theme.css" rel="stylesheet">
-        <link type="text/css" href="{{ base_url_theme }}images/icons/css/font-awesome.css" rel="stylesheet">
-        <link type="text/css" href="{{ base_url('assets/comp/pace/flash.css') }}" rel="stylesheet">
-        <link type="text/css" href="{{ base_url('assets/comp/offline/offline-theme-chrome.css') }}" rel="stylesheet">
-        <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        {% include 'layout-header.html' %}
         {% block css %}{% endblock %}
-        {{ comp_css|raw }}
-        <link rel="shortcut icon" type="image/x-icon" href="{{ favicon_url }}">
     </head>
-    <body style="display: none;">
+
+    <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container">
@@ -23,7 +13,7 @@
                         <i class="icon-reorder shaded"></i>
                     </a>
                     <a class="brand" href="{{ site_url }}">
-                        <img src="{{ logo_url_medium }}"> <span class="visible-phone brand-txt">E-Learning App</span><span class="visible-desktop visible-tablet brand-txt">{{ site_name }}</span>
+                        <img src="{{ logo_url_medium }}"> <span class="visible-phone brand-txt">e-Learning</span><span class="visible-desktop visible-tablet brand-txt">{{ site_name }}</span>
                     </a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <form class="navbar-search pull-left input-append" method="get" action="{{ site_url('welcome/search') }}">
@@ -37,7 +27,6 @@
 
                             {% if is_admin() %}
                             <li><a href="{{ site_url('welcome/get_plugin') }}">PLUGINS</a></li>
-                            <li><a href="{{ site_url('welcome/donation') }}">DONASI</a></li>
                             {% endif %}
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 {{ nama_panggilan(get_sess_data('user', 'nama')) }}
@@ -59,6 +48,7 @@
                                     <li>{{ anchor('login/pp', 'Profil & Akun Login')|raw }}</li>
                                     {% endif %}
 
+                                    <li><a href="{{ site_url('login/login_log/' ~ get_sess_data('login', 'id')) }}">Login log</a></li>
                                     <li><a href="{{ site_url('login/logout') }}">Logout</a></li>
                                 </ul>
                             </li>
@@ -104,22 +94,9 @@
                 </center>
             </div>
         </div>
-        <script type="text/javascript">
-        var site_url = "{{ site_url() }}";
-        var base_url = "{{ base_url() }}";
-        </script>
-        <script data-pace-options='{ "ajax": false }' src="{{ base_url('assets/comp/pace/pace.min.js') }}" type="text/javascript"></script>
-        <script src="{{ base_url('assets/comp/offline/offline.min.js') }}" type="text/javascript"></script>
-        <script src="{{ base_url_theme }}scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
-        <script src="{{ base_url_theme }}scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
-        <script src="{{ base_url_theme }}bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        {{ comp_js|raw }}
-        <script src="{{ base_url_theme }}scripts/script.js" type="text/javascript"></script>
+
+        {% include 'layout-footer.html' %}
         {% block js %}{% endblock %}
-        <script type="text/javascript">
-            $( document ).ready(function() {
-                $("body").show();
-            });
-        </script>
+
     </body>
 </html>

@@ -29,7 +29,7 @@ Matapelajaran Kelas - {{ parent() }}
                                     <tr>
                                         <td class="pull-right">Parent Kelas</td>
                                         <td>
-                                            <select name="parent_kelas" id="parent-kelas">
+                                            <select name="parent_kelas" id="kelas-mapel-kelas-parent-kelas">
                                                 <option>--pilih--</option>
                                                 {% for pk in parent_kelas %}
                                                 <option value="{{ pk.id }}" {{ (filter.parent_id == pk.id) ? 'selected' }}>{{ pk.nama }}</option>
@@ -40,7 +40,7 @@ Matapelajaran Kelas - {{ parent() }}
                                     <tr>
                                         <td class="pull-right">Sub Kelas</td>
                                         <td>
-                                            <select name="sub_kelas" id="sub-kelas">
+                                            <select name="sub_kelas" id="kelas-mapel-kelas-sub-kelas">
                                                 <option>--pilih--</option>
                                                 {% if sub_kelas is not empty %}
                                                     {% for sk in sub_kelas %}

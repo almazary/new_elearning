@@ -1,4 +1,34 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Class untuk resource tugas
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
 
 class Tugas extends MY_Controller
 {
@@ -145,7 +175,6 @@ class Tugas extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-tugas.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -481,7 +510,6 @@ class Tugas extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-manajamen-soal.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -599,7 +627,6 @@ class Tugas extends MY_Controller
         $data['comp_js'] = load_comp_js(array(
             base_url('assets/comp/datatables/jquery.dataTables.js'),
             base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-            base_url('assets/comp/datatables/script.js'),
         ));
 
         $data['comp_css'] = load_comp_css(array(
@@ -1085,9 +1112,6 @@ class Tugas extends MY_Controller
 
         if ($tugas['type_id'] == 2) {
             $html_js .= get_tinymce('jawaban, textarea#jawaban-' . implode(', textarea#jawaban-', $check_field_value['pertanyaan_id']), 'advanced', array('autosave'));
-            $html_js .= load_comp_js(array(
-                base_url('assets/comp/jquery/tinymce.autosave.js'),
-            ));
             $data['data']['str_id'] = implode(',', $check_field_value['pertanyaan_id']);
         }
 
@@ -1231,7 +1255,8 @@ class Tugas extends MY_Controller
             }
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
-            redirect('tugas');
+
+            $this->twig->display('redirect.html', array('redirect_to' => site_url('tugas')));
         }
         # ini belum mengerjakan
         else {
@@ -1313,7 +1338,8 @@ class Tugas extends MY_Controller
             }
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
-            redirect('tugas');
+
+            $this->twig->display('redirect.html', array('redirect_to' => site_url('tugas')));
         }
         # ini belum mengerjakan
         else {
@@ -1393,7 +1419,8 @@ class Tugas extends MY_Controller
             }
 
             $this->session->set_flashdata('tugas', get_alert('success', 'Anda telah berhasil mengerjakan tugas ini.'));
-            redirect('tugas');
+
+            $this->twig->display('redirect.html', array('redirect_to' => site_url('tugas')));
         }
         # ini belum mengerjakan
         else {
@@ -1455,6 +1482,45 @@ class Tugas extends MY_Controller
 
                 $nilai['siswa'] = $siswa;
 
+                # kalo ada filter tampil jawaban
+                if (!empty($_POST['tampil_jawaban'])) {
+                    # cari kunci
+                    $list_kunci = array();
+                    foreach ($nilai['history']['value']['pertanyaan_id'] as $h_pertanyaan_id) {
+                        $row_kunci   = array();
+                        $semua_kunci = $this->tugas_model->retrieve_all_pilihan($h_pertanyaan_id);
+                        foreach ($semua_kunci as $h_pilihan) {
+                            if ($h_pilihan['kunci'] == 1) {
+                                $row_kunci = $h_pilihan;
+                            }
+                        }
+
+                        $list_kunci[$h_pertanyaan_id] = $row_kunci;
+                    }
+
+                    $array_format_jawaban = array();
+
+                    $no_tampil = 1;
+                    foreach ($list_kunci as $h_pertanyaan_id => $h_pilihan) {
+                        $label_key = "";
+                        if (!empty($h_pilihan['urutan'])) {
+                            $label_key = get_abjad($h_pilihan['urutan']);
+                        }
+
+                        $label_jawaban = "";
+                        if (isset($nilai['history']['value']['jawaban'][$h_pertanyaan_id])) {
+                            $pilihan_jawaban = $this->tugas_model->retrieve_pilihan($nilai['history']['value']['jawaban'][$h_pertanyaan_id], $h_pertanyaan_id);
+                            $label_jawaban   = get_abjad($pilihan_jawaban['urutan']);
+                        }
+
+                        $array_format_jawaban[] = "{$no_tampil}. {$label_key}:{$label_jawaban}";
+                        $no_tampil++;
+                    }
+
+                    $nilai['tampil_jawaban'] = implode(", ", $array_format_jawaban);
+                }
+
+                # kalo ada filter kelas
                 if (!empty($_POST['kelas_id'])) {
                     if ($_POST['kelas_id'] == 'all' OR $kelas['id'] == $_POST['kelas_id']) {
                         $data_nilai[] = $nilai;
@@ -1462,6 +1528,10 @@ class Tugas extends MY_Controller
                 } else {
                     $data_nilai[] = $nilai;
                 }
+            }
+
+            if (!empty($_POST['tampil_jawaban'])) {
+                $data['tampil_jawaban'] = 1;
             }
 
             $data['data_nilai']  = $data_nilai;
@@ -1623,6 +1693,14 @@ class Tugas extends MY_Controller
             exit('Akses ditolak');
         }
 
+        # kelas siswa
+        $kelas_siswa = $this->kelas_model->retrieve_siswa(null, array(
+            'siswa_id' => $siswa_id,
+            'aktif'    => 1
+        ));
+        $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
+        $siswa['kelas_aktif'] = $kelas;
+
         $tugas_id = (int)$tugas_id;
         $tugas    = $this->tugas_model->retrieve($tugas_id);
         if (empty($tugas)) {
@@ -1659,6 +1737,10 @@ class Tugas extends MY_Controller
         }
 
         $data['history'] = $history_value;
+
+        if (!empty($_GET['mode'])) {
+            $data['mode'] = $_GET['mode'];
+        }
 
         if ($tugas['type_id'] == 3) {
             $this->twig->display('detail-jawaban-ganda.html', $data);

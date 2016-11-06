@@ -1,0 +1,32 @@
+img.nav-avatar {
+    width: 30px;
+    height: 30px;
+}
+ul.user-info {
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+input.radio{
+    margin-top: -3px;
+}
+.label-radio {
+    font-weight: bold;
+}
+.well {
+    border:2px dashed #333;
+}
+.p-info {
+    font-size: 18px;
+}
+hr.hr1 {
+    margin-top: 5px;
+}
+.clock.affix {
+    margin-top: -50px;
+    margin-left: 60px;
+}
+.box-show-hide-countdown {
+    margin-top:0px;
+    font-size:10px;
+    margin-bottom:4px;
+}

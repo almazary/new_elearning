@@ -1,0 +1,11 @@
+<script type="text/javascript">
+var site_url = "{{ site_url() }}";
+var base_url = "{{ base_url() }}";
+</script>
+<script src="{{ base_url('assets/comp/jquery/jquery.js') }}" type="text/javascript"></script>
+<script src="{{ base_url('assets/comp/jquery/jquery-ui-1.10.1.custom.min.js') }}" type="text/javascript"></script>
+<script data-pace-options='{ "ajax": false }' src="{{ base_url('assets/comp/pace/pace.min.js') }}" type="text/javascript"></script>
+<script src="{{ base_url('assets/comp/offline/offline.min.js') }}" type="text/javascript"></script>
+<script src="{{ base_url('assets/comp/bootstrap/js/bootstrap.min.js') }}" type="text/javascript"></script>
+{{ comp_js|raw }}
+<script src="{{ base_url_theme }}scripts/script.js" type="text/javascript"></script>

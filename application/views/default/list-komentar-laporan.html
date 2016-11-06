@@ -27,7 +27,7 @@ Laporan Komentar Materi - {{ parent() }}
 
         <div class="btn-group">
             <a href="{{ site_url('materi/komentar') }}" class="btn btn-sm btn-default">Semua</a>
-            <a href="{{ site_url('materi/komentar/laporan') }}" class="btn btn-sm btn-primary">Laporan ({{ count(laporan) }})</a>
+            <a href="{{ site_url('materi/komentar/laporan') }}" class="btn btn-sm btn-primary">Laporan {{ (jml_laporan_baru > 0) ? '(' ~ jml_laporan_baru ~ ')' }}</a>
         </div>
         <br><br>
 
@@ -35,12 +35,12 @@ Laporan Komentar Materi - {{ parent() }}
             <thead>
                 <tr>
                     <th>Komentar</th>
-                    <th width="30%">Laporan</th>
+                    <th width="40%">Laporan</th>
                 </tr>
             </thead>
             <tbody>
                 {% for l in laporan %}
-                <tr>
+                <tr {{ (l.view_admin == 0) ? 'class="info"' }}>
                     <td>
                         <div class="media">
                             <div class="pull-left">
@@ -60,8 +60,8 @@ Laporan Komentar Materi - {{ parent() }}
                         <b>Tgl. Lapor : </b> {{ l.tgl_lapor|date('d F Y') }}
                         <p>
                         <div class="btn-group">
-                            <a class="btn btn-success" href="{{ site_url('materi/komentar/laporan/?act=1&id=' ~ l.id) }}" onclick="return confirm('Anda yakin akan menghapus komentar & laporan?')">Hapus Komentar</a>
-                            <a class="btn btn-success" href="{{ site_url('materi/komentar/laporan/?act=2&id=' ~ l.id) }}" onclick="return confirm('Anda yakin hanya menghapus laporan?')">Hapus Laporan</a>
+                            <a class="btn btn-primary btn-xs" href="{{ site_url('materi/komentar/laporan/?act=1&id=' ~ l.id) }}" onclick="return confirm('Anda yakin akan menghapus komentar & laporan?')">Hapus Komentar</a>
+                            <a class="btn btn-primary btn-xs" href="{{ site_url('materi/komentar/laporan/?act=2&id=' ~ l.id) }}" onclick="return confirm('Anda yakin hanya menghapus laporan?')">Hapus Laporan</a>
                         </div>
                         </p>
                     </td>
@@ -72,20 +72,4 @@ Laporan Komentar Materi - {{ parent() }}
 
     </div>
 </div>
-{% endblock %}
-
-{% block js %}
-<script type="text/javascript">
-    $('.datatable').dataTable({
-        "language": {
-            "url": base_url + "assets/comp/datatables/lang.id.json"
-        },
-        "aaSorting" : [],
-        "fnDrawCallback" : function( oSettings ) {
-            if (typeof MathJax !== 'undefined') {
-                MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-            }
-        }
-    });
-</script>
 {% endblock %}

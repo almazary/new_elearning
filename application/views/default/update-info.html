@@ -1,0 +1,66 @@
+{% extends "layout-private.html" %}
+
+{% block title %}
+Update Aplikasi - {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="module">
+    <div class="module-head">
+        <h3>Update Aplikasi</h3>
+    </div>
+    <div class="module-body">
+        {{ get_flashdata('update')|raw }}
+
+        {% if purchase_plugins_key is empty and plugin_list is not empty %}
+        <div class="alert alert-warning">
+            <b>PENTING!! </b>SEBELUM MELAKUKAN UPDATE APLIKASI
+            <hr class="hr-normal">
+            <p>Untuk keperluan update plugin otomatis, kami membutuhkan konfirmasi pembelian plugin anda dengan cara mengirimkan email berikut ke <b>almazary@gmail.com</b></p>
+            <p>
+                <b>Subjek : </b>KONFIRMASI PEMBELIAN PLUGIN APLIKASI E-LEARNING
+                <br>
+                <b>Isi email : </b>Saya telah membeli plugin : <b>{{ implode(', ', plugin_list) }}</b>
+            </p>
+            <p>
+                Langkah ini kami perlukan untuk validasi bahwa anda benar - benar telah membeli plugin.<br>
+                Setelah melakukan konfirmasi dan melakukan tindakan yang kami intruksikan, notif ini akan hilang.
+            </p>
+            <p>
+                Terimakasih<br>
+                Salam<br>
+                Almazari (<a href="http://www.dokumenary.net">http://www.dokumenary.net</a>)
+            </p>
+        </div>
+        {% endif %}
+
+        {% if new_update is empty %}
+            <div class="alert alert-success">
+                <h4><i class="icon-ok"></i> Terimakasih telah menggunakan aplikasi e-Learning dokumenary.net versi terbaru {{ current_version }}</h4>
+            </div>
+        {% else %}
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td width="20%">
+                            <img src="{{ logo_url_medium }}" class="img-polaroid">
+                        </td>
+                        <td>
+                            <h4>Aplikasi e-Learning versi {{ new_update.result }} telah tersedia</h4>
+                            List perubahan:
+                            {{ new_update.change_log|raw }}
+
+                            <br>
+                            <div class="btn-group">
+                                <a class="btn btn-primary" id="btn-perbaharui-aplikasi">Perbaharui</a>
+                            </div>
+                            <span id="progress-perbaharui"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

@@ -6,9 +6,20 @@
  */
 function install_success()
 {
+    check_db_connection();
+
+    return check_success_install();
+}
+
+/**
+ * Fungsi untuk cek koneksi, kalo error throw new
+ * @return boolean
+ */
+function check_db_connection()
+{
     $db_file = APPPATH . 'config/database.php';
     if (!is_file($db_file)) {
-        throw new Exception(get_alert('error', 'File database.php in application/config/ not exists'));
+        throw new Exception('File database.php in application/config/ not exists');
     }
 
     # cek pengaturan database
@@ -16,12 +27,27 @@ function install_success()
 
     $link = @mysqli_connect($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
     if (!$link) {
-        throw new Exception(get_alert('error', 'Failed to connect to the server: ' . mysqli_connect_error()));
-    }
-    elseif (!@mysqli_select_db($link, $db['default']['database'])) {
-        throw new Exception(get_alert('error', 'Failed to connect to the database: ' . mysqli_error($link)));
+        throw new Exception('Failed to connect to the server: ' . mysqli_connect_error());
     }
 
+    $select_db = @mysqli_select_db($link, $db['default']['database']);
+    if (!$select_db) {
+        throw new Exception('Failed to connect to the database: ' . mysqli_error($link));
+    }
+
+    # ciptakan variable global supaya driver ci tidak melakukan konek-konek lagi
+    $GLOBALS['el_mysqli_connect']   = $link;
+    $GLOBALS['el_mysqli_select_db'] = $select_db;
+
+    return true;
+}
+
+/**
+ * Cek apakah sudah berhasil install
+ * @return boolean
+ */
+function check_success_install()
+{
     $CI =& get_instance();
     $CI->load->database();
 
@@ -67,8 +93,6 @@ function default_parser_item($add_item = array())
         'logo_url_large'    => get_logo_url('large'),
         'base_url_theme'    => base_url_theme().'/',
         'site_name_default' => 'e-Learning system',
-        'comp_css'          => '',
-        'comp_js'           => '',
         'url_referrer'      => $url_referrer,
         'elapsed_time'      => $CI->benchmark->elapsed_time(),
     );
@@ -76,8 +100,60 @@ function default_parser_item($add_item = array())
     # cek proses install tidak
     if ($CI->uri->segment(1) != 'setup') {
         $return['copyright'] = 'Copyright &copy; 2014 - ' . date('Y') . ' ' . get_pengaturan('nama-sekolah', 'value').' by Almazari - <a href="http://www.dokumenary.net">dokumenary.net</a>';
-        $return['site_name'] = 'E-Learning '.get_pengaturan('nama-sekolah', 'value');
+        $return['site_name'] = 'e-Learning '.get_pengaturan('nama-sekolah', 'value');
         $return['version']   = '<a href="https://github.com/almazary/new_elearning">versi ' . get_pengaturan('versi', 'value') . '</a>';
+
+        # load menu
+        $return['list_menu'] = $CI->menu->get();
+    }
+
+    # load komponen js aplikasi
+    $load_js_app = load_comp_js(array(
+        base_url('assets/comp/SyntaxHighlighter/scripts/shCore.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAppleScript.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAS3.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushBash.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushColdFusion.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCpp.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCSharp.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCss.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDelphi.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDiff.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushErlang.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushGroovy.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJava.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJavaFX.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJScript.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPerl.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPhp.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPlain.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPowerShell.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPython.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushRuby.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSass.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushScala.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSql.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushVb.js'),
+        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushXml.js'),
+        base_url('assets/comp/timeago/jquery.timeago.js'),
+        base_url('assets/comp/jquery/app.js'),
+    ));
+
+    if (isset($add_item['comp_js'])) {
+        $add_item['comp_js'] .= $load_js_app;
+    } else {
+        $add_item['comp_js'] = $load_js_app;
+    }
+
+    // load komponen css aplikasi
+    $load_css_app = load_comp_css(array(
+        base_url('assets/comp/SyntaxHighlighter/styles/shCoreEclipse.css'),
+    ));
+
+    if (isset($add_item['comp_css'])) {
+        $add_item['comp_css'] .= $load_css_app;
+    } else {
+        $add_item['comp_css'] = $load_css_app;
     }
 
     if (!empty($add_item) AND is_array($add_item)) {
@@ -204,7 +280,7 @@ function get_alert($notif = 'success', $msg = '')
  */
 function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array(), $str_options = null)
 {
-    $tiny_plugins = array('emotions','syntaxhl','wordcount','pagebreak','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','searchreplace','contextmenu','paste','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
+    $tiny_plugins = array('emotions','syntaxhl','wordcount','pagebreak','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
     if (!empty($remove_plugins)) {
         $copy_tiny_plugins = $tiny_plugins;
         $combine           = array_combine($tiny_plugins, $copy_tiny_plugins);
@@ -234,7 +310,12 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
                     content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
                     convert_urls: false,
                     force_br_newlines : false,
-                    force_p_newlines : false';
+                    force_p_newlines : false,
+                    inline_styles: false,
+                    formats: {
+                       underline: { inline: "u", exact : true },
+                       strikethrough: { inline: "del", exact : true }
+                    }';
             } else {
                 $return .= $str_options;
             }
@@ -529,7 +610,7 @@ function get_indo_bulan($bln = '')
         return $data;
     } else {
         $bln = (int)$bln;
-        return $data[$bln];
+        return isset($data[$bln]) ? $data[$bln] : "";
     }
 }
 
@@ -576,6 +657,52 @@ function tgl_jam_indo($tgl_jam = '')
         $pisah = explode(' ', $tgl_jam);
         return tgl_indo($pisah[0]).' '.date('H:i', strtotime($tgl_jam));
     }
+}
+
+/**
+ * Method untuk memforamt tanggal dan jam supaya lebih enak dibaca
+ * @param  datetime $datetime
+ * @return string
+ */
+function format_datetime($datetime)
+{
+    # format tanggal, jika hari ini
+    if (date('Y-m-d') == date('Y-m-d', strtotime($datetime))) {
+        $selisih = time() - strtotime($datetime) ;
+
+        $detik = $selisih ;
+        $menit = round($selisih / 60);
+        $jam   = round($selisih / 3600);
+
+        if ($detik <= 60) {
+            if ($detik == 0) {
+                $waktu = "baru saja";
+            } else {
+                $waktu = $detik.' detik yang lalu';
+            }
+        } else if ($menit <= 60) {
+            $waktu = $menit.' menit yang lalu';
+        } else if ($jam <= 24) {
+            $waktu = $jam.' jam yang lalu';
+        } else {
+            $waktu = date('H:i', strtotime($datetime));
+        }
+
+        $datetime = $waktu;
+    }
+    # kemarin
+    elseif (date('Y-m-d', strtotime('-1 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($datetime))) {
+        $datetime = 'Kemarin ' . date('H:i', strtotime($datetime));
+    }
+    # lusa
+    elseif (date('Y-m-d', strtotime('-2 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($datetime))) {
+        $datetime = '2 hari yang lalu ' . date('H:i', strtotime($datetime));
+    }
+    else {
+        $datetime = tgl_jam_indo($datetime);
+    }
+
+    return $datetime;
 }
 
 /**
@@ -1126,4 +1253,56 @@ function pass_siswa_equal_nis()
     }
 
     return false;
+}
+
+/**
+ * Method untuk menyimpan session tampilkan atau sembunyikan timeer saat ujian
+ *
+ * @param  string $act
+ * @param  string $tugas_id
+ * @param  string $hide
+ */
+function sess_hide_countdown($act, $tugas_id = "", $hide = "")
+{
+    $CI =& get_instance();
+    $sess_name = 'hide_countdown';
+    $currents  = $CI->session->userdata($sess_name);
+
+    switch ($act) {
+        case 'set':
+            $currents[$tugas_id] = $hide;
+            $CI->session->set_userdata($sess_name, $currents);
+        break;
+
+        case 'get':
+            return !empty($currents[$tugas_id]) ? 1 : 0;
+        break;
+    }
+}
+
+/**
+ * Method untuk ngecek tgljam tertentu sudah lewat sehari belum
+ * @param  string $datetime
+ * @return boolean
+ */
+function belum_sehari($datetime)
+{
+    $sekarang       = strtotime(date("Y-m-d H:i:s"));
+    $sehari_yg_lalu = strtotime("-1 day", $sekarang);
+
+    if (strtotime($datetime) > $sehari_yg_lalu) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Untuk menciptakan datetime format ISO8601
+ * @param  string $datetime
+ * @return string
+ */
+function iso8601($datetime)
+{
+    return date(DateTime::ISO8601, strtotime($datetime));
 }

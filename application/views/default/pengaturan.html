@@ -50,6 +50,17 @@ Pengaturan - {{ parent() }}
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label">Status registrasi siswa</label>
+                <div class="controls">
+                    <label class="radio inline">
+                        <input type="radio" name="status-registrasi-siswa" value="0" {{ set_radio('status-registrasi-siswa', '0', ((in_array(get_pengaturan('status-registrasi-siswa', 'value'), ['', '0'])) ? true)) }}> Pending
+                    </label>
+                    <label class="radio inline">
+                        <input type="radio" name="status-registrasi-siswa" value="1" {{ set_radio('status-registrasi-siswa', '1', ((get_pengaturan('status-registrasi-siswa', 'value') == '1') ? true)) }}> Aktif
+                    </label>
+                </div>
+            </div>
+            <div class="control-group">
                 <label class="control-label">Registrasi pengajar</label>
                 <div class="controls">
                     <label class="radio inline">
@@ -57,6 +68,17 @@ Pengaturan - {{ parent() }}
                     </label>
                     <label class="radio inline">
                         <input type="radio" name="registrasi-pengajar" value="0" {{ set_radio('registrasi-pengajar', '0', ((get_pengaturan('registrasi-pengajar', 'value') == '0') ? true)) }}> Sembunyikan
+                    </label>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Status registrasi pengajar</label>
+                <div class="controls">
+                    <label class="radio inline">
+                        <input type="radio" name="status-registrasi-pengajar" value="0" {{ set_radio('status-registrasi-pengajar', '0', ((in_array(get_pengaturan('status-registrasi-pengajar', 'value'), ['', '0'])) ? true)) }}> Pending
+                    </label>
+                    <label class="radio inline">
+                        <input type="radio" name="status-registrasi-pengajar" value="1" {{ set_radio('status-registrasi-pengajar', '1', ((get_pengaturan('status-registrasi-pengajar', 'value') == '1') ? true)) }}> Aktif
                     </label>
                 </div>
             </div>

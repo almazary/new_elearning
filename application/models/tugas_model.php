@@ -220,13 +220,15 @@ class Tugas_model extends CI_Model
      * Method untuk mengambail banyak data pilihan
      *
      * @param  integer  $pertanyaan_id
+     * @param  string   $order
      * @return array
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_pilihan(
-        $pertanyaan_id
+        $pertanyaan_id,
+        $order = "ASC"
     ) {
-        $this->db->order_by('urutan', 'ASC');
+        $this->db->order_by('urutan', $order);
         $this->db->where('aktif', 1);
         $this->db->where('pertanyaan_id', $pertanyaan_id);
         $result = $this->db->get('pilihan');

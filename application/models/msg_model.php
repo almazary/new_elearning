@@ -217,27 +217,11 @@ class Msg_model extends CI_Model
      */
     public function create_table()
     {
-        include APPPATH . 'config/database.php';
-        $prefix = $db['default']['dbprefix'];
+        $CI =& get_instance();
+        $CI->load->model('config_model');
 
-        $this->db->query("CREATE TABLE IF NOT EXISTS `{$prefix}messages` (
-        `id` int(11) NOT NULL,
-          `type_id` tinyint(1) NOT NULL COMMENT '1=inbox,2=outbox',
-          `content` text NOT NULL,
-          `owner_id` int(11) NOT NULL,
-          `sender_receiver_id` int(11) NOT NULL,
-          `date` datetime NOT NULL,
-          `opened` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=belum,1=sudah'
-        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
+        $CI->config_model->create_tb_messages();
 
-        $this->db->query("ALTER TABLE `{$prefix}messages`
-        ADD PRIMARY KEY (`id`), ADD KEY `fk_messages_login1_idx` (`owner_id`), ADD KEY `fk_messages_login2_idx` (`sender_receiver_id`);");
-
-        $this->db->query("ALTER TABLE `{$prefix}messages`
-        MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1;");
-
-        $this->db->query("ALTER TABLE `{$prefix}messages`
-        ADD CONSTRAINT `fk_messages_login1` FOREIGN KEY (`owner_id`) REFERENCES `{$prefix}login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-        ADD CONSTRAINT `fk_messages_login2` FOREIGN KEY (`sender_receiver_id`) REFERENCES `{$prefix}login` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;");
+        return true;
     }
 }

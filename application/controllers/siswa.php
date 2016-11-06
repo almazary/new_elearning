@@ -1,4 +1,34 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Class untuk resource siswa
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
 
 class Siswa extends MY_Controller
 {
@@ -47,14 +77,14 @@ class Siswa extends MY_Controller
         $data['status_id']  = $status_id;
         $data['siswas']     = $retrieve_all['results'];
         $data['pagination'] = $this->pager->view($retrieve_all, 'siswa/index/'.$status_id.'/');
+        $data['count_pending'] = $this->siswa_model->count('pending');
 
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-siswa.js')
         ));
-        $data['comp_js']      = $html_js;
-        $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
         if (isset($_POST['status_id']) AND !empty($_POST['status_id'])) {
             $post_status_id = $this->input->post('status_id', TRUE);
@@ -316,12 +346,12 @@ class Siswa extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-siswa.js')
         ));
-        $data['comp_js']    = $html_js;
-        $data['comp_css']   = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
-        $data['siswas']     = $retrieve_all['results'];
-        $data['pagination'] = $this->pager->view($retrieve_all, 'siswa/filter/');
+        $data['comp_js']       = $html_js;
+        $data['comp_css']      = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+        $data['siswas']        = $retrieve_all['results'];
+        $data['pagination']    = $this->pager->view($retrieve_all, 'siswa/filter/');
+        $data['count_pending'] = $this->siswa_model->count('pending');
 
         $this->twig->display('filter-siswa.html', $data);
     }
@@ -470,6 +500,56 @@ class Siswa extends MY_Controller
         }
 
         $this->twig->display('edit-siswa-profile.html', $data);
+    }
+
+    /**
+     * Meghapus foto siswa
+     * @since 1.8
+     */
+    function delete_foto($segment_3 = '', $segment_4 = '')
+    {
+        if (is_pengajar()) {
+            show_error('Akses ditolak');
+        }
+
+        # cek pengaturan
+        if (is_siswa() AND get_pengaturan('edit-foto-siswa', 'value') == '0') {
+            show_error('Maaf fitur dinonaktifkan oleh administrator');
+        }
+
+        $siswa_id       = (int)$segment_3;
+        $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+        if (empty($retrieve_siswa)) {
+            show_error('Data siswa tidak ditemukan');
+        }
+
+        # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
+        if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
+            show_error('Akses ditolak');
+        }
+
+        if (is_file(get_path_image($retrieve_siswa['foto']))) {
+            unlink(get_path_image($retrieve_siswa['foto']));
+        }
+
+        if (is_file(get_path_image($retrieve_siswa['foto'], 'medium'))) {
+            unlink(get_path_image($retrieve_siswa['foto'], 'medium'));
+        }
+
+        if (is_file(get_path_image($retrieve_siswa['foto'], 'small'))) {
+            unlink(get_path_image($retrieve_siswa['foto'], 'small'));
+        }
+
+        $this->siswa_model->delete_foto($retrieve_siswa['id']);
+
+        $uri_back = $segment_4;
+        if (!empty($uri_back)) {
+            $uri_back = deurl_redirect($uri_back);
+        } else {
+            $uri_back = site_url('siswa');
+        }
+
+        redirect($uri_back);
     }
 
     function edit_picture($segment_3 = '', $segment_4 = '')
@@ -718,7 +798,6 @@ class Siswa extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-siswa.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));

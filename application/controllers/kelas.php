@@ -1,5 +1,36 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Class untuk resource kelas
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
+
 class Kelas extends MY_Controller
 {
     function __construct()
@@ -56,12 +87,11 @@ class Kelas extends MY_Controller
             'comp_js'  => load_comp_js(
                 array(
                     base_url('assets/comp/nestedSortable/jquery.mjs.nestedSortable.js'),
-                    base_url('assets/comp/nestedSortable/kelas.js'),
                 )
             )
         );
 
-        if ($this->form_validation->run('kelas/index') == TRUE) {
+        if ($this->form_validation->run('kelas/index') == TRUE AND !is_demo_app()) {
             # insert kelas
             $nama = $this->input->post('nama', TRUE);
             $this->kelas_model->create($nama);
@@ -91,13 +121,12 @@ class Kelas extends MY_Controller
             'comp_js'  => load_comp_js(
                 array(
                     base_url('assets/comp/nestedSortable/jquery.mjs.nestedSortable.js'),
-                    base_url('assets/comp/nestedSortable/kelas.js'),
                 )
             )
         );
 
         $data['kelas'] = $kelas;
-        if ($this->form_validation->run('kelas/edit') == TRUE) {
+        if ($this->form_validation->run('kelas/edit') == TRUE AND !is_demo_app()) {
             $nama  = $this->input->post('nama', TRUE);
             if (empty($kelas['parent_id'])) {
                 $aktif = 1;
@@ -195,10 +224,6 @@ class Kelas extends MY_Controller
 
     function mapel_kelas($act = 'list', $segment_4 = '', $segment_5 = '', $segment_6 = '', $segment_7 = '')
     {
-        $data['comp_js']   = load_comp_js(array(
-            base_url('assets/comp/jquery/ajax.js')
-        ));
-
         switch ($act) {
             case 'aktifkan':
                 $parent_id      = (int)$segment_4;
@@ -309,6 +334,19 @@ class Kelas extends MY_Controller
                 $mapel_kelas_id = array();
                 foreach ($retrieve_all_kelas as $v) {
                     $mapel_kelas_id[] = $v['mapel_id'];
+                }
+
+                $data['post_mapel'] = 0;
+                if (!empty($_POST['add-mapel'])) {
+                    if ($this->form_validation->run('mapel/add') == TRUE AND !is_demo_app()) {
+                        $nama = $this->input->post('nama', TRUE);
+                        $info = $this->input->post('info', TRUE);
+                        $this->mapel_model->create($nama, $info);
+
+                        $this->session->set_flashdata('mapel', get_alert('success', 'Matapelajaran baru berhasil ditambah.'));
+                        redirect('kelas/mapel_kelas/add/'.$parent_id.'/'.$kelas_id.'/'.enurl_redirect($uri_back));
+                    }
+                    $data['post_mapel'] = 1;
                 }
 
                 if ($this->form_validation->run('kelas/mapel_kelas/add') == TRUE AND !is_demo_app()) {

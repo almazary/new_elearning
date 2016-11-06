@@ -1,4 +1,34 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Class untuk resource Pesan
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
 
 class Message extends MY_Controller
 {
@@ -17,6 +47,8 @@ class Message extends MY_Controller
         }
 
         must_login();
+
+        $this->db->query("SET sql_mode = ''");
     }
 
     function index($segment_3 = '', $segment_4 = '')
@@ -154,14 +186,8 @@ class Message extends MY_Controller
             $data['receiver_name'] = $data['r']['profil']['nama'] . " [$login_username]>";
         }
 
-        $html_js = get_tinymce('content');
-        $html_js .= load_comp_js(array(
-            base_url('assets/comp/autocomplete/jquery.autocomplete.min.js'),
-            base_url('assets/comp/autocomplete/script.js'),
-            base_url('assets/comp/jquery/get-new-msg.js')
-        ));
-        $data['comp_js']  = $html_js;
-        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/autocomplete/autocomplete.css')));
+        $html_js         = get_tinymce('content');
+        $data['comp_js'] = $html_js;
 
         # update read
         $this->msg_model->update_read($msg_id);

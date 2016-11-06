@@ -2,6 +2,7 @@
 !/userfiles/files/index.html
 /userfiles/images/
 /userfiles/uploads/
+/userfiles/updates/
 /user_guide/
 /assets/comp/tinymce/plugins/tiny_mce_wiris/cache/
 /assets/comp/tinymce/plugins/tiny_mce_wiris/formulas/
@@ -12,3 +13,4 @@
 /plugins/views/
 /application/cache/twig/*
 !/application/cache/twig/index.html
+/application/controllers/test.php

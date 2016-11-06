@@ -1,5 +1,36 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Class ajax, semua aksi yang dieksekusi via ajax tempatnya disini.
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
+
 class Ajax extends MY_Controller
 {
     function __construct()
@@ -8,7 +39,7 @@ class Ajax extends MY_Controller
 
         # jika belum login die
         if (!is_login()) {
-            exit('Maaf anda harus login.');
+            exit('403 Forbidden.');
         }
 
         # jika bukan ajax
@@ -23,24 +54,143 @@ class Ajax extends MY_Controller
             case 'penerima':
                 $query =  !empty($_GET['query']) ? $_GET['query'] : '';
 
-                $sql = "SELECT " . $this->db->dbprefix('login') . ".username, " . $this->db->dbprefix('pengajar') . ".nama FROM " . $this->db->dbprefix('pengajar') . " INNER JOIN " . $this->db->dbprefix('login') . " ON " . $this->db->dbprefix('pengajar') . ".id = " . $this->db->dbprefix('login') . ".pengajar_id
-                        WHERE " . $this->db->dbprefix('login') . ".username LIKE '%" . $this->db->escape_like_str($query) . "%' OR " . $this->db->dbprefix('pengajar') . ".nama LIKE '%" . $this->db->escape_like_str($query) . "%'
-                        UNION
-                        SELECT " . $this->db->dbprefix('login') . ".username, " . $this->db->dbprefix('siswa') . ".nama FROM " . $this->db->dbprefix('siswa') . " INNER JOIN " . $this->db->dbprefix('login') . " ON " . $this->db->dbprefix('siswa') . ".id = " . $this->db->dbprefix('login') . ".siswa_id
-                        WHERE " . $this->db->dbprefix('login') . ".username LIKE '%" . $this->db->escape_like_str($query) . "%' OR " . $this->db->dbprefix('siswa') . ".nama LIKE '%" . $this->db->escape_like_str($query) . "%'";
+                # jika query tidak kosong
+                $results = array();
+                if (!empty($query)) {
+                    $sql = "(SELECT " . $this->db->dbprefix('login') . ".username, " . $this->db->dbprefix('pengajar') . ".nama FROM " . $this->db->dbprefix('pengajar') . " INNER JOIN " . $this->db->dbprefix('login') . " ON " . $this->db->dbprefix('pengajar') . ".id = " . $this->db->dbprefix('login') . ".pengajar_id
+                            WHERE " . $this->db->dbprefix('login') . ".username LIKE '%" . $this->db->escape_like_str($query) . "%' OR " . $this->db->dbprefix('pengajar') . ".nama LIKE '%" . $this->db->escape_like_str($query) . "%' LIMIT 20)
+                            UNION
+                            (SELECT " . $this->db->dbprefix('login') . ".username, " . $this->db->dbprefix('siswa') . ".nama FROM " . $this->db->dbprefix('siswa') . " INNER JOIN " . $this->db->dbprefix('login') . " ON " . $this->db->dbprefix('siswa') . ".id = " . $this->db->dbprefix('login') . ".siswa_id
+                            WHERE " . $this->db->dbprefix('login') . ".username LIKE '%" . $this->db->escape_like_str($query) . "%' OR " . $this->db->dbprefix('siswa') . ".nama LIKE '%" . $this->db->escape_like_str($query) . "%' LIMIT 20)";
 
-                $result = $this->db->query($sql);
+                    $result = $this->db->query($sql);
 
-                $data['suggestions'] = array();
-                foreach ($result->result_array() as $r) {
-                    $data['suggestions'][] = array('value' => $r['nama'] . ' <' . $r['username'] . '>');
+                    foreach ($result->result_array() as $r) {
+                        $results[] = addslashes($r['nama']) . ' [' . $r['username'] . ']';
+                    }
                 }
 
-                echo json_encode($data);
+                echo json_encode($results);
             break;
 
-            case 'new_msg':
-                echo $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
+            case 'count_new_data':
+                # pesan baru
+                $new_msg = $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
+
+                $count_update     = 0;
+                $pending_siswa    = 0;
+                $pending_pengajar = 0;
+                $unread_laporan   = 0;
+
+                # jika login admin
+                if (is_admin()) {
+                    # update terbaru
+                    $count_update = 0;
+                    $field_id     = "cek-versi";
+                    $cek_versi    = retrieve_field($field_id);
+                    if (!empty($cek_versi['value'])) {
+                        $cek_value = json_decode($cek_versi['value'], 1);
+                        if ($cek_value['result'] > $this->current_version) {
+                            $count_update = 1;
+                        }
+                    }
+
+                    # cari jumlah pending siswa
+                    $pending_siswa = $this->siswa_model->count('pending');
+
+                    # cari pending pengajar
+                    $pending_pengajar = $this->pengajar_model->count('pending');
+
+                    # laporan
+                    $unread_laporan = $this->materi_model->count('unread-laporan');
+                }
+
+                # ambil data login terahir
+                $retrieve_last_log = $this->login_model->retrieve_new_log();
+                foreach ($retrieve_last_log as $key => $val) {
+                    $retrieve_last_log[$key]['user'] = $this->get_user_data($val['login_id']);
+
+                    if (belum_sehari($val['lasttime'])) {
+                        $retrieve_last_log[$key]['timeago'] = iso8601($val['lasttime']);
+                    }
+
+                    $retrieve_last_log[$key]['lasttime'] = format_datetime($val['lasttime']);
+                }
+
+                $render_last_login = $this->twig->render('last-login-person.html', array('last_login_data' => $retrieve_last_log));
+
+                $result = array(
+                    'new_msg'          => $new_msg,
+                    'new_update'       => $count_update,
+                    'pending_siswa'    => $pending_siswa,
+                    'pending_pengajar' => $pending_pengajar,
+                    'unread_laporan'   => $unread_laporan,
+                    'last_login_list'  => $render_last_login,
+                );
+
+                echo json_encode($result);
+            break;
+
+            case 'check_update':
+                $ada_update = $this->check_new_version();
+                if ($ada_update) {
+                    echo "1";
+                } else {
+                    echo "0";
+                }
+            break;
+
+            case 'download_update':
+                $field_id  = "cek-versi";
+                $cek_versi = retrieve_field($field_id);
+                if (empty($cek_versi['value'])) {
+                    echo 0;die;
+                }
+
+                $cek_value = json_decode($cek_versi['value'], 1);
+
+                # cek sudah ada belum file updatenya, kalo sudah ada hapus dulu
+                $path = './userfiles/updates';
+                if (!is_dir($path)) {
+                    if (!is_writable('./userfiles')) {
+                        echo "Folder userfiles tidak dapat ditulis!";die;
+                    } else {
+                        mkdir($path);
+                    }
+                }
+
+                $path_folder_update = $path . '/' . $cek_value['result'];
+                if (!is_dir($path_folder_update)) {
+                    mkdir($path_folder_update);
+                }
+
+                $path_file_update = $path_folder_update . '/' . $cek_value['result'] . '.zip';
+                if (is_file($path_file_update)) {
+                    if (!unlink($path_file_update)) {
+                        echo "File update lama tidak dapat diperbaharui!";die;
+                    }
+                }
+
+                # download file
+                @file_put_contents($path_file_update, fopen($cek_value['download_link'], 'r'));
+
+                # cek beneran kedownload belum
+                if (!is_file($path_file_update)) {
+                    echo "Download file update gagal!";die;
+                }
+
+                # ciptakan session update
+                $field_id    = "session-updates";
+                $field_name  = "Session Updates";
+                $field_value = json_encode(array('version' => $cek_value['result']));
+                $retrieve_session = retrieve_field($field_id);
+                if (empty($retrieve_session)) {
+                    create_field($field_id, $field_name, $field_value);
+                } else {
+                    update_field($field_id, $field_name, $field_value);
+                }
+
+                echo 1;
             break;
         }
     }
@@ -48,6 +198,14 @@ class Ajax extends MY_Controller
     function post_data($page)
     {
         switch ($page) {
+            case 'hide_show_countdown':
+                $tugas_id = $this->input->post('tugas_id', true);
+                $hide     = $this->input->post('hide', true);
+                sess_hide_countdown('set', $tugas_id, $hide);
+
+                echo "1";
+            break;
+
             case 'check_reset_status':
                 $siswa_id = $this->input->post('siswa_id', true);
                 $tugas_id = $this->input->post('tugas_id', true);
@@ -185,12 +343,12 @@ class Ajax extends MY_Controller
                 $active_msg_id = $this->input->post('active_msg_id', true);
                 $active_msg_id = (int)$active_msg_id;
                 if (empty($active_msg_id)) {
-                    echo '';
+                    die;
                 }
 
                 $msg = $this->msg_model->retrieve(get_sess_data('login', 'id'), $active_msg_id, false, false);
                 if (empty($msg)) {
-                    echo '';
+                    die;
                 }
                 $msg = $msg['retrieve'];
 
@@ -231,35 +389,18 @@ class Ajax extends MY_Controller
                         $user['link_image'] = get_url_image_pengajar($user['foto'], 'medium', $user['jenis_kelamin']);
                     }
 
-                    # format tanggal, jika hari ini
-                    if (date('Y-m-d') == date('Y-m-d', strtotime($retrieve['date']))) {
-                        $retrieve['date'] = date('H:i', strtotime($retrieve['date']));
-                    }
-                    # kemarin
-                    elseif (date('Y-m-d', strtotime('-1 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
-                        $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' kemarin';
-                    }
-                    # lusa
-                    elseif (date('Y-m-d', strtotime('-2 day', strtotime(date('Y-m-d')))) == date('Y-m-d', strtotime($retrieve['date']))) {
-                        $retrieve['date'] = date('H:i', strtotime($retrieve['date'])) . ' lusa';
-                    }
-                    else {
-                        $retrieve['date'] = tgl_jam_indo($retrieve['date']);
+                    $retrieve['profil'] = $user;
+                    if (belum_sehari($retrieve['date'])) {
+                        $retrieve['timeago'] = iso8601($retrieve['date']);
                     }
 
-                    ?>
-                    <tr id="msg-<?php echo $val['id'] ?>">
-                        <td class="user flag-new">
-                            <img class="img-user img-polaroid img-circle pull-left" src="<?php echo $user['link_image']; ?>">
-                            <a href="{{ n.profil.link_profil }}"><?php echo character_limiter($user['nama'], 23, '...') ?></a>
-                            <br><small><?php echo $retrieve['date']; ?></small>
-                        </td>
-                        <td class="msg-content">
-                            <a class="pull-right" style="margin-left:10px;" href="<?php echo site_url('message/del/' . $retrieve['id'] . '/' . $msg['id']) ?>" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
-                            <?php echo html_entity_decode($retrieve['content']); ?>
-                        </td>
-                    </tr>
-                    <?php
+                    $retrieve['date'] = format_datetime($retrieve['date']);
+
+                    $this->twig->display('detail-pesan-item.html', array(
+                        'active_msg_id' => $msg['id'],
+                        'item_msg'      => $retrieve,
+                        'msg_flag_new'  => 1
+                    ));
                 }
             break;
         }

@@ -1,4 +1,34 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Class untuk resource Pengajar
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
 
 class Pengajar extends MY_Controller
 {
@@ -33,11 +63,11 @@ class Pengajar extends MY_Controller
         $data['status_id']  = $status_id;
         $data['pengajar']   = $retrieve_all['results'];
         $data['pagination'] = $this->pager->view($retrieve_all, $base_url_module);
+        $data['count_pending'] = $this->pengajar_model->count('pending');
 
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-pengajar.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -63,7 +93,7 @@ class Pengajar extends MY_Controller
                     );
 
                     if ($retrieve_pengajar['status_id'] == 0 && $post_status_id == 1) {
-                        kirim_email_approve_pengajar($pengajar_id);
+                        @kirim_email_approve_pengajar($pengajar_id);
                     }
                 }
             }
@@ -262,6 +292,52 @@ class Pengajar extends MY_Controller
         }
 
         $this->twig->display('edit-pengajar-profile.html', $data);
+    }
+
+    /**
+     * Meghapus foto pengajar
+     * @since 1.8
+     */
+    function delete_foto($segment_3 = "", $segment_4 = "")
+    {
+        # siswa tidak diijinkan
+        if (is_siswa()) {
+            show_error('Akses ditolak');
+        }
+
+        $pengajar_id       = (int)$segment_3;
+        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        if (empty($retrieve_pengajar)) {
+            show_error('Data Pengajar tidak ditemukan');
+        }
+
+        # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
+        if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
+            show_error('Akses ditolak');
+        }
+
+        if (is_file(get_path_image($retrieve_pengajar['foto']))) {
+            unlink(get_path_image($retrieve_pengajar['foto']));
+        }
+
+        if (is_file(get_path_image($retrieve_pengajar['foto'], 'medium'))) {
+            unlink(get_path_image($retrieve_pengajar['foto'], 'medium'));
+        }
+
+        if (is_file(get_path_image($retrieve_pengajar['foto'], 'small'))) {
+            unlink(get_path_image($retrieve_pengajar['foto'], 'small'));
+        }
+
+        $this->pengajar_model->delete_foto($retrieve_pengajar['id']);
+
+        $uri_back = $segment_4;
+        if (!empty($uri_back)) {
+            $uri_back = deurl_redirect($uri_back);
+        } else {
+            $uri_back = site_url('pengajar');
+        }
+
+        redirect($uri_back);
     }
 
     function edit_picture($segment_3 = '', $segment_4 = '')
@@ -464,7 +540,6 @@ class Pengajar extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-pengajar.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -495,10 +570,6 @@ class Pengajar extends MY_Controller
         if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
             exit('Akses ditolak');
         }
-
-        $data['comp_js'] = load_comp_js(array(
-            base_url('assets/comp/jquery/ajax.js')
-        ));
 
         $data['status_id']   = $status_id;
         $data['pengajar_id'] = $pengajar_id;
@@ -551,10 +622,6 @@ class Pengajar extends MY_Controller
         }
 
         $retrieve_mk = $this->mapel_model->retrieve_kelas($retrieve_ma['mapel_kelas_id']);
-
-        $data['comp_js'] = load_comp_js(array(
-            base_url('assets/comp/jquery/ajax.js')
-        ));
 
         $data['status_id']    = $status_id;
         $data['pengajar_id']  = $pengajar_id;
@@ -669,13 +736,13 @@ class Pengajar extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-siswa.js')
         ));
-        $data['comp_js']      = $html_js;
-        $data['comp_css']     = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+        $data['comp_js']  = $html_js;
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
-        $data['pengajars']  = $retrieve_all['results'];
-        $data['pagination'] = $this->pager->view($retrieve_all, 'pengajar/filter/');
+        $data['pengajars']     = $retrieve_all['results'];
+        $data['pagination']    = $this->pager->view($retrieve_all, 'pengajar/filter/');
+        $data['count_pending'] = $this->pengajar_model->count('pending');
 
         $this->twig->display('filter-pengajar.html', $data);
     }
@@ -739,7 +806,6 @@ class Pengajar extends MY_Controller
         # panggil colorbox
         $html_js = load_comp_js(array(
             base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-            base_url('assets/comp/colorbox/act-pengajar.js')
         ));
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));

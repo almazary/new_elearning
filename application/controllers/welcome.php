@@ -1,5 +1,36 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Class untuk halaman utama
+ *
+ * @package   e-Learning Dokumenary Net
+ * @author    Almazari <almazary@gmail.com>
+ * @copyright Copyright (c) 2013 - 2016, Dokumenary Net.
+ * @since     1.0
+ * @link      http://dokumenary.net
+ *
+ * INDEMNITY
+ * You agree to indemnify and hold harmless the authors of the Software and
+ * any contributors for any direct, indirect, incidental, or consequential
+ * third-party claims, actions or suits, as well as any related expenses,
+ * liabilities, damages, settlements or fees arising from your use or misuse
+ * of the Software, or a violation of any terms of this license.
+ *
+ * DISCLAIMER OF WARRANTY
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESSED OR
+ * IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF QUALITY, PERFORMANCE,
+ * NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ * LIMITATIONS OF LIABILITY
+ * YOU ASSUME ALL RISK ASSOCIATED WITH THE INSTALLATION AND USE OF THE SOFTWARE.
+ * IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS OF THE SOFTWARE BE LIABLE
+ * FOR CLAIMS, DAMAGES OR OTHER LIABILITY ARISING FROM, OUT OF, OR IN CONNECTION
+ * WITH THE SOFTWARE. LICENSE HOLDERS ARE SOLELY RESPONSIBLE FOR DETERMINING THE
+ * APPROPRIATENESS OF USE AND ASSUME ALL RISKS ASSOCIATED WITH ITS USE, INCLUDING
+ * BUT NOT LIMITED TO THE RISKS OF PROGRAM ERRORS, DAMAGE TO EQUIPMENT, LOSS OF
+ * DATA OR SOFTWARE PROGRAMS, OR UNAVAILABILITY OR INTERRUPTION OF OPERATIONS.
+ */
+
 class Welcome extends MY_Controller
 {
     function index()
@@ -61,20 +92,69 @@ class Welcome extends MY_Controller
             $data['bug_tracker_link']   = $this->bug_tracker_link;
 
             $html_js = load_comp_js(array(
-                base_url('assets/comp/jquery/info-update.js'),
+                base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
             ));
-            $data['comp_js'] = $html_js;
+            $data['comp_js']  = $html_js;
+            $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
             $where_pengumuman = array(
                 'tgl_tampil <='   => date('Y-m-d'),
                 'tgl_tutup >='    => date('Y-m-d')
             );
+
+            $data['count_mapel_kelas'] = $this->mapel_model->count_kelas();
         }
 
         # ambil pengumuman yang sudah tampil
         $data['pengumuman'] = $this->pengumuman_model->retrieve_all(10, 1, $where_pengumuman, false);
 
         $this->twig->display('welcome.html', $data);
+    }
+
+    function new_version()
+    {
+        must_login();
+
+        if (!is_admin()) {
+            redirect('welcome');
+        }
+
+        $field_id  = "cek-versi";
+        $cek_versi = retrieve_field($field_id);
+        $data['n'] = json_decode($cek_versi['value'], 1);
+
+        $data['comp_js']  = load_comp_js(array(base_url('assets/comp/colorbox/jquery.colorbox-min.js')));
+        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
+        $this->twig->display('new-version.html', $data);
+    }
+
+    function update_info()
+    {
+        must_login();
+
+        if (!is_admin()) {
+            redirect('welcome');
+        }
+
+        # ambil versi terbaru
+        $this->check_new_version(true);
+
+        $field_id  = "cek-versi";
+        $cek_versi = retrieve_field($field_id);
+
+        $new_update = array();
+        if (!empty($cek_versi['value'])) {
+            $new_update = json_decode($cek_versi['value'], 1);
+        }
+
+        $purchase_plugins_key = $this->config->item('purchase_plugins_key');
+
+        $data['purchase_plugins_key'] = $purchase_plugins_key;
+        $data['plugin_list']     = plugin_list();
+        $data['new_update']      = $new_update;
+        $data['current_version'] = $this->current_version;
+
+        $this->twig->display('update-info.html', $data);
     }
 
     function pengaturan()
@@ -320,8 +400,6 @@ class Welcome extends MY_Controller
             # panggil colorbox
             $html_js = load_comp_js(array(
                 base_url('assets/comp/colorbox/jquery.colorbox-min.js'),
-                base_url('assets/comp/colorbox/act-siswa.js'),
-                base_url('assets/comp/colorbox/act-pengajar.js')
             ));
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
@@ -353,7 +431,6 @@ class Welcome extends MY_Controller
         $data['comp_js'] = load_comp_js(array(
             base_url('assets/comp/datatables/jquery.dataTables.js'),
             base_url('assets/comp/datatables/datatable-bootstrap2.js'),
-            base_url('assets/comp/datatables/script.js'),
         ));
 
         $data['comp_css'] = load_comp_css(array(
@@ -372,161 +449,277 @@ class Welcome extends MY_Controller
         }
 
         $data = array();
+        $this->twig->display('backup-restore.html', $data);
+    }
 
-        $field_id    = "last-backup-date";
-        $last_backup = retrieve_field($field_id);
-        if (!empty($last_backup)) {
-            $data['last_backup_date'] = $last_backup['value'];
-        }
+    function hapus_data($segment_3 = "")
+    {
+        $data = array();
 
-        switch ($act) {
-            case 'backup':
-                # catat backup
-                $date_backup = date('Y-m-d H:i:s');
-                $last_backup = retrieve_field($field_id);
-                if (empty($last_backup)) {
-                    create_field($field_id, "Last backup database", $date_backup);
-                } else {
-                    update_field($field_id, "Last backup database", $date_backup);
-                }
+        switch ($segment_3) {
+            case 'siswa':
+                $this->form_validation->set_rules('siswa_id', 'Siswa ID', 'required|trim|xss_clean');
+                if ($this->form_validation->run() == true) {
 
-                $prefix = $this->db->dbprefix;
+                    $data_gagal = array();
+                    $siswa_ids  = explode(",", $this->input->post('siswa_id', true));
+                    foreach ($siswa_ids as $siswa_id) {
+                        $siswa_id = trim($siswa_id);
 
-                # backup template
-                $backup_template = file_get_contents(APPPATH . 'install/backup-table');
-                $backup_template = str_replace('{$prefix}', $prefix, $backup_template);
-                $backup_template = str_replace('{$versi}', get_pengaturan('versi', 'value'), $backup_template);
-                $backup_template = str_replace('{$tgl_backup}', $date_backup, $backup_template);
-                $backup_template = str_replace('{$site_url}', site_url(), $backup_template);
-
-                # insert
-                $table_list = array(
-                    'bank_soal',
-                    'field_tambahan',
-                    'kelas',
-                    'kelas_siswa',
-                    'komentar',
-                    'login',
-                    'mapel',
-                    'mapel_ajar',
-                    'mapel_kelas',
-                    'materi',
-                    'materi_kelas',
-                    'messages',
-                    'nilai_tugas',
-                    'pengajar',
-                    'pengaturan',
-                    'pengumuman',
-                    'pilihan',
-                    'siswa',
-                    'tugas',
-                    'tugas_kelas',
-                    'tugas_pertanyaan',
-                );
-
-                foreach ($table_list as $table) {
-                    # cek tabel ada atau g
-                    if (!$this->db->table_exists($table)) {
-                        $backup_template = str_replace('{$insert_' . $table . '}', "", $backup_template);
-                        continue;
-                    }
-
-                    # cek isi table
-                    $results = $this->db->get($table);
-                    $results = $results->result_array();
-                    if (empty($results)) {
-                        $backup_template = str_replace('{$insert_' . $table . '}', "", $backup_template);
-                        continue;
-                    }
-
-                    # cari list field
-                    $fields = $this->db->list_fields($table);
-
-                    $data_values = array();
-                    foreach ($results as $row) {
-                        $data_row = array();
-                        foreach ($row as $key => $val) {
-                            if (in_array($key, $fields)) {
-                                $data_row[] = is_null($val) ? "NULL" : "'" . $this->db->escape_str($val) . "'";
-                            }
+                        # check dulu
+                        $db_siswa = $this->siswa_model->retrieve($siswa_id);
+                        if (empty($db_siswa)) {
+                            $data_gagal[] = $siswa_id;
+                            continue;
                         }
 
-                        $data_values[] = "(" . implode(", ", $data_row) . ")";
-                    }
-
-                    $sql_insert = "";
-
-                    # limit 500 insert
-                    $i  = 1;
-                    $ii = 1;
-                    $limit = 500;
-                    foreach ($data_values as $value) {
-                        if ($i == 1) {
-                            $sql_insert .= "\n\n";
-                            $sql_insert .= "INSERT INTO `{$prefix}{$table}` (`" . implode("`, `", $fields) . "`) VALUES \n";
-                        }
-
-                        $sql_insert .= $value;
-
-                        if ($i == $limit OR $ii == count($data_values)) {
-                            $i = 0;
-                            $sql_insert .= "; \n";
-                        } else {
-                            $sql_insert .= ", \n";
-                        }
-
-                        $i++;
-                        $ii++;
-                    }
-
-                    $backup_template = str_replace('{$insert_' . $table . '}', $sql_insert, $backup_template);
-                }
-
-                $file_name = "backup-elearning-" . date('Y-m-d-H-i') . ".sql";
-                force_download($file_name, $backup_template);
-            break;
-
-            case 'restore':
-                if (!empty($_FILES['userfile']['tmp_name'])) {
-                    $split_name = explode('.', $_FILES['userfile']['name']);
-                    $file_ext   = end($split_name);
-                    if ($file_ext != 'sql') {
-                        $data['restore_msg'] = "File harus bertipe .sql";
-                    } else {
                         $this->db->trans_start();
 
-                        $templine = "";
-                        $lines    = file($_FILES['userfile']['tmp_name']);
-                        foreach ($lines as $line) {
-                            if ($line == "" OR substr($line, 0, 2) == "--" OR substr($line, 0, 1) == "#") {
-                                continue;
-                            }
+                        # hapus kelas_siswa
+                        $this->db->where('siswa_id', $siswa_id);
+                        $this->db->delete('kelas_siswa');
 
-                            $templine .= $line;
+                        $db_login = $this->db->get_where('login', array('siswa_id' => $siswa_id))->row_array();
 
-                            if (substr(trim($line), -1, 1) == ';') {
-                                $this->db->query($templine);
-                                $templine = '';
-                            }
+                        # hapus komentar
+                        $this->db->where('login_id', $db_login['id']);
+                        $this->db->delete('komentar');
+
+                        # hapus kelas_materi dan materi
+                        $db_materi = $this->db->get_where('materi', array('siswa_id' => $siswa_id))->result_array();
+                        foreach ($db_materi as $row) {
+                            # hapus kelas_materi
+                            $this->db->where('materi_id', $row['id']);
+                            $this->db->delete('kelas_materi');
+
+                            # hapus komentar
+                            $this->db->where('materi_id', $row['id']);
+                            $this->db->delete('komentar');
+
+                            # hapus materi
+                            $this->db->where('id', $row['id']);
+                            $this->db->delete('materi');
                         }
+
+                        # hapus message
+                        $this->db->where('owner_id', $db_login['id']);
+                        $this->db->or_where('sender_receiver_id', $db_login['id']);
+                        $this->db->delete('messages');
+
+                        # hapus nilai tugas
+                        $this->db->where('siswa_id', $siswa_id);
+                        $this->db->delete('nilai_tugas');
+
+                        # hapus login log
+                        $this->db->where('login_id', $db_login['id']);
+                        $this->db->delete('login_log');
+
+                        # hapus login
+                        $this->db->where('siswa_id', $siswa_id);
+                        $this->db->delete('login');
+
+                        # hapus siswa
+                        $this->db->where('id', $siswa_id);
+                        $this->db->delete('siswa');
 
                         $this->db->trans_complete();
 
                         if ($this->db->trans_status() === FALSE) {
-                            $data['restore_msg'] = "Restore error : " . $this->db->_error_message() . " " . $this->db->_error_number();
+                            $data_gagal[] = $siswa_id;
+                        }
+                    }
+
+                    # redirect berhasil
+                    if (empty($data_gagal)) {
+                        $this->session->set_flashdata('hapus_data', get_alert('success', 'Hapus data siswa berhasil.'));
+                    } else {
+                        $flash_msg = "Siswa ID " . implode(", ", $data_gagal) . " gagal dihapus.";
+                        $this->session->set_flashdata('hapus_data', get_alert('warning', $flash_msg));
+                    }
+
+                    redirect('welcome/hapus_data');
+                }
+            break;
+
+            case 'pengajar':
+                $this->form_validation->set_rules('pengajar_id', 'Pengajar ID', 'required|trim|xss_clean');
+                if ($this->form_validation->run() == true) {
+
+                    $data_gagal   = array();
+                    $pengajar_ids = explode(",", $this->input->post('pengajar_id', true));
+                    foreach ($pengajar_ids as $pengajar_id) {
+                        $pengajar_id = trim($pengajar_id);
+
+                        # cek dulu
+                        $db_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+                        if (empty($db_pengajar)) {
+                            $data_gagal[] = $pengajar_id;
+                            continue;
                         }
 
-                        # redirect berhasil
-                        $this->session->set_flashdata('backup_restore', get_alert('success', 'Restore data berhasil.'));
-                        redirect('welcome/backup_restore');
+                        $this->db->trans_start();
+
+                        # hapus bank soal
+                        if ($this->db->table_exists('bank_soal')) {
+                            $this->db->where('pengajar_id', $pengajar_id);
+                            $this->db->delete('bank_soal');
+                        }
+
+                        $db_login = $this->db->get_where('login', array('pengajar_id' => $pengajar_id))->row_array();
+
+                        # hapus komentar
+                        $this->db->where('login_id', $db_login['id']);
+                        $this->db->delete('komentar');
+
+                        # hapus kelas_materi dan materi
+                        $db_materi = $this->db->get_where('materi', array('pengajar_id' => $pengajar_id))->result_array();
+                        foreach ($db_materi as $row) {
+                            # hapus kelas_materi
+                            $this->db->where('materi_id', $row['id']);
+                            $this->db->delete('kelas_materi');
+
+                            # hapus komentar
+                            $this->db->where('materi_id', $row['id']);
+                            $this->db->delete('komentar');
+
+                            # hapus materi
+                            $this->db->where('id', $row['id']);
+                            $this->db->delete('materi');
+                        }
+
+                        # hapus message
+                        $this->db->where('owner_id', $db_login['id']);
+                        $this->db->or_where('sender_receiver_id', $db_login['id']);
+                        $this->db->delete('messages');
+
+                        # hapus mapel ajar
+                        $this->db->where('pengajar_id', $pengajar_id);
+                        $this->db->delete('mapel_ajar');
+
+                        # hapus pengumuman
+                        $this->db->where('pengajar_id', $pengajar_id);
+                        $this->db->delete('pengumuman');
+
+                        # hapus tugas
+                        $db_tugas = $this->db->get_where('tugas', array('pengajar_id' => $pengajar_id))->result_array();
+                        foreach ($db_tugas as $row) {
+                            # hapus tugas kelas
+                            $this->db->where('tugas_id', $row['id']);
+                            $this->db->delete('tugas_kelas');
+
+                            # hapus tugas pertanyaan
+                            $db_pertanyaan = $this->db->get_where('tugas_pertanyaan', array('tugas_id' => $row['id']))->result_array();
+                            foreach ($db_pertanyaan as $pertanyaan) {
+                                # hapus semua pilihan
+                                $this->db->where('pertanyaan_id', $pertanyaan['id']);
+                                $this->db->delete('pilihan');
+
+                                $this->db->where('id', $pertanyaan['id']);
+                                $this->db->delete('tugas_pertanyaan');
+                            }
+
+                            # hapus nilai tugas
+                            $this->db->where('tugas_id', $row['id']);
+                            $this->db->delete('nilai_tugas');
+
+                            # hapus tugas
+                            $this->db->where('id', $row['id']);
+                            $this->db->delete('tugas');
+                        }
+
+                        # hapus login log
+                        $this->db->where('login_id', $db_login['id']);
+                        $this->db->delete('login_log');
+
+                        # hapus login
+                        $this->db->where('pengajar_id', $pengajar_id);
+                        $this->db->delete('login');
+
+                        # hapus pengajar
+                        $this->db->where('id', $pengajar_id);
+                        $this->db->delete('pengajar');
+
+                        $this->db->trans_complete();
+
+                        if ($this->db->trans_status() === FALSE) {
+                            $data_gagal[] = $pengajar_id;
+                        }
                     }
-                } else {
-                    $data['restore_msg'] = "Tidak ada file yang diupload.";
+
+                    # redirect berhasil
+                    if (empty($data_gagal)) {
+                        $this->session->set_flashdata('hapus_data', get_alert('success', 'Hapus data pengajar berhasil.'));
+                    } else {
+                        $flash_msg = "Pengajar ID " . implode(", ", $data_gagal) . " gagal dihapus.";
+                        $this->session->set_flashdata('hapus_data', get_alert('warning', $flash_msg));
+                    }
+
+                    redirect('welcome/hapus_data');
+                }
+            break;
+
+            case 'tugas':
+                $this->form_validation->set_rules('tugas_id', 'Tugas ID', 'required|trim|xss_clean');
+                if ($this->form_validation->run() == true) {
+
+                    $data_gagal = array();
+                    $tugas_ids  = explode(",", $this->input->post('tugas_id', true));
+                    foreach ($tugas_ids as $tugas_id) {
+                        $tugas_id = trim($tugas_id);
+
+                        #cek dulu
+                        $db_tugas = $this->tugas_model->retrieve($tugas_id);
+                        if (empty($db_tugas)) {
+                            $data_gagal[] = $tugas_id;
+                            continue;
+                        }
+
+                        $this->db->trans_start();
+
+                        # hapus tugas kelas
+                        $this->db->where('tugas_id', $tugas_id);
+                        $this->db->delete('tugas_kelas');
+
+                        # hapus tugas pertanyaan
+                        $db_pertanyaan = $this->db->get_where('tugas_pertanyaan', array('tugas_id' => $tugas_id))->result_array();
+                        foreach ($db_pertanyaan as $pertanyaan) {
+                            # hapus semua pilihan
+                            $this->db->where('pertanyaan_id', $pertanyaan['id']);
+                            $this->db->delete('pilihan');
+
+                            $this->db->where('id', $pertanyaan['id']);
+                            $this->db->delete('tugas_pertanyaan');
+                        }
+
+                        # hapus nilai tugas
+                        $this->db->where('tugas_id', $tugas_id);
+                        $this->db->delete('nilai_tugas');
+
+                        # hapus tugas
+                        $this->db->where('id', $tugas_id);
+                        $this->db->delete('tugas');
+
+                        $this->db->trans_complete();
+
+                        if ($this->db->trans_status() === FALSE) {
+                            $data_gagal[] = $tugas_id;
+                        }
+                    }
+
+                    # redirect berhasil
+                    if (empty($data_gagal)) {
+                        $this->session->set_flashdata('hapus_data', get_alert('success', 'Hapus data tugas berhasil.'));
+                    } else {
+                        $flash_msg = "Tugas ID " . implode(", ", $data_gagal) . " gagal dihapus.";
+                        $this->session->set_flashdata('hapus_data', get_alert('warning', $flash_msg));
+                    }
+
+                    redirect('welcome/hapus_data');
                 }
             break;
         }
 
-        $this->twig->display('backup-restore.html', $data);
+        $this->twig->display('hapus-data.html', $data);
     }
 }
 

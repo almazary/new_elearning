@@ -4,20 +4,51 @@
 <div class="btn-controls">
     <div class="btn-box-row row-fluid">
         <div class="span12">
-            <div class="widget-usage" style="padding: 10px 15px;">
-                <small class="pull-right">{{ tgl_indo(date('Y-m-d')) }}, IP {{ get_ip() }}</small>
-                Selamat datang di <b>E-learning {{ get_pengaturan('nama-sekolah', 'value') }}</b>
+            <div class="well well-small well-box">
+                <small class="pull-right">{{ tgl_indo(date('Y-m-d')) }}, IP anda: {{ get_ip() }}</small>
+                Selamat datang di <b>e-learning {{ get_pengaturan('nama-sekolah', 'value') }}</b>
                 <br>
-                <i class="icon icon-map-marker"></i> {{ get_pengaturan('alamat', 'value') }}
+                <i class="icon icon-map-marker"></i> Alamat: {{ get_pengaturan('alamat', 'value') }}
                 {% if get_pengaturan('telp', 'value') is not empty %}
-                <i class="icon icon-phone"></i> {{ get_pengaturan('telp', 'value') }}
+                <i class="icon icon-phone"></i> Telpon: {{ get_pengaturan('telp', 'value') }}
                 {% endif %}
             </div>
         </div>
     </div>
-    <br>
 
     {% if is_admin() %}
+    {% if count_mapel_kelas == 0 %}
+    <div class="well well-large well-box" style="border:2px solid #29b7d3;">
+        <b><i class="icon-wrench"></i> Atur data berikut supaya aplikasi e-learing dapat berjalan dengan baik:</b>
+        <table class="table table-hover" style="margin-top:10px;">
+            <tr>
+                <td width="30%">
+                    <a href="{{ site_url('mapel') }}"><b><i class="menu-icon icon-book"></i> Manajemen Matapelajaran</b></a>
+                </td>
+                <td>
+                    Input semua Matapelajaran yang ada di sekolah
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">
+                    <a href="{{ site_url('kelas') }}"><b><i class="menu-icon icon-tasks"></i> Manajemen Kelas</b></a>
+                </td>
+                <td>
+                    Input semua Kelas yang ada di sekolah
+                </td>
+            </tr>
+            <tr>
+                <td width="30%">
+                    <a href="{{ site_url('kelas/mapel_kelas') }}"><b><i class="menu-icon icon-paste"></i> Matapelajaran Kelas</b></a>
+                </td>
+                <td>
+                    Atur Matapelajaran pada tiap-tiap Kelas
+                </td>
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+
     <div class="btn-box-row row-fluid">
         <a href="{{ site_url('siswa/index/1') }}" class="btn-box big span3">
             <i class="icon-group"></i><b>{{ jml_siswa }}</b>
@@ -39,7 +70,7 @@
 
     <div class="btn-box-row row-fluid">
         <div class="span6">
-            <div class="well well-small" style="box-shadow: none;background-color: #FFF;">
+            <div class="well well-small well-box">
                 <b><i class="icon-bullhorn"></i> Pengumuman</b>
                 <table class="table table-striped table-condensed">
                     {% for p in pengumuman %}
@@ -49,9 +80,14 @@
                     {% endfor %}
                 </table>
             </div>
+
+            <div class="well well-small well-box">
+                <b><i class="icon-signin"></i> Riwayat login pengguna</b>
+                <div id="show-last-login-list"></div>
+            </div>
         </div>
         <div class="span6">
-            <div class="well well-small" style="box-shadow: none;background-color: #FFF;">
+            <div class="well well-small well-box">
                 <div class="pull-right">
                     <a class="muted" href="{{ portal_update_link }}" target="_tab">Portal update</a> |
                     <a class="muted" href="{{ bug_tracker_link }}" target="_tab">Bug tracker</a>
@@ -67,7 +103,7 @@
     {% if is_pengajar() %}
     <div class="btn-box-row row-fluid">
         <div class="span6">
-            <div class="widget-usage" style="padding: 10px 15px;">
+            <div class="well well-small well-box">
                 <b><i class="icon-bullhorn"></i> Pengumuman</b>
                 <table class="table table-striped table-condensed">
                     {% for p in pengumuman %}
@@ -77,10 +113,15 @@
                     {% endfor %}
                 </table>
             </div>
+
+            <div class="well well-small well-box">
+                <b><i class="icon-signin"></i> Riwayat login pengguna</b>
+                <div id="show-last-login-list"></div>
+            </div>
         </div>
         <div class="span6">
-            <div class="widget-usage" style="padding: 10px 15px;">
-                <b>Peraturan E-learning : </b><br>
+            <div class="well well-small well-box">
+                <b>Peraturan e-learning : </b><br>
                 {{ get_pengaturan('peraturan-elearning', 'value')|raw_media|raw }}
             </div>
         </div>
@@ -90,9 +131,8 @@
     {% if is_siswa() %}
     <div class="btn-box-row row-fluid">
         <div class="span6">
-
-            <div class="widget-usage" style="padding: 10px 15px; margin-bottom: 20px;">
-                <b>Tugas terbaru</b>
+            <div class="well well-small well-box">
+                <b><i class="icon-tasks"></i> Tugas terbaru</b>
                 <table class="table table-striped table-condensed">
                     {% for m in tugas_terbaru %}
                     <tr>
@@ -104,8 +144,8 @@
                 </table>
             </div>
 
-            <div class="widget-usage" style="padding: 10px 15px; margin-bottom: 20px;">
-                <b>Materi terbaru</b>
+            <div class="well well-small well-box">
+                <b><i class="icon-book"></i> Materi terbaru</b>
                 <table class="table table-striped table-condensed">
                     {% for m in materi_terbaru %}
                     <tr>
@@ -119,7 +159,7 @@
 
         </div>
         <div class="span6">
-            <div class="widget-usage" style="padding: 10px 15px; margin-bottom: 20px;">
+            <div class="well well-small well-box">
                 <b><i class="icon-bullhorn"></i> Pengumuman</b>
                 <table class="table table-striped table-condensed">
                     {% for p in pengumuman %}
@@ -130,8 +170,13 @@
                 </table>
             </div>
 
+            <div class="well well-small well-box">
+                <b><i class="icon-signin"></i> Riwayat login pengguna</b>
+                <div id="show-last-login-list"></div>
+            </div>
+
             <div class="widget-usage" style="padding: 10px 15px;">
-                <b>Peraturan E-learning : </b><br>
+                <b>Peraturan e-learning : </b><br>
                 {{ get_pengaturan('peraturan-elearning', 'value')|raw_media|raw }}
             </div>
         </div>
