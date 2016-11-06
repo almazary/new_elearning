@@ -65,8 +65,8 @@ class updateElearning
             $file_name  = end($split_path);
             $file_path  = $path_folder . $destinantion;
 
-            # cek file disertakan tidak
-            if (!is_file($file_path)) {
+            # cek file disertakan tidak, kalo perintahnya hapus abaikan
+            if (!is_file($file_path) AND $key_do != 2) {
                 throw new Exception("File {$file_path} tidak tersedia!");
             }
 
