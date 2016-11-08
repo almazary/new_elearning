@@ -93,6 +93,10 @@ function plugin_list()
 {
     $plugin_dir = './plugins/src';
 
+    if (!is_dir($plugin_dir)) {
+        return array();
+    }
+
     $objects = scandir($plugin_dir);
     $results = array();
     foreach ($objects as $object) {
