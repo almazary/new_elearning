@@ -70,6 +70,11 @@ class MY_Controller extends CI_Controller
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
+        # cek apakah sudah berhasil install
+        if (check_success_install() == false) {
+            echo "Aplikasi terdeteksi belum dipasang dengan benar, mungkin anda melakukan perubahan konfigurasi application/config/database.php, mohon dicek kembali termasuk dbprefix tabelnya atau menuju ke " . anchor('setup', "&rarr; Halaman Install");die;
+        }
+
         # jika bukan ajax
         if (!is_ajax()) {
             // $this->output->enable_profiler(TRUE);
