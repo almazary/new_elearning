@@ -53,10 +53,11 @@ class MY_Controller extends CI_Controller
         # load helper
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download', 'plugins'));
 
+        $error_install = "Install aplikasi e-learning by Almazari (www.dokumenary.net): " . anchor('setup', "&rarr; Halaman Install");
         try {
             check_db_connection();
         } catch (Exception $e) {
-            echo "Mohon periksa kembali pengaturan database anda.";die;
+            echo $error_install;die;
         }
 
         $this->load->database();
@@ -72,7 +73,7 @@ class MY_Controller extends CI_Controller
 
         # cek apakah sudah berhasil install
         if (check_success_install() == false) {
-            echo "Aplikasi terdeteksi belum dipasang dengan benar, mungkin anda melakukan perubahan konfigurasi application/config/database.php, mohon dicek kembali termasuk dbprefix tabelnya atau menuju ke " . anchor('setup', "&rarr; Halaman Install");die;
+            echo $error_install;die;
         }
 
         # jika bukan ajax
