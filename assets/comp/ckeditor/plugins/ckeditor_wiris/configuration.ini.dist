@@ -1,0 +1,104 @@
+#
+# This is a sample configuration file
+# You can uncomment any line and rename this file to configuration.ini
+#
+
+#wirisdebug = false
+#wirisimageserviceversion = 3.0
+
+#
+# Connection properties
+#
+#wirisimageservicehost = www.wiris.net
+#wirisimageservicepath = /demo/editor/render
+#wirisimageserviceport = 80
+#wirisimageserviceprotocol = http
+# Proxy configuration
+#wirisproxy = false
+#wirisproxy_host =
+#wirisproxy_port =
+# Basic authentication proxy configuration
+#wirisproxy_user =
+#wirisproxy_password =
+
+#
+# Folder properties
+#
+# Place to store the cached images.
+#wiriscachedirectory = /var/cache
+# Place to store the formulas.
+#wirisformuladirectory = /var/formulas
+
+#
+# Class overridables
+#
+#wirisstorageclass = com.wiris.plugin.storage.FileStorageAndCache
+#wirisconfigurationclass = 
+#wirisconfigurationrefreshtime = 10000
+
+#
+# Editor behaviour
+#
+#wiriseditorenabled = true
+#wiriseditormathmlattribute = data-mathml
+#wiriseditorsavemode = xml
+#wiriseditoreditmode = default
+#wiriseditorparselatex = true
+#wiriseditorparsexml = false
+#wiriseditorwindowattributes = width=570, height=450, scroll=no, resizable=yes
+#wiriseditorsetsize = false
+#wiriseditormodalwindow = false
+#wirischemeditorenabled = true
+#wirisimageformat = png
+
+#
+# Editor inherit parameters
+#
+#wiriseditorparameters = {}
+
+#
+# Accessibility
+#
+#wirisaccessibilityenabled = true
+
+#
+# WIRIS cas
+#
+#wiriscascodebase = http://www.wiris.net/demo/wiris/wiris-codebase
+#wiriscasarchive = wrs_net_%LANG.jar
+#wiriscasclass = WirisApplet_net_%LANG
+#wiriscaslanguages = en, es, fr, it, nl, et, ca, eu, pt, de
+#CAS_width = 450
+#CAS_height = 400
+
+#
+# External plugin
+#
+#wirisexternalplugin = false
+
+#
+# Experimental settings.
+#
+#wirispluginperformance = false
+
+#
+# Deprecated. Editor parameters should be parsed as a Json on wiriseditorparameters variale.
+#
+#wiristransparency = true
+#wirisfontfamily = Arial
+#wirisimagecolor = #000000
+#wirisimagebackgroundcolor = #ffffff
+#wirisimagefontsize = 16px
+#wirisimagedpi = 96
+#wiriseditortoolbar = quizzes
+#wirisrtllanguages = ar
+#wirisltrlanguages = ar_ma
+#wirisarabicindiclanguages = ar_eg, ar_sd, ar_sa
+#wiriseasternarabicindiclanguages = fa, ps, ur
+#wiriseuropeanlanguages =
+
+# Delete cache parameters.
+# wiriscleancachegui = false
+# wiriscleancachetoken = token
+
+# End of file

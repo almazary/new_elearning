@@ -1010,7 +1010,7 @@ $config['pengumuman'] = array(
     array(
         'field' => 'konten',
         'label' => 'Konten',
-        'rules' => 'trim|xss_clean|required'
+        'rules' => 'trim|required'
     ),
     array(
         'field' => 'tampil_siswa',

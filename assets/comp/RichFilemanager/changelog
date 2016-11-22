@@ -1,0 +1,69 @@
+Version 1.0.0
+---------------------------
+- Drag & Drop feature
+- Updated third-party libraries and plugins
+- Implemented plugins system for PHP connector (server-based)
+- Implemented AWS S3 storage plugin
+- Ability to limit max size of the storage (root folder)
+- Optimized for integration with frameworks - added "pluginPath" option to load scripts correctly when using custom path routing
+- Extended list of previewed file types via ViewerJS
+- Implemented preview of MS Office file types via Google Docs Viewer
+- Dropzone file uploader replaced with Blueimp's jQuery-File-Upload, which provides out of the box following features:
+    * chunked upload;
+    * image resizing (Wideimage lib was removed);
+    * image orientation (auto-rotation);
+- New design and features in multiple upload window for preview items; controls for each item (start, abort, resume, delete, etc.)
+- Improved Filetree: allow to open and display multiple subfolders at a time
+- Improved manipulation of Filetree nodes:
+    * rewritten most of items manipulation methods to perform all possible operations on client-side;
+    * this made possible to significantly reduce number of server requests (which is critical for S3 servers that charge you for each request);
+    * implemented "moveNode" for Drag & Drop and "replace" action;
+- Implemented "moveNode" for Drag & Drop and "replace" action
+- Added new "Type" column in the list view
+- Implemented natural sorting on the client-side for Filetree nodes and Fileinfo items after "upload", "add", "rename", "move" and other actions
+- Improved list view sorting: sort settings are persistent during folders navigation and not reset as it was before
+- Caching result of some requests which were duplicated for Filetree and Fileinfo sections (like "getfolder")
+- Reduced number of requests to server by implementing "getFolderData" method that caches data for a short time
+- Rewritten most of items manipulation methods to perform all possible operations on client-side, that makes possible
+to significantly reduce number of server requests (which is critical for S3 servers that charge you for each request)
+- FM template wrapped with ".fm-container" container; CSS rules in all themes were encapsulated to affect only elements inside container
+- New transliteration methods on client and server sides (PHP) to support a wide range of chars (cyrillic, chinese, etc.)
+- Auto calculating FM height when place it to the non-empty page to fill the empty space (between header and footer, for example)
+- Improved FM height calculating (check required for CKEditor and other WYSIWYGs)
+- Fixed bug: security vulnerabilities in PHP connector ("getinfo", "rename" and "move" methods)
+- Fixed bug: "Parent Folder" button in file preview mode works correctly
+- Fixed bug: sorting respects type of item (file/folder) and doesn't mixes them together
+- Fixed bug: handle download errors correctly, if any
+- Fixed bug: better error handling for client-size and in PHP connector
+
+
+Version 1.0.4
+---------------------------
+- Improved and extended logging process
+- Added new associations of some icons with file types for filetree and listview (docx, xlsx, odt, ods, odp, etc...)
+- Fixed bug: multiple issues when filemanager is located and accessible not from root (nested) folder
+- Fixed bug: error in PHP connector while file downloading
+- Fixed bug: error in PHP connector while transliteration process
+
+
+Version 1.0.5
+---------------------------
+- Added a capability to preview images and media files when the userfiles folder is located beyond server root directory
+- Improved path processing at the client-side. Absolute path used whenever it is possible. Normalization of the preview path
+- Improved a way of automatically determination of `baseUrl` based on page URL
+- Fixed bug: Copy URL to clipboard does not work - #5
+- Fixed bug: Path issue upon file selection in WYSIWYG editor
+- Fixed bug: It is possible to select folders in WYSIWYG editor
+- Fixed bug: Preview of media and pdf files is broken when the path contains special chars (fixed by path encoding)
+
+
+Version 1.0.6
+---------------------------
+- removed `fileConnector` option from server-side;
+- removed 'Preview' and 'Thumbnail' params from `getinfo` response;
+- all preview paths (images, media, office files) are now associated to connector. Absolute paths for icons exclusively;
+- all preview paths are now built at the client-side (connector independent) for better API support;
+- added support of seeking for media files in PHP connector (including S3 storage plugin);
+- added capability to pass custom configuration options in filemanager.php to override the default config;
+- PHP connector refactored, following OOP practices;
+- added icons for OpenOffice files;

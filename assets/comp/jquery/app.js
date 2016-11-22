@@ -2,6 +2,9 @@
 
 // $(document).ready(function() {
 
+    // codesnipet plugins ckeditor
+    hljs.initHighlightingOnLoad();
+
     var is_user_logged_in = 0;
     var sedang_ujian = 0;
 
@@ -18,9 +21,9 @@
     });
 
     // panggil SyntaxHighlighter
-    try {
-        SyntaxHighlighter.all();
-    } catch(e) {}
+    // try {
+    //     SyntaxHighlighter.all();
+    // } catch(e) {}
 
     // tooltip
     $('[data-toggle="tooltip"]').tooltip({html:true});
@@ -69,6 +72,39 @@
     $(document).ajaxComplete(function( event, xhr, settings ) {
         on_ajax_success(xhr);
     });
+
+    // configurasi default untuk ckeditor
+    function ckeditor_config()
+    {
+        return {
+            toolbarGroups : [
+                { name: 'clipboard', groups: [ 'clipboard', 'undo'] },
+                { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                { name: 'forms', groups: [ 'forms' ] },
+                { name: 'links', groups: [ 'links' ] },
+                { name: 'insert', groups: [ 'insert' ] },
+                { name: 'others', groups: [ 'others' ] },
+                '/',
+                { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                { name: 'colors', groups: [ 'colors' ] },
+                '/',
+                { name: 'styles', groups: [ 'styles' ] },
+                { name: 'about', groups: [ 'about' ] },
+                { name: 'document', groups: [ 'document', 'doctools', 'mode' ] },
+                { name: 'tools', groups: [ 'tools' ] }
+            ],
+            removeButtons : 'Save,NewPage,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Find,Replace,SelectAll,RemoveFormat,CopyFormatting,Language,CreateDiv,HorizontalRule,PageBreak,Iframe,About,Scayt',
+            extraPlugins : 'lineutils,widget,codesnippet,ckeditor_wiris,youtube,html5audio,video',
+            codeSnippet_theme : 'monokai',
+            allowedContent : true,
+            skin : 'office2013',
+        };
+    }
+
+    try {
+        $('textarea.texteditor').ckeditor(ckeditor_config());
+    } catch(e) {}
 
     // area yang harus login dan tidak sedang ujian
     if (is_user_logged_in == 1 && sedang_ujian == 0) {

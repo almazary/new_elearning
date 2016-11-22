@@ -109,32 +109,34 @@ function default_parser_item($add_item = array())
 
     # load komponen js aplikasi
     $load_js_app = load_comp_js(array(
-        base_url('assets/comp/SyntaxHighlighter/scripts/shCore.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAppleScript.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAS3.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushBash.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushColdFusion.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCpp.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCSharp.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCss.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDelphi.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDiff.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushErlang.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushGroovy.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJava.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJavaFX.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJScript.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPerl.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPhp.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPlain.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPowerShell.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPython.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushRuby.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSass.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushScala.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSql.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushVb.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushXml.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shCore.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAppleScript.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAS3.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushBash.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushColdFusion.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCpp.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCSharp.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCss.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDelphi.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDiff.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushErlang.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushGroovy.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJava.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJavaFX.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJScript.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPerl.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPhp.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPlain.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPowerShell.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPython.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushRuby.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSass.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushScala.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSql.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushVb.js'),
+        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushXml.js'),
+        base_url('assets/comp/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js'),
+        base_url('assets/comp/ckeditor/plugins/ckeditor_wiris/integration/WIRISplugins.js?viewer=image'),
         base_url('assets/comp/timeago/jquery.timeago.js'),
         base_url('assets/comp/jquery/app.js'),
     ));
@@ -270,6 +272,14 @@ function get_active_theme()
 function get_alert($notif = 'success', $msg = '')
 {
     return '<div class="alert alert-'.$notif.'"><button type="button" class="close" data-dismiss="alert">×</button> '.$msg.'</div>';
+}
+
+function get_texteditor()
+{
+    return load_comp_js(array(
+        base_url('assets/comp/ckeditor/ckeditor.js'),
+        base_url('assets/comp/ckeditor/adapters/jquery.js'),
+    ));
 }
 
 /**

@@ -126,7 +126,7 @@ class Pengumuman extends MY_Controller
             $split           = explode(" s/d ", $this->input->post('tgl_tampil', true));
             $tgl_tampil      = $split[0];
             $tgl_tutup       = $split[1];
-            $konten          = $this->input->post('konten', true);
+            $konten          = $this->input->post('konten');
             $tampil_siswa    = $this->input->post('tampil_siswa', true);
             $tampil_pengajar = $this->input->post('tampil_pengajar', true);
 
@@ -137,7 +137,8 @@ class Pengumuman extends MY_Controller
         }
 
         # load komponen
-        $html_js = get_tinymce('konten');
+        // $html_js = get_tinymce('konten');
+        $html_js = get_texteditor();
         $html_js .= load_comp_js(array(
             base_url('assets/comp/jquery/moment.min.js'),
             base_url('assets/comp/daterangepicker/jquery.daterangepicker.js'),
