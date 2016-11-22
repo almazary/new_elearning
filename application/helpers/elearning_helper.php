@@ -797,33 +797,6 @@ function start_native_session()
 }
 
 /**
- * Method untuk membuat session kcfinder, karena kcfinder masih menggunakan natif session
- *
- * @param  integer $login_id
- */
-function create_sess_kcfinder($login_id)
-{
-    if (is_login()) {
-        # start natif session
-        start_native_session();
-
-        $_SESSION['E-LEARNING']['KCFINDER']              = array();
-        $_SESSION['E-LEARNING']['KCFINDER']['disabled']  = false;
-        $_SESSION['E-LEARNING']['KCFINDER']['uploadDir'] = "";
-        if (is_admin()) {
-            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('userfiles/uploads/');
-        } else {
-            $user_folder = './userfiles/uploads/' . $login_id;
-            if (!is_dir($user_folder)) {
-                mkdir($user_folder, 0755);
-                chmod($user_folder, 0755);
-            }
-            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('userfiles/uploads/' . $login_id);
-        }
-    }
-}
-
-/**
  * Method untuk mendapatkan satu record tambahan
  *
  * @param  string $id

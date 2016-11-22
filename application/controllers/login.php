@@ -76,9 +76,14 @@ class Login extends MY_Controller
                     'user'  => $user
                 );
 
-                $this->session->set_userdata($data_session);
+                # setup folder
+                if ($user_type == 'admin') {
+                    $data_session['login_' . APP_PREFIX]['path_userfiles'] = FCPATH . 'userfiles/';
+                } else {
+                    $data_session['login_' . APP_PREFIX]['path_userfiles'] = FCPATH . 'userfiles/' . $get_login['id'] . '/';
+                }
 
-                create_sess_kcfinder($get_login['id']);
+                $this->session->set_userdata($data_session);
 
                 redirect('welcome');
             }
@@ -103,7 +108,6 @@ class Login extends MY_Controller
 
     function logout()
     {
-        $_SESSION['E-LEARNING'] = array();
         $this->session->set_userdata('login_' . APP_PREFIX, null);
         $this->session->set_userdata('filter_pengajar', null);
         $this->session->set_userdata('filter_materi', null);

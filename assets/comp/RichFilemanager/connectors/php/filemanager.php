@@ -44,6 +44,14 @@ $split_lokasi      = explode("/", __FILE__);
 $key_assets        = array_search('assets', $split_lokasi);
 $key_parent_folder = $key_assets - 1;
 
-$fm->setFileRoot("{$split_lokasi[$key_parent_folder]}/userfiles/", true);
+// # ambil cookie
+// include '../../../../../application/config/config.php';
+// if (empty($config['sess_cookie_name'])) {
+//     throw new \Exception("Gagal include config.php");
+// }
+
+// $ci_cookie = unserialize($_COOKIE[$config['sess_cookie_name']]);
+
+$fm->setFileRoot('/Users/almazari/Sites/new_elearning/userfiles/', true);
 
 $fm->handleRequest();

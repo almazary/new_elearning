@@ -80,14 +80,6 @@ class MY_Controller extends CI_Controller
         if (!is_ajax()) {
             // $this->output->enable_profiler(TRUE);
 
-            # jika sudah login
-            if (is_login()) {
-                # cek session kcfindernya ada atau tidak
-                if (empty($_SESSION['E-LEARNING']['KCFINDER'])) {
-                    create_sess_kcfinder(get_sess_data('login', 'id'));
-                }
-            }
-
             # jika login sebagai siswa
             if (is_siswa()) {
                 # jika kelas aktifnya kosong, sebaiknya di die jasa
