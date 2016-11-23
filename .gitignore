@@ -1,6 +1,7 @@
 /userfiles/files/*
 !/userfiles/files/index.html
 /userfiles/images/
+/userfiles/_thumbs/
 /userfiles/uploads/
 /userfiles/updates/
 /user_guide/

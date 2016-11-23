@@ -78,9 +78,9 @@ class Login extends MY_Controller
 
                 # setup folder
                 if ($user_type == 'admin') {
-                    $data_session['login_' . APP_PREFIX]['path_userfiles'] = FCPATH . 'userfiles/';
+                    $data_session['login_' . APP_PREFIX]['path_userfiles'] = 'userfiles/';
                 } else {
-                    $data_session['login_' . APP_PREFIX]['path_userfiles'] = FCPATH . 'userfiles/' . $get_login['id'] . '/';
+                    $data_session['login_' . APP_PREFIX]['path_userfiles'] = 'userfiles/uploads/' . $get_login['id'] . '/';
                 }
 
                 $this->session->set_userdata($data_session);

@@ -44,14 +44,16 @@ $split_lokasi      = explode("/", __FILE__);
 $key_assets        = array_search('assets', $split_lokasi);
 $key_parent_folder = $key_assets - 1;
 
-// # ambil cookie
-// include '../../../../../application/config/config.php';
-// if (empty($config['sess_cookie_name'])) {
-//     throw new \Exception("Gagal include config.php");
-// }
+# ambil cookie
+define('BASEPATH', '');
+require_once '../../../../../application/config/config.php';
+if (empty($config['sess_cookie_name'])) {
+    $config['sess_cookie_name'] = 'ci_session';
+}
 
-// $ci_cookie = unserialize($_COOKIE[$config['sess_cookie_name']]);
+$ci_cookie = unserialize($_COOKIE[$config['sess_cookie_name']]);
 
-$fm->setFileRoot('/Users/almazari/Sites/new_elearning/userfiles/', true);
+# otomatis duah mulai dari root htdocs
+$fm->setFileRoot($split_lokasi[$key_parent_folder] . '/' . $ci_cookie['login_e-learning']['path_userfiles'], true);
 
 $fm->handleRequest();

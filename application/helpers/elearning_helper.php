@@ -149,7 +149,7 @@ function default_parser_item($add_item = array())
 
     // load komponen css aplikasi
     $load_css_app = load_comp_css(array(
-        base_url('assets/comp/SyntaxHighlighter/styles/shCoreEclipse.css'),
+        base_url('assets/comp/RichFilemanager/styles/dialog.css'),
     ));
 
     if (isset($add_item['comp_css'])) {
