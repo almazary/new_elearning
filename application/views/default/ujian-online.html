@@ -161,7 +161,7 @@
                                         {{ p.pertanyaan|raw_media|raw }}
                                     </div>
 
-                                    <textarea name="jawaban[{{ p.id }}]" id="jawaban-{{ p.id }}" style="width:100%; height:300px;">{{ get_jawaban(data.jawaban, p.id)|raw }}</textarea>
+                                    <textarea name="jawaban[{{ p.id }}]" id="jawaban-{{ p.id }}" class="texteditor">{{ get_jawaban(data.jawaban, p.id)|raw }}</textarea>
 
                                 </td>
                             </tr>

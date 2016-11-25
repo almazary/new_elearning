@@ -307,7 +307,7 @@ class Ajax extends MY_Controller
 
                 $tugas_id      = (int)$this->input->post('tugas_id', true);
                 $pertanyaan_id = (int)$this->input->post('pertanyaan_id', true);
-                $jawaban       = $this->input->post('jawaban', true);
+                $jawaban       = $this->input->post('jawaban');
 
                 $tugas = $this->tugas_model->retrieve($tugas_id);
                 if (empty($tugas)) {

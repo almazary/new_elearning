@@ -109,32 +109,6 @@ function default_parser_item($add_item = array())
 
     # load komponen js aplikasi
     $load_js_app = load_comp_js(array(
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shCore.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAppleScript.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAS3.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushBash.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushColdFusion.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCpp.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCSharp.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCss.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDelphi.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDiff.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushErlang.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushGroovy.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJava.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJavaFX.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJScript.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPerl.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPhp.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPlain.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPowerShell.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPython.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushRuby.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSass.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushScala.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSql.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushVb.js'),
-        // base_url('assets/comp/SyntaxHighlighter/scripts/shBrushXml.js'),
         base_url('assets/comp/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js'),
         base_url('assets/comp/ckeditor/plugins/ckeditor_wiris/integration/WIRISplugins.js?viewer=image'),
         base_url('assets/comp/timeago/jquery.timeago.js'),
@@ -150,6 +124,7 @@ function default_parser_item($add_item = array())
     // load komponen css aplikasi
     $load_css_app = load_comp_css(array(
         base_url('assets/comp/RichFilemanager/styles/dialog.css'),
+        base_url('assets/comp/ckeditor/plugins/codesnippet/lib/highlight/styles/monokai.css'),
     ));
 
     if (isset($add_item['comp_css'])) {
@@ -274,81 +249,17 @@ function get_alert($notif = 'success', $msg = '')
     return '<div class="alert alert-'.$notif.'"><button type="button" class="close" data-dismiss="alert">×</button> '.$msg.'</div>';
 }
 
+/**
+ * Method untuk memanggil library javascript untuk texteditornya
+ * @return string
+ */
 function get_texteditor()
 {
+    # load ckeditor
     return load_comp_js(array(
         base_url('assets/comp/ckeditor/ckeditor.js'),
         base_url('assets/comp/ckeditor/adapters/jquery.js'),
     ));
-}
-
-/**
- * Method untuk panggil component tinymc
- *
- * @param  string $element_id
- * @return string
- */
-function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array(), $str_options = null)
-{
-    $tiny_plugins = array('emotions','syntaxhl','wordcount','pagebreak','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
-    if (!empty($remove_plugins)) {
-        $copy_tiny_plugins = $tiny_plugins;
-        $combine           = array_combine($tiny_plugins, $copy_tiny_plugins);
-        foreach ($remove_plugins as $rm) {
-            unset($combine[$rm]);
-        }
-        $tiny_plugins = array_values($combine);
-    }
-
-    $return = '<script type="text/javascript" src="'.base_url('assets/comp/tinymce/tiny_mce.js').'"></script>'.PHP_EOL;
-    $return .= '<script type="text/javascript">
-        tinyMCE.init({
-            selector: "textarea#'.$element_id.'",
-            theme : "'.$theme.'",
-            plugins : "'.implode(',', $tiny_plugins).'",';
-
-            if (empty($str_options)) {
-                $return .= 'theme_advanced_buttons1 : "undo,redo,bold,italic,underline,strikethrough,bullist,numlist,justifyleft,justifycenter,justifyright,justifyfull,blockquote,link,unlink,sub,sup,charmap,tiny_mce_wiris_formulaEditor,emotions,image,media,youtubeIframe,syntaxhl,code",
-                    theme_advanced_buttons2 : "",
-                    theme_advanced_buttons3 : "",
-                    theme_advanced_toolbar_location : "top",
-                    theme_advanced_toolbar_align : "left",
-                    theme_advanced_statusbar_location : "bottom",
-                    file_browser_callback : "openKCFinder",
-                    theme_advanced_resizing : true,
-                    theme_advanced_resize_horizontal : false,
-                    content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
-                    convert_urls: false,
-                    force_br_newlines : false,
-                    force_p_newlines : false,
-                    inline_styles: false,
-                    formats: {
-                       underline: { inline: "u", exact : true },
-                       strikethrough: { inline: "del", exact : true }
-                    }';
-            } else {
-                $return .= $str_options;
-            }
-    $return .= '});';
-
-    $return .= 'function openKCFinder(field_name, url, type, win) {
-            tinyMCE.activeEditor.windowManager.open({
-                file: "'.base_url('assets/comp/kcfinder/browse.php?opener=tinymce&type=').'" + type,
-                title: "KCFinder",
-                width: 700,
-                height: 500,
-                resizable: "yes",
-                inline: true,
-                close_previous: "no",
-                popup_css: false
-            }, {
-                window: win,
-                input: field_name
-            });
-            return false;
-        }
-    </script>';
-    return $return;
 }
 
 /**

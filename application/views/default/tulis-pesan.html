@@ -28,7 +28,7 @@ Tulis pesan - {{ parent() }}
             <div class="control-group">
                 <label class="control-label">Isi Pesan <span class="text-error">*</span></label>
                 <div class="controls">
-                    <textarea name="content" id="content" style="height:300px;width:100%;">{{ set_value('content')|raw }}</textarea>
+                    <textarea name="content" id="content" class="texteditor">{{ set_value('content')|raw }}</textarea>
                     {{ form_error('content')|raw }}
                 </div>
             </div>

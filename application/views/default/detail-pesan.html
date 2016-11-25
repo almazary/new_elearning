@@ -37,7 +37,7 @@ Detail Percakapan - {{ parent() }}
             <hr class="hr-msg">
             {{ form_open_multipart('message/create/' ~ r.sender_receiver_id, {'class' : 'form-horizontal row-fluid'})|raw }}
                 <input type="hidden" name="penerima" value="{{ receiver_name }}">
-                <textarea name="content" id="content" style="height:300px;width:100%;">{{ set_value('content')|raw }}</textarea>
+                <textarea name="content" id="content" class="texteditor">{{ set_value('content')|raw }}</textarea>
                 {{ form_error('content')|raw }}
                 <br>
                 <p><button class="btn btn-primary">Kirim</button></p>

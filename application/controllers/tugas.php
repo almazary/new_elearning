@@ -212,12 +212,12 @@ class Tugas extends MY_Controller
         $data['type']    = $type;
         $data['mapel']   = $this->mapel_model->retrieve_all_mapel();
         $data['kelas']   = $this->kelas_model->retrieve_all_child();
-        $data['comp_js'] = get_tinymce('info');
+        $data['comp_js'] = get_texteditor();
 
         if ($this->form_validation->run($form_validation) == TRUE) {
             $mapel_id = $this->input->post('mapel_id', TRUE);
             $judul    = $this->input->post('judul', TRUE);
-            $info     = $this->input->post('info', TRUE);
+            $info     = $this->input->post('info');
             $durasi   = null;
             if ($type != 1) {
                 $durasi = $this->input->post('durasi', TRUE);
@@ -309,12 +309,12 @@ class Tugas extends MY_Controller
         $data['tugas_kelas'] = $tugas_kelas_id;
         $data['mapel']       = $this->mapel_model->retrieve_all_mapel();
         $data['kelas']       = $this->kelas_model->retrieve_all_child();
-        $data['comp_js']     = get_tinymce('info');
+        $data['comp_js']     = get_texteditor();
 
         if ($this->form_validation->run($form_validation) == TRUE) {
             $mapel_id = $this->input->post('mapel_id', TRUE);
             $judul    = $this->input->post('judul', TRUE);
-            $info     = $this->input->post('info', TRUE);
+            $info     = $this->input->post('info');
             $durasi   = null;
             if ($tugas['type_id'] != 1) {
                 $durasi = $this->input->post('durasi', TRUE);
@@ -656,11 +656,11 @@ class Tugas extends MY_Controller
         }
 
         $data['tugas']         = $tugas;
-        $data['comp_js']       = get_tinymce('pertanyaan', 'advanced', array('autosave'));
+        $data['comp_js']       = get_texteditor();
         $data['no_pertanyaan'] = $this->tugas_model->count_pertanyaan($tugas['id']) + 1;
 
         if ($this->form_validation->run('tugas/pertanyaan') == TRUE) {
-            $pertanyaan = $this->input->post('pertanyaan', true);
+            $pertanyaan = $this->input->post('pertanyaan');
 
             $pertanyaan_id = $this->tugas_model->create_pertanyaan(
                 $pertanyaan,
@@ -702,11 +702,11 @@ class Tugas extends MY_Controller
 
         $data['pertanyaan']    = $pertanyaan;
         $data['tugas']         = $tugas;
-        $data['comp_js']       = get_tinymce('pertanyaan', 'advanced', array('autosave'));
+        $data['comp_js']       = get_texteditor();
         $data['no_pertanyaan'] = $pertanyaan['urutan'];
 
         if ($this->form_validation->run('tugas/pertanyaan') == TRUE) {
-            $post_pertanyaan = $this->input->post('pertanyaan', true);
+            $post_pertanyaan = $this->input->post('pertanyaan');
 
             $this->tugas_model->update_pertanyaan(
                 $pertanyaan['id'],
@@ -788,11 +788,11 @@ class Tugas extends MY_Controller
 
         $data['pertanyaan']    = $pertanyaan;
         $data['tugas']         = $tugas;
-        $data['comp_js']       = get_tinymce('konten', 'advanced', array('autosave'));
+        $data['comp_js']       = get_texteditor();
 
         if ($this->form_validation->run('tugas/pilihan') == TRUE) {
             $post_pilihan = $this->input->post('pilihan', true);
-            $post_konten  = $this->input->post('konten', true);
+            $post_konten  = $this->input->post('konten');
 
             $pilihan_id = $this->tugas_model->create_pilihan(
                 $pertanyaan['id'],
@@ -842,11 +842,11 @@ class Tugas extends MY_Controller
         $data['pilihan']    = $pilihan;
         $data['pertanyaan'] = $pertanyaan;
         $data['tugas']      = $tugas;
-        $data['comp_js']    = get_tinymce('konten', 'advanced', array('autosave'));
+        $data['comp_js']    = get_texteditor();
 
         if ($this->form_validation->run('tugas/pilihan') == TRUE) {
             $post_pilihan = $this->input->post('pilihan', true);
-            $post_konten  = $this->input->post('konten', true);
+            $post_konten  = $this->input->post('konten');
 
             $this->tugas_model->update_pilihan(
                 $pilihan['id'],
@@ -1111,7 +1111,7 @@ class Tugas extends MY_Controller
         }
 
         if ($tugas['type_id'] == 2) {
-            $html_js .= get_tinymce('jawaban, textarea#jawaban-' . implode(', textarea#jawaban-', $check_field_value['pertanyaan_id']), 'advanced', array('autosave'));
+            $html_js .= get_texteditor();
             $data['data']['str_id'] = implode(',', $check_field_value['pertanyaan_id']);
         }
 

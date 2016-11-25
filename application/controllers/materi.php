@@ -178,7 +178,7 @@ class Materi extends MY_Controller
         $data['type']    = $type;
         $data['mapel']   = $this->mapel_model->retrieve_all_mapel();
         $data['kelas']   = $this->kelas_model->retrieve_all(null, array('aktif' => 1));
-        $data['comp_js'] = get_tinymce('konten');
+        $data['comp_js'] = get_texteditor();
 
         $success = false;
         if ($type == 'tertulis') {

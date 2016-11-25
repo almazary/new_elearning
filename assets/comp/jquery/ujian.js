@@ -66,8 +66,7 @@ function simpanJawaban(tugas_id) {
 
         var count_success = 0;
         for (var i = 0; i < arr_pertanyaan_id.length; i++) {
-            var tiny_obj = tinyMCE.get('jawaban-' + arr_pertanyaan_id[i]);
-            var jawaban  = tiny_obj.getContent();
+            var jawaban = CKEDITOR.instances['jawaban-' + arr_pertanyaan_id[i]].getData();
 
             $.ajax({
                 type : "POST",
