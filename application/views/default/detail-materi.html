@@ -46,7 +46,7 @@
                     <div class="row-fluid">
                         <div class="span8">
                             <h4>
-                                <i class="fa fa-pencil"></i> Tulis komentar
+                                <i class="icon-pencil"></i> Tulis komentar
                                 <div class="pull-right" style="font-size: 14px;">{{ form_error('komentar')|raw }}</div>
                             </h4>
                             <div class="bg-form-komentar" id="form-komentar">
@@ -63,12 +63,12 @@
                             <br>
 
                             {% if materi.jml_komentar > 0 %}
-                                <h4><i class="fa fa-comments"></i> {{ materi.jml_komentar }} Komentar</h4>
+                                <h4><i class="icon-comments"></i> {{ materi.jml_komentar }} Komentar</h4>
 
                                 {% for k in materi.komentar %}
                                 <div class="komentar" id="komentar-{{ k.id }}">
                                     <img src="{{ k.login.link_image }}" style="height:25px;width:25px; margin-left:5px;" class="img-circle img-polaroid pull-right">
-                                    <p><a href="{{ k.login.link_profil }}"><b>{{ k.login.nama }}</b></a>, <small>{{ k.tgl_posting|date('d F Y') }}</small>, <small><a href="{{ site_url('materi/detail/' ~ materi.id ~ '/laporkan/' ~ k.id) }}" class="text-muted iframe-laporkan"><i class="fa fa-bug"></i> laporkan</a></small></p>
+                                    <p><a href="{{ k.login.link_profil }}"><b>{{ k.login.nama }}</b></a>, <small>{{ k.tgl_posting|date('d F Y') }}</small>, <small><a href="{{ site_url('materi/detail/' ~ materi.id ~ '/laporkan/' ~ k.id) }}" class="text-muted iframe-laporkan"><i class="icon-bug"></i> laporkan</a></small></p>
                                     {{ k.konten|raw_media|raw }}
                                 </div>
                                 {% endfor %}
@@ -79,12 +79,12 @@
                             {% endif %}
                         </div>
                         <div class="span4">
-                            <h4><i class="fa fa-file"></i> Materi lainnya</h4>
+                            <h4><i class="icon-file"></i> Materi lainnya</h4>
                             <ul class="unstyled ul-materi">
                                 {% for t in terkait %}
                                 <li>
                                     <div class="materi">
-                                        <a href="{{ site_url('materi/detail/' ~ t.id) }}"><i class="fa {{ (t.file is empty) ? 'fa-file-text' : 'fa-file' }} img-circle img-polaroid {{ (strlen(t.judul) > 33) ? 'pull-left' }}" style="padding:10px; margin-right:10px;"></i>{{ t.judul|raw }}</a>
+                                        <a href="{{ site_url('materi/detail/' ~ t.id) }}"><i class="{{ (t.file is empty) ? 'icon-file-text' : 'icon-file' }} img-circle img-polaroid {{ (strlen(t.judul) > 33) ? 'pull-left' }}" style="padding:10px; margin-right:10px;"></i>{{ t.judul|raw }}</a>
                                     </div>
                                 </li>
                                 {% endfor %}

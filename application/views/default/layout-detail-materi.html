@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>{% block title %}{{ site_name }}{% endblock %}</title>
         {% include 'layout-header.html' %}
         <link type="text/css" href="{{ base_url_theme }}css/read.css" rel="stylesheet">
         {% block css %}{% endblock %}
