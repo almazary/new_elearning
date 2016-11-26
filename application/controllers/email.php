@@ -101,7 +101,7 @@ class Email extends MY_Controller
             'subject' => $retrieve_value['subject'],
             'body'    => $retrieve_value['body']
         );
-        $data['comp_js'] = get_tinymce('body', 'simple');
+        $data['comp_js'] = get_texteditor();
 
         $this->twig->display('edit-email-template.html', $data);
     }

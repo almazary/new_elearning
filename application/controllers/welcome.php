@@ -235,7 +235,7 @@ class Welcome extends MY_Controller
             }
         }
 
-        $data['comp_js'] = get_tinymce('tinymce, textarea.tinymce');
+        $data['comp_js'] = get_texteditor();
         $this->twig->display('pengaturan.html', $data);
     }
 

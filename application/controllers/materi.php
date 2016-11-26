@@ -185,7 +185,7 @@ class Materi extends MY_Controller
             if ($this->form_validation->run('materi/add/tertulis') == TRUE) {
                 $mapel_id = $this->input->post('mapel_id', TRUE);
                 $judul    = $this->input->post('judul', TRUE);
-                $konten   = $this->input->post('konten', TRUE);
+                $konten   = $this->input->post('konten');
 
                 $materi_id = $this->materi_model->create(
                     (is_pengajar() OR is_admin()) ? get_sess_data('user', 'id') : null,
@@ -300,7 +300,7 @@ class Materi extends MY_Controller
         $data['mapel']        = $this->mapel_model->retrieve_all_mapel();
         $data['kelas']        = $this->kelas_model->retrieve_all(null, array('aktif' => 1));
         $data['materi_kelas'] = $materi_kelas_id;
-        $data['comp_js']      = get_tinymce('konten');
+        $data['comp_js']      = get_texteditor();
         if ($type == 'file') {
             $data['file_info'] = get_file_info(get_path_file($materi['file']));
             $data['file_info']['mime'] = get_mime_by_extension(get_path_file($materi['file']));
@@ -312,7 +312,7 @@ class Materi extends MY_Controller
             if ($this->form_validation->run('materi/edit/tertulis') == TRUE) {
                 $mapel_id = $this->input->post('mapel_id', TRUE);
                 $judul    = $this->input->post('judul', TRUE);
-                $konten   = $this->input->post('konten', TRUE);
+                $konten   = $this->input->post('konten');
 
                 $this->materi_model->update(
                     $materi['id'],
@@ -577,7 +577,7 @@ class Materi extends MY_Controller
                 }
 
                 # post komentar
-                $this->form_validation->set_rules('komentar', 'Komentar', 'required|trim|xss_clean');
+                $this->form_validation->set_rules('komentar', 'Komentar', 'required');
                 if ($this->form_validation->run() == true) {
                     $komentar_id = $this->komentar_model->create(
                         get_sess_data('login', 'id'),
@@ -698,26 +698,8 @@ class Materi extends MY_Controller
 
                 $data['terkait'] = $data_terkait;
 
-                # setup tinymce komentar
-                $tiny_option = 'theme_advanced_buttons1 : "bold,italic,underline,strikethrough,|,bullist,numlist,|,link,unlink,|,sub,sup,charmap,tiny_mce_wiris_formulaEditor,|,emotions,image,media,youtubeIframe,syntaxhl,code",
-                theme_advanced_buttons2 : "",
-                theme_advanced_buttons3 : "",
-                theme_advanced_toolbar_location : "top",
-                theme_advanced_toolbar_align : "left",
-                theme_advanced_statusbar_location : "bottom",
-                file_browser_callback : "openKCFinder",
-                theme_advanced_resizing : true,
-                theme_advanced_resize_horizontal : false,
-                content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
-                convert_urls: false,
-                force_br_newlines : false,
-                force_p_newlines : false,
-                inline_styles: false,
-                formats: {
-                   underline: { inline: "u", exact : true },
-                   strikethrough: { inline: "del", exact : true }
-                }';
-                $html_js = get_tinymce('komentar', 'advanced', array('pdw'), $tiny_option);
+                # setup texteditor
+                $html_js = get_texteditor();
 
                 # setup colorbox
                 $html_js .= load_comp_js(array(

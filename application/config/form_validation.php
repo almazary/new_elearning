@@ -774,7 +774,7 @@ $config['materi/add/tertulis'] = array(
     array(
         'field' => 'konten',
         'label' => 'Konten',
-        'rules' => 'required|trim|xss_clean'
+        'rules' => 'required'
     ),
 );
 
@@ -815,7 +815,7 @@ $config['materi/edit/tertulis'] = array(
     array(
         'field' => 'konten',
         'label' => 'Konten',
-        'rules' => 'required|trim|xss_clean'
+        'rules' => 'required'
     ),
 );
 
