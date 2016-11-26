@@ -84,7 +84,7 @@
                                 {% for t in terkait %}
                                 <li>
                                     <div class="materi">
-                                        <a href="{{ site_url('materi/detail/' ~ t.id) }}"><i class="{{ (t.file is empty) ? 'icon-file-text' : 'icon-file' }} img-circle img-polaroid {{ (strlen(t.judul) > 33) ? 'pull-left' }}" style="padding:10px; margin-right:10px;"></i>{{ t.judul|raw }}</a>
+                                        <a href="{{ site_url('materi/detail/' ~ t.id) }}"><i class="{{ (t.file is empty) ? 'icon-file' : 'icon-download' }} img-circle img-polaroid {{ (strlen(t.judul) > 33) ? 'pull-left' }}" style="padding:10px; margin-right:10px;"></i>{{ t.judul|raw }}</a>
                                     </div>
                                 </li>
                                 {% endfor %}
