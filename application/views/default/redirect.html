@@ -7,3 +7,13 @@ Redirect...
 {% block content %}
 Mohon tunggu, halaman akan segera dialihkan...
 {% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+    $( document ).ready(function() {
+        setTimeout(function() {
+            location.href = "{{ redirect_to }}";
+        }, 3000);
+    });
+</script>
+{% endblock %}
