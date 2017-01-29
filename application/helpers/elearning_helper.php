@@ -836,19 +836,20 @@ function sudah_ngerjakan($tugas_id, $siswa_id)
 /**
  * Method untuk mendapatkan lama pengerjaan berdasarkan waktu mulai dan selesai
  *
- * @param  string $start
+ * @param  string $start    2017-01-29 1:14:44
  * @param  string $finish
+ * @param  string $format
  * @return string
  */
-function lama_pengerjaan($start, $finish)
+function lama_pengerjaan($start, $finish, $format = "%h jam %i menit %s detik")
 {
     $date_a = new DateTime($start);
     $date_b = new DateTime($finish);
 
     $interval = date_diff($date_a, $date_b);
 
-    $result  = $interval->format(" %h jam %i menit %s detik");
-    $result  = str_replace(array(" 0 jam", " 0 menit", " 0 detik"), '', $result);
+    $result  = $interval->format($format);
+    $result  = str_replace(array("0 jam", " 0 menit", " 0 detik"), '', $result);
 
     return trim($result);
 }
