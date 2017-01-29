@@ -82,7 +82,13 @@ class Login extends MY_Controller
                             # cari selisih
                             $selisih = lama_pengerjaan(date("Y-m-d H:i:s", $last_log['last_activity']), date("Y-m-d H:i:s", $time_minus), "%i menit %s detik");
 
-                            $this->session->set_flashdata('login', get_alert('warning', 'Akun anda sedang digunakan untuk login dengan IP ' . $last_agent['ip'] . '. <br><br>Jika anda hanya ganti browser, mohon tunggu ' . $selisih . ' dari sekarang.'));
+                            # atur pesan
+                            $error_msg = "Akun anda sedang digunakan untuk login dengan IP {$last_agent['ip']}.";
+                            if ($current_ip == $last_agent['ip'] AND $current_browser != $last_agent['browser']) {
+                                $error_msg .= "<br><br>Jika anda hanya ganti browser, mohon tunggu {$selisih} dari sekarang.";
+                            }
+
+                            $this->session->set_flashdata('login', get_alert('warning', $error_msg));
                             redirect('login');
                         }
                     }
