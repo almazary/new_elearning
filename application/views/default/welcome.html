@@ -101,6 +101,18 @@
     {% endif %}
 
     {% if is_pengajar() %}
+    {% set peraturan = get_pengaturan('peraturan-elearning', 'value') %}
+    {% if peraturan is not empty %}
+    <div class="btn-box-row row-fluid">
+         <div class="span12">
+            <div class="well well-small well-box">
+                <b>Peraturan e-learning : </b><br>
+                {{ peraturan|raw_media|raw }}
+            </div>
+         </div>
+    </div>
+    {% endif %}
+
     <div class="btn-box-row row-fluid">
         <div class="span6">
             <div class="well well-small well-box">
@@ -113,22 +125,29 @@
                     {% endfor %}
                 </table>
             </div>
-
-            <div class="well well-small well-box">
-                <b><i class="icon-signin"></i> Riwayat login pengguna</b>
-                <div id="show-last-login-list"></div>
-            </div>
         </div>
         <div class="span6">
             <div class="well well-small well-box">
-                <b>Peraturan e-learning : </b><br>
-                {{ get_pengaturan('peraturan-elearning', 'value')|raw_media|raw }}
+                <b><i class="icon-signin"></i> Riwayat login pengguna</b>
+                <div id="show-last-login-list"></div>
             </div>
         </div>
     </div>
     {% endif %}
 
     {% if is_siswa() %}
+    {% set peraturan = get_pengaturan('peraturan-elearning', 'value') %}
+    {% if peraturan is not empty %}
+    <div class="btn-box-row row-fluid">
+         <div class="span12">
+            <div class="well well-small well-box">
+                <b>Peraturan e-learning : </b><br>
+                {{ peraturan|raw_media|raw }}
+            </div>
+         </div>
+    </div>
+    {% endif %}
+
     <div class="btn-box-row row-fluid">
         <div class="span6">
             <div class="well well-small well-box">
@@ -156,8 +175,8 @@
                     {% endfor %}
                 </table>
             </div>
-
         </div>
+
         <div class="span6">
             <div class="well well-small well-box">
                 <b><i class="icon-bullhorn"></i> Pengumuman</b>
@@ -173,11 +192,6 @@
             <div class="well well-small well-box">
                 <b><i class="icon-signin"></i> Riwayat login pengguna</b>
                 <div id="show-last-login-list"></div>
-            </div>
-
-            <div class="widget-usage" style="padding: 10px 15px;">
-                <b>Peraturan e-learning : </b><br>
-                {{ get_pengaturan('peraturan-elearning', 'value')|raw_media|raw }}
             </div>
         </div>
     </div>

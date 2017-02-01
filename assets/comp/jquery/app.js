@@ -75,94 +75,99 @@
 
     // jika sudah login
     if (is_user_logged_in == 1) {
-        // jika ada class texteditor atau texteditor-simple
-        if ($("textarea.texteditor").length || $("textarea.texteditor-simple").length) {
-            try {
-                $('textarea.texteditor').ckeditor({
-                    toolbarGroups : [
-                        { name: 'clipboard', groups: [ 'clipboard', 'undo'] },
-                        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
-                        { name: 'forms', groups: [ 'forms' ] },
-                        { name: 'links', groups: [ 'links' ] },
-                        { name: 'insert', groups: [ 'insert' ] },
-                        { name: 'others', groups: [ 'others' ] },
-                        '/',
-                        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-                        { name: 'colors', groups: [ 'colors' ] },
-                        '/',
-                        { name: 'styles', groups: [ 'styles' ] },
-                        { name: 'about', groups: [ 'about' ] },
-                        { name: 'document', groups: [ 'document', 'doctools', 'mode' ] },
-                        { name: 'tools', groups: [ 'tools' ] }
-                    ],
-                    removeButtons : 'Save,NewPage,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Find,Replace,SelectAll,RemoveFormat,CopyFormatting,Language,CreateDiv,HorizontalRule,PageBreak,Iframe,About,Scayt',
-                    extraPlugins : 'lineutils,widget,codesnippet,ckeditor_wiris,youtube,html5audio,video',
-                    codeSnippet_theme : 'monokai',
-                    allowedContent : true,
-                    skin : 'office2013',
-                });
 
-                $('textarea.texteditor-simple').ckeditor({
-                    toolbarGroups : [
-                        { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-                        { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
-                        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
-                        { name: 'forms', groups: [ 'forms' ] },
-                        { name: 'insert', groups: [ 'insert' ] },
-                        '/',
-                        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-                        { name: 'links', groups: [ 'links' ] },
-                        { name: 'colors', groups: [ 'colors' ] },
-                        { name: 'styles', groups: [ 'styles' ] },
-                        { name: 'tools', groups: [ 'tools' ] },
-                        { name: 'others', groups: [ 'others' ] },
-                        { name: 'about', groups: [ 'about' ] }
-                    ],
-                    removeButtons : 'Save,NewPage,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,RemoveFormat,CopyFormatting,Language,Link,Unlink,Anchor,Image,Flash,HorizontalRule,Smiley,PageBreak,Iframe,Maximize,About',
-                    skin : 'office2013',
-                });
-
-                CKEDITOR.on('dialogDefinition', function (event)
-                {
-                    var editor = event.editor;
-                    var dialogDefinition = event.data.definition;
-                    var dialogName = event.data.name;
-
-                    var cleanUpFuncRef = CKEDITOR.tools.addFunction(function ()
-                    {
-                        // Do the clean-up of filemanager here (called when an image was selected or cancel was clicked)
-                        $('#fm-iframe').remove();
-                        $("body").css("overflow-y", "scroll");
+        function load_texteditor() {
+            // jika ada class texteditor atau texteditor-simple
+            if ($("textarea.texteditor").length || $("textarea.texteditor-simple").length) {
+                try {
+                    $('textarea.texteditor').ckeditor({
+                        toolbarGroups : [
+                            { name: 'clipboard', groups: [ 'clipboard', 'undo'] },
+                            { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                            { name: 'forms', groups: [ 'forms' ] },
+                            { name: 'links', groups: [ 'links' ] },
+                            { name: 'insert', groups: [ 'insert' ] },
+                            { name: 'others', groups: [ 'others' ] },
+                            '/',
+                            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                            { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                            { name: 'colors', groups: [ 'colors' ] },
+                            '/',
+                            { name: 'styles', groups: [ 'styles' ] },
+                            { name: 'about', groups: [ 'about' ] },
+                            { name: 'document', groups: [ 'document', 'doctools', 'mode' ] },
+                            { name: 'tools', groups: [ 'tools' ] }
+                        ],
+                        removeButtons : 'Save,NewPage,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Find,Replace,SelectAll,RemoveFormat,CopyFormatting,Language,CreateDiv,HorizontalRule,PageBreak,Iframe,About,Scayt,Flash,ckeditor_wiris_CAS',
+                        extraPlugins : 'lineutils,widget,codesnippet,ckeditor_wiris,youtube,html5audio,video',
+                        codeSnippet_theme : 'monokai',
+                        allowedContent : true,
+                        skin : 'office2013',
                     });
 
-                    var tabCount = dialogDefinition.contents.length;
-                    for (var i = 0; i < tabCount; i++) {
-                        var browseButton = dialogDefinition.contents[i].get('browse');
+                    $('textarea.texteditor-simple').ckeditor({
+                        toolbarGroups : [
+                            { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
+                            { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+                            { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                            { name: 'forms', groups: [ 'forms' ] },
+                            { name: 'insert', groups: [ 'insert' ] },
+                            '/',
+                            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                            { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                            { name: 'links', groups: [ 'links' ] },
+                            { name: 'colors', groups: [ 'colors' ] },
+                            { name: 'styles', groups: [ 'styles' ] },
+                            { name: 'tools', groups: [ 'tools' ] },
+                            { name: 'others', groups: [ 'others' ] },
+                            { name: 'about', groups: [ 'about' ] }
+                        ],
+                        removeButtons : 'Save,NewPage,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,RemoveFormat,CopyFormatting,Language,Link,Unlink,Anchor,Image,Flash,HorizontalRule,Smiley,PageBreak,Iframe,Maximize,About',
+                        skin : 'office2013',
+                    });
 
-                        if (browseButton !== null) {
-                            browseButton.hidden = false;
-                            browseButton.onClick = function (dialog, i)
-                            {
-                                editor._.filebrowserSe = this;
-                                var iframe = $("<iframe id='fm-iframe' class='fm-modal'/>").attr({
-                                    src: base_url + 'assets/comp/RichFilemanager/index.html' + // Change it to wherever  Filemanager is stored.
-                                        '?CKEditorFuncNum=' + CKEDITOR.instances[event.editor.name]._.filebrowserFn +
-                                        '&CKEditorCleanUpFuncNum=' + cleanUpFuncRef +
-                                        '&langCode=en' +
-                                        '&CKEditor=' + event.editor.name
-                                });
+                    CKEDITOR.on('dialogDefinition', function (event)
+                    {
+                        var editor = event.editor;
+                        var dialogDefinition = event.data.definition;
+                        var dialogName = event.data.name;
 
-                                $("body").append(iframe);
-                                $("body").css("overflow-y", "hidden");  // Get rid of possible scrollbars in containing document
+                        var cleanUpFuncRef = CKEDITOR.tools.addFunction(function ()
+                        {
+                            // Do the clean-up of filemanager here (called when an image was selected or cancel was clicked)
+                            $('#fm-iframe').remove();
+                            $("body").css("overflow-y", "scroll");
+                        });
+
+                        var tabCount = dialogDefinition.contents.length;
+                        for (var i = 0; i < tabCount; i++) {
+                            var browseButton = dialogDefinition.contents[i].get('browse');
+
+                            if (browseButton !== null) {
+                                browseButton.hidden = false;
+                                browseButton.onClick = function (dialog, i)
+                                {
+                                    editor._.filebrowserSe = this;
+                                    var iframe = $("<iframe id='fm-iframe' class='fm-modal'/>").attr({
+                                        src: base_url + 'assets/comp/RichFilemanager/index.html' + // Change it to wherever  Filemanager is stored.
+                                            '?CKEditorFuncNum=' + CKEDITOR.instances[event.editor.name]._.filebrowserFn +
+                                            '&CKEditorCleanUpFuncNum=' + cleanUpFuncRef +
+                                            '&langCode=en' +
+                                            '&CKEditor=' + event.editor.name
+                                    });
+
+                                    $("body").append(iframe);
+                                    $("body").css("overflow-y", "hidden");  // Get rid of possible scrollbars in containing document
+                                }
                             }
                         }
-                    }
-                }); // dialogDefinition
+                    }); // dialogDefinition
 
-            } catch(e) {}
+                } catch(e) {}
+            }
         }
+
+        load_texteditor();
     }
 
     // area yang harus login dan tidak sedang ujian
