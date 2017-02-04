@@ -52,8 +52,6 @@ class Twig
             }
         }
 
-        $this->_twig->addFilter($filter);
-
     }
 
     public function add_function($name)
