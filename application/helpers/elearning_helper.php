@@ -269,10 +269,7 @@ function get_texteditor()
  */
 function is_login()
 {
-    $CI =& get_instance();
-
-    $sess_data = $CI->session->userdata('login_' . APP_PREFIX);
-    if (!empty($sess_data)) {
+    if (!empty($_SESSION['login_' . APP_PREFIX])) {
         return true;
     }
 
@@ -300,10 +297,7 @@ function is_admin()
         return false;
     }
 
-    $CI =& get_instance();
-
-    $sess = $CI->session->userdata('login_' . APP_PREFIX);
-    if (!empty($sess['admin'])) {
+    if (!empty($_SESSION['login_' . APP_PREFIX]['admin'])) {
         return true;
     }
 
@@ -320,10 +314,7 @@ function is_pengajar()
         return false;
     }
 
-    $CI =& get_instance();
-
-    $sess = $CI->session->userdata('login_' . APP_PREFIX);
-    if (!empty($sess['pengajar'])) {
+    if (!empty($_SESSION['login_' . APP_PREFIX]['pengajar'])) {
         return true;
     }
 
@@ -340,10 +331,7 @@ function is_siswa()
         return false;
     }
 
-    $CI =& get_instance();
-
-    $sess = $CI->session->userdata('login_' . APP_PREFIX);
-    if (!empty($sess['siswa'])) {
+    if (!empty($_SESSION['login_' . APP_PREFIX]['siswa'])) {
         return true;
     }
 
@@ -359,10 +347,7 @@ function is_siswa()
  */
 function get_sess_data($key1, $key2)
 {
-    $CI =& get_instance();
-
-    $sess_data = $CI->session->userdata('login_' . APP_PREFIX);
-    if (!empty($sess_data)) {
+    if (!empty($_SESSION['login_' . APP_PREFIX])) {
         $type = '';
         if (is_admin()) {
             $type = 'admin';
@@ -375,7 +360,7 @@ function get_sess_data($key1, $key2)
         }
 
         if (!empty($type)) {
-            return $sess_data[$type][$key1][$key2];
+            return $_SESSION['login_' . APP_PREFIX][$type][$key1][$key2];
         }
     }
 }

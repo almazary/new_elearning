@@ -98,19 +98,21 @@ class Login extends MY_Controller
                 $log_id = $this->login_model->create_log($get_login['id']);
                 $get_login['log_id'] = $log_id;
 
-                $data_session['login_' . APP_PREFIX][$user_type] = array(
+                $data_session[$user_type] = array(
                     'login' => $get_login,
                     'user'  => $user
                 );
 
                 # setup folder
                 if ($user_type == 'admin') {
-                    $data_session['login_' . APP_PREFIX]['path_userfiles'] = 'userfiles/';
+                    $data_session['path_userfiles'] = 'userfiles/';
                 } else {
-                    $data_session['login_' . APP_PREFIX]['path_userfiles'] = 'userfiles/uploads/' . $get_login['id'] . '/';
+                    $data_session['path_userfiles'] = 'userfiles/uploads/' . $get_login['id'] . '/';
                 }
+                $data_session['root_path_userfiles'] = 'userfiles/';
+                $data_session['base_url_userfiles']  = base_url($data_session['path_userfiles']);
 
-                $this->session->set_userdata($data_session);
+                $_SESSION['login_' . APP_PREFIX] = $data_session;
 
                 redirect('welcome');
             }
@@ -135,13 +137,17 @@ class Login extends MY_Controller
 
     function logout()
     {
-        $this->session->set_userdata('login_' . APP_PREFIX, null);
+        # update last activity
+        $time_minus = strtotime("-2 minutes", time());
+        $this->login_model->update_last_activity(get_sess_data('login', 'log_id'), $time_minus);
+
         $this->session->set_userdata('filter_pengajar', null);
         $this->session->set_userdata('filter_materi', null);
         $this->session->set_userdata('filter_tugas', null);
         $this->session->set_userdata('filter_siswa', null);
         $this->session->set_userdata('mengerjakan_tugas', null);
         $this->session->set_userdata('hide_countdown', null);
+        $_SESSION['login_' . APP_PREFIX] = null;
 
         redirect('login/index');
     }

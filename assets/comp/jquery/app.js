@@ -135,7 +135,7 @@
                         var cleanUpFuncRef = CKEDITOR.tools.addFunction(function ()
                         {
                             // Do the clean-up of filemanager here (called when an image was selected or cancel was clicked)
-                            $('#fm-iframe').remove();
+                            $('#filemanager_iframe').remove();
                             $("body").css("overflow-y", "scroll");
                         });
 
@@ -148,7 +148,7 @@
                                 browseButton.onClick = function (dialog, i)
                                 {
                                     editor._.filebrowserSe = this;
-                                    var iframe = $("<iframe id='fm-iframe' class='fm-modal'/>").attr({
+                                    var iframe = $("<iframe id='filemanager_iframe' class='fm-modal'/>").attr({
                                         src: base_url + 'assets/comp/RichFilemanager/index.html' + // Change it to wherever  Filemanager is stored.
                                             '?CKEditorFuncNum=' + CKEDITOR.instances[event.editor.name]._.filebrowserFn +
                                             '&CKEditorCleanUpFuncNum=' + cleanUpFuncRef +

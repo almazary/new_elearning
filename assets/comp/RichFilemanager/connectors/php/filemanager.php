@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 /**
  *	Filemanager PHP connector
  *  Initial class, put your customizations here
@@ -22,6 +24,11 @@ function auth()
     // IMPORTANT : by default Read and Write access is granted to everyone.
     // You can insert your own code over here to check if the user is authorized.
     // If you use a session variable, you've got to start the session first (session_start())
+    # jika sudah login
+    if (empty($_SESSION['login_e-learning'])) {
+        return false;
+    }
+
     return true;
 }
 
@@ -29,9 +36,9 @@ $config = array();
 
 // example to override the default config
 //$config = array(
-//    'security' => array(
-//        'uploadPolicy' => 'DISALLOW_ALL',
-//        'uploadRestrictions' => array(
+//    'upload' => array(
+//        'policy' => 'DISALLOW_ALL',
+//        'restrictions' => array(
 //            'pdf',
 //        ),
 //    ),
@@ -44,16 +51,12 @@ $split_lokasi      = explode("/", __FILE__);
 $key_assets        = array_search('assets', $split_lokasi);
 $key_parent_folder = $key_assets - 1;
 
-# ambil cookie
-define('BASEPATH', '');
-require_once '../../../../../application/config/config.php';
-if (empty($config['sess_cookie_name'])) {
-    $config['sess_cookie_name'] = 'ci_session';
-}
+$path_user = $_SESSION['login_e-learning']['path_userfiles'];
 
-$ci_cookie = unserialize($_COOKIE[$config['sess_cookie_name']]);
+// example to setup files root folder
+$fm->setFileRoot('/' . $split_lokasi[$key_parent_folder] . '/' . $path_user, true);
 
-# otomatis duah mulai dari root htdocs
-$fm->setFileRoot($split_lokasi[$key_parent_folder] . '/' . $ci_cookie['login_e-learning']['path_userfiles'], true);
+// example to set list of allowed actions
+// $fm->setAllowedActions(["select", "move"]);
 
 $fm->handleRequest();
