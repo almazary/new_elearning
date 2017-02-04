@@ -20,11 +20,6 @@
         async: false
     });
 
-    // panggil SyntaxHighlighter
-    // try {
-    //     SyntaxHighlighter.all();
-    // } catch(e) {}
-
     // tooltip
     $('[data-toggle="tooltip"]').tooltip({html:true});
 
@@ -47,16 +42,6 @@
     // fungsi yang dipanggil saat ajax success
     function on_ajax_success(xhr)
     {
-        // SyntaxHighlighter
-        try {
-            SyntaxHighlighter.highlight();
-        } catch(e) {}
-
-        // MathJax
-        if (typeof MathJax !== 'undefined') {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-        }
-
         // logout kalo session expired
         if (xhr.responseText == "403 Forbidden.") {
             location.href = site_url + '/login/sess_expired';
