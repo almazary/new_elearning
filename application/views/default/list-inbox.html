@@ -45,7 +45,7 @@ Pesan - {{ parent() }}
                             {% if d.receiver is not empty %}
                             <div>To <a href="{{ d.receiver.link_profil }}">{{ d.receiver.nama }}</a></div>
                             {% endif %}
-                            {{ character_limiter(strip_tags(d.content), 80, '...')|raw_media|raw }}
+                            {{ character_limiter(strip_tags(d.content), 80, '...')|raw }}
                         </td>
                     </tr>
                     {% endfor %}

@@ -11,6 +11,6 @@
     </td>
     <td class="msg-content">
         <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ item_msg.id ~ '/' ~ active_msg_id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
-        {{ item_msg.content|raw_media|raw }}
+        {{ item_msg.content|raw }}
     </td>
 </tr>

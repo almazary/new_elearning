@@ -25,7 +25,7 @@
                     {% if data.tugas.type_id != 1 %}
                     <div class="span8">
                         <b>Informasi : </b><br>
-                        {{ data.tugas.info|raw_media|raw }}
+                        {{ data.tugas.info|raw }}
                     </div>
                     <div class="span4">
                         <div class="pull-right clock" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
@@ -75,7 +75,7 @@
                     </div>
                     <div class="span6">
                         <b>Informasi Tugas : </b><br>
-                        {{ data.tugas.info|raw_media|raw }}
+                        {{ data.tugas.info|raw }}
                     </div>
                     {% endif %}
                 </div>
@@ -94,7 +94,7 @@
                                 <td><b>{{ loop.index }}.</b></td>
                                 <td>
                                     <div class="pertanyaan">
-                                        {{ p.pertanyaan|raw_media|raw }}
+                                        {{ p.pertanyaan|raw }}
                                     </div>
 
                                     <div id="pilihan-{{ p.id }}">
@@ -104,7 +104,7 @@
                                                 <tr>
                                                     <td width="5%"><label class="label-radio"><input {{ (is_pilih(data.jawaban, p.id, pil.id)) ? 'checked' }} type="radio" name="pilihan-{{ p.id }}" value="{{ pil.urutan }}" onclick="update_ganda({{ data.tugas.id }}, {{ p.id }}, {{ pil.id }})" class="radio"> {{ get_abjad(pil.urutan) }}</label></td>
                                                     <td>
-                                                        {{ pil.konten|raw_media|raw }}
+                                                        {{ pil.konten|raw }}
                                                     </td>
                                                 </tr>
                                                 {% endfor %}
@@ -158,7 +158,7 @@
                                 <td><b>{{ loop.index }}.</b></td>
                                 <td>
                                     <div class="pertanyaan">
-                                        {{ p.pertanyaan|raw_media|raw }}
+                                        {{ p.pertanyaan|raw }}
                                     </div>
 
                                     <textarea name="jawaban[{{ p.id }}]" id="jawaban-{{ p.id }}" class="texteditor">{{ get_jawaban(data.jawaban, p.id)|raw }}</textarea>
