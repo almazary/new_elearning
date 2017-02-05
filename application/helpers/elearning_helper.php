@@ -276,6 +276,24 @@ function get_texteditor()
 }
 
 /**
+ * Method untuk mendapatkan data session last time activity
+ * @param  string $act get|renew
+ * @return integer
+ */
+function last_time_activity_session($act)
+{
+    switch ($act) {
+        case 'get':
+            return isset($_SESSION['login_' . APP_PREFIX]['last_time_activity']) ? $_SESSION['login_' . APP_PREFIX]['last_time_activity'] : "";
+        break;
+
+        case 'renew':
+            $_SESSION['login_' . APP_PREFIX]['last_time_activity'] = time();
+        break;
+    }
+}
+
+/**
  * Method untuk ngecek apakah sudah login atau belum
  *
  * @return boolean
@@ -283,6 +301,16 @@ function get_texteditor()
 function is_login()
 {
     if (!empty($_SESSION['login_' . APP_PREFIX])) {
+        # yang ini untuk cek last_time_activity session
+        if (!is_ajax()) {
+            if (!empty(last_time_activity_session('get')) AND last_time_activity_session('get') < strtotime("-55 minute", time())) {
+                return false;
+            } else {
+                last_time_activity_session('renew');
+                return true;
+            }
+        }
+
         return true;
     }
 

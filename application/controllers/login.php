@@ -109,8 +109,7 @@ class Login extends MY_Controller
                 } else {
                     $data_session['path_userfiles'] = 'userfiles/uploads/' . $get_login['id'] . '/';
                 }
-                $data_session['root_path_userfiles'] = 'userfiles/';
-                $data_session['base_url_userfiles']  = base_url($data_session['path_userfiles']);
+                $data_session['last_time_activity']  = time();
 
                 $_SESSION['login_' . APP_PREFIX] = $data_session;
 
