@@ -90,27 +90,6 @@
                         skin : 'office2013',
                     });
 
-                    $('textarea.texteditor-simple').ckeditor({
-                        toolbarGroups : [
-                            { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-                            { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
-                            { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
-                            { name: 'forms', groups: [ 'forms' ] },
-                            { name: 'insert', groups: [ 'insert' ] },
-                            '/',
-                            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-                            { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-                            { name: 'links', groups: [ 'links' ] },
-                            { name: 'colors', groups: [ 'colors' ] },
-                            { name: 'styles', groups: [ 'styles' ] },
-                            { name: 'tools', groups: [ 'tools' ] },
-                            { name: 'others', groups: [ 'others' ] },
-                            { name: 'about', groups: [ 'about' ] }
-                        ],
-                        removeButtons : 'Save,NewPage,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,RemoveFormat,CopyFormatting,Language,Link,Unlink,Anchor,Image,Flash,HorizontalRule,Smiley,PageBreak,Iframe,Maximize,About',
-                        skin : 'office2013',
-                    });
-
                     CKEDITOR.on('dialogDefinition', function (event)
                     {
                         var editor = event.editor;

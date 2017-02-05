@@ -2152,3 +2152,30 @@ hr.hr-normal {
     margin-top:5px;
     margin-bottom: 10px;
 }
+
+.kop-print {
+    width: 700px;
+    margin: auto;
+}
+
+.kop-print img {
+    float: left;
+    height: 60px;
+    margin-right: 20px;
+}
+
+.kop-print .kop-info {
+    font-size: 15px;
+}
+
+.kop-print .kop-nama {
+    font-size: 25px;
+    font-weight: bold;
+    line-height: 35px;
+}
+
+.kop-print-hr {
+    border-width: 2px;
+    border-color: black;
+    margin-bottom: 0px;
+}

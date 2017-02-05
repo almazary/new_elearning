@@ -18,6 +18,20 @@ Pengaturan - {{ parent() }}
 
         {{ form_open_multipart('welcome/pengaturan', {'class' : 'form-horizontal row-fluid'})|raw }}
             <div class="control-group">
+                <label class="control-label">Logo sekolah</label>
+                <div class="controls">
+                    {% set logo_sekolah = get_pengaturan('logo-sekolah', 'value') %}
+                    {% if logo_sekolah is empty %}
+                        <img src="{{ logo_url_medium }}">
+                    {% else %}
+                        <a href="{{ site_url('welcome/pengaturan/?delete-img=5') }}" onclick="return confirm('Anda yakin ingin menghapus?')" class="pull-right" title="Hapus logo"><i class="icon-trash"></i></a>
+                        <img src="{{ get_url_image(logo_sekolah) }}" style="max-width: 120px;">
+                    {% endif %}
+                    <br>Ganti logo <small>(Ukuran terbaik 120 x 122 pixel)</small><br>
+                    <input type="file" name="logo-sekolah">
+                </div>
+            </div>
+            <div class="control-group">
                 <label class="control-label">Nama sekolah <span class="text-error">*</span></label>
                 <div class="controls">
                     <input type="text" name="nama-sekolah" class="span8" value="{{ set_value('nama-sekolah', get_pengaturan('nama-sekolah', 'value')) }}">

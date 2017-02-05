@@ -228,6 +228,19 @@ function get_logo_url($size = 'small') {
 }
 
 /**
+ * Method untuk mendapatkan logo yang diatur
+ * @return string
+ */
+function get_logo_config() {
+    $config = get_pengaturan('logo-sekolah', 'value');
+    if (empty($config)) {
+        return get_logo_url('medium');
+    } else {
+        return get_url_image($config);
+    }
+}
+
+/**
  * Method untuk mendapatkan nama template yang aktif
  *
  * @return string nama template

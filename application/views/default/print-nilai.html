@@ -5,13 +5,7 @@
 {% endblock %}
 
 {% block content %}
-<center>
-    <h3 class="title">{{ get_pengaturan('nama-sekolah', 'value') }}</h3>
-    {{ get_pengaturan('alamat', 'value') }}
-</center>
-<hr class="top">
-
-<p><b>Nilai {{ tugas.judul }}, {{ tugas.mapel.nama }}</b></p>
+<b>Nilai {{ tugas.judul }}, {{ tugas.mapel.nama }}</b>
 
 {% if tugas.type_id == 3 %}
 <table class="table table-bordered table-striped">

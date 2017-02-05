@@ -41,7 +41,7 @@ Edit Email Template - {{ parent() }}
             <div class="control-group">
                 <label class="control-label">Body</label>
                 <div class="controls">
-                    <textarea name="body" id="body" class="texteditor-simple">{{ set_value('body', template.body)|raw }}</textarea>
+                    <textarea name="body" id="body" class="texteditor">{{ set_value('body', template.body)|raw }}</textarea>
                     {{ form_error('body')|raw }}
                 </div>
             </div>
