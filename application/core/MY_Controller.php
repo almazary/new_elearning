@@ -80,14 +80,6 @@ class MY_Controller extends CI_Controller
         if (!is_ajax()) {
             // $this->output->enable_profiler(TRUE);
 
-            # jika sudah login
-            if (is_login()) {
-                # cek session kcfindernya ada atau tidak
-                if (empty($_SESSION['E-LEARNING']['KCFINDER'])) {
-                    create_sess_kcfinder(get_sess_data('login', 'id'));
-                }
-            }
-
             # jika login sebagai siswa
             if (is_siswa()) {
                 # jika kelas aktifnya kosong, sebaiknya di die jasa
@@ -107,7 +99,7 @@ class MY_Controller extends CI_Controller
         }
 
         # cek versi
-        $versi_install = '1.8';
+        $versi_install = '1.9';
         $versi = get_pengaturan('versi', 'value');
 
         $this->current_version = $versi;
@@ -123,6 +115,11 @@ class MY_Controller extends CI_Controller
 
         # autoload function plugin
         autoload_function_plugin();
+
+        # since 1.8.2 update field last_activity login log, pastikan dibawah table_change
+        if (is_login()) {
+            $this->login_model->update_last_activity(get_sess_data('login', 'log_id'));
+        }
     }
 
     /**
@@ -131,11 +128,12 @@ class MY_Controller extends CI_Controller
      */
     function table_change()
     {
+        $this->load->dbforge();
+
         # ubah type field `value` pada tabel field_tambahan menjadi longtext
         $fields = $this->db->field_data('field_tambahan');
         foreach ($fields as $field) {
             if ($field->name == 'value' && $field->type == 'text') {
-                $this->load->dbforge();
                 $this->dbforge->modify_column('field_tambahan', array(
                     '`value`' => array(
                         'type' => 'LONGTEXT'
@@ -146,6 +144,15 @@ class MY_Controller extends CI_Controller
 
         # penambahan fitur login log
         $this->login_model->alter_table();
+
+        # since 1.8.2 tambah field last_activity
+        $this->dbforge->add_column('login_log', array(
+            'last_activity' => array(
+                'type' => 'INT',
+                'unsigned' => TRUE,
+                'null' => TRUE,
+            ),
+        ));
 
         return true;
     }

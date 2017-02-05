@@ -2,6 +2,9 @@
 
 // $(document).ready(function() {
 
+    // codesnipet plugins ckeditor
+    hljs.initHighlightingOnLoad();
+
     var is_user_logged_in = 0;
     var sedang_ujian = 0;
 
@@ -16,11 +19,6 @@
         },
         async: false
     });
-
-    // panggil SyntaxHighlighter
-    try {
-        SyntaxHighlighter.all();
-    } catch(e) {}
 
     // tooltip
     $('[data-toggle="tooltip"]').tooltip({html:true});
@@ -44,16 +42,6 @@
     // fungsi yang dipanggil saat ajax success
     function on_ajax_success(xhr)
     {
-        // SyntaxHighlighter
-        try {
-            SyntaxHighlighter.highlight();
-        } catch(e) {}
-
-        // MathJax
-        if (typeof MathJax !== 'undefined') {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-        }
-
         // logout kalo session expired
         if (xhr.responseText == "403 Forbidden.") {
             location.href = site_url + '/login/sess_expired';
@@ -69,6 +57,82 @@
     $(document).ajaxComplete(function( event, xhr, settings ) {
         on_ajax_success(xhr);
     });
+
+    // jika sudah login
+    if (is_user_logged_in == 1) {
+
+        function load_texteditor() {
+            // jika ada class texteditor atau texteditor-simple
+            if ($("textarea.texteditor").length || $("textarea.texteditor-simple").length) {
+                try {
+                    $('textarea.texteditor').ckeditor({
+                        toolbarGroups : [
+                            { name: 'clipboard', groups: [ 'clipboard', 'undo'] },
+                            { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
+                            { name: 'forms', groups: [ 'forms' ] },
+                            { name: 'links', groups: [ 'links' ] },
+                            { name: 'insert', groups: [ 'insert' ] },
+                            { name: 'others', groups: [ 'others' ] },
+                            '/',
+                            { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+                            { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+                            { name: 'colors', groups: [ 'colors' ] },
+                            '/',
+                            { name: 'styles', groups: [ 'styles' ] },
+                            { name: 'about', groups: [ 'about' ] },
+                            { name: 'document', groups: [ 'document', 'doctools', 'mode' ] },
+                            { name: 'tools', groups: [ 'tools' ] }
+                        ],
+                        removeButtons : 'Save,NewPage,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Find,Replace,SelectAll,RemoveFormat,CopyFormatting,Language,CreateDiv,HorizontalRule,PageBreak,Iframe,About,Scayt,Flash,ckeditor_wiris_CAS',
+                        extraPlugins : 'lineutils,widget,codesnippet,ckeditor_wiris,youtube,html5audio,video',
+                        codeSnippet_theme : 'monokai',
+                        allowedContent : true,
+                        skin : 'office2013',
+                    });
+
+                    CKEDITOR.on('dialogDefinition', function (event)
+                    {
+                        var editor = event.editor;
+                        var dialogDefinition = event.data.definition;
+                        var dialogName = event.data.name;
+
+                        var cleanUpFuncRef = CKEDITOR.tools.addFunction(function ()
+                        {
+                            // Do the clean-up of filemanager here (called when an image was selected or cancel was clicked)
+                            $('#filemanager_iframe').remove();
+                            $("body").css("overflow-y", "scroll");
+                        });
+
+                        var tabCount = dialogDefinition.contents.length;
+                        for (var i = 0; i < tabCount; i++) {
+                            var browseButton = dialogDefinition.contents[i].get('browse');
+
+                            if (browseButton !== null) {
+                                browseButton.hidden = false;
+                                browseButton.onClick = function (dialog, i)
+                                {
+                                    editor._.filebrowserSe = this;
+                                    var iframe = $("<iframe id='filemanager_iframe' class='fm-modal'/>").attr({
+                                        src: base_url + 'assets/comp/RichFilemanager/index.html' + // Change it to wherever  Filemanager is stored.
+                                            '?CKEditorFuncNum=' + CKEDITOR.instances[event.editor.name]._.filebrowserFn +
+                                            '&CKEditorCleanUpFuncNum=' + cleanUpFuncRef +
+                                            '&langCode=en' +
+                                            '&CKEditor=' + event.editor.name
+                                    });
+
+                                    $("body").append(iframe);
+                                    $("body").css("overflow-y", "hidden");  // Get rid of possible scrollbars in containing document
+                                }
+                            }
+                        }
+                    }); // dialogDefinition
+
+                } catch(e) {}
+            }
+        }
+
+        load_texteditor();
+    }
 
     // area yang harus login dan tidak sedang ujian
     if (is_user_logged_in == 1 && sedang_ujian == 0) {
@@ -100,16 +164,11 @@
                     url = $("#info-update-link").val();
                     $.ajax({
                         type: "GET",
-                        url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=20&callback=?&q=' + encodeURIComponent(url),
-                        dataType: 'json',
-                        success: function(xml){
-                            values = xml.responseData.feed.entries;
-                            var l = 1;
-                            $.each( values, function( i, val ) {
-                                if (l <= 15) {
-                                    $("#info-update").append("<tr><td><a href='"+val.link+"' target='_blank'>"+val.title+"</a></td></tr>");
-                                }
-                                l++;
+                        url: site_url + '/ajax/get_data/elearning-dokumenary-feed',
+                        success: function(data){
+                            var values = $.parseJSON(data);
+                            $.each(values, function(i, val) {
+                                $("#info-update").append("<tr><td><a href='"+val.link+"' target='_blank'>"+val.title+"</a></td></tr>");
                             });
                         }
                     });

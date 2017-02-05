@@ -19,6 +19,17 @@
 </head>
 <body>
     <div class="container">
+        <div class="row">
+            <div class="span12">
+                <br>
+                <div class="kop-print">
+                    <img src="{{ get_logo_config() }}">
+                    <div class="kop-nama">{{ get_pengaturan('nama-sekolah', 'value') }}</div>
+                    <div class="kop-info">Alamat : {{ get_pengaturan('alamat', 'value') }}, Telepon : {{ get_pengaturan('telp', 'value') }}</div>
+                </div>
+                <hr class="kop-print-hr">
+            </div>
+        </div>
         <br>
         {% block content %}{% endblock %}
     </div>

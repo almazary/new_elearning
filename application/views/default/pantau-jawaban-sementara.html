@@ -47,7 +47,7 @@
             </td>
             <td>
                 <div class="pertanyaan">
-                    {{ p.pertanyaan|raw_media|raw }}
+                    {{ p.pertanyaan|raw }}
                 </div>
 
                 <div id="pilihan-{{ p.id }}">
@@ -57,7 +57,7 @@
                             <tr>
                                 <td style="width:15px;"><b>{{ get_abjad(pil.urutan) }}</b></td>
                                 <td>
-                                    {{ pil.konten|raw_media|raw }}
+                                    {{ pil.konten|raw }}
 
                                     <ul class="unstyled inline" style="margin-bottom: 0px;margin-left: -5px;">
                                         {% if pil.kunci == 1 %}
@@ -115,11 +115,11 @@
             </td>
             <td>
                 <div class="pertanyaan">
-                    {{ p.pertanyaan|raw_media|raw }}
+                    {{ p.pertanyaan|raw }}
                 </div>
 
                 <b>Jawaban :</b>
-                {{ get_jawaban(jawaban, p.id)|raw_media|raw }}
+                {{ get_jawaban(jawaban, p.id)|raw }}
             </td>
         </tr>
 

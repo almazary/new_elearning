@@ -436,6 +436,7 @@ class CI_Session {
 		$this->userdata = array();
 
 		unset($_SESSION['KCFINDER']);
+        $_SESSION['login_' . APP_PREFIX] = null;
 	}
 
 	// --------------------------------------------------------------------

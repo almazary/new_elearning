@@ -1,12 +1,14 @@
 /userfiles/files/*
 !/userfiles/files/index.html
 /userfiles/images/
+/userfiles/_thumbs/
 /userfiles/uploads/
 /userfiles/updates/
-/userfiles/_thumbs/
+/userfiles/
 /user_guide/
 /assets/comp/tinymce/plugins/tiny_mce_wiris/cache/
 /assets/comp/tinymce/plugins/tiny_mce_wiris/formulas/
+/assets/comp/ckeditor/plugins/ckeditor_wiris/formulas/
 /application/config/config.php
 /application/config/database.php
 /nbproject/

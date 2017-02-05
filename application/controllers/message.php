@@ -108,7 +108,7 @@ class Message extends MY_Controller
 
         if ($this->form_validation->run('message/create') == true) {
             $get_email = get_email_from_string($this->input->post('penerima', true));
-            $content   = $this->input->post('content', true);
+            $content   = $this->input->post('content');
 
             $l = 0;
             foreach ($get_email as $email) {
@@ -134,7 +134,7 @@ class Message extends MY_Controller
 
         $data['login']   = $login;
 
-        $html_js = get_tinymce('content');
+        $html_js = get_texteditor();
         $html_js .= load_comp_js(array(
             base_url('assets/comp/tags/bootstrap-tagsinput.js'),
         ));
@@ -186,7 +186,7 @@ class Message extends MY_Controller
             $data['receiver_name'] = $data['r']['profil']['nama'] . " [$login_username]>";
         }
 
-        $html_js         = get_tinymce('content');
+        $html_js         = get_texteditor();
         $data['comp_js'] = $html_js;
 
         # update read

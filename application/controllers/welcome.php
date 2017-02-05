@@ -184,6 +184,21 @@ class Welcome extends MY_Controller
                     }
                 }
 
+                if ($img_id == 5) {
+                    $key      = 'logo-sekolah';
+                    $retrieve = $this->config_model->retrieve($key);
+                    if (!empty($retrieve) AND !empty($retrieve['value'])) {
+
+                        # hapus file
+                        if (is_file(get_path_image($retrieve['value']))) {
+                            unlink(get_path_image($retrieve['value']));
+                        }
+
+                        $this->config_model->update($key, $key, '');
+
+                    }
+                }
+
                 redirect('welcome/pengaturan');
             }
 
@@ -235,7 +250,7 @@ class Welcome extends MY_Controller
             }
         }
 
-        $data['comp_js'] = get_tinymce('tinymce, textarea.tinymce');
+        $data['comp_js'] = get_texteditor();
         $this->twig->display('pengaturan.html', $data);
     }
 

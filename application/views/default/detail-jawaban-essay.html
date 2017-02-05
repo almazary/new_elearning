@@ -95,11 +95,11 @@
             </td>
             <td>
                 <div class="pertanyaan">
-                    {{ p.pertanyaan|raw_media|raw }}
+                    {{ p.pertanyaan|raw }}
                 </div>
 
                 <b>Jawaban :</b>
-                {{ get_jawaban(history.jawaban, p.id)|raw_media|raw }}
+                {{ get_jawaban(history.jawaban, p.id)|raw }}
 
                 <p><b>Nilai :</b></p>
                 {% if mode == 'print' %}

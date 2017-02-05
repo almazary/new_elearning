@@ -109,32 +109,8 @@ function default_parser_item($add_item = array())
 
     # load komponen js aplikasi
     $load_js_app = load_comp_js(array(
-        base_url('assets/comp/SyntaxHighlighter/scripts/shCore.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAppleScript.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushAS3.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushBash.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushColdFusion.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCpp.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCSharp.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushCss.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDelphi.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushDiff.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushErlang.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushGroovy.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJava.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJavaFX.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushJScript.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPerl.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPhp.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPlain.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPowerShell.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushPython.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushRuby.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSass.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushScala.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushSql.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushVb.js'),
-        base_url('assets/comp/SyntaxHighlighter/scripts/shBrushXml.js'),
+        base_url('assets/comp/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js'),
+        base_url('assets/comp/ckeditor/plugins/ckeditor_wiris/integration/WIRISplugins.js?viewer=image'),
         base_url('assets/comp/timeago/jquery.timeago.js'),
         base_url('assets/comp/jquery/app.js'),
     ));
@@ -147,7 +123,8 @@ function default_parser_item($add_item = array())
 
     // load komponen css aplikasi
     $load_css_app = load_comp_css(array(
-        base_url('assets/comp/SyntaxHighlighter/styles/shCoreEclipse.css'),
+        base_url('assets/comp/RichFilemanager/styles/dialog.css'),
+        base_url('assets/comp/ckeditor/plugins/codesnippet/lib/highlight/styles/monokai.css'),
     ));
 
     if (isset($add_item['comp_css'])) {
@@ -251,6 +228,19 @@ function get_logo_url($size = 'small') {
 }
 
 /**
+ * Method untuk mendapatkan logo yang diatur
+ * @return string
+ */
+function get_logo_config() {
+    $config = get_pengaturan('logo-sekolah', 'value');
+    if (empty($config)) {
+        return get_logo_url('medium');
+    } else {
+        return get_url_image($config);
+    }
+}
+
+/**
  * Method untuk mendapatkan nama template yang aktif
  *
  * @return string nama template
@@ -273,72 +263,34 @@ function get_alert($notif = 'success', $msg = '')
 }
 
 /**
- * Method untuk panggil component tinymc
- *
- * @param  string $element_id
+ * Method untuk memanggil library javascript untuk texteditornya
  * @return string
  */
-function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array(), $str_options = null)
+function get_texteditor()
 {
-    $tiny_plugins = array('emotions','syntaxhl','wordcount','pagebreak','layer','table','save','advhr','advimage','advlink','insertdatetime','preview','directionality','fullscreen','noneditable','visualchars','nonbreaking','xhtmlxtras','template','inlinepopups','autosave','print','media','youtubeIframe','syntaxhl','tiny_mce_wiris');
-    if (!empty($remove_plugins)) {
-        $copy_tiny_plugins = $tiny_plugins;
-        $combine           = array_combine($tiny_plugins, $copy_tiny_plugins);
-        foreach ($remove_plugins as $rm) {
-            unset($combine[$rm]);
-        }
-        $tiny_plugins = array_values($combine);
+    # load ckeditor
+    return load_comp_js(array(
+        base_url('assets/comp/ckeditor/ckeditor.js'),
+        base_url('assets/comp/ckeditor/adapters/jquery.js'),
+    ));
+}
+
+/**
+ * Method untuk mendapatkan data session last time activity
+ * @param  string $act get|renew
+ * @return integer
+ */
+function last_time_activity_session($act)
+{
+    switch ($act) {
+        case 'get':
+            return isset($_SESSION['login_' . APP_PREFIX]['last_time_activity']) ? $_SESSION['login_' . APP_PREFIX]['last_time_activity'] : "";
+        break;
+
+        case 'renew':
+            $_SESSION['login_' . APP_PREFIX]['last_time_activity'] = time();
+        break;
     }
-
-    $return = '<script type="text/javascript" src="'.base_url('assets/comp/tinymce/tiny_mce.js').'"></script>'.PHP_EOL;
-    $return .= '<script type="text/javascript">
-        tinyMCE.init({
-            selector: "textarea#'.$element_id.'",
-            theme : "'.$theme.'",
-            plugins : "'.implode(',', $tiny_plugins).'",';
-
-            if (empty($str_options)) {
-                $return .= 'theme_advanced_buttons1 : "undo,redo,bold,italic,underline,strikethrough,bullist,numlist,justifyleft,justifycenter,justifyright,justifyfull,blockquote,link,unlink,sub,sup,charmap,tiny_mce_wiris_formulaEditor,emotions,image,media,youtubeIframe,syntaxhl,code",
-                    theme_advanced_buttons2 : "",
-                    theme_advanced_buttons3 : "",
-                    theme_advanced_toolbar_location : "top",
-                    theme_advanced_toolbar_align : "left",
-                    theme_advanced_statusbar_location : "bottom",
-                    file_browser_callback : "openKCFinder",
-                    theme_advanced_resizing : true,
-                    theme_advanced_resize_horizontal : false,
-                    content_css : "'.base_url('assets/comp/tinymce/com/content.css').'",
-                    convert_urls: false,
-                    force_br_newlines : false,
-                    force_p_newlines : false,
-                    inline_styles: false,
-                    formats: {
-                       underline: { inline: "u", exact : true },
-                       strikethrough: { inline: "del", exact : true }
-                    }';
-            } else {
-                $return .= $str_options;
-            }
-    $return .= '});';
-
-    $return .= 'function openKCFinder(field_name, url, type, win) {
-            tinyMCE.activeEditor.windowManager.open({
-                file: "'.base_url('assets/comp/kcfinder/browse.php?opener=tinymce&type=').'" + type,
-                title: "KCFinder",
-                width: 700,
-                height: 500,
-                resizable: "yes",
-                inline: true,
-                close_previous: "no",
-                popup_css: false
-            }, {
-                window: win,
-                input: field_name
-            });
-            return false;
-        }
-    </script>';
-    return $return;
 }
 
 /**
@@ -348,10 +300,17 @@ function get_tinymce($element_id, $theme = 'advanced', $remove_plugins = array()
  */
 function is_login()
 {
-    $CI =& get_instance();
+    if (!empty($_SESSION['login_' . APP_PREFIX])) {
+        # yang ini untuk cek last_time_activity session
+        if (!is_ajax()) {
+            if (!empty(last_time_activity_session('get')) AND last_time_activity_session('get') < strtotime("-55 minute", time())) {
+                return false;
+            } else {
+                last_time_activity_session('renew');
+                return true;
+            }
+        }
 
-    $sess_data = $CI->session->userdata('login_' . APP_PREFIX);
-    if (!empty($sess_data)) {
         return true;
     }
 
@@ -379,10 +338,7 @@ function is_admin()
         return false;
     }
 
-    $CI =& get_instance();
-
-    $sess = $CI->session->userdata('login_' . APP_PREFIX);
-    if (!empty($sess['admin'])) {
+    if (!empty($_SESSION['login_' . APP_PREFIX]['admin'])) {
         return true;
     }
 
@@ -399,10 +355,7 @@ function is_pengajar()
         return false;
     }
 
-    $CI =& get_instance();
-
-    $sess = $CI->session->userdata('login_' . APP_PREFIX);
-    if (!empty($sess['pengajar'])) {
+    if (!empty($_SESSION['login_' . APP_PREFIX]['pengajar'])) {
         return true;
     }
 
@@ -419,10 +372,7 @@ function is_siswa()
         return false;
     }
 
-    $CI =& get_instance();
-
-    $sess = $CI->session->userdata('login_' . APP_PREFIX);
-    if (!empty($sess['siswa'])) {
+    if (!empty($_SESSION['login_' . APP_PREFIX]['siswa'])) {
         return true;
     }
 
@@ -438,10 +388,7 @@ function is_siswa()
  */
 function get_sess_data($key1, $key2)
 {
-    $CI =& get_instance();
-
-    $sess_data = $CI->session->userdata('login_' . APP_PREFIX);
-    if (!empty($sess_data)) {
+    if (!empty($_SESSION['login_' . APP_PREFIX])) {
         $type = '';
         if (is_admin()) {
             $type = 'admin';
@@ -454,7 +401,7 @@ function get_sess_data($key1, $key2)
         }
 
         if (!empty($type)) {
-            return $sess_data[$type][$key1][$key2];
+            return $_SESSION['login_' . APP_PREFIX][$type][$key1][$key2];
         }
     }
 }
@@ -787,33 +734,6 @@ function start_native_session()
 }
 
 /**
- * Method untuk membuat session kcfinder, karena kcfinder masih menggunakan natif session
- *
- * @param  integer $login_id
- */
-function create_sess_kcfinder($login_id)
-{
-    if (is_login()) {
-        # start natif session
-        start_native_session();
-
-        $_SESSION['E-LEARNING']['KCFINDER']              = array();
-        $_SESSION['E-LEARNING']['KCFINDER']['disabled']  = false;
-        $_SESSION['E-LEARNING']['KCFINDER']['uploadDir'] = "";
-        if (is_admin()) {
-            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('userfiles/uploads/');
-        } else {
-            $user_folder = './userfiles/uploads/' . $login_id;
-            if (!is_dir($user_folder)) {
-                mkdir($user_folder, 0755);
-                chmod($user_folder, 0755);
-            }
-            $_SESSION['E-LEARNING']['KCFINDER']['uploadURL'] = base_url('userfiles/uploads/' . $login_id);
-        }
-    }
-}
-
-/**
  * Method untuk mendapatkan satu record tambahan
  *
  * @param  string $id
@@ -942,19 +862,20 @@ function sudah_ngerjakan($tugas_id, $siswa_id)
 /**
  * Method untuk mendapatkan lama pengerjaan berdasarkan waktu mulai dan selesai
  *
- * @param  string $start
+ * @param  string $start    2017-01-29 1:14:44
  * @param  string $finish
+ * @param  string $format
  * @return string
  */
-function lama_pengerjaan($start, $finish)
+function lama_pengerjaan($start, $finish, $format = "%h jam %i menit %s detik")
 {
     $date_a = new DateTime($start);
     $date_b = new DateTime($finish);
 
     $interval = date_diff($date_a, $date_b);
 
-    $result  = $interval->format(" %h jam %i menit %s detik");
-    $result  = str_replace(array(" 0 jam", " 0 menit", " 0 detik"), '', $result);
+    $result  = $interval->format($format);
+    $result  = str_replace(array("0 jam", " 0 menit", " 0 detik"), '', $result);
 
     return trim($result);
 }

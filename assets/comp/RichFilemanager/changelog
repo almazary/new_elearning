@@ -1,0 +1,156 @@
+Version 2.2.0
+---------------------------
+- clipboard feature: copy, cut, paste, clear (header panel and context menu) #80;
+- implemented "copy" action at the client-side and PHP connector (see API) to support clipboard copy feature;
+- configurable clipboard availability via `clipboard` option in json configuration file;
+- implemented context menu on items background; include clipboard "paste" and "create folder" items;
+- more flexible permissions control: attribute "protected" has been split into two: readable and writable attributes #91, #92;
+- support [.md] markdown files editing out of the box #86;
+- create new and adjust existing translations;
+- better support of define RFM context for "select" action;
+- bugfix: error on filtering inside a subfolder #89;
+- bugfix: error upon setup default theme for CodeMirror #86;
+- bugfix: text editor remains open after close preview #79;
+- bugfix: corrupted PHP S3 plugin move/copy of thumbnails if located at AWS S3 storage;
+- included "purl" library to parse urls and updated CodeMirror library;
+
+Backward incompatible changes:
+- API: attribute "protected" has been split into two: readable and writable attributes #91, #92;
+
+
+Version 2.1.0
+---------------------------
+- implemented selectable view items (mouse dragging & Ctrl key), see `manager`.`selection` config options #15, #38;
+- implemented multiple actions for selected items (move, delete, download) #11, #15, #38;
+- special drag helper while dragging multiple items:
+	* shows number items items;
+	* prevents on moving (to) protect folder or to the one of selected items;
+- provided an ability to open files/folders with mouse dblClick, see `manager`.`dblClickOpen` config option;
+- improved injection of dynamic assets (js & css) with toast plugin;
+- added "afterSelectItem" callback function #73;
+- created file to initiate RFM plugin and configure with callbacks and baseUrl #73;
+- "select" action now available without window.opener to use RFM inside custom modal windows (bootstrap, jquery dialog, etc.);
+- bugfix: scrollbar not showing on initial load #77;
+- PHP connector: bugfix comma in filename problem #78;
+- composer is added to the project #71;
+
+Backward incompatible changes:
+- JSON configuration file "filemanager.config.default.json" has been moved from "/scripts" to "/config" folder;
+- have to copy and rename "/config/filemanager.init.js.example" file, along with JSON configuration file;
+
+
+Version 2.0.3
+---------------------------
+- added "overrideClientConfig" option in PHP connector config file, "false" by default
+- added callback functions for some urls modification, described in Wiki article "Configuration"
+- moved application plugin initialization to the index file
+- adjusted Wiki articles and ReadMe.md file
+- bugfix: broken "exclusiveFolder" query param
+
+
+Version 2.0.2
+---------------------------
+- ASHX connector is up-to-date (thanks @richeflits)
+- bugfix: displaying file type in list view
+
+
+Version 2.0.1
+---------------------------
+- new demo site: http://fm.devale.pro
+- bugfix: broken "expandedFolder" query param (#59)
+- bugfix: download action for files less than 16mb (#60)
+- removed "filter_output" method from "getfile" action (PHP)
+
+
+Version 2.0.0
+---------------------------
+- js file reworked to become a plugin
+- some ajax async calls replaced with deferred chains (based on #21)
+- new nice notifications, based on alertify plugin on my fork (#25)
+- theme concept was reworked, base assets created, no need to duplicate all assets for new theme
+- started with demo page with examples for different usage cases
+- many changes in html templates to make thing more organaized
+- upload popup dialog now scrollable
+- migrated frontend to knockout.js
+- removed a number of the application plugins (tinysort, filetree, impromptu, liveSearch); their functionality has been replaced with own implementation
+- grid view icons implemented via css styles (#47)
+- capability to preview images and media files with absolute path along with connector path (#27, #31)
+- completely rewritten and standardized Rich Filemanager API that follows JSON API best practices (#37)
+- configuration splitted into two files: server and client config files (#31, #32)
+- implemented "initiate" request to provide ability to override client-side configuration options (#29, #32)
+- refactored client-side configuration files: deleted obsolete options, some options or sections were moved/renamed (actual configuration description is in WIKI)
+- implemented actions-based access management (#24)
+- greatly improved security for PHP connector, a number of vulnerabilities were fixed
+- handle large files download in PHP connector (#56)
+- "languages" folder moved to the root FM folder
+
+
+Version 1.0.6
+---------------------------
+- removed `fileConnector` option from server-side;
+- removed 'Preview' and 'Thumbnail' params from `getinfo` response;
+- all preview paths (images, media, office files) are now associated to connector. Absolute paths for icons exclusively;
+- all preview paths are now built at the client-side (connector independent) for better API support;
+- added support of seeking for media files in PHP connector (including S3 storage plugin);
+- added capability to pass custom configuration options in filemanager.php to override the default config;
+- PHP connector refactored, following OOP practices;
+- added icons for OpenOffice files;
+
+
+Version 1.0.5
+---------------------------
+- Added a capability to preview images and media files when the userfiles folder is located beyond server root directory
+- Improved path processing at the client-side. Absolute path used whenever it is possible. Normalization of the preview path
+- Improved a way of automatically determination of `baseUrl` based on page URL
+- Fixed bug: Copy URL to clipboard does not work - #5
+- Fixed bug: Path issue upon file selection in WYSIWYG editor
+- Fixed bug: It is possible to select folders in WYSIWYG editor
+- Fixed bug: Preview of media and pdf files is broken when the path contains special chars (fixed by path encoding)
+
+
+Version 1.0.4
+---------------------------
+- Improved and extended logging process
+- Added new associations of some icons with file types for filetree and listview (docx, xlsx, odt, ods, odp, etc...)
+- Fixed bug: multiple issues when filemanager is located and accessible not from root (nested) folder
+- Fixed bug: error in PHP connector while file downloading
+- Fixed bug: error in PHP connector while transliteration process
+
+
+Version 1.0.0
+---------------------------
+- Drag & Drop feature
+- Updated third-party libraries and plugins
+- Implemented plugins system for PHP connector (server-based)
+- Implemented AWS S3 storage plugin
+- Ability to limit max size of the storage (root folder)
+- Optimized for integration with frameworks - added "pluginPath" option to load scripts correctly when using custom path routing
+- Extended list of previewed file types via ViewerJS
+- Implemented preview of MS Office file types via Google Docs Viewer
+- Dropzone file uploader replaced with Blueimp's jQuery-File-Upload, which provides out of the box following features:
+    * chunked upload;
+    * image resizing (Wideimage lib was removed);
+    * image orientation (auto-rotation);
+- New design and features in multiple upload window for preview items; controls for each item (start, abort, resume, delete, etc.)
+- Improved Filetree: allow to open and display multiple subfolders at a time
+- Improved manipulation of Filetree nodes:
+    * rewritten most of items manipulation methods to perform all possible operations on client-side;
+    * this made possible to significantly reduce number of server requests (which is critical for S3 servers that charge you for each request);
+    * implemented "moveNode" for Drag & Drop and "replace" action;
+- Implemented "moveNode" for Drag & Drop and "replace" action
+- Added new "Type" column in the list view
+- Implemented natural sorting on the client-side for Filetree nodes and Fileinfo items after "upload", "add", "rename", "move" and other actions
+- Improved list view sorting: sort settings are persistent during folders navigation and not reset as it was before
+- Caching result of some requests which were duplicated for Filetree and Fileinfo sections (like "getfolder")
+- Reduced number of requests to server by implementing "getFolderData" method that caches data for a short time
+- Rewritten most of items manipulation methods to perform all possible operations on client-side, that makes possible
+to significantly reduce number of server requests (which is critical for S3 servers that charge you for each request)
+- FM template wrapped with ".fm-container" container; CSS rules in all themes were encapsulated to affect only elements inside container
+- New transliteration methods on client and server sides (PHP) to support a wide range of chars (cyrillic, chinese, etc.)
+- Auto calculating FM height when place it to the non-empty page to fill the empty space (between header and footer, for example)
+- Improved FM height calculating (check required for CKEditor and other WYSIWYGs)
+- Fixed bug: security vulnerabilities in PHP connector ("getinfo", "rename" and "move" methods)
+- Fixed bug: "Parent Folder" button in file preview mode works correctly
+- Fixed bug: sorting respects type of item (file/folder) and doesn't mixes them together
+- Fixed bug: handle download errors correctly, if any
+- Fixed bug: better error handling for client-size and in PHP connector

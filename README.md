@@ -30,6 +30,6 @@ Kebutuhan:
 - PHP >= 5.5
 - Mysql
 
-Versi terbaru: 1.8
+Versi terbaru: 1.9
 
 <a href="http://www.dokumenary.net/demo-aplikasi-elearning/">DEMO</a> | <a href="http://dokumenary.net">PORTAL UPDATE</a> | <a href="http://www.dokumenary.net/2015/08/23/new-elearning-versi-1-0/">PANDUAN INSTALL</a>

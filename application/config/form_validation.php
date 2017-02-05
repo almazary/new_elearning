@@ -774,7 +774,7 @@ $config['materi/add/tertulis'] = array(
     array(
         'field' => 'konten',
         'label' => 'Konten',
-        'rules' => 'required|trim|xss_clean'
+        'rules' => 'required'
     ),
 );
 
@@ -815,7 +815,7 @@ $config['materi/edit/tertulis'] = array(
     array(
         'field' => 'konten',
         'label' => 'Konten',
-        'rules' => 'required|trim|xss_clean'
+        'rules' => 'required'
     ),
 );
 
@@ -857,6 +857,11 @@ $config['tugas/add_ganda_essay'] = array(
         'field' => 'durasi',
         'label' => 'Durasi',
         'rules' => 'required|trim|xss_clean|numeric'
+    ),
+    array(
+        'field' => 'info',
+        'label' => 'Info',
+        'rules' => ''
     )
 );
 
@@ -875,6 +880,11 @@ $config['tugas/add_upload'] = array(
         'field' => 'judul',
         'label' => 'Judul Tugas',
         'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'info',
+        'label' => 'Info',
+        'rules' => ''
     )
 );
 
@@ -895,7 +905,7 @@ $config['tugas/pertanyaan'] = array(
     array(
         'field' => 'pertanyaan',
         'label' => 'Pertanyaan',
-        'rules' => 'required|trim|xss_clean'
+        'rules' => 'required'
     )
 );
 
@@ -908,7 +918,7 @@ $config['tugas/pilihan'] = array(
     array(
         'field' => 'konten',
         'label' => 'Konten',
-        'rules' => 'required|trim|xss_clean'
+        'rules' => 'required'
     )
 );
 
@@ -992,7 +1002,7 @@ $config['message/create'] = array(
     array(
         'field' => 'content',
         'label' => 'Isi Pesan',
-        'rules' => 'trim|xss_clean|required'
+        'rules' => 'required'
     ),
 );
 
@@ -1010,7 +1020,7 @@ $config['pengumuman'] = array(
     array(
         'field' => 'konten',
         'label' => 'Konten',
-        'rules' => 'trim|xss_clean|required'
+        'rules' => 'required'
     ),
     array(
         'field' => 'tampil_siswa',

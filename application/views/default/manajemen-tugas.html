@@ -49,7 +49,7 @@ Manajemen Soal Tugas - {{ parent() }}
                     </tr>
                     <tr>
                         <th>Info</th>
-                        <td>{{ tugas.info|raw_media|raw }}</td>
+                        <td>{{ tugas.info|raw }}</td>
                     </tr>
                     <tr>
                         <th>Durasi</th>
@@ -88,7 +88,7 @@ Manajemen Soal Tugas - {{ parent() }}
                                 <a onclick="return confirm('Anda yakin ingin menghapus?')" href="{{ site_url('tugas/hapus_soal/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ enurl_redirect(current_url())) }}" class="btn btn-small btn-default" data-toggle="tooltip" title="Hapus Pertanyaan"><i class="icon-trash"></i></a>
                             </div>
 
-                            {{ p.pertanyaan|raw_media|raw }}
+                            {{ p.pertanyaan|raw }}
                         </div>
 
                         {% if tugas.type_id == 3 %}
@@ -106,7 +106,7 @@ Manajemen Soal Tugas - {{ parent() }}
                                                 <a href="{{ site_url('tugas/edit_pilihan/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ pil.id) }}" class="btn btn-small btn-default iframe-pilihan" data-toggle="tooltip" title="Edit Pilihan"><i class="icon-edit"></i></a>
                                                 <a onclick="return confirm('Anda yakin ingin menghapus?')" href="{{ site_url('tugas/hapus_pilihan/' ~ tugas.id ~ '/' ~ p.id ~ '/' ~ pil.id ~ '/' ~ enurl_redirect(current_url())) }}" class="btn btn-small btn-default" data-toggle="tooltip" title="Hapus Pilihan"><i class="icon-trash"></i></a>
                                             </div>
-                                            {{ pil.konten|raw_media|raw }}
+                                            {{ pil.konten|raw }}
 
                                             {% if pil.kunci == 1 %}
                                             <b class="text-warning"><i class="icon-star"></i> Kunci Jawaban</b>

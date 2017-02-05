@@ -57,7 +57,7 @@ Komentar Materi - {{ parent() }}
                             </div>
                             <div class="media-body">
                                 <p><a href="{{ k.login.link_profil }}"><b>{{ k.login.nama }}</b></a>, <small>{{ k.tgl_posting|date('d F Y') }}</small> | <b><a href="{{ site_url('materi/detail/' ~ k.materi.id) }}" target="_blank">{{ k.materi.judul }}</a></b></p>
-                                {{ k.konten|raw_media|raw }}
+                                {{ k.konten|raw }}
                             </div>
                         </div>
                     </td>

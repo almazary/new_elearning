@@ -1,0 +1,27 @@
+{
+  "name": "rich-filemanager",
+  "description": "Highly customizable open-source file manager",
+  "main": "scripts/filemanager.js",
+  "authors": [
+    "Pavel Solomienko"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "filemanager",
+    "fileupload",
+    "manager",
+    "upload",
+    "file",
+    "rich",
+    "js",
+    "php"
+  ],
+  "homepage": "https://github.com/servocoder/RichFilemanager",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -28,10 +28,11 @@ $db['default']['dbprefix'] = 'el_';
 </pre>
 {% endif %}
 
-Buka file <b>application/config/config.php</b>, atur base_url dan encryption_key menjadi seperti berikut : <br>
+Buka file <b>application/config/config.php</b>, atur base_url, encryption_key dan sess_cookie_name menjadi seperti berikut : <br>
 <pre>
 $config['base_url'] = '{{ set_base_url }}';
 $config['encryption_key'] = '{{ md5(uniqid()) }}';
+$config['sess_cookie_name'] = 'ci_session_{{ uniqid() }}';
 </pre>
 
 <b>Jika sudah diatur, refresh kembali halaman ini, kemudian tunggu loading sampai selesai.</b>

@@ -52,6 +52,49 @@ class Login_model extends CI_Model
     }
 
     /**
+     * Method untuk mendapatkan waktu aktifitas terahir
+     *
+     * @param  integer $log_id
+     * @return integer
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_last_activity($log_id)
+    {
+        $log = $this->retrieve_log($log_id);
+        return $log['last_activity'];
+    }
+
+    /**
+     * Method untuk update last_activity
+     * @param  integer $log_id
+     * @param  integer $time
+     * @return array
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function update_last_activity($log_id, $time = "")
+    {
+        $this->db->where('id', $log_id);
+        $this->db->update('login_log', array(
+            'last_activity' => empty($time) ? time() : $time,
+        ));
+        return true;
+    }
+
+    /**
+     * Method untuk mendapatkan login log terahir berdasarkan login_id
+     * @param  integer $login_id
+     * @return array
+     * @author Almazari <almazary@gmail.com>
+     */
+    public function retrieve_last_log($login_id)
+    {
+        $this->db->where('login_id', $login_id);
+        $this->db->order_by('id', 'desc');
+        $result = $this->db->get('login_log', 1);
+        return $result->row_array();
+    }
+
+    /**
      * Method untuk mendapatkan satu data log berdasarkan id
      * @param  integer $id
      * @return array

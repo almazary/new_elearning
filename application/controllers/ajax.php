@@ -51,6 +51,23 @@ class Ajax extends MY_Controller
     function get_data($page)
     {
         switch ($page) {
+            case 'elearning-dokumenary-feed':
+                // https://bavotasan.com/2010/display-rss-feed-with-php/
+                $rss = new DOMDocument();
+                $rss->load($this->update_link);
+                $feed = array();
+                foreach ($rss->getElementsByTagName('item') as $node) {
+                    $item = array (
+                        'title' => $node->getElementsByTagName('title')->item(0)->nodeValue,
+                        'link' => $node->getElementsByTagName('link')->item(0)->nodeValue,
+                    );
+
+                    array_push($feed, $item);
+                }
+
+                echo json_encode($feed);
+            break;
+
             case 'penerima':
                 $query =  !empty($_GET['query']) ? $_GET['query'] : '';
 
@@ -307,7 +324,7 @@ class Ajax extends MY_Controller
 
                 $tugas_id      = (int)$this->input->post('tugas_id', true);
                 $pertanyaan_id = (int)$this->input->post('pertanyaan_id', true);
-                $jawaban       = $this->input->post('jawaban', true);
+                $jawaban       = $this->input->post('jawaban');
 
                 $tugas = $this->tugas_model->retrieve($tugas_id);
                 if (empty($tugas)) {
