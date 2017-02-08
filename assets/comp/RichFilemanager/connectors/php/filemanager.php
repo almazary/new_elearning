@@ -47,7 +47,12 @@ $config = array();
 $fm = Fm::app()->getInstance($config);
 
 // use to setup files root folder
-$split_lokasi      = explode("/", __FILE__);
+if (strpos(__FILE__, "\\") !== false) {
+    $split_lokasi = explode("\\", __FILE__);
+} else {
+    $split_lokasi = explode("/", __FILE__);
+}
+
 $key_assets        = array_search('assets', $split_lokasi);
 $key_parent_folder = $key_assets - 1;
 
