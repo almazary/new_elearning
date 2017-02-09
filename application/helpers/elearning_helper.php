@@ -25,12 +25,12 @@ function check_db_connection()
     # cek pengaturan database
     include APPPATH . 'config/database.php';
 
-    $link = @mysqli_connect($db['default']['hostname'], $db['default']['username'], $db['default']['password']);
+    $link = @mysqli_connect("{$db['default']['hostname']}", "{$db['default']['username']}", "{$db['default']['password']}");
     if (!$link) {
         throw new Exception('Failed to connect to the server: ' . mysqli_connect_error());
     }
 
-    $select_db = @mysqli_select_db($link, $db['default']['database']);
+    $select_db = @mysqli_select_db($link, "{$db['default']['database']}");
     if (!$select_db) {
         throw new Exception('Failed to connect to the database: ' . mysqli_error($link));
     }
