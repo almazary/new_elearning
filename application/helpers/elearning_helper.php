@@ -303,7 +303,8 @@ function is_login()
     if (!empty($_SESSION['login_' . APP_PREFIX])) {
         # yang ini untuk cek last_time_activity session
         if (!is_ajax()) {
-            if (!empty(last_time_activity_session('get')) AND last_time_activity_session('get') < strtotime("-55 minute", time())) {
+            $last_time = last_time_activity_session('get');
+            if (!empty($last_time) AND $last_time < strtotime("-55 minute", time())) {
                 $_SESSION['login_' . APP_PREFIX] = null;
                 return false;
             } else {
