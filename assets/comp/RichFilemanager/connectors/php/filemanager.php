@@ -46,20 +46,19 @@ $config = array();
 
 $fm = Fm::app()->getInstance($config);
 
-// use to setup files root folder
-if (strpos(__FILE__, "\\") !== false) {
-    $split_lokasi = explode("\\", __FILE__);
-} else {
-    $split_lokasi = explode("/", __FILE__);
-}
+$lokasi_file  = str_replace($_SERVER['DOCUMENT_ROOT'], "", __FILE__);
+$split_lokasi = explode("assets", $lokasi_file);
+$dir_app = $split_lokasi[0];
 
-$key_assets        = array_search('assets', $split_lokasi);
-$key_parent_folder = $key_assets - 1;
+// use to setup files root folder
+if (strpos($dir_app, "\\") !== false) {
+    $dir_app = str_replace("\\", "/", $dir_app);
+}
 
 $path_user = $_SESSION['login_e-learning']['path_userfiles'];
 
 // example to setup files root folder
-$fm->setFileRoot('/' . $split_lokasi[$key_parent_folder] . '/' . $path_user, true);
+$fm->setFileRoot($dir_app . $path_user, true);
 
 // example to set list of allowed actions
 // $fm->setAllowedActions(["select", "move"]);
