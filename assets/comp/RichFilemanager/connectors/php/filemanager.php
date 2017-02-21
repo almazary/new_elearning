@@ -46,9 +46,10 @@ $config = array();
 
 $fm = Fm::app()->getInstance($config);
 
-$lokasi_file  = str_replace($_SERVER['DOCUMENT_ROOT'], "", __FILE__);
-$split_lokasi = explode("assets", $lokasi_file);
-$dir_app = $split_lokasi[0];
+$fix_path_file = str_replace("\\", "/", __FILE__);
+$lokasi_file   = str_replace($_SERVER['DOCUMENT_ROOT'], "", $fix_path_file);
+$split_lokasi  = explode("assets", $lokasi_file);
+$dir_app       = $split_lokasi[0];
 
 // use to setup files root folder
 if (strpos($dir_app, "\\") !== false) {
