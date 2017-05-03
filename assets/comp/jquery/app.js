@@ -277,6 +277,7 @@
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [ 0 ] }
                 ],
+                "stateSave": true
                 // "fnDrawCallback" : function( oSettings ) {
 
                 // }
