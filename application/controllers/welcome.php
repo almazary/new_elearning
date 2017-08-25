@@ -469,6 +469,8 @@ class Welcome extends MY_Controller
 
     function hapus_data($segment_3 = "")
     {
+        must_login();
+
         $data = array();
 
         switch ($segment_3) {
