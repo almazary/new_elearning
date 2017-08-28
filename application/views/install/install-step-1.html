@@ -15,28 +15,35 @@ Install - {{ parent() }}
             <div class="module-body">
                 {{ error|raw }}
 
-<p>Rename file <b>application/config/database.sample.php</b> menjadi <b>application/config/database.php</b></p>
+<h4>Ikuti langkah - langkah berikut:</h4>
 
-{% if error is not empty %}
+<ol>
+    <li>Rename file <b>application/config/database.sample.php</b> menjadi <b>application/config/database.php</b></li>
+
+    {% if error is not empty %}
+    <li>
 Atur koneksi database pada file <b>application/config/database.php</b>, isi bagian - bagian berikut :<br>
 <pre>
-$db['default']['hostname'] = '';
-$db['default']['username'] = '';
-$db['default']['password'] = '';
-$db['default']['database'] = '';
-$db['default']['dbprefix'] = 'el_';
+$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = ''; //username user mysql
+$db['default']['password'] = ''; //password user mysql
+$db['default']['database'] = ''; //nama database
+$db['default']['dbprefix'] = 'el_'; //awalan nama tabel
 </pre>
-{% endif %}
+    </li>
+    {% endif %}
 
+    <li>
 Buka file <b>application/config/config.php</b>, atur base_url, encryption_key dan sess_cookie_name menjadi seperti berikut : <br>
 <pre>
 $config['base_url'] = '{{ set_base_url }}';
 $config['encryption_key'] = '{{ md5(uniqid()) }}';
 $config['sess_cookie_name'] = 'ci_session_{{ uniqid() }}';
 </pre>
-
-<b>Jika sudah diatur, refresh kembali halaman ini, kemudian tunggu loading sampai selesai.</b>
-
+    </li>
+</ol>
+<hr>
+<button class="btn btn-primary" type="button" onclick="location.reload()">Install</button>
             </div>
     </div>
 </div>

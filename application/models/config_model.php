@@ -69,6 +69,8 @@ class Config_model extends CI_Model
           `pengajar_id` int(11) NOT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}pengumuman` ADD INDEX(`pengajar_id`);");
     }
 
     /**
@@ -83,6 +85,8 @@ class Config_model extends CI_Model
             `agent` text NOT NULL,
             PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}login_log` ADD INDEX(`login_id`);");
     }
 
     /**
@@ -99,6 +103,8 @@ class Config_model extends CI_Model
           `tgl_posting` datetime DEFAULT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}komentar` ADD INDEX(`login_id`, `materi_id`);");
     }
 
     /**
@@ -116,6 +122,8 @@ class Config_model extends CI_Model
           `opened` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=belum,1=sudah',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}messages` ADD INDEX(`type_id`, `owner_id`, `sender_receiver_id`);");
     }
 
     /**
@@ -131,6 +139,8 @@ class Config_model extends CI_Model
           `aktif` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1=aktif 0=tidak',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}kelas` ADD INDEX(`parent_id`);");
     }
 
     /**
@@ -145,6 +155,8 @@ class Config_model extends CI_Model
           `aktif` tinyint(1) NOT NULL COMMENT '0 jika bukan, 1 jika ya',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}kelas_siswa` ADD INDEX(`kelas_id`, `siswa_id`);");
     }
 
     /**
@@ -162,6 +174,8 @@ class Config_model extends CI_Model
           `reset_kode` varchar(255) DEFAULT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}login` ADD INDEX(`username`, `siswa_id`, `pengajar_id`);");
     }
 
     /**
@@ -193,6 +207,8 @@ class Config_model extends CI_Model
           `aktif` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 = aktif 0 = tidak',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}mapel_ajar` ADD INDEX(`hari_id`, `pengajar_id`, `mapel_kelas_id`);");
     }
 
     /**
@@ -207,6 +223,8 @@ class Config_model extends CI_Model
           `aktif` tinyint(1) NOT NULL DEFAULT '1',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}mapel_kelas` ADD INDEX(`kelas_id`, `mapel_id`);");
     }
 
     /**
@@ -227,6 +245,8 @@ class Config_model extends CI_Model
           `views` int(11) NOT NULL DEFAULT '1',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}materi` ADD INDEX(`mapel_id`, `pengajar_id`, `siswa_id`, `judul`);");
     }
 
     /**
@@ -240,6 +260,8 @@ class Config_model extends CI_Model
           `kelas_id` int(11) NOT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}materi_kelas` ADD INDEX(`materi_id`, `kelas_id`);");
     }
 
     /**
@@ -254,6 +276,8 @@ class Config_model extends CI_Model
           `siswa_id` int(11) NOT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}nilai_tugas` ADD INDEX(`tugas_id`, `siswa_id`);");
     }
 
     /**
@@ -273,6 +297,8 @@ class Config_model extends CI_Model
           `status_id` tinyint(1) NOT NULL COMMENT '0=pending, 1=aktif, 2=blok',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}pengajar` ADD INDEX(`nip`);");
     }
 
     /**
@@ -302,6 +328,8 @@ class Config_model extends CI_Model
           `aktif` tinyint(1) NOT NULL DEFAULT '1',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}pilihan` ADD INDEX(`pertanyaan_id`, `kunci`);");
     }
 
     /**
@@ -323,6 +351,8 @@ class Config_model extends CI_Model
           `status_id` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=pending, 1=aktif, 2=blok, 3=alumni, 4=deleted',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}siswa` ADD INDEX(`nis`, `nama`, `status_id`);");
     }
 
     /**
@@ -343,6 +373,8 @@ class Config_model extends CI_Model
           `tampil_siswa` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=tidak tampil di siswa, 1=tampil siswa',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}tugas` ADD INDEX(`mapel_id`, `pengajar_id`, `type_id`);");
     }
 
     /**
@@ -356,6 +388,8 @@ class Config_model extends CI_Model
           `kelas_id` int(11) NOT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}tugas_kelas` ADD INDEX(`tugas_id`, `kelas_id`);");
     }
 
     /**
@@ -371,6 +405,8 @@ class Config_model extends CI_Model
           `aktif` tinyint(1) NOT NULL DEFAULT '1',
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}tugas_pertanyaan` ADD INDEX(`tugas_id`);");
     }
 
     /**
@@ -384,6 +420,8 @@ class Config_model extends CI_Model
           `value` longtext,
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}field_tambahan` ADD INDEX(`id`);");
     }
 
     /**
