@@ -114,6 +114,7 @@ class Materi extends MY_Controller
                 'mapel_id'    => $this->input->post('mapel_id', true),
                 'kelas_id'    => $this->input->post('kelas_id', true),
                 'type'        => $this->input->post('type', true),
+                'publish'     => $this->input->post('publish', true),
             );
 
             $this->session->set_userdata('filter_materi', $filter);
@@ -129,7 +130,8 @@ class Materi extends MY_Controller
                 'pembuat'     => '',
                 'mapel_id'    => array(),
                 'kelas_id'    => array(),
-                'type'        => array()
+                'type'        => array(),
+                'publish'     => array(),
             );
         }
         $data['filter'] = $filter;
@@ -144,7 +146,7 @@ class Materi extends MY_Controller
             $filter['judul'],
             $filter['konten'],
             $tgl_posting = null,
-            $publish = 1,
+            $filter['publish'],
             $filter['kelas_id'],
             $filter['type']
         );
@@ -274,20 +276,25 @@ class Materi extends MY_Controller
                 $arr_post_kelas[] = $materi_kelas_id;
             }
 
+            /**
+             * Hapus kelas yang tidak ada dipost
+             */
+            $retrieve_all_kelas = $this->materi_model->retrieve_all_kelas($materi_id);
+            foreach ($retrieve_all_kelas as $val) {
+                if (!in_array($val['kelas_id'], $arr_post_kelas)) {
+                    $this->materi_model->delete_kelas($val['id']);
+                }
+            }
+
             if (isset($status) && $status == 'preview') {
                 $data['preview_id'] = $materi_id;
-
-                /**
-                 * Hapus kelas yang tidak ada dipost
-                 */
-                $retrieve_all_kelas = $this->materi_model->retrieve_all_kelas($materi_id);
-                foreach ($retrieve_all_kelas as $val) {
-                    if (!in_array($val['kelas_id'], $arr_post_kelas)) {
-                        $this->materi_model->delete_kelas($val['id']);
-                    }
-                }
             } else {
-                $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil disimpan.'));
+                $add_info = "dan diterbitkan.";
+                if (isset($status) && $status == 'draft') {
+                    $add_info = "sebagai konsep.";
+                }
+
+                $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil disimpan ' . $add_info));
                 if (!empty($materi_id)) {
                     redirect('materi/edit/'.$type.'/'.$materi_id);
                 } else {

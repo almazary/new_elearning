@@ -953,6 +953,11 @@ $config['materi/filter'] = array(
         'label' => 'Type',
         'rules' => 'xss_clean'
     ),
+    array(
+        'field' => 'publish[]',
+        'label' => 'Status',
+        'rules' => 'xss_clean'
+    ),
 );
 
 $config['tugas/filter'] = array(
