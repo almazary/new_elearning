@@ -186,16 +186,42 @@ class Materi extends MY_Controller
                 $mapel_id = $this->input->post('mapel_id', TRUE);
                 $judul    = $this->input->post('judul', TRUE);
                 $konten   = $this->input->post('konten');
+                $status   = $this->input->post('status', TRUE);
 
-                $materi_id = $this->materi_model->create(
-                    (is_pengajar() OR is_admin()) ? get_sess_data('user', 'id') : null,
-                    is_siswa() ? get_sess_data('user', 'id') : null,
-                    $mapel_id,
-                    $judul,
-                    $konten,
-                    null,
-                    1
-                );
+                $publish = 1;
+                if (!empty($status) && in_array($status, array('preview', 'draft'))) {
+                    $publish = 0;
+                }
+
+                $get_preview_id = $this->uri->segment(4);
+                if (!empty($get_preview_id)) {
+                    $get_materi = $this->materi_model->retrieve($get_preview_id);
+                    if (empty($get_materi) OR $get_materi['publish'] == 1) {
+                        show_404();
+                    }
+                    # update
+                    $this->materi_model->update(
+                        $get_materi['id'],
+                        $get_materi['pengajar_id'],
+                        $get_materi['siswa_id'],
+                        $mapel_id,
+                        $judul,
+                        $konten,
+                        null,
+                        $publish
+                    );
+                    $materi_id = $get_materi['id'];
+                } else {
+                    $materi_id = $this->materi_model->create(
+                        (is_pengajar() OR is_admin()) ? get_sess_data('user', 'id') : null,
+                        is_siswa() ? get_sess_data('user', 'id') : null,
+                        $mapel_id,
+                        $judul,
+                        $konten,
+                        null,
+                        $publish
+                    );
+                }
 
                 $success = true;
             }
@@ -236,16 +262,37 @@ class Materi extends MY_Controller
 
         if ($success) {
             # simpan kelas materi
+            $arr_post_kelas = array();
             $kelas_id = $this->input->post('kelas_id', TRUE);
             foreach ($kelas_id as $materi_kelas_id) {
-                $this->materi_model->create_kelas($materi_id, $materi_kelas_id);
+                # cek sudah ada belum
+                $sudah_ada = $this->materi_model->retrieve_kelas(null, $materi_id, $materi_kelas_id);
+                if (empty($sudah_ada)) {
+                    $this->materi_model->create_kelas($materi_id, $materi_kelas_id);
+                }
+
+                $arr_post_kelas[] = $materi_kelas_id;
             }
 
-            $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil disimpan.'));
-            if (!empty($materi_id)) {
-                redirect('materi/edit/'.$type.'/'.$materi_id);
+            if (isset($status) && $status == 'preview') {
+                $data['preview_id'] = $materi_id;
+
+                /**
+                 * Hapus kelas yang tidak ada dipost
+                 */
+                $retrieve_all_kelas = $this->materi_model->retrieve_all_kelas($materi_id);
+                foreach ($retrieve_all_kelas as $val) {
+                    if (!in_array($val['kelas_id'], $arr_post_kelas)) {
+                        $this->materi_model->delete_kelas($val['id']);
+                    }
+                }
             } else {
-                redirect('materi');
+                $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil disimpan.'));
+                if (!empty($materi_id)) {
+                    redirect('materi/edit/'.$type.'/'.$materi_id);
+                } else {
+                    redirect('materi');
+                }
             }
         }
 
@@ -466,12 +513,16 @@ class Materi extends MY_Controller
         $materi_id = (int)$segment_3;
 
         if (empty($materi_id)) {
-            show_error("Materi tidak ditemukan.");
+            show_404();
         }
 
         $materi = $this->materi_model->retrieve($materi_id);
-        if (empty($materi) OR empty($materi['publish'])) {
-            show_error("Materi tidak ditemukan.");
+        if (empty($materi)) {
+            show_404();
+        }
+
+        if (is_siswa() && empty($materi['publish'])) {
+            show_404();
         }
 
         # tambah views jika materi terfulis

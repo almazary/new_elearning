@@ -12,7 +12,7 @@ Tambah Materi - {{ parent() }}
     <div class="module-body">
         {{ get_flashdata('materi')|raw }}
 
-        {{ form_open_multipart('materi/add/' ~ type, {'class' : 'form-horizontal row-fluid'})|raw }}
+        {{ form_open_multipart('materi/add/' ~ type ~ '/' ~ preview_id, {'class' : 'form-horizontal row-fluid', 'id' : 'form-materi'})|raw }}
             <div class="control-group">
                 <label class="control-label">Judul <span class="text-error">*</span></label>
                 <div class="controls">
@@ -33,7 +33,7 @@ Tambah Materi - {{ parent() }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Kelas <span class="text-error">*</span></label>
+                <label class="control-label">Untuk Kelas <span class="text-error">*</span></label>
                 <div class="controls">
                     <ul class="unstyled inline" style="margin-left: -5px;">
                         {% for k in kelas %}
@@ -66,12 +66,22 @@ Tambah Materi - {{ parent() }}
             {% endif %}
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="{{ site_url('materi') }}" class="btn btn-default">Kembali</a>
+                    <button type="submit" name="status" value="preview" class="btn btn-info">Preview</button>
+                    <button type="submit" name="status" value="draft" class="btn btn-primary">Simpan Saja</button>
+                    <button type="submit" name="status" value="publish" class="btn btn-success">Simpan & Terbitkan</button>
+                    <a href="{{ site_url('materi') }}" class="btn btn-default" onclick="return confirm('Materi belum disimpan, anda yakin ingin kembali tanpa menyimpan?')">Kembali</a>
                 </div>
             </div>
         {{ form_close()|raw }}
 
     </div>
 </div>
+{% endblock %}
+
+{% block js %}
+    {% if preview_id is not empty %}
+    <script type="text/javascript">
+        window.open(site_url + '/materi/detail/{{ preview_id }}', '_tab');
+    </script>
+    {% endif %}
 {% endblock %}
