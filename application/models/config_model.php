@@ -54,6 +54,33 @@ class Config_model extends CI_Model
     }
 
     /**
+     * Method untuk nambahin index tabel-table default
+     */
+    public function update_index_default_table()
+    {
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}pengumuman` ADD INDEX(`pengajar_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}login_log` ADD INDEX(`login_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}komentar` ADD INDEX(`login_id`, `materi_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}messages` ADD INDEX(`type_id`, `owner_id`, `sender_receiver_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}kelas` ADD INDEX(`parent_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}kelas_siswa` ADD INDEX(`kelas_id`, `siswa_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}login` ADD INDEX(`username`, `siswa_id`, `pengajar_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}mapel_ajar` ADD INDEX(`hari_id`, `pengajar_id`, `mapel_kelas_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}mapel_kelas` ADD INDEX(`kelas_id`, `mapel_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}materi` ADD INDEX(`mapel_id`, `pengajar_id`, `siswa_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}materi_kelas` ADD INDEX(`materi_id`, `kelas_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}nilai_tugas` ADD INDEX(`tugas_id`, `siswa_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}pengajar` ADD INDEX(`nip`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}pilihan` ADD INDEX(`pertanyaan_id`, `kunci`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}siswa` ADD INDEX(`nis`, `nama`, `status_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}tugas` ADD INDEX(`mapel_id`, `pengajar_id`, `type_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}tugas_kelas` ADD INDEX(`tugas_id`, `kelas_id`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}tugas_pertanyaan` ADD INDEX(`tugas_id`);");
+
+        return true;
+    }
+
+    /**
      * Method untuk membuat tabel pengumuman
      */
     public function create_tb_pengumuman()
@@ -246,7 +273,7 @@ class Config_model extends CI_Model
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 
-        $this->db->query("ALTER TABLE `{$this->db->dbprefix}materi` ADD INDEX(`mapel_id`, `pengajar_id`, `siswa_id`, `judul`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}materi` ADD INDEX(`mapel_id`, `pengajar_id`, `siswa_id`);");
     }
 
     /**
@@ -329,7 +356,7 @@ class Config_model extends CI_Model
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 
-        $this->db->query("ALTER TABLE `{$this->db->dbprefix}pilihan` ADD INDEX(`pertanyaan_id`, `kunci`);");
+        $this->db->query("ALTER TABLE `{$this->db->dbprefix}pilihan` ADD INDEX(`pertanyaan_id`);");
     }
 
     /**
@@ -420,8 +447,6 @@ class Config_model extends CI_Model
           `value` longtext,
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
-
-        $this->db->query("ALTER TABLE `{$this->db->dbprefix}field_tambahan` ADD INDEX(`id`);");
     }
 
     /**
