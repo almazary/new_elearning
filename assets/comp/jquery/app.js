@@ -141,38 +141,20 @@
         if ($("#info-update-link").length) {
             // popup new version
             setTimeout(function() {
-                var ada_update = 0;
                 $.ajax({
                     type: "GET",
-                    url: site_url + '/ajax/get_data/check_update',
-                    success: function (data) {
-                        ada_update = data;
-                    },
-                    async: false
-                });
+                    url: site_url + '/ajax/get_data/elearning-dokumenary-feed',
+                    success: function(data){
+                        var values = $.parseJSON(data);
+                        $.each(values.feed, function(i, val) {
+                            $("#info-update").append("<tr><td><a href='"+val.link+"' target='_blank'>"+val.title+"</a></td></tr>");
+                        });
 
-                if (ada_update == 1) {
-                    $.colorbox({
-                        href: site_url + "/welcome/new_version",
-                        fixed: true,
-                        width: 500,
-                        onClosed : function() {
-                            location.reload();
+                        if (values.urgent_info) {
+                            $("#show-urgent-info").html(values.urgent_info);
                         }
-                    });
-                } else {
-                    url = $("#info-update-link").val();
-                    $.ajax({
-                        type: "GET",
-                        url: site_url + '/ajax/get_data/elearning-dokumenary-feed',
-                        success: function(data){
-                            var values = $.parseJSON(data);
-                            $.each(values, function(i, val) {
-                                $("#info-update").append("<tr><td><a href='"+val.link+"' target='_blank'>"+val.title+"</a></td></tr>");
-                            });
-                        }
-                    });
-                }
+                    }
+                });
             }, 1000);
         }
 
@@ -666,27 +648,6 @@
                 fixed:true,
             });
         }
-
-        $("#btn-perbaharui-aplikasi").on('click', function() {
-            $("#progress-perbaharui").html('<img src="' + base_url + 'assets/images/loading.gif" style="width:30px;">');
-
-            $.ajax({
-                method: "GET",
-                url: site_url + '/ajax/get_data/download_update',
-                success: function (data) {
-                    if (data == 0) {
-                        $("#progress-perbaharui").html("Gagal mendownload file!");
-                        setTimeout(function() {
-                            location.reload();
-                        }, 2000);
-                    } else if (data == 1) {
-                        location.href = base_url + 'update-app.php';
-                    } else {
-                        $("#progress-perbaharui").html(data);
-                    }
-                }
-            });
-        });
 
     }
 

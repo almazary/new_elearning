@@ -52,20 +52,39 @@ class Ajax extends MY_Controller
     {
         switch ($page) {
             case 'elearning-dokumenary-feed':
-                // https://bavotasan.com/2010/display-rss-feed-with-php/
-                $rss = new DOMDocument();
-                $rss->load($this->update_link);
-                $feed = array();
-                foreach ($rss->getElementsByTagName('item') as $node) {
-                    $item = array (
-                        'title' => $node->getElementsByTagName('title')->item(0)->nodeValue,
-                        'link' => $node->getElementsByTagName('link')->item(0)->nodeValue,
-                    );
-
-                    array_push($feed, $item);
+                if (!is_admin()) {
+                    echo json_encode(array(
+                        'feed'        => array(),
+                        'urgent_info' => "",
+                    ));die;
                 }
 
-                echo json_encode($feed);
+                # ambil informasi update
+                $urgent_info = $this->check_urgent_info();
+                if (!empty($urgent_info)) {
+                    $urgent_info = $this->twig->render('urgent-info.html', array('info' => $urgent_info));
+                }
+
+                $feed = array();
+                try {
+                    // https://bavotasan.com/2010/display-rss-feed-with-php/
+                    $rss = new DOMDocument();
+                    $rss->load($this->update_link);
+                    foreach ($rss->getElementsByTagName('item') as $node) {
+                        $item = array (
+                            'title' => $node->getElementsByTagName('title')->item(0)->nodeValue,
+                            'link' => $node->getElementsByTagName('link')->item(0)->nodeValue,
+                        );
+
+                        array_push($feed, $item);
+                    }
+                } catch (\Exception $e) {
+                }
+
+                echo json_encode(array(
+                    'feed'        => $feed,
+                    'urgent_info' => $urgent_info,
+                ));
             break;
 
             case 'penerima':
@@ -94,24 +113,12 @@ class Ajax extends MY_Controller
                 # pesan baru
                 $new_msg = $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
 
-                $count_update     = 0;
                 $pending_siswa    = 0;
                 $pending_pengajar = 0;
                 $unread_laporan   = 0;
 
                 # jika login admin
                 if (is_admin()) {
-                    # update terbaru
-                    $count_update = 0;
-                    $field_id     = "cek-versi";
-                    $cek_versi    = retrieve_field($field_id);
-                    if (!empty($cek_versi['value'])) {
-                        $cek_value = json_decode($cek_versi['value'], 1);
-                        if ($cek_value['result'] > $this->current_version) {
-                            $count_update = 1;
-                        }
-                    }
-
                     # cari jumlah pending siswa
                     $pending_siswa = $this->siswa_model->count('pending');
 
@@ -138,7 +145,7 @@ class Ajax extends MY_Controller
 
                 $result = array(
                     'new_msg'          => $new_msg,
-                    'new_update'       => $count_update,
+                    // 'new_update'       => $count_update,
                     'pending_siswa'    => $pending_siswa,
                     'pending_pengajar' => $pending_pengajar,
                     'unread_laporan'   => $unread_laporan,
@@ -146,68 +153,6 @@ class Ajax extends MY_Controller
                 );
 
                 echo json_encode($result);
-            break;
-
-            case 'check_update':
-                $ada_update = $this->check_new_version();
-                if ($ada_update) {
-                    echo "1";
-                } else {
-                    echo "0";
-                }
-            break;
-
-            case 'download_update':
-                $field_id  = "cek-versi";
-                $cek_versi = retrieve_field($field_id);
-                if (empty($cek_versi['value'])) {
-                    echo 0;die;
-                }
-
-                $cek_value = json_decode($cek_versi['value'], 1);
-
-                # cek sudah ada belum file updatenya, kalo sudah ada hapus dulu
-                $path = './userfiles/updates';
-                if (!is_dir($path)) {
-                    if (!is_writable('./userfiles')) {
-                        echo "Folder userfiles tidak dapat ditulis!";die;
-                    } else {
-                        mkdir($path);
-                    }
-                }
-
-                $path_folder_update = $path . '/' . $cek_value['result'];
-                if (!is_dir($path_folder_update)) {
-                    mkdir($path_folder_update);
-                }
-
-                $path_file_update = $path_folder_update . '/' . $cek_value['result'] . '.zip';
-                if (is_file($path_file_update)) {
-                    if (!unlink($path_file_update)) {
-                        echo "File update lama tidak dapat diperbaharui!";die;
-                    }
-                }
-
-                # download file
-                @file_put_contents($path_file_update, fopen($cek_value['download_link'], 'r'));
-
-                # cek beneran kedownload belum
-                if (!is_file($path_file_update)) {
-                    echo "Download file update gagal!";die;
-                }
-
-                # ciptakan session update
-                $field_id    = "session-updates";
-                $field_name  = "Session Updates";
-                $field_value = json_encode(array('version' => $cek_value['result']));
-                $retrieve_session = retrieve_field($field_id);
-                if (empty($retrieve_session)) {
-                    create_field($field_id, $field_name, $field_value);
-                } else {
-                    update_field($field_id, $field_name, $field_value);
-                }
-
-                echo 1;
             break;
         }
     }
