@@ -81,12 +81,14 @@ Materi - {{ parent() }}
                                 <input type="text" name="konten" class="span5" value="{{ set_value('konten', filter.konten) }}">
                             </td>
                         </tr>
+                        {% if is_admin() == true %}
                         <tr>
                             <th>Pembuat</th>
                             <td>
                                 <input type="text" name="pembuat" class="span4" value="{{ set_value('pembuat', filter.pembuat) }}">
                             </td>
                         </tr>
+                        {% endif %}
                         <tr>
                             <th>Status</th>
                             <td>
@@ -162,7 +164,7 @@ Materi - {{ parent() }}
                                 <span class="divider">/</span>
                             </li>
                             <li>
-                                {{ (m.file is not empty) ? 'File' : 'Tertulis' }}
+                                {{ (m.file is not empty) ? '<span class="label label-success">File</span>' : '<span class="label label-info">Tertulis</span>' }}
                                 <span class="divider">/</span>
                             </li>
                             <li>
@@ -176,9 +178,12 @@ Materi - {{ parent() }}
                                 <span class="divider">/</span>
                             </li>
                             <li>
-                                Pembuat <a href="{{ m.pembuat.link_profil }}">{{ m.pembuat.nama }}</a>
-                                ,
-                                {{ tgl_jam_indo(m.tgl_posting) }}
+                                {% if is_pengajar() == false %}
+                                    Pembuat <a href="{{ m.pembuat.link_profil }}">{{ m.pembuat.nama }}</a>
+                                    , {{ tgl_jam_indo(m.tgl_posting) }}
+                                {% else %}
+                                    Dibuat {{ tgl_jam_indo(m.tgl_posting) }}
+                                {% endif %}
                                 <span class="divider">/</span>
                             </li>
                             <li>

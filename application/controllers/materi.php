@@ -114,7 +114,7 @@ class Materi extends MY_Controller
                 'mapel_id'    => $this->input->post('mapel_id', true),
                 'kelas_id'    => $this->input->post('kelas_id', true),
                 'type'        => $this->input->post('type', true),
-                'publish'     => $this->input->post('publish', true),
+                'publish'     => is_siswa() ? array(1) : $this->input->post('publish', true),
             );
 
             $this->session->set_userdata('filter_materi', $filter);
@@ -131,10 +131,24 @@ class Materi extends MY_Controller
                 'mapel_id'    => array(),
                 'kelas_id'    => array(),
                 'type'        => array(),
-                'publish'     => array(),
+                'publish'     => is_siswa() ? array(1) : array(),
             );
         }
         $data['filter'] = $filter;
+
+        # jika sebagai pengajar tampilkan materi miliknya saja
+        if (is_pengajar()) {
+            $filter['pengajar_id'] = get_sess_data('user', 'id');
+        }
+
+        # kalo siswa tampilkan yang kelasnya saja
+        if (is_siswa()) {
+            $kelas_aktif = $this->siswa_kelas_aktif;
+            $retrieve_kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
+
+            # ambil parentnya
+            $filter['kelas_id'] = array($retrieve_kelas['parent_id']);
+        }
 
         # ambil semua data materi
         $retrieve_all_materi = $this->materi_model->retrieve_all(
@@ -241,6 +255,12 @@ class Materi extends MY_Controller
                 $judul       = $this->input->post('judul', TRUE);
                 $upload_data = $this->upload->data();
                 $file        = $upload_data['file_name'];
+                $status      = $this->input->post('status', TRUE);
+
+                $publish = 1;
+                if (!empty($status) && in_array($status, array('draft'))) {
+                    $publish = 0;
+                }
 
                 $materi_id = $this->materi_model->create(
                     (is_pengajar() OR is_admin()) ? get_sess_data('user', 'id') : null,
@@ -249,7 +269,7 @@ class Materi extends MY_Controller
                     $judul,
                     null,
                     $file,
-                    1
+                    $publish
                 );
 
                 $success = true;
@@ -367,6 +387,7 @@ class Materi extends MY_Controller
                 $mapel_id = $this->input->post('mapel_id', TRUE);
                 $judul    = $this->input->post('judul', TRUE);
                 $konten   = $this->input->post('konten');
+                $publish  = $this->input->post('publish', TRUE);
 
                 $this->materi_model->update(
                     $materi['id'],
@@ -376,7 +397,7 @@ class Materi extends MY_Controller
                     $judul,
                     $konten,
                     null,
-                    1
+                    $publish
                 );
 
                 $success = true;
@@ -410,6 +431,7 @@ class Materi extends MY_Controller
             if ($this->form_validation->run('materi/edit/file') == TRUE AND $upload_success == TRUE) {
                 $mapel_id = $this->input->post('mapel_id', TRUE);
                 $judul    = $this->input->post('judul', TRUE);
+                $publish  = $this->input->post('publish', TRUE);
 
                 $this->materi_model->update(
                     $materi['id'],
@@ -419,7 +441,7 @@ class Materi extends MY_Controller
                     $judul,
                     null,
                     $update_file,
-                    1
+                    $publish
                 );
 
                 if ($is_new_file) {
@@ -529,6 +551,16 @@ class Materi extends MY_Controller
         }
 
         if (is_siswa() && empty($materi['publish'])) {
+            show_404();
+        } else {
+            # cek sesuai kelas aktif tidak
+
+        }
+
+        /**
+         * jika pengajar cek kepemilikan untuk yang konsep
+         */
+        if (is_pengajar() && $materi['publish'] == '0' && $materi['pengajar_id'] != get_sess_data('user', 'id')) {
             show_404();
         }
 
@@ -680,6 +712,27 @@ class Materi extends MY_Controller
                     $arr_materi_kelas_id[]            = $mk['kelas_id'];
                     $kelas                            = $this->kelas_model->retrieve($mk['kelas_id']);
                     $data['materi']['materi_kelas'][] = $kelas;
+                }
+
+                /**
+                 * Jika siswa cek dengan kelas aktif
+                 */
+                if (is_siswa()) {
+                    $kelas_aktif = $this->siswa_kelas_aktif;
+                    $retrieve_kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
+
+                    $kelas_valid = false;
+                    foreach ($arr_materi_kelas_id as $mk_id) {
+                        if ($mk_id == $retrieve_kelas['parent_id']) {
+                            $kelas_valid = true;
+                            break;
+                        }
+                    }
+
+                    if ($kelas_valid == false) {
+                        $this->session->set_flashdata('materi', get_alert('warning', 'Materi tidak tersedia untuk kelas Anda.'));
+                        redirect('materi');
+                    }
                 }
 
                 # cari pembuatnya

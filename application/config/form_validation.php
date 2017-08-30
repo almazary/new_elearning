@@ -817,6 +817,11 @@ $config['materi/edit/tertulis'] = array(
         'label' => 'Konten',
         'rules' => 'required'
     ),
+    array(
+        'field' => 'publish',
+        'label' => 'Status',
+        'rules' => 'required|numeric'
+    ),
 );
 
 $config['materi/edit/file'] = array(
@@ -834,6 +839,11 @@ $config['materi/edit/file'] = array(
         'field' => 'judul',
         'label' => 'Judul',
         'rules' => 'required|trim|xss_clean'
+    ),
+    array(
+        'field' => 'publish',
+        'label' => 'Status',
+        'rules' => 'required|numeric'
     ),
 );
 

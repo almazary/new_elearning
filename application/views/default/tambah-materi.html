@@ -60,16 +60,27 @@ Tambah Materi - {{ parent() }}
                 <label class="control-label">File <span class="text-error">*</span></label>
                 <div class="controls">
                     <input type="file" name="userfile">
-                    <br>{{ (error_upload is not empty) ? error_upload|raw }}
+                    <div class="well well-small">Ekstensi yang diijinkan: <br>.doc, .zip, .rar, .txt, .docx, .xls, .xlsx, .pdf, .tar, .gz, .jpg, .jpeg, .JPG, .JPEG, .png, .ppt, .pptx</div>
+                    {{ (error_upload is not empty) ? error_upload|raw }}
                 </div>
             </div>
             {% endif %}
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" name="status" value="preview" class="btn btn-info">Preview</button>
-                    <button type="submit" name="status" value="draft" class="btn btn-primary">Simpan Saja</button>
-                    <button type="submit" name="status" value="publish" class="btn btn-success">Simpan & Terbitkan</button>
-                    <a href="{{ site_url('materi') }}" class="btn btn-default" onclick="return confirm('Materi belum disimpan, anda yakin ingin kembali tanpa menyimpan?')">Kembali</a>
+                    {% if type == 'tertulis' %}
+                        <button type="submit" name="status" value="preview" class="btn btn-info">Preview</button>
+                        <button type="submit" name="status" value="draft" class="btn btn-primary">Simpan Saja</button>
+                        <button type="submit" name="status" value="publish" class="btn btn-success">Simpan & Terbitkan</button>
+                        <a href="{{ site_url('materi') }}" class="btn btn-default"
+                            {% if preview_id is empty %}
+                            onclick="return confirm('Materi belum disimpan, anda yakin ingin kembali tanpa menyimpan?')"
+                            {% endif %}
+                        >Kembali</a>
+                    {% elseif type == 'file' %}
+                        <button type="submit" name="status" value="draft" class="btn btn-primary">Simpan Saja</button>
+                        <button type="submit" name="status" value="publish" class="btn btn-success">Simpan & Terbitkan</button>
+                        <a href="{{ site_url('materi') }}" class="btn btn-default">Kembali</a>
+                    {% endif %}
                 </div>
             </div>
         {{ form_close()|raw }}
