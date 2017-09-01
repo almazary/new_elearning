@@ -2230,4 +2230,8 @@ hr.hr-normal {
   [class*="span"], .uneditable-input[class*="span"], .row-fluid [class*="span"] {
     margin-bottom: 10px;
   }
+
+  img.img-msg-user {
+    display: none;
+  }
 }
