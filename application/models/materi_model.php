@@ -221,9 +221,8 @@ class Materi_model extends CI_Model
         if (!empty($tgl_posting)) {
             $where['DATE(tgl_posting)'] = array($tgl_posting, 'where');
         }
-        if (!is_null($publish)) {
-            $publish = (int)$publish;
-            $where['materi.publish'] = array($publish, 'where');
+        if (!empty($publish)) {
+            $where['materi.publish'] = array($publish, 'where_in');
         }
         if (!empty($kelas_id)) {
             $where['materi_kelas']          = array('materi.id = materi_kelas.materi_id', 'join', 'inner');

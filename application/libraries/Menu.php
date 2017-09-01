@@ -42,7 +42,6 @@ class Menu
                 '<a href="' . site_url('email') . '"><i class="menu-icon icon-envelope"></i>Email Template</a>',
                 '<a href="' . site_url('welcome/backup_restore') . '"><i class="menu-icon icon-hdd"></i>Backup & Restore</a>',
                 '<a href="' . site_url('welcome/hapus_data') . '"><i class="menu-icon icon-trash"></i>Hapus Data</a>',
-                '<a href="' . site_url('welcome/update_info') . '"><i class="menu-icon icon-info-sign"></i>Update Aplikasi <span class="menu-count-new-update"></span></a>'
             ),
             5 => array(
                 '<a href="' . site_url('login/logout') . '"><i class="menu-icon icon-signout"></i>Logout </a>'

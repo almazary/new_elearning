@@ -13,6 +13,7 @@ Detail Percakapan - {{ parent() }}
 
         {% set active_msg_id = r.id %}
 
+        <div class="table-responsive">
         <table class="table table-hover" id="list-msg">
             <tbody>
                 {% for d in old_related_msg %}
@@ -29,6 +30,7 @@ Detail Percakapan - {{ parent() }}
                 {% endfor %}
             </tbody>
         </table>
+        </div>
 
         <br>
         {% if confirm_del_all == false %}

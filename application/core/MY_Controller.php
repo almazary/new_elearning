@@ -99,7 +99,7 @@ class MY_Controller extends CI_Controller
         }
 
         # cek versi
-        $versi_install = '1.9';
+        $versi_install = '2.0';
         $versi = get_pengaturan('versi', 'value');
 
         $this->current_version = $versi;
@@ -146,13 +146,27 @@ class MY_Controller extends CI_Controller
         $this->login_model->alter_table();
 
         # since 1.8.2 tambah field last_activity
-        $this->dbforge->add_column('login_log', array(
-            'last_activity' => array(
-                'type' => 'INT',
-                'unsigned' => TRUE,
-                'null' => TRUE,
-            ),
-        ));
+        $ada_field = false;
+        $fields = $this->db->field_data('login_log');
+        foreach ($fields as $field) {
+            if ($field->name == 'last_activity') {
+                $ada_field = true;
+                break;
+            }
+        }
+        # jika tidak ada
+        if (!$ada_field) {
+            $this->dbforge->add_column('login_log', array(
+                'last_activity' => array(
+                    'type' => 'INT',
+                    'unsigned' => TRUE,
+                    'null' => TRUE,
+                ),
+            ));
+        }
+
+        # 2.0 optimasi index table
+        $this->config_model->update_index_default_table();
 
         return true;
     }
@@ -562,74 +576,54 @@ class MY_Controller extends CI_Controller
     }
 
     /**
-     * Method untuk cek versi terbaru
+     * Method untuk mengambil informasi yang urgent dari dokumenary.net
      *
-     * @param  boolean $skip_check_time
-     * @return boolean
-     * @since  1.8
+     * @param boolean $skip_check_time
+     * @since 2.0
      */
-    function check_new_version($skip_check_time = false)
+    function check_urgent_info($skip_check_time = false)
     {
-        $field_id  = "cek-versi";
-        $cek_versi = retrieve_field($field_id);
+        $field_id = "check-urgent-info";
+        $check_urgent = retrieve_field($field_id);
 
         if ($skip_check_time) {
             $ok_check = true;
         } else {
             $ok_check  = false;
-            if (empty($cek_versi)) {
+            if (empty($check_urgent)) {
                 $ok_check = true;
             } else {
-                $cek_val = json_decode($cek_versi['value'], 1);
-                # bikin 15 menit sekali saja checknya
+                $cek_val = json_decode($check_urgent['value'], 1);
+                # bikin 30 menit sekali saja checknya
                 $date_plus = strtotime("+30 minute", strtotime($cek_val['last_check']));
                 if ($date_plus < strtotime(date('Y-m-d H:i:s'))) {
                     $ok_check = true;
                 }
             }
         }
-        // $ok_check = true;
 
-        $ada_update = false;
         if ($ok_check) {
-            $http_query = array(
-                'referer'          => base_url(),
-                'current_version'  => $this->current_version,
-                'plugin_installed' => implode(",", plugin_list()),
-            );
+            $url_urgent_info = "http://elearningupdates.dokumenary.net/urgent_info.php";
+            $result_html = get_url_data($url_urgent_info);
 
-            $purchase_plugins_key = $this->config->item('purchase_plugins_key');
-            if (!empty($purchase_plugins_key) AND is_array($purchase_plugins_key)) {
-                $http_query = array_merge($http_query, $purchase_plugins_key);
-            }
+            $update_value = json_encode(array(
+                'info'       => $result_html,
+                'last_check' => date('Y-m-d H:i:s'),
+            ));
 
-            # cari informasi update
-            $url_new_version = 'http://elearningupdates.dokumenary.net/index.php?' . http_build_query($http_query);
-            $get_new_version = get_url_data($url_new_version);
-            $get_new_version = json_decode($get_new_version, 1);
-
-            # jika versi ditemukan
-            if (isset($get_new_version['version']) AND $get_new_version['version'] > $this->current_version) {
-                $arr_update = array(
-                    'result'        => $get_new_version['version'],
-                    'last_check'    => date('Y-m-d H:i:s'),
-                );
-                $arr_update   = array_merge($arr_update, $get_new_version);
-                $update_value = json_encode($arr_update);
-
-                if (empty($cek_versi)) {
-                    create_field($field_id, "Cek Versi", $update_value);
-                } else {
-                    update_field($field_id, "Cek Versi", $update_value);
-                }
-
-                $ada_update = true;
-            }
-            else {
-                delete_field($field_id);
+            if (empty($check_urgent)) {
+                create_field($field_id, "Check Urgent Info", $update_value);
+            } else {
+                update_field($field_id, "Check Urgent Info", $update_value);
             }
         }
 
-        return $ada_update;
+        if (isset($result_html)) {
+            return $result_html;
+        } elseif (!empty($cek_val['info'])) {
+            return $cek_val['info'];
+        }
+
+        return "";
     }
 }

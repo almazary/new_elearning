@@ -114,6 +114,7 @@ class Materi extends MY_Controller
                 'mapel_id'    => $this->input->post('mapel_id', true),
                 'kelas_id'    => $this->input->post('kelas_id', true),
                 'type'        => $this->input->post('type', true),
+                'publish'     => is_siswa() ? array(1) : $this->input->post('publish', true),
             );
 
             $this->session->set_userdata('filter_materi', $filter);
@@ -129,10 +130,25 @@ class Materi extends MY_Controller
                 'pembuat'     => '',
                 'mapel_id'    => array(),
                 'kelas_id'    => array(),
-                'type'        => array()
+                'type'        => array(),
+                'publish'     => is_siswa() ? array(1) : array(),
             );
         }
         $data['filter'] = $filter;
+
+        # jika sebagai pengajar tampilkan materi miliknya saja
+        if (is_pengajar()) {
+            $filter['pengajar_id'] = get_sess_data('user', 'id');
+        }
+
+        # kalo siswa tampilkan yang kelasnya saja
+        if (is_siswa()) {
+            $kelas_aktif = $this->siswa_kelas_aktif;
+            $retrieve_kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
+
+            # ambil parentnya
+            $filter['kelas_id'] = array($retrieve_kelas['parent_id']);
+        }
 
         # ambil semua data materi
         $retrieve_all_materi = $this->materi_model->retrieve_all(
@@ -144,7 +160,7 @@ class Materi extends MY_Controller
             $filter['judul'],
             $filter['konten'],
             $tgl_posting = null,
-            $publish = 1,
+            $filter['publish'],
             $filter['kelas_id'],
             $filter['type']
         );
@@ -186,16 +202,42 @@ class Materi extends MY_Controller
                 $mapel_id = $this->input->post('mapel_id', TRUE);
                 $judul    = $this->input->post('judul', TRUE);
                 $konten   = $this->input->post('konten');
+                $status   = $this->input->post('status', TRUE);
 
-                $materi_id = $this->materi_model->create(
-                    (is_pengajar() OR is_admin()) ? get_sess_data('user', 'id') : null,
-                    is_siswa() ? get_sess_data('user', 'id') : null,
-                    $mapel_id,
-                    $judul,
-                    $konten,
-                    null,
-                    1
-                );
+                $publish = 1;
+                if (!empty($status) && in_array($status, array('preview', 'draft'))) {
+                    $publish = 0;
+                }
+
+                $get_preview_id = $this->uri->segment(4);
+                if (!empty($get_preview_id)) {
+                    $get_materi = $this->materi_model->retrieve($get_preview_id);
+                    if (empty($get_materi) OR $get_materi['publish'] == 1) {
+                        show_404();
+                    }
+                    # update
+                    $this->materi_model->update(
+                        $get_materi['id'],
+                        $get_materi['pengajar_id'],
+                        $get_materi['siswa_id'],
+                        $mapel_id,
+                        $judul,
+                        $konten,
+                        null,
+                        $publish
+                    );
+                    $materi_id = $get_materi['id'];
+                } else {
+                    $materi_id = $this->materi_model->create(
+                        (is_pengajar() OR is_admin()) ? get_sess_data('user', 'id') : null,
+                        is_siswa() ? get_sess_data('user', 'id') : null,
+                        $mapel_id,
+                        $judul,
+                        $konten,
+                        null,
+                        $publish
+                    );
+                }
 
                 $success = true;
             }
@@ -213,6 +255,12 @@ class Materi extends MY_Controller
                 $judul       = $this->input->post('judul', TRUE);
                 $upload_data = $this->upload->data();
                 $file        = $upload_data['file_name'];
+                $status      = $this->input->post('status', TRUE);
+
+                $publish = 1;
+                if (!empty($status) && in_array($status, array('draft'))) {
+                    $publish = 0;
+                }
 
                 $materi_id = $this->materi_model->create(
                     (is_pengajar() OR is_admin()) ? get_sess_data('user', 'id') : null,
@@ -221,7 +269,7 @@ class Materi extends MY_Controller
                     $judul,
                     null,
                     $file,
-                    1
+                    $publish
                 );
 
                 $success = true;
@@ -236,16 +284,42 @@ class Materi extends MY_Controller
 
         if ($success) {
             # simpan kelas materi
+            $arr_post_kelas = array();
             $kelas_id = $this->input->post('kelas_id', TRUE);
             foreach ($kelas_id as $materi_kelas_id) {
-                $this->materi_model->create_kelas($materi_id, $materi_kelas_id);
+                # cek sudah ada belum
+                $sudah_ada = $this->materi_model->retrieve_kelas(null, $materi_id, $materi_kelas_id);
+                if (empty($sudah_ada)) {
+                    $this->materi_model->create_kelas($materi_id, $materi_kelas_id);
+                }
+
+                $arr_post_kelas[] = $materi_kelas_id;
             }
 
-            $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil disimpan.'));
-            if (!empty($materi_id)) {
-                redirect('materi/edit/'.$type.'/'.$materi_id);
+            /**
+             * Hapus kelas yang tidak ada dipost
+             */
+            $retrieve_all_kelas = $this->materi_model->retrieve_all_kelas($materi_id);
+            foreach ($retrieve_all_kelas as $val) {
+                if (!in_array($val['kelas_id'], $arr_post_kelas)) {
+                    $this->materi_model->delete_kelas($val['id']);
+                }
+            }
+
+            if (isset($status) && $status == 'preview') {
+                $data['preview_id'] = $materi_id;
             } else {
-                redirect('materi');
+                $add_info = "dan diterbitkan.";
+                if (isset($status) && $status == 'draft') {
+                    $add_info = "sebagai konsep.";
+                }
+
+                $this->session->set_flashdata('materi', get_alert('success', 'Materi berhasil disimpan ' . $add_info));
+                if (!empty($materi_id)) {
+                    redirect('materi/edit/'.$type.'/'.$materi_id);
+                } else {
+                    redirect('materi');
+                }
             }
         }
 
@@ -313,6 +387,7 @@ class Materi extends MY_Controller
                 $mapel_id = $this->input->post('mapel_id', TRUE);
                 $judul    = $this->input->post('judul', TRUE);
                 $konten   = $this->input->post('konten');
+                $publish  = $this->input->post('publish', TRUE);
 
                 $this->materi_model->update(
                     $materi['id'],
@@ -322,7 +397,7 @@ class Materi extends MY_Controller
                     $judul,
                     $konten,
                     null,
-                    1
+                    $publish
                 );
 
                 $success = true;
@@ -356,6 +431,7 @@ class Materi extends MY_Controller
             if ($this->form_validation->run('materi/edit/file') == TRUE AND $upload_success == TRUE) {
                 $mapel_id = $this->input->post('mapel_id', TRUE);
                 $judul    = $this->input->post('judul', TRUE);
+                $publish  = $this->input->post('publish', TRUE);
 
                 $this->materi_model->update(
                     $materi['id'],
@@ -365,7 +441,7 @@ class Materi extends MY_Controller
                     $judul,
                     null,
                     $update_file,
-                    1
+                    $publish
                 );
 
                 if ($is_new_file) {
@@ -466,12 +542,26 @@ class Materi extends MY_Controller
         $materi_id = (int)$segment_3;
 
         if (empty($materi_id)) {
-            show_error("Materi tidak ditemukan.");
+            show_404();
         }
 
         $materi = $this->materi_model->retrieve($materi_id);
-        if (empty($materi) OR empty($materi['publish'])) {
-            show_error("Materi tidak ditemukan.");
+        if (empty($materi)) {
+            show_404();
+        }
+
+        if (is_siswa() && empty($materi['publish'])) {
+            show_404();
+        } else {
+            # cek sesuai kelas aktif tidak
+
+        }
+
+        /**
+         * jika pengajar cek kepemilikan untuk yang konsep
+         */
+        if (is_pengajar() && $materi['publish'] == '0' && $materi['pengajar_id'] != get_sess_data('user', 'id')) {
+            show_404();
         }
 
         # tambah views jika materi terfulis
@@ -622,6 +712,27 @@ class Materi extends MY_Controller
                     $arr_materi_kelas_id[]            = $mk['kelas_id'];
                     $kelas                            = $this->kelas_model->retrieve($mk['kelas_id']);
                     $data['materi']['materi_kelas'][] = $kelas;
+                }
+
+                /**
+                 * Jika siswa cek dengan kelas aktif
+                 */
+                if (is_siswa()) {
+                    $kelas_aktif = $this->siswa_kelas_aktif;
+                    $retrieve_kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
+
+                    $kelas_valid = false;
+                    foreach ($arr_materi_kelas_id as $mk_id) {
+                        if ($mk_id == $retrieve_kelas['parent_id']) {
+                            $kelas_valid = true;
+                            break;
+                        }
+                    }
+
+                    if ($kelas_valid == false) {
+                        $this->session->set_flashdata('materi', get_alert('warning', 'Materi tidak tersedia untuk kelas Anda.'));
+                        redirect('materi');
+                    }
                 }
 
                 # cari pembuatnya

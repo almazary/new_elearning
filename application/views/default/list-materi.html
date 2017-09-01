@@ -81,10 +81,29 @@ Materi - {{ parent() }}
                                 <input type="text" name="konten" class="span5" value="{{ set_value('konten', filter.konten) }}">
                             </td>
                         </tr>
+                        {% if is_admin() == true %}
                         <tr>
                             <th>Pembuat</th>
                             <td>
                                 <input type="text" name="pembuat" class="span4" value="{{ set_value('pembuat', filter.pembuat) }}">
+                            </td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <th>Status</th>
+                            <td>
+                                <ul class="unstyled inline" style="margin-left: -5px;">
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="publish[]" value="1" {{ set_checkbox('publish[]', '1', (filter.publish is not empty and in_array('1', filter.publish)) ? true) }}> Terbit
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="checkbox inline">
+                                            <input type="checkbox" name="publish[]" value="0" {{ set_checkbox('publish[]', '0', (filter.publish is not empty and in_array('0', filter.publish)) ? true) }}> Konsep
+                                        </label>
+                                    </li>
+                                </ul>
                             </td>
                         </tr>
                         <tr>
@@ -106,7 +125,6 @@ Materi - {{ parent() }}
                 <tr>
                     <th width="7%">ID</th>
                     <th>Informasi Materi</th>
-                    <th width="15%">Tipe Materi</th>
                     <th width="15%"></th>
                 </tr>
             </thead>
@@ -140,37 +158,43 @@ Materi - {{ parent() }}
                         <p><strong class="text-warning">
                             {{ m.judul }}
                         </strong></p>
-                        <table class="table table-condensed table-bordered">
-                            <tr>
-                                <td width="20%">Mapel</td>
-                                <td>{{ m.mapel.nama }}</td>
-                            </tr>
-                            <tr>
-                                <td>Kelas</td>
-                                <td>
-                                    {% for mk in m.materi_kelas %}
-                                        {{ mk.nama }}&nbsp;
-                                    {% endfor %}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Pembuat</td>
-                                <td>
-                                    <a href="{{ m.pembuat.link_profil }}">{{ m.pembuat.nama }}</a>, <small>{{ tgl_jam_indo(m.tgl_posting) }}</small>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{{ (m.file is empty) ? 'Dibaca' : 'Diunduh' }}</td>
-                                <td>{{ m.views }}</td>
-                            </tr>
-                            <tr>
-                                <td>Komentar</td>
-                                <td>{{ m.jml_komentar }}</td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td>
-                        {{ (m.file is not empty) ? '<span class="label label-info">File</span>' : '<span class="label label-success">Tertulis</span>' }}
+                        <ul class="breadcrumb" style="padding: 0px;background: none;">
+                            <li>
+                                {{ (m.publish == 1) ? '<span class="label label-success">Terbit</span>' : '<span class="label label-warning">Konsep</span>' }}
+                                <span class="divider">/</span>
+                            </li>
+                            <li>
+                                {{ (m.file is not empty) ? '<span class="label label-success">File</span>' : '<span class="label label-info">Tertulis</span>' }}
+                                <span class="divider">/</span>
+                            </li>
+                            <li>
+                                {{ m.mapel.nama }}
+                                <span class="divider">/</span>
+                            </li>
+                            <li>
+                                {% for mk in m.materi_kelas %}
+                                    {{ mk.nama }}&nbsp;
+                                {% endfor %}
+                                <span class="divider">/</span>
+                            </li>
+                            <li>
+                                {% if is_pengajar() == false %}
+                                    Pembuat <a href="{{ m.pembuat.link_profil }}">{{ m.pembuat.nama }}</a>
+                                    , {{ tgl_jam_indo(m.tgl_posting) }}
+                                {% else %}
+                                    Dibuat {{ tgl_jam_indo(m.tgl_posting) }}
+                                {% endif %}
+                                <span class="divider">/</span>
+                            </li>
+                            <li>
+                                {{ (m.file is empty) ? 'Dibaca' : 'Diunduh' }}
+                                {{ m.views }} kali
+                                <span class="divider">/</span>
+                            </li>
+                            <li>
+                                {{ m.jml_komentar }} Komentar
+                            </li>
+                        </ul>
                     </td>
                     <td>
                         <div class="btn-group">

@@ -1121,23 +1121,24 @@ if (!function_exists('date_diff')) {
  */
 function get_url_data($url)
 {
-    # jika curl hidup
-    if (function_exists('curl_version')) {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    // # jika curl hidup
+    // if (function_exists('curl_version')) {
+    //     $ch = curl_init($url);
+    //     curl_setopt($ch, CURLOPT_HEADER, 1);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        $response    = curl_exec($ch);
-        $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-        $header      = substr($response, 0, $header_size);
-        $body        = substr($response, $header_size);
-        $code        = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-    } else {
-        $body = file_get_contents($url);
-    }
+    //     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    //     $response    = curl_exec($ch);
+    //     $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    //     $header      = substr($response, 0, $header_size);
+    //     $body        = substr($response, $header_size);
+    //     $code        = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    //     curl_close($ch);
+    // } else {
+
+    // }
+    $body = file_get_contents($url);
 
     return $body;
 }

@@ -111,52 +111,6 @@ class Welcome extends MY_Controller
         $this->twig->display('welcome.html', $data);
     }
 
-    function new_version()
-    {
-        must_login();
-
-        if (!is_admin()) {
-            redirect('welcome');
-        }
-
-        $field_id  = "cek-versi";
-        $cek_versi = retrieve_field($field_id);
-        $data['n'] = json_decode($cek_versi['value'], 1);
-
-        $data['comp_js']  = load_comp_js(array(base_url('assets/comp/colorbox/jquery.colorbox-min.js')));
-        $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
-        $this->twig->display('new-version.html', $data);
-    }
-
-    function update_info()
-    {
-        must_login();
-
-        if (!is_admin()) {
-            redirect('welcome');
-        }
-
-        # ambil versi terbaru
-        $this->check_new_version(true);
-
-        $field_id  = "cek-versi";
-        $cek_versi = retrieve_field($field_id);
-
-        $new_update = array();
-        if (!empty($cek_versi['value'])) {
-            $new_update = json_decode($cek_versi['value'], 1);
-        }
-
-        $purchase_plugins_key = $this->config->item('purchase_plugins_key');
-
-        $data['purchase_plugins_key'] = $purchase_plugins_key;
-        $data['plugin_list']     = plugin_list();
-        $data['new_update']      = $new_update;
-        $data['current_version'] = $this->current_version;
-
-        $this->twig->display('update-info.html', $data);
-    }
-
     function pengaturan()
     {
         must_login();

@@ -94,6 +94,17 @@ Edit Materi - {{ parent() }}
             </div>
             {% endif %}
             <div class="control-group">
+                <label class="control-label">Status <span class="text-error">*</span></label>
+                <div class="controls">
+                    <label class="radio">
+                        <input type="radio" name="publish" value="1" {{ set_radio('publish', '1', (materi.publish) ? true) }}> Terbit
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="publish" value="0" {{ set_radio('publish', '0', (materi.publish == 0) ? true) }}> Konsep
+                    </label>
+                </div>
+            </div>
+            <div class="control-group">
                 <div class="controls">
                     <button type="submit" class="btn btn-primary">Update</button>
                     <a href="{{ uri_back }}" class="btn btn-default">Kembali</a>
