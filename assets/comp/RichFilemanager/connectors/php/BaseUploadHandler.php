@@ -352,11 +352,11 @@ class BaseUploadHandler
         $last = strtolower($val[strlen($val)-1]);
         switch($last) {
             case 'g':
-                $val *= 1024;
+                $val = (double)$val * 1024;
             case 'm':
-                $val *= 1024;
+                $val = (double)$val * 1024;
             case 'k':
-                $val *= 1024;
+                $val = (double)$val * 1024;
         }
         return $this->fix_integer_overflow($val);
     }
@@ -1136,6 +1136,28 @@ class BaseUploadHandler
                 }
             }
             $this->set_additional_file_properties($file);
+
+            //Array ( [0] => 871 [1] => 650 [2] => 3 [3] => width="871" height="650" [bits] => 8 [mime] => image/png )
+            $origin_size = getimagesize($file_path);
+            if (!empty($origin_size[0])) {
+                try {
+                    //resize and replace file path
+                    include_once __DIR__ . '/plugins/php-image-resize/lib/ImageResize.php';
+
+                    $IR = new \Gumlet\ImageResize($file_path);
+                    $IR->resizeToWidth($origin_size[0] - 10);
+                    $IR->resizeToHeight($origin_size[1] - 10);
+                    $new_name = $file_path . '.temp';
+                    $IR->save($new_name);
+
+                    unlink($file_path);
+
+                    rename($new_name, $file_path);
+                } catch (\Exception $e) {
+                    //echo $e->__toString();die;
+                }
+            }
+
         }
         return $file;
     }
