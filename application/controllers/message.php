@@ -151,6 +151,7 @@ class Message extends MY_Controller
         $msg_id   = (int)$segment_3;
         $retrieve = $this->msg_model->retrieve(get_sess_data('login', 'id'), $msg_id);
 
+        # Kalo tidak ditemukan bisa jadi owner_id nya tidak sesuai session
         if (empty($retrieve['retrieve'])) {
             $this->session->set_flashdata('msg', get_alert('success', 'Pesan tidak ditemukan.'));
             redirect('message');
@@ -171,6 +172,7 @@ class Message extends MY_Controller
         $data['old_related_msg'] = $retrieve['old_related_msg'];
         $data['new_related_msg'] = $retrieve['new_related_msg'];
 
+        # ini harusnya kondisinya selalu terpenuhi
         if ($data['r']['sender_receiver_id'] != get_sess_data('login', 'id')) {
             $login_receiver = $this->login_model->retrieve($data['r']['sender_receiver_id']);
             if (!empty($login_receiver['siswa_id'])) {
@@ -182,8 +184,8 @@ class Message extends MY_Controller
             $login_username = $login_receiver['username'];
             $data['receiver_name'] = $user_receiver['nama'] . " [$login_username]";
         } else {
-            $login_username = $login_receiver['username'];
-            $data['receiver_name'] = $data['r']['profil']['nama'] . " [$login_username]>";
+            $this->session->set_flashdata('msg', get_alert('warning', 'Maaf, terdapat kesalahan pada record.'));
+            redirect('message');
         }
 
         $html_js         = get_texteditor();

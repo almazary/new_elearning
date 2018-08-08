@@ -588,13 +588,18 @@ class Tugas extends MY_Controller
 
         # ambil semua pertanyaan
         $retrieve_all_pertanyaan = $this->tugas_model->retrieve_all_pertanyaan('all', 1, null);
-        foreach ($retrieve_all_pertanyaan as $key => &$val) {
+        foreach ($retrieve_all_pertanyaan as $key => $val) {
             # dapatkan informasi pembuat pertanyaan dan pada tugas apa
             if (!isset($arr_tugas_id[$val['tugas_id']])) {
                 $info_tugas = $this->tugas_model->retrieve($val['tugas_id']);
                 $arr_tugas_id[$val['tugas_id']] = $this->tugas_model->retrieve($val['tugas_id']);
             } else {
                 $info_tugas = $arr_tugas_id[$val['tugas_id']];
+            }
+
+            //Jika sebagai pengajar, tampilkan yang dia buat saja
+            if (is_pengajar() AND $info_tugas['pengajar_id'] != get_sess_data('user', 'id')) {
+                unset($retrieve_all_pertanyaan[$key]);
             }
 
             if (!isset($arr_pengajar_id[$info_tugas['pengajar_id']])) {
