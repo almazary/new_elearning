@@ -297,7 +297,7 @@ class MY_Controller extends CI_Controller
         $result = $this->db->get('login');
         $result = $result->num_rows();
         if (empty($result)) {
-            $this->form_validation->set_message('check_username_exist', 'Username tidak ditemukan.');
+            $this->form_validation->set_message('check_username_exist', __('username_not_found'));
             return false;
         } else {
             return true;

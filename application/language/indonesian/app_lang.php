@@ -59,3 +59,5 @@ $lang['forgotpwd_form_title'] = "Lupa Password";
 $lang['forgotpwd_form_label_username'] = "Username (Email)";
 $lang['forgotpwd_form_label_btn'] = "Kirim";
 $lang['forgotpwd_send_success'] = "Link reset password telah dikirimkan ke email Anda.";
+
+$lang['username_not_found'] = "Username tidak ditemukan.";
