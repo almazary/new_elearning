@@ -1,5 +1,4 @@
 <?php
-
 $lang['cal_su'] = 'Mg';
 $lang['cal_mo'] = 'Sn';
 $lang['cal_tu'] = 'Sl';

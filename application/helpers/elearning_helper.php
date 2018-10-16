@@ -19,20 +19,20 @@ function check_db_connection()
 {
     $db_file = APPPATH . 'config/database.php';
     if (!is_file($db_file)) {
-        throw new Exception('File database.php in application/config/ not exists');
+        throw new Exception(__('dbfile_empty'));
     }
 
     # cek pengaturan database
     include APPPATH . 'config/database.php';
 
-    $link = @mysqli_connect("{$db['default']['hostname']}", "{$db['default']['username']}", "{$db['default']['password']}");
+    $link = @mysqli_connect("{$db[$active_group]['hostname']}", "{$db[$active_group]['username']}", "{$db[$active_group]['password']}");
     if (!$link) {
-        throw new Exception('Failed to connect to the server: ' . mysqli_connect_error());
+        throw new Exception(__('dbconnect_error', array('error' => mysqli_connect_error())));
     }
 
-    $select_db = @mysqli_select_db($link, "{$db['default']['database']}");
+    $select_db = @mysqli_select_db($link, "{$db[$active_group]['database']}");
     if (!$select_db) {
-        throw new Exception('Failed to connect to the database: ' . mysqli_error($link));
+        throw new Exception(__('dbselect_error', array('error' => mysqli_error($link))));
     }
 
     # ciptakan variable global supaya driver ci tidak melakukan konek-konek lagi
@@ -1255,6 +1255,70 @@ function autoload_function_plugin()
                 }
             }
         }
+    }
+
+    return true;
+}
+
+/**
+ * get lang
+ *
+ * @param mixed $lang_key
+ * @param array $lang_data
+ */
+function __($lang_key, $lang_data = array())
+{
+    $CI =& get_instance();
+    $line = $CI->lang->line($lang_key);
+
+    if (!empty($lang_data)) {
+        $arr_old = array();
+        $arr_new = array();
+        foreach ($lang_data as $key => $val) {
+            $arr_old[] = '{' . $key . '}';
+            $arr_new[] = $val;
+        }
+
+        $line = str_replace($arr_old, $arr_new, $line);
+    }
+
+    return $line;
+}
+
+/**
+ * cache save
+ *
+ * @param mixed $key
+ * @param mixed $data
+ * @param mixed $ttl
+ */
+function cs($key, $data, $ttl = null)
+{
+    $CI =& get_instance();
+    return $CI->cache->file->save($key, $data, !empty($ttl) ? $ttl : 60);
+}
+
+/**
+ * cg cache get
+ *
+ * @param mixed $key
+ */
+function cg($key)
+{
+    $CI =& get_instance();
+    return $CI->cache->file->get($key);
+}
+
+/**
+ * cd cache delete
+ *
+ * @param mixed $key
+ */
+function cd($key)
+{
+    $CI =& get_instance();
+    if (cg($key) !== false) {
+        return $CI->cache->file->delete($key);
     }
 
     return true;

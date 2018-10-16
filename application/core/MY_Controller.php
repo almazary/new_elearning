@@ -50,20 +50,32 @@ class MY_Controller extends CI_Controller
         $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
         $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
 
+        // first require
+        $this->load->library('session');
+
+        // load lang
+        $this->load_lang();
+
         # load helper
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download', 'plugins'));
 
-        $error_install = "Install aplikasi e-learning by Almazari (www.dokumenary.net): " . anchor('setup', "&rarr; Halaman Install");
         try {
             check_db_connection();
         } catch (Exception $e) {
-            echo $error_install;die;
+            die($e->getMessage());
+        }
+
+        // check writable dir
+        try {
+            $this->check_writable_dir();
+        } catch (Exception $e) {
+            die($e->getMessage());
         }
 
         $this->load->database();
 
         # load library
-        $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email', 'menu'));
+        $this->load->library(array('form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email', 'menu'));
 
         # load saja semua model
         $this->load->model(array('config_model', 'kelas_model', 'login_model', 'mapel_model', 'materi_model', 'pengajar_model', 'siswa_model', 'tugas_model', 'msg_model', 'pengumuman_model', 'komentar_model'));
@@ -76,9 +88,12 @@ class MY_Controller extends CI_Controller
             echo $error_install;die;
         }
 
+        // load cache
+        $this->load->driver('cache');
+
         # jika bukan ajax
         if (!is_ajax()) {
-            // $this->output->enable_profiler(TRUE);
+            $this->output->enable_profiler(TRUE);
 
             # jika login sebagai siswa
             if (is_siswa()) {
@@ -167,6 +182,57 @@ class MY_Controller extends CI_Controller
 
         # 2.0 optimasi index table
         $this->config_model->update_index_default_table();
+
+        return true;
+    }
+
+    /**
+     * load_lang function for handle lang & switch lang with switch-lang get parameter
+     */
+    function load_lang()
+    {
+        $update_sess = true;
+
+        if (empty($_GET['switch-lang'])) {
+            $lang = 'indonesian';
+            // check session lang
+            $lang_sess = $this->session->userdata('lang');
+            if (!empty($lang_sess)) {
+                $lang = $lang_sess;
+                $update_sess = false;
+            }
+        } else {
+            $lang = $_GET['switch-lang'];
+            // check lang file
+            $lang_path = APPPATH . 'language/' . $lang . '/app_lang.php';
+            $lang = is_file($lang_path) ? $lang : 'indonesian';
+        }
+
+        $this->lang->load('app', $lang);
+
+        if ($update_sess) {
+            $this->session->set_userdata('lang', $lang);
+        }
+
+        return true;
+    }
+
+    /**
+     * check_writable_dir for check writable directory
+     */
+    function check_writable_dir()
+    {
+        $write_dir = array(
+            APPPATH . 'cache',
+            APPPATH . 'cache/twig',
+            './userfiles',
+        );
+
+        foreach ($write_dir as $pd) {
+            if (!is_writable($pd)) {
+                throw new Exception(__('dir_cannot_write', array('path' => $pd)));
+            }
+        }
 
         return true;
     }
