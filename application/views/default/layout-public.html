@@ -21,7 +21,7 @@
                 <div class="nav-collapse collapse navbar-inverse-collapse">
                     <ul class="nav pull-right">
                         {% if get_pengaturan('registrasi-siswa', 'value') == 1 or get_pengaturan('registrasi-pengajar', 'value') == 1 %}
-                        <li><a href="{{ site_url('login/register') }}">Register</a></li>
+                        <li><a href="{{ site_url('login/register') }}">{{ __('register_link_label') }}</a></li>
                         {% endif %}
                     </ul>
                 </div>
@@ -40,7 +40,7 @@
     <div class="footer">
         <div class="container">
             <center>
-                <b class="copyright">{{ copyright|raw }} </b> All rights reserved.<br>
+                <b class="copyright">{{ copyright|raw }}</b>. All rights reserved.<br>
                 {{ version|raw }} | Page loaded in {{ elapsed_time }} seconds.
             </center>
         </div>

@@ -47,57 +47,57 @@ $config['reset_password'] = array(
 $config['register/siswa'] = array(
     array(
         'field' => 'nis',
-        'label' => 'NIS',
+        'label' => __('register_form_label_key'),
         'rules' => 'trim|xss_clean|is_unique[siswa.nis]'
     ),
     array(
         'field' => 'nama',
-        'label' => 'Nama',
+        'label' => __('register_form_label_name'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'jenis_kelamin',
-        'label' => 'Jenis Kelamin',
+        'label' => __('register_form_label_gender'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'tahun_masuk',
-        'label' => 'Tahun Masuk',
+        'label' => __('register_form_label_year_join'),
         'rules' => 'required|trim|xss_clean|numeric|min_length[4]|max_length[4]'
     ),
     array(
         'field' => 'kelas_id',
-        'label' => 'Kelas',
+        'label' => __('register_form_label_class'),
         'rules' => 'required|trim|xss_clean|numeric'
     ),
     array(
         'field' => 'tempat_lahir',
-        'label' => 'Tempat Lahir',
+        'label' => __('register_form_label_born_in'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tgl_lahir',
-        'label' => 'Tgl Lahir',
+        'label' => __('born_date'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'bln_lahir',
-        'label' => 'Bulan Lahir',
+        'label' => __('born_month'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'thn_lahir',
-        'label' => 'Tahun Lahir',
+        'label' => __('born_year'),
         'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[4]'
     ),
     array(
         'field' => 'agama',
-        'label' => 'Agama',
+        'label' => __('register_form_label_religion'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'alamat',
-        'label' => 'Alamat',
+        'label' => __('register_form_label_address'),
         'rules' => 'trim|xss_clean'
     ),
     array(
@@ -112,7 +112,7 @@ $config['register/siswa'] = array(
     ),
     array(
         'field' => 'password2',
-        'label' => 'Ulangi Password',
+        'label' => __('repeat') . ' Password',
         'rules' => 'required|matches[password]'
     ),
 );
@@ -120,42 +120,42 @@ $config['register/siswa'] = array(
 $config['register/pengajar'] = array(
     array(
         'field' => 'nip',
-        'label' => 'NIP',
+        'label' => __('register_form_label_key_teacher'),
         'rules' => 'trim|xss_clean|is_unique[pengajar.nip]'
     ),
     array(
         'field' => 'nama',
-        'label' => 'Nama',
+        'label' => __('register_form_label_name'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'jenis_kelamin',
-        'label' => 'Jenis Kelamin',
+        'label' => __('register_form_label_gender'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'tempat_lahir',
-        'label' => 'Tempat Lahir',
+        'label' => __('register_form_label_born_in'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tgl_lahir',
-        'label' => 'Tgl Lahir',
+        'label' => __('born_date'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'bln_lahir',
-        'label' => 'Bulan Lahir',
+        'label' => __('born_month'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'thn_lahir',
-        'label' => 'Tahun Lahir',
+        'label' => __('born_year'),
         'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[4]'
     ),
     array(
         'field' => 'alamat',
-        'label' => 'Alamat',
+        'label' => __('register_form_label_address'),
         'rules' => 'trim|xss_clean'
     ),
     array(
@@ -170,7 +170,7 @@ $config['register/pengajar'] = array(
     ),
     array(
         'field' => 'password2',
-        'label' => 'Ulangi Password',
+        'label' => __('repeat') . ' Password',
         'rules' => 'required|matches[password]'
     ),
 );

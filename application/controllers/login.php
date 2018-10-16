@@ -46,7 +46,7 @@ class Login extends MY_Controller
             $get_login = $this->login_model->retrieve(null, $email, $password);
 
             if (empty($get_login)) {
-                $this->session->set_flashdata('login', get_alert('warning', 'Maaf akun tidak ditemukan.'));
+                $this->session->set_flashdata('login', get_alert('warning', __('account_not_found')));
                 redirect('login');
             } else {
                 # cari user yang login
@@ -63,7 +63,7 @@ class Login extends MY_Controller
 
                 # cek jika user berstatus tidak aktif
                 if ($user['status_id'] != 1) {
-                    $this->session->set_flashdata('login', get_alert('warning', 'Maaf status anda tidak aktif.'));
+                    $this->session->set_flashdata('login', get_alert('warning', __('account_inactive')));
                     redirect('login');
                 }
 
@@ -80,12 +80,13 @@ class Login extends MY_Controller
 
                         if ($current_ip != $last_agent['ip'] OR $current_browser != $last_agent['browser']) {
                             # cari selisih
-                            $selisih = lama_pengerjaan(date("Y-m-d H:i:s", $last_log['last_activity']), date("Y-m-d H:i:s", $time_minus), "%i menit %s detik");
+                            $selisih = lama_pengerjaan(date("Y-m-d H:i:s", $last_log['last_activity']), date("Y-m-d H:i:s", $time_minus), "%i " . __('minute') . " %s " . __('seconds'));
 
                             # atur pesan
-                            $error_msg = "Akun anda sedang digunakan untuk login dengan IP {$last_agent['ip']}.";
+                            $error_msg = __('account_being_used', array('ip' => $last_agent['ip']));
                             if ($current_ip == $last_agent['ip'] AND $current_browser != $last_agent['browser']) {
-                                $error_msg .= "<br><br>Jika anda hanya ganti browser, mohon tunggu {$selisih} dari sekarang.";
+                                $error_msg .= "<br><br>";
+                                $error_msg .= __('account_being_used_info', array('duration' => $selisih));
                             }
 
                             $this->session->set_flashdata('login', get_alert('warning', $error_msg));
@@ -288,7 +289,7 @@ class Login extends MY_Controller
                     # kirim email aktifasi
                     @kirim_email_approve_siswa($siswa_id);
 
-                    $pesan = "Registrasi sebagai siswa berhasil, silakan " . anchor('login/index', 'LOG IN') . " ke sistem.";
+                    $pesan = __('register_student_active', array('login_link' => anchor('login/index', 'LOG IN')));
                 } else {
                     # kirim email registrasi
                     @kirim_email('email-template-register-siswa', $username, array(
@@ -296,7 +297,7 @@ class Login extends MY_Controller
                         'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
                     ));
 
-                    $pesan = "Registrasi sebagai siswa berhasil, tunggu pengaktifan akun oleh admin.";
+                    $pesan = __('register_student_pending');
                 }
 
                 $this->session->set_flashdata('register', get_alert('success', $pesan));
@@ -355,7 +356,7 @@ class Login extends MY_Controller
                 if ($status_id == 1) {
                     @kirim_email_approve_pengajar($pengajar_id);
 
-                    $pesan = "Registrasi sebagai pengajar berhasil, silakan " . anchor('login/index', 'LOG IN') . " ke sistem.";
+                    $pesan = __('register_teacher_active', array('login_link' => anchor('login/index', 'LOG IN')));
                 } else {
                     # kirim email registrasi
                     @kirim_email('email-template-register-pengajar', $username, array(
@@ -363,7 +364,7 @@ class Login extends MY_Controller
                         'nama_sekolah' => get_pengaturan('nama-sekolah', 'value')
                     ));
 
-                    $pesan = "Registrasi sebagai pengajar berhasil, tunggu pengaktifan akun oleh admin.";
+                    $pesan = __('register_teacher_pending');
                 }
 
                 $this->session->set_flashdata('register', get_alert('success', $pesan));

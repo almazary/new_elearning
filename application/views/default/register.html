@@ -1,14 +1,14 @@
 {% extends "layout-public.html" %}
 
 {% block title %}
-Register - {{ parent() }}
+{{ __('register_page_title') }} - {{ parent() }}
 {% endblock %}
 
 {% block content %}
 <div class="row">
     <div class="module span8 offset2">
             <div class="module-head">
-                <h3>Register E-learning</h3>
+                <h3>{{ __('register_form_title') }}</h3>
             </div>
 
             <div class="module-body">
@@ -16,18 +16,18 @@ Register - {{ parent() }}
 
                 {% if get_pengaturan('info-registrasi', 'value') is not empty %}
                 <div class="well well-small" style="box-shadow: none;">
-                    <b>Informasi : </b><br>
+                    <b>{{ __('register_form_info') }}</b><br>
                     {{ get_pengaturan('info-registrasi', 'value')|raw }}
                 </div>
                 {% endif %}
 
                 <ul class="nav nav-tabs">
                     {% if get_pengaturan('registrasi-siswa', 'value') == 1 %}
-                    <li {{ (sebagai == 'siswa') ? 'class="active"' }}><a href="#register-siswa" data-toggle="tab">Sebagai siswa</a></li>
+                    <li {{ (sebagai == 'siswa') ? 'class="active"' }}><a href="#register-siswa" data-toggle="tab">{{ __('register_form_student') }}</a></li>
                     {% endif %}
 
                     {% if get_pengaturan('registrasi-pengajar', 'value') == 1 %}
-                    <li {{ (sebagai == 'pengajar') ? 'class="active"' }}><a href="#register-pengajar" data-toggle="tab">Sebagai pengajar</a></li>
+                    <li {{ (sebagai == 'pengajar') ? 'class="active"' }}><a href="#register-pengajar" data-toggle="tab">{{ __('register_form_teacher') }}</a></li>
                     {% endif %}
                 </ul>
 
@@ -36,39 +36,39 @@ Register - {{ parent() }}
                     <div class="tab-pane fade {{ (sebagai == 'siswa') ? 'active' }} in" id="register-siswa">
                         {{ form_open_multipart('login/register/siswa', {'class' : 'form-horizontal row-fluid'})|raw }}
                             <div class="control-group">
-                                <label class="control-label">NIS</label>
+                                <label class="control-label">{{ __('register_form_label_key') }}</label>
                                 <div class="controls">
                                     <input type="text" id="nis" name="nis" class="span4" value="{{ set_value('nis') }}">
                                     <br>{{ form_error('nis')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Nama <span class="text-error">*</span></label>
+                                <label class="control-label">{{ __('register_form_label_name') }} <span class="text-error">*</span></label>
                                 <div class="controls">
                                     <input type="text" name="nama" class="span8" value="{{ set_value('nama') }}">
                                     <br>{{ form_error('nama')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Jenis Kelamin <span class="text-error">*</span></label>
+                                <label class="control-label">{{ __('register_form_label_gender') }} <span class="text-error">*</span></label>
                                 <div class="controls">
-                                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Laki-laki" {{ set_radio('jenis_kelamin', 'Laki-laki') }}> Laki-laki</label>
-                                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Perempuan" {{ set_radio('jenis_kelamin', 'Perempuan') }}> Perempuan</label>
+                                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Laki-laki" {{ set_radio('jenis_kelamin', 'Laki-laki') }}> {{ __('male') }}</label>
+                                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Perempuan" {{ set_radio('jenis_kelamin', 'Perempuan') }}> {{ __('female') }}</label>
                                     <br>{{ form_error('jenis_kelamin')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Tahun Masuk <span class="text-error">*</span></label>
+                                <label class="control-label">{{ __('register_form_label_year_join') }} <span class="text-error">*</span></label>
                                 <div class="controls">
                                     <input type="text" name="tahun_masuk" class="span2" maxlength="4" value="{{ set_value('tahun_masuk') }}">
                                     <br>{{ form_error('tahun_masuk')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Kelas <span class="text-error">*</span></label>
+                                <label class="control-label">{{ __('register_form_label_class') }} <span class="text-error">*</span></label>
                                 <div class="controls">
                                     <select class="span3" name="kelas_id">
-                                        <option value="">--pilih--</option>
+                                        <option value="">--{{ __('choose') }}--</option>
                                         {% for k in kelas %}
                                             <option value="{{ k.id }}" {{ set_select('kelas_id', k.id) }}>{{ k.nama }}</option>
                                         {% endfor %}
@@ -77,36 +77,36 @@ Register - {{ parent() }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Tempat Lahir</label>
+                                <label class="control-label">{{ __('register_form_label_born_in') }}</label>
                                 <div class="controls">
                                     <input type="text" name="tempat_lahir" class="span5" value="{{ set_value('tempat_lahir') }}">
                                     <br>{{ form_error('tempat_lahir')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Tanggal Lahir</label>
+                                <label class="control-label">{{ __('register_form_label_born_on') }}</label>
                                 <div class="controls">
                                     <select class="span2" style="width: 10%;" name="tgl_lahir">
-                                        <option value="">Tgl</option>
+                                        <option value="">{{ __('date_sort') }}</option>
                                         {% for i in 1..31 %}
                                             <option value="{{ i }}" {{ set_select('tgl_lahir', i) }}>{{ i }}</option>
                                         {% endfor %}
                                     </select>
                                     <select class="span2" style="width: 17%;" name="bln_lahir">
-                                        <option value="">Bulan</option>
+                                        <option value="">{{ __('month') }}</option>
                                         {% for i in 1..12 %}
                                             <option value="{{ i }}" {{ set_select('bln_lahir', i) }}>{{ get_indo_bulan(i) }}</option>
                                         {% endfor %}
                                     </select>
-                                    <input type="text" name="thn_lahir" class="span2" maxlength="4" value="{{ set_value('thn_lahir') }}" placeholder="Tahun">
+                                    <input type="text" name="thn_lahir" class="span2" maxlength="4" value="{{ set_value('thn_lahir') }}" placeholder="{{ __('year') }}">
                                     <br>{{ form_error('thn_lahir')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Agama</label>
+                                <label class="control-label">{{ __('register_form_label_religion') }}</label>
                                 <div class="controls">
                                     <select name="agama" class="span2">
-                                        <option value="">--pilih--</option>
+                                        <option value="">--{{ __('choose') }}--</option>
                                         <option value="ISLAM" {{ set_select('agama', 'ISLAM') }}>ISLAM</option>
                                         <option value="KRISTEN" {{ set_select('agama', 'KRISTEN') }}>KRISTEN</option>
                                         <option value="KATOLIK" {{ set_select('agama', 'KATOLIK') }}>KATOLIK</option>
@@ -117,7 +117,7 @@ Register - {{ parent() }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Alamat</label>
+                                <label class="control-label">{{ __('register_form_label_address') }}</label>
                                 <div class="controls">
                                     <input type="text" name="alamat" class="span8" value="{{ set_value('alamat') }}">
                                     <br>{{ form_error('alamat')|raw }}
@@ -126,7 +126,7 @@ Register - {{ parent() }}
                             <div class="control-group">
                                 <label class="control-label">Username <span class="text-error">*</span></label>
                                 <div class="controls">
-                                    <input type="text" id="username" name="username" class="span5" value="{{ set_value('username') }}" placeholder="alamat email">
+                                    <input type="text" id="username" name="username" class="span5" value="{{ set_value('username') }}" placeholder="{{ __('register_form_label_username_info') }}">
                                     <br>{{ form_error('username')|raw }}
                                 </div>
                             </div>
@@ -138,7 +138,7 @@ Register - {{ parent() }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Ulangi Password <span class="text-error">*</span></label>
+                                <label class="control-label">{{ __('repeat') }} Password <span class="text-error">*</span></label>
                                 <div class="controls">
                                     <input type="password" name="password2" class="span5" value="{{ set_value('password2') }}">
                                     <br>{{ form_error('password2')|raw }}
@@ -146,7 +146,7 @@ Register - {{ parent() }}
                             </div>
                             <div class="control-group">
                                 <div class="controls">
-                                    <button type="submit" class="btn btn-primary">Register</button>
+                                    <button type="submit" class="btn btn-primary">{{ __('register_form_label_btn') }}</button>
                                 </div>
                             </div>
                         {{ form_close()|raw }}
@@ -157,55 +157,55 @@ Register - {{ parent() }}
                     <div class="tab-pane fade {{ (sebagai == 'pengajar') ? 'active' }} in" id="register-pengajar">
                         {{ form_open_multipart('login/register/pengajar', {'class' : 'form-horizontal row-fluid'})|raw }}
                             <div class="control-group">
-                                <label class="control-label">NIP</label>
+                                <label class="control-label">{{ __('register_form_label_key_teacher') }}</label>
                                 <div class="controls">
                                     <input type="text" id="nip" name="nip" class="span4" value="{{ set_value('nip') }}">
                                     <br>{{ form_error('nip')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Nama <span class="text-error">*</span></label>
+                                <label class="control-label">{{ __('register_form_label_name') }} <span class="text-error">*</span></label>
                                 <div class="controls">
                                     <input type="text" name="nama" class="span8" value="{{ set_value('nama') }}">
                                     <br>{{ form_error('nama')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Jenis Kelamin <span class="text-error">*</span></label>
+                                <label class="control-label">{{ __('register_form_label_gender') }} <span class="text-error">*</span></label>
                                 <div class="controls">
-                                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Laki-laki" {{ set_radio('jenis_kelamin', 'Laki-laki') }}> Laki-laki</label>
-                                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Perempuan" {{ set_radio('jenis_kelamin', 'Perempuan') }}> Perempuan</label>
+                                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Laki-laki" {{ set_radio('jenis_kelamin', 'Laki-laki') }}> {{ __('male') }}</label>
+                                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Perempuan" {{ set_radio('jenis_kelamin', 'Perempuan') }}> {{ __('female') }}</label>
                                     <br>{{ form_error('jenis_kelamin')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Tempat Lahir</label>
+                                <label class="control-label">{{ __('register_form_label_born_in') }}</label>
                                 <div class="controls">
                                     <input type="text" name="tempat_lahir" class="span5" value="{{ set_value('tempat_lahir') }}">
                                     <br>{{ form_error('tempat_lahir')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Tanggal Lahir</label>
+                                <label class="control-label">{{ __('register_form_label_born_on') }}</label>
                                 <div class="controls">
                                     <select class="span2" style="width: 10%;" name="tgl_lahir">
-                                        <option value="">Tgl</option>
+                                        <option value="">{{ __('date_sort') }}</option>
                                         {% for i in 1..31 %}
                                             <option value="{{ i }}" {{ set_select('tgl_lahir', i) }}>{{ i }}</option>
                                         {% endfor %}
                                     </select>
                                     <select class="span2" style="width: 17%;" name="bln_lahir">
-                                        <option value="">Bulan</option>
+                                        <option value="">{{ __('month') }}</option>
                                         {% for i in 1..12 %}
                                             <option value="{{ i }}" {{ set_select('bln_lahir', i) }}>{{ get_indo_bulan(i) }}</option>
                                         {% endfor %}
                                     </select>
-                                    <input type="text" name="thn_lahir" class="span2" maxlength="4" value="{{ set_value('thn_lahir') }}" placeholder="Tahun">
+                                    <input type="text" name="thn_lahir" class="span2" maxlength="4" value="{{ set_value('thn_lahir') }}" placeholder="{{ __('year') }}">
                                     <br>{{ form_error('thn_lahir')|raw }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Alamat</label>
+                                <label class="control-label">{{ __('register_form_label_address') }}</label>
                                 <div class="controls">
                                     <input type="text" name="alamat" class="span10" value="{{ set_value('alamat') }}">
                                     <br>{{ form_error('alamat')|raw }}
@@ -214,7 +214,7 @@ Register - {{ parent() }}
                             <div class="control-group">
                                 <label class="control-label">Username <span class="text-error">*</span></label>
                                 <div class="controls">
-                                    <input type="text" id="username" name="username" class="span5" value="{{ set_value('username') }}" placeholder="alamat email">
+                                    <input type="text" id="username" name="username" class="span5" value="{{ set_value('username') }}" placeholder="{{ __('register-register_form_label_username_info') }}">
                                     <br>{{ form_error('username')|raw }}
                                 </div>
                             </div>
@@ -226,7 +226,7 @@ Register - {{ parent() }}
                                 </div>
                             </div>
                             <div class="control-group">
-                                <label class="control-label">Ulangi Password <span class="text-error">*</span></label>
+                                <label class="control-label">{{ __('repeat') }} Password <span class="text-error">*</span></label>
                                 <div class="controls">
                                     <input type="password" name="password2" class="span5" value="{{ set_value('password2') }}">
                                     <br>{{ form_error('password2')|raw }}
@@ -234,7 +234,7 @@ Register - {{ parent() }}
                             </div>
                             <div class="control-group">
                                 <div class="controls">
-                                    <button type="submit" class="btn btn-primary">Register</button>
+                                    <button type="submit" class="btn btn-primary">{{ __('register_form_label_btn') }}</button>
                                 </div>
                             </div>
                         {{ form_close()|raw }}
