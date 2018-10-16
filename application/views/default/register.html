@@ -87,7 +87,7 @@
                                 <label class="control-label">{{ __('register_form_label_born_on') }}</label>
                                 <div class="controls">
                                     <select class="span2" style="width: 10%;" name="tgl_lahir">
-                                        <option value="">{{ __('date_sort') }}</option>
+                                        <option value="">{{ __('date_short') }}</option>
                                         {% for i in 1..31 %}
                                             <option value="{{ i }}" {{ set_select('tgl_lahir', i) }}>{{ i }}</option>
                                         {% endfor %}
@@ -189,7 +189,7 @@
                                 <label class="control-label">{{ __('register_form_label_born_on') }}</label>
                                 <div class="controls">
                                     <select class="span2" style="width: 10%;" name="tgl_lahir">
-                                        <option value="">{{ __('date_sort') }}</option>
+                                        <option value="">{{ __('date_short') }}</option>
                                         {% for i in 1..31 %}
                                             <option value="{{ i }}" {{ set_select('tgl_lahir', i) }}>{{ i }}</option>
                                         {% endfor %}
