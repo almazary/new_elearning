@@ -117,7 +117,13 @@ class Login extends MY_Controller
             }
         }
 
-        $data['sliders'] = $this->config_model->get_all_slider_img();
+        $sliders = cg('sliders');
+        if ($sliders === false) {
+            $sliders = $this->config_model->get_all_slider_img();
+            cs('sliders', $sliders, 60 * 60 * 24);
+        }
+
+        $data['sliders'] = $sliders;
 
         if (!empty($data['sliders'])) {
             # panggil nivoslider

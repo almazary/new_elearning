@@ -201,7 +201,19 @@ function get_row_data($model, $func, $args = array(), $field_name = '')
  */
 function get_pengaturan($id, $get = null)
 {
-    $result = get_row_data('config_model', 'retrieve', array($id), $get);
+    // check cache first
+    $result = cg($id);
+    if ($result === false) {
+        $result = get_row_data('config_model', 'retrieve', array($id));
+
+        //save cache
+        cs($id, $result, 60 * 60 * 24);
+    }
+
+    if (!empty($get)) {
+        $result = isset($result[$get]) ? $result[$get] : '';
+    }
+
     return $result;
 }
 

@@ -14,6 +14,7 @@
 /nbproject/
 /plugins/src/
 /plugins/views/
-/application/cache/twig/*
+/application/cache/*
 !/application/cache/twig/index.html
+!/application/cache/index.html
 /application/controllers/test.php

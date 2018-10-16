@@ -88,11 +88,6 @@ class MY_Controller extends CI_Controller
         # delimiters form validation
         $this->form_validation->set_error_delimiters('<span class="text-error"><i class="icon-info-sign"></i> ', '</span>');
 
-        # cek apakah sudah berhasil install
-        if (check_success_install() == false) {
-            echo $error_install;die;
-        }
-
         // load cache
         $this->load->driver('cache');
 
@@ -131,6 +126,9 @@ class MY_Controller extends CI_Controller
             $this->table_change();
 
             $this->current_version = $versi_install;
+
+            // delete cache
+            cd('versi');
         }
 
         # autoload function plugin
