@@ -16,6 +16,9 @@
 */
 $config['base_url'] = '';
 
+//timezone
+$config['timezone'] = 'Asia/Jakarta';
+
 /*
 |--------------------------------------------------------------------------
 | Encryption Key

@@ -44,6 +44,11 @@ class MY_Controller extends CI_Controller
     {
         parent::__construct();
 
+        // check timezone config
+        if (!empty($this->config->item('timezone'))) {
+            $this->default_timezone = $this->config->item('timezone');
+        }
+
         date_default_timezone_set($this->default_timezone);
 
         $this->update_link        = 'http://www.dokumenary.net/category/new-elearning/feed/';
