@@ -304,7 +304,13 @@ class Login extends MY_Controller
                 redirect('login/register/siswa');
             }
 
-            $data['kelas'] = $this->kelas_model->retrieve_all_child();
+            $kelas_all_child = cg('kelas_retrieve_all_child');
+            if ($kelas_all_child === false) {
+                $kelas_all_child = $this->kelas_model->retrieve_all_child();
+                cs('kelas_retrieve_all_child', $kelas_all_child, 60 * 60 * 24);
+            }
+
+            $data['kelas'] = $kelas_all_child;
         }
 
         # jika pengajar
