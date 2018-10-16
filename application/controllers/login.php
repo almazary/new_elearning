@@ -415,7 +415,7 @@ class Login extends MY_Controller
                 'link_reset' => site_url('login/reset_password/' . $reset_kode)
             ));
 
-            $this->session->set_flashdata('lupa_password', get_alert('success', 'Link reset password telah dikirimkan keemail anda.'));
+            $this->session->set_flashdata('lupa_password', get_alert('success', __('forgotpwd_send_success')));
             redirect('login/lupa_password');
         }
 

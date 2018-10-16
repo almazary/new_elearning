@@ -53,3 +53,9 @@ $lang['register_student_pending'] = "Registrasi sebagai siswa berhasil, tunggu p
 
 $lang['register_teacher_active'] = "Registrasi sebagai pengajar berhasil, silakan  {login_link} ke aplikasi.";
 $lang['register_teacher_pending'] = "Registrasi sebagai pengajar berhasil, tunggu pengaktifan akun oleh admin.";
+
+$lang['forgotpwd_page_title'] = "Lupa Password";
+$lang['forgotpwd_form_title'] = "Lupa Password";
+$lang['forgotpwd_form_label_username'] = "Username (Email)";
+$lang['forgotpwd_form_label_btn'] = "Kirim";
+$lang['forgotpwd_send_success'] = "Link reset password telah dikirimkan ke email Anda.";

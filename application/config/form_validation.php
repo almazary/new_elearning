@@ -26,7 +26,7 @@ $config['setup/index/2'] = array(
 $config['lupa_password'] = array(
     array(
         'field' => 'email',
-        'label' => 'Username (Email)',
+        'label' => __('forgotpwd_form_label_username'),
         'rules' => 'required|trim|valid_email|xss_clean|callback_check_username_exist'
     ),
 );
