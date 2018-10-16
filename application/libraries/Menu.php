@@ -19,73 +19,73 @@ class Menu
     {
         $this->menus['admin'] = array(
             0 => array(
-                '<a href="' . site_url() . '"><i class="menu-icon icon-home"></i>Beranda</a>',
-                '<a href="' . site_url('pengumuman') . '"><i class="menu-icon icon-bullhorn"></i>Pengumuman</a>',
-                '<a href="' . site_url('message') . '"><i class="menu-icon icon-comments"></i>Pesan <span class="menu-count-new-msg"></span></a>'
+                '<a href="' . site_url() . '"><i class="menu-icon icon-home"></i>' . __('home') . '</a>',
+                '<a href="' . site_url('pengumuman') . '"><i class="menu-icon icon-bullhorn"></i>' . __('announcement') . '</a>',
+                '<a href="' . site_url('message') . '"><i class="menu-icon icon-comments"></i>' . __('message') .' <span class="menu-count-new-msg"></span></a>'
             ),
             1 => array(
-                '<a href="' . site_url('siswa'). '"><i class="menu-icon icon-group"></i>Siswa <span class="menu-count-pending-siswa"></span></a>',
-                '<a href="' . site_url('pengajar'). '"><i class="menu-icon icon-user"></i>Pengajar <span class="menu-count-pending-pengajar"></span></a>'
+                '<a href="' . site_url('siswa'). '"><i class="menu-icon icon-group"></i>' . __('student') . ' <span class="menu-count-pending-siswa"></span></a>',
+                '<a href="' . site_url('pengajar'). '"><i class="menu-icon icon-user"></i>' . __('teacher') . ' <span class="menu-count-pending-pengajar"></span></a>'
             ),
             2 => array(
-                '<a href="' . site_url('tugas?clear_filter=true') . '"><i class="menu-icon icon-tasks"></i>Tugas </a>',
-                '<a href="' . site_url('materi?clear_filter=true') . '"><i class="menu-icon icon-book"></i>Materi </a>',
-                '<a href="' . site_url('materi/komentar') . '"><i class="menu-icon icon-comments"></i>Komentar Materi <span class="menu-count-unread-laporan"></span></a>'
+                '<a href="' . site_url('tugas?clear_filter=true') . '"><i class="menu-icon icon-tasks"></i>' . __('task') . ' </a>',
+                '<a href="' . site_url('materi?clear_filter=true') . '"><i class="menu-icon icon-book"></i>' . __('material') . ' </a>',
+                '<a href="' . site_url('materi/komentar') . '"><i class="menu-icon icon-comments"></i>' . __('material_comment') . ' <span class="menu-count-unread-laporan"></span></a>'
             ),
             3 => array(
-                '<a href="' . site_url('kelas/mapel_kelas') . '"><i class="menu-icon icon-paste"></i>Matapelajaran Kelas </a>',
-                '<a href="' . site_url('kelas') . '"><i class="menu-icon icon-tasks"></i>Manajemen Kelas </a>',
-                '<a href="' . site_url('mapel') . '"><i class="menu-icon icon-book"></i>Manajemen Matapelajaran </a>'
+                '<a href="' . site_url('kelas/mapel_kelas') . '"><i class="menu-icon icon-paste"></i>' . __('course_class') . ' </a>',
+                '<a href="' . site_url('kelas') . '"><i class="menu-icon icon-tasks"></i>' . __('class_manage') . ' </a>',
+                '<a href="' . site_url('mapel') . '"><i class="menu-icon icon-book"></i>' . __('course_manage') . ' </a>'
             ),
             4 => array(
-                '<a href="' . site_url('welcome/pengaturan') . '"><i class="menu-icon icon-wrench"></i>Pengaturan</a>',
-                '<a href="' . site_url('email') . '"><i class="menu-icon icon-envelope"></i>Email Template</a>',
-                '<a href="' . site_url('welcome/backup_restore') . '"><i class="menu-icon icon-hdd"></i>Backup & Restore</a>',
-                '<a href="' . site_url('welcome/hapus_data') . '"><i class="menu-icon icon-trash"></i>Hapus Data</a>',
+                '<a href="' . site_url('welcome/pengaturan') . '"><i class="menu-icon icon-wrench"></i>' . __('setting') . '</a>',
+                '<a href="' . site_url('email') . '"><i class="menu-icon icon-envelope"></i>' . __('email_template') . '</a>',
+                '<a href="' . site_url('welcome/backup_restore') . '"><i class="menu-icon icon-hdd"></i>' . __('backup_restore') . '</a>',
+                '<a href="' . site_url('welcome/hapus_data') . '"><i class="menu-icon icon-trash"></i>' . __('delete_data') . '</a>',
             ),
             5 => array(
-                '<a href="' . site_url('login/logout') . '"><i class="menu-icon icon-signout"></i>Logout </a>'
+                '<a href="' . site_url('login/logout') . '"><i class="menu-icon icon-signout"></i>' . __('logout') . ' </a>'
             )
         );
 
         $this->menus['pengajar'] = array(
             0 => array(
-                '<a href="' . site_url() . '"><i class="menu-icon icon-home"></i>Beranda</a>',
-                '<a href="' . site_url('pengumuman') . '"><i class="menu-icon icon-bullhorn"></i>Pengumuman</a>',
-                '<a href="' . site_url('message') . '"><i class="menu-icon icon-comments"></i>Pesan <span class="menu-count-new-msg"></span></a>',
-                '<a href="' . site_url('pengajar/jadwal') . '"><i class="menu-icon icon-tasks"></i>Jadwal Mengajar </a>'
+                '<a href="' . site_url() . '"><i class="menu-icon icon-home"></i>' . __('home') . '</a>',
+                '<a href="' . site_url('pengumuman') . '"><i class="menu-icon icon-bullhorn"></i>' . __('announcement') . '</a>',
+                '<a href="' . site_url('message') . '"><i class="menu-icon icon-comments"></i>' . __('message') . ' <span class="menu-count-new-msg"></span></a>',
+                '<a href="' . site_url('pengajar/jadwal') . '"><i class="menu-icon icon-tasks"></i>' . __('schedule_teach') . ' </a>'
             ),
             1 => array(
-                '<a href="' . site_url('tugas?clear_filter=true') . '"><i class="menu-icon icon-tasks"></i>Tugas </a>',
-                '<a href="' . site_url('materi?clear_filter=true') . '"><i class="menu-icon icon-book"></i>Materi </a>',
-                '<a href="' . site_url('materi/komentar') . '"><i class="menu-icon icon-comments"></i>Komentar saya</a>'
+                '<a href="' . site_url('tugas?clear_filter=true') . '"><i class="menu-icon icon-tasks"></i>' . __('task') . ' </a>',
+                '<a href="' . site_url('materi?clear_filter=true') . '"><i class="menu-icon icon-book"></i>' . __('material') . ' </a>',
+                '<a href="' . site_url('materi/komentar') . '"><i class="menu-icon icon-comments"></i>' . __('my_comment') . '</a>'
             ),
             2 => array(
-                '<a href="' . site_url('pengajar/filter') . '"><i class="menu-icon icon-search"></i>Filter Pengajar </a>',
-                '<a href="' . site_url('siswa/filter') . '"><i class="menu-icon icon-search"></i>Filter Siswa </a>'
+                '<a href="' . site_url('pengajar/filter') . '"><i class="menu-icon icon-search"></i>' . __('filter_teacher') . ' </a>',
+                '<a href="' . site_url('siswa/filter') . '"><i class="menu-icon icon-search"></i>' . __('filter_student') . ' </a>'
             ),
             3 => array(
-                '<a href="' . site_url('login/logout') . '"><i class="menu-icon icon-signout"></i>Logout </a>'
+                '<a href="' . site_url('login/logout') . '"><i class="menu-icon icon-signout"></i>' . __('logout') . ' </a>'
             )
         );
 
         $this->menus['siswa'] = array(
             0 => array(
-                '<a href="' . site_url() . '"><i class="menu-icon icon-home"></i>Beranda</a>',
-                '<a href="' . site_url('message') . '"><i class="menu-icon icon-comments"></i>Pesan <span class="menu-count-new-msg"></span></a>',
-                '<a href="' . site_url('siswa/jadwal_mapel') . '"><i class="menu-icon icon-tasks"></i>Jadwal Matapelajaran</a>'
+                '<a href="' . site_url() . '"><i class="menu-icon icon-home"></i>' . __('home') . '</a>',
+                '<a href="' . site_url('message') . '"><i class="menu-icon icon-comments"></i>' . __('message') . ' <span class="menu-count-new-msg"></span></a>',
+                '<a href="' . site_url('siswa/jadwal_mapel') . '"><i class="menu-icon icon-tasks"></i>' . __('course_schedule') . '</a>'
             ),
             1 => array(
-                '<a href="' . site_url('tugas?clear_filter=true') . '"><i class="menu-icon icon-tasks"></i>Tugas </a>',
-                '<a href="' . site_url('materi?clear_filter=true') . '"><i class="menu-icon icon-book"></i>Materi </a>',
-                '<a href="' . site_url('materi/komentar') . '"><i class="menu-icon icon-comments"></i>Komentar saya </a>'
+                '<a href="' . site_url('tugas?clear_filter=true') . '"><i class="menu-icon icon-tasks"></i>' . __('task') . ' </a>',
+                '<a href="' . site_url('materi?clear_filter=true') . '"><i class="menu-icon icon-book"></i>' . __('material') . ' </a>',
+                '<a href="' . site_url('materi/komentar') . '"><i class="menu-icon icon-comments"></i>' . __('my_comment') . ' </a>'
             ),
             2 => array(
-                '<a href="' . site_url('pengajar/filter') . '"><i class="menu-icon icon-search"></i>Filter Pengajar </a>',
-                '<a href="' . site_url('siswa/filter') . '"><i class="menu-icon icon-search"></i>Filter Siswa </a>'
+                '<a href="' . site_url('pengajar/filter') . '"><i class="menu-icon icon-search"></i>' . __('filter_teacher') . ' </a>',
+                '<a href="' . site_url('siswa/filter') . '"><i class="menu-icon icon-search"></i>' . __('filter_student') . ' </a>'
             ),
             3 => array(
-                '<a href="' . site_url('login/logout') . '"><i class="menu-icon icon-signout"></i>Logout </a>'
+                '<a href="' . site_url('login/logout') . '"><i class="menu-icon icon-signout"></i>' . __('logout') . ' </a>'
             )
         );
     }
