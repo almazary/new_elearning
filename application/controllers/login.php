@@ -439,7 +439,7 @@ class Login extends MY_Controller
         );
 
         if (empty($login)) {
-            $this->session->set_flashdata('lupa_password', get_alert('warning', 'Reset kode tidak benar.'));
+            $this->session->set_flashdata('lupa_password', get_alert('warning', __('resetpwd_code_incorrect')));
             redirect('login/lupa_password');
         }
 
@@ -460,7 +460,7 @@ class Login extends MY_Controller
                 $reset_kode  = null
             );
 
-            $this->session->set_flashdata('login', get_alert('success', 'Password berhasil diperbaharui, silahkan login menggunakan password baru anda.'));
+            $this->session->set_flashdata('login', get_alert('success', __('resetpwd_success')));
             redirect('login');
         }
 

@@ -56,8 +56,17 @@ $lang['register_teacher_pending'] = "Registrasi sebagai pengajar berhasil, tungg
 
 $lang['forgotpwd_page_title'] = "Lupa Password";
 $lang['forgotpwd_form_title'] = "Lupa Password";
+$lang['forgotpwd_form_info'] = "Sistem akan mengirimkan link reset password ke email Anda, silakan masukkan username:";
 $lang['forgotpwd_form_label_username'] = "Username (Email)";
 $lang['forgotpwd_form_label_btn'] = "Kirim";
 $lang['forgotpwd_send_success'] = "Link reset password telah dikirimkan ke email Anda.";
 
 $lang['username_not_found'] = "Username tidak ditemukan.";
+
+$lang['resetpwd_page_title'] = "Reset Password";
+$lang['resetpwd_form_title'] = "Reset Password";
+$lang['resetpwd_form_label_password'] = "Isikan password baru";
+$lang['resetpwd_form_label_password_confirm'] = "Isi ulang password";
+$lang['resetpwd_form_label_btn'] = "Reset";
+$lang['resetpwd_code_incorrect'] = "Reset kode tidak benar.";
+$lang['resetpwd_success'] = "Password berhasil diperbarui, silakan masuk menggunakan password baru Anda.";
