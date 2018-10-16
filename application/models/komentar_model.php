@@ -12,12 +12,12 @@ class Komentar_model extends CI_Model
 {
     private $table = 'komentar';
 
-    function __construct()
-    {
-        if (!$this->db->table_exists($this->table)) {
-            $this->create_table();
-        }
-    }
+    //function __construct()
+    //{
+    //    if (!$this->db->table_exists($this->table)) {
+    //        $this->create_table();
+    //    }
+    //}
 
     /**
      * Method untuk mendapatkan jumlah komentar
