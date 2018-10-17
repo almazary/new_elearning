@@ -934,7 +934,7 @@ transition: all .2s ease-in-out;
 }
 .widget-menu>li>a {
 	background-color: #2d2b32;
-	color: #767676;
+	color: #d5d5d5;
 	-webkit-transition: all .2s ease-in-out;
 -moz-transition: all .2s ease-in-out;
 transition: all .2s ease-in-out;

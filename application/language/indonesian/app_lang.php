@@ -95,3 +95,22 @@ $lang['course_schedule'] = "Jadwal Matapelajaran";
 $lang['detail_profile'] = "Detail Profil";
 $lang['profile_account'] = "Profil & Akun";
 $lang['login_log'] = "Riwayat Masuk";
+
+$lang['notif_student_pass_equal_key'] = "Dimohon untuk segera mengganti password Anda untuk alasan keamanan. {link_change_pass}";
+$lang['login_history'] = "Riwayat login pengguna";
+$lang['update_info'] = "Info update";
+
+$lang['student_pending'] = "Siswa Menunggu Aktifasi";
+$lang['teacher_pending'] = "Pengajar Menunggu Aktifasi";
+
+$lang['welcome_to'] = "Selamat datang di";
+$lang['your_ip'] = "IP Anda";
+$lang['address'] = "Alamat";
+$lang['phone'] = "Telepon";
+
+$lang['welcome_tips_info'] = "Atur data berikut supaya aplikasi e-learing dapat berjalan dengan baik:";
+$lang['welcome_tips_course'] = "Input semua Matapelajaran yang ada di sekolah";
+$lang['welcome_tips_class'] = "Input semua Kelas yang ada di sekolah";
+$lang['welcome_tips_course_class'] = "Atur Matapelajaran pada tiap-tiap Kelas";
+
+$lang['keyword_search'] = "Kata kunci pencarian";

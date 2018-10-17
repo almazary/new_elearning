@@ -18,7 +18,7 @@
                     </a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <form class="navbar-search pull-left input-append" method="get" action="{{ site_url('welcome/search') }}">
-                            <input type="text" class="span3" name="q">
+                            <input type="text" class="span3" name="q" placeholder="{{ __('keyword_search') }}">
                             <button class="btn" type="submit">
                                 <i class="icon-search"></i>
                             </button>
@@ -75,7 +75,7 @@
                     <div class="span9 mobile-12">
                         <div class="content">
                             {% if pass_siswa_equal_nis() == true %}
-                                {{ get_alert('warning', "Dimohon untuk segera mengganti password anda untuk alasan keamanan. " ~ anchor('login/pp?show=edit-password', 'Ganti Password'))|raw }}
+                                {{ get_alert('warning', __('notif_student_pass_equal_key', {'link_change_pass' : anchor('login/pp?show=edit-password', 'Ganti Password')}))|raw }}
                             {% endif %}
 
                             {% block content %}{% endblock %}

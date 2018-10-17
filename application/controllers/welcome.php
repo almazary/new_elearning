@@ -97,16 +97,13 @@ class Welcome extends MY_Controller
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
-            $where_pengumuman = array(
-                'tgl_tampil <='   => date('Y-m-d'),
-                'tgl_tutup >='    => date('Y-m-d')
-            );
-
             $data['count_mapel_kelas'] = $this->mapel_model->count_kelas();
         }
 
         # ambil pengumuman yang sudah tampil
-        $data['pengumuman'] = $this->pengumuman_model->retrieve_all(10, 1, $where_pengumuman, false);
+        if (is_siswa() || is_pengajar()) {
+            $data['pengumuman'] = $this->pengumuman_model->retrieve_all(10, 1, $where_pengumuman, false);
+        }
 
         $this->twig->display('welcome.html', $data);
     }

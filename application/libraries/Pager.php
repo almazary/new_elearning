@@ -76,12 +76,12 @@ class Pager
         $next_page    = null;
         $page_no_plus = $page_no + 1;
         $offset       = ($page_no_plus - 1) * $no_of_records;
-        $this->init_select($select_str);
+        $this->init_select("COUNT(*) next_jml");
         $this->init_where($where);
         $this->init_orderby($order_by);
         $this->init_groupby($group_by);
-        $result_next = $CI->db->get($table, $no_of_records, $offset);
-        if ($result_next->num_rows() > 0) {
+        $result_next = $CI->db->get($table, $no_of_records, $offset)->row_array();
+        if (!empty($result_next['next_jml'])) {
             $next_page = $page_no_plus;
         }
 
@@ -90,12 +90,12 @@ class Pager
         if ($page_no > 1) {
             $page_no_min = $page_no - 1;
             $offset      = ($page_no_min - 1) * $no_of_records;
-            $this->init_select($select_str);
+            $this->init_select("COUNT(*) prev_jml");
             $this->init_where($where);
             $this->init_orderby($order_by);
             $this->init_groupby($group_by);
-            $result_prev = $CI->db->get($table, $no_of_records, $offset);
-            if ($result_prev->num_rows() > 0) {
+            $result_prev = $CI->db->get($table, $no_of_records, $offset)->row_array();
+            if (!empty($result_prev['prev_jml'])) {
                 $prev_page = $page_no_min;
             }
         }
