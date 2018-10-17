@@ -114,3 +114,7 @@ $lang['welcome_tips_class'] = "Input semua Kelas yang ada di sekolah";
 $lang['welcome_tips_course_class'] = "Atur Matapelajaran pada tiap-tiap Kelas";
 
 $lang['keyword_search'] = "Kata kunci pencarian";
+$lang['elearning_regulation'] = "Peraturan e-Learning:";
+
+$lang['latest_task'] = "Tugas terbaru";
+$lang['latest_material'] = "Materi terbaru";
