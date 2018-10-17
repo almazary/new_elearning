@@ -67,12 +67,10 @@ class Pager
         $this->init_groupby($group_by);
         $result = $CI->db->get($table, $no_of_records, $offset);
 
-        $this->init_select($select_str);
+        $this->init_select("COUNT(*) pager_jml");
         $this->init_where($where);
-        $this->init_orderby($order_by);
-        $this->init_groupby($group_by);
-        $result_all = $CI->db->get($table);
-        $count_all  = $result_all->num_rows();
+        $result_all = $CI->db->get($table)->row_array();
+        $count_all = isset($result_all['pager_jml']) ? $result_all['pager_jml'] : 0;
 
         //cari page next
         $next_page    = null;

@@ -38,19 +38,19 @@
                                 </span>
                                 <ul class="dropdown-menu">
                                     {% if is_admin() %}
-                                    <li>{{ anchor('pengajar/detail/'~ get_sess_data('user', 'status_id') ~'/' ~ get_sess_data('user', 'id'), 'Detail Profil', {'title' : 'Detail Profil'})|raw }}</li>
+                                    <li>{{ anchor('pengajar/detail/'~ get_sess_data('user', 'status_id') ~'/' ~ get_sess_data('user', 'id'), 'Detail Profil', {'title' : __('detail_profile')})|raw }}</li>
                                     {% endif %}
 
                                     {% if is_pengajar() %}
-                                    <li>{{ anchor('login/pp', 'Profil & Akun Login')|raw }}</li>
+                                    <li>{{ anchor('login/pp', __('profile_account'))|raw }}</li>
                                     {% endif %}
 
                                     {% if is_siswa() %}
-                                    <li>{{ anchor('login/pp', 'Profil & Akun Login')|raw }}</li>
+                                    <li>{{ anchor('login/pp', __('profile_account'))|raw }}</li>
                                     {% endif %}
 
-                                    <li><a href="{{ site_url('login/login_log/' ~ get_sess_data('login', 'id')) }}">Login log</a></li>
-                                    <li><a href="{{ site_url('login/logout') }}">Logout</a></li>
+                                    <li><a href="{{ site_url('login/login_log/' ~ get_sess_data('login', 'id')) }}">{{ __('login_log') }}</a></li>
+                                    <li><a href="{{ site_url('login/logout') }}">{{ __('logout') }}</a></li>
                                 </ul>
                             </li>
                         </ul>

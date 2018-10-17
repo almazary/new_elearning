@@ -92,3 +92,6 @@ $lang['my_comment'] = "Komentar Saya";
 $lang['filter_teacher'] = "Cari Pangajar";
 $lang['filter_student'] = "Cari Siswa";
 $lang['course_schedule'] = "Jadwal Matapelajaran";
+$lang['detail_profile'] = "Detail Profil";
+$lang['profile_account'] = "Profil & Akun";
+$lang['login_log'] = "Riwayat Masuk";
