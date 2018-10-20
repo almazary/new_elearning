@@ -97,7 +97,15 @@ class Welcome extends MY_Controller
             $data['comp_js']  = $html_js;
             $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
-            $data['count_mapel_kelas'] = $this->mapel_model->count_kelas();
+            $count_mapel_kelas = cg('mapel_count_kelas');
+            if ($count_mapel_kelas === false) {
+                $count_mapel_kelas = $this->mapel_model->count_kelas();
+
+                //save cache
+                cs('mapel_count_kelas', $count_mapel_kelas, 60 * 60 * 24);
+            }
+
+            $data['count_mapel_kelas'] = $count_mapel_kelas;
         }
 
         # ambil pengumuman yang sudah tampil
@@ -105,6 +113,7 @@ class Welcome extends MY_Controller
             $data['pengumuman'] = $this->pengumuman_model->retrieve_all(10, 1, $where_pengumuman, false);
         }
 
+        $data['is_home'] = true;
         $this->twig->display('welcome.html', $data);
     }
 

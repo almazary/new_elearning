@@ -19,6 +19,9 @@ $config['base_url'] = '';
 //timezone
 $config['timezone'] = 'Asia/Jakarta';
 
+//jumlah data yg ditampilkan pada list
+$config['no_of_records'] = 1;
+
 /*
 |--------------------------------------------------------------------------
 | Encryption Key

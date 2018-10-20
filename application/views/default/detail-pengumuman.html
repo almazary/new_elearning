@@ -1,14 +1,19 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Detail Pengumuman - {{ parent() }}
+{{ __('announcement') }} - {{ __('detail') }} | {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li>{{ anchor('pengumuman', __('announcement'))|raw }} <span class="divider">/</span></li>
+<li class="active">{{ __('detail') }}</li>
 {% endblock %}
 
 {% block content %}
 <div class="module">
     {% if is_siswa() == false %}
     <div class="module-head">
-        <h3>{{ anchor('pengumuman', 'Pengumuman')|raw }} / Detail Pengumuman</h3>
+        <h3>{{ __('announcement') }}</h3>
     </div>
     {% endif %}
 

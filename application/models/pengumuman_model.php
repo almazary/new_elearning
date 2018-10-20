@@ -11,13 +11,6 @@ class Pengumuman_model extends CI_Model
 {
     private $table = 'pengumuman';
 
-    //function __construct()
-    //{
-    //    if (!$this->db->table_exists($this->table)) {
-    //        $this->create_table();
-    //    }
-    //}
-
     /**
      * Method untuk mendapatkan banyak data
      *

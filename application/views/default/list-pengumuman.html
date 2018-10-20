@@ -1,13 +1,17 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Pengumuman - {{ parent() }}
+{{ __('announcement') }} - {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">{{ __('announcement') }}</li>
 {% endblock %}
 
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>Pengumuman</h3>
+        <h3>{{ __('announcement') }}</h3>
     </div>
     <div class="module-body">
         {{ get_flashdata('pengumuman')|raw }}
@@ -16,14 +20,14 @@ Pengumuman - {{ parent() }}
             <div class="pull-right">
                 <form class="form-search" method="get" action="{{ site_url('pengumuman/index/' ~ page_no ~ '/') }}">
                     <div class="input-append">
-                        <input type="text" class="span3 search-query" placeholder="cari pengumuman..." name="q" value="{{ keyword }}">
+                        <input type="text" class="span3" placeholder="{{ __('keyword_search') }}" name="q" value="{{ keyword }}">
                         <button type="submit" class="btn"><i class="icon-search"></i></button>
                     </div>
                 </form>
             </div>
             <div class="pull-left">
                 {% if is_siswa() == false %}
-                <a href="{{ site_url('pengumuman/add') }}" class="btn btn-primary"><i class="icon-pencil"></i> Buat</a>
+                <a href="{{ site_url('pengumuman/add') }}" class="btn btn-primary">{{ __('add') }}</a>
                 {% endif %}
             </div>
         </div>
@@ -34,9 +38,9 @@ Pengumuman - {{ parent() }}
                 <thead>
                     <tr>
                         <th width="5%">ID</th>
-                        <th>Judul</th>
-                        <th width="17%">Tgl. Tampil</th>
-                        <th width="17%">Tgl. Tutup</th>
+                        <th>{{ __('title') }}</th>
+                        <th width="17%">{{ __('date_show') }}</th>
+                        <th width="17%">{{ __('date_close') }}</th>
                         <th width="15%"></th>
                     </tr>
                 </thead>
@@ -48,18 +52,14 @@ Pengumuman - {{ parent() }}
                         <td>{{ tgl_indo(p.tgl_tampil) }}</td>
                         <td>{{ tgl_indo(p.tgl_tutup) }}</td>
                         <td>
-                            <div class="btn-group">
+                            <div class="btn-group pull-right">
                             {% for a in p.allow_action %}
-                                {% if a == 'detail' %}
-                                <a class="btn btn-default btn-small" href="{{ site_url('pengumuman/detail/' ~ p.id) }}" data-toggle="tooltip" title="Detail"><i class="icon-zoom-in"></i></a>
-                                {% endif %}
-
                                 {% if a == 'edit' %}
-                                <a class="btn btn-default btn-small" href="{{ site_url('pengumuman/edit/' ~ p.id) }}" data-toggle="tooltip" title="Edit"><i class="icon-edit"></i></a>
+                                <a class="btn btn-default btn-small" href="{{ site_url('pengumuman/edit/' ~ p.id) }}" data-toggle="tooltip" title="{{ __('edit') }}"><i class="icon-edit"></i></a>
                                 {% endif %}
 
                                 {% if a == 'delete' %}
-                                <a onclick="return confirm('Anda yakin ingin menghapus?')" class="btn btn-default btn-small" href="{{ site_url('pengumuman/delete/' ~ p.id) }}" data-toggle="tooltip" title="Hapus"><i class="icon-trash"></i></a>
+                                <a onclick="return confirm('{{ __('delete_confirm') }}')" class="btn btn-default btn-small" href="{{ site_url('pengumuman/delete/' ~ p.id) }}" data-toggle="tooltip" title="{{ __('remove') }}"><i class="icon-trash"></i></a>
                                 {% endif %}
                             {% endfor %}
                             </div>

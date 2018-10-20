@@ -190,6 +190,15 @@ class MY_Controller extends CI_Controller
     }
 
     /**
+     * no_of_records
+     */
+    function no_of_records()
+    {
+        $conf = $this->config->item('no_of_records');
+        return !empty($conf) ? $conf : 20;
+    }
+
+    /**
      * load_lang function for handle lang & switch lang with switch-lang get parameter
      */
     function load_lang()
@@ -364,7 +373,7 @@ class MY_Controller extends CI_Controller
         }
 
         if (!$valid) {
-            $this->form_validation->set_message('check_tgl_tampil', 'Tgl. Tampil tidak valid.');
+            $this->form_validation->set_message('check_tgl_tampil', __('date_show_invalid'));
             return false;
         }
 

@@ -524,6 +524,7 @@ class Login extends MY_Controller
         $return = array(
             'is_user_logged_in' => is_login() ? '1' : '0',
             'sedang_ujian' => $this->sedang_ujian() ? '1' : '0',
+            'lang' => $this->session->userdata('lang'),
         );
 
         echo json_encode($return);

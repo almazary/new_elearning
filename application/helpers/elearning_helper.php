@@ -112,7 +112,7 @@ function default_parser_item($add_item = array())
         base_url('assets/comp/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js'),
         base_url('assets/comp/ckeditor/plugins/ckeditor_wiris/integration/WIRISplugins.js?viewer=image'),
         base_url('assets/comp/timeago/jquery.timeago.js'),
-        base_url('assets/comp/jquery/app.js'),
+        base_url('assets/comp/jquery/app.js?v=' . get_pengaturan('versi', 'value')),
     ));
 
     if (isset($add_item['comp_js'])) {

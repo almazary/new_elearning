@@ -74,6 +74,13 @@
                     <!--/.span3-->
                     <div class="span9 mobile-12">
                         <div class="content">
+                            {% if is_home == false %}
+                            <ul class="breadcrumb">
+                                <li><a href="{{ site_url() }}">{{ __('home') }}</a> <span class="divider">/</span></li>
+                                {% block breadcrumb %}{% endblock %}
+                            </ul>
+                            {% endif %}
+
                             {% if pass_siswa_equal_nis() == true %}
                                 {{ get_alert('warning', __('notif_student_pass_equal_key', {'link_change_pass' : anchor('login/pp?show=edit-password', 'Ganti Password')}))|raw }}
                             {% endif %}

@@ -12,6 +12,10 @@ $lang['repeat'] = "Ulangi";
 $lang['born_date'] = "Tgl Lahir";
 $lang['born_month'] = "Bulan Lahir";
 $lang['born_year'] = "Tahun Lahir";
+$lang['add'] = "Tambah";
+$lang['edit'] = "Ubah";
+$lang['remove'] = "Hapus";
+$lang['detail'] = "Detail";
 
 $lang['dbfile_empty'] = "File database.php pada application/config/ tidak ditemukan.";
 $lang['dbconnect_error'] = "Koneksi database bermasalah: {error}";
@@ -103,7 +107,7 @@ $lang['update_info'] = "Info update";
 $lang['student_pending'] = "Siswa Menunggu Aktifasi";
 $lang['teacher_pending'] = "Pengajar Menunggu Aktifasi";
 
-$lang['welcome_to'] = "Selamat datang di";
+$lang['welcome_to'] = "Selamat datang kembali di";
 $lang['your_ip'] = "IP Anda";
 $lang['address'] = "Alamat";
 $lang['phone'] = "Telepon";
@@ -118,3 +122,28 @@ $lang['elearning_regulation'] = "Peraturan e-Learning:";
 
 $lang['latest_task'] = "Tugas terbaru";
 $lang['latest_material'] = "Materi terbaru";
+
+$lang['title'] = "Judul";
+$lang['date_show'] = "Tgl. Tampil";
+$lang['date_close'] = "Tgl. Tutup";
+$lang['content'] = "Konten";
+$lang['delete_confirm'] = "Anda yakin ingin menghapus?";
+$lang['date_show_invalid'] = "Tgl. Tampil tidak valid.";
+
+$lang['pagination_info'] = "{total_response} dari {total_record} total data";
+$lang['pagination_first'] = "Awal";
+$lang['pagination_prev'] = "Sebelumnya";
+$lang['pagination_next'] = "Selanjutnya";
+$lang['pagination_last'] = "Akhir";
+
+$lang['add_success_msg'] = "Data berhasil ditambah.";
+$lang['edit_success_msg'] = "Data berhasil diperbarui.";
+$lang['delete_success_msg'] = "Data berhasil dihapus.";
+$lang['show_in_student'] = "Tampil Disiswa";
+$lang['show_in_teacher'] = "Tampil Dipengajar";
+$lang['yes'] = "Ya";
+$lang['no'] = "Tidak";
+$lang['save'] = "Simpan";
+$lang['back'] = "Kembali";
+$lang['record_not_found'] = "Data tidak ditemukan.";
+$lang['access_denied'] = "Akses ditolak.";

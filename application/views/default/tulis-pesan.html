@@ -17,7 +17,7 @@ Tulis pesan - {{ parent() }}
                 <label class="control-label">Penerima <span class="text-error">*</span></label>
                 <div class="controls">
                     {% if login is empty %}
-                        <input type="text" name="penerima" id="msg-penerima" data-role="tagsinput" placeholder="Nama atau email" value="{{ set_value('penerima')|raw }}">
+                        <input type="text" name="penerima" id="msg-penerima" placeholder="Nama atau email" value="{{ set_value('penerima')|raw }}">
                         <br>{{ form_error('penerima')|raw }}
                     {% else %}
                         <div style="margin-top: 5px;"><b>{{ login.profil.nama }} </b> [{{ login.username }}]</div>

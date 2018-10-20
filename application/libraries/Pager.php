@@ -250,7 +250,7 @@ class Pager
         $return = '<div class="row-fluid">';
             if ($show_info) {
                 $return .= '<div class="span5">
-                    '.$array_data['total_respon'].' dari '.$array_data['total_record'].' total data
+                    ' . __('pagination_info', array('total_response' => $array_data['total_respon'], 'total_record' => $array_data['total_record'])) . '
                 </div>
                 <div class="span7">';
             } else {
@@ -264,9 +264,9 @@ class Pager
 
                     //first
                     if (empty($array_data['prev_page'])) {
-                        $return .= '<li class="disabled"><a href="#">First</a></li>';
+                        $return .= '<li class="disabled"><a href="#">' . __('pagination_first') . '</a></li>';
                     } else {
-                        $return .= '<li><a href="'.site_url($url.'1'.$add_segment).'">First</a></li>';
+                        $return .= '<li><a href="'.site_url($url.'1'.$add_segment).'">' . __('pagination_first') . '</a></li>';
                     }
 
                     //jika total halaman <= 5
@@ -278,9 +278,9 @@ class Pager
                     } else {
 
                         if ($array_data['current_page'] > 1) {
-                            $return .= '<li><a href="'.site_url($url.($array_data['current_page'] - 1).$add_segment).'">Prev</a></li>';
+                            $return .= '<li><a href="'.site_url($url.($array_data['current_page'] - 1).$add_segment).'">' . __('pagination_prev') . '</a></li>';
                         } else {
-                            $return .= '<li class="disabled"><a href="#">Prev</a></li>';
+                            $return .= '<li class="disabled"><a href="#">' . __('pagination_prev') . '</a></li>';
                         }
 
                         $numberOfPages = 5;
@@ -309,17 +309,17 @@ class Pager
                         }
 
                         if ($array_data['current_page'] < $array_data['total_page']) {
-                            $return .= '<li><a href="'.site_url($url.($array_data['current_page'] + 1).$add_segment).'">Next</a></li>';
+                            $return .= '<li><a href="'.site_url($url.($array_data['current_page'] + 1).$add_segment).'">' . __('pagination_next') . '</a></li>';
                         } else {
-                            $return .= '<li class="disabled"><a href="#">Next</a></li>';
+                            $return .= '<li class="disabled"><a href="#">' . __('pagination_next') . '</a></li>';
                         }
                     }
 
                     //last
                     if (empty($array_data['next_page'])) {
-                        $return .= '<li class="disabled"><a href="#">Last</a></li>';
+                        $return .= '<li class="disabled"><a href="#">' . __('pagination_last') . '</a></li>';
                     } else {
-                        $return .= '<li><a href="'.site_url($url.$array_data['total_page'].$add_segment).'">Last</a></li>';
+                        $return .= '<li><a href="'.site_url($url.$array_data['total_page'].$add_segment).'">' . ('pagination_last') . '</a></li>';
                     }
 
                 }
