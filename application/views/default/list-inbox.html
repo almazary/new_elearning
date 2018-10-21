@@ -1,13 +1,17 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Pesan - {{ parent() }}
+{{ __('msg') }} | {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">{{ __('msg') }}</li>
 {% endblock %}
 
 {% block content %}
 <div class="module message">
     <div class="module-head">
-        <h3>Pesan</h3>
+        <h3>{{ __('msg') }}</h3>
     </div>
     <div class="module-body">
         <div class="module-option clearfix">
@@ -16,13 +20,13 @@ Pesan - {{ parent() }}
             <div class="pull-right">
                 <form class="form-search" method="get" action="{{ site_url('message/index/') }}">
                     <div class="input-append">
-                        <input type="text" class="span3 search-query" placeholder="cari pesan..." name="q" value="{{ keyword }}">
+                        <input type="text" class="span3" placeholder="{{ __('keyword_search') }}" name="q" value="{{ keyword }}">
                         <button type="submit" class="btn"><i class="icon-search"></i></button>
                     </div>
                 </form>
             </div>
             <div class="pull-left">
-                <a href="{{ site_url('message/create/') }}" class="btn btn-primary"><i class="icon-pencil"></i> Tulis pesan</a>
+                <a href="{{ site_url('message/create/') }}" class="btn btn-primary">{{ __('msg_write') }}</a>
             </div>
         </div>
         <div class="module-body table">
@@ -41,9 +45,9 @@ Pesan - {{ parent() }}
                             {% endif %}
                         </td>
                         <td class="cell-title hidden-phone hidden-tablet">
-                            <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/detail/' ~ d.id ~ '/?confirm=1#confirm') }}"><i class="icon-trash"></i></a>
+                            <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/detail/' ~ d.id ~ '/?confirm=1#confirm') }}" data-toggle="tooltip" title="Hapus"><i class="icon-trash"></i></a>
                             {% if d.receiver is not empty %}
-                            <div>To <a href="{{ d.receiver.link_profil }}">{{ d.receiver.nama }}</a></div>
+                            <div>{{ __('msg_to') }} <a href="{{ d.receiver.link_profil }}">{{ d.receiver.nama }}</a></div>
                             {% endif %}
                             {{ character_limiter(strip_tags(d.content), 80, '...')|raw }}
                         </td>

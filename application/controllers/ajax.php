@@ -110,47 +110,74 @@ class Ajax extends MY_Controller
             break;
 
             case 'count_new_data':
-                # pesan baru
-                $new_msg = $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
-
+                $new_msg          = 0;
                 $pending_siswa    = 0;
                 $pending_pengajar = 0;
                 $unread_laporan   = 0;
 
+                # pesan baru
+                if ($this->input->get('new_msg') == 1) {
+                    $new_msg = $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
+                }
+
                 # jika login admin
                 if (is_admin()) {
                     # cari jumlah pending siswa
-                    $pending_siswa = $this->siswa_model->count('pending');
+                    if ($this->input->get('pending_siswa') == 1) {
+                        $pending_siswa = $this->siswa_model->count('pending');
+                    }
 
                     # cari pending pengajar
-                    $pending_pengajar = $this->pengajar_model->count('pending');
+                    if ($this->input->get('pending_pengajar') == 1) {
+                        $pending_pengajar = $this->pengajar_model->count('pending');
+                    }
 
                     # laporan
-                    $unread_laporan = $this->materi_model->count('unread-laporan');
+                    if ($this->input->get('unread_laporan') == 1) {
+                        $unread_laporan = $this->materi_model->count('unread-laporan');
+                    }
                 }
 
                 # ambil data login terahir
-                $retrieve_last_log = $this->login_model->retrieve_new_log();
-                foreach ($retrieve_last_log as $key => $val) {
-                    $retrieve_last_log[$key]['user'] = $this->get_user_data($val['login_id']);
+                $render_last_login = "";
+                if ($this->input->get('last_login') == 1) {
+                    $retrieve_last_log = $this->login_model->retrieve_new_log();
+                    foreach ($retrieve_last_log as $key => $val) {
+                        $retrieve_last_log[$key]['user'] = $this->get_user_data($val['login_id']);
 
-                    if (belum_sehari($val['lasttime'])) {
-                        $retrieve_last_log[$key]['timeago'] = iso8601($val['lasttime']);
+                        if (belum_sehari($val['lasttime'])) {
+                            $retrieve_last_log[$key]['timeago'] = iso8601($val['lasttime']);
+                        }
+
+                        $retrieve_last_log[$key]['lasttime'] = format_datetime($val['lasttime']);
                     }
 
-                    $retrieve_last_log[$key]['lasttime'] = format_datetime($val['lasttime']);
+                    $render_last_login = $this->twig->render('last-login-person.html', array('last_login_data' => $retrieve_last_log));
                 }
-
-                $render_last_login = $this->twig->render('last-login-person.html', array('last_login_data' => $retrieve_last_log));
 
                 $result = array(
                     'new_msg'          => $new_msg,
-                    // 'new_update'       => $count_update,
                     'pending_siswa'    => $pending_siswa,
                     'pending_pengajar' => $pending_pengajar,
                     'unread_laporan'   => $unread_laporan,
                     'last_login_list'  => $render_last_login,
                 );
+
+                if ($this->input->get('new_msg') != 1) {
+                    unset($result['new_msg']);
+                }
+                if ($this->input->get('pending_siswa') != 1) {
+                    unset($result['pending_siswa']);
+                }
+                if ($this->input->get('pending_pengajar') != 1) {
+                    unset($result['pending_pengajar']);
+                }
+                if ($this->input->get('unread_laporan') != 1) {
+                    unset($result['unread_laporan']);
+                }
+                if ($this->input->get('last_login') != 1) {
+                    unset($result['last_login_list']);
+                }
 
                 echo json_encode($result);
             break;

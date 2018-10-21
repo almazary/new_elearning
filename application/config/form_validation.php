@@ -1011,12 +1011,12 @@ $config['tugas/filter'] = array(
 $config['message/create'] = array(
     array(
         'field' => 'penerima',
-        'label' => 'Penerima',
+        'label' => __('msg_receiver'),
         'rules' => 'trim|xss_clean|required|callback_check_penerima_pesan'
     ),
     array(
         'field' => 'content',
-        'label' => 'Isi Pesan',
+        'label' => __('msg_body'),
         'rules' => 'required'
     ),
 );

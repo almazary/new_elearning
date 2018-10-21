@@ -60,7 +60,7 @@ class Message extends MY_Controller
         }
 
         # ambil semua inbox
-        $retrieve_all = $this->msg_model->retrieve_all(10, $page_no, get_sess_data('login', 'id'), (!empty($query) ? array('content' => $query) : array()));
+        $retrieve_all = $this->msg_model->retrieve_all($this->no_of_records(), $page_no, get_sess_data('login', 'id'), (!empty($query) ? array('content' => $query) : array()));
         $results_data = array();
         foreach ($retrieve_all['results'] as $key => $val) {
             $results_data[$key] = $this->format_msg($val);
@@ -77,7 +77,7 @@ class Message extends MY_Controller
     {
         $receiver_id = (int)$receiver_id;
         if (!empty($receiver_id) && $receiver_id == get_sess_data('login', 'id')) {
-            $this->session->set_flashdata('msg', get_alert('warning', 'Anda tidak dapat mengirim pesan ke diri sendiri.'));
+            $this->session->set_flashdata('msg', get_alert('warning', __('msg_err_sendto_yourself')));
             redirect('message/create');
         }
 
@@ -85,7 +85,7 @@ class Message extends MY_Controller
         if (!empty($receiver_id)) {
             $login = $this->login_model->retrieve($receiver_id);
             if (empty($login)) {
-                $this->session->set_flashdata('msg', get_alert('warning', 'Penerima tidak ditemukan.'));
+                $this->session->set_flashdata('msg', get_alert('warning', __('msg_err_receiver_not_found')));
                 redirect('message/create');
             }
 
@@ -114,7 +114,7 @@ class Message extends MY_Controller
                 $l++;
             }
 
-            $this->session->set_flashdata('msg', get_alert('success', 'Pesan berhasil dikirimkan.'));
+            $this->session->set_flashdata('msg', get_alert('success', __('msg_succes_send')));
             if ($l == 1) {
                 redirect('message/detail/' . $outbox_id . '#msg-' . $outbox_id);
             } else {
@@ -131,8 +131,6 @@ class Message extends MY_Controller
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/tags/bootstrap-tagsinput.css')));
 
-        $data['all_users'] = '"' . implode('","', $this->login_model->retrieve_all_users()) . '"';
-
         $this->twig->display('tulis-pesan.html', $data);
     }
 
@@ -143,20 +141,40 @@ class Message extends MY_Controller
 
         # Kalo tidak ditemukan bisa jadi owner_id nya tidak sesuai session
         if (empty($retrieve['retrieve'])) {
-            $this->session->set_flashdata('msg', get_alert('success', 'Pesan tidak ditemukan.'));
+            $this->session->set_flashdata('msg', get_alert('success', __('msg_not_found')));
             redirect('message');
+        }
+
+        # update read
+        if ($retrieve['retrieve']['opened'] != 1) {
+            $this->msg_model->update_read($msg_id);
+            $retrieve['retrieve']['opened'] = 1;
+        }
+
+        foreach ($retrieve['old_related_msg'] as $key => $old_msg) {
+            if ($old_msg['opened'] != 1) {
+                $this->msg_model->update_read($old_msg['id']);
+                $retrieve['old_related_msg'][$key]['opened'] = 1;
+            }
+        }
+
+        foreach ($retrieve['new_related_msg'] as $key => $new_msg) {
+            if ($new_msg['opened'] != 1) {
+                $this->msg_model->update_read($new_msg['id']);
+                $retrieve['new_related_msg'][$key]['opened'] = 1;
+            }
         }
 
         # format data
         $retrieve['retrieve'] = $this->format_msg($retrieve['retrieve']);
-        foreach ($retrieve['old_related_msg'] as $key => &$val) {
+        foreach ($retrieve['old_related_msg'] as $key => $val) {
             $retrieve['old_related_msg'][$key] = $this->format_msg($val);
         }
-        foreach ($retrieve['new_related_msg'] as $key => &$val) {
+        foreach ($retrieve['new_related_msg'] as $key => $val) {
             $retrieve['new_related_msg'][$key] = $this->format_msg($val);
         }
 
-        // pr($retrieve);die;
+        //pr($retrieve);die;
 
         $data['r']               = $retrieve['retrieve'];
         $data['old_related_msg'] = $retrieve['old_related_msg'];
@@ -174,23 +192,12 @@ class Message extends MY_Controller
             $login_username = $login_receiver['username'];
             $data['receiver_name'] = $user_receiver['nama'] . " [$login_username]";
         } else {
-            $this->session->set_flashdata('msg', get_alert('warning', 'Maaf, terdapat kesalahan pada record.'));
+            $this->session->set_flashdata('msg', get_alert('warning', __('msg_wrong_record')));
             redirect('message');
         }
 
-        $html_js         = get_texteditor();
+        $html_js = get_texteditor();
         $data['comp_js'] = $html_js;
-
-        # update read
-        $this->msg_model->update_read($msg_id);
-
-        foreach ($data['old_related_msg'] as $old_msg) {
-            $this->msg_model->update_read($old_msg['id']);
-        }
-
-        foreach ($data['new_related_msg'] as $new_msg) {
-            $this->msg_model->update_read($new_msg['id']);
-        }
 
         if (!empty($_GET['confirm']) AND $_GET['confirm'] == 1) {
             $data['confirm_del_all'] = true;
@@ -205,21 +212,24 @@ class Message extends MY_Controller
         $retrieve = $this->msg_model->retrieve(get_sess_data('login', 'id'), $msg_id, true, true);
 
         if (empty($retrieve['retrieve'])) {
-            $this->session->set_flashdata('msg', get_alert('success', 'Pesan tidak ditemukan.'));
+            $this->session->set_flashdata('msg', get_alert('success', __('msg_not_found')));
             redirect('message');
         }
 
         $this->msg_model->delete($msg_id);
+        cd("format_msg_{$msg_id}");
 
         foreach ($retrieve['old_related_msg'] as $m) {
             $this->msg_model->delete($m['id']);
+            cd("format_msg_{$m['id']}");
         }
 
         foreach ($retrieve['new_related_msg'] as $m) {
             $this->msg_model->delete($m['id']);
+            cd("format_msg_{$m['id']}");
         }
 
-        $this->session->set_flashdata('msg', get_alert('success', 'Percakapan berhasil dihapus.'));
+        $this->session->set_flashdata('msg', get_alert('success', __('msg_success_delete_conversation')));
 
         redirect('message');
     }
@@ -230,13 +240,16 @@ class Message extends MY_Controller
         $retrieve = $this->msg_model->retrieve(get_sess_data('login', 'id'), $msg_id);
 
         if (empty($retrieve['retrieve'])) {
-            $this->session->set_flashdata('msg', get_alert('success', 'Pesan tidak ditemukan.'));
+            $this->session->set_flashdata('msg', get_alert('success', __('msg_not_found')));
             redirect('message');
         }
 
         $this->msg_model->delete($msg_id);
 
-        $this->session->set_flashdata('msg', get_alert('success', 'Pesan berhasil dihapus.'));
+        //delete cache
+        cd("format_msg_{$msg_id}");
+
+        $this->session->set_flashdata('msg', get_alert('success', __('msg_succes_delete')));
 
         $segment_4 = (int)$segment_4;
         if (!empty($segment_4)) {
@@ -256,22 +269,22 @@ class Message extends MY_Controller
     {
         $tujuan = (string)$segment_3;
         if (!in_array($tujuan, array('siswa', 'pengajar'))) {
-            exit('Tujuan tidak ditemukan.');
+            show_404();
         }
 
         $id = (int)$segment_4;
         if (empty($id)) {
-            exit('Tujuan tidak ditemukan.');
+            show_404();
         }
 
         if ($tujuan == 'siswa') {
             $user = $this->siswa_model->retrieve($id);
             if (empty($user)) {
-                exit('Tujuan tidak ditemukan.');
+                show_404();
             }
 
             if (is_siswa() && get_sess_data('user', 'id') == $user['id']) {
-                exit('Anda tidak dapat mengirim pesan ke diri sendiri.');
+                show_404();
             }
 
             $login = $this->login_model->retrieve(null, null, null, $user['id']);
@@ -280,11 +293,11 @@ class Message extends MY_Controller
         if ($tujuan == 'pengajar') {
             $user = $this->pengajar_model->retrieve($id);
             if (empty($user)) {
-                exit('Tujuan tidak ditemukan.');
+                show_404();
             }
 
             if ((is_pengajar() || is_admin()) && get_sess_data('user', 'id') == $user['id']) {
-                exit('Anda tidak dapat mengirim pesan ke diri sendiri.');
+                show_404();
             }
 
             $login = $this->login_model->retrieve(null, null, null, null, $user['id']);

@@ -117,27 +117,26 @@
     $.ajax({
       method: 'GET',
       url: window.siteUrl + '/ajax/get_data/count_new_data',
+      data: {
+        new_msg: $('.menu-count-new-msg').length ? 1 : 0,
+        pending_siswa: $('.menu-count-pending-siswa').length ? 1 : 0,
+        pending_pengajar: $('.menu-count-pending-pengajar').length ? 1 : 0,
+        unread_laporan: $('.menu-count-unread-laporan').length ? 1 : 0,
+        last_login: $('#show-last-login-list').length ? 1 : 0
+      },
       success: function (data) {
         var result = $.parseJSON(data)
 
         // new msg
-        if (result.new_msg > 0) {
+        if (result.new_msg && result.new_msg > 0) {
           $('.menu-count-new-msg').html('')
           $('.menu-count-new-msg').html('<b class="label orange pull-right">' + result.new_msg + '</b>')
         } else {
           $('.menu-count-new-msg').html('')
         }
 
-        // new update
-        if (result.new_update > 0) {
-          $('.menu-count-new-update').html('')
-          $('.menu-count-new-update').html('<b class="label orange pull-right">' + result.new_update + '</b>')
-        } else {
-          $('.menu-count-new-update').html('')
-        }
-
         // pending siswa
-        if (result.pending_siswa > 0) {
+        if (result.pending_siswa && result.pending_siswa > 0) {
           $('.menu-count-pending-siswa').html('')
           $('.menu-count-pending-siswa').html('<b class="label orange pull-right">' + result.pending_siswa + '</b>')
         } else {
@@ -145,7 +144,7 @@
         }
 
         // pending pengajar
-        if (result.pending_pengajar > 0) {
+        if (result.pending_pengajar && result.pending_pengajar > 0) {
           $('.menu-count-pending-pengajar').html('')
           $('.menu-count-pending-pengajar').html('<b class="label orange pull-right">' + result.pending_pengajar + '</b>')
         } else {
@@ -153,7 +152,7 @@
         }
 
         // pending laporan
-        if (result.unread_laporan > 0) {
+        if (result.unread_laporan && result.unread_laporan > 0) {
           $('.menu-count-unread-laporan').html('')
           $('.menu-count-unread-laporan').html('<b class="label orange pull-right">' + result.unread_laporan + '</b>')
         } else {
@@ -269,7 +268,7 @@
         countNewData()
 
         getNewMsg()
-      }, 10000)
+      }, 15000)
 
       // jika ada class datatable
       if ($('.datatable').length) {

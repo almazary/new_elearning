@@ -16,6 +16,7 @@ $lang['add'] = "Tambah";
 $lang['edit'] = "Ubah";
 $lang['remove'] = "Hapus";
 $lang['detail'] = "Detail";
+$lang['cancel'] = "Batal";
 
 $lang['dbfile_empty'] = "File database.php pada application/config/ tidak ditemukan.";
 $lang['dbconnect_error'] = "Koneksi database bermasalah: {error}";
@@ -66,6 +67,7 @@ $lang['forgotpwd_form_label_btn'] = "Kirim";
 $lang['forgotpwd_send_success'] = "Link reset password telah dikirimkan ke email Anda.";
 
 $lang['username_not_found'] = "Username tidak ditemukan.";
+$lang['username_email_not_found'] = "Username {email} tidak ditemukan.";
 
 $lang['resetpwd_page_title'] = "Reset Password";
 $lang['resetpwd_form_title'] = "Reset Password";
@@ -147,3 +149,19 @@ $lang['save'] = "Simpan";
 $lang['back'] = "Kembali";
 $lang['record_not_found'] = "Data tidak ditemukan.";
 $lang['access_denied'] = "Akses ditolak.";
+
+$lang['msg'] = "Pesan";
+$lang['msg_err_sendto_yourself'] = "Anda tidak dapat mengirim pesan ke diri sendiri.";
+$lang['msg_err_receiver_not_found'] = "Penerima tidak ditemukan.";
+$lang['msg_succes_send'] = "Pesan berhasil dikirimkan.";
+$lang['msg_succes_delete'] = "Pesan berhasil dihapus.";
+$lang['msg_not_found'] = "Pesan tidak ditemukan.";
+$lang['msg_wrong_record'] = "Maaf, terdapat kesalahan pada record.";
+$lang['msg_success_delete_conversation'] = "Percakapan berhasil dihapus.";
+$lang['msg_write'] = "Kirim pesan";
+$lang['msg_to'] = "Kepada";
+$lang['msg_receiver'] = "Penerima";
+$lang['msg_body'] = "Isi Pesan";
+$lang['msg_send'] = "Kirim";
+$lang['msg_yes_delete'] = "Ya Hapus";
+$lang['msg_conversation_delete'] = "Anda yakin ingin menghapus percakapan ini?";

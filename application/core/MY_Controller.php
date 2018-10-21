@@ -324,20 +324,20 @@ class MY_Controller extends CI_Controller
         $get_email = get_email_from_string($username);
 
         if (empty($get_email)) {
-            $this->form_validation->set_message('check_penerima_pesan', 'Username tidak ditemukan.');
+            $this->form_validation->set_message('check_penerima_pesan', __('username_not_found'));
             return false;
         } else {
 
             foreach ($get_email as $email) {
                 # cek ada tidak
                 if (!$this->check_username_exist($email)) {
-                    $this->form_validation->set_message('check_penerima_pesan', "Username $email tidak ditemukan.");
+                    $this->form_validation->set_message('check_penerima_pesan', __('username_email_not_found', array('email' => $email)));
                     return false;
                 }
 
                 # cek sama dengan yang login tidak
                 if ($email == get_sess_data('login', 'username')) {
-                    $this->form_validation->set_message('check_penerima_pesan', 'Anda tidak dapat mengirim pesan ke diri sendiri.');
+                    $this->form_validation->set_message('check_penerima_pesan', __('msg_err_sendto_yourself'));
                     return false;
                 }
             }
@@ -498,25 +498,36 @@ class MY_Controller extends CI_Controller
      */
     function format_msg($retrieve)
     {
-        # jika inbox yang dicari pengirimnya
-        if ($retrieve['type_id'] == 1) {
-            $get_user = $retrieve['sender_receiver_id'];
-        } elseif ($retrieve['type_id'] == 2) {
-            $get_user = $retrieve['owner_id'];
+        //get cache
+        $cache_key = "format_msg_{$retrieve['id']}";
+        $cache_get = cg($cache_key);
+        if ($cache_get === false) {
+            # jika inbox yang dicari pengirimnya
+            if ($retrieve['type_id'] == 1) {
+                $get_user = $retrieve['sender_receiver_id'];
+            } elseif ($retrieve['type_id'] == 2) {
+                $get_user = $retrieve['owner_id'];
 
-            # cari profil penerima
-            $retrieve['receiver'] = $this->get_user_data($retrieve['sender_receiver_id']);
+                # cari profil penerima
+                $retrieve['receiver'] = $this->get_user_data($retrieve['sender_receiver_id']);
+            }
+
+            $retrieve['profil']   = $this->get_user_data($get_user);
+            $retrieve['login']    = $this->login_model->retrieve($get_user);
+            $retrieve['raw_date'] = $retrieve['date'];
+
+            if (belum_sehari($retrieve['date'])) {
+                $retrieve['timeago'] = iso8601($retrieve['date']);
+            }
+
+            $retrieve['date'] = format_datetime($retrieve['date']);
+
+            //save
+            cs($cache_key, $retrieve, 60 * 60 * 24);
+        } else {
+            $retrieve = $cache_get;
         }
 
-        $retrieve['profil']   = $this->get_user_data($get_user);
-        $retrieve['login']    = $this->login_model->retrieve($get_user);
-        $retrieve['raw_date'] = $retrieve['date'];
-
-        if (belum_sehari($retrieve['date'])) {
-            $retrieve['timeago'] = iso8601($retrieve['date']);
-        }
-
-        $retrieve['date'] = format_datetime($retrieve['date']);
         return $retrieve;
     }
 

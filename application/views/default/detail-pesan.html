@@ -1,13 +1,18 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Detail Percakapan - {{ parent() }}
+{{ __('msg') }} - {{ __('detail') }} | {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li>{{ anchor('message', __('msg'))|raw }} <span class="divider">/</span></li>
+<li class="active">{{ __('detail') }}</li>
 {% endblock %}
 
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>{{ anchor('message', 'Pesan')|raw }} / Detail Percakapan</h3>
+        <h3>{{ __('msg') }}</h3>
     </div>
     <div class="module-body">
 
@@ -35,14 +40,14 @@ Detail Percakapan - {{ parent() }}
         <br>
         {% if confirm_del_all == false %}
         <div class="msg-active">
-            <b>Kirim Pesan</b>
+            <b>{{ __('msg_write') }}</b>
             <hr class="hr-msg">
             {{ form_open_multipart('message/create/' ~ r.sender_receiver_id, {'class' : 'form-horizontal row-fluid'})|raw }}
                 <input type="hidden" name="penerima" value="{{ receiver_name }}">
                 <textarea name="content" id="content" class="texteditor">{{ set_value('content')|raw }}</textarea>
                 {{ form_error('content')|raw }}
                 <br>
-                <p><button class="btn btn-primary">Kirim</button></p>
+                <p><button class="btn btn-primary">{{ __('msg_send') }}</button></p>
             {{ form_close()|raw }}
         </div>
         {% endif %}
@@ -51,10 +56,10 @@ Detail Percakapan - {{ parent() }}
         <hr class="hr-msg">
         <div id="confirm" class="alert alert-block">
             <div class="pull-right btn-group" style="margin-top: -5px;">
-                <a class="btn btn-danger" href="{{ site_url('message/del_all/' ~ r.id) }}">Ya hapus</a>
-                <a class="btn btn-primary" href="{{ site_url('message') }}">Batal</a>
+                <a class="btn btn-danger" href="{{ site_url('message/del_all/' ~ r.id) }}">{{ __('msg_yes_delete') }}</a>
+                <a class="btn btn-primary" href="{{ site_url('message') }}">{{ __('cancel') }}</a>
             </div>
-            <b>Anda yakin ingin menghapus percakapan ini?</b>
+            <b>{{ __('msg_conversation_delete') }}</b>
         </div>
         {% endif %}
 

@@ -1,20 +1,25 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Tulis pesan - {{ parent() }}
+{{ __('msg') }} - {{ __('msg_write') }} | {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li>{{ anchor('message', __('msg'))|raw }} <span class="divider">/</span></li>
+<li class="active">{{ __('msg_write') }}</li>
 {% endblock %}
 
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>{{ anchor('message', 'Pesan')|raw }} / Tulis</h3>
+        <h3>{{ __('msg') }}</h3>
     </div>
     <div class="module-body">
         {{ get_flashdata('msg')|raw }}
 
         {{ form_open_multipart('message/create/' ~ ((login is not empty) ? login.id), {'class' : 'form-horizontal row-fluid'})|raw }}
             <div class="control-group">
-                <label class="control-label">Penerima <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('msg_receiver')}} <span class="text-error">*</span></label>
                 <div class="controls">
                     {% if login is empty %}
                         <input type="text" name="penerima" id="msg-penerima" placeholder="Nama atau email" value="{{ set_value('penerima')|raw }}">
@@ -26,7 +31,7 @@ Tulis pesan - {{ parent() }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Isi Pesan <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('msg_body') }} <span class="text-error">*</span></label>
                 <div class="controls">
                     <textarea name="content" id="content" class="texteditor">{{ set_value('content')|raw }}</textarea>
                     {{ form_error('content')|raw }}
@@ -34,8 +39,8 @@ Tulis pesan - {{ parent() }}
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" class="btn btn-primary">Kirim</button>
-                    <a href="{{ site_url('message') }}" class="btn btn-default">Batal</a>
+                    <button type="submit" class="btn btn-primary">{{ __('msg_send') }}</button>
+                    <a href="{{ site_url('message') }}" class="btn btn-default">{{ __('back') }}</a>
                 </div>
             </div>
         {{ form_close()|raw }}

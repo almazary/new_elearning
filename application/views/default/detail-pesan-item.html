@@ -10,7 +10,7 @@
         {% endif %}
     </td>
     <td class="msg-content">
-        <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ item_msg.id ~ '/' ~ active_msg_id) }}" onclick="return confirm('Anda yakin ingin menghapus?')"><i class="icon-trash"></i></a>
+        <a class="pull-right" style="margin-left:10px;" href="{{ site_url('message/del/' ~ item_msg.id ~ '/' ~ active_msg_id) }}" onclick="return confirm('{{ __('delete_confirm') }}')" data-toggle="tooltip" title="{{ __('remove') }}"><i class="icon-trash"></i></a>
         {{ item_msg.content|raw }}
     </td>
 </tr>
