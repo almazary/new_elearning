@@ -39,7 +39,7 @@ class Pengajar_model extends CI_Model
                 $this->db->where('status_id !=', '0');
                 $result = $this->db->get('pengajar');
                 $result = $result->row_array();
-                return $result['jml'];
+                return isset($result['jml']) ? $result['jml'] : 0;
             break;
 
             case 'pending':
@@ -47,7 +47,7 @@ class Pengajar_model extends CI_Model
                 $this->db->where('status_id', '0');
                 $result = $this->db->get('pengajar');
                 $result = $result->row_array();
-                return $result['jml'];
+                return isset($result['jml']) ? $result['jml'] : 0;
             break;
 
             default:

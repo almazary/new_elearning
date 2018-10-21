@@ -1,6 +1,16 @@
 (function ($) {
   window.hljs.initHighlightingOnLoad()
 
+  function notify (msg, type, icon) {
+    $.notify({
+      icon: icon || 'icon-exclamation-sign',
+      message: msg
+    }, {
+      allow_dismiss: true,
+      type: type || 'info'
+    })
+  }
+
   // cek sudah login belum
   $.ajax({
     method: 'GET',
@@ -118,14 +128,21 @@
       method: 'GET',
       url: window.siteUrl + '/ajax/get_data/count_new_data',
       data: {
-        new_msg: $('.menu-count-new-msg').length ? 1 : 0,
-        pending_siswa: $('.menu-count-pending-siswa').length ? 1 : 0,
-        pending_pengajar: $('.menu-count-pending-pengajar').length ? 1 : 0,
-        unread_laporan: $('.menu-count-unread-laporan').length ? 1 : 0,
-        last_login: $('#show-last-login-list').length ? 1 : 0
+        nm: $('.menu-count-new-msg').length ? 1 : 0,
+        nmn: $('#module-msg-detail').length ? 1 : 0,
+        ps: $('.menu-count-pending-siswa').length ? 1 : 0,
+        pp: $('.menu-count-pending-pengajar').length ? 1 : 0,
+        ul: $('.menu-count-unread-laporan').length ? 1 : 0,
+        ll: $('#show-last-login-list').length ? 1 : 0
       },
       success: function (data) {
         var result = $.parseJSON(data)
+
+        if (result.new_msg_notify) {
+          result.new_msg_notify.forEach(function (item) {
+            notify(item, 'success', 'icon-comment')
+          })
+        }
 
         // new msg
         if (result.new_msg && result.new_msg > 0) {

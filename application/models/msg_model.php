@@ -49,13 +49,31 @@ class Msg_model extends CI_Model
     {
         switch ($type_get) {
             case 'unread':
+                $this->db->select('COUNT(*) jml');
                 $this->db->where('type_id', $type_id);
                 $this->db->where('owner_id', $owner_id);
                 $this->db->where('opened', '0');
-                $results = $this->db->get($this->table);
-                return $results->num_rows();
+                $result = $this->db->get($this->table)->row_array();
+                return isset($result['jml']) ? $result['jml'] : 0;
             break;
         }
+    }
+
+    /**
+     * retrieve_all_unread get all unread msg
+     *
+     * @param mixed $owner_id
+     * @param array $sender_receiver_id
+     */
+    public function retrieve_all_unread($owner_id, $sender_receiver_id = array())
+    {
+        $this->db->where('owner_id', $owner_id);
+        $this->db->where('opened', '0');
+        if (!empty($sender_receiver_id)) {
+            $this->db->where_in('sender_receiver_id', $sender_receiver_id);
+        }
+        $this->db->order_by('id', 'ASC');
+        return $this->db->get($this->table)->result_array();
     }
 
     /**

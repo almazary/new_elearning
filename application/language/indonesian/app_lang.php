@@ -165,3 +165,5 @@ $lang['msg_body'] = "Isi Pesan";
 $lang['msg_send'] = "Kirim";
 $lang['msg_yes_delete'] = "Ya Hapus";
 $lang['msg_conversation_delete'] = "Anda yakin ingin menghapus percakapan ini?";
+$lang['msg_notify'] = "Pesan baru dari <b>{sender}</b>.";
+$lang['msg_notify_unread'] = "Ada <b>{count}</b> pesan belum dibaca.";

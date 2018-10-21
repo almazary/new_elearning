@@ -37,11 +37,12 @@ class Siswa_model extends CI_Model
             case 'kelas':
                 $kelas_id = $param['kelas_id'];
 
-                $this->db->join('siswa', 'kelas_siswa.siswa_id = siswa.id');
+                $this->db->select("COUNT(*) as jml");
+                $this->db->join('siswa', 'kelas_siswa.siswa_id = siswa.id', 'inner');
                 $this->db->where('kelas_siswa.kelas_id', $kelas_id);
                 $this->db->where('siswa.status_id', 1);
-                $result = $this->db->get('kelas_siswa');
-                return $result->num_rows();
+                $result = $this->db->get('kelas_siswa')->row_array();
+                return isset($result['jml']) ? $result['jml'] : 0;
             break;
 
             case 'total':
@@ -49,7 +50,7 @@ class Siswa_model extends CI_Model
                 $this->db->where('status_id !=', '0');
                 $result = $this->db->get('siswa');
                 $result = $result->row_array();
-                return $result['jml'];
+                return isset($result['jml']) ? $result['jml'] : 0;
             break;
 
             case 'pending':
@@ -57,7 +58,7 @@ class Siswa_model extends CI_Model
                 $this->db->where('status_id', '0');
                 $result = $this->db->get('siswa');
                 $result = $result->row_array();
-                return $result['jml'];
+                return isset($result['jml']) ? $result['jml'] : 0;
             break;
 
             default:

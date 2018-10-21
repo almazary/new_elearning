@@ -109,6 +109,9 @@ function default_parser_item($add_item = array())
 
     # load komponen js aplikasi
     $load_js_app = load_comp_js(array(
+        base_url('assets/comp/jquery/jquery.js'),
+        base_url('assets/comp/jquery/jquery-ui-1.10.1.custom.min.js'),
+        base_url('assets/comp/notify/bootstrap-notify.min.js'),
         base_url('assets/comp/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js'),
         base_url('assets/comp/ckeditor/plugins/ckeditor_wiris/integration/WIRISplugins.js?viewer=image'),
         base_url('assets/comp/timeago/jquery.timeago.js'),

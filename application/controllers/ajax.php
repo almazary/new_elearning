@@ -110,37 +110,66 @@ class Ajax extends MY_Controller
             break;
 
             case 'count_new_data':
-                $new_msg          = 0;
-                $pending_siswa    = 0;
-                $pending_pengajar = 0;
-                $unread_laporan   = 0;
+                $return = array();
 
                 # pesan baru
-                if ($this->input->get('new_msg') == 1) {
+                if ($this->input->get('nm') == 1) {
                     $new_msg = $this->msg_model->count(1, get_sess_data('login', 'id'), 'unread');
+                    $return['new_msg'] = (int)$new_msg;
+                    if (!empty($new_msg)) {
+                        // find sender for notification
+                        if ($this->input->get('nmn') == 1) {
+                            $new_msg_sender = array();
+                            $unread_msgs = $this->msg_model->retrieve_all_unread(get_sess_data('login', 'id'));
+                            foreach ($unread_msgs as $retrieve) {
+                                # jika inbox yang dicari pengirimnya
+                                if ($retrieve['type_id'] == 1) {
+                                    $get_user = $retrieve['sender_receiver_id'];
+                                } elseif ($retrieve['type_id'] == 2) {
+                                    $get_user = $retrieve['owner_id'];
+                                }
+
+                                # cari sender/receiver
+                                $login = $this->login_model->retrieve($get_user);
+                                if (!empty($login['siswa_id'])) {
+                                    $user = $this->siswa_model->retrieve($login['siswa_id']);
+                                } elseif (!empty($login['pengajar_id'])) {
+                                    $user = $this->pengajar_model->retrieve($login['pengajar_id']);
+                                }
+
+                                $new_msg_sender[] = __('msg_notify', array('sender' => $user['nama']));
+                            }
+
+                            $return['new_msg_notify'] = $new_msg_sender;
+                        } else {
+                            $return['new_msg_notify'][] = __('msg_notify_unread', array('count' => $new_msg));
+                        }
+                    }
                 }
 
                 # jika login admin
                 if (is_admin()) {
                     # cari jumlah pending siswa
-                    if ($this->input->get('pending_siswa') == 1) {
+                    if ($this->input->get('ps') == 1) {
                         $pending_siswa = $this->siswa_model->count('pending');
+                        $return['pending_siswa'] = (int)$pending_siswa;
                     }
 
                     # cari pending pengajar
-                    if ($this->input->get('pending_pengajar') == 1) {
+                    if ($this->input->get('pp') == 1) {
                         $pending_pengajar = $this->pengajar_model->count('pending');
+                        $return['pending_pengajar'] = (int)$pending_pengajar;
                     }
 
                     # laporan
-                    if ($this->input->get('unread_laporan') == 1) {
-                        $unread_laporan = $this->materi_model->count('unread-laporan');
+                    if ($this->input->get('ul') == 1) {
+                        $unread_laporan = $this->materi_model->count('usiswanread-laporan');
+                        $return['unread_laporan'] = (int)$unread_laporan;
                     }
                 }
 
                 # ambil data login terahir
-                $render_last_login = "";
-                if ($this->input->get('last_login') == 1) {
+                if ($this->input->get('ll') == 1) {
                     $retrieve_last_log = $this->login_model->retrieve_new_log();
                     foreach ($retrieve_last_log as $key => $val) {
                         $retrieve_last_log[$key]['user'] = $this->get_user_data($val['login_id']);
@@ -153,33 +182,10 @@ class Ajax extends MY_Controller
                     }
 
                     $render_last_login = $this->twig->render('last-login-person.html', array('last_login_data' => $retrieve_last_log));
+                    $return['last_login_list'] = $render_last_login;
                 }
 
-                $result = array(
-                    'new_msg'          => $new_msg,
-                    'pending_siswa'    => $pending_siswa,
-                    'pending_pengajar' => $pending_pengajar,
-                    'unread_laporan'   => $unread_laporan,
-                    'last_login_list'  => $render_last_login,
-                );
-
-                if ($this->input->get('new_msg') != 1) {
-                    unset($result['new_msg']);
-                }
-                if ($this->input->get('pending_siswa') != 1) {
-                    unset($result['pending_siswa']);
-                }
-                if ($this->input->get('pending_pengajar') != 1) {
-                    unset($result['pending_pengajar']);
-                }
-                if ($this->input->get('unread_laporan') != 1) {
-                    unset($result['unread_laporan']);
-                }
-                if ($this->input->get('last_login') != 1) {
-                    unset($result['last_login_list']);
-                }
-
-                echo json_encode($result);
+                echo json_encode($return);
             break;
         }
     }
@@ -341,13 +347,9 @@ class Ajax extends MY_Controller
                 }
                 $msg = $msg['retrieve'];
 
-                $this->db->where('owner_id', get_sess_data('login', 'id'));
-                $this->db->where('opened', '0');
-                $this->db->where_in('sender_receiver_id', array(get_sess_data('login', 'id'), $msg['sender_receiver_id']));
-                $this->db->order_by('id', 'ASC');
-                $results = $this->db->get('messages');
+                $unread_msgs = $this->msg_model->retrieve_all_unread(get_sess_data('login', 'id'), array(get_sess_data('login', 'id'), $msg['sender_receiver_id']));
 
-                foreach ($results->result_array() as $retrieve) {
+                foreach ($unread_msgs as $retrieve) {
                     $this->msg_model->update_read($retrieve['id']);
 
                     # jika inbox yang dicari pengirimnya

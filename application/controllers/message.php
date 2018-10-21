@@ -149,12 +149,14 @@ class Message extends MY_Controller
         if ($retrieve['retrieve']['opened'] != 1) {
             $this->msg_model->update_read($msg_id);
             $retrieve['retrieve']['opened'] = 1;
+            cd("format_msg_{$msg_id}");
         }
 
         foreach ($retrieve['old_related_msg'] as $key => $old_msg) {
             if ($old_msg['opened'] != 1) {
                 $this->msg_model->update_read($old_msg['id']);
                 $retrieve['old_related_msg'][$key]['opened'] = 1;
+                cd("format_msg_{$old_msg['id']}");
             }
         }
 
@@ -162,6 +164,7 @@ class Message extends MY_Controller
             if ($new_msg['opened'] != 1) {
                 $this->msg_model->update_read($new_msg['id']);
                 $retrieve['new_related_msg'][$key]['opened'] = 1;
+                cd("format_msg_{$new_msg['id']}");
             }
         }
 
