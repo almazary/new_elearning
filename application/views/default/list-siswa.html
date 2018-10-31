@@ -1,29 +1,32 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Data Siswa - {{ parent() }}
+{{ __('student') }} - {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">{{ __('student') }}</li>
 {% endblock %}
 
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>Data Siswa</h3>
+        <h3>{{ __('student') }}</h3>
     </div>
     <div class="module-body">
         {{ get_flashdata('siswa')|raw }}
 
         <div class="row-fluid">
             <div class="span7">
-                <a href="{{ site_url('siswa/add/' ~ status_id) }}" class="btn btn-primary">Tambah Siswa</a>
+                <a href="{{ site_url('siswa/add/' ~ status_id) }}" class="btn btn-primary">{{ __('add') }}</a>
             </div>
 
             <div class="span5">
                 <div class="btn-group pull-right">
-                    {{ anchor('siswa/index/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/0', 'Pending ' ~ ((count_pending > 0) ? '<span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/3', 'Alumni', {'class' : (status_id == 3) ? 'btn btn-info' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/1', __('student_status_active'), {'class' : (status_id == 1) ? 'btn btn-primary' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/0', __('student_status_pending') ~ ((count_pending > 0) ? ' <span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-primary' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/3', __('student_status_alumni'), {'class' : (status_id == 3) ? 'btn btn-primary' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> ' ~ __('filter_student'), {'class' : 'btn btn-default'})|raw }}
                 </div>
             </div>
         </div>
@@ -37,9 +40,9 @@ Data Siswa - {{ parent() }}
                         {% if status_id == 0 or status_id == 2 %}
                             <input type="checkbox" style="margin-top:-2px;" onclick="filter_siswa_ch_uch_checkbox(this)">
                         {% endif %}
-                        ID
+                        {{ __('student_id') }}
                     </th>
-                    <th>Informasi Siswa</th>
+                    <th>{{ __('student_info') }}</th>
                     <th width="22%"></th>
                 </tr>
             </thead>
@@ -59,9 +62,9 @@ Data Siswa - {{ parent() }}
                     </td>
                     <td>
                         <ul class="nav nav-pills" style="margin-bottom:0px;">
-                            <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> {{ __('detail') }}</a></li>
                             <li class="dropdown">
-                                <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
+                                <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> {{ __('edit') }} <b class="caret" style="margin-top:5px;"></b></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
                                     <li>{{ anchor('siswa/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'siswa-iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
                                     <li>{{ anchor('siswa/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'siswa-iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>

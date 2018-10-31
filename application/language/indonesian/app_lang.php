@@ -106,7 +106,6 @@ $lang['notif_student_pass_equal_key'] = "Dimohon untuk segera mengganti password
 $lang['login_history'] = "Riwayat login pengguna";
 $lang['update_info'] = "Info update";
 
-$lang['student_pending'] = "Siswa Menunggu Aktifasi";
 $lang['teacher_pending'] = "Pengajar Menunggu Aktifasi";
 
 $lang['welcome_to'] = "Selamat datang kembali di";
@@ -167,3 +166,11 @@ $lang['msg_yes_delete'] = "Ya Hapus";
 $lang['msg_conversation_delete'] = "Anda yakin ingin menghapus percakapan ini?";
 $lang['msg_notify'] = "Pesan baru dari <b>{sender}</b>.";
 $lang['msg_notify_unread'] = "Ada <b>{count}</b> pesan belum dibaca.";
+
+$lang['student_pending'] = "Siswa Belum Aktif";
+$lang['student_status_active'] = "Aktif";
+$lang['student_status_pending'] = "Belum Aktif";
+$lang['student_status_block'] = "Cegah Login";
+$lang['student_status_alumni'] = "Alumni";
+$lang['student_id'] = "ID";
+$lang['student_info'] = "Informasi Siswa";

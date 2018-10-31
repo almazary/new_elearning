@@ -39,6 +39,27 @@ class Siswa extends MY_Controller
         must_login();
     }
 
+    private function reset_cache()
+    {
+        $keys = cg('keys_siswa_retrieve_all');
+        if (!empty($keys)) {
+            foreach ($keys as $v) {
+                cd($v);
+            }
+
+            cd('keys_siswa_retrieve_all');
+        }
+
+        $keys = cg('keys_siswa_retrieve');
+        if (!empty($keys)) {
+            foreach ($keys as $v) {
+                cd($v);
+            }
+
+            cd('keys_siswa_retrieve');
+        }
+    }
+
     function index($segment_3 = '', $segment_4 = '')
     {
         if (is_pengajar() or is_siswa()) {
@@ -55,29 +76,81 @@ class Siswa extends MY_Controller
             $page_no = 1;
         }
 
-        # ambil semua data siswa
-        $retrieve_all = $this->siswa_model->retrieve_all(20, $page_no, null, null, $status_id);
+        // get cache
+        $cache_key = "siswa_retrieve_all_{$this->no_of_records()}_{$page_no}_{$status_id}";
 
-        # dapatkan data2 siswa
-        foreach ($retrieve_all['results'] as $key => $val) {
-            $kelas_siswa = $this->kelas_model->retrieve_siswa(null, array(
-                'siswa_id' => $val['id'],
-                'aktif'    => 1
-            ));
+        // save key
+        $cache_get_keys = cg('keys_siswa_retrieve_all');
+        if ($cache_get_keys === false) {
+            cs('keys_siswa_retrieve_all', array($cache_key));
+        } else {
+            if (!in_array($cache_key, $cache_get_keys)) {
+                $cache_get_keys[] = $cache_key;
+                cs('keys_siswa_retrieve_all', $cache_get_keys);
+            }
+        }
 
-            # kelas aktif
-            if (!empty($kelas_siswa) AND $val['status_id'] != 3) {
-                $kelas              = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
-                $val['kelas_aktif'] = $kelas;
+        $cache_get = cg($cache_key);
+        if ($cache_get === false) {
+            # ambil semua data siswa
+            $retrieve_all = $this->siswa_model->retrieve_all($this->no_of_records(), $page_no, null, null, $status_id);
+
+            # dapatkan data2 siswa
+            foreach ($retrieve_all['results'] as $key => $val) {
+                // get cache kelas siswa
+                $cache_key2 = "kelas_retrieve_siswa_" . json_encode(array(
+                    'siswa_id' => $val['id'],
+                    'aktif'    => 1
+                ));
+
+                $cache_get2 = cg($cache_key2);
+                if ($cache_get2 === false) {
+                    $kelas_siswa = $this->kelas_model->retrieve_siswa(null, array(
+                        'siswa_id' => $val['id'],
+                        'aktif'    => 1
+                    ));
+
+                    cs($cache_key2, $kelas_siswa);
+                } else {
+                    $kelas_siswa = $cache_get2;
+                }
+
+                # kelas aktif
+                if (!empty($kelas_siswa) AND $val['status_id'] != 3) {
+                    $cache_key2 = "kelas_retrieve_{$kelas_siswa['kelas_id']}";
+                    $cache_get2 = cg($cache_key2);
+                    if ($cache_get2 === false) {
+                        $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
+                        cs($cache_key2, $kelas);
+                    } else {
+                        $kelas = $cache_get2;
+                    }
+
+                    $val['kelas_aktif'] = $kelas;
+                }
+
+                $retrieve_all['results'][$key] = $val;
             }
 
-            $retrieve_all['results'][$key] = $val;
+            //save
+            cs($cache_key, $retrieve_all);
+        } else {
+            $retrieve_all = $cache_get;
         }
 
         $data['status_id']  = $status_id;
         $data['siswas']     = $retrieve_all['results'];
         $data['pagination'] = $this->pager->view($retrieve_all, 'siswa/index/'.$status_id.'/');
-        $data['count_pending'] = $this->siswa_model->count('pending');
+
+        $cache_key = "siswa_count_pending";
+        $cache_get = cg($cache_key);
+        if ($cache_get === false) {
+            $count_pending = $this->siswa_model->count('pending');
+            cs($cache_key, $count_pending);
+        } else {
+            $count_pending = $cache_get;
+        }
+        $data['count_pending'] = $count_pending;
 
         # panggil colorbox
         $html_js = load_comp_js(array(
@@ -86,6 +159,7 @@ class Siswa extends MY_Controller
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
+        // handle update status
         if (isset($_POST['status_id']) AND !empty($_POST['status_id'])) {
             $post_status_id = $this->input->post('status_id', TRUE);
             $siswa_ids      = $this->input->post('siswa_id', TRUE);
