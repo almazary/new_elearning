@@ -1,4 +1,5 @@
 <?php
+
 $lang['minute'] = "menit";
 $lang['seconds'] = "detik";
 $lang['male'] = "Laki-laki";
@@ -170,7 +171,14 @@ $lang['msg_notify_unread'] = "Ada <b>{count}</b> pesan belum dibaca.";
 $lang['student_pending'] = "Siswa Belum Aktif";
 $lang['student_status_active'] = "Aktif";
 $lang['student_status_pending'] = "Belum Aktif";
-$lang['student_status_block'] = "Cegah Login";
+$lang['student_status_block'] = "Larang Masuk";
 $lang['student_status_alumni'] = "Alumni";
 $lang['student_id'] = "ID";
 $lang['student_info'] = "Informasi Siswa";
+$lang['student_info_alumni'] = "Informasi Alumni";
+$lang['student_edit_profile'] = "Ubah Profil";
+$lang['student_edit_picture'] = "Ubah Foto";
+$lang['student_edit_class_active'] = "Ubah Kelas Aktif";
+$lang['student_edit_username'] = "Ubah Username";
+$lang['student_edit_password'] = "Ubah Password";
+$lang['student_edit_selected'] = "Ubah Status Terpilih";

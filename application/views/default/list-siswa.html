@@ -23,9 +23,9 @@
 
             <div class="span5">
                 <div class="btn-group pull-right">
-                    {{ anchor('siswa/index/1', __('student_status_active'), {'class' : (status_id == 1) ? 'btn btn-primary' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/0', __('student_status_pending') ~ ((count_pending > 0) ? ' <span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-primary' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/3', __('student_status_alumni'), {'class' : (status_id == 3) ? 'btn btn-primary' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/1', __('student_status_active'), {'class' : (status_id == 1) ? 'btn btn-success' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/0', __('student_status_pending') ~ ((count_pending > 0) ? ' <span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-success' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/3', __('student_status_alumni'), {'class' : (status_id == 3) ? 'btn btn-success' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> ' ~ __('filter_student'), {'class' : 'btn btn-default'})|raw }}
                 </div>
             </div>
@@ -38,11 +38,17 @@
                 <tr>
                     <th width="7%">
                         {% if status_id == 0 or status_id == 2 %}
-                            <input type="checkbox" style="margin-top:-2px;" onclick="filter_siswa_ch_uch_checkbox(this)">
+                            <input type="checkbox" id="checkbox-all-student" style="margin-top:-2px;">
                         {% endif %}
                         {{ __('student_id') }}
                     </th>
-                    <th>{{ __('student_info') }}</th>
+                    <th>
+                        {% if status_id == 3 %}
+                            {{ __('student_info_alumni') }}
+                        {% else %}
+                            {{ __('student_info') }}
+                        {% endif %}
+                    </th>
                     <th width="22%"></th>
                 </tr>
             </thead>
@@ -51,7 +57,7 @@
                 <tr>
                     <td>
                         {% if status_id == 0 or status_id == 2 %}
-                            <input type="checkbox" name="siswa_id[]" value="{{ v.id }}" style="margin-top:-2px;">
+                            <input type="checkbox" name="siswa_id[]" value="{{ v.id }}" style="margin-top:-2px;" class="checkbox-student">
                         {% endif %}
                         <b>{{ v.id }}</b>
                     </td>
@@ -66,13 +72,13 @@
                             <li class="dropdown">
                                 <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> {{ __('edit') }} <b class="caret" style="margin-top:5px;"></b></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
-                                    <li>{{ anchor('siswa/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'siswa-iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
-                                    <li>{{ anchor('siswa/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'siswa-iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_profile/' ~ status_id ~ '/' ~ v.id, __('student_edit_profile'), {'class' : 'siswa-iframe-4', 'title' : __('student_edit_profile')})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_picture/' ~ status_id ~ '/' ~ v.id, __('student_edit_picture'), {'class' : 'siswa-iframe-5', 'title' : __('student_edit_picture')})|raw }}</li>
                                     {% if status_id != 3 %}
-                                    <li>{{ anchor('siswa/moved_class/' ~ status_id ~ '/' ~ v.id, 'Edit Kelas Aktif', {'class' : 'siswa-iframe', 'title' : 'Edit Kelas Aktif'})|raw }}</li>
+                                    <li>{{ anchor('siswa/moved_class/' ~ status_id ~ '/' ~ v.id, __('student_edit_class_active'), {'class' : 'siswa-iframe', 'title' : __('student_edit_class_active')})|raw }}</li>
                                     {% endif %}
-                                    <li>{{ anchor('siswa/edit_username/' ~ status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'siswa-iframe-2', 'title' : 'Edit Username Siswa'})|raw }}</li>
-                                    <li>{{ anchor('siswa/edit_password/' ~ status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'siswa-iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_username/' ~ status_id ~ '/' ~ v.id, __('student_edit_username'), {'class' : 'siswa-iframe-2', 'title' : __('student_edit_username')})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_password/' ~ status_id ~ '/' ~ v.id, __('student_edit_password'), {'class' : 'siswa-iframe-3', 'title' : __('student_edit_password')})|raw }}</li>
                                 </ul>
                             </li>
                         </ul>
@@ -88,20 +94,20 @@
             <div class="span7">
                 <table cellpadding="5">
                     <tr>
-                        <th valign="top">Update Status Terpilih</th>
+                        <th valign="top">{{ __('student_edit_selected') }}</th>
                         <td valign="top">
                             <select name="status_id" style="width:100%;">
-                                <option>--Pilih Status--</option>
-                                <option value="1">Aktif</option>
+                                <option>--{{ __('choose') }}--</option>
+                                <option value="1">{{ __('student_status_active') }}</option>
                                 {% if status_id == 0 %}
-                                <option value="2">Blocking</option>
+                                <option value="2">{{ __('student_status_block') }}</option>
                                 {% elseif status_id == 2 %}
-                                <option value="3">Alumni</option>
+                                <option value="3">{{ __('student_status_alumni') }}</option>
                                 {% endif %}
                             </select>
                         </td>
                         <td valign="top">
-                            <button type="submit" class="btn">Update</button>
+                            <button type="submit" class="btn">{{ __('edit') }}</button>
                         </td>
                     </tr>
                 </table>
@@ -110,10 +116,9 @@
         {% endif %}
 
         {{ form_close()|raw }}
-
-        <br>
+    </div>
+    <div class="module-foot">
         {{ pagination|raw }}
-
     </div>
 </div>
 {% endblock %}

@@ -58,6 +58,9 @@ class Siswa extends MY_Controller
 
             cd('keys_siswa_retrieve');
         }
+
+        // remove count
+        cd("siswa_count_pending");
     }
 
     function index($segment_3 = '', $segment_4 = '')
@@ -185,6 +188,12 @@ class Siswa extends MY_Controller
                         @kirim_email_approve_siswa($retrieve_siswa['id']);
                     }
                 }
+            }
+
+
+            // reset cache
+            if (!empty($siswa_ids)) {
+                $this->reset_cache();
             }
 
             redirect('siswa/index/' . $post_status_id);

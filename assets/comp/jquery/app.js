@@ -205,45 +205,45 @@
   }
 
   // filter pengajar
-  function filter_pengajar_ch_uch_checkbox (source) {
-    let checkboxes = document.getElementsByName('pengajar_id[]')
-    for (var i = 0, n = checkboxes.length; i < n; i++) {
-      checkboxes[i].checked = source.checked
-    }
-  }
-
-  // tambah siswa
-  function username_default () {
-    if (document.getElementById('default_username').checked) {
-      var nis = $('#nis').val()
-      if (nis === '') {
-        nis = new Date().getTime()
-      }
-      $('#username').val(nis + '@example.sch.id')
-    } else {
-      $('#username').val('')
-    }
-  }
-
-  // filter siswa
-  function filter_siswa_ch_uch_checkbox (source) {
-    let checkboxes = document.getElementsByName('siswa_id[]')
-    for (var i = 0, n = checkboxes.length; i < n; i++) {
-      checkboxes[i].checked = source.checked
-    }
-  }
-
-  function username_default_pengajar () {
-    if (document.getElementById('default_username').checked) {
-      var nip = $('#nip').val()
-      if (nip === '') {
-        nip = new Date().getTime()
-      }
-      $('#username').val(nip + '@example.sch.id')
-    } else {
-      $('#username').val('')
-    }
-  }
+  // function filter_pengajar_ch_uch_checkbox (source) {
+  //  let checkboxes = document.getElementsByName('pengajar_id[]')
+  //  for (var i = 0, n = checkboxes.length; i < n; i++) {
+  //    checkboxes[i].checked = source.checked
+  //  }
+  // }
+  //
+  /// / tambah siswa
+  // function username_default () {
+  //  if (document.getElementById('default_username').checked) {
+  //    var nis = $('#nis').val()
+  //    if (nis === '') {
+  //      nis = new Date().getTime()
+  //    }
+  //    $('#username').val(nis + '@example.sch.id')
+  //  } else {
+  //    $('#username').val('')
+  //  }
+  // }
+  //
+  /// / filter siswa
+  // function filter_siswa_ch_uch_checkbox (source) {
+  //  let checkboxes = document.getElementsByName('siswa_id[]')
+  //  for (var i = 0, n = checkboxes.length; i < n; i++) {
+  //    checkboxes[i].checked = source.checked
+  //  }
+  // }
+  //
+  // function username_default_pengajar () {
+  //  if (document.getElementById('default_username').checked) {
+  //    var nip = $('#nip').val()
+  //    if (nip === '') {
+  //      nip = new Date().getTime()
+  //    }
+  //    $('#username').val(nip + '@example.sch.id')
+  //  } else {
+  //    $('#username').val('')
+  //  }
+  // }
 
   function afterInitLoad (param) {
     const isUserLoggedIn = parseInt(param.is_user_logged_in)
@@ -630,6 +630,18 @@
           fixed: true
         })
       }
+
+      // checkbox siswa
+      $('#checkbox-all-student:checkbox').on('change', function () {
+        var newStatus = false
+        if ($(this).prop('checked')) {
+          newStatus = true
+        }
+
+        $('.checkbox-student:checkbox').each(function () {
+          $(this).prop('checked', newStatus)
+        })
+      })
     }
   }
 })(window.jQuery)
