@@ -33,6 +33,7 @@
         <br>
 
         {{ form_open('siswa/index/' ~ status_id)|raw }}
+        <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -49,7 +50,7 @@
                             {{ __('student_info') }}
                         {% endif %}
                     </th>
-                    <th width="22%"></th>
+                    <th width="27%"></th>
                 </tr>
             </thead>
             <tbody>
@@ -87,6 +88,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        </div>
 
         {% if siswas is not empty and (status_id == 0 or status_id == 2) %}
         <br>
