@@ -18,6 +18,7 @@ $lang['edit'] = "Ubah";
 $lang['remove'] = "Hapus";
 $lang['detail'] = "Detail";
 $lang['cancel'] = "Batal";
+$lang['apply'] = "Terapkan";
 
 $lang['islam'] = "Islam";
 $lang['christian'] = "Kristen";
@@ -156,6 +157,7 @@ $lang['back'] = "Kembali";
 $lang['record_not_found'] = "Data tidak ditemukan.";
 $lang['access_denied'] = "Akses ditolak.";
 $lang['insert_error'] = "Mohon maaf terjadi masalah saat memasukkan data.";
+$lang['search_param'] = "Parameter Pencarian";
 
 $lang['msg'] = "Pesan";
 $lang['msg_err_sendto_yourself'] = "Anda tidak dapat mengirim pesan ke diri sendiri.";
@@ -203,3 +205,6 @@ $lang['student_username'] = "Username";
 $lang['student_username_info'] = "Harus Email";
 $lang['student_password'] = "Password";
 $lang['student_password_confirm'] = "Ulangi Password";
+$lang['student_status'] = "Status";
+$lang['student_update_status'] = "Ubah Status";
+$lang['student_move_class'] = "Pindah Kelas";

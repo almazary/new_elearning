@@ -21,9 +21,9 @@
 
             <div class="span5">
                 <div class="btn-group pull-right">
-                    {{ anchor('siswa/index/1', __('student_status_active'), {'class' : (status_id == 1) ? 'btn btn-success' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/0', __('student_status_pending') ~ ((count_pending > 0) ? ' <span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-success' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/3', __('student_status_alumni'), {'class' : (status_id == 3) ? 'btn btn-success' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/1', __('student_status_active'), {'class' : (status_id == 1) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/0', __('student_status_pending') ~ ((count_pending > 0) ? ' <span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/3', __('student_status_alumni'), {'class' : (status_id == 3) ? 'btn btn-info' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> ' ~ __('filter_student'), {'class' : 'btn btn-default'})|raw }}
                 </div>
             </div>
@@ -99,7 +99,7 @@
                         <th valign="top">{{ __('student_edit_selected') }}</th>
                         <td valign="top">
                             <select name="status_id" style="width:100%;">
-                                <option>--{{ __('choose') }}--</option>
+                                <option>{{ __('choose') }}</option>
                                 <option value="1">{{ __('student_status_active') }}</option>
                                 {% if status_id == 0 %}
                                 <option value="2">{{ __('student_status_block') }}</option>

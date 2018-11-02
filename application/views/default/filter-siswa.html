@@ -1,30 +1,32 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Filter Siswa - {{ parent() }}
+{{ __('student') }} - {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li>{{ anchor('siswa', __('student'))|raw }} <span class="divider">/</span></li>
+<li class="active">{{ __('filter_student') }}</li>
 {% endblock %}
 
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>Filter Siswa</h3>
+        <h3>{{ __('student') }}</h3>
     </div>
     <div class="module-body">
-        {{ get_flashdata('siswa')|raw }}
-
         {% if is_admin() == true %}
         <div class="row-fluid">
             <div class="span7">
-                <a href="{{ site_url('siswa/add/1') }}" class="btn btn-primary">Tambah Siswa</a>
+                <a href="{{ site_url('siswa/add/1') }}" class="btn btn-primary">{{ __('add') }}</a>
             </div>
 
             <div class="span5">
                 <div class="btn-group pull-right">
-                    {{ anchor('siswa/index/1', 'Aktif', {'class' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/0', 'Pending ' ~ ((count_pending > 0) ? '<span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/2', 'Blocking', {'class' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/3', 'Alumni', {'class' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-info'})|raw }}
+                    {{ anchor('siswa/index/1', __('student_status_active'), {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/0', __('student_status_pending') ~ ((count_pending > 0) ? '<span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/3', __('student_status_alumni'), {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> ' ~ __('filter_student'), {'class' : 'btn btn-info'})|raw }}
                 </div>
             </div>
         </div>
@@ -32,85 +34,85 @@ Filter Siswa - {{ parent() }}
         {% endif %}
 
         <div class="bs-callout bs-callout-info">
-            <b class="as-link" data-toggle="collapse" data-target="#form-filter"><i class="icon-search"></i> PARAMETER PENCARIAN</b>
-            <div id="form-filter" class="collapse">
+            <p><b><i class="icon-search"></i> {{ __('search_param')|upper }}</b><p>
+            <div id="form-filter">
                 {{ form_open('siswa/filter')|raw }}
                 <table class="table table-condensed" id="form-search">
                     <tr>
-                        <th width="20%">NIS</th>
+                        <th width="20%">{{ __('student_key') }}</th>
                         <td>
                             <input type="text" name="nis" class="span2" style="margin-bottom:0px;" value="{{ set_value('nis', (filter.nis is defined) ? filter.nis) }}">
                         </td>
                     </tr>
                     <tr>
-                        <th>Nama</th>
+                        <th>{{ __('student_name') }}</th>
                         <td>
                             <input type="text" name="nama" class="span4" style="margin-bottom:0px;" value="{{ set_value('nama', (filter.nama is defined) ? filter.nama) }}">
                         </td>
                     </tr>
                     <tr>
-                        <th>Jenis Kelamin</th>
+                        <th>{{ __('student_gender') }}</th>
                         <td>
                             <p style="margin-top:0px; margin-bottom:5px;">
                             <label class="checkbox inline">
-                                <input type="checkbox" name="jenis_kelamin[]" value="Laki-laki" {{ set_checkbox('jenis_kelamin[]', 'Laki-laki', (filter.jenis_kelamin is defined and 'Laki-laki' in filter.jenis_kelamin) ? TRUE : FALSE) }}> Laki-laki
+                                <input type="checkbox" name="jenis_kelamin[]" value="Laki-laki" {{ set_checkbox('jenis_kelamin[]', 'Laki-laki', (filter.jenis_kelamin is defined and 'Laki-laki' in filter.jenis_kelamin) ? TRUE : FALSE) }}> {{ __('male') }}
                             </label>
                             <label class="checkbox inline">
-                                <input type="checkbox" name="jenis_kelamin[]" value="Perempuan" {{ set_checkbox('jenis_kelamin[]', 'Perempuan', (filter.jenis_kelamin is defined and 'Perempuan' in filter.jenis_kelamin) ? TRUE : FALSE) }}> Perempuan
+                                <input type="checkbox" name="jenis_kelamin[]" value="Perempuan" {{ set_checkbox('jenis_kelamin[]', 'Perempuan', (filter.jenis_kelamin is defined and 'Perempuan' in filter.jenis_kelamin) ? TRUE : FALSE) }}> {{ __('female') }}
                             </label>
                             </p>
                         </td>
                     <tr>
                     <tr>
-                        <th>Tahun Masuk</th>
+                        <th>{{ __('student_join_year') }}</th>
                         <td>
                             <input type="text" name="tahun_masuk" maxlength="4" style="width:15%;margin-bottom:0px;" value="{{ set_value('tahun_masuk', (filter.tahun_masuk is defined) ? filter.tahun_masuk) }}">
                         </td>
                     <tr>
                     <tr>
-                        <th>Tempat Lahir</th>
+                        <th>{{ __('student_born_in') }}</th>
                         <td>
                             <input type="text" name="tempat_lahir" class="span3" style="margin-bottom:0px;" value="{{ set_value('tempat_lahir', (filter.tempat_lahir is defined) ? filter.tempat_lahir) }}">
                         </td>
                     <tr>
                     <tr>
-                        <th>Tanggal Lahir</th>
+                        <th>{{ __('student_born_on') }}</th>
                         <td>
                             <select class="span2" style="width: 10%;" name="tgl_lahir">
-                                <option value="">Tgl</option>
+                                <option value="">{{ __('date_short') }}</option>
                                 {% for i in 1..31 %}
                                     <option value="{{ i }}" {{ set_select('tgl_lahir', i, (filter.tgl_lahir is defined and i == filter.tgl_lahir) ? TRUE : FALSE) }}>{{ i }}</option>
                                 {% endfor %}
                             </select>
                             <select class="span2" style="width: 17%;" name="bln_lahir">
-                                <option value="">Bulan</option>
+                                <option value="">{{ __('month') }}</option>
                                 {% for i in 1..12 %}
                                     <option value="{{ i }}" {{ set_select('bln_lahir', i, (filter.bln_lahir is defined and i == filter.bln_lahir) ? TRUE : FALSE) }}>{{ get_indo_bulan(i) }}</option>
                                 {% endfor %}
                             </select>
-                            <input type="text" name="thn_lahir" class="span1" maxlength="4" value="{{ set_value('thn_lahir', (filter.thn_lahir is defined) ? filter.thn_lahir) }}" placeholder="Tahun">
+                            <input type="text" name="thn_lahir" class="span1" maxlength="4" value="{{ set_value('thn_lahir', (filter.thn_lahir is defined) ? filter.thn_lahir) }}" placeholder="{{ __('year') }}">
                         </td>
                     <tr>
                     <tr>
-                        <th>Alamat</th>
+                        <th>{{ __('student_address') }}</th>
                         <td>
                             <input type="text" name="alamat" class="span4" style="margin-bottom:0px;" value="{{ set_value('alamat', (filter.alamat is defined) ? filter.alamat) }}">
                         </td>
                     <tr>
                     <tr>
-                        <th>Agama</th>
+                        <th>{{ __('student_religion') }}</th>
                         <td>
                             <p style="margin-top:0px; margin-bottom:5px;">
-                                <label class="checkbox inline"><input type="checkbox" name="agama[]" value="ISLAM" {{ set_checkbox('agama[]', 'ISLAM', (filter.agama is defined and 'ISLAM' in filter.agama) ? TRUE : FALSE) }}>ISLAM</label>
-                                <label class="checkbox inline"><input type="checkbox" name="agama[]" value="KRISTEN" {{ set_checkbox('agama[]', 'KRISTEN', (filter.agama is defined and 'KRISTEN' in filter.agama) ? TRUE : FALSE) }}>KRISTEN</label>
-                                <label class="checkbox inline"><input type="checkbox" name="agama[]" value="KATOLIK" {{ set_checkbox('agama[]', 'KATOLIK', (filter.agama is defined and 'KATOLIK' in filter.agama) ? TRUE : FALSE) }}>KATOLIK</label>
-                                <label class="checkbox inline"><input type="checkbox" name="agama[]" value="HINDU" {{ set_checkbox('agama[]', 'HINDU', (filter.agama is defined and 'HINDU' in filter.agama) ? TRUE : FALSE) }}>HINDU</label>
-                                <label class="checkbox inline"><input type="checkbox" name="agama[]" value="BUDHA" {{ set_checkbox('agama[]', 'BUDHA', (filter.agama is defined and 'BUDHA' in filter.agama) ? TRUE : FALSE) }}>BUDHA</label>
+                            <label class="checkbox inline"><input type="checkbox" name="agama[]" value="ISLAM" {{ set_checkbox('agama[]', 'ISLAM', (filter.agama is defined and 'ISLAM' in filter.agama) ? TRUE : FALSE) }}>{{ __('islam')|upper }}</label>
+                                <label class="checkbox inline"><input type="checkbox" name="agama[]" value="KRISTEN" {{ set_checkbox('agama[]', 'KRISTEN', (filter.agama is defined and 'KRISTEN' in filter.agama) ? TRUE : FALSE) }}>{{ __('christian')|upper }}</label>
+                                <label class="checkbox inline"><input type="checkbox" name="agama[]" value="KATOLIK" {{ set_checkbox('agama[]', 'KATOLIK', (filter.agama is defined and 'KATOLIK' in filter.agama) ? TRUE : FALSE) }}>{{ __('catholic')|upper }}</label>
+                                <label class="checkbox inline"><input type="checkbox" name="agama[]" value="HINDU" {{ set_checkbox('agama[]', 'HINDU', (filter.agama is defined and 'HINDU' in filter.agama) ? TRUE : FALSE) }}>{{ __('hindu')|upper }}</label>
+                                <label class="checkbox inline"><input type="checkbox" name="agama[]" value="BUDHA" {{ set_checkbox('agama[]', 'BUDHA', (filter.agama is defined and 'BUDHA' in filter.agama) ? TRUE : FALSE) }}>{{ __('buddha')|upper }}</label>
                             </p>
                         </td>
                     <tr>
                     <tr>
-                        <th>Kelas</th>
+                        <th>{{ __('student_class') }}</th>
                         <td>
                             <ul class="unstyled inline" style="margin-left: -5px;">
                                 {% for k in kelas_all %}
@@ -120,21 +122,21 @@ Filter Siswa - {{ parent() }}
                         </td>
                     <tr>
                     <tr>
-                        <th>Status</th>
+                        <th>{{ __('student_status') }}</th>
                         <td>
                             <p style="margin-top:0px; margin-bottom:5px;">
                                 {% if is_admin() %}
-                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="0" {{ set_checkbox('status_id[]', '0', (filter.status_id is defined and 0 in filter.status_id) ? TRUE : FALSE) }}> Pending</label>
-                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="1" {{ set_checkbox('status_id[]', '1', (filter.status_id is defined and 1 in filter.status_id) ? TRUE : FALSE) }}> Aktif</label>
-                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="2" {{ set_checkbox('status_id[]', '2', (filter.status_id is defined and 2 in filter.status_id) ? TRUE : FALSE) }}> Blocking</label>
+                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="0" {{ set_checkbox('status_id[]', '0', (filter.status_id is defined and 0 in filter.status_id) ? TRUE : FALSE) }}> {{ __('student_status_pending') }}</label>
+                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="1" {{ set_checkbox('status_id[]', '1', (filter.status_id is defined and 1 in filter.status_id) ? TRUE : FALSE) }}> {{ __('student_status_active') }}</label>
+                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="2" {{ set_checkbox('status_id[]', '2', (filter.status_id is defined and 2 in filter.status_id) ? TRUE : FALSE) }}> {{ __('student_status_block') }}</label>
                                 {% endif %}
-                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="3" {{ set_checkbox('status_id[]', '3', (filter.status_id is defined and 3 in filter.status_id) ? TRUE : FALSE) }}> Alumni</label>
+                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="3" {{ set_checkbox('status_id[]', '3', (filter.status_id is defined and 3 in filter.status_id) ? TRUE : FALSE) }}> {{ __('student_status_alumni') }}</label>
                             </p>
                         </td>
                     <tr>
                     {% if is_admin() %}
                     <tr>
-                        <th>Username</th>
+                        <th>{{ __('student_username') }}</th>
                         <td>
                             <input type="text" name="username" class="span3" style="margin-bottom:0px;" value="{{ set_value('username', (filter.username is defined) ? filter.username) }}">
                         </td>
@@ -143,27 +145,31 @@ Filter Siswa - {{ parent() }}
                     <tr>
                         <td></td>
                         <td>
-                            <button type="submit" class="btn btn-primary">Filter</button>
+                            <button type="submit" class="btn btn-primary">{{ __('filter_student') }}</button>
                         </td>
                     </tr>
                 </table>
                 {{ form_close()|raw }}
             </div>
         </div>
-
         <br>
 
+        {{ get_flashdata('siswa')|raw }}
+
         {{ form_open('siswa/filter_action')|raw }}
+        <div class="table-responsive" id="filter-results">
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th width="7%">
                         {% if is_admin() and (status_id == 0 or status_id == 2) %}
-                            <input type="checkbox" style="margin-top:-2px;" onclick="filter_siswa_ch_uch_checkbox(this)">
+                            <input type="checkbox" id="checkbox-all-student" style="margin-top:-2px;">
                         {% endif %}
-                        ID
+                        {{ __('student_id') }}
                     </th>
-                    <th>Informasi Siswa</th>
+                    <th>
+                        {{ __('student_info') }}
+                    </th>
                     <th width="22%"></th>
                 </tr>
             </thead>
@@ -172,7 +178,7 @@ Filter Siswa - {{ parent() }}
                 <tr>
                     <td>
                         {% if is_admin() %}
-                        <input type="checkbox" name="siswa_id[]" value="{{ v.id }}" style="margin-top:-2px;" {{ (v.status_id == 3) ? 'disabled' }}>
+                        <input type="checkbox" name="siswa_id[]" value="{{ v.id }}" style="margin-top:-2px;" class="checkbox-student" {{ (v.status_id == 3) ? 'disabled' }}>
                         {% endif %}
                         <b>{{ v.id }}</b>
                     </td>
@@ -184,21 +190,21 @@ Filter Siswa - {{ parent() }}
                     <td>
                         <ul class="nav nav-pills" style="margin-bottom:0px;">
                             {% if is_admin() %}
-                            <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> {{ __('detail') }}</a></li>
                             <li class="dropdown">
-                                <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
+                                <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> {{ __('edit') }} <b class="caret" style="margin-top:5px;"></b></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
-                                    <li>{{ anchor('siswa/edit_profile/' ~ v.status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'siswa-iframe-4', 'title' : 'Edit Profil Siswa'})|raw }}</li>
-                                    <li>{{ anchor('siswa/edit_picture/' ~ v.status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'siswa-iframe-5', 'title' : 'Edit Foto Siswa'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_profile/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_profile'), {'class' : 'siswa-iframe-4', 'title' : __('student_edit_profile')})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_picture/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_picture'), {'class' : 'siswa-iframe-5', 'title' : __('student_edit_picture')})|raw }}</li>
                                     {% if v.status_id != 3 %}
-                                    <li>{{ anchor('siswa/moved_class/' ~ v.status_id ~ '/' ~ v.id, 'Edit Kelas Aktif', {'class' : 'siswa-iframe', 'title' : 'Edit Kelas Aktif'})|raw }}</li>
+                                    <li>{{ anchor('siswa/moved_class/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_class_active'), {'class' : 'siswa-iframe', 'title' : __('student_edit_class_active')})|raw }}</li>
                                     {% endif %}
-                                    <li>{{ anchor('siswa/edit_username/' ~ v.status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'siswa-iframe-2', 'title' : 'Edit Username Siswa'})|raw }}</li>
-                                    <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'siswa-iframe-3', 'title' : 'Edit Password Siswa'})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_username/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_username'), {'class' : 'siswa-iframe-2', 'title' : __('student_edit_username')})|raw }}</li>
+                                    <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_password'), {'class' : 'siswa-iframe-3', 'title' : __('student_edit_password')})|raw }}</li>
                                 </ul>
                             </li>
                             {% else %}
-                            <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> {{ __('detail') }}</a></li>
                             {% endif %}
                         </ul>
                     </td>
@@ -206,6 +212,7 @@ Filter Siswa - {{ parent() }}
                 {% endfor %}
             </tbody>
         </table>
+        </div>
 
         {% if is_admin() and siswas is not empty %}
         <br>
@@ -213,25 +220,24 @@ Filter Siswa - {{ parent() }}
             <div class="span8">
                 <table cellpadding="5">
                     <tr>
-                        <th valign="top">Aksi Terpilih</th>
                         <td valign="top">
                             <select name="status_id" style="width:auto;">
-                                <option value="">--Update Status--</option>
-                                <option value="1">Aktif</option>
-                                <option value="2">Blocking</option>
-                                <option value="3">Alumni</option>
+                                <option value="">{{ __('student_update_status') }}</option>
+                                <option value="1">{{ __('student_status_active') }}</option>
+                                <option value="2">{{ __('student_status_block') }}</option>
+                                <option value="3">{{ __('student_status_alumni') }}</option>
                             </select>
                         </td>
                         <td valign="top">
                             <select name="kelas_id" style="width:auto;">
-                                <option value="">--Pindah Kelas--</option>
+                                <option value="">{{ __('student_move_class') }}</option>
                                 {% for k in kelas %}
                                     <option value="{{ k.id }}">{{ k.nama }}</option>
                                 {% endfor %}
                             </select>
                         </td>
                         <td valign="top">
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="submit" class="btn btn-primary">{{ __('apply') }}</button>
                         </td>
                     </tr>
                 </table>
@@ -240,10 +246,9 @@ Filter Siswa - {{ parent() }}
         {% endif %}
 
         {{ form_close()|raw }}
-
-        <br>
+    </div>
+    <div class="module-foot">
         {{ pagination|raw }}
-
     </div>
 </div>
 {% endblock %}
