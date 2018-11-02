@@ -19,6 +19,12 @@ $lang['remove'] = "Hapus";
 $lang['detail'] = "Detail";
 $lang['cancel'] = "Batal";
 
+$lang['islam'] = "Islam";
+$lang['christian'] = "Kristen";
+$lang['catholic'] = "Katolik";
+$lang['hindu'] = "Hindu";
+$lang['buddha'] = "Budha";
+
 $lang['dbfile_empty'] = "File database.php pada application/config/ tidak ditemukan.";
 $lang['dbconnect_error'] = "Koneksi database bermasalah: {error}";
 $lang['dbselect_error'] = "Koneksi database bermasalah: {error}";
@@ -51,7 +57,7 @@ $lang['register_form_label_born_in'] = "Tempat Lahir";
 $lang['register_form_label_born_on'] = "Tanggal Lahir";
 $lang['register_form_label_religion'] = "Agama";
 $lang['register_form_label_address'] = "Alamat";
-$lang['register_form_label_username_info'] = "Alamat Email";
+$lang['register_form_label_username_info'] = "Harus Email";
 $lang['register_form_label_btn'] = "Daftar";
 
 $lang['register_student_active'] = "Registrasi sebagai siswa berhasil, silakan {login_link} ke aplikasi.";
@@ -149,6 +155,7 @@ $lang['save'] = "Simpan";
 $lang['back'] = "Kembali";
 $lang['record_not_found'] = "Data tidak ditemukan.";
 $lang['access_denied'] = "Akses ditolak.";
+$lang['insert_error'] = "Mohon maaf terjadi masalah saat memasukkan data.";
 
 $lang['msg'] = "Pesan";
 $lang['msg_err_sendto_yourself'] = "Anda tidak dapat mengirim pesan ke diri sendiri.";
@@ -182,3 +189,17 @@ $lang['student_edit_class_active'] = "Ubah Kelas Aktif";
 $lang['student_edit_username'] = "Ubah Username";
 $lang['student_edit_password'] = "Ubah Password";
 $lang['student_edit_selected'] = "Ubah Status Terpilih";
+$lang['student_key'] = "NIS";
+$lang['student_name'] = "Nama";
+$lang['student_gender'] = "Jenis Kelamin";
+$lang['student_join_year'] = "Tahun Masuk";
+$lang['student_class'] = "Kelas";
+$lang['student_born_in'] = "Tempat Lahir";
+$lang['student_born_on'] = "Tanggal Lahir";
+$lang['student_religion'] = "Agama";
+$lang['student_address'] = "Alamat";
+$lang['student_picture'] = "Foto";
+$lang['student_username'] = "Username";
+$lang['student_username_info'] = "Harus Email";
+$lang['student_password'] = "Password";
+$lang['student_password_confirm'] = "Ulangi Password";

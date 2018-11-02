@@ -1,49 +1,54 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Tambah Siswa - {{ parent() }}
+{{ __('student') }} - {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li>{{ anchor('siswa', __('student'))|raw }} <span class="divider">/</span></li>
+<li class="active">{{ __('add') }}</li>
 {% endblock %}
 
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>{{ anchor('siswa/index/' ~ status_id, 'Data Siswa')|raw }} / Tambah Siswa</h3>
+        <h3>{{ __('student') }}</h3>
     </div>
     <div class="module-body">
         {{ get_flashdata('siswa')|raw }}
 
         {{ form_open_multipart('siswa/add/' ~ status_id, {'class' : 'form-horizontal row-fluid'})|raw }}
             <div class="control-group">
-                <label class="control-label">NIS <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('student_key') }} <span class="text-error">*</span></label>
                 <div class="controls">
                     <input type="text" id="nis" name="nis" class="span4" value="{{ set_value('nis') }}">
                     <br>{{ form_error('nis')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Nama <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('student_name') }} <span class="text-error">*</span></label>
                 <div class="controls">
                     <input type="text" name="nama" class="span8" value="{{ set_value('nama') }}">
                     <br>{{ form_error('nama')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Jenis Kelamin <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('student_gender') }} <span class="text-error">*</span></label>
                 <div class="controls">
-                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Laki-laki" {{ set_radio('jenis_kelamin', 'Laki-laki') }}> Laki-laki</label>
-                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Perempuan" {{ set_radio('jenis_kelamin', 'Perempuan') }}> Perempuan</label>
+                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Laki-laki" {{ set_radio('jenis_kelamin', 'Laki-laki') }}> {{ __('male') }}</label>
+                    <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Perempuan" {{ set_radio('jenis_kelamin', 'Perempuan') }}> {{ __('female') }}</label>
                     <br>{{ form_error('jenis_kelamin')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Tahun Masuk <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('student_join_year') }} <span class="text-error">*</span></label>
                 <div class="controls">
                     <input type="text" name="tahun_masuk" class="span2" maxlength="4" value="{{ set_value('tahun_masuk') }}">
                     <br>{{ form_error('tahun_masuk')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Kelas <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('student_class') }} <span class="text-error">*</span></label>
                 <div class="controls">
                     <select class="span3" name="kelas_id">
                         {% for k in kelas %}
@@ -54,77 +59,75 @@ Tambah Siswa - {{ parent() }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Tempat Lahir</label>
+                <label class="control-label">{{ __('student_born_in') }}</label>
                 <div class="controls">
                     <input type="text" name="tempat_lahir" class="span5" value="{{ set_value('tempat_lahir') }}">
                     <br>{{ form_error('tempat_lahir')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Tanggal Lahir</label>
+                <label class="control-label">{{ __('student_born_on') }}</label>
                 <div class="controls">
                     <select class="span2" style="width: 10%;" name="tgl_lahir">
-                        <option value="">Tgl</option>
+                        <option value="">{{ __('date_short') }}</option>
                         {% for i in 1..31 %}
                             <option value="{{ i }}" {{ set_select('tgl_lahir', i) }}>{{ i }}</option>
                         {% endfor %}
                     </select>
                     <select class="span2" style="width: 17%;" name="bln_lahir">
-                        <option value="">Bulan</option>
+                        <option value="">{{ __('month') }}</option>
                         {% for i in 1..12 %}
                             <option value="{{ i }}" {{ set_select('bln_lahir', i) }}>{{ get_indo_bulan(i) }}</option>
                         {% endfor %}
                     </select>
-                    <input type="text" name="thn_lahir" class="span2" maxlength="4" value="{{ set_value('thn_lahir') }}" placeholder="Tahun">
+                    <input type="text" name="thn_lahir" class="span2" maxlength="4" value="{{ set_value('thn_lahir') }}" placeholder="{{ __('year') }}">
                     <br>{{ form_error('thn_lahir')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Agama</label>
+                <label class="control-label">{{ __('student_religion') }}</label>
                 <div class="controls">
                     <select name="agama" class="span2">
                         <option value="">--pilih--</option>
-                        <option value="ISLAM" {{ set_select('agama', 'ISLAM') }}>ISLAM</option>
-                        <option value="KRISTEN" {{ set_select('agama', 'KRISTEN') }}>KRISTEN</option>
-                        <option value="KATOLIK" {{ set_select('agama', 'KATOLIK') }}>KATOLIK</option>
-                        <option value="HINDU" {{ set_select('agama', 'HINDU') }}>HINDU</option>
-                        <option value="BUDHA" {{ set_select('agama', 'BUDHA') }}>BUDHA</option>
+                        <option value="ISLAM" {{ set_select('agama', 'ISLAM') }}>{{ __('islam')|upper }}</option>
+                        <option value="KRISTEN" {{ set_select('agama', 'KRISTEN') }}>{{ __('christian')|upper }}</option>
+                        <option value="KATOLIK" {{ set_select('agama', 'KATOLIK') }}>{{ __('catholic')|upper }}</option>
+                        <option value="HINDU" {{ set_select('agama', 'HINDU') }}>{{ __('hindu')|upper }}</option>
+                        <option value="BUDHA" {{ set_select('agama', 'BUDHA') }}>{{ __('buddha')|upper }}</option>
                     </select>
                     <br>{{ form_error('agama')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Alamat</label>
+                <label class="control-label">{{ __('student_address') }}</label>
                 <div class="controls">
                     <input type="text" name="alamat" class="span8" value="{{ set_value('alamat') }}">
                     <br>{{ form_error('alamat')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Foto</label>
+                <label class="control-label">{{ __('student_picture') }}</label>
                 <div class="controls">
                     <input type="file" name="userfile">
                     {{ (error_upload is not empty) ? error_upload|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Username <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('student_username') }} <span class="text-error">*</span></label>
                 <div class="controls">
-                    <input type="text" id="username" name="username" class="span5" value="{{ set_value('username') }}" placeholder="example@example.sch.id">
-
-                    <label class="checkbox inline"><input type="checkbox" name="default_username" id="default_username" onclick="username_default()" value="1" {{ set_checkbox('default_username', '1') }}> Gunakan default username</label>
+                    <input type="text" id="username" name="username" class="span5" value="{{ set_value('username') }}" placeholder="{{ __('student_username_info') }}">
                     <br>{{ form_error('username')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Password <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('student_password') }} <span class="text-error">*</span></label>
                 <div class="controls">
                     <input type="password" name="password" class="span5" value="{{ set_value('password') }}">
                     <br>{{ form_error('password')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Ulangi Password <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('student_password_confirm') }} <span class="text-error">*</span></label>
                 <div class="controls">
                     <input type="password" name="password2" class="span5" value="{{ set_value('password2') }}">
                     <br>{{ form_error('password2')|raw }}
@@ -132,8 +135,8 @@ Tambah Siswa - {{ parent() }}
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="{{ site_url('siswa/index/' ~ status_id) }}" class="btn">Batal</a>
+                    <button type="submit" class="btn btn-primary">{{ __('save') }}</button>
+                    <a href="{{ site_url('siswa/index/' ~ status_id) }}" class="btn">{{ __('cancel') }}</a>
                 </div>
             </div>
         {{ form_close()|raw }}

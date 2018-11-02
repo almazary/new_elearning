@@ -107,11 +107,11 @@
                                 <div class="controls">
                                     <select name="agama" class="span2">
                                         <option value="">--{{ __('choose') }}--</option>
-                                        <option value="ISLAM" {{ set_select('agama', 'ISLAM') }}>ISLAM</option>
-                                        <option value="KRISTEN" {{ set_select('agama', 'KRISTEN') }}>KRISTEN</option>
-                                        <option value="KATOLIK" {{ set_select('agama', 'KATOLIK') }}>KATOLIK</option>
-                                        <option value="HINDU" {{ set_select('agama', 'HINDU') }}>HINDU</option>
-                                        <option value="BUDHA" {{ set_select('agama', 'BUDHA') }}>BUDHA</option>
+                                        <option value="ISLAM" {{ set_select('agama', 'ISLAM') }}>{{ __('islam')|upper }}</option>
+                                        <option value="KRISTEN" {{ set_select('agama', 'KRISTEN') }}>{{ __('christian')|upper }}</option>
+                                        <option value="KATOLIK" {{ set_select('agama', 'KATOLIK') }}>{{ __('catholic')|upper }}</option>
+                                        <option value="HINDU" {{ set_select('agama', 'HINDU') }}>{{ __('hindu')|upper }}</option>
+                                        <option value="BUDHA" {{ set_select('agama', 'BUDHA') }}>{{ __('buddha')|upper }}</option>
                                     </select>
                                     <br>{{ form_error('agama')|raw }}
                                 </div>

@@ -307,62 +307,62 @@ $config['ch_profil'] = array(
 $config['siswa/add'] = array(
     array(
         'field' => 'nis',
-        'label' => 'NIS',
+        'label' => __('student_key'),
         'rules' => 'required|trim|xss_clean|is_unique[siswa.nis]'
     ),
     array(
         'field' => 'nama',
-        'label' => 'Nama',
+        'label' => __('student_name'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'jenis_kelamin',
-        'label' => 'Jenis Kelamin',
+        'label' => __('student_gender'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'tahun_masuk',
-        'label' => 'Tahun Masuk',
+        'label' => __('student_join_year'),
         'rules' => 'required|trim|xss_clean|numeric|min_length[4]|max_length[4]'
     ),
     array(
         'field' => 'kelas_id',
-        'label' => 'Kelas',
+        'label' => __('student_class'),
         'rules' => 'required|trim|xss_clean|numeric'
     ),
     array(
         'field' => 'tempat_lahir',
-        'label' => 'Tempat Lahir',
+        'label' => __('student_born_in'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tgl_lahir',
-        'label' => 'Tgl Lahir',
+        'label' => __('born_date'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'bln_lahir',
-        'label' => 'Bulan Lahir',
+        'label' => __('born_month'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'thn_lahir',
-        'label' => 'Tahun Lahir',
+        'label' => __('born_year'),
         'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[4]'
     ),
     array(
         'field' => 'agama',
-        'label' => 'Agama',
+        'label' => __('student_religion'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'alamat',
-        'label' => 'Alamat',
+        'label' => __('student_address'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'username',
-        'label' => 'Username',
+        'label' => __('student_username'),
         'rules' => 'required|trim|xss_clean|valid_email|is_unique[login.username]'
     ),
     array(
@@ -372,12 +372,12 @@ $config['siswa/add'] = array(
     ),
     array(
         'field' => 'password',
-        'label' => 'Password',
+        'label' => __('student_password'),
         'rules' => 'required|trim|xss_clean|alpha_numeric'
     ),
     array(
         'field' => 'password2',
-        'label' => 'Ulangi Password',
+        'label' => __('student_password_confirm'),
         'rules' => 'required|matches[password]'
     ),
 );

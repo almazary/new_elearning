@@ -212,19 +212,6 @@
   //  }
   // }
   //
-  /// / tambah siswa
-  // function username_default () {
-  //  if (document.getElementById('default_username').checked) {
-  //    var nis = $('#nis').val()
-  //    if (nis === '') {
-  //      nis = new Date().getTime()
-  //    }
-  //    $('#username').val(nis + '@example.sch.id')
-  //  } else {
-  //    $('#username').val('')
-  //  }
-  // }
-  //
   /// / filter siswa
   // function filter_siswa_ch_uch_checkbox (source) {
   //  let checkboxes = document.getElementsByName('siswa_id[]')

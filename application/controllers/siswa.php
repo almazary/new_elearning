@@ -215,7 +215,18 @@ class Siswa extends MY_Controller
         }
 
         $data['status_id'] = $status_id;
-        $data['kelas']     = $this->kelas_model->retrieve_all_child();
+
+        // get cache
+        $ck = "kelas_retrieve_all_child";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $kelas_child = $this->kelas_model->retrieve_all_child();
+            cs($ck, $kelas_child);
+        } else {
+            $kelas_child = $cg;
+        }
+
+        $data['kelas'] = $kelas_child;
 
         $config['upload_path']   = get_path_image();
         $config['allowed_types'] = 'jpg|jpeg|png';
@@ -278,6 +289,9 @@ class Siswa extends MY_Controller
                 $foto = null;
             }
 
+            // start transaction
+            $this->db->trans_begin();
+
             # simpan data siswa
             $siswa_id = $this->siswa_model->create(
                 $nis,
@@ -307,7 +321,17 @@ class Siswa extends MY_Controller
                 1
             );
 
-            $this->session->set_flashdata('siswa', get_alert('success', 'Data siswa berhasil disimpan.'));
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                $this->session->set_flashdata('siswa', get_alert('warning', __('insert_error')));
+            } else {
+                $this->db->trans_commit();
+                $this->session->set_flashdata('siswa', get_alert('success', __('add_success_msg')));
+
+                //reset cache
+                $this->reset_cache();
+            }
+
             redirect('siswa/index/1');
 
         } else {

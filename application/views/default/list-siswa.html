@@ -14,8 +14,6 @@
         <h3>{{ __('student') }}</h3>
     </div>
     <div class="module-body">
-        {{ get_flashdata('siswa')|raw }}
-
         <div class="row-fluid">
             <div class="span7">
                 <a href="{{ site_url('siswa/add/' ~ status_id) }}" class="btn btn-primary">{{ __('add') }}</a>
@@ -31,6 +29,8 @@
             </div>
         </div>
         <br>
+
+        {{ get_flashdata('siswa')|raw }}
 
         {{ form_open('siswa/index/' ~ status_id)|raw }}
         <div class="table-responsive">
