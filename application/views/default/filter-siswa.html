@@ -154,64 +154,64 @@
         </div>
         <br>
 
-        {{ get_flashdata('siswa')|raw }}
-
-        {{ form_open('siswa/filter_action')|raw }}
         <div class="table-responsive" id="filter-results">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th width="7%">
-                        {% if is_admin() and (status_id == 0 or status_id == 2) %}
-                            <input type="checkbox" id="checkbox-all-student" style="margin-top:-2px;">
-                        {% endif %}
-                        {{ __('student_id') }}
-                    </th>
-                    <th>
-                        {{ __('student_info') }}
-                    </th>
-                    <th width="22%"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for no, v in siswas %}
-                <tr>
-                    <td>
-                        {% if is_admin() %}
-                        <input type="checkbox" name="siswa_id[]" value="{{ v.id }}" style="margin-top:-2px;" class="checkbox-student" {{ (v.status_id == 3) ? 'disabled' }}>
-                        {% endif %}
-                        <b>{{ v.id }}</b>
-                    </td>
-                    <td>
-                        <img style="height:40px;width:40px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(v.foto, 'medium', v.jenis_kelamin) }}">
-                        <b>{{ v.nama }} {{ ((v.nis is not empty) ? '<span class="text-muted">(' ~ v.nis ~ ')</span>')|raw }}</b>
-                        <br>{{ ((v.kelas_aktif is not empty) ? v.kelas_aktif.nama : '<b class="text-success">Alumni</b>')|raw }} , {{ v.jenis_kelamin }} , {{ v.agama }}
-                    </td>
-                    <td>
-                        <ul class="nav nav-pills" style="margin-bottom:0px;">
-                            {% if is_admin() %}
-                            <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> {{ __('detail') }}</a></li>
-                            <li class="dropdown">
-                                <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> {{ __('edit') }} <b class="caret" style="margin-top:5px;"></b></a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
-                                    <li>{{ anchor('siswa/edit_profile/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_profile'), {'class' : 'siswa-iframe-4', 'title' : __('student_edit_profile')})|raw }}</li>
-                                    <li>{{ anchor('siswa/edit_picture/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_picture'), {'class' : 'siswa-iframe-5', 'title' : __('student_edit_picture')})|raw }}</li>
-                                    {% if v.status_id != 3 %}
-                                    <li>{{ anchor('siswa/moved_class/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_class_active'), {'class' : 'siswa-iframe', 'title' : __('student_edit_class_active')})|raw }}</li>
-                                    {% endif %}
-                                    <li>{{ anchor('siswa/edit_username/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_username'), {'class' : 'siswa-iframe-2', 'title' : __('student_edit_username')})|raw }}</li>
-                                    <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_password'), {'class' : 'siswa-iframe-3', 'title' : __('student_edit_password')})|raw }}</li>
-                                </ul>
-                            </li>
-                            {% else %}
-                            <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> {{ __('detail') }}</a></li>
+            {{ get_flashdata('siswa')|raw }}
+
+            {{ form_open('siswa/filter_action')|raw }}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th width="7%">
+                            {% if is_admin() and (status_id == 0 or status_id == 2) %}
+                                <input type="checkbox" id="checkbox-all-student" style="margin-top:-2px;">
                             {% endif %}
-                        </ul>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                            {{ __('student_id') }}
+                        </th>
+                        <th>
+                            {{ __('student_info') }}
+                        </th>
+                        <th width="22%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for no, v in siswas %}
+                    <tr>
+                        <td>
+                            {% if is_admin() %}
+                            <input type="checkbox" name="siswa_id[]" value="{{ v.id }}" style="margin-top:-2px;" class="checkbox-student" {{ (v.status_id == 3) ? 'disabled' }}>
+                            {% endif %}
+                            <b>{{ v.id }}</b>
+                        </td>
+                        <td>
+                            <img style="height:40px;width:40px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(v.foto, 'medium', v.jenis_kelamin) }}">
+                            <b>{{ v.nama }} {{ ((v.nis is not empty) ? '<span class="text-muted">(' ~ v.nis ~ ')</span>')|raw }}</b>
+                            <br>{{ ((v.kelas_aktif is not empty) ? v.kelas_aktif.nama : '<b class="text-success">' ~ __('student_status_alumni') ~ '</b>')|raw }} , {{ v.jenis_kelamin }} , {{ v.agama }}
+                        </td>
+                        <td>
+                            <ul class="nav nav-pills" style="margin-bottom:0px;">
+                                {% if is_admin() %}
+                                <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> {{ __('detail') }}</a></li>
+                                <li class="dropdown">
+                                    <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> {{ __('edit') }} <b class="caret" style="margin-top:5px;"></b></a>
+                                    <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
+                                        <li>{{ anchor('siswa/edit_profile/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_profile'), {'class' : 'siswa-iframe-4', 'title' : __('student_edit_profile')})|raw }}</li>
+                                        <li>{{ anchor('siswa/edit_picture/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_picture'), {'class' : 'siswa-iframe-5', 'title' : __('student_edit_picture')})|raw }}</li>
+                                        {% if v.status_id != 3 %}
+                                        <li>{{ anchor('siswa/moved_class/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_class_active'), {'class' : 'siswa-iframe', 'title' : __('student_edit_class_active')})|raw }}</li>
+                                        {% endif %}
+                                        <li>{{ anchor('siswa/edit_username/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_username'), {'class' : 'siswa-iframe-2', 'title' : __('student_edit_username')})|raw }}</li>
+                                        <li>{{ anchor('siswa/edit_password/' ~ v.status_id ~ '/' ~ v.id, __('student_edit_password'), {'class' : 'siswa-iframe-3', 'title' : __('student_edit_password')})|raw }}</li>
+                                    </ul>
+                                </li>
+                                {% else %}
+                                <li><a class="btn btn-default btn-small" href="{{ site_url('siswa/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> {{ __('detail') }}</a></li>
+                                {% endif %}
+                            </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
 
         {% if is_admin() and siswas is not empty %}
@@ -220,6 +220,9 @@
             <div class="span8">
                 <table cellpadding="5">
                     <tr>
+                        <td valign="top">
+                            {{ __('bulk_action') }}
+                        </td>
                         <td valign="top">
                             <select name="status_id" style="width:auto;">
                                 <option value="">{{ __('student_update_status') }}</option>

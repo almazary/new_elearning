@@ -554,13 +554,13 @@ class Siswa extends MY_Controller
             if (!empty($siswa_ids) AND is_array($siswa_ids)) {
 
                 if (empty($status_id) AND empty($kelas_id)) {
-                    $this->session->set_flashdata('siswa', get_alert('warning', 'Tidak ada aksi yang dipilih.'));
-                    redirect('siswa/filter');
+                    $this->session->set_flashdata('siswa', get_alert('warning', __('action_empty')));
+                    redirect('siswa/filter#filter-results');
                 }
 
                 foreach ($siswa_ids as $siswa_id) {
-                    $s = $this->siswa_model->retrieve($siswa_id);
                     if (!empty($status_id)) {
+                        $s = $this->siswa_model->retrieve($siswa_id);
                         # update status siswa
                         $this->siswa_model->update(
                             $siswa_id,
@@ -575,6 +575,9 @@ class Siswa extends MY_Controller
                             $s['foto'],
                             $status_id
                         );
+
+                        // delete cache
+                        cd("siswa_retrieve_{$siswa_id}");
                     }
 
                     if (!empty($kelas_id)) {
@@ -593,32 +596,54 @@ class Siswa extends MY_Controller
                         } else {
                             $this->kelas_model->update_siswa($check['id'], $kelas_id, $siswa_id, 1);
                         }
+
+                        // delete cache
+                        cd("kelas_retrieve_siswa_null_" . json_encode(array(
+                            'siswa_id' => $siswa_id,
+                            'kelas_id' => $kelas_id
+                        )));
+
+                        cd("kelas_retrieve_siswa_null_" . json_encode(array(
+                            'siswa_id' => $siswa_id,
+                            'aktif'    => 1
+                        )));
                     }
                 }
+
+                //reset cache
+                $this->reset_cache();
 
                 $label = '';
                 if (!empty($status_id)) {
-                    $label_status = array('Pending', 'Aktif', 'Blocking', 'Alumni');
-                    $label .= 'status = '.$label_status[$status_id];
+                    $label_status = array(__('student_status_pending'), __('student_status_active'), __('student_status_block'), __('student_status_alumni'));
+                    $label .= __('student_update_status') . ' = ' . $label_status[$status_id];
                 }
                 if (!empty($kelas_id)) {
-                    $kelas = $this->kelas_model->retrieve($kelas_id);
+                    $ck = "kelas_retrieve_{$kelas_id}";
+                    $cg = cg($ck);
+                    if ($cg === false) {
+                        $kelas = $this->kelas_model->retrieve($kelas_id);
+                        cs($ck, $kelas);
+                    } else {
+                        $kelas = $cg;
+                    }
+
                     if (!empty($label)) {
                         $label .= ' & ';
                     }
-                    $label .= 'kelas = '.$kelas['nama'];
+                    $label .= __('student_move_class') . ' = ' . $kelas['nama'];
                 }
 
-                $this->session->set_flashdata('siswa', get_alert('success', 'Siswa berhasil diperbaharui ('.$label.').'));
-                redirect('siswa/filter');
+                $this->session->set_flashdata('siswa', get_alert('success', __('bulk_action_success_msg', array('results' => $label))));
+                redirect('siswa/filter#filter-results');
 
             } else {
-                $this->session->set_flashdata('siswa', get_alert('warning', 'Tidak ada siswa yang dipilih.'));
-                redirect('siswa/filter');
+                $this->session->set_flashdata('siswa', get_alert('warning', __('student_empty_selected')));
+                redirect('siswa/filter#filter-results');
             }
 
         } else {
-            redirect('siswa/filter');
+            redirect('siswa/filter#filter-results');
         }
     }
 
