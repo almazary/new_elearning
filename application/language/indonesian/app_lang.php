@@ -102,6 +102,7 @@ $lang['setting'] = "Pengaturan";
 $lang['email_template'] = "Email Template";
 $lang['backup_restore'] = "Backup & Restore";
 $lang['delete_data'] = "Hapus Data";
+$lang['delete_picture'] = "Hapus Foto";
 $lang['logout'] = "Keluar";
 $lang['schedule_teach'] = "Jadwal Mengajar";
 $lang['my_comment'] = "Komentar Saya";
@@ -161,6 +162,8 @@ $lang['record_not_found'] = "Data tidak ditemukan.";
 $lang['access_denied'] = "Akses ditolak.";
 $lang['insert_error'] = "Mohon maaf terjadi masalah saat memasukkan data.";
 $lang['search_param'] = "Parameter Pencarian";
+$lang['feature_disabled_adm'] = "Maaf fitur dinonaktifkan oleh Administrator.";
+$lang['upload_file'] = "Unggah berkas";
 
 $lang['msg'] = "Pesan";
 $lang['msg_err_sendto_yourself'] = "Anda tidak dapat mengirim pesan ke diri sendiri.";

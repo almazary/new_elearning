@@ -713,6 +713,7 @@ class Siswa extends MY_Controller
 
             // delete cache
             cd("siswa_retrieve_{$siswa_id}");
+            $this->reset_cache();
 
             # jika sebelumnya berstatus pending, dan dibuah ke aktif kirimkan email approve
             if ($retrieve_siswa['status_id'] == 0 && $status == 1) {
@@ -733,38 +734,54 @@ class Siswa extends MY_Controller
     function delete_foto($segment_3 = '', $segment_4 = '')
     {
         if (is_pengajar()) {
-            show_error('Akses ditolak');
+            die(__('access_denied'));
         }
 
         # cek pengaturan
         if (is_siswa() AND get_pengaturan('edit-foto-siswa', 'value') == '0') {
-            show_error('Maaf fitur dinonaktifkan oleh administrator');
+            die(__('feature_disabled_adm'));
         }
 
-        $siswa_id       = (int)$segment_3;
-        $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+        $siswa_id = (int)$segment_3;
+        if (empty($siswa_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "siswa_retrieve_{$siswa_id}";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+            cs($ck, $retrieve_siswa);
+        } else {
+            $retrieve_siswa = $cg;
+        }
+
         if (empty($retrieve_siswa)) {
-            show_error('Data siswa tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
         if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
-            show_error('Akses ditolak');
+            die(__('access_denied'));
         }
 
         if (is_file(get_path_image($retrieve_siswa['foto']))) {
-            unlink(get_path_image($retrieve_siswa['foto']));
+            @unlink(get_path_image($retrieve_siswa['foto']));
         }
 
         if (is_file(get_path_image($retrieve_siswa['foto'], 'medium'))) {
-            unlink(get_path_image($retrieve_siswa['foto'], 'medium'));
+            @unlink(get_path_image($retrieve_siswa['foto'], 'medium'));
         }
 
         if (is_file(get_path_image($retrieve_siswa['foto'], 'small'))) {
-            unlink(get_path_image($retrieve_siswa['foto'], 'small'));
+            @unlink(get_path_image($retrieve_siswa['foto'], 'small'));
         }
 
         $this->siswa_model->delete_foto($retrieve_siswa['id']);
+
+        // delete cache
+        cd("siswa_retrieve_{$siswa_id}");
+        $this->reset_cache();
 
         $uri_back = $segment_4;
         if (!empty($uri_back)) {
@@ -779,24 +796,36 @@ class Siswa extends MY_Controller
     function edit_picture($segment_3 = '', $segment_4 = '')
     {
         if (is_pengajar()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         # cek pengaturan
         if (is_siswa() AND get_pengaturan('edit-foto-siswa', 'value') == '0') {
-            exit('Maaf fitur dinonaktifkan oleh administrator');
+            die(__('feature_disabled_adm'));
         }
 
-        $status_id      = (int)$segment_3;
-        $siswa_id       = (int)$segment_4;
-        $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+        $status_id = (int)$segment_3;
+        $siswa_id = (int)$segment_4;
+        if (empty($siswa_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "siswa_retrieve_{$siswa_id}";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+            cs($ck, $retrieve_siswa);
+        } else {
+            $retrieve_siswa = $cg;
+        }
+
         if (empty($retrieve_siswa)) {
-            exit('Data siswa tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
         if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         $data['status_id'] = $status_id;
@@ -814,15 +843,15 @@ class Siswa extends MY_Controller
         if ($this->upload->do_upload()) {
 
             if (is_file(get_path_image($retrieve_siswa['foto']))) {
-                unlink(get_path_image($retrieve_siswa['foto']));
+                @unlink(get_path_image($retrieve_siswa['foto']));
             }
 
             if (is_file(get_path_image($retrieve_siswa['foto'], 'medium'))) {
-                unlink(get_path_image($retrieve_siswa['foto'], 'medium'));
+                @unlink(get_path_image($retrieve_siswa['foto'], 'medium'));
             }
 
             if (is_file(get_path_image($retrieve_siswa['foto'], 'small'))) {
-                unlink(get_path_image($retrieve_siswa['foto'], 'small'));
+                @unlink(get_path_image($retrieve_siswa['foto'], 'small'));
             }
 
             $upload_data = $this->upload->data();
@@ -844,21 +873,13 @@ class Siswa extends MY_Controller
             );
 
             # update siswa
-            $this->siswa_model->update(
-                $siswa_id,
-                $retrieve_siswa['nis'],
-                $retrieve_siswa['nama'],
-                $retrieve_siswa['jenis_kelamin'],
-                $retrieve_siswa['tempat_lahir'],
-                $retrieve_siswa['tgl_lahir'],
-                $retrieve_siswa['agama'],
-                $retrieve_siswa['alamat'],
-                $retrieve_siswa['tahun_masuk'],
-                $upload_data['file_name'],
-                $retrieve_siswa['status_id']
-            );
+            $this->siswa_model->updatePicture($siswa_id, $upload_data['file_name']);
 
-            $this->session->set_flashdata('edit', get_alert('success', 'Foto siswa berhasil diperbaharui.'));
+            // hapus cache
+            cd("siswa_retrieve_{$siswa_id}");
+            $this->reset_cache();
+
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg')));
             redirect('siswa/edit_picture/'.$status_id.'/'.$siswa_id);
         } else {
             if (!empty($_FILES['userfile']['tmp_name'])) {

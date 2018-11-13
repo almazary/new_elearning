@@ -1,29 +1,38 @@
 {% extends "layout-iframe.html" %}
 
 {% block content %}
-<h4>Edit Foto</h4>
-{{ get_flashdata('edit')|raw }}
+<div class="content-top">
+    <div class="title-top">
+        {{ __('student_edit_picture') }}
+    </div>
+    {{ get_flashdata('edit')|raw }}
+</div>
 
 {{ form_open_multipart('siswa/edit_picture/' ~ status_id ~ '/' ~ siswa_id)|raw }}
-<table class="table table-striped">
+<table class="table table-striped table-form">
     <tbody>
         <tr>
             <td>
-                <img class="img-polaroid" src="{{ get_url_image_siswa(siswa.foto, 'medium', siswa.jenis_kelamin) }}">
-            </td>
-            <td>
-                <input type="file" name="userfile" class="btn btn-small" style="max-width:190px;">
+                <center>
+                    <a href="{{ get_url_image_siswa(siswa.foto, '', siswa.jenis_kelamin) }}" target="_blank">
+                        <img class="img-polaroid" src="{{ get_url_image_siswa(siswa.foto, 'medium', siswa.jenis_kelamin) }}" style="max-width:90%;">
+                    </a>
+                </center>
+                <br>
+                {{ __('upload_file') }}
+                <br>
+                <input type="file" name="userfile">
                 {{ (error_upload is not empty) ? error_upload|raw }}
-            </td>
-        <tr>
-        <tr>
-            <td colspan="2">
-                {% if siswa.foto != '' %}
-                <a href="{{ site_url('siswa/delete_foto/' ~ siswa_id ~ '/' ~ enurl_redirect(current_url())) }}" onclick="return confirm('Anda yakin ingin menghapus foto?')" class="pull-right btn btn-default"><i class="icon-trash"></i> Hapus foto</a>
+                {% if error_upload is empty %}
+                <br>
+                <br>
                 {% endif %}
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary">{{ __('save') }}</button>
+                {% if siswa.foto != '' %}
+                <a href="{{ site_url('siswa/delete_foto/' ~ siswa_id ~ '/' ~ enurl_redirect(current_url())) }}" onclick="return confirm('{{ __('delete_confirm') }}')" class="btn btn-default">{{ __('delete_picture') }}</a>
+                {% endif %}
             </td>
-        </tr>
+        <tr>
     </tbody>
 </table>
 {{ form_close()|raw }}

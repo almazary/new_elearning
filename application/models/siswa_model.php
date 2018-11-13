@@ -270,6 +270,15 @@ class Siswa_model extends CI_Model
         return $data;
     }
 
+    public function updatePicture($id, $img)
+    {
+        return $this->db->update('siswa', array(
+            'foto' => $img,
+        ), array(
+            'id' => $id,
+        ));
+    }
+
     /**
      * Method untuk memperbaharui data siswa
      *

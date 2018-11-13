@@ -500,7 +500,7 @@
         $('.siswa-iframe-5').colorbox({
           iframe: true,
           width: '450',
-          height: '340',
+          height: '400',
           fixed: true,
           onClosed: function () {
             window.location.reload()
