@@ -65,7 +65,7 @@
                     <td>
                         <img style="height:40px;width:40px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_siswa(v.foto, 'medium', v.jenis_kelamin) }}">
                         <b>{{ v.nama }} {{ ((v.nis is not empty) ? '<span class="text-muted">(' ~ v.nis ~ ')</span>')|raw }}</b>
-                        <br>{{ (v.status_id != 3) ? v.kelas_aktif.nama ~ ' , ' }} {{ v.jenis_kelamin }} , {{ v.agama }}
+                        <br>{{ (v.status_id != 3) ? v.kelas_aktif.nama ~ ', ' }} {{ v.jenis_kelamin }}{{ (v.agama is not empty) ? ', ' ~ v.agama }}
                     </td>
                     <td>
                         <ul class="nav nav-pills" style="margin-bottom:0px;">

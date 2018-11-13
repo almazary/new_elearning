@@ -673,6 +673,10 @@ class Siswa extends MY_Controller
         $data['siswa_id']  = $siswa_id;
         $data['siswa']     = $retrieve_siswa;
 
+        if (!empty($_POST)) {
+            $_POST['siswa_id'] = $siswa_id;
+        }
+
         if ($this->form_validation->run('siswa/edit_profile') == TRUE) {
             $nis           = $this->input->post('nis', TRUE);
             $nama          = $this->input->post('nama', TRUE);
@@ -684,8 +688,13 @@ class Siswa extends MY_Controller
             $thn_lahir     = $this->input->post('thn_lahir', TRUE);
             $agama         = $this->input->post('agama', TRUE);
             $alamat        = $this->input->post('alamat', TRUE);
-            $status        = $this->input->post('status_id', TRUE);
             $tanggal_lahir = handle_tgl_lahir($tgl_lahir, $bln_lahir, $thn_lahir);
+
+            if (is_admin() && $retrieve_siswa['status_id'] != 3) {
+                $status = $this->input->post('status_id', TRUE);
+            } else {
+                $status = $retrieve_siswa['status_id'];
+            }
 
             # update siswa
             $this->siswa_model->update(

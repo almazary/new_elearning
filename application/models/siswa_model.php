@@ -317,7 +317,7 @@ class Siswa_model extends CI_Model
             'status_id'     => $status_id
         );
         if (empty($tgl_lahir)) {
-            unset($data['tgl_lahir']);
+            $data['tgl_lahir'] = null;
         }
 
         $this->db->where('id', $id);

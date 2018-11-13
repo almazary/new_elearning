@@ -3,6 +3,23 @@
     <head>
         <title>{% block title %}{{ site_name }}{% endblock %}</title>
         {% include 'layout-header.html' %}
+        <style>
+        .content-top .alert {
+            margin-top:0px;
+            margin-bottom:0px;
+            border-radius:none;
+        }
+        .title-top {
+            background-color: #248aaf;
+            padding: 15px 10px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            font-size: 17px;
+            color: white;
+            border-bottom: 2px dashed white;
+        }
+        </style>
         {% block css %}{% endblock %}
     </head>
 

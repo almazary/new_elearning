@@ -410,124 +410,124 @@ $config['siswa/edit_password'] = array(
 $config['siswa/edit_profile'] = array(
     array(
         'field' => 'nis',
-        'label' => 'NIS',
+        'label' => __('student_key'),
         'rules' => 'required|trim|xss_clean|callback_update_nis'
     ),
     array(
         'field' => 'nama',
-        'label' => 'Nama',
+        'label' => __('student_name'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'jenis_kelamin',
-        'label' => 'Jenis Kelamin',
+        'label' => __('student_gender'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'tahun_masuk',
-        'label' => 'Tahun Masuk',
+        'label' => __('student_join_year'),
         'rules' => 'required|trim|xss_clean|numeric|min_length[4]|max_length[4]'
     ),
     array(
         'field' => 'tempat_lahir',
-        'label' => 'Tempat Lahir',
+        'label' => __('student_born_in'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tgl_lahir',
-        'label' => 'Tgl Lahir',
+        'label' => __('born_date'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'bln_lahir',
-        'label' => 'Bulan Lahir',
+        'label' => __('born_month'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'thn_lahir',
-        'label' => 'Tahun Lahir',
+        'label' => __('born_year'),
         'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[4]'
     ),
     array(
         'field' => 'agama',
-        'label' => 'Agama',
+        'label' => __('student_religion'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'alamat',
-        'label' => 'Alamat',
+        'label' => __('student_address'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'status_id',
-        'label' => 'Status',
-        'rules' => 'required|trim|xss_clean|numeric'
+        'label' => __('student_status'),
+        'rules' => 'trim|xss_clean|numeric'
     )
 );
 $config['siswa/filter'] = array(
     array(
         'field' => 'nis',
-        'label' => 'NIS',
+        'label' => __('student_key'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'nama',
-        'label' => 'Nama',
+        'label' => __('student_name'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'jenis_kelamin[]',
-        'label' => 'Jenis Kelamin',
+        'label' => __('student_gender'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tahun_masuk',
-        'label' => 'Tahun Masuk',
+        'label' => __('student_join_year'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tempat_lahir',
-        'label' => 'Tempat Lahir',
+        'label' => __('student_born_in'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tgl_lahir',
-        'label' => 'Tgl Lahir',
+        'label' => __('born_date'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'bln_lahir',
-        'label' => 'Bulan Lahir',
+        'label' => __('born_month'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'thn_lahir',
-        'label' => 'Tahun Lahir',
+        'label' => __('born_year'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'alamat',
-        'label' => 'Alamat',
+        'label' => __('student_address'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'agama[]',
-        'label' => 'Agama',
+        'label' => __('student_religion'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'kelas_id[]',
-        'label' => 'Kelas',
+        'label' => __('student_class'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'status_id[]',
-        'label' => 'Status',
+        'label' => __('student_status'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'username',
-        'label' => 'Username',
+        'label' => __('student_username'),
         'rules' => 'trim|xss_clean'
     ),
 );
