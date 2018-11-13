@@ -1336,3 +1336,15 @@ function cd($key)
 
     return true;
 }
+
+function handle_tgl_lahir($tgl = "", $bln = "", $thn = "")
+{
+    if (empty($tgl) || empty($bln) || empty($thn)) {
+        return null;
+    }
+
+    $tgl = ($tgl < 10) ? "0{$tgl}" : $tgl;
+    $bln = ($bln < 10) ? "0{$bln}" : $bln;
+
+    return "{$thn}-{$bln}-{$tgl}";
+}

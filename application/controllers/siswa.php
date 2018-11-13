@@ -267,12 +267,7 @@ class Siswa extends MY_Controller
             $alamat        = $this->input->post('alamat', TRUE);
             $username      = $this->input->post('username', TRUE);
             $password      = $this->input->post('password2', TRUE);
-
-            if (empty($thn_lahir)) {
-                $tanggal_lahir = null;
-            } else {
-                $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
-            }
+            $tanggal_lahir = handle_tgl_lahir($tgl_lahir, $bln_lahir, $thn_lahir);
 
             if (!empty($_FILES['userfile']['tmp_name'])) {
                 $upload_data = $this->upload->data();
@@ -650,19 +645,28 @@ class Siswa extends MY_Controller
     function edit_profile($segment_3 = '', $segment_4 = '')
     {
         if (is_pengajar()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
-        $status_id      = (int)$segment_3;
-        $siswa_id       = (int)$segment_4;
-        $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+        $status_id = (int)$segment_3;
+        $siswa_id  = (int)$segment_4;
+
+        $ck = "siswa_retrieve_{$siswa_id}";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+            cs($ck, $retrieve_siswa);
+        } else {
+            $retrieve_siswa = $cg;
+        }
+
         if (empty($retrieve_siswa)) {
-            exit('Data siswa tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
         if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         $data['status_id'] = $status_id;
@@ -681,12 +685,7 @@ class Siswa extends MY_Controller
             $agama         = $this->input->post('agama', TRUE);
             $alamat        = $this->input->post('alamat', TRUE);
             $status        = $this->input->post('status_id', TRUE);
-
-            if (empty($thn_lahir)) {
-                $tanggal_lahir = null;
-            } else {
-                $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
-            }
+            $tanggal_lahir = handle_tgl_lahir($tgl_lahir, $bln_lahir, $thn_lahir);
 
             # update siswa
             $this->siswa_model->update(
@@ -703,12 +702,15 @@ class Siswa extends MY_Controller
                 $status
             );
 
+            // delete cache
+            cd("siswa_retrieve_{$siswa_id}");
+
             # jika sebelumnya berstatus pending, dan dibuah ke aktif kirimkan email approve
             if ($retrieve_siswa['status_id'] == 0 && $status == 1) {
                 kirim_email_approve_siswa($retrieve_siswa['id']);
             }
 
-            $this->session->set_flashdata('edit', get_alert('success', 'Profil siswa berhasil diperbaharui.'));
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg')));
             redirect('siswa/edit_profile/'.$status_id.'/'.$siswa_id);
         }
 

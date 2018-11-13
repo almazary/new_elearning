@@ -293,7 +293,7 @@ class Siswa_model extends CI_Model
         $nama,
         $jenis_kelamin,
         $tempat_lahir,
-        $tgl_lahir,
+        $tgl_lahir = null,
         $agama = null,
         $alamat = '',
         $tahun_masuk,
@@ -316,6 +316,9 @@ class Siswa_model extends CI_Model
             'foto'          => $foto,
             'status_id'     => $status_id
         );
+        if (empty($tgl_lahir)) {
+            unset($data['tgl_lahir']);
+        }
 
         $this->db->where('id', $id);
         $this->db->update('siswa', $data);
@@ -364,7 +367,7 @@ class Siswa_model extends CI_Model
         $nama,
         $jenis_kelamin,
         $tempat_lahir,
-        $tgl_lahir,
+        $tgl_lahir = null,
         $agama = null,
         $alamat = '',
         $tahun_masuk,
@@ -386,6 +389,10 @@ class Siswa_model extends CI_Model
             'foto'          => $foto,
             'status_id'     => $status_id
         );
+        if (empty($tgl_lahir)) {
+            unset($data['tgl_lahir']);
+        }
+
         $this->db->insert('siswa', $data);
         return $this->db->insert_id();
     }
