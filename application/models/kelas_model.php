@@ -247,20 +247,24 @@ class Kelas_model extends CI_Model
         $page_no       = 1,
         $array_where   = null
     ) {
-        $no_of_records = (int)$no_of_records;
-        $page_no       = (int)$page_no;
+        if ($no_of_records == "all") {
+            return $this->db->get_where('kelas_siswa', $array_where)->result_array();
+        } else {
+            $no_of_records = (int)$no_of_records;
+            $page_no       = (int)$page_no;
 
-        $where = array();
-        if (!is_null($array_where) AND is_array($array_where)) {
-            foreach ($array_where as $key => $value) {
-                $where[$key] = array($value, 'where');
+            $where = array();
+            if (!is_null($array_where) AND is_array($array_where)) {
+                foreach ($array_where as $key => $value) {
+                    $where[$key] = array($value, 'where');
+                }
             }
+
+            $order_by = array('id' => 'ASC');
+            $data = $this->pager->set('kelas_siswa', $no_of_records, $page_no, $where, $order_by);
+
+            return $data;
         }
-
-        $order_by = array('id' => 'ASC');
-        $data = $this->pager->set('kelas_siswa', $no_of_records, $page_no, $where, $order_by);
-
-        return $data;
     }
 
     /**

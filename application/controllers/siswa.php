@@ -997,6 +997,9 @@ class Siswa extends MY_Controller
             )));
 
             cd("siswa_retrieve_" . cp($siswa_id));
+            cd("kelas_retrieve_" . cp($kelas_id));
+            cd("kelas_retrieve_" . cp($kelas_id, true));
+            cd("kelas_retrieve_all_siswa_" . cp('all', 1, array('siswa_id' => $siswa_id)));
             $this->reset_cache();
 
             $this->session->set_flashdata('class', get_alert('success', __('edit_success_msg', array('subject' => __('student_class_active')))));
@@ -1123,13 +1126,46 @@ class Siswa extends MY_Controller
             $status_id = 1;
         }
 
-        $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
-        if (empty($retrieve_siswa)) {
-            redirect('siswa/index/1');
+        if (empty($siswa_id)) {
+            die(__('record_not_found'));
         }
 
-        $retrieve_login     = $this->login_model->retrieve(null, null, null, $retrieve_siswa['id']);
-        $retrieve_all_kelas = $this->kelas_model->retrieve_all_siswa(10, 1, array('siswa_id' => $retrieve_siswa['id']));
+        $ck = "siswa_retrieve_" . cp($siswa_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+            cs($ck, $retrieve_siswa);
+        } else {
+            $retrieve_siswa = $cg;
+        }
+
+        if (empty($retrieve_siswa)) {
+            die(__('record_not_found'));
+        }
+
+        $retrieve_login = $this->login_model->retrieve(null, null, null, $retrieve_siswa['id']);
+
+        $ck = "kelas_retrieve_all_siswa_" . cp('all', 1, array('siswa_id' => $retrieve_siswa['id']));
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_all_kelas = $this->kelas_model->retrieve_all_siswa('all', 1, array('siswa_id' => $retrieve_siswa['id']));
+            foreach ($retrieve_all_kelas as $k => $v) {
+                $ck2 = "kelas_retrieve_" . cp($v['kelas_id'], true);
+                $cg2 = cg($ck2);
+                if ($cg2 === false) {
+                    $kelas_retrieve = $this->kelas_model->retrieve($v['kelas_id'], true);
+                    cs($ck2, $kelas_retrieve);
+                } else {
+                    $kelas_retrieve = $cg2;
+                }
+
+                $retrieve_all_kelas[$k]['retrieve'] = $kelas_retrieve;
+            }
+
+            cs($ck, $retrieve_all_kelas);
+        } else {
+            $retrieve_all_kelas = $cg;
+        }
 
         $data['siswa']       = $retrieve_siswa;
         $data['siswa_login'] = $retrieve_login;
