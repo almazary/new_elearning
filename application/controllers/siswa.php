@@ -44,7 +44,7 @@ class Siswa extends MY_Controller
         $keys = cg('siswa_retrieve_all');
         if (!empty($keys)) {
             foreach ($keys as $k => $v) {
-                cd("siswa_retrieve_all_{$k}");
+                cd("siswa_retrieve_all_". cp($k));
             }
 
             cd('siswa_retrieve_all');
@@ -53,7 +53,7 @@ class Siswa extends MY_Controller
         $keys = cg('siswa_filter');
         if (!empty($keys)) {
             foreach ($keys as $k => $v) {
-                cd("siswa_filter_{$k}");
+                cd("siswa_filter_" . cp($k));
             }
 
             cd('siswa_filter');
@@ -342,7 +342,7 @@ class Siswa extends MY_Controller
                 $this->session->set_flashdata('siswa', get_alert('warning', __('insert_error')));
             } else {
                 $this->db->trans_commit();
-                $this->session->set_flashdata('siswa', get_alert('success', __('add_success_msg')));
+                $this->session->set_flashdata('siswa', get_alert('success', __('add_success_msg', array('subject' => __('student')))));
 
                 //reset cache
                 $this->reset_cache();
@@ -597,7 +597,7 @@ class Siswa extends MY_Controller
                         );
 
                         // delete cache
-                        cd("siswa_retrieve_{$siswa_id}");
+                        cd("siswa_retrieve_" . cp($siswa_id));
                     }
 
                     if (!empty($kelas_id)) {
@@ -737,7 +737,7 @@ class Siswa extends MY_Controller
             );
 
             // delete cache
-            cd("siswa_retrieve_{$siswa_id}");
+            cd("siswa_retrieve_" . cp($siswa_id));
             $this->reset_cache();
 
             # jika sebelumnya berstatus pending, dan dibuah ke aktif kirimkan email approve
@@ -745,7 +745,7 @@ class Siswa extends MY_Controller
                 kirim_email_approve_siswa($retrieve_siswa['id']);
             }
 
-            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg')));
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg', array('subject' => __('student_profile')))));
             redirect('siswa/edit_profile/'.$status_id.'/'.$siswa_id);
         }
 
@@ -805,7 +805,7 @@ class Siswa extends MY_Controller
         $this->siswa_model->delete_foto($retrieve_siswa['id']);
 
         // delete cache
-        cd("siswa_retrieve_{$siswa_id}");
+        cd("siswa_retrieve_" . cp($siswa_id));
         $this->reset_cache();
 
         $uri_back = $segment_4;
@@ -901,10 +901,10 @@ class Siswa extends MY_Controller
             $this->siswa_model->updatePicture($siswa_id, $upload_data['file_name']);
 
             // hapus cache
-            cd("siswa_retrieve_{$siswa_id}");
+            cd("siswa_retrieve_" . cp($siswa_id));
             $this->reset_cache();
 
-            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg')));
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg', array('subject' => __('student_picture')))));
             redirect('siswa/edit_picture/'.$status_id.'/'.$siswa_id);
         } else {
             if (!empty($_FILES['userfile']['tmp_name'])) {
@@ -996,10 +996,10 @@ class Siswa extends MY_Controller
                 'aktif'    => 1
             )));
 
-            cd("siswa_retrieve_{$siswa_id}");
+            cd("siswa_retrieve_" . cp($siswa_id));
             $this->reset_cache();
 
-            $this->session->set_flashdata('class', get_alert('success', __('edit_success_msg')));
+            $this->session->set_flashdata('class', get_alert('success', __('edit_success_msg', array('subject' => __('student_class_active')))));
             redirect('siswa/moved_class/'.$status_id.'/'.$siswa_id);
         }
 
@@ -1009,24 +1009,36 @@ class Siswa extends MY_Controller
     function edit_username($segment_3 = '', $segment_4 = '')
     {
         if (is_pengajar()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         # cek pengaturan
         if (is_siswa() AND get_pengaturan('edit-username-siswa', 'value') == '0') {
-            exit('Maaf fitur dinonaktifkan oleh administrator');
+            die(__('feature_disabled_adm'));
         }
 
-        $status_id      = (int)$segment_3;
-        $siswa_id       = (int)$segment_4;
-        $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+        $status_id = (int)$segment_3;
+        $siswa_id  = (int)$segment_4;
+        if (empty($siswa_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "siswa_retrieve_" . cp($siswa_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+            cs($ck, $retrieve_siswa);
+        } else {
+            $retrieve_siswa = $cg;
+        }
+
         if (empty($retrieve_siswa)) {
-            exit('Data siswa tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
         if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         $data['login']     = $this->login_model->retrieve(null, null, null, $siswa_id);
@@ -1047,7 +1059,7 @@ class Siswa extends MY_Controller
                 $data['login']['reset_kode']
             );
 
-            $this->session->set_flashdata('edit', get_alert('success', 'Username siswa berhasil diperbaharui.'));
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg', array('subject' => __('student_username')))));
             redirect('siswa/edit_username/'.$status_id.'/'.$siswa_id);
         }
 
@@ -1057,19 +1069,31 @@ class Siswa extends MY_Controller
     function edit_password($segment_3 = '', $segment_4 = '')
     {
         if (is_pengajar()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
-        $status_id      = (int)$segment_3;
-        $siswa_id       = (int)$segment_4;
-        $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+        $status_id = (int)$segment_3;
+        $siswa_id  = (int)$segment_4;
+        if (empty($siswa_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "siswa_retrieve_" . cp($siswa_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+            cs($ck, $retrieve_siswa);
+        } else {
+            $retrieve_siswa = $cg;
+        }
+
         if (empty($retrieve_siswa)) {
-            exit('Data siswa tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai siswa, hanya profilnya dia yang bisa diupdate
         if (is_siswa() AND get_sess_data('user', 'id') != $retrieve_siswa['id']) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         $data['status_id'] = $status_id;
@@ -1082,7 +1106,7 @@ class Siswa extends MY_Controller
             # update password
             $this->login_model->update_password($retrieve_login['id'], $password);
 
-            $this->session->set_flashdata('edit', get_alert('success', 'Password siswa berhasil diperbaharui.'));
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg', array('subject' => __('student_password')))));
             redirect('siswa/edit_password/'.$status_id.'/'.$siswa_id);
         }
 

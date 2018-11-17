@@ -183,7 +183,7 @@ class Pengumuman extends MY_Controller
                 $this->reset_cache();
             }
 
-            $this->session->set_flashdata('pengumuman', get_alert('success', __('add_success_msg')));
+            $this->session->set_flashdata('pengumuman', get_alert('success', __('add_success_msg', array('subject' => __('announcement')))));
             redirect('pengumuman/index/1');
         }
 
@@ -236,7 +236,7 @@ class Pengumuman extends MY_Controller
                 $this->reset_cache();
             }
 
-            $this->session->set_flashdata('pengumuman', get_alert('success', __('edit_success_msg')));
+            $this->session->set_flashdata('pengumuman', get_alert('success', __('edit_success_msg', array('subject' => __('announcement')))));
             redirect('pengumuman/edit/' . $pengumuman['id']);
         }
 

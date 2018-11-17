@@ -337,6 +337,20 @@ class MY_Controller extends CI_Controller
         }
     }
 
+    function update_username($username)
+    {
+        $this->db->where('id !=', $this->input->post('login_id'));
+        $this->db->where('username', $username);
+        $result = $this->db->get('login');
+        $result = $result->num_rows();
+        if (!empty($result)) {
+            $this->form_validation->set_message('update_username', __('username_already_taken'));
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     /**
      * Method untuk ngecek username penerima pesan, valid tidak.
      *

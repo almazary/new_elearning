@@ -391,19 +391,19 @@ $config['siswa/moved_class'] = array(
 $config['siswa/edit_username'] = array(
     array(
         'field' => 'username',
-        'label' => 'Username',
+        'label' => __('student_username'),
         'rules' => 'required|trim|xss_clean|valid_email|callback_update_username'
     )
 );
 $config['siswa/edit_password'] = array(
     array(
         'field' => 'password',
-        'label' => 'Password Baru',
+        'label' => __('student_password_new'),
         'rules' => 'required|trim|xss_clean|alpha_numeric'
     ),
     array(
         'field' => 'password2',
-        'label' => 'Ulangi Password',
+        'label' => __('student_password_confirm'),
         'rules' => 'required|matches[password]'
     )
 );
