@@ -41,22 +41,22 @@ class Siswa extends MY_Controller
 
     private function reset_cache()
     {
-        $keys = cg('keys_siswa_retrieve_all');
+        $keys = cg('siswa_retrieve_all');
         if (!empty($keys)) {
-            foreach ($keys as $v) {
-                cd($v);
+            foreach ($keys as $k => $v) {
+                cd("siswa_retrieve_all_{$k}");
             }
 
-            cd('keys_siswa_retrieve_all');
+            cd('siswa_retrieve_all');
         }
 
-        $keys = cg('keys_siswa_filter');
+        $keys = cg('siswa_filter');
         if (!empty($keys)) {
-            foreach ($keys as $v) {
-                cd($v);
+            foreach ($keys as $k => $v) {
+                cd("siswa_filter_{$k}");
             }
 
-            cd('keys_siswa_filter');
+            cd('siswa_filter');
         }
 
         $keys = cg('keys_siswa_retrieve');
@@ -89,19 +89,31 @@ class Siswa extends MY_Controller
         }
 
         // get cache
-        $cache_key = "siswa_retrieve_all_{$this->no_of_records()}_{$page_no}_{$status_id}";
+        $filter_key = cp($this->no_of_records(), $page_no, null, null, $status_id);
+        $cache_key = "siswa_retrieve_all";
+        $cache_idx = time();
 
         // save key
-        $cache_get_keys = cg('keys_siswa_retrieve_all');
+        $cache_get_keys = cg($cache_key);
         if ($cache_get_keys === false) {
-            cs('keys_siswa_retrieve_all', array($cache_key));
+            cs($cache_key, array($cache_idx => $cache_key));
         } else {
-            if (!in_array($cache_key, $cache_get_keys)) {
-                $cache_get_keys[] = $cache_key;
-                cs('keys_siswa_retrieve_all', $cache_get_keys);
+            $ada = false;
+            foreach ($cache_get_keys as $k => $v) {
+                if ($v == $filter_key) {
+                    $cache_idx = $k;
+                    $ada = true;
+                    break;
+                }
+            }
+
+            if (!$ada) {
+                $cache_get_keys[$cache_idx] = $filter_key;
+                cs($cache_key, $cache_get_keys);
             }
         }
 
+        $cache_key = "{$cache_key}_{$cache_idx}";
         $cache_get = cg($cache_key);
         if ($cache_get === false) {
             # ambil semua data siswa
@@ -110,7 +122,7 @@ class Siswa extends MY_Controller
             # dapatkan data2 siswa
             foreach ($retrieve_all['results'] as $key => $val) {
                 // get cache kelas siswa
-                $cache_key2 = "kelas_retrieve_siswa_null_" . json_encode(array(
+                $cache_key2 = "kelas_retrieve_siswa_" . cp(null, array(
                     'siswa_id' => $val['id'],
                     'aktif'    => 1
                 ));
@@ -129,7 +141,7 @@ class Siswa extends MY_Controller
 
                 # kelas aktif
                 if (!empty($kelas_siswa) AND $val['status_id'] != 3) {
-                    $cache_key2 = "kelas_retrieve_{$kelas_siswa['kelas_id']}";
+                    $cache_key2 = "kelas_retrieve_" . cp($kelas_siswa['kelas_id']);
                     $cache_get2 = cg($cache_key2);
                     if ($cache_get2 === false) {
                         $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
@@ -154,7 +166,7 @@ class Siswa extends MY_Controller
         $data['siswas']     = $retrieve_all['results'];
         $data['pagination'] = $this->pager->view($retrieve_all, 'siswa/index/'.$status_id.'/');
 
-        $cache_key = "siswa_count_pending";
+        $cache_key = "siswa_count_" . cp('pending');
         $cache_get = cg($cache_key);
         if ($cache_get === false) {
             $count_pending = $this->siswa_model->count('pending');
@@ -351,7 +363,7 @@ class Siswa extends MY_Controller
     function filter($segment_3 = '')
     {
         // get cache
-        $ck = "kelas_retrieve_all_child_1";
+        $ck = "kelas_retrieve_all_child_" . cp(true);
         $cg = cg($ck);
         if ($cg === false) {
             $kelas_all = $this->kelas_model->retrieve_all_child(true);
@@ -453,20 +465,33 @@ class Siswa extends MY_Controller
         $data['filter'] = $filter;
 
         if (!empty($filter)) {
+            $filter_key = cp($filter);
+
             // get cache
-            $cache_key = "siswa_filter_" . json_encode($filter);
+            $cache_key = "siswa_filter";
+            $cache_idx = time();
 
             // save key
-            $cache_get_keys = cg('keys_siswa_filter');
+            $cache_get_keys = cg($cache_key);
             if ($cache_get_keys === false) {
-                cs('keys_siswa_filter', array($cache_key));
+                cs($cache_key, array($cache_idx => $cache_key));
             } else {
-                if (!in_array($cache_key, $cache_get_keys)) {
-                    $cache_get_keys[] = $cache_key;
-                    cs('keys_siswa_filter', $cache_get_keys);
+                $ada = false;
+                foreach ($cache_get_keys as $k => $v) {
+                    if ($v == $filter_key) {
+                        $cache_idx = $k;
+                        $ada = true;
+                        break;
+                    }
+                }
+
+                if (!$ada) {
+                    $cache_get_keys[$cache_idx] = $filter_key;
+                    cs($cache_key, $cache_get_keys);
                 }
             }
 
+            $cache_key = "{$cache_key}_{$cache_idx}";
             $cache_get = cg($cache_key);
             if ($cache_get === false) {
                 $retrieve_all = $this->siswa_model->retrieve_all_filter(
@@ -476,7 +501,7 @@ class Siswa extends MY_Controller
                 # dapatkan data2 siswa
                 foreach ($retrieve_all['results'] as $key => $val) {
                     // get cache kelas siswa
-                    $cache_key2 = "kelas_retrieve_siswa_null_" . json_encode(array(
+                    $cache_key2 = "kelas_retrieve_siswa_" . cp(null, array(
                         'siswa_id' => $val['id'],
                         'aktif'    => 1
                     ));
@@ -495,7 +520,7 @@ class Siswa extends MY_Controller
 
                     # kelas aktif
                     if (!empty($kelas_siswa) AND $val['status_id'] != 3) {
-                        $cache_key2 = "kelas_retrieve_{$kelas_siswa['kelas_id']}";
+                        $cache_key2 = "kelas_retrieve_" . cp($kelas_siswa['kelas_id']);
                         $cache_get2 = cg($cache_key2);
                         if ($cache_get2 === false) {
                             $kelas = $this->kelas_model->retrieve($kelas_siswa['kelas_id']);
@@ -526,7 +551,7 @@ class Siswa extends MY_Controller
         $data['siswas']        = $retrieve_all['results'];
         $data['pagination']    = $this->pager->view($retrieve_all, 'siswa/filter/');
 
-        $cache_key = "siswa_count_pending";
+        $cache_key = "siswa_count_" . cp('pending');
         $cache_get = cg($cache_key);
         if ($cache_get === false) {
             $count_pending = $this->siswa_model->count('pending');
@@ -593,12 +618,12 @@ class Siswa extends MY_Controller
                         }
 
                         // delete cache
-                        cd("kelas_retrieve_siswa_null_" . json_encode(array(
+                        cd("kelas_retrieve_siswa_" . cp(null, array(
                             'siswa_id' => $siswa_id,
                             'kelas_id' => $kelas_id
                         )));
 
-                        cd("kelas_retrieve_siswa_null_" . json_encode(array(
+                        cd("kelas_retrieve_siswa_" . cp(null, array(
                             'siswa_id' => $siswa_id,
                             'aktif'    => 1
                         )));
@@ -614,7 +639,7 @@ class Siswa extends MY_Controller
                     $label .= __('student_update_status') . ' = ' . $label_status[$status_id];
                 }
                 if (!empty($kelas_id)) {
-                    $ck = "kelas_retrieve_{$kelas_id}";
+                    $ck = "kelas_retrieve_" . cp($kelas_id);
                     $cg = cg($ck);
                     if ($cg === false) {
                         $kelas = $this->kelas_model->retrieve($kelas_id);
@@ -651,7 +676,7 @@ class Siswa extends MY_Controller
         $status_id = (int)$segment_3;
         $siswa_id  = (int)$segment_4;
 
-        $ck = "siswa_retrieve_{$siswa_id}";
+        $ck = "siswa_retrieve_" . cp($siswa_id);
         $cg = cg($ck);
         if ($cg === false) {
             $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
@@ -747,7 +772,7 @@ class Siswa extends MY_Controller
             die(__('record_not_found'));
         }
 
-        $ck = "siswa_retrieve_{$siswa_id}";
+        $ck = "siswa_retrieve_" . cp($siswa_id);
         $cg = cg($ck);
         if ($cg === false) {
             $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
@@ -810,7 +835,7 @@ class Siswa extends MY_Controller
             die(__('record_not_found'));
         }
 
-        $ck = "siswa_retrieve_{$siswa_id}";
+        $ck = "siswa_retrieve_" . cp($siswa_id);
         $cg = cg($ck);
         if ($cg === false) {
             $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
@@ -893,24 +918,57 @@ class Siswa extends MY_Controller
     function moved_class($segment_3 = '', $segment_4 = '')
     {
         if (!is_admin()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
-        $status_id      = (int)$segment_3;
-        $siswa_id       = (int)$segment_4;
-        $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+        $status_id = (int)$segment_3;
+        $siswa_id = (int)$segment_4;
+        if (empty($siswa_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "siswa_retrieve_" . cp($siswa_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_siswa = $this->siswa_model->retrieve($siswa_id);
+            cs($ck, $retrieve_siswa);
+        } else {
+            $retrieve_siswa = $cg;
+        }
+
         if (empty($retrieve_siswa)) {
-            exit('Data siswa tidak ditemukan');
+            die(__('record_not_found'));
         }
 
-        $data['kelas']     = $this->kelas_model->retrieve_all_child();
+        $ck = "kelas_retrieve_all_child";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $kelas_child = $this->kelas_model->retrieve_all_child();
+            cs($ck, $kelas_child);
+        } else {
+            $kelas_child = $cg;
+        }
+
+        $data['kelas']     = $kelas_child;
         $data['status_id'] = $status_id;
         $data['siswa_id']  = $siswa_id;
 
-        $get_aktif = $this->kelas_model->retrieve_siswa(null, array(
+        $ck = "kelas_retrieve_siswa_" . cp(null, array(
             'siswa_id' => $siswa_id,
             'aktif'    => 1
         ));
+        $cg = cg($ck);
+        if ($cg === false) {
+            $get_aktif = $this->kelas_model->retrieve_siswa(null, array(
+                'siswa_id' => $siswa_id,
+                'aktif'    => 1
+            ));
+
+            cs($ck, $get_aktif);
+        } else {
+            $get_aktif = $cg;
+        }
+
         $data['get_aktif'] = $get_aktif;
 
         if ($this->form_validation->run('siswa/moved_class') == TRUE) {
@@ -927,7 +985,21 @@ class Siswa extends MY_Controller
                 $this->kelas_model->update_siswa($check['id'], $kelas_id, $siswa_id, 1);
             }
 
-            $this->session->set_flashdata('class', get_alert('success', 'Kelas siswa berhasil diperbaharui.'));
+            //delete cache
+            cd("kelas_retrieve_siswa_" . cp(null, array(
+                'siswa_id' => $siswa_id,
+                'kelas_id' => $kelas_id
+            )));
+
+            cd("kelas_retrieve_siswa_" . cp(null, array(
+                'siswa_id' => $siswa_id,
+                'aktif'    => 1
+            )));
+
+            cd("siswa_retrieve_{$siswa_id}");
+            $this->reset_cache();
+
+            $this->session->set_flashdata('class', get_alert('success', __('edit_success_msg')));
             redirect('siswa/moved_class/'.$status_id.'/'.$siswa_id);
         }
 

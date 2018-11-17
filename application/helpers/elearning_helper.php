@@ -1337,6 +1337,41 @@ function cd($key)
     return true;
 }
 
+/**
+ * cp cache param
+ *
+ */
+function cp()
+{
+    if (!function_exists('cpArray')) {
+        function cpArray($i, $k) {
+            if (is_array($i)) {
+                ksort($i);
+                $a = array_map('cpArray', array_values($i), array_keys($i));
+                return "{$k}," . '{' . implode(',', $a) . '}';
+            } else {
+                return "{$k},{$i}";
+            }
+        }
+    }
+
+    $a = array();
+    foreach (func_get_args() as $param) {
+        if (is_null($param)) {
+            $a[] = "null";
+        } elseif (is_array($param)) {
+            ksort($param);
+            $a[] = implode("|", array_map('cpArray', array_values($param), array_keys($param)));
+        } elseif (is_bool($param)) {
+            $a[] = ($param) ? 'true' : 'false';
+        } else {
+            $a[] = $param;
+        }
+    }
+
+	return implode("_", $a);
+}
+
 function handle_tgl_lahir($tgl = "", $bln = "", $thn = "")
 {
     if (empty($tgl) || empty($bln) || empty($thn)) {

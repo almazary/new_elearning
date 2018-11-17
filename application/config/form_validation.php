@@ -384,7 +384,7 @@ $config['siswa/add'] = array(
 $config['siswa/moved_class'] = array(
     array(
         'field' => 'kelas_id',
-        'label' => 'Kelas',
+        'label' => __('student_class'),
         'rules' => 'required|trim|numeric|xss_clean'
     )
 );

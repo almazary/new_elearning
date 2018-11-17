@@ -48,6 +48,22 @@
                     window.location.replace(site_url);
                 }
             }
+
+            try {
+                // colorbox autoheight
+                var max_height = $(window.parent).height() - 100;
+                if (max_height < 150) {
+                    max_height = 150;
+                }
+                if ($('body').height() < max_height) {
+                    max_height = $('body').height();
+                }
+
+                parent.$.colorbox.resize({
+                    innerHeight:max_height,
+                });
+            } catch(e){}
+
         </script>
     </body>
 </html>

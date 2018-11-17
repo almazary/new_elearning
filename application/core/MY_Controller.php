@@ -138,6 +138,30 @@ class MY_Controller extends CI_Controller
         if (is_login()) {
             $this->login_model->update_last_activity(get_sess_data('login', 'log_id'));
         }
+
+        // delete all cache via query url
+        if (!empty($this->input->get('please_reset_cache')) && is_admin()) {
+            $this->delete_all_cache();
+        }
+    }
+
+    /**
+     * delete_all_cache
+     *
+     */
+    function delete_all_cache()
+    {
+        $ignore = array(".", "..", ".DS_Store", "index.html", ".htaccess");
+
+        $cache_dir = APPPATH . 'cache/';
+        $objects = scandir($cache_dir);
+        foreach ($objects as $object) {
+            if (!in_array($object, $ignore) && !is_dir($cache_dir . $object)) {
+                cd($object);
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -499,7 +523,7 @@ class MY_Controller extends CI_Controller
     function format_msg($retrieve)
     {
         //get cache
-        $cache_key = "format_msg_{$retrieve['id']}";
+        $cache_key = "format_msg_" . cp($retrieve['id']);
         $cache_get = cg($cache_key);
         if ($cache_get === false) {
             # jika inbox yang dicari pengirimnya
