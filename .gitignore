@@ -19,3 +19,4 @@
 !/application/cache/index.html
 /application/controllers/test.php
 /TODO
+.DS_Store
