@@ -59,22 +59,22 @@ class Pengumuman extends MY_Controller
 
     private function reset_cache()
     {
-        $keys = cg('keys_pengumuman_retrieve_all');
+        $keys = cg('pengumuman_retrieve_all');
         if (!empty($keys)) {
-            foreach ($keys as $v) {
-                cd($v);
+            foreach ($keys as $k => $v) {
+                cd('pengumuman_retrieve_all_' . cp($k));
             }
 
-            cd('keys_pengumuman_retrieve_all');
+            cd('pengumuman_retrieve_all');
         }
 
-        $keys = cg('keys_pengumuman_retrieve');
+        $keys = cg('pengumuman_retrieve');
         if (!empty($keys)) {
-            foreach ($keys as $v) {
-                cd($v);
+            foreach ($keys as $k => $v) {
+                cd('pengumuman_retrieve_' . cp($k));
             }
 
-            cd('keys_pengumuman_retrieve');
+            cd('pengumuman_retrieve');
         }
     }
 
@@ -111,19 +111,31 @@ class Pengumuman extends MY_Controller
         }
 
         // get cache
-        $cache_key = "pengumuman_retrieve_all_{$this->no_of_records()}_{$page_no}_" . (!empty($where) ? json_encode($where) : "");
+        $filter_key = cp($this->no_of_records(), $page_no, $where);
+        $cache_key = "pengumuman_retrieve_all";
+        $cache_idx = time();
 
         // save key
-        $cache_get_keys = cg('keys_pengumuman_retrieve_all');
+        $cache_get_keys = cg($cache_key);
         if ($cache_get_keys === false) {
-            cs('keys_pengumuman_retrieve_all', array($cache_key), 60 * 60 * 25);
+            cs($cache_key, array($cache_idx => $cache_key));
         } else {
-            if (!in_array($cache_key, $cache_get_keys)) {
-                $cache_get_keys[] = $cache_key;
-                cs('keys_pengumuman_retrieve_all', $cache_get_keys, 60 * 60 * 25);
+            $ada = false;
+            foreach ($cache_get_keys as $k => $v) {
+                if ($v == $filter_key) {
+                    $cache_idx = $k;
+                    $ada = true;
+                    break;
+                }
+            }
+
+            if (!$ada) {
+                $cache_get_keys[$cache_idx] = $filter_key;
+                cs($cache_key, $cache_get_keys);
             }
         }
 
+        $cache_key = "{$cache_key}_{$cache_idx}";
         $cache_get = cg($cache_key);
         if ($cache_get === false) {
             $retrieve_all = $this->pengumuman_model->retrieve_all($this->no_of_records(), $page_no, $where);
@@ -149,7 +161,7 @@ class Pengumuman extends MY_Controller
             }
 
             //save
-            cs($cache_key, $retrieve_all, 60 * 60 * 24);
+            cs($cache_key, $retrieve_all);
         } else {
             $retrieve_all = $cache_get;
         }
@@ -285,21 +297,36 @@ class Pengumuman extends MY_Controller
     function detail($segment_3 = '')
     {
         $id = (int)$segment_3;
+        if (empty($id)) {
+            die(__('record_not_found'));
+        }
 
         // get cache
-        $cache_key = "pengumuman_retrieve_{$id}";
+        $filter_key = cp($id);
+        $cache_key = "pengumuman_retrieve";
+        $cache_idx = time();
 
         // save key
-        $cache_get_keys = cg('keys_pengumuman_retrieve');
+        $cache_get_keys = cg($cache_key);
         if ($cache_get_keys === false) {
-            cs('keys_pengumuman_retrieve', array($cache_key), 60 * 60 * 25);
+            cs($cache_key, array($cache_idx => $cache_key));
         } else {
-            if (!in_array($cache_key, $cache_get_keys)) {
-                $cache_get_keys[] = $cache_key;
-                cs('keys_pengumuman_retrieve', $cache_get_keys, 60 * 60 * 25);
+            $ada = false;
+            foreach ($cache_get_keys as $k => $v) {
+                if ($v == $filter_key) {
+                    $cache_idx = $k;
+                    $ada = true;
+                    break;
+                }
+            }
+
+            if (!$ada) {
+                $cache_get_keys[$cache_idx] = $filter_key;
+                cs($cache_key, $cache_get_keys);
             }
         }
 
+        $cache_key = "{$cache_key}_{$cache_idx}";
         $cache_get = cg($cache_key);
         if ($cache_get === false) {
             $pengumuman = $this->pengumuman_model->retrieve(array('id' => $id));
@@ -320,7 +347,7 @@ class Pengumuman extends MY_Controller
             $pengumuman['allow_action'] = $this->get_allow_action($pengumuman);
 
             // save
-            cs($cache_key, $pengumuman, 60 * 60 * 24);
+            cs($cache_key, $pengumuman);
         } else {
             $pengumuman = $cache_get;
         }
