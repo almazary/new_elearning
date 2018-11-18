@@ -21,7 +21,7 @@
         <div class="btn-group pull-right">
             <a class="btn btn-default btn-sm" href="{{ site_url('message/to/siswa/' ~ siswa.id) }}">{{ __('student_send_msg') }}</a>
             {% if is_admin() %}
-            <a class="btn btn-default btn-sm" href="{{ site_url('login/login_log/' ~ siswa_login.id) }}">{{ __('student_login_log') }}</a>
+            <a class="btn btn-default btn-sm" href="{{ site_url('login/login_log/' ~ siswa_login.id) }}">{{ __('login_log') }}</a>
             {% endif %}
         </div>
     </div>
@@ -33,9 +33,9 @@
     <div class="table-responsive">
         <table class="table table-noborder">
             <tr>
-                <th bgcolor="#FBFBFB" width="25%" style="border-top: 0px;">{{ __('student_key') }}</th>
-                <td style="border-top: 0px;">{{ siswa.nis }}</td>
-                <td rowspan="5" width="15%" style="border-top: 0px;">
+                <th width="20%">{{ __('student_key') }}</th>
+                <td>{{ siswa.nis }}</td>
+                <td rowspan="5" width="20%">
                     {% if siswa.foto is not empty  %}
                     <a target="_blank" href="{{ get_url_image_siswa(siswa.foto, '', siswa.jenis_kelamin) }}">
                         {% endif %}
@@ -46,7 +46,7 @@
                 </td>
             </tr>
             <tr>
-                <th bgcolor="#FBFBFB">{{ __('student_gender') }}</th>
+                <th>{{ __('student_gender') }}</th>
                 <td>
                     {% if (siswa.jenis_kelamin == 'Laki-laki') %}
                     {{ __('male') }}
@@ -56,27 +56,27 @@
                 </td>
             </tr>
             <tr>
-                <th bgcolor="#FBFBFB">{{ __('student_join_year') }}</th>
+                <th>{{ __('student_join_year') }}</th>
                 <td>{{ siswa.tahun_masuk }}</td>
             </tr>
             <tr>
-                <th bgcolor="#FBFBFB">{{ __('student_born_in') }}</th>
+                <th>{{ __('student_born_in') }}</th>
                 <td>{{ siswa.tempat_lahir }}</td>
             </tr>
             <tr>
-                <th bgcolor="#FBFBFB">{{ __('student_born_on') }}</th>
+                <th>{{ __('student_born_on') }}</th>
                 <td>{{ (siswa.tgl_lahir is not empty) ? tgl_indo(siswa.tgl_lahir) }}</td>
             </tr>
             <tr>
-                <th bgcolor="#FBFBFB">{{ __('student_religion') }}</th>
+                <th>{{ __('student_religion') }}</th>
                 <td colspan="2">{{ siswa.agama }}</td>
             </tr>
             <tr>
-                <th bgcolor="#FBFBFB">{{ __('student_address') }}</th>
+                <th>{{ __('student_address') }}</th>
                 <td colspan="2">{{ siswa.alamat }}</td>
             </tr>
             <tr>
-                <th bgcolor="#FBFBFB">{{ __('student_status') }}</th>
+                <th>{{ __('student_status') }}</th>
                 <td colspan="2">
                     {% if siswa.status_id == 0 %}
                     {{ __('student_status_pending') }}
@@ -162,13 +162,13 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <th width="30%" bgcolor="#FBFBFB" style="border-top: 0px;">{{ __('student_username') }}</th>
+                            <th width="30%" style="border-top: 0px;">{{ __('student_username') }}</th>
                             <td style="border-top: 0px;">
                                 {{ siswa_login.username }}
                             </td>
                         </tr>
                         <tr>
-                            <th bgcolor="#FBFBFB">{{ __('student_password') }}</th>
+                            <th>{{ __('student_password') }}</th>
                             <td>
                                 *********
                             </td>
