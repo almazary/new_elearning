@@ -225,3 +225,4 @@ $lang['student_empty_selected'] = "Pilih siswa terlebih dahulu.";
 $lang['student_send_msg'] = "Kirim Pesan";
 $lang['student_login_log'] = "Login Log";
 $lang['student_class_histories'] = "Riwayat Kelas";
+$lang['student_account'] = "Akun";

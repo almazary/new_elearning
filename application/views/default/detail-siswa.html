@@ -10,174 +10,174 @@
 {% endblock %}
 
 {% block content %}
-<div class="module">
-    <div class="module-head">
-        <h3>{{ __('student') }}</h3>
+{{ get_flashdata('siswa')|raw }}
+
+<div class="row-fluid">
+    <div class="span8">
+        <h3 style="margin-top:0px;margin-bottom:0px;margin-left:15px;">{{ siswa.nama }}</h3>
     </div>
-    <div class="module-body">
-        {{ get_flashdata('siswa')|raw }}
-
-        {% if siswa_login.id != get_sess_data('login', 'id') %}
-        <div class="row-fluid">
-            <div class="span4">
-                <div class="btn-group">
-                    <a class="btn btn-primary btn-sm" href="{{ site_url('message/to/siswa/' ~ siswa.id) }}">{{ __('student_send_msg') }}</a>
-                    {% if is_admin() %}
-                    <a class="btn btn-default btn-sm" href="{{ site_url('login/login_log/' ~ siswa_login.id) }}">{{ __('student_login_log') }}</a>
-                    {% endif %}
-                </div>
-            </div>
+    {% if siswa_login.id != get_sess_data('login', 'id') %}
+    <div class="span4">
+        <div class="btn-group pull-right">
+            <a class="btn btn-default btn-sm" href="{{ site_url('message/to/siswa/' ~ siswa.id) }}">{{ __('student_send_msg') }}</a>
+            {% if is_admin() %}
+            <a class="btn btn-default btn-sm" href="{{ site_url('login/login_log/' ~ siswa_login.id) }}">{{ __('student_login_log') }}</a>
+            {% endif %}
         </div>
-        <br>
-        {% endif %}
+    </div>
+    {% endif %}
+</div>
 
-        <div class="panel panel-default">
+<br>
+<div class="wel well-small well-white">
+    <div class="table-responsive">
+        <table class="table table-noborder">
+            <tr>
+                <th bgcolor="#FBFBFB" width="25%" style="border-top: 0px;">{{ __('student_key') }}</th>
+                <td style="border-top: 0px;">{{ siswa.nis }}</td>
+                <td rowspan="5" width="15%" style="border-top: 0px;">
+                    {% if siswa.foto is not empty  %}
+                    <a target="_blank" href="{{ get_url_image_siswa(siswa.foto, '', siswa.jenis_kelamin) }}">
+                        {% endif %}
+                        <img style="width:113px;" class="img-polaroid" src="{{ get_url_image_siswa(siswa.foto, 'medium', siswa.jenis_kelamin) }}">
+                        {% if siswa.foto is not empty  %}
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">{{ __('student_gender') }}</th>
+                <td>
+                    {% if (siswa.jenis_kelamin == 'Laki-laki') %}
+                    {{ __('male') }}
+                    {% elseif (siswa.jenis_kelamin == 'Perempuan')%}
+                    {{ __('female') }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">{{ __('student_join_year') }}</th>
+                <td>{{ siswa.tahun_masuk }}</td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">{{ __('student_born_in') }}</th>
+                <td>{{ siswa.tempat_lahir }}</td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">{{ __('student_born_on') }}</th>
+                <td>{{ (siswa.tgl_lahir is not empty) ? tgl_indo(siswa.tgl_lahir) }}</td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">{{ __('student_religion') }}</th>
+                <td colspan="2">{{ siswa.agama }}</td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">{{ __('student_address') }}</th>
+                <td colspan="2">{{ siswa.alamat }}</td>
+            </tr>
+            <tr>
+                <th bgcolor="#FBFBFB">{{ __('student_status') }}</th>
+                <td colspan="2">
+                    {% if siswa.status_id == 0 %}
+                    {{ __('student_status_pending') }}
+                    {% elseif siswa.status_id == 1 %}
+                    {{ __('student_status_active') }}
+                    {% elseif siswa.status_id == 2 %}
+                    {{ __('student_status_block') }}
+                    {% elseif siswa.status_id == 3 %}
+                    {{ __('student_status_alumni') }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% if is_admin() and status_id != 3 %}
+            <tr>
+                <td></td>
+                <td colspan="2">
+                    <div class="btn-group">
+                        {{ anchor('siswa/edit_profile/' ~ status_id ~ '/' ~ siswa.id, __('student_edit_profile'), {'class' : 'siswa-iframe-4 btn btn-small btn-default', 'title' : __('student_edit_profile')})|raw }}
+                        {{ anchor('siswa/edit_picture/' ~ status_id ~ '/' ~ siswa.id, __('student_edit_picture'), {'class' : 'siswa-iframe-5 btn btn-small btn-default', 'title' : __('student_edit_picture')})|raw }}
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+</div>
+
+<br>
+<div class="row-fluid">
+    <div class="span6">
+        <div class="panel panel-default" id="riwayat-kelas">
             <div class="panel-heading">
-                <strong>{{ __('student_profile') }}</strong>
-                {% if is_admin() %}
+                <strong>{{ __('student_class_histories') }}</strong>
+                {% if is_admin() and status_id != 3 %}
                 <div class="btn-group pull-right" style="margin-top:-4px;">
-                    {{ anchor('siswa/edit_profile/' ~ status_id ~ '/' ~ siswa.id, __('student_edit_profile'), {'class' : 'siswa-iframe-4 btn btn-small btn-primary', 'title' : __('student_edit_profile')})|raw }}
-                    {{ anchor('siswa/edit_picture/' ~ status_id ~ '/' ~ siswa.id, __('student_edit_picture'), {'class' : 'siswa-iframe-5 btn btn-small btn-primary', 'title' : __('student_edit_picture')})|raw }}
+                    {{ anchor('siswa/moved_class/' ~ status_id ~ '/' ~ siswa.id, __('student_edit_class_active'), {'class' : 'siswa-iframe btn btn-small btn-default', 'title' : __('student_edit_class_active')})|raw }}
                 </div>
                 {% endif %}
             </div>
             <div class="panel-body">
-                <table class="table">
-                    <tr>
-                        <th bgcolor="#FBFBFB" width="25%" style="border-top: 0px;">{{ __('student_key') }}</th>
-                        <td style="border-top: 0px;">{{ siswa.nis }}</td>
-                        <td rowspan="5" width="15%" style="border-top: 0px;">
-                            <img style="width:113px;" class="img-polaroid" src="{{ get_url_image_siswa(siswa.foto, 'medium', siswa.jenis_kelamin) }}">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th bgcolor="#FBFBFB">{{ __('student_name') }}</th>
-                        <td>{{ siswa.nama }}</td>
-                    </tr>
-                    <tr>
-                        <th bgcolor="#FBFBFB">{{ __('student_gender') }}</th>
-                        <td>
-                            {% if (siswa.jenis_kelamin == 'Laki-laki') %}
-                                {{ __('male') }}
-                            {% elseif (siswa.jenis_kelamin == 'Perempuan')%}
-                                {{ __('female') }}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th width="5%">{{ __('number') }}</th>
+                            <th>{{ __('student_class') }}</th>
+                            {% if status_id != 3 %}
+                            <th>{{ __('active') }}</th>
                             {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th bgcolor="#FBFBFB">{{ __('student_join_year') }}</th>
-                        <td colspan="2">{{ siswa.tahun_masuk }}</td>
-                    </tr>
-                    <tr>
-                        <th bgcolor="#FBFBFB">{{ __('student_born_in') }}</th>
-                        <td>{{ siswa.tempat_lahir }}</td>
-                    </tr>
-                    <tr>
-                        <th bgcolor="#FBFBFB">{{ __('student_born_on') }}</th>
-                        <td>{{ (siswa.tgl_lahir is not empty) ? tgl_indo(siswa.tgl_lahir) }}</td>
-                    </tr>
-                    <tr>
-                        <th bgcolor="#FBFBFB">{{ __('student_religion') }}</th>
-                        <td colspan="2">{{ siswa.agama }}</td>
-                    </tr>
-                    <tr>
-                        <th bgcolor="#FBFBFB">{{ __('student_address') }}</th>
-                        <td colspan="2">{{ siswa.alamat }}</td>
-                    </tr>
-                    <tr>
-                        <th bgcolor="#FBFBFB">{{ __('student_status') }}</th>
-                        <td colspan="2">
-                            {% if siswa.status_id == 0 %}
-                                {{ __('student_status_pending') }}
-                            {% elseif siswa.status_id == 1 %}
-                                {{ __('student_status_active') }}
-                            {% elseif siswa.status_id == 2 %}
-                                {{ __('student_status_block') }}
-                            {% elseif siswa.status_id == 3 %}
-                                {{ __('student_status_alumni') }}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for v in siswa_kelas %}
+                        <tr>
+                            <td>{{ loop.index }}.</td>
+                            <td>
+                                {{ v.retrieve.nama }}
+                            </td>
+                            {% if status_id != 3 %}
+                            <td>
+                                {% if v.aktif == 1 %}
+                                <i class="icon icon-ok"></i>
+                                {% endif %}
+                            </td>
                             {% endif %}
-                        </td>
-                    </tr>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
-
-        <div class="row-fluid">
-            <div class="span6">
-                <div class="panel panel-default" id="riwayat-kelas">
-                    <div class="panel-heading">
-                        <strong>{{ __('student_class_histories') }}</strong>
-                        {% if is_admin() and status_id != 3 %}
-                        <div class="btn-group pull-right" style="margin-top:-4px;">
-                            {{ anchor('siswa/moved_class/' ~ status_id ~ '/' ~ siswa.id, __('student_edit_class_active'), {'class' : 'siswa-iframe btn btn-small btn-primary', 'title' : __('student_edit_class_active')})|raw }}
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div class="panel-body">
-                        <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th width="5%">{{ __('number') }}</th>
-                                <th>{{ __('student_class') }}</th>
-                                {% if status_id != 3 %}
-                                <th>{{ __('active') }}</th>
-                                {% endif %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for v in siswa_kelas %}
-                            <tr>
-                                <td>{{ loop.index }}.</td>
-                                <td>
-                                    {{ v.retrieve.nama }}
-                                </td>
-                                {% if status_id != 3 %}
-                                <td>
-                                    {% if v.aktif == 1 %}
-                                        <i class="icon icon-ok"></i>
-                                    {% endif %}
-                                </td>
-                                {% endif %}
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            {% if is_admin() %}
-            <div class="span6">
-                <div class="panel panel-default" id="akun">
-                    <div class="panel-heading">
-                        <strong>Akun Login</strong>
-                        <div class="btn-group pull-right" style="margin-top:-4px;">
-                            {{ anchor('siswa/edit_username/' ~ status_id ~ '/' ~ siswa.id, 'Edit Username', {'class' : 'siswa-iframe-2 btn btn-small btn-primary', 'title' : 'Edit Username Siswa'})|raw }}
-                            {{ anchor('siswa/edit_password/' ~ status_id ~ '/' ~ siswa.id, 'Edit Password', {'class' : 'siswa-iframe-3 btn btn-small btn-primary', 'title' : 'Edit Password Siswa'})|raw }}
-                        </div>
-                    </div>
-                    <div class="panel-body">
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <th width="30%" bgcolor="#FBFBFB" style="border-top: 0px;">Username</th>
-                                    <td style="border-top: 0px;">
-                                        {{ siswa_login.username }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th bgcolor="#FBFBFB">Password</th>
-                                    <td>
-                                        *********
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-        </div>
-
     </div>
+    {% if is_admin() %}
+    <div class="span6">
+        <div class="panel panel-default" id="akun">
+            <div class="panel-heading">
+                <strong>{{ __('student_account') }}</strong>
+                <div class="btn-group pull-right" style="margin-top:-4px;">
+                    {{ anchor('siswa/edit_username/' ~ status_id ~ '/' ~ siswa.id, __('student_edit_username'), {'class' : 'siswa-iframe-2 btn btn-small btn-default', 'title' : __('student_edit_username')})|raw }}
+                    {{ anchor('siswa/edit_password/' ~ status_id ~ '/' ~ siswa.id, __('student_edit_password'), {'class' : 'siswa-iframe-3 btn btn-small btn-default', 'title' : __('student_edit_password')})|raw }}
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th width="30%" bgcolor="#FBFBFB" style="border-top: 0px;">{{ __('student_username') }}</th>
+                            <td style="border-top: 0px;">
+                                {{ siswa_login.username }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th bgcolor="#FBFBFB">{{ __('student_password') }}</th>
+                            <td>
+                                *********
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
