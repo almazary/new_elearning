@@ -400,6 +400,7 @@ class Siswa extends MY_Controller
             $kelas_id      = $this->input->post('kelas_id', TRUE);
 
             $filter = array(
+                'id'            => $this->input->post('id', TRUE),
                 'nis'           => $this->input->post('nis', TRUE),
                 'nama'          => $this->input->post('nama', TRUE),
                 'jenis_kelamin' => (empty($jenis_kelamin)) ? array() : $jenis_kelamin,
@@ -443,6 +444,7 @@ class Siswa extends MY_Controller
             $data['filter_empty'] = 1;
 
             $filter = array(
+                'id'            => '',
                 'nis'           => '',
                 'nama'          => '',
                 'jenis_kelamin' => '',
@@ -496,7 +498,24 @@ class Siswa extends MY_Controller
             $cache_get = cg($cache_key);
             if ($cache_get === false) {
                 $retrieve_all = $this->siswa_model->retrieve_all_filter(
-                    $filter['nis'], $filter['nama'], $filter['jenis_kelamin'], $filter['tahun_masuk'], $filter['tempat_lahir'], $filter['tgl_lahir'], $filter['bln_lahir'], $filter['thn_lahir'], $filter['alamat'], $filter['agama'], $filter['kelas_id'], $filter['status_id'], $filter['username'], $page_no
+                    !empty($filter['id']) ? array_filter(explode(',', $filter['id']), function ($i) {
+                        $i = trim($i);
+                        return is_numeric($i);
+                    }) : array(),
+                    $filter['nis'],
+                    $filter['nama'],
+                    $filter['jenis_kelamin'],
+                    $filter['tahun_masuk'],
+                    $filter['tempat_lahir'],
+                    $filter['tgl_lahir'],
+                    $filter['bln_lahir'],
+                    $filter['thn_lahir'],
+                    $filter['alamat'],
+                    $filter['agama'],
+                    $filter['kelas_id'],
+                    $filter['status_id'],
+                    $filter['username'],
+                    $page_no
                 );
 
                 # dapatkan data2 siswa

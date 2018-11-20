@@ -134,6 +134,7 @@ class Siswa_model extends CI_Model
     public function retrieve_all_by_name($nama)
     {
         $search_result = $this->retrieve_all_filter(
+            $id            = array(),
             $nis           = '',
             $nama,
             $jenis_kelamin = array(),
@@ -175,6 +176,7 @@ class Siswa_model extends CI_Model
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_filter(
+        $id            = array(),
         $nis           = '',
         $nama          = '',
         $jenis_kelamin = array(),
@@ -193,6 +195,10 @@ class Siswa_model extends CI_Model
     ) {
         $where = array();
         $orderby['siswa.id'] = 'DESC';
+
+        if (!empty($id)) {
+            $where['siswa.id'] = array($id, 'where_in');
+        }
 
         if (!empty($nis)) {
             $nis = (int)$nis;

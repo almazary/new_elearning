@@ -466,6 +466,11 @@ $config['siswa/edit_profile'] = array(
 );
 $config['siswa/filter'] = array(
     array(
+        'field' => 'id',
+        'label' => __('student_id'),
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
         'field' => 'nis',
         'label' => __('student_key'),
         'rules' => 'trim|xss_clean'

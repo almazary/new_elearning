@@ -24,7 +24,7 @@
             <div class="span5">
                 <div class="btn-group pull-right">
                     {{ anchor('siswa/index/1', __('student_status_active'), {'class' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/index/0', __('student_status_pending') ~ ((count_pending > 0) ? '<span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('siswa/index/0', __('student_status_pending') ~ ((count_pending > 0) ? ' (' ~ count_pending  ~ ')'), {'class' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/index/3', __('student_status_alumni'), {'class' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> ' ~ __('filter_student'), {'class' : 'btn btn-info'})|raw }}
                 </div>
@@ -39,7 +39,13 @@
                 {{ form_open('siswa/filter')|raw }}
                 <table class="table table-condensed" id="form-search">
                     <tr>
-                        <th width="20%">{{ __('student_key') }}</th>
+                        <th width="20%">{{ __('student_id') }}</th>
+                        <td>
+                            <input type="text" name="id" class="span3" style="margin-bottom:0px;" value="{{ set_value('id', (filter.id is defined) ? filter.id) }}" placeholder="{{ __('comma_separate') }}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>{{ __('student_key') }}</th>
                         <td>
                             <input type="text" name="nis" class="span2" style="margin-bottom:0px;" value="{{ set_value('nis', (filter.nis is defined) ? filter.nis) }}">
                         </td>
@@ -126,9 +132,8 @@
                         <td>
                             <p style="margin-top:0px; margin-bottom:5px;">
                                 {% if is_admin() %}
-                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="0" {{ set_checkbox('status_id[]', '0', (filter.status_id is defined and 0 in filter.status_id) ? TRUE : FALSE) }}> {{ __('student_status_pending') }}</label>
                                 <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="1" {{ set_checkbox('status_id[]', '1', (filter.status_id is defined and 1 in filter.status_id) ? TRUE : FALSE) }}> {{ __('student_status_active') }}</label>
-                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="2" {{ set_checkbox('status_id[]', '2', (filter.status_id is defined and 2 in filter.status_id) ? TRUE : FALSE) }}> {{ __('student_status_block') }}</label>
+                                <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="0" {{ set_checkbox('status_id[]', '0', (filter.status_id is defined and 0 in filter.status_id) ? TRUE : FALSE) }}> {{ __('student_status_pending') }}</label>
                                 {% endif %}
                                 <label class="checkbox inline"><input type="checkbox" name="status_id[]" value="3" {{ set_checkbox('status_id[]', '3', (filter.status_id is defined and 3 in filter.status_id) ? TRUE : FALSE) }}> {{ __('student_status_alumni') }}</label>
                             </p>
@@ -227,7 +232,6 @@
                             <select name="status_id" style="width:auto;">
                                 <option value="">{{ __('student_update_status') }}</option>
                                 <option value="1">{{ __('student_status_active') }}</option>
-                                <option value="2">{{ __('student_status_block') }}</option>
                                 <option value="3">{{ __('student_status_alumni') }}</option>
                             </select>
                         </td>

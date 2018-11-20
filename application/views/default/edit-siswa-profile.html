@@ -98,9 +98,8 @@
         <tr>
             <th>{{ __('student_status') }} <span class="text-error">*</span></th>
             <td>
-                <label class="radio inline"><input type="radio" name="status_id" value="0" {{ set_radio('status_id', '0', (siswa.status_id == '0') ? TRUE : FALSE) }}> {{ __('student_status_pending') }}</label>
                 <label class="radio inline"><input type="radio" name="status_id" value="1" {{ set_radio('status_id', '1', (siswa.status_id == '1') ? TRUE : FALSE) }}> {{ __('student_status_active') }}</label>
-                <label class="radio inline"><input type="radio" name="status_id" value="2" {{ set_radio('status_id', '2', (siswa.status_id == '2') ? TRUE : FALSE) }}> {{ __('student_status_block') }}</label>
+                <label class="radio inline"><input type="radio" name="status_id" value="0" {{ set_radio('status_id', '0', (siswa.status_id == '0') ? TRUE : FALSE) }}> {{ __('student_status_pending') }}</label>
                 <label class="radio inline"><input type="radio" name="status_id" value="3" {{ set_radio('status_id', '3', (siswa.status_id == '3') ? TRUE : FALSE) }}> {{ __('student_status_alumni') }}</label>
                 <br>{{ form_error('status_id')|raw }}
             </td>

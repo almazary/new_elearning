@@ -51,7 +51,7 @@ class Pengajar extends MY_Controller
         }
 
         // remove count
-        cd("pengajar_count_pending");
+        cd("pengajar_count_". cp("pending"));
     }
 
     function index($segment_3 = '', $segment_4 = '')
@@ -179,6 +179,10 @@ class Pengajar extends MY_Controller
                         @kirim_email_approve_pengajar($pengajar_id);
                     }
                 }
+            }
+
+            if (!empty($pengajar_ids)) {
+                $this->reset_cache();
             }
 
             redirect($base_url_module);

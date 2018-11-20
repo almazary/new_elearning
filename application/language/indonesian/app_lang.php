@@ -116,6 +116,7 @@ $lang['course_schedule'] = "Jadwal Matapelajaran";
 $lang['detail_profile'] = "Detail Profil";
 $lang['profile_account'] = "Profil & Akun";
 $lang['login_log'] = "Riwayat Masuk";
+$lang['comma_separate'] = "Pisah dengan koma";
 
 $lang['notif_student_pass_equal_key'] = "Dimohon untuk segera mengganti password Anda untuk alasan keamanan. {link_change_pass}";
 $lang['login_history'] = "Riwayat login pengguna";

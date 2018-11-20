@@ -231,6 +231,7 @@ class Welcome extends MY_Controller
 
         # cari siswa
         $retrieve_all_siswa = $this->siswa_model->retrieve_all_filter(
+            $id            = '',
             $nis           = '',
             $nama          = $q,
             $jenis_kelamin = array(),
