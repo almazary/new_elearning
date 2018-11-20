@@ -1,29 +1,30 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Data Pengajar - {{ parent() }}
+{{ __('teacher') }} - {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">{{ __('teacher') }}</li>
 {% endblock %}
 
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>Data Pengajar</h3>
+        <h3>{{ __('teacher') }}</h3>
     </div>
     <div class="module-body">
-        {{ get_flashdata('pengajar')|raw }}
-
         {% if is_admin() == true %}
         <div class="row-fluid">
             <div class="span7">
-                <a href="{{ site_url('pengajar/add/' ~ status_id) }}" class="btn btn-primary">Tambah Pengajar</a>
+                <a href="{{ site_url('pengajar/add/' ~ status_id) }}" class="btn btn-primary">{{ __('add') }}</a>
             </div>
 
             <div class="span5">
                 <div class="btn-group pull-right">
-                    {{ anchor('pengajar/index/1', 'Aktif', {'class' : (status_id == 1) ? 'btn btn-info' : 'btn btn-default'})|raw }}
-                    {{ anchor('pengajar/index/0', 'Pending '  ~ ((count_pending > 0) ? '<span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
-                    {{ anchor('pengajar/index/2', 'Blocking', {'class' : (status_id == 2) ? 'btn btn-info' : 'btn btn-default'})|raw }}
-                    {{ anchor('pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> Filter', {'class' : 'btn btn-default'})|raw }}
+                    {{ anchor('pengajar/index/1', __('teacher_status_active'), {'class' : (status_id == 1) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('pengajar/index/0', __('teacher_status_pending')  ~ ((count_pending > 0) ? ' <span class="label label-warning">' ~ count_pending  ~ '</span>'), {'class' : (status_id == 0) ? 'btn btn-info' : 'btn btn-default'})|raw }}
+                    {{ anchor('pengajar/filter', '<i class="icon-search" style="line-height: 0px;"></i> ' ~ __('filter_teacher'), {'class' : 'btn btn-default'})|raw }}
                 </div>
             </div>
         </div>
@@ -107,17 +108,20 @@ Data Pengajar - {{ parent() }}
         {% endif %}
         <br>
 
+        {{ get_flashdata('pengajar')|raw }}
+
         {{ form_open('pengajar/index/' ~ status_id)|raw }}
+        <div class="table-responsive">
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th width="7%">
                         {% if status_id == 0 or status_id == 2 %}
-                            <input type="checkbox" style="margin-top:-2px;" onclick="filter_pengajar_ch_uch_checkbox(this)">
+                            <input type="checkbox" style="margin-top:-2px;" id="checkbox-all-teacher">
                         {% endif %}
-                        ID
+                        {{ __('teacher_id') }}
                     </th>
-                    <th>Informasi Pengajar</th>
+                    <th>{{ __('teacher_info') }}</th>
                     <th width="22%"></th>
                 </tr>
             </thead>
@@ -126,34 +130,35 @@ Data Pengajar - {{ parent() }}
                 <tr>
                     <td>
                         {% if status_id == 0 or status_id == 2 %}
-                            <input type="checkbox" name="pengajar_id[]" value="{{ v.id }}" style="margin-top:-2px;">
+                            <input type="checkbox" name="pengajar_id[]" value="{{ v.id }}" style="margin-top:-2px;" class="checkbox-teacher">
                         {% endif %}
                         <b>{{ v.id }}</b>
                     </td>
                     <td>
                         <img style="height:40px;width:40px; margin-right: 10px;" class="img-polaroid img-circle pull-left" src="{{ get_url_image_pengajar(v.foto, 'medium', v.jenis_kelamin) }}">
                         <b>{{ v.nama }} {{ ((v.nip is not empty) ? '<span class="text-muted">(' ~ v.nip ~ ')</span>')|raw }}</b>
-                        {% set is_admin =  get_row_data('login_model', 'retrieve', [null, null, null, null, v.id], 'is_admin') %}
-                        {% if is_admin == 1 %}
-                            <span class="label label-warning">Administrator</span>
+                        <br>
+                        {% if v.is_admin == 1 %}
+                        <span class="label label-warning">{{ __('administrator') }}</span>
+                        {% else %}
+                        {{ v.mapel_ajar_nama }}
                         {% endif %}
-                        <br><b>Alamat :</b> {{ v.alamat }}
                     </td>
                     <td>
                         <ul class="nav nav-pills" style="margin-bottom:0px;">
                             {% if is_admin() == true %}
-                            <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ status_id ~ '/' ~ v.id) }}"><i class="icon-zoom-in"></i> {{ __('detail') }}</a></li>
                             <li class="dropdown">
-                                <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> Edit <b class="caret" style="margin-top:5px;"></b></a>
+                                <a class="btn btn-default btn-small" href="#" id="act-{{ v.id }}" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-edit"></i> {{ __('edit') }} <b class="caret" style="margin-top:5px;"></b></a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="act-{{ v.id }}">
-                                    <li>{{ anchor('pengajar/edit_profile/' ~ status_id ~ '/' ~ v.id, 'Edit Profil', {'class' : 'pengajar-iframe-4', 'title' : 'Edit Profil Pengajar'})|raw }}</li>
-                                    <li>{{ anchor('pengajar/edit_picture/' ~ status_id ~ '/' ~ v.id, 'Edit Foto', {'class' : 'pengajar-iframe-5', 'title' : 'Edit Foto Pengajar'})|raw }}</li>
-                                    <li>{{ anchor('pengajar/edit_username/' ~ status_id ~ '/' ~ v.id, 'Edit Username', {'class' : 'pengajar-iframe-2', 'title' : 'Edit Username Pengajar'})|raw }}</li>
-                                    <li>{{ anchor('pengajar/edit_password/' ~ status_id ~ '/' ~ v.id, 'Edit Password', {'class' : 'pengajar-iframe-3', 'title' : 'Edit Password Pengajar'})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_profile/' ~ status_id ~ '/' ~ v.id, __('teacher_edit_profile'), {'class' : 'pengajar-iframe-4', 'title' : __('teacher_edit_profile')})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_picture/' ~ status_id ~ '/' ~ v.id, __('teacher_edit_picture'), {'class' : 'pengajar-iframe-5', 'title' : __('teacher_edit_picture')})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_username/' ~ status_id ~ '/' ~ v.id, __('teacher_edit_username'), {'class' : 'pengajar-iframe-2', 'title' : __('teacher_edit_username')})|raw }}</li>
+                                    <li>{{ anchor('pengajar/edit_password/' ~ status_id ~ '/' ~ v.id, __('teacher_edit_password'), {'class' : 'pengajar-iframe-3', 'title' : __('teacher_edit_password')})|raw }}</li>
                                 </ul>
                             </li>
                             {% elseif is_pengajar() == true %}
-                            <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> Detail</a></li>
+                            <li><a class="btn btn-default btn-small" href="{{ site_url('pengajar/detail/' ~ v.id) }}"><i class="icon-zoom-in"></i> {{ __('detail') }}</a></li>
                             {% endif %}
                         </ul>
                     </td>
@@ -161,6 +166,7 @@ Data Pengajar - {{ parent() }}
                 {% endfor %}
             </tbody>
         </table>
+        </div>
 
         {% if pengajar is not empty and (status_id == 0 or status_id == 2) %}
         <br>
@@ -168,18 +174,18 @@ Data Pengajar - {{ parent() }}
             <div class="span7">
                 <table cellpadding="5">
                     <tr>
-                        <th valign="top">Update Status Terpilih</th>
+                        <th valign="top">{{ __('teacher_edit_selected') }}</th>
                         <td valign="top">
                             <select name="status_id" style="width:100%;">
-                                <option>--Pilih Status--</option>
-                                <option value="1">Aktif</option>
+                                <option>{{ __('choose') }}</option>
+                                <option value="1">{{ __('teacher_status_active') }}</option>
                                 {% if status_id == 0 %}
-                                <option value="2">Blocking</option>
+                                <option value="2">{{ __('teacher_status_block') }}</option>
                                 {% endif %}
                             </select>
                         </td>
                         <td valign="top">
-                            <button type="submit" class="btn">Update</button>
+                            <button type="submit" class="btn btn-primary">{{ __('edit') }}</button>
                         </td>
                     </tr>
                 </table>
@@ -188,10 +194,9 @@ Data Pengajar - {{ parent() }}
         {% endif %}
 
         {{ form_close()|raw }}
-
-        <br>
+    </div>
+    <div class="module-foot">
         {{ pagination|raw }}
-
     </div>
 </div>
 {% endblock %}

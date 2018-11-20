@@ -249,6 +249,7 @@ class Siswa extends MY_Controller
 
         $data['kelas'] = $kelas_child;
 
+        $config = array();
         $config['upload_path']   = get_path_image();
         $config['allowed_types'] = 'jpg|jpeg|png';
         $config['max_size']      = '0';

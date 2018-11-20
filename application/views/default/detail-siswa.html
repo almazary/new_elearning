@@ -120,7 +120,7 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th width="5%">{{ __('number') }}</th>
+                            <th width="5%" align="center">{{ __('number') }}</th>
                             <th>{{ __('student_class') }}</th>
                             {% if status_id != 3 %}
                             <th>{{ __('active') }}</th>
@@ -130,7 +130,7 @@
                     <tbody>
                         {% for v in siswa_kelas %}
                         <tr>
-                            <td>{{ loop.index }}.</td>
+                            <td align="center">{{ loop.index }}</td>
                             <td>
                                 {{ v.retrieve.nama }}
                             </td>

@@ -39,6 +39,21 @@ class Pengajar extends MY_Controller
         must_login();
     }
 
+    private function reset_cache()
+    {
+        $keys = cg('pengajar_retrieve_all');
+        if (!empty($keys)) {
+            foreach ($keys as $k => $v) {
+                cd("pengajar_retrieve_all_" . cp($k));
+            }
+
+            cd('pengajar_retrieve_all');
+        }
+
+        // remove count
+        cd("pengajar_count_pending");
+    }
+
     function index($segment_3 = '', $segment_4 = '')
     {
         if (is_pengajar()) {
@@ -57,13 +72,80 @@ class Pengajar extends MY_Controller
 
         $base_url_module = 'pengajar/index/'.$status_id.'/';
 
-        # ambil semua data pengajar
-        $retrieve_all = $this->pengajar_model->retrieve_all(20, $page_no, $status_id);
+        // get cache
+        $filter_key = cp($this->no_of_records(), $page_no, $status_id);
+        $cache_key = "pengajar_retrieve_all";
+        $cache_idx = time();
+
+        // save key
+        $cache_get_keys = cg($cache_key);
+        if ($cache_get_keys === false) {
+            cs($cache_key, array($cache_idx => $cache_key));
+        } else {
+            $ada = false;
+            foreach ($cache_get_keys as $k => $v) {
+                if ($v == $filter_key) {
+                    $cache_idx = $k;
+                    $ada = true;
+                    break;
+                }
+            }
+
+            if (!$ada) {
+                $cache_get_keys[$cache_idx] = $filter_key;
+                cs($cache_key, $cache_get_keys);
+            }
+        }
+
+        $cache_key = "{$cache_key}_{$cache_idx}";
+        $cache_get = cg($cache_key);
+        if ($cache_get === false) {
+            # ambil semua data pengajar
+            $retrieve_all = $this->pengajar_model->retrieve_all($this->no_of_records(), $page_no, $status_id);
+            foreach ($retrieve_all['results'] as $k => $v) {
+                // admin or not
+                $retrieve_login = $this->login_model->retrieve(null, null, null, null, $v['id']);
+                if (isset($retrieve_login['is_admin'])) {
+                    $v['is_admin'] = $retrieve_login['is_admin'];
+                }
+
+                // mapel ajar
+                $results_ma = array();
+                $retrieve_all_ma = $this->pengajar_model->retrieve_all_ma(null, $v['id']);
+                foreach ($retrieve_all_ma as $k2 => $v2) {
+                    $retrieve_mapel_kelas = $this->mapel_model->retrieve_kelas($v2['mapel_kelas_id']);
+                    $retrieve_mapel = $this->mapel_model->retrieve($retrieve_mapel_kelas['mapel_id']);
+                    if (empty($results_ma[$retrieve_mapel['id']])) {
+                        $results_ma[$retrieve_mapel['id']] = $retrieve_mapel;
+                    }
+                }
+
+                $v['mapel_ajar'] = $results_ma;
+                $v['mapel_ajar_nama'] = implode(', ', array_map(function ($item) {
+                    return $item['nama'];
+                }, $results_ma));
+
+                $retrieve_all['results'][$k] = $v;
+            }
+
+            cs($cache_key, $retrieve_all);
+        } else {
+            $retrieve_all = $cache_get;
+        }
 
         $data['status_id']  = $status_id;
         $data['pengajar']   = $retrieve_all['results'];
         $data['pagination'] = $this->pager->view($retrieve_all, $base_url_module);
-        $data['count_pending'] = $this->pengajar_model->count('pending');
+
+        $ck = "pengajar_count_" . cp('pending');
+        $cg = cg($ck);
+        if ($cg === false) {
+            $count_pending = $this->pengajar_model->count('pending');
+            cs($ck, $count_pending);
+        } else {
+            $count_pending = $cg;
+        }
+        $data['count_pending'] = $count_pending;
 
         # panggil colorbox
         $html_js = load_comp_js(array(
@@ -72,6 +154,7 @@ class Pengajar extends MY_Controller
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
+        // handle update status
         if (isset($_POST['status_id']) AND !empty($_POST['status_id'])) {
             $post_status_id = $this->input->post('status_id', TRUE);
             $pengajar_ids   = $this->input->post('pengajar_id', TRUE);
@@ -118,6 +201,7 @@ class Pengajar extends MY_Controller
 
         $data['status_id'] = $status_id;
 
+        $config = array();
         $config['upload_path']   = get_path_image();
         $config['allowed_types'] = 'jpg|jpeg|png';
         $config['max_size']      = '0';
@@ -146,12 +230,7 @@ class Pengajar extends MY_Controller
             $username      = $this->input->post('username', TRUE);
             $password      = $this->input->post('password2', TRUE);
             $is_admin      = $this->input->post('is_admin', TRUE);
-
-            if (empty($thn_lahir)) {
-                $tanggal_lahir = null;
-            } else {
-                $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
-            }
+            $tanggal_lahir = handle_tgl_lahir($tgl_lahir, $bln_lahir, $thn_lahir);
 
             if (!empty($_FILES['userfile']['tmp_name'])) {
                 $upload_data = $this->upload->data();
@@ -177,6 +256,9 @@ class Pengajar extends MY_Controller
                 $foto = null;
             }
 
+            // start transaction
+            $this->db->trans_begin();
+
             # simpan data siswa
             $pengajar_id = $this->pengajar_model->create(
                 $nip,
@@ -198,7 +280,17 @@ class Pengajar extends MY_Controller
                 $is_admin
             );
 
-            $this->session->set_flashdata('pengajar', get_alert('success', 'Data Pengajar berhasil disimpan.'));
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                $this->session->set_flashdata('pengajar', get_alert('warning', __('insert_error')));
+            } else {
+                $this->db->trans_commit();
+                $this->session->set_flashdata('pengajar', get_alert('success', __('add_success_msg', array('subject' => __('teacher')))));
+
+                //reset cache
+                $this->reset_cache();
+            }
+
             redirect('pengajar/index/1');
 
         } else {

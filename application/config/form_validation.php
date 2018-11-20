@@ -535,67 +535,62 @@ $config['siswa/filter'] = array(
 $config['pengajar/add'] = array(
     array(
         'field' => 'nip',
-        'label' => 'NIP',
+        'label' => __('teacher_key'),
         'rules' => 'trim|xss_clean|is_unique[pengajar.nip]'
     ),
     array(
         'field' => 'nama',
-        'label' => 'Nama',
+        'label' => __('teacher_name'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'jenis_kelamin',
-        'label' => 'Jenis Kelamin',
+        'label' => __('teacher_gender'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'tempat_lahir',
-        'label' => 'Tempat Lahir',
+        'label' => __('teacher_born_on'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tgl_lahir',
-        'label' => 'Tgl Lahir',
+        'label' => __('born_date'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'bln_lahir',
-        'label' => 'Bulan Lahir',
+        'label' => __('born_month'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'thn_lahir',
-        'label' => 'Tahun Lahir',
+        'label' => __('born_year'),
         'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[4]'
     ),
     array(
         'field' => 'alamat',
-        'label' => 'Alamat',
+        'label' => __('teacher_address'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'username',
-        'label' => 'Username',
+        'label' => __('teacher_username'),
         'rules' => 'required|trim|xss_clean|valid_email|is_unique[login.username]'
     ),
     array(
-        'field' => 'default_username',
-        'label' => 'Default Username',
-        'rules' => 'trim|xss_clean|numeric'
-    ),
-    array(
         'field' => 'password',
-        'label' => 'Password',
+        'label' => __('teacher_password'),
         'rules' => 'required|trim|xss_clean|alpha_numeric'
     ),
     array(
         'field' => 'password2',
-        'label' => 'Ulangi Password',
+        'label' => __('teacher_password_confirm'),
         'rules' => 'required|matches[password]'
     ),
     array(
         'field' => 'is_admin',
-        'label' => 'Opsi',
+        'label' => __('teacher_option'),
         'rules' => 'numeric'
     ),
 );

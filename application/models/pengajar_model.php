@@ -400,7 +400,7 @@ class Pengajar_model extends CI_Model
             $where['status_id'] = array($status_id, 'where');
         }
 
-        $orderby['pengajar.nama'] = 'ASC';
+        $orderby['pengajar.id'] = 'DESC';
 
         $data = $this->pager->set('pengajar', $no_of_records, $page_no, $where, $orderby);
 
