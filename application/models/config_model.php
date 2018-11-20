@@ -321,7 +321,8 @@ class Config_model extends CI_Model
           `tgl_lahir` date DEFAULT NULL,
           `alamat` varchar(255) NOT NULL,
           `foto` text,
-          `status_id` tinyint(1) NOT NULL COMMENT '0=pending, 1=aktif, 2=blok',
+          `status_id` tinyint(1) NOT NULL COMMENT '0=pending, 1=aktif',
+          `tgl_daftar` datetime DEFAULT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 
@@ -375,7 +376,8 @@ class Config_model extends CI_Model
           `alamat` varchar(255) NOT NULL,
           `tahun_masuk` year(4) NOT NULL,
           `foto` text,
-          `status_id` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=pending, 1=aktif, 2=blok, 3=alumni, 4=deleted',
+          `status_id` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=pending, 1=aktif, 3=alumni, 4=deleted',
+          `tgl_daftar` datetime DEFAULT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 

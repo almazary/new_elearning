@@ -186,6 +186,7 @@ $lang['msg_conversation_delete'] = "Anda yakin ingin menghapus percakapan ini?";
 $lang['msg_notify'] = "Pesan baru dari <b>{sender}</b>.";
 $lang['msg_notify_unread'] = "Ada <b>{count}</b> pesan belum dibaca.";
 
+$lang['student_register_date'] = "Daftar pada {date}";
 $lang['student_pending'] = "Siswa Belum Aktif";
 $lang['student_status_active'] = "Aktif";
 $lang['student_status_pending'] = "Belum Aktif";
@@ -226,6 +227,7 @@ $lang['student_send_msg'] = "Kirim Pesan";
 $lang['student_class_histories'] = "Riwayat Kelas";
 $lang['student_account'] = "Akun";
 
+$lang['teacher_register_date'] = "Daftar pada {date}";
 $lang['teacher_pending'] = "Pengajar Menunggu Aktifasi";
 $lang['teacher_status_active'] = "Aktif";
 $lang['teacher_status_pending'] = "Belum Aktif";
@@ -251,3 +253,4 @@ $lang['teacher_password_new'] = "Password Baru";
 $lang['teacher_password_confirm'] = "Ulangi Password";
 $lang['teacher_option'] = "Opsi";
 $lang['teacher_make_adm'] = "Jadikan Administrator";
+$lang['teacher_empty_teaching_subjects'] = "Belum ada Mapel ampu";

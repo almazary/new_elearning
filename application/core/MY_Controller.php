@@ -114,7 +114,7 @@ class MY_Controller extends CI_Controller
         }
 
         # cek versi
-        $versi_install = '2.0';
+        $versi_install = '2.1';
         $versi = get_pengaturan('versi', 'value');
 
         $this->current_version = $versi;
@@ -123,7 +123,7 @@ class MY_Controller extends CI_Controller
             $this->config_model->update('versi', 'Versi', $versi_install);
 
             # panggil perubahan tabel
-            $this->table_change();
+            $this->table_change($versi, $versi_install);
 
             $this->current_version = $versi_install;
 
@@ -168,47 +168,71 @@ class MY_Controller extends CI_Controller
      * Semua perubahan tabel pada versi yang baru ditaruh di fungsi ini
      * @return boolean
      */
-    function table_change()
+    function table_change($from, $to)
     {
         $this->load->dbforge();
 
-        # ubah type field `value` pada tabel field_tambahan menjadi longtext
-        $fields = $this->db->field_data('field_tambahan');
-        foreach ($fields as $field) {
-            if ($field->name == 'value' && $field->type == 'text') {
-                $this->dbforge->modify_column('field_tambahan', array(
-                    '`value`' => array(
-                        'type' => 'LONGTEXT'
-                    )
+        // old method
+        if ($to <= '2.0') {
+            # ubah type field `value` pada tabel field_tambahan menjadi longtext
+            $fields = $this->db->field_data('field_tambahan');
+            foreach ($fields as $field) {
+                if ($field->name == 'value' && $field->type == 'text') {
+                    $this->dbforge->modify_column('field_tambahan', array(
+                        '`value`' => array(
+                            'type' => 'LONGTEXT'
+                        )
+                    ));
+                }
+            }
+
+            # penambahan fitur login log
+            $this->login_model->alter_table();
+
+            # since 1.8.2 tambah field last_activity
+            $ada_field = false;
+            $fields = $this->db->field_data('login_log');
+            foreach ($fields as $field) {
+                if ($field->name == 'last_activity') {
+                    $ada_field = true;
+                    break;
+                }
+            }
+            # jika tidak ada
+            if (!$ada_field) {
+                $this->dbforge->add_column('login_log', array(
+                    'last_activity' => array(
+                        'type' => 'INT',
+                        'unsigned' => TRUE,
+                        'null' => TRUE,
+                    ),
                 ));
             }
-        }
 
-        # penambahan fitur login log
-        $this->login_model->alter_table();
-
-        # since 1.8.2 tambah field last_activity
-        $ada_field = false;
-        $fields = $this->db->field_data('login_log');
-        foreach ($fields as $field) {
-            if ($field->name == 'last_activity') {
-                $ada_field = true;
-                break;
-            }
+            # 2.0 optimasi index table
+            $this->config_model->update_index_default_table();
         }
-        # jika tidak ada
-        if (!$ada_field) {
-            $this->dbforge->add_column('login_log', array(
-                'last_activity' => array(
-                    'type' => 'INT',
-                    'unsigned' => TRUE,
-                    'null' => TRUE,
-                ),
-            ));
-        }
+        else {
+            do {
+                if ($from == "2.0") {
+                    $this->dbforge->add_column('siswa', array(
+                        'tgl_daftar' => array(
+                            'type' => 'DATETIME',
+                            'null' => true,
+                        ),
+                    ));
 
-        # 2.0 optimasi index table
-        $this->config_model->update_index_default_table();
+                    $this->dbforge->add_column('pengajar', array(
+                        'tgl_daftar' => array(
+                            'type' => 'DATETIME',
+                            'null' => true,
+                        ),
+                    ));
+                }
+
+                $from = $from + 0.1;
+            } while ($from < $to);
+        }
 
         return true;
     }

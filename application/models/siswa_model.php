@@ -402,7 +402,8 @@ class Siswa_model extends CI_Model
             'alamat'        => $alamat,
             'tahun_masuk'   => $tahun_masuk,
             'foto'          => $foto,
-            'status_id'     => $status_id
+            'status_id'     => $status_id,
+            'tgl_daftar'    => date("Y-m-d H:i:s"),
         );
         if (empty($tgl_lahir)) {
             unset($data['tgl_lahir']);

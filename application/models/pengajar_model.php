@@ -506,7 +506,8 @@ class Pengajar_model extends CI_Model
             'tgl_lahir'     => $tgl_lahir,
             'alamat'        => $alamat,
             'foto'          => $foto,
-            'status_id'     => $status_id
+            'status_id'     => $status_id,
+            'tgl_daftar'    => date("Y-m-d H:i:s"),
         );
         $this->db->insert('pengajar', $data);
         return $this->db->insert_id();
