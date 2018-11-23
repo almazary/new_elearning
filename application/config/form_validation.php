@@ -704,53 +704,58 @@ $config['pengajar/ampuan'] = array(
 
 $config['pengajar/filter'] = array(
     array(
+        'field' => 'id',
+        'label' => __('teach_id'),
+        'rules' => 'trim|xss_clean'
+    ),
+    array(
         'field' => 'nip',
-        'label' => 'NIP',
+        'label' => __('teacher_key'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'nama',
-        'label' => 'Nama',
+        'label' => __('teacher_name'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'jenis_kelamin[]',
-        'label' => 'Jenis Kelamin',
+        'label' => __('teacher_gender'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tempat_lahir',
-        'label' => 'Tempat Lahir',
+        'label' => __('teacher_born_on'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tgl_lahir',
-        'label' => 'Tgl Lahir',
+        'label' => __('born_date'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'bln_lahir',
-        'label' => 'Bulan Lahir',
+        'label' => __('born_month'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'thn_lahir',
-        'label' => 'Tahun Lahir',
+        'label' => __('born_year'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'alamat',
-        'label' => 'Alamat',
+        'label' => __('teacher_address'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'status_id[]',
-        'label' => 'Status',
+        'label' => __('teacher_status'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'username',
-        'label' => 'Username',
+        'label' => __('teacher_username'),
         'rules' => 'trim|xss_clean'
     ),
 );

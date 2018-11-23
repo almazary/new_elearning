@@ -67,6 +67,7 @@ class Pengajar_model extends CI_Model
     public function retrieve_all_by_name($nama)
     {
         $search_result = $this->retrieve_all_filter(
+            $id            = array(),
             $nip           = '',
             $nama,
             $jenis_kelamin = array(),
@@ -103,6 +104,7 @@ class Pengajar_model extends CI_Model
      * @author Almazari <almazary@gmail.com>
      */
     public function retrieve_all_filter(
+        $id            = array(),
         $nip           = '',
         $nama          = '',
         $jenis_kelamin = array(),
@@ -119,6 +121,10 @@ class Pengajar_model extends CI_Model
     ) {
         $where = array();
         $orderby['pengajar.id'] = 'DESC';
+
+        if (!empty($id)) {
+            $where['pengajar.id'] = array($id, 'where_in');
+        }
 
         if (!empty($nip)) {
             $nip = (int)$nip;

@@ -26,7 +26,7 @@
                     {{ anchor('siswa/index/1', __('student_status_active'), {'class' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/index/0', __('student_status_pending') ~ ((count_pending > 0) ? ' (' ~ count_pending  ~ ')'), {'class' : 'btn btn-default'})|raw }}
                     {{ anchor('siswa/index/3', __('student_status_alumni'), {'class' : 'btn btn-default'})|raw }}
-                    {{ anchor('siswa/filter', '<i class="icon-search" style="line-height: 0px;"></i> ' ~ __('filter_student'), {'class' : 'btn btn-info'})|raw }}
+                    {{ anchor('siswa/filter?clear=1', '<i class="icon-search" style="line-height: 0px;"></i> ' ~ __('search'), {'class' : 'btn btn-info'})|raw }}
                 </div>
             </div>
         </div>

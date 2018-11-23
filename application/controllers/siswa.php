@@ -389,6 +389,11 @@ class Siswa extends MY_Controller
             $page_no = 1;
         }
 
+        // clear filter
+        if ($this->input->get('clear') == 1) {
+            $this->session->set_userdata('filter_siswa', array());
+        }
+
         $session_filter = $this->session->userdata('filter_siswa');
 
         // handle post filter

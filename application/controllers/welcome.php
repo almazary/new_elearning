@@ -266,6 +266,7 @@ class Welcome extends MY_Controller
 
         # cari pengajar
         $retrieve_all_pengajar = $this->pengajar_model->retrieve_all_filter(
+            $id            = array(),
             $nip           = '',
             $nama          = $q,
             $jenis_kelamin = array(),

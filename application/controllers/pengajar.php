@@ -50,6 +50,15 @@ class Pengajar extends MY_Controller
             cd('pengajar_retrieve_all');
         }
 
+        $keys = cg('pengajar_filter');
+        if (!empty($keys)) {
+            foreach ($keys as $k => $v) {
+                cd("pengajar_filter_" . cp($k));
+            }
+
+            cd('pengajar_filter');
+        }
+
         // remove count
         cd("pengajar_count_". cp("pending"));
     }
@@ -755,6 +764,11 @@ class Pengajar extends MY_Controller
             $page_no = 1;
         }
 
+        // clear filter
+        if ($this->input->get('clear') == 1) {
+            $this->session->set_userdata('filter_pengajar', array());
+        }
+
         $session_filter = $this->session->userdata('filter_pengajar');
 
         if ($this->form_validation->run('pengajar/filter') == TRUE) {
@@ -764,6 +778,7 @@ class Pengajar extends MY_Controller
             $status_id     = $this->input->post('status_id', TRUE);
 
             $filter = array(
+                'id'            => $this->input->post('id', TRUE),
                 'nip'           => $this->input->post('nip', TRUE),
                 'nama'          => $this->input->post('nama', TRUE),
                 'jenis_kelamin' => (empty($jenis_kelamin)) ? array() : $jenis_kelamin,
@@ -803,6 +818,7 @@ class Pengajar extends MY_Controller
 
         if (empty($filter)) {
             $filter = array(
+                'id'            => '',
                 'nip'           => '',
                 'nama'          => '',
                 'jenis_kelamin' => '',
@@ -824,9 +840,85 @@ class Pengajar extends MY_Controller
         $data['filter'] = $filter;
 
         if (!empty($filter)) {
-            $retrieve_all = $this->pengajar_model->retrieve_all_filter(
-                $filter['nip'], $filter['nama'], $filter['jenis_kelamin'], $filter['tempat_lahir'], $filter['tgl_lahir'], $filter['bln_lahir'], $filter['thn_lahir'], $filter['alamat'], $filter['status_id'], $filter['username'], $filter['is_admin'], $page_no
-            );
+            $filter_key = cp($filter);
+
+            // get cache
+            $cache_key = "pengajar_filter";
+            $cache_idx = time();
+
+            // save key
+            $cache_get_keys = cg($cache_key);
+            if ($cache_get_keys === false) {
+                cs($cache_key, array($cache_idx => $cache_key));
+            } else {
+                $ada = false;
+                foreach ($cache_get_keys as $k => $v) {
+                    if ($v == $filter_key) {
+                        $cache_idx = $k;
+                        $ada = true;
+                        break;
+                    }
+                }
+
+                if (!$ada) {
+                    $cache_get_keys[$cache_idx] = $filter_key;
+                    cs($cache_key, $cache_get_keys);
+                }
+            }
+
+            $cache_key = "{$cache_key}_{$cache_idx}";
+            $cache_get = cg($cache_key);
+            if ($cache_get === false) {
+                $retrieve_all = $this->pengajar_model->retrieve_all_filter(
+                    !empty($filter['id']) ? array_filter(explode(',', $filter['id']), function ($i) {
+                        $i = trim($i);
+                        return is_numeric($i);
+                    }) : array(),
+                    $filter['nip'],
+                    $filter['nama'],
+                    $filter['jenis_kelamin'],
+                    $filter['tempat_lahir'],
+                    $filter['tgl_lahir'],
+                    $filter['bln_lahir'],
+                    $filter['thn_lahir'],
+                    $filter['alamat'],
+                    $filter['status_id'],
+                    $filter['username'],
+                    $filter['is_admin'],
+                    $page_no
+                );
+
+                foreach ($retrieve_all['results'] as $k => $v) {
+                    // admin or not
+                    $retrieve_login = $this->login_model->retrieve(null, null, null, null, $v['id']);
+                    if (isset($retrieve_login['is_admin'])) {
+                        $v['is_admin'] = $retrieve_login['is_admin'];
+                    }
+
+                    // mapel ajar
+                    $results_ma = array();
+                    $retrieve_all_ma = $this->pengajar_model->retrieve_all_ma(null, $v['id']);
+                    foreach ($retrieve_all_ma as $k2 => $v2) {
+                        $retrieve_mapel_kelas = $this->mapel_model->retrieve_kelas($v2['mapel_kelas_id']);
+                        $retrieve_mapel = $this->mapel_model->retrieve($retrieve_mapel_kelas['mapel_id']);
+                        if (empty($results_ma[$retrieve_mapel['id']])) {
+                            $results_ma[$retrieve_mapel['id']] = $retrieve_mapel;
+                        }
+                    }
+
+                    $v['mapel_ajar'] = $results_ma;
+                    $v['mapel_ajar_nama'] = implode(', ', array_map(function ($item) {
+                        return $item['nama'];
+                    }, $results_ma));
+
+                    $retrieve_all['results'][$k] = $v;
+                }
+
+                //save
+                cs($cache_key, $retrieve_all);
+            } else {
+                $retrieve_all = $cache_get;
+            }
         }
 
         # panggil colorbox
@@ -838,7 +930,16 @@ class Pengajar extends MY_Controller
 
         $data['pengajars']     = $retrieve_all['results'];
         $data['pagination']    = $this->pager->view($retrieve_all, 'pengajar/filter/');
-        $data['count_pending'] = $this->pengajar_model->count('pending');
+
+        $ck = "pengajar_count_" . cp('pending');
+        $cg = cg($ck);
+        if ($cg === false) {
+            $count_pending = $this->pengajar_model->count('pending');
+            cs($ck, $count_pending);
+        } else {
+            $count_pending = $cg;
+        }
+        $data['count_pending'] = $count_pending;
 
         $this->twig->display('filter-pengajar.html', $data);
     }
@@ -871,20 +972,26 @@ class Pengajar extends MY_Controller
                             $p['foto'],
                             $status_id
                         );
+
+                        // delete cache
+                        cd("pengajar_retrieve_" . cp($pengajar_id));
                     }
                 }
 
+                //reset cache
+                $this->reset_cache();
+
                 $label = '';
                 if (!empty($status_id)) {
-                    $label_status = array('Pending', 'Aktif', 'Blocking');
-                    $label .= 'status = '.$label_status[$status_id];
+                    $label_status = array(__('teacher_status_pending'), __('teacher_status_active'), __('teacher_status_block'));
+                    $label .= __('teacher_update_status') . ' = ' . $label_status[$status_id];
                 }
 
-                $this->session->set_flashdata('pengajar', get_alert('success', 'Pengajar berhasil diperbaharui ('.$label.').'));
+                $this->session->set_flashdata('pengajar', get_alert('success', __('bulk_action_success_msg', array('results' => $label))));
                 redirect('pengajar/filter');
 
             } else {
-                $this->session->set_flashdata('pengajar', get_alert('warning', 'Tidak ada pengajar yang dipilih.'));
+                $this->session->set_flashdata('pengajar', get_alert('warning', __('teacher_empty_selected')));
                 redirect('pengajar/filter');
             }
 

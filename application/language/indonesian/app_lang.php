@@ -167,6 +167,7 @@ $lang['insert_error'] = "Mohon maaf terjadi masalah saat memasukkan data.";
 $lang['search_param'] = "Parameter Pencarian";
 $lang['feature_disabled_adm'] = "Maaf fitur dinonaktifkan oleh Administrator.";
 $lang['upload_file'] = "Unggah berkas";
+$lang['search'] = "Cari";
 
 $lang['msg'] = "Pesan";
 $lang['msg_err_sendto_yourself'] = "Anda tidak dapat mengirim pesan ke diri sendiri.";
@@ -251,6 +252,9 @@ $lang['teacher_username_info'] = "Harus Email";
 $lang['teacher_password'] = "Password";
 $lang['teacher_password_new'] = "Password Baru";
 $lang['teacher_password_confirm'] = "Ulangi Password";
+$lang['teacher_status'] = "Status";
+$lang['teacher_update_status'] = "Ubah Status";
 $lang['teacher_option'] = "Opsi";
 $lang['teacher_make_adm'] = "Jadikan Administrator";
 $lang['teacher_empty_teaching_subjects'] = "Belum ada Mapel ampu";
+$lang['teacher_empty_selected'] = "Pilih pengajar terlebih dahulu.";
