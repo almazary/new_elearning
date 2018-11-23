@@ -320,19 +320,31 @@ class Pengajar extends MY_Controller
     {
         # siswa tidak diijinkan
         if (is_siswa()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
-        $status_id         = (int)$segment_3;
-        $pengajar_id       = (int)$segment_4;
-        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        $status_id   = (int)$segment_3;
+        $pengajar_id = (int)$segment_4;
+        if (empty($pengajar_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "pengajar_retrieve_" . cp($pengajar_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+            cs($ck, $retrieve_pengajar);
+        } else {
+            $retrieve_pengajar = $cg;
+        }
+
         if (empty($retrieve_pengajar)) {
-            exit('Data Pengajar tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
         if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
@@ -341,6 +353,10 @@ class Pengajar extends MY_Controller
         $data['status_id']    = $status_id;
         $data['pengajar_id']  = $pengajar_id;
         $data['pengajar']     = $retrieve_pengajar;
+
+        if (!empty($_POST)) {
+            $_POST['pengajar_id'] = $pengajar_id;
+        }
 
         if ($this->form_validation->run('pengajar/edit_profile') == TRUE AND (!is_demo_app() OR !$retrieve_login['is_admin'])) {
             $nip           = $this->input->post('nip', TRUE);
@@ -388,11 +404,15 @@ class Pengajar extends MY_Controller
                 null
             );
 
+            // delete cache
+            cd("pengajar_retrieve_" . cp($pengajar_id));
+            $this->reset_cache();
+
             if ($retrieve_pengajar['status_id'] == 0 && $status == 1) {
                 kirim_email_approve_pengajar($pengajar_id);
             }
 
-            $this->session->set_flashdata('edit', get_alert('success', 'Profil pengajar berhasil diperbaharui.'));
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg')));
             redirect('pengajar/edit_profile/'.$status_id.'/'.$pengajar_id);
         }
 

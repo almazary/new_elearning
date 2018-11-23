@@ -1,70 +1,73 @@
 {% extends "layout-iframe.html" %}
 
 {% block content %}
-<h4>Edit Profil</h4>
-{{ get_flashdata('edit')|raw }}
+<div class="content-top">
+    <div class="title-top">
+        {{ __('teacher_edit_profile') }}
+    </div>
+    {{ get_flashdata('edit')|raw }}
+</div>
 
 {% if is_demo_app() and pengajar.is_admin == true %}
     {{ get_alert('warning', get_demo_msg())|raw }}
 {% endif %}
 
 {{ form_open('pengajar/edit_profile/' ~ status_id ~ '/' ~ pengajar_id)|raw }}
-<input type="hidden" name="pengajar_id" value="{{ pengajar_id }}">
-<table class="table table-striped">
+<table class="table table-form">
     <tbody>
         <tr>
-            <th width="30%">NIP</th>
+            <th width="30%">{{ __('teacher_key') }}</th>
             <td>
                 <input type="text" id="nip" name="nip" style="width:40%;" value="{{ set_value('nip', pengajar.nip) }}">
                 <br>{{ form_error('nip')|raw }}
             </td>
         <tr>
         <tr>
-            <th>Nama <span class="text-error">*</span></th>
+            <th>{{ __('teacher_name') }} <span class="text-error">*</span></th>
             <td>
                 <input type="text" name="nama" style="width:90%;" value="{{ set_value('nama', pengajar.nama) }}">
                 <br>{{ form_error('nama')|raw }}
             </td>
         <tr>
         <tr>
-            <th>Jenis Kelamin <span class="text-error">*</span></th>
+            <th>{{ __('teacher_gender') }} <span class="text-error">*</span></th>
             <td>
-                <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Laki-laki" {{ set_radio('jenis_kelamin', 'Laki-laki', (pengajar.jenis_kelamin == 'Laki-laki') ? TRUE : FALSE) }}> Laki-laki</label>
-                <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Perempuan" {{ set_radio('jenis_kelamin', 'Perempuan', (pengajar.jenis_kelamin == 'Perempuan') ? TRUE : FALSE) }}> Perempuan</label>
+                <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Laki-laki" {{ set_radio('jenis_kelamin', 'Laki-laki', (pengajar.jenis_kelamin == 'Laki-laki') ? TRUE : FALSE) }}> {{ __('male') }}</label>
+                <label class="radio inline"><input type="radio" name="jenis_kelamin" value="Perempuan" {{ set_radio('jenis_kelamin', 'Perempuan', (pengajar.jenis_kelamin == 'Perempuan') ? TRUE : FALSE) }}> {{ __('female') }}</label>
                 <br>{{ form_error('jenis_kelamin')|raw }}
             </td>
         <tr>
         <tr>
-            <th>Tempat Lahir</th>
+            <th>{{ __('teacher_born_in') }}</th>
             <td>
                 <input type="text" name="tempat_lahir" value="{{ set_value('tempat_lahir', pengajar.tempat_lahir) }}">
                 <br>{{ form_error('tempat_lahir')|raw }}
             </td>
         <tr>
         <tr>
-            <th>Tanggal Lahir</th>
+            <th>{{ __('teacher_born_on') }}</th>
             <td>
                 {% set tgl = (pengajar.tgl_lahir is not empty) ? pengajar.tgl_lahir|date('d') %}
                 {% set bln = (pengajar.tgl_lahir is not empty) ? pengajar.tgl_lahir|date('m') %}
                 {% set thn = (pengajar.tgl_lahir is not empty) ? pengajar.tgl_lahir|date('Y') %}
                 <select class="span2" style="width: 20%;float:left;margin-right:5px;" name="tgl_lahir">
-                    <option value="">--Tgl--</option>
+                    <option value="">{{ __('date_short') }}</option>
                     {% for i in 1..31 %}
                         <option value="{{ i }}" {{ set_select('tgl_lahir', i, (i == tgl) ? TRUE : FALSE) }}>{{ i }}</option>
                     {% endfor %}
                 </select>
                 <select class="span2" style="width: 35%;float:left;margin-right:5px;" name="bln_lahir">
-                    <option value="">--Bulan--</option>
+                    <option value="">{{ __('month') }}</option>
                     {% for i in 1..12 %}
                         <option value="{{ i }}" {{ set_select('bln_lahir', i, (i == bln) ? TRUE : FALSE) }}>{{ get_indo_bulan(i) }}</option>
                     {% endfor %}
                 </select>
-                <input type="text" name="thn_lahir" style="width:15%;float:left;" maxlength="4" value="{{ set_value('thn_lahir', thn) }}" placeholder="Tahun">
+                <input type="text" name="thn_lahir" style="width:15%;float:left;" maxlength="4" value="{{ set_value('thn_lahir', thn) }}" placeholder="{{ __('year') }}">
                 <br>{{ form_error('thn_lahir')|raw }}
             </td>
         <tr>
         <tr>
-            <th>Alamat</th>
+            <th>{{ __('teacher_address') }}</th>
             <td>
                 <input type="text" name="alamat" style="width:90%;" value="{{ set_value('alamat', pengajar.alamat) }}">
                 <br>{{ form_error('alamat')|raw }}
@@ -72,28 +75,17 @@
         <tr>
         {% if is_admin() %}
         <tr>
-            <th>Status <span class="text-error">*</span></th>
+            <th>{{ __('teacher_option') }}</th>
             <td>
-                {% if pengajar.status_id == 0 %}
-                <label class="radio inline"><input type="radio" name="status_id" value="0" {{ set_radio('status_id', '0', (pengajar.status_id == '0') ? TRUE : FALSE) }}> Pending</label>
-                {% endif %}
-                <label class="radio inline"><input type="radio" name="status_id" value="1" {{ set_radio('status_id', '1', (pengajar.status_id == '1') ? TRUE : FALSE) }}> Aktif</label>
-                <label class="radio inline"><input type="radio" name="status_id" value="2" {{ set_radio('status_id', '2', (pengajar.status_id == '2') ? TRUE : FALSE) }}> Blocking</label>
-                <br>{{ form_error('status_id')|raw }}
-            </td>
-        <tr>
-        <tr>
-            <th>Opsi</th>
-            <td>
-                <label class="checkbox text-warning"><input type="checkbox" name="is_admin" value="1" {{ set_checkbox('is_admin', '1', (pengajar.is_admin == 1) ? TRUE : FALSE) }}> Jadikan pengajar admin website</label>
-                <br>{{ form_error('is_admin')|raw }}
+                <label class="checkbox text-warning"><input type="checkbox" name="is_admin" value="1" {{ set_checkbox('is_admin', '1', (pengajar.is_admin == 1) ? TRUE : FALSE) }}> {{ __('teacher_make_adm') }}</label>
             </td>
         <tr>
         {% endif %}
 
         {% if is_demo_app() == false or pengajar.is_admin == false %}
         <tr>
-            <td colspan="2">
+            <td></td>
+            <td>
                 <button type="submit" class="btn btn-primary">Update</button>
             </td>
         </tr>

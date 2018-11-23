@@ -700,6 +700,9 @@ class Siswa extends MY_Controller
 
         $status_id = (int)$segment_3;
         $siswa_id  = (int)$segment_4;
+        if (empty($siswa_id)) {
+            die(__('record_not_found'));
+        }
 
         $ck = "siswa_retrieve_" . cp($siswa_id);
         $cg = cg($ck);
@@ -739,12 +742,7 @@ class Siswa extends MY_Controller
             $agama         = $this->input->post('agama', TRUE);
             $alamat        = $this->input->post('alamat', TRUE);
             $tanggal_lahir = handle_tgl_lahir($tgl_lahir, $bln_lahir, $thn_lahir);
-
-            if (is_admin() && $retrieve_siswa['status_id'] != 3) {
-                $status = $this->input->post('status_id', TRUE);
-            } else {
-                $status = $retrieve_siswa['status_id'];
-            }
+            $status        = $retrieve_siswa['status_id'];
 
             # update siswa
             $this->siswa_model->update(
