@@ -8,7 +8,8 @@
 <link type="text/css" href="{{ base_url('assets/comp/offline/offline-theme-chrome.css') }}" rel="stylesheet">
 {{ comp_css|raw }}
 <style>
-.table-noborder th, .table-noborder td { border-top:none; }
+.table-noborder th, .table-noborder td { border-top:none; border-bottom:1px dashed #eee; }
+.table-noborder tr:last-child>td { border-bottom:none; }
 .btn-default { background-color: #f5f5f5; border-color: #cccccc; }
 .well-white { background-color:white; padding:15px; border:1px solid #ddd; }
 </style>
