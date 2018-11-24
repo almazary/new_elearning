@@ -14,9 +14,13 @@
         <tr>
             <td>
                 <center>
+                    {% if siswa.foto != '' %}
                     <a href="{{ get_url_image_siswa(siswa.foto, '', siswa.jenis_kelamin) }}" target="_blank">
+                    {% endif %}
                         <img class="img-polaroid" src="{{ get_url_image_siswa(siswa.foto, 'medium', siswa.jenis_kelamin) }}" style="max-width:90%;">
+                    {% if siswa.foto != '' %}
                     </a>
+                    {% endif %}
                 </center>
                 <br>
                 {{ __('upload_file') }}

@@ -412,7 +412,7 @@ class Pengajar extends MY_Controller
                 kirim_email_approve_pengajar($pengajar_id);
             }
 
-            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg')));
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg', array('subject' => __('teacher_profile')))));
             redirect('pengajar/edit_profile/'.$status_id.'/'.$pengajar_id);
         }
 
@@ -427,33 +427,49 @@ class Pengajar extends MY_Controller
     {
         # siswa tidak diijinkan
         if (is_siswa()) {
-            show_error('Akses ditolak');
+            die(__('access_denied'));
         }
 
-        $pengajar_id       = (int)$segment_3;
-        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        $pengajar_id = (int)$segment_3;
+        if (empty($pengajar_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "pengajar_retrieve_" . cp($pengajar_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+            cs($ck, $retrieve_pengajar);
+        } else {
+            $retrieve_pengajar = $cg;
+        }
+
         if (empty($retrieve_pengajar)) {
-            show_error('Data Pengajar tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
         if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
-            show_error('Akses ditolak');
+            die(__('access_denied'));
         }
 
         if (is_file(get_path_image($retrieve_pengajar['foto']))) {
-            unlink(get_path_image($retrieve_pengajar['foto']));
+            @unlink(get_path_image($retrieve_pengajar['foto']));
         }
 
         if (is_file(get_path_image($retrieve_pengajar['foto'], 'medium'))) {
-            unlink(get_path_image($retrieve_pengajar['foto'], 'medium'));
+            @unlink(get_path_image($retrieve_pengajar['foto'], 'medium'));
         }
 
         if (is_file(get_path_image($retrieve_pengajar['foto'], 'small'))) {
-            unlink(get_path_image($retrieve_pengajar['foto'], 'small'));
+            @unlink(get_path_image($retrieve_pengajar['foto'], 'small'));
         }
 
         $this->pengajar_model->delete_foto($retrieve_pengajar['id']);
+
+        // delete cache
+        cd("pengajar_retrieve_" . cp($pengajar_id));
+        $this->reset_cache();
 
         $uri_back = $segment_4;
         if (!empty($uri_back)) {
@@ -469,19 +485,31 @@ class Pengajar extends MY_Controller
     {
         # siswa tidak diijinkan
         if (is_siswa()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
-        $status_id         = (int)$segment_3;
-        $pengajar_id       = (int)$segment_4;
-        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        $status_id   = (int)$segment_3;
+        $pengajar_id = (int)$segment_4;
+        if (empty($pengajar_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "pengajar_retrieve_" . cp($pengajar_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+            cs($ck, $retrieve_pengajar);
+        } else {
+            $retrieve_pengajar = $cg;
+        }
+
         if (empty($retrieve_pengajar)) {
-            exit('Data Pengajar tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
         if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
@@ -502,15 +530,15 @@ class Pengajar extends MY_Controller
         if ($this->upload->do_upload() AND (!is_demo_app() OR !$retrieve_login['is_admin'])) {
 
             if (is_file(get_path_image($retrieve_pengajar['foto']))) {
-                unlink(get_path_image($retrieve_pengajar['foto']));
+                @unlink(get_path_image($retrieve_pengajar['foto']));
             }
 
             if (is_file(get_path_image($retrieve_pengajar['foto'], 'medium'))) {
-                unlink(get_path_image($retrieve_pengajar['foto'], 'medium'));
+                @unlink(get_path_image($retrieve_pengajar['foto'], 'medium'));
             }
 
             if (is_file(get_path_image($retrieve_pengajar['foto'], 'small'))) {
-                unlink(get_path_image($retrieve_pengajar['foto'], 'small'));
+                @unlink(get_path_image($retrieve_pengajar['foto'], 'small'));
             }
 
             $upload_data = $this->upload->data();
@@ -544,7 +572,11 @@ class Pengajar extends MY_Controller
                 $retrieve_pengajar['status_id']
             );
 
-            $this->session->set_flashdata('edit', get_alert('success', 'Foto pengajar berhasil diperbaharui.'));
+            // delete cache
+            cd("pengajar_retrieve_" . cp($pengajar_id));
+            $this->reset_cache();
+
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg', array('subject' => __('teacher_picture')))));
             redirect('pengajar/edit_picture/'.$status_id.'/'.$pengajar_id);
         } else {
             if (!empty($_FILES['userfile']['tmp_name'])) {

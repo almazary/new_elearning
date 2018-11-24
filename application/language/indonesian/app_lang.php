@@ -246,6 +246,7 @@ $lang['teacher_gender'] = "Jenis Kelamin";
 $lang['teacher_born_in'] = "Tempat Lahir";
 $lang['teacher_born_on'] = "Tanggal Lahir";
 $lang['teacher_address'] = "Alamat Tinggal";
+$lang['teacher_profile'] = "Profil";
 $lang['teacher_picture'] = "Foto";
 $lang['teacher_username'] = "Username";
 $lang['teacher_username_info'] = "Harus Email";
