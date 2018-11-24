@@ -24,7 +24,7 @@
     {% endif %}
 
     <div class="module span4 {{ (sliders is empty) ? 'offset4' }}">
-        {{ form_open('login', {'autocomplete': 'off', 'class' : 'form-vertical'})|raw }}
+        {{ form_open('login', {'autocomplete': 'off', 'class' : 'form-vertical', 'id' : 'form-login'})|raw }}
             <div class="module-head">
                 <h3>{{ __('login_form_title') }}</h3>
             </div>

@@ -23,10 +23,14 @@
   // tooltip
   $('[data-toggle="tooltip"]').tooltip({html: true})
 
-    // nivoslider login
+  // nivoslider login
   if ($('#slider-login').length) {
     $('#slider-login').nivoSlider()
   }
+
+  $('form#form-login').submit(function (e) {
+    $(this).find(':submit').prop('disabled', true)
+  })
 
   // timeago
   $.timeago.settings.strings.suffixAgo = 'yang lalu'
