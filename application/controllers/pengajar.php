@@ -367,19 +367,15 @@ class Pengajar extends MY_Controller
             $bln_lahir     = $this->input->post('bln_lahir', TRUE);
             $thn_lahir     = $this->input->post('thn_lahir', TRUE);
             $alamat        = $this->input->post('alamat', TRUE);
+            $status        = $retrieve_pengajar['status_id'];
+
             if (is_admin()) {
-                $status   = $this->input->post('status_id', TRUE);
                 $is_admin = $this->input->post('is_admin', TRUE);
             } else {
-                $status   = $retrieve_pengajar['status_id'];
                 $is_admin = $retrieve_login['is_admin'];
             }
 
-            if (empty($thn_lahir)) {
-                $tanggal_lahir = null;
-            } else {
-                $tanggal_lahir = $thn_lahir.'-'.$bln_lahir.'-'.$tgl_lahir;
-            }
+            $tanggal_lahir = handle_tgl_lahir($tgl_lahir, $bln_lahir, $thn_lahir);
 
             # update pengajar
             $this->pengajar_model->update(
@@ -591,19 +587,31 @@ class Pengajar extends MY_Controller
     {
         # siswa tidak diijinkan
         if (is_siswa()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
-        $status_id         = (int)$segment_3;
-        $pengajar_id       = (int)$segment_4;
-        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        $status_id   = (int)$segment_3;
+        $pengajar_id = (int)$segment_4;
+        if (empty($pengajar_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "pengajar_retrieve_" . cp($pengajar_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+            cs($ck, $retrieve_pengajar);
+        } else {
+            $retrieve_pengajar = $cg;
+        }
+
         if (empty($retrieve_pengajar)) {
-            exit('Data Pengajar tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
         if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         $data['status_id']    = $status_id;
@@ -625,11 +633,11 @@ class Pengajar extends MY_Controller
                     $data['login']['reset_kode']
                 );
             } catch (Exception $e) {
-                $this->session->set_flashdata('edit', get_alert('warning', $e->getMessage()));
+                $this->session->set_flashdata('edit', get_alert('warning', __('error_exception', array('error' => $e->getMessage()))));
                 redirect('pengajar/edit_username/'.$status_id.'/'.$pengajar_id);
             }
 
-            $this->session->set_flashdata('edit', get_alert('success', 'Username pengajar berhasil diperbaharui.'));
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg', array('subject' => __('teacher_username')))));
             redirect('pengajar/edit_username/'.$status_id.'/'.$pengajar_id);
         }
 
@@ -640,19 +648,31 @@ class Pengajar extends MY_Controller
     {
         # siswa tidak diijinkan
         if (is_siswa()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
-        $status_id         = (int)$segment_3;
-        $pengajar_id       = (int)$segment_4;
-        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        $status_id   = (int)$segment_3;
+        $pengajar_id = (int)$segment_4;
+        if (empty($pengajar_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "pengajar_retrieve_" . cp($pengajar_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+            cs($ck, $retrieve_pengajar);
+        } else {
+            $retrieve_pengajar = $cg;
+        }
+
         if (empty($retrieve_pengajar)) {
-            exit('Data Pengajar tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
         if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         $data['status_id']    = $status_id;
@@ -667,7 +687,7 @@ class Pengajar extends MY_Controller
             # update password
             $this->login_model->update_password($retrieve_login['id'], $password);
 
-            $this->session->set_flashdata('edit', get_alert('success', 'Password pengajar berhasil diperbaharui.'));
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg', array('subject' => __('teacher_password')))));
             redirect('pengajar/edit_password/'.$status_id.'/'.$pengajar_id);
         }
 
@@ -684,15 +704,58 @@ class Pengajar extends MY_Controller
             $pengajar_id = (int)$segment_3;
         }
 
-        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        $ck = "pengajar_retrieve_" . cp($pengajar_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+            cs($ck, $retrieve_pengajar);
+        } else {
+            $retrieve_pengajar = $cg;
+        }
+
         if (empty($retrieve_pengajar)) {
-            redirect('pengajar');
+            die(__('record_not_found'));
         }
 
         $retrieve_login = $this->login_model->retrieve(null, null, null, null, $retrieve_pengajar['id']);
 
         $data['pengajar']       = $retrieve_pengajar;
         $data['pengajar_login'] = $retrieve_login;
+
+        // teaching schedule
+        $schedules = array();
+        foreach (get_indo_hari() as $hari_id => $h) {
+            $ck = "pengajar_retrieve_all_ma_" . cp($hari_id, $retrieve_pengajar['id']);
+            $cg = cg($ck);
+            if ($cg === false) {
+                $retrieve_all_ma = $this->pengajar_model->retrieve_all_ma(
+                    $hari_id,
+                    $retrieve_pengajar['id'],
+                    null,
+                    (is_pengajar() || is_siswa()) ? 1 : null
+                );
+                foreach ($retrieve_all_ma as $k => $v) {
+                    $mapel_kelas = $this->mapel_model->retrieve_kelas($v['mapel_kelas_id']);
+                    $kelas = $this->kelas_model->retrieve($mapel_kelas['kelas_id']);
+                    $mapel = $this->mapel_model->retrieve($mapel_kelas['mapel_id']);
+                    $v['mapel_kelas'] = $mapel_kelas;
+                    $v['kelas'] = $kelas;
+                    $v['mapel'] = $mapel;
+
+                    $retrieve_all_ma[$k] = $v;
+                }
+
+                cs($ck, $retrieve_all_ma);
+            } else {
+                $retrieve_all_ma = $cg;
+            }
+
+            $schedules[$hari_id] = array(
+                'label' => $h,
+                'data'  => $retrieve_all_ma,
+            );
+        }
+        $data['schedules'] = $schedules;
 
         # panggil colorbox
         $html_js = load_comp_js(array(
@@ -708,30 +771,52 @@ class Pengajar extends MY_Controller
     {
         # siswa tidak diijinkan
         if (is_siswa()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         $status_id    = (int)$segment_3;
         $pengajar_id  = (int)$segment_4;
         $hari_id      = (int)$segment_5;
         if ($hari_id < 1 OR $hari_id > 7) {
-            exit('Hari tidak ditemukan');
+            die(__('invalid', array('subject' => __('day'))));
         }
 
-        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        if (empty($pengajar_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "pengajar_retrieve_" . cp($pengajar_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+            cs($ck, $retrieve_pengajar);
+        } else {
+            $retrieve_pengajar = $cg;
+        }
+
         if (empty($retrieve_pengajar)) {
-            exit('Data Pengajar tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
         if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
         $data['status_id']   = $status_id;
         $data['pengajar_id'] = $pengajar_id;
         $data['hari_id']     = $hari_id;
-        $data['kelas']       = $this->kelas_model->retrieve_all_child();
+
+        $ck = "kelas_retrieve_all_child";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_all_child = $this->kelas_model->retrieve_all_child();
+            cs($ck, $retrieve_all_child);
+        } else {
+            $retrieve_all_child = $cg;
+        }
+
+        $data['kelas'] = $retrieve_all_child;
 
         if ($this->form_validation->run('pengajar/ampuan') == TRUE) {
             $mapel_kelas_id = $this->input->post('mapel_kelas_id', TRUE);
@@ -746,7 +831,11 @@ class Pengajar extends MY_Controller
                 $mapel_kelas_id
             );
 
-            $this->session->set_flashdata('add', get_alert('success', 'Jadwal Matapelajaran berhasil disimpan.'));
+            //delete cache
+            cd("pengajar_retrieve_all_ma_" . cp($hari_id, $pengajar_id));
+            $this->reset_cache();
+
+            $this->session->set_flashdata('add', get_alert('success', __('add_success_msg', array('subject' => __('schedule_teach')))));
             redirect('pengajar/add_ampuan/'.$status_id.'/'.$pengajar_id.'/'.$hari_id);
         }
 
@@ -757,34 +846,96 @@ class Pengajar extends MY_Controller
     {
         # siswa tidak diijinkan
         if (is_siswa()) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
-        $status_id         = (int)$segment_3;
-        $pengajar_id       = (int)$segment_4;
-        $ma_id             = (int)$segment_5;
-        $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+        $status_id   = (int)$segment_3;
+        $pengajar_id = (int)$segment_4;
+        $ma_id       = (int)$segment_5;
+
+        if (empty($pengajar_id) || empty($ma_id)) {
+            die(__('record_not_found'));
+        }
+
+        $ck = "pengajar_retrieve_" . cp($pengajar_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_pengajar = $this->pengajar_model->retrieve($pengajar_id);
+            cs($ck, $retrieve_pengajar);
+        } else {
+            $retrieve_pengajar = $cg;
+        }
+
         if (empty($retrieve_pengajar)) {
-            exit('Data Pengajar tidak ditemukan');
+            die(__('record_not_found'));
         }
 
         # jika sebagai pengajar, hanya profilnya dia yang bisa diupdate
         if (is_pengajar() AND get_sess_data('user', 'id') != $retrieve_pengajar['id']) {
-            exit('Akses ditolak');
+            die(__('access_denied'));
         }
 
-        $retrieve_ma = $this->pengajar_model->retrieve_ma($ma_id);
+        $ck = "pengajar_retrieve_ma_" . cp($ma_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_ma = $this->pengajar_model->retrieve_ma($ma_id);
+            cs($ck, $retrieve_ma);
+        } else {
+            $retrieve_ma = $cg;
+        }
         if (empty($retrieve_ma)) {
-            exit('Mapel Ajar tidak ditemukan');
+            die(__('record_not_found'));
         }
 
-        $retrieve_mk = $this->mapel_model->retrieve_kelas($retrieve_ma['mapel_kelas_id']);
 
-        $data['status_id']    = $status_id;
-        $data['pengajar_id']  = $pengajar_id;
-        $data['ma']           = $retrieve_ma;
-        $data['mk']           = $retrieve_mk;
-        $data['kelas']        = $this->kelas_model->retrieve_all_child();
+        $ck = "mapel_retrieve_kelas_" . cp($retrieve_ma['mapel_kelas_id']);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_mk = $this->mapel_model->retrieve_kelas($retrieve_ma['mapel_kelas_id']);
+            cs($ck, $retrieve_mk);
+        } else {
+            $retrieve_mk = $cg;
+        }
+
+        $ck = "mapel_retrieve_all_kelas_" . cp(null, $retrieve_mk['kelas_id']);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_all_kelas = $this->mapel_model->retrieve_all_kelas(null, $retrieve_mk['kelas_id']);
+            foreach ($retrieve_all_kelas as $k => $v) {
+                $ck2 = "mapel_retrieve_" . cp($v['mapel_id']);
+                $cg2 = cg($ck2);
+                if ($cg2 === false) {
+                    $mapel = $this->mapel_model->retrieve($v['mapel_id']);
+                    cs($ck2, $mapel);
+                } else {
+                    $mapel = $cg2;
+                }
+                $v['mapel'] = $mapel;
+
+                $retrieve_all_kelas[$k] = $v;
+            }
+
+            cs($ck, $retrieve_all_kelas);
+        } else {
+            $retrieve_all_kelas = $cg;
+        }
+
+        $retrieve_mk['mapel_kelas'] = $retrieve_all_kelas;
+
+        $data['status_id']   = $status_id;
+        $data['pengajar_id'] = $pengajar_id;
+        $data['ma']          = $retrieve_ma;
+        $data['mk']          = $retrieve_mk;
+
+        $ck = "kelas_retrieve_all_child";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $retrieve_all_child = $this->kelas_model->retrieve_all_child();
+            cs($ck, $retrieve_all_child);
+        } else {
+            $retrieve_all_child = $cg;
+        }
+        $data['kelas'] = $retrieve_all_child;
 
         if ($this->form_validation->run('pengajar/ampuan') == TRUE) {
             $mapel_kelas_id = $this->input->post('mapel_kelas_id', TRUE);
@@ -802,7 +953,13 @@ class Pengajar extends MY_Controller
                 $aktif
             );
 
-            $this->session->set_flashdata('edit', get_alert('success', 'Jadwal Ajar berhasil diperbaharui.'));
+            //delete cache
+            cd("pengajar_retrieve_all_ma_" . cp($retrieve_ma['hari_id'], $pengajar_id));
+            $this->reset_cache();
+
+            cd("pengajar_retrieve_ma_" . cp($ma_id));
+
+            $this->session->set_flashdata('edit', get_alert('success', __('edit_success_msg', array('subject' => __('schedule_teach')))));
             redirect('pengajar/edit_ampuan/'.$status_id.'/'.$pengajar_id.'/'.$retrieve_ma['id']);
         }
 

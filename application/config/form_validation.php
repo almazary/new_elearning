@@ -603,52 +603,52 @@ $config['pengajar/add'] = array(
 $config['pengajar/edit_profile'] = array(
     array(
         'field' => 'nip',
-        'label' => 'NIP',
+        'label' => __('teacher_key'),
         'rules' => 'trim|xss_clean|callback_update_nip'
     ),
     array(
         'field' => 'nama',
-        'label' => 'Nama',
+        'label' => __('teacher_name'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'jenis_kelamin',
-        'label' => 'Jenis Kelamin',
+        'label' => __('teacher_gender'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'tempat_lahir',
-        'label' => 'Tempat Lahir',
+        'label' => __('teacher_born_in'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'tgl_lahir',
-        'label' => 'Tgl Lahir',
+        'label' => __('born_date'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'bln_lahir',
-        'label' => 'Bulan Lahir',
+        'label' => __('born_month'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'thn_lahir',
-        'label' => 'Tahun Lahir',
+        'label' => __('born_year'),
         'rules' => 'trim|xss_clean|numeric|min_length[4]|max_length[4]'
     ),
     array(
         'field' => 'alamat',
-        'label' => 'Alamat',
+        'label' => __('teacher_address'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'status_id',
-        'label' => 'Status',
+        'label' => __('teacher_status'),
         'rules' => 'trim|xss_clean|numeric'
     ),
     array(
         'field' => 'is_admin',
-        'label' => 'Opsi',
+        'label' => __('teacher_option'),
         'rules' => 'numeric'
     ),
 );
@@ -656,7 +656,7 @@ $config['pengajar/edit_profile'] = array(
 $config['pengajar/edit_username'] = array(
     array(
         'field' => 'username',
-        'label' => 'Username',
+        'label' => __('teacher_username'),
         'rules' => 'required|trim|xss_clean|valid_email|callback_update_username'
     )
 );
@@ -664,12 +664,12 @@ $config['pengajar/edit_username'] = array(
 $config['pengajar/edit_password'] = array(
     array(
         'field' => 'password',
-        'label' => 'Password Baru',
+        'label' => __('teacher_password_new'),
         'rules' => 'required|trim|xss_clean|alpha_numeric'
     ),
     array(
         'field' => 'password2',
-        'label' => 'Ulangi Password',
+        'label' => __('teacher_password_confirm'),
         'rules' => 'required|matches[password]'
     )
 );
@@ -677,27 +677,27 @@ $config['pengajar/edit_password'] = array(
 $config['pengajar/ampuan'] = array(
     array(
         'field' => 'kelas_id',
-        'label' => 'Kelas',
+        'label' => __('student_class'),
         'rules' => 'required|trim|xss_clean|numeric'
     ),
     array(
         'field' => 'mapel_kelas_id',
-        'label' => 'Matapelajaran',
+        'label' => __('subject'),
         'rules' => 'required|trim|xss_clean|numeric'
     ),
     array(
         'field' => 'jam_mulai',
-        'label' => 'Jam Mulai',
+        'label' => __('start_time'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'jam_selesai',
-        'label' => 'Jam Selesai',
+        'label' => __('end_time'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'aktif',
-        'label' => 'Aktif',
+        'label' => __('active'),
         'rules' => 'trim|xss_clean|numeric'
     ),
 );

@@ -312,12 +312,9 @@ class MY_Controller extends CI_Controller
             if ($result->num_rows() == 0) {
                 return true;
             } else {
-                $this->form_validation->set_message('update_nis', 'NIS sudah digunakan.');
+                $this->form_validation->set_message('update_nis', __('student_key_already_taken'));
                 return false;
             }
-        } else {
-            $this->form_validation->set_message('update_nis', 'NIS di butuhkan.');
-            return false;
         }
     }
 
@@ -336,7 +333,7 @@ class MY_Controller extends CI_Controller
             if ($result->num_rows() == 0) {
                 return true;
             } else {
-                $this->form_validation->set_message('update_nip', 'NIP sudah digunakan.');
+                $this->form_validation->set_message('update_nip', __('teacher_key_already_taken'));
                 return false;
             }
         }

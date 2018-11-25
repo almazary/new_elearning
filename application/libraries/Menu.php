@@ -33,9 +33,9 @@ class Menu
                 '<a href="' . site_url('materi/komentar') . '"><i class="menu-icon icon-comments"></i>' . __('material_comment') . ' <span class="menu-count-unread-laporan"></span></a>'
             ),
             3 => array(
-                '<a href="' . site_url('kelas/mapel_kelas') . '"><i class="menu-icon icon-paste"></i>' . __('course_class') . ' </a>',
+                '<a href="' . site_url('kelas/mapel_kelas') . '"><i class="menu-icon icon-paste"></i>' . __('subject_class') . ' </a>',
                 '<a href="' . site_url('kelas') . '"><i class="menu-icon icon-tasks"></i>' . __('class_manage') . ' </a>',
-                '<a href="' . site_url('mapel') . '"><i class="menu-icon icon-book"></i>' . __('course_manage') . ' </a>'
+                '<a href="' . site_url('mapel') . '"><i class="menu-icon icon-book"></i>' . __('subject_manage') . ' </a>'
             ),
             4 => array(
                 '<a href="' . site_url('welcome/pengaturan') . '"><i class="menu-icon icon-wrench"></i>' . __('setting') . '</a>',
@@ -73,7 +73,7 @@ class Menu
             0 => array(
                 '<a href="' . site_url() . '"><i class="menu-icon icon-home"></i>' . __('home') . '</a>',
                 '<a href="' . site_url('message') . '"><i class="menu-icon icon-comments"></i>' . __('message') . ' <span class="menu-count-new-msg"></span></a>',
-                '<a href="' . site_url('siswa/jadwal_mapel') . '"><i class="menu-icon icon-tasks"></i>' . __('course_schedule') . '</a>'
+                '<a href="' . site_url('siswa/jadwal_mapel') . '"><i class="menu-icon icon-tasks"></i>' . __('subject_schedule') . '</a>'
             ),
             1 => array(
                 '<a href="' . site_url('tugas?clear_filter=true') . '"><i class="menu-icon icon-tasks"></i>' . __('task') . ' </a>',

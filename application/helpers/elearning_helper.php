@@ -567,7 +567,7 @@ function get_flashdata($key)
  */
 function get_indo_bulan($bln = '')
 {
-    $data = array(1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember');
+    $data = array(1 => __('january'), __('february'), __('march'), __('april'), __('may'), __('june'), __('july'), __('august'), __('september'), __('october'), __('november'), __('december'));
     if (empty($bln)) {
         return $data;
     } else {
@@ -584,7 +584,7 @@ function get_indo_bulan($bln = '')
  */
 function get_indo_hari($hari = '')
 {
-    $data = array(1 => 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu', 'Minggu');
+    $data = array(1 => __('monday'), __('tuesday'), __('wednesday'), __('thursday'), __('friday'), __('saturday'), __('sunday'));
     if (empty($hari)) {
         return $data;
     } else {

@@ -39,7 +39,7 @@
                     {% if siswa.foto is not empty  %}
                     <a target="_blank" href="{{ get_url_image_siswa(siswa.foto, '', siswa.jenis_kelamin) }}">
                         {% endif %}
-                        <img style="width:113px;" class="img-polaroid" src="{{ get_url_image_siswa(siswa.foto, 'medium', siswa.jenis_kelamin) }}">
+                        <img style="width:113px;" class="img-rounded" src="{{ get_url_image_siswa(siswa.foto, 'medium', siswa.jenis_kelamin) }}">
                         {% if siswa.foto is not empty  %}
                     </a>
                     {% endif %}
