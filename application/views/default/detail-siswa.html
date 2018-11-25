@@ -35,11 +35,11 @@
             <tr>
                 <th width="20%">{{ __('student_key') }}</th>
                 <td>{{ siswa.nis }}</td>
-                <td rowspan="5" width="20%">
+                <td rowspan="5" width="30%">
                     {% if siswa.foto is not empty  %}
                     <a target="_blank" href="{{ get_url_image_siswa(siswa.foto, '', siswa.jenis_kelamin) }}">
                         {% endif %}
-                        <img style="width:113px;" class="img-rounded" src="{{ get_url_image_siswa(siswa.foto, 'medium', siswa.jenis_kelamin) }}">
+                        <img style="max-width:100%;" class="img-rounded" src="{{ get_url_image_siswa(siswa.foto, 'medium', siswa.jenis_kelamin) }}">
                         {% if siswa.foto is not empty  %}
                     </a>
                     {% endif %}
