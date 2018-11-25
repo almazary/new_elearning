@@ -10,38 +10,35 @@
 {% endblock %}
 
 {% block content %}
-<div class="module">
-    {% if is_siswa() == false %}
-    <div class="module-head">
-        <h3>{{ __('announcement') }}</h3>
+{{ get_flashdata('pengumuman')|raw }}
+
+<div class="row-fluid">
+    <div class="span8">
+        <h3 style="margin-top:0px;margin-bottom:0px;margin-left:15px;">{{ p.judul }}</h3>
     </div>
-    {% endif %}
+    <div class="span4">
+        <div class="btn-group pull-right">
+            {% for a in p.allow_action %}
+                {% if a == 'edit' %}
+                <a class="btn btn-default btn-small" href="{{ site_url('pengumuman/edit/' ~ p.id) }}" data-toggle="tooltip" title="{{ __('edit') }}"><i class="icon-edit"></i></a>
+                {% endif %}
 
-    <div class="module-body">
-        {{ get_flashdata('pengumuman')|raw }}
-
-        <div class="btn-group pull-right" style="margin-left: 10px;">
-        {% for a in p.allow_action %}
-            {% if a == 'edit' %}
-            <a class="btn btn-default btn-small" href="{{ site_url('pengumuman/edit/' ~ p.id) }}" data-toggle="tooltip" title="Edit"><i class="icon-edit"></i></a>
-            {% endif %}
-
-            {% if a == 'delete' %}
-            <a onclick="return confirm('Anda yakin ingin menghapus?')" class="btn btn-default btn-small" href="{{ site_url('pengumuman/delete/' ~ p.id) }}" data-toggle="tooltip" title="Hapus"><i class="icon-trash"></i></a>
-            {% endif %}
-        {% endfor %}
+                {% if a == 'delete' %}
+                <a onclick="return confirm('{{ __('delete_confirm') }}')" class="btn btn-default btn-small" href="{{ site_url('pengumuman/delete/' ~ p.id) }}" data-toggle="tooltip" title="{{ __('remove') }}"><i class="icon-trash"></i></a>
+                {% endif %}
+            {% endfor %}
         </div>
-
-        <b style="margin-bottom: 0px;">{{ p.judul }}</b>
-        <small>
-        <ul class="unstyled inline" style="margin-left: -5px;">
-            <li><b>Pembuat : </b>{{ anchor(p.pengajar.link_profil, p.pengajar.nama)|raw }}</li>
-            <li><b>Tgl. Tampil : </b>{{ tgl_indo(p.tgl_tampil) }} s/d {{ tgl_indo(p.tgl_tutup) }}</li>
-        </ul>
-        </small>
-        <hr style="margin-top: 5px;margin-bottom: 10px;">
-
-        {{ p.konten|raw }}
     </div>
+</div>
+<br>
+
+<div class="wel well-small well-white">
+    <ul class="unstyled inline" style="margin-left: -5px;">
+        <li><b>{{ __('creator') }} : </b>{{ anchor(p.pengajar.link_profil, p.pengajar.nama)|raw }}</li>
+        <li><b>{{ __('date_show') }} : </b>{{ tgl_indo(p.tgl_tampil) }} s/d {{ tgl_indo(p.tgl_tutup) }}</li>
+    </ul>
+    <hr style="margin-top: 5px;margin-bottom: 10px;">
+
+    {{ p.konten|raw }}
 </div>
 {% endblock %}

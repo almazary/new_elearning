@@ -177,6 +177,7 @@ $lang['date_close'] = "Tgl. Tutup";
 $lang['content'] = "Konten";
 $lang['delete_confirm'] = "Anda yakin ingin menghapus?";
 $lang['date_show_invalid'] = "Tgl. Tampil tidak valid.";
+$lang['creator'] = "Pembuat";
 
 $lang['pagination_info'] = "{total_response} dari {total_record} total data";
 $lang['pagination_first'] = "Awal";

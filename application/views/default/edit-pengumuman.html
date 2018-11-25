@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">{{ __('show_in_student') }}</label>
+                <label class="control-label">{{ __('show_in_student') }}?</label>
                 <div class="controls">
                     <label class="radio inline"><input type="radio" name="tampil_siswa" value="1" {{ set_radio('tampil_siswa', '1', (p.tampil_siswa == 1) ? true) }}> {{ __('yes') }}</label>
                     <label class="radio inline"><input type="radio" name="tampil_siswa" value="0" {{ set_radio('tampil_siswa', '0', (p.tampil_siswa == 0) ? true) }}> {{ __('no') }}</label>
@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">{{ __('show_in_student') }}</label>
+                <label class="control-label">{{ __('show_in_teacher') }}?</label>
                 <div class="controls">
                     <label class="radio inline"><input type="radio" name="tampil_pengajar" value="1" {{ set_radio('tampil_pengajar', '1', (p.tampil_pengajar == 1) ? true) }}> {{ __('yes') }}</label>
                     <label class="radio inline"><input type="radio" name="tampil_pengajar" value="0" {{ set_radio('tampil_pengajar', '0', (p.tampil_pengajar == 0) ? true) }}> {{ __('no') }}</label>
