@@ -56,7 +56,7 @@
             </tr>
             <tr>
                 <th>{{ __('teacher_born_on') }}</th>
-                <td>{{ (pengajar.tgl_lahir is not empty) ? tgl_indo(pengajar.tgl_lahir) }}</td>
+                <td>{{ (pengajar.tgl_lahir is not empty) ? tgl_indo(pengajar.tgl_lahir) ~ ', (' ~ __('age', {'age': age(pengajar.tgl_lahir)})  ~ ')' }}</td>
             </tr>
             <tr>
                 <th>{{ __('teacher_address') }}</th>
@@ -73,6 +73,10 @@
                         {{ __('teacher_status_block') }}
                     {% endif %}
                 </td>
+            </tr>
+            <tr>
+                <th>{{ __('teacher_join_date') }}</th>
+                <td colspan="2">{{ tgl_indo(pengajar.tgl_daftar) }}</td>
             </tr>
             {% if is_admin() == true %}
             <tr>

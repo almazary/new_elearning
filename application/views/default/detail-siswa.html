@@ -56,16 +56,12 @@
                 </td>
             </tr>
             <tr>
-                <th>{{ __('student_join_year') }}</th>
-                <td>{{ siswa.tahun_masuk }}</td>
-            </tr>
-            <tr>
                 <th>{{ __('student_born_in') }}</th>
                 <td>{{ siswa.tempat_lahir }}</td>
             </tr>
             <tr>
                 <th>{{ __('student_born_on') }}</th>
-                <td>{{ (siswa.tgl_lahir is not empty) ? tgl_indo(siswa.tgl_lahir) }}</td>
+                <td>{{ (siswa.tgl_lahir is not empty) ? tgl_indo(siswa.tgl_lahir) ~ ', (' ~ __('age', {'age': age(siswa.tgl_lahir)})  ~ ')' }}</td>
             </tr>
             <tr>
                 <th>{{ __('student_religion') }}</th>
@@ -74,6 +70,10 @@
             <tr>
                 <th>{{ __('student_address') }}</th>
                 <td colspan="2">{{ siswa.alamat }}</td>
+            </tr>
+            <tr>
+                <th>{{ __('student_join_year') }}</th>
+                <td>{{ siswa.tahun_masuk }}</td>
             </tr>
             <tr>
                 <th>{{ __('student_status') }}</th>
@@ -88,6 +88,10 @@
                     {{ __('student_status_alumni') }}
                     {% endif %}
                 </td>
+            </tr>
+            <tr>
+                <th>{{ __('student_join_date') }}</th>
+                <td colspan="2">{{ tgl_indo(siswa.tgl_daftar) }}</td>
             </tr>
             {% if is_admin() and status_id != 3 %}
             <tr>

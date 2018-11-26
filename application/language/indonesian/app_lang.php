@@ -26,6 +26,7 @@ $lang['active'] = "Aktif";
 $lang['administrator'] = "Administrator";
 $lang['day'] = "Hari";
 $lang['e.g'] = "Contoh";
+$lang['age'] = "{age} Tahun";
 
 $lang['january'] = "Januari";
 $lang['february'] = "Februari";
@@ -262,9 +263,10 @@ $lang['student_send_msg'] = "Kirim Pesan";
 $lang['student_class_histories'] = "Riwayat Kelas";
 $lang['student_account'] = "Akun";
 $lang['student_key_already_taken'] = "NIS sudah digunakan";
+$lang['student_join_date'] = "Tanggal Bergabung";
 
 $lang['teacher_register_date'] = "Daftar pada {date}";
-$lang['teacher_pending'] = "Pengajar Menunggu Aktifasi";
+$lang['teacher_pending'] = "Pengajar Belum Aktif";
 $lang['teacher_status_active'] = "Aktif";
 $lang['teacher_status_pending'] = "Belum Aktif";
 $lang['teacher_status_block'] = "Larang Masuk";
@@ -297,3 +299,4 @@ $lang['teacher_empty_selected'] = "Pilih pengajar terlebih dahulu.";
 $lang['teacher_send_msg'] = "Kirim Pesan";
 $lang['teacher_account'] = "Akun";
 $lang['teacher_key_already_taken'] = "NIP sudah digunakan";
+$lang['teacher_join_date'] = "Tanggal Bergabung";

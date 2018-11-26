@@ -1162,7 +1162,7 @@ class Pengajar extends MY_Controller
             if (!empty($pengajar_ids) AND is_array($pengajar_ids)) {
 
                 if (empty($status_id)) {
-                    $this->session->set_flashdata('pengajar', get_alert('warning', 'Tidak ada aksi yang dipilih.'));
+                    $this->session->set_flashdata('pengajar', get_alert('warning', __('action_empty')));
                     redirect('pengajar/filter');
                 }
 

@@ -38,13 +38,6 @@
             </td>
         <tr>
         <tr>
-            <th>{{ __('student_join_year') }} <span class="text-error">*</span></th>
-            <td>
-                <input type="text" name="tahun_masuk" maxlength="4" style="width:15%;" value="{{ set_value('tahun_masuk', siswa.tahun_masuk) }}">
-                <br>{{ form_error('tahun_masuk')|raw }}
-            </td>
-        <tr>
-        <tr>
             <th>{{ __('student_born_in') }}</th>
             <td>
                 <input type="text" name="tempat_lahir" value="{{ set_value('tempat_lahir', siswa.tempat_lahir) }}">
@@ -92,6 +85,13 @@
             <td>
                 <input type="text" name="alamat" style="width:90%;" value="{{ set_value('alamat', siswa.alamat) }}">
                 <br>{{ form_error('alamat')|raw }}
+            </td>
+        <tr>
+        <tr>
+            <th>{{ __('student_join_year') }} <span class="text-error">*</span></th>
+            <td>
+                <input type="text" name="tahun_masuk" maxlength="4" style="width:15%;" value="{{ set_value('tahun_masuk', siswa.tahun_masuk) }}">
+                <br>{{ form_error('tahun_masuk')|raw }}
             </td>
         <tr>
         {% if is_admin() and siswa.status_id != 3 %}

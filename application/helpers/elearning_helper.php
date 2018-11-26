@@ -1383,3 +1383,11 @@ function handle_tgl_lahir($tgl = "", $bln = "", $thn = "")
 
     return "{$thn}-{$bln}-{$tgl}";
 }
+
+function age($born_date)
+{
+    $begin = new DateTime("now");
+    $end   = new DateTime($born_date);
+    $diff  = $begin->diff($end);
+    return $diff->format("%y");
+}
