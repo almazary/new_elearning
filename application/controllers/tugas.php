@@ -39,11 +39,40 @@ class Tugas extends MY_Controller
         must_login();
     }
 
+    private function reset_cache()
+    {
+        $keys = cg('tugas_retrieve_all');
+        if (!empty($keys)) {
+            foreach ($keys as $k => $v) {
+                cd("tugas_retrieve_all_". cp($k));
+            }
+
+            cd('tugas_retrieve_all');
+        }
+
+        $keys = cg('tugas_filter');
+        if (!empty($keys)) {
+            foreach ($keys as $k => $v) {
+                cd("tugas_filter_" . cp($k));
+            }
+
+            cd('tugas_filter');
+        }
+    }
+
     private function formatData($val)
     {
         # cari pembuatnya
         if (!empty($val['pengajar_id'])) {
-            $pengajar = $this->pengajar_model->retrieve($val['pengajar_id']);
+            $ck = "pengajar_retrieve_" . cp($val['pengajar_id']);
+            $cg = cg($ck);
+            if ($cg === false) {
+                $pengajar = $this->pengajar_model->retrieve($val['pengajar_id']);
+                cs($ck, $pengajar);
+            } else {
+                $pengajar = $cg;
+            }
+
             $val['pembuat'] = $pengajar;
             if (is_admin()) {
                 $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
@@ -53,14 +82,43 @@ class Tugas extends MY_Controller
         }
 
         # cari tugas kelas
-        $tugas_kelas = $this->tugas_model->retrieve_all_kelas($val['id']);
+        $ck = "tugas_retrieve_all_kelas_" . cp($val['id']);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $tugas_kelas = $this->tugas_model->retrieve_all_kelas($val['id']);
+            cs($ck, $tugas_kelas);
+        } else {
+            $tugas_kelas = $cg;
+        }
+
         foreach ($tugas_kelas as $mk) {
-            $kelas = $this->kelas_model->retrieve($mk['kelas_id']);
+            $ck = "kelas_retrieve_" . cp($mk['kelas_id']);
+            $cg = cg($ck);
+            if ($cg === false) {
+                $kelas = $this->kelas_model->retrieve($mk['kelas_id']);
+                cs($ck, $kelas);
+            } else {
+                $kelas = $cg;
+            }
+
             $val['tugas_kelas'][] = $kelas;
         }
 
+        $val['tugas_kelas_nama'] = implode(', ', array_map(function ($item) {
+            return $item['nama'];
+        }, $val['tugas_kelas']));
+
         # cari matapelajarannya
-        $val['mapel'] = $this->mapel_model->retrieve($val['mapel_id']);
+        $ck = "mapel_retrieve_" . cp($val['mapel_id']);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $mapel = $this->mapel_model->retrieve($val['mapel_id']);
+            cs($ck, $mapel);
+        } else {
+            $mapel = $cg;
+        }
+
+        $val['mapel'] = $mapel;
 
         # type label
         if ($val['type_id'] == 1) {
@@ -148,9 +206,9 @@ class Tugas extends MY_Controller
 
         $data['filter'] = $filter;
 
-        # ambil semua data tugas
-        $retrieve_all_tugas = $this->tugas_model->retrieve_all(
-            20,
+        // get cache
+        $filter_key = cp(
+            $this->no_of_records(),
             $page_no,
             $filter['mapel_id'],
             $filter['pengajar_id'],
@@ -160,17 +218,80 @@ class Tugas extends MY_Controller
             $filter['info'],
             $filter['status']
         );
+        $cache_key = "tugas_retrieve_all";
+        $cache_idx = time();
 
-        # format array data
-        $results = array();
-        foreach ($retrieve_all_tugas['results'] as $key => $val) {
-            $results[$key] = $this->formatData($val);
+        // save key
+        $cache_get_keys = cg($cache_key);
+        if ($cache_get_keys === false) {
+            cs($cache_key, array($cache_idx => $cache_key));
+        } else {
+            $ada = false;
+            foreach ($cache_get_keys as $k => $v) {
+                if ($v == $filter_key) {
+                    $cache_idx = $k;
+                    $ada = true;
+                    break;
+                }
+            }
+
+            if (!$ada) {
+                $cache_get_keys[$cache_idx] = $filter_key;
+                cs($cache_key, $cache_get_keys);
+            }
         }
 
-        $data['tugas']      = $results;
+        $cache_key = "{$cache_key}_{$cache_idx}";
+        $cache_get = cg($cache_key);
+        if ($cache_get === false) {
+            # ambil semua data tugas
+            $retrieve_all_tugas = $this->tugas_model->retrieve_all(
+                $this->no_of_records(),
+                $page_no,
+                $filter['mapel_id'],
+                $filter['pengajar_id'],
+                $filter['type'],
+                $filter['kelas_id'],
+                $filter['judul'],
+                $filter['info'],
+                $filter['status']
+            );
+
+            # format array data
+            foreach ($retrieve_all_tugas['results'] as $key => $val) {
+                $retrieve_all_tugas['results'][$key] = $this->formatData($val);
+            }
+
+            // save
+            cs($cache_key, $retrieve_all_tugas);
+        } else {
+            $retrieve_all_tugas = $cache_get;
+        }
+
+        $data['tugas']      = $retrieve_all_tugas['results'];
         $data['pagination'] = $this->pager->view($retrieve_all_tugas, 'tugas/index/');
-        $data['kelas']      = $this->kelas_model->retrieve_all_child();
-        $data['mapel']      = $this->mapel_model->retrieve_all_mapel();
+
+        $ck = "kelas_retrieve_all_child";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $kelas_retrieve_all_child = $this->kelas_model->retrieve_all_child();
+            cs($ck, $kelas_retrieve_all_child);
+        } else {
+            $kelas_retrieve_all_child = $cg;
+        }
+
+        $data['kelas'] = $kelas_retrieve_all_child;
+
+        $ck = "mapel_retrieve_all_mapel";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $mapel_retrieve_all_mapel = $this->mapel_model->retrieve_all_mapel();
+            cs($ck, $mapel_retrieve_all_mapel);
+        } else {
+            $mapel_retrieve_all_mapel = $cg;
+        }
+
+        $data['mapel'] = $mapel_retrieve_all_mapel;
 
         # panggil colorbox
         $html_js = load_comp_js(array(
