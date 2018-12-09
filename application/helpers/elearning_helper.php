@@ -602,7 +602,8 @@ function get_indo_hari($hari = '')
 function tgl_indo($tgl = '')
 {
     if (!empty($tgl)) {
-        $pisah = explode('-', $tgl);
+        $split = explode(" ", $tgl);
+        $pisah = explode('-', $split[0]);
         return $pisah[2].' '.get_indo_bulan($pisah[1]).' '.$pisah[0];
     }
 }

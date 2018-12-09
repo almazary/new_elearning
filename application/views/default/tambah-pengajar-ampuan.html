@@ -17,7 +17,7 @@
                 <select name="kelas_id" style="width:70%;" id="kelas_id">
                     <option value="">{{ __('student_class') }}</option>
                     {% for k in kelas %}
-                    <option value="{{ k.id }}" {{ set_select('kelas_id', k.id) }}>{{ k.nama }}</option>
+                    <option value="{{ k.id }}">{{ k.nama }}</option>
                     {% endfor %}
                 </select>
                 <br>{{ form_error('kelas_id')|raw }}
