@@ -546,6 +546,7 @@ class Tugas_model extends CI_Model
      *
      * @param  integer $no_of_records
      * @param  integer $page_no
+     * @param  array   $id
      * @param  array   $mapel_id
      * @param  array   $pengajar_id
      * @param  array   $type_id
@@ -560,6 +561,7 @@ class Tugas_model extends CI_Model
     public function retrieve_all(
         $no_of_records = 10,
         $page_no       = 1,
+        $id            = array(),
         $mapel_id      = array(),
         $pengajar_id   = array(),
         $type_id       = array(),
@@ -574,6 +576,9 @@ class Tugas_model extends CI_Model
 
         $where    = array();
         $group_by = array();
+        if (!empty($id)) {
+            $where['tugas.id'] = array($id, 'where_in');
+        }
         if (!empty($pengajar_id)) {
             $where['tugas.pengajar_id'] = array($pengajar_id, 'where_in');
         }

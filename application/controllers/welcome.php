@@ -61,6 +61,7 @@ class Welcome extends MY_Controller
                 null,
                 null,
                 null,
+                null,
                 null
             );
 
@@ -302,6 +303,7 @@ class Welcome extends MY_Controller
         $retrieve_all_tugas = $this->tugas_model->retrieve_all(
             $no_of_records = 10,
             $page_no       = 1,
+            $id            = array(),
             $mapel_id      = array(),
             $pengajar_id   = is_pengajar() ? array(get_sess_data('user', 'id')) : array(),
             $type_id       = array(),

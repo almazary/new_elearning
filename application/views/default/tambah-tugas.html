@@ -1,30 +1,43 @@
 {% extends "layout-private.html" %}
 
 {% block title %}
-Tambah Tugas {{ type_label }} - {{ parent() }}
+{{ __('task') }} - {{ parent() }}
+{% endblock %}
+
+{% block breadcrumb %}
+<li>{{ anchor('tugas', __('task'))|raw }} <span class="divider">/</span></li>
+<li class="active">{{ __('add') }}</li>
 {% endblock %}
 
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>{{ anchor('tugas', 'Tugas')|raw }} / Tambah Tugas {{ type_label }}</h3>
+        <h3>{{ __('task') }}</h3>
     </div>
     <div class="module-body">
         {{ get_flashdata('tugas')|raw }}
 
         {{ form_open_multipart('tugas/add/' ~ type, {'class' : 'form-horizontal row-fluid'})|raw }}
             <div class="control-group">
-                <label class="control-label">Judul <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('task_type') }}</label>
+                <div class="controls">
+                    <div style="margin-top:7px;">
+                    {{ type_label }}
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">{{ __('task_title') }} <span class="text-error">*</span></label>
                 <div class="controls">
                     <input type="text" name="judul" class="span12" value="{{ set_value('judul') }}">
                     <br>{{ form_error('judul')|raw }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Matapelajaran <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('subject') }} <span class="text-error">*</span></label>
                 <div class="controls">
                     <select name="mapel_id">
-                        <option value="">--pilih--</option>
+                        <option value="">{{ __('choose') }}</option>
                         {% for m in mapel %}
                         <option value="{{ m.id }}" {{ set_select('mapel_id', m.id) }}>{{ m.nama }}</option>
                         {% endfor %}
@@ -33,7 +46,7 @@ Tambah Tugas {{ type_label }} - {{ parent() }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Kelas <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('student_class') }} <span class="text-error">*</span></label>
                 <div class="controls">
                     <ul class="unstyled inline" style="margin-left: -5px;">
                         {% for k in kelas %}
@@ -48,7 +61,7 @@ Tambah Tugas {{ type_label }} - {{ parent() }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Info</label>
+                <label class="control-label">{{ __('task_info') }}</label>
                 <div class="controls">
                     <textarea name="info" id="info" class="texteditor">{{ set_value('info')|raw }}</textarea>
                     {{ form_error('info')|raw }}
@@ -56,17 +69,17 @@ Tambah Tugas {{ type_label }} - {{ parent() }}
             </div>
             {% if type != 1 %}
             <div class="control-group">
-                <label class="control-label">Durasi <span class="text-error">*</span></label>
+                <label class="control-label">{{ __('task_duration') }} <span class="text-error">*</span></label>
                 <div class="controls">
-                    <input type="text" name="durasi" class="span2" value="{{ set_value('durasi') }}" placeholder="Dalam menit">
+                    <input type="text" name="durasi" class="span2" value="{{ set_value('durasi') }}" placeholder="{{ __('task_duration_info') }}">
                     <br>{{ form_error('durasi')|raw }}
                 </div>
             </div>
             {% endif %}
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="{{ site_url('tugas') }}" class="btn btn-default">Kembali</a>
+                    <button type="submit" class="btn btn-primary">{{ __('save') }}</button>
+                    <a href="{{ site_url('tugas') }}" class="btn btn-default">{{ __('back') }}</a>
                 </div>
             </div>
         {{ form_close()|raw }}

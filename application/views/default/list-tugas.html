@@ -30,8 +30,14 @@
                 {{ form_open('tugas')|raw }}
                     <table class="table table-condensed">
                         <tr>
-                            <th  style="border-top: none;">{{ __('subject') }}</th>
-                            <td  style="border-top: none;">
+                            <th style="border-top: none;">{{ __('task_id') }}</th>
+                            <td style="border-top: none;">
+                                <input type="text" name="id" class="span3" style="margin-bottom:0px;" value="{{ set_value('id', (filter.id is defined) ? filter.id) }}" placeholder="{{ __('comma_separate') }}">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>{{ __('subject') }}</th>
+                            <td>
                                 <ul class="unstyled inline" style="margin-left: -5px;">
                                     {% for m in mapel %}
                                     <li>
@@ -181,7 +187,7 @@
                             <div class="btn-group">
                             {% if is_siswa() == false %}
                                 {% if m.type_label == 'Ganda' or m.type_label == 'Essay' %}
-                                    {{ anchor('tugas/manajemen_soal/' ~ m.id, '<i class="icon icon-tasks"></i> ' ~ __('task_question'), {'class' : 'btn btn-primary btn-small'})|raw }}
+                                    {{ anchor('tugas/manajemen_soal/' ~ m.id, '<i class="icon icon-question-sign"></i> ' ~ __('task_question'), {'class' : 'btn btn-primary btn-small'})|raw }}
                                 {% endif %}
                                 {% if m.aktif == 0 %}
                                     {{ anchor('tugas/terbitkan/' ~ m.id ~ '/' ~ enurl_redirect(current_url()), '<i class="icon-ok"></i> ' ~ __('task_publish_task'), {'class' : 'btn btn-success btn-small'})|raw }}

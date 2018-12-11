@@ -855,27 +855,27 @@ $config['materi/edit/file'] = array(
 $config['tugas/add_ganda_essay'] = array(
     array(
         'field' => 'mapel_id',
-        'label' => 'Matapelajaran',
+        'label' => __('subject'),
         'rules' => 'required|trim|xss_clean|numeric'
     ),
     array(
         'field' => 'kelas_id[]',
-        'label' => 'Kelas',
+        'label' => __('student_class'),
         'rules' => 'required|xss_clean'
     ),
     array(
         'field' => 'judul',
-        'label' => 'Judul Tugas',
+        'label' => __('task_title'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'durasi',
-        'label' => 'Durasi',
+        'label' => __('task_duration'),
         'rules' => 'required|trim|xss_clean|numeric'
     ),
     array(
         'field' => 'info',
-        'label' => 'Info',
+        'label' => __('task_info'),
         'rules' => ''
     )
 );
@@ -883,22 +883,22 @@ $config['tugas/add_ganda_essay'] = array(
 $config['tugas/add_upload'] = array(
     array(
         'field' => 'mapel_id',
-        'label' => 'Matapelajaran',
+        'label' => __('subject'),
         'rules' => 'required|trim|xss_clean|numeric'
     ),
     array(
         'field' => 'kelas_id[]',
-        'label' => 'Kelas',
+        'label' => __('student_class'),
         'rules' => 'required|xss_clean'
     ),
     array(
         'field' => 'judul',
-        'label' => 'Judul Tugas',
+        'label' => __('task_title'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'info',
-        'label' => 'Info',
+        'label' => __('task_info'),
         'rules' => ''
     )
 );
@@ -906,12 +906,12 @@ $config['tugas/add_upload'] = array(
 $config['tugas/edit'] = array(
     array(
         'field' => 'judul',
-        'label' => 'Judul Tugas',
+        'label' => __('task_title'),
         'rules' => 'required|trim|xss_clean'
     ),
     array(
         'field' => 'durasi',
-        'label' => 'Judul Tugas',
+        'label' => __('task_duration'),
         'rules' => 'numeric|trim|xss_clean'
     ),
 );
@@ -919,7 +919,7 @@ $config['tugas/edit'] = array(
 $config['tugas/pertanyaan'] = array(
     array(
         'field' => 'pertanyaan',
-        'label' => 'Pertanyaan',
+        'label' => __('task_question'),
         'rules' => 'required'
     )
 );
@@ -927,12 +927,12 @@ $config['tugas/pertanyaan'] = array(
 $config['tugas/pilihan'] = array(
     array(
         'field' => 'pilihan',
-        'label' => 'Pilihan',
+        'label' => __('task_question_option'),
         'rules' => 'required|trim|numeric|xss_clean'
     ),
     array(
         'field' => 'konten',
-        'label' => 'Konten',
+        'label' => __('task_question_option_content'),
         'rules' => 'required'
     )
 );
@@ -978,37 +978,37 @@ $config['materi/filter'] = array(
 $config['tugas/filter'] = array(
     array(
         'field' => 'judul',
-        'label' => 'Judul',
+        'label' => __('task_title'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'info',
-        'label' => 'Info',
+        'label' => __('task_info'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'pembuat',
-        'label' => 'Pembuat',
+        'label' => __('task_author'),
         'rules' => 'trim|xss_clean'
     ),
     array(
         'field' => 'mapel_id[]',
-        'label' => 'Matapelajaran',
+        'label' => __('subject'),
         'rules' => 'xss_clean'
     ),
     array(
         'field' => 'kelas_id[]',
-        'label' => 'Kelas',
+        'label' => __('student_class'),
         'rules' => 'xss_clean'
     ),
     array(
         'field' => 'type[]',
-        'label' => 'Type',
+        'label' => __('task_type'),
         'rules' => 'xss_clean'
     ),
     array(
         'field' => 'status[]',
-        'label' => 'Status',
+        'label' => __('task_status'),
         'rules' => 'xss_clean'
     ),
 );

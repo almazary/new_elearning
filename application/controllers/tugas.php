@@ -162,6 +162,7 @@ class Tugas extends MY_Controller
             }
 
             $filter = array(
+                'id'          => $this->input->post('id', true),
                 'judul'       => $this->input->post('judul', true),
                 'info'        => $this->input->post('info', true),
                 'pengajar_id' => $pengajar_id,
@@ -178,6 +179,7 @@ class Tugas extends MY_Controller
         $filter = $this->session->userdata('filter_tugas');
         if (empty($filter)) {
             $filter = array(
+                'id'          => '',
                 'judul'       => '',
                 'info'        => '',
                 'pengajar_id' => array(),
@@ -210,6 +212,7 @@ class Tugas extends MY_Controller
         $filter_key = cp(
             $this->no_of_records(),
             $page_no,
+            $filter['id'],
             $filter['mapel_id'],
             $filter['pengajar_id'],
             $filter['type'],
@@ -248,6 +251,10 @@ class Tugas extends MY_Controller
             $retrieve_all_tugas = $this->tugas_model->retrieve_all(
                 $this->no_of_records(),
                 $page_no,
+                !empty($filter['id']) ? array_filter(explode(',', $filter['id']), function ($i) {
+                    $i = trim($i);
+                    return is_numeric($i);
+                }) : array(),
                 $filter['mapel_id'],
                 $filter['pengajar_id'],
                 $filter['type'],
@@ -318,21 +325,41 @@ class Tugas extends MY_Controller
 
         # type label
         if ($type == 1) {
-            $data['type_label'] = 'Upload';
+            $data['type_label'] = __('task_type_upload');
             $form_validation    = 'tugas/add_upload';
         }
         if ($type == 2) {
-            $data['type_label'] = 'Essay';
+            $data['type_label'] = __('task_type_essay');
             $form_validation    = 'tugas/add_ganda_essay';
         }
         if ($type == 3) {
-            $data['type_label'] = 'Ganda';
+            $data['type_label'] = __('task_type_multiple_choice');
             $form_validation    = 'tugas/add_ganda_essay';
         }
 
-        $data['type']    = $type;
-        $data['mapel']   = $this->mapel_model->retrieve_all_mapel();
-        $data['kelas']   = $this->kelas_model->retrieve_all_child();
+        $data['type'] = $type;
+
+        $ck = "kelas_retrieve_all_child";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $kelas_retrieve_all_child = $this->kelas_model->retrieve_all_child();
+            cs($ck, $kelas_retrieve_all_child);
+        } else {
+            $kelas_retrieve_all_child = $cg;
+        }
+
+        $data['kelas'] = $kelas_retrieve_all_child;
+
+        $ck = "mapel_retrieve_all_mapel";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $mapel_retrieve_all_mapel = $this->mapel_model->retrieve_all_mapel();
+            cs($ck, $mapel_retrieve_all_mapel);
+        } else {
+            $mapel_retrieve_all_mapel = $cg;
+        }
+
+        $data['mapel'] = $mapel_retrieve_all_mapel;
         $data['comp_js'] = get_texteditor();
 
         if ($this->form_validation->run($form_validation) == TRUE) {
@@ -343,6 +370,9 @@ class Tugas extends MY_Controller
             if ($type != 1) {
                 $durasi = $this->input->post('durasi', TRUE);
             }
+
+            // start transaction
+            $this->db->trans_begin();
 
             $tugas_id = $this->tugas_model->create(
                 $mapel_id,
@@ -359,14 +389,25 @@ class Tugas extends MY_Controller
                 $this->tugas_model->create_kelas($tugas_id, $tugas_kelas_id);
             }
 
-            if ($type != 1) {
-                # redirect ke manajemen soal
-                $this->session->set_flashdata('tugas', get_alert('success', 'Manajemen soal tugas.'));
-                redirect('tugas/manajemen_soal/' . $tugas_id);
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                $this->session->set_flashdata('tugas', get_alert('warning', __('insert_error')));
             } else {
-                $this->session->set_flashdata('tugas', get_alert('success', 'Tugas Upload berhasil disimpan.'));
-                redirect('tugas');
+                $this->db->trans_commit();
+
+                if ($type != 1) {
+                    # redirect ke manajemen soal
+                    $this->session->set_flashdata('tugas', get_alert('success', __('task_manage_question_msg')));
+                    $redirect_url = 'tugas/manajemen_soal/' . $tugas_id;
+                } else {
+                    $this->session->set_flashdata('tugas', get_alert('success', __('add_success_msg', array('subject' => __('task_type_upload')))));
+                }
+
+                //reset cache
+                $this->reset_cache();
             }
+
+            redirect(!empty($redirect_url) ? $redirect_url : 'tugas');
         }
 
         $this->twig->display('tambah-tugas.html', $data);
@@ -376,7 +417,7 @@ class Tugas extends MY_Controller
     {
         # harus admin atau pengajar
         if (!is_admin() AND !is_pengajar()) {
-            $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));
+            $this->session->set_flashdata('tugas', get_alert('warning', __('access_denied')));
             redirect('tugas');
         }
 
@@ -395,7 +436,15 @@ class Tugas extends MY_Controller
             redirect($uri_back);
         }
 
-        $tugas = $this->tugas_model->retrieve($tugas_id);
+        $ck = "tugas_retrieve_" . cp($tugas_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $tugas = $this->tugas_model->retrieve($tugas_id);
+            cs($ck, $tugas);
+        } else {
+            $tugas = $cg;
+        }
+
         if (empty($tugas)) {
             redirect($uri_back);
         }
@@ -407,20 +456,28 @@ class Tugas extends MY_Controller
 
         # type label
         if ($tugas['type_id'] == 1) {
-            $data['type_label'] = 'Upload';
+            $data['type_label'] = __('task_type_upload');
             $form_validation    = 'tugas/add_upload';
         }
         if ($tugas['type_id'] == 2) {
-            $data['type_label'] = 'Essay';
+            $data['type_label'] = __('task_type_essay');
             $form_validation    = 'tugas/add_ganda_essay';
         }
         if ($tugas['type_id'] == 3) {
-            $data['type_label'] = 'Ganda';
+            $data['type_label'] = __('task_type_multiple_choice');
             $form_validation    = 'tugas/add_ganda_essay';
         }
 
         # hanya ambil kelas_idnya
-        $tugas_kelas    = $this->tugas_model->retrieve_all_kelas($tugas['id']);
+        $ck = "tugas_retrieve_all_kelas_" . $tugas['id'];
+        $cg = cg($ck);
+        if ($cg === false) {
+            $tugas_kelas = $this->tugas_model->retrieve_all_kelas($tugas['id']);
+            cs($ck, $tugas_kelas);
+        } else {
+            $tugas_kelas = $cg;
+        }
+
         $tugas_kelas_id = array();
         foreach ($tugas_kelas as $r) {
             $tugas_kelas_id[] = $r['kelas_id'];
@@ -428,9 +485,27 @@ class Tugas extends MY_Controller
 
         $data['tugas']       = $tugas;
         $data['tugas_kelas'] = $tugas_kelas_id;
-        $data['mapel']       = $this->mapel_model->retrieve_all_mapel();
-        $data['kelas']       = $this->kelas_model->retrieve_all_child();
         $data['comp_js']     = get_texteditor();
+
+        $ck = "mapel_retrieve_all_mapel";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $mapel_retrieve_all_mapel = $this->mapel_model->retrieve_all_mapel();
+            cs($ck, $mapel_retrieve_all_mapel);
+        } else {
+            $mapel_retrieve_all_mapel = $cg;
+        }
+        $data['mapel'] = $mapel_retrieve_all_mapel;
+
+        $ck = "kelas_retrieve_all_child";
+        $cg = cg($ck);
+        if ($cg === false) {
+            $kelas_retrieve_all_child = $this->kelas_model->retrieve_all_child();
+            cs($ck, $kelas_retrieve_all_child);
+        } else {
+            $kelas_retrieve_all_child = $cg;
+        }
+        $data['kelas'] = $kelas_retrieve_all_child;
 
         if ($this->form_validation->run($form_validation) == TRUE) {
             $mapel_id = $this->input->post('mapel_id', TRUE);
@@ -440,6 +515,9 @@ class Tugas extends MY_Controller
             if ($tugas['type_id'] != 1) {
                 $durasi = $this->input->post('durasi', TRUE);
             }
+
+            // start transaction
+            $this->db->trans_begin();
 
             $this->tugas_model->update(
                 $tugas['id'],
@@ -478,7 +556,19 @@ class Tugas extends MY_Controller
                 }
             }
 
-            $this->session->set_flashdata('tugas', get_alert('success', 'Tugas berhasil diperbaharui.'));
+            if ($this->db->trans_status() === FALSE) {
+                $this->db->trans_rollback();
+                $this->session->set_flashdata('tugas', get_alert('warning', __('insert_error')));
+            } else {
+                $this->db->trans_commit();
+
+                $this->session->set_flashdata('tugas', get_alert('success', __('edit_success_msg', array('subject' => __('task')))));
+
+                //reset cache
+                cd('tugas_retrieve_' . $tugas_id);
+                $this->reset_cache();
+            }
+
             redirect($uri_back);
         }
 
