@@ -435,10 +435,11 @@ class Tugas_model extends CI_Model
      */
     public function count_pertanyaan($tugas_id)
     {
+        $this->db->select("COUNT(*) as jml");
         $this->db->where('aktif' , 1);
         $this->db->where('tugas_id', $tugas_id);
-        $result = $this->db->get('tugas_pertanyaan');
-        return $result->num_rows();
+        $result = $this->db->get('tugas_pertanyaan')->row_array();
+        return isset($result['jml']) ? $result['jml'] : 0;
     }
 
     /**

@@ -1,11 +1,15 @@
 {% extends "layout-iframe.html" %}
 
 {% block content %}
-<h4>Pertanyaan ke {{ no_pertanyaan }}</h4>
-{{ get_flashdata('tugas')|raw }}
+<div class="content-top">
+    <div class="title-top">
+        {{ __('task_question') }} {{ no_pertanyaan }}
+    </div>
+    {{ get_flashdata('tugas')|raw }}
+</div>
 
 {{ form_open('tugas/tambah_soal/' ~ tugas.id)|raw }}
-<table class="table table-striped">
+<table class="table table-form">
     <tbody>
         <tr>
             <td>
@@ -15,7 +19,7 @@
         <tr>
         <tr>
             <td colspan="2">
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary">{{ __('save') }}</button>
             </td>
         </tr>
     </tbody>

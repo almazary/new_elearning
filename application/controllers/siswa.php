@@ -96,7 +96,7 @@ class Siswa extends MY_Controller
         // save key
         $cache_get_keys = cg($cache_key);
         if ($cache_get_keys === false) {
-            cs($cache_key, array($cache_idx => $cache_key));
+            cs($cache_key, array($cache_idx => $filter_key));
         } else {
             $ada = false;
             foreach ($cache_get_keys as $k => $v) {
@@ -482,7 +482,7 @@ class Siswa extends MY_Controller
             // save key
             $cache_get_keys = cg($cache_key);
             if ($cache_get_keys === false) {
-                cs($cache_key, array($cache_idx => $cache_key));
+                cs($cache_key, array($cache_idx => $filter_key));
             } else {
                 $ada = false;
                 foreach ($cache_get_keys as $k => $v) {

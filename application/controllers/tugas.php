@@ -60,6 +60,27 @@ class Tugas extends MY_Controller
         }
     }
 
+    private function reset_cache_question()
+    {
+        $keys = cg('tugas_retrieve_all_pertanyaan');
+        if (!empty($keys)) {
+            foreach ($keys as $k => $v) {
+                cd("tugas_retrieve_all_pertanyaan_" . cp($k));
+            }
+
+            cd('tugas_retrieve_all_pertanyaan');
+        }
+
+        $keys = cg('tugas_retrieve_all_pilihan');
+        if (!empty($keys)) {
+            foreach ($keys as $k => $v) {
+                cd("tugas_retrieve_all_pilihan_" . cp($k));
+            }
+
+            cd('tugas_retrieve_all_pilihan');
+        }
+    }
+
     private function formatData($val)
     {
         # cari pembuatnya
@@ -227,7 +248,7 @@ class Tugas extends MY_Controller
         // save key
         $cache_get_keys = cg($cache_key);
         if ($cache_get_keys === false) {
-            cs($cache_key, array($cache_idx => $cache_key));
+            cs($cache_key, array($cache_idx => $filter_key));
         } else {
             $ada = false;
             foreach ($cache_get_keys as $k => $v) {
@@ -696,7 +717,7 @@ class Tugas extends MY_Controller
     {
         # harus admin atau pengajar
         if (!is_admin() AND !is_pengajar()) {
-            $this->session->set_flashdata('tugas', get_alert('warning', 'Akses ditolak.'));
+            $this->session->set_flashdata('tugas', get_alert('warning', __('access_denied')));
             redirect('tugas');
         }
 
@@ -706,7 +727,15 @@ class Tugas extends MY_Controller
             $page_no = 1;
         }
 
-        $tugas = $this->tugas_model->retrieve($tugas_id);
+        $ck = "tugas_retrieve_" . cp($tugas_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $tugas = $this->tugas_model->retrieve($tugas_id);
+            cs($ck, $tugas);
+        } else {
+            $tugas = $cg;
+        }
+
         if (empty($tugas) OR $tugas['type_id'] == 1) {
             redirect('tugas/index');
         }
@@ -725,17 +754,86 @@ class Tugas extends MY_Controller
         $data['comp_js']  = $html_js;
         $data['comp_css'] = load_comp_css(array(base_url('assets/comp/colorbox/colorbox.css')));
 
-        $retrieve_all = $this->tugas_model->retrieve_all_pertanyaan(
-            20,
+        $filter_key = cp(
+            $this->no_of_records(),
             $page_no,
             $tugas['id'],
             'DESC'
         );
+        $cache_key = "tugas_retrieve_all_pertanyaan";
+        $cache_idx = time();
+
+        // save key
+        $cache_get_keys = cg($cache_key);
+        if ($cache_get_keys === false) {
+            cs($cache_key, array($cache_idx => $filter_key));
+        } else {
+            $ada = false;
+            foreach ($cache_get_keys as $k => $v) {
+                if ($v == $filter_key) {
+                    $cache_idx = $k;
+                    $ada = true;
+                    break;
+                }
+            }
+
+            if (!$ada) {
+                $cache_get_keys[$cache_idx] = $filter_key;
+                cs($cache_key, $cache_get_keys);
+            }
+        }
+
+        $cache_key = "{$cache_key}_{$cache_idx}";
+        $cache_get = cg($cache_key);
+        if ($cache_get === false) {
+            $retrieve_all = $this->tugas_model->retrieve_all_pertanyaan(
+                $this->no_of_records(),
+                $page_no,
+                $tugas['id'],
+                'DESC'
+            );
+            cs($cache_key, $retrieve_all);
+        } else {
+            $retrieve_all = $cache_get;
+        }
 
         # jika pilihan ganda
         if ($tugas['type_id'] == 3) {
             foreach ($retrieve_all['results'] as $key => $val) {
-                $val['pilihan'] = $this->tugas_model->retrieve_all_pilihan($val['id']);
+                $filter_key = cp($val['id']);
+                $cache_key = "tugas_retrieve_all_pilihan";
+                $cache_idx = time();
+
+                // save key
+                $cache_get_keys = cg($cache_key);
+                if ($cache_get_keys === false) {
+                    cs($cache_key, array($cache_idx => $filter_key));
+                } else {
+                    $ada = false;
+                    foreach ($cache_get_keys as $k => $v) {
+                        if ($v == $filter_key) {
+                            $cache_idx = $k;
+                            $ada = true;
+                            break;
+                        }
+                    }
+
+                    if (!$ada) {
+                        $cache_get_keys[$cache_idx] = $filter_key;
+                        cs($cache_key, $cache_get_keys);
+                    }
+                }
+
+                $cache_key = "{$cache_key}_{$cache_idx}";
+                $cache_get = cg($cache_key);
+                if ($cache_get === false) {
+                    $retrieve_all_pilihan = $this->tugas_model->retrieve_all_pilihan($val['id']);
+                    cs($cache_key, $retrieve_all_pilihan);
+                } else {
+                    $retrieve_all_pilihan = $cache_get;
+                }
+
+                $val['pilihan'] = $retrieve_all_pilihan;
                 $retrieve_all['results'][$key] = $val;
             }
         }
@@ -856,19 +954,29 @@ class Tugas extends MY_Controller
     {
         # harus admin atau pengajar
         if (!is_admin() AND !is_pengajar()) {
-            exit("Akses ditolak.");
+            die(__("access_denied"));
         }
 
         $tugas_id = (int)$segment_3;
+        if (empty($tugas_id)) {
+            die(__('record_not_found'));
+        }
 
-        $tugas = $this->tugas_model->retrieve($tugas_id);
+        $ck = "tugas_retrieve_" . cp($tugas_id);
+        $cg = cg($ck);
+        if ($cg === false) {
+            $tugas = $this->tugas_model->retrieve($tugas_id);
+            cs($ck, $tugas);
+        } else {
+            $tugas = $cg;
+        }
         if (empty($tugas) OR $tugas['type_id'] == 1) {
-            exit("Tugas tidak ditemukan");
+            die(__('record_not_found'));
         }
 
         # jika sebagai pengajar, cek kepemilikan
         if (is_pengajar() AND $tugas['pengajar_id'] != get_sess_data('user', 'id')) {
-            exit("Tugas tidak ditemukan");
+            die(__('record_not_found'));
         }
 
         $data['tugas']         = $tugas;
@@ -884,7 +992,10 @@ class Tugas extends MY_Controller
                 $data['no_pertanyaan']
             );
 
-            $this->session->set_flashdata('tugas', get_alert('success', 'Pertanyaan berhasil disimpan.'));
+            // reset cache
+            $this->reset_cache_question();
+
+            $this->session->set_flashdata('tugas', get_alert('success', __('add_success_msg', array('subject' => __('task_question')))));
             redirect('tugas/edit_soal/' . $tugas['id'] . '/' . $pertanyaan_id);
         }
 
