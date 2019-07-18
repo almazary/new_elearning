@@ -55,6 +55,9 @@ class MY_Controller extends CI_Controller
         $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
         $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
 
+        // load vendor
+        require_once APPPATH . 'vendor/autoload.php';
+
         // first require
         $this->load->library('session');
 
@@ -64,15 +67,16 @@ class MY_Controller extends CI_Controller
         # load helper
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download', 'plugins'));
 
+        // check writable dir
         try {
-            check_db_connection();
+            $this->check_writable_dir();
         } catch (Exception $e) {
             die($e->getMessage());
         }
 
-        // check writable dir
+        // cek connection
         try {
-            $this->check_writable_dir();
+            check_db_connection();
         } catch (Exception $e) {
             die($e->getMessage());
         }
@@ -90,6 +94,17 @@ class MY_Controller extends CI_Controller
 
         // load cache
         $this->load->driver('cache');
+
+        // from setup page
+        if (!empty($_GET['from_page']) && $_GET['from_page'] == 'setup') {
+            // delete cache
+            cd('install-success');
+        }
+
+        // check installation status
+        if (!check_success_install()) {
+            redirect('setup');
+        }
 
         # jika bukan ajax
         if (!is_ajax()) {
@@ -215,19 +230,24 @@ class MY_Controller extends CI_Controller
         else {
             do {
                 if ($from == "2.0") {
-                    $this->dbforge->add_column('siswa', array(
-                        'tgl_daftar' => array(
-                            'type' => 'DATETIME',
-                            'null' => true,
-                        ),
-                    ));
+                    if (!$this->db->field_exists('tgl_daftar', 'siswa')) {
+                        $this->dbforge->add_column('siswa', array(
+                            'tgl_daftar' => array(
+                                'type' => 'DATETIME',
+                                'null' => true,
+                            ),
+                        ));
+                    }
 
-                    $this->dbforge->add_column('pengajar', array(
-                        'tgl_daftar' => array(
-                            'type' => 'DATETIME',
-                            'null' => true,
-                        ),
-                    ));
+
+                    if (!$this->db->field_exists('tgl_daftar', 'pengajar')) {
+                        $this->dbforge->add_column('pengajar', array(
+                            'tgl_daftar' => array(
+                                'type' => 'DATETIME',
+                                'null' => true,
+                            ),
+                        ));
+                    }
                 }
 
                 $from = $from + 0.1;

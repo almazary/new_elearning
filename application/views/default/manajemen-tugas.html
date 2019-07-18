@@ -12,7 +12,7 @@
 {% block content %}
 <div class="module">
     <div class="module-head">
-        <h3>{{ __('task') }}</h3>
+        <h3>{{ __('task_manage_question') }}</h3>
     </div>
     <div class="module-body">
 
@@ -66,8 +66,8 @@
         {{ get_flashdata('tugas')|raw }}
 
         <div class="btn-group">
-            <a href="{{ site_url('tugas/tambah_soal/' ~ tugas.id) }}" class="btn btn-primary iframe-pertanyaan" title="Tambah Pertanyaan">Tambah Pertanyaan</a>
-            <a href="{{ site_url('tugas/copy_soal/' ~ tugas.id) }}" class="btn btn-primary iframe-copy-pertanyaan" title="Copy Pertanyaan">Copy Pertanyaan</a>
+            <a href="{{ site_url('tugas/tambah_soal/' ~ tugas.id) }}" class="btn btn-primary iframe-pertanyaan" title="Tambah Pertanyaan">{{ __('add') }}</a>
+            <a href="{{ site_url('tugas/copy_soal/' ~ tugas.id) }}" class="btn btn-primary iframe-copy-pertanyaan" title="Copy Pertanyaan">{{ __('copy') }}</a>
         </div>
         <br><br>
 

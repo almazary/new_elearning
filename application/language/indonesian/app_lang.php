@@ -27,6 +27,7 @@ $lang['administrator'] = "Administrator";
 $lang['day'] = "Hari";
 $lang['e.g'] = "Contoh";
 $lang['age'] = "{age} Tahun";
+$lang['copy'] = "Salin";
 
 $lang['january'] = "Januari";
 $lang['february'] = "Februari";
@@ -329,3 +330,5 @@ $lang['task_duration'] = "Durasi";
 $lang['task_duration_info'] = "Dalam menit";
 $lang['task_make_option_key'] = "Jadikan Kunci";
 $lang['task_option_key'] = "Kunci Jawaban";
+$lang['task_add_question'] = "Tambah Pertanyaan";
+$lang['task_copy_question'] = "Salin Pertanyaan";

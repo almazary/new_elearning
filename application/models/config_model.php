@@ -110,6 +110,7 @@ class Config_model extends CI_Model
             `login_id` int(11) NOT NULL,
             `lasttime` datetime NOT NULL,
             `agent` text NOT NULL,
+            `last_activity` int(11) NULL,
             PRIMARY KEY (`id`)
         ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 

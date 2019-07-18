@@ -1309,7 +1309,9 @@ function __($lang_key, $lang_data = array())
 function cs($key, $data, $ttl = null)
 {
     $CI =& get_instance();
-    return $CI->cache->file->save($key, $data, !empty($ttl) ? $ttl : (60 * 60 * 24));
+    if (property_exists($CI, 'cache')) {
+        return $CI->cache->file->save($key, $data, !empty($ttl) ? $ttl : (60 * 60 * 24));
+    }
 }
 
 /**
@@ -1320,7 +1322,9 @@ function cs($key, $data, $ttl = null)
 function cg($key)
 {
     $CI =& get_instance();
-    return $CI->cache->file->get($key);
+    if (property_exists($CI, 'cache')) {
+        return $CI->cache->file->get($key);
+    }
 }
 
 /**

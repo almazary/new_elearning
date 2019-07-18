@@ -41,6 +41,8 @@ class Setup extends CI_Controller
     {
         parent::__construct();
 
+        date_default_timezone_set('Asia/Jakarta');
+
         # load helper
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date'));
 
@@ -79,6 +81,10 @@ class Setup extends CI_Controller
         switch ($step) {
             case '4':
                 if (!empty($this->db_error)) {
+                    redirect('setup/index/1');
+                }
+
+                if (!$this->db->table_exists('pengaturan')) {
                     redirect('setup/index/1');
                 }
 
@@ -138,7 +144,7 @@ class Setup extends CI_Controller
                     $this->config_model->create('install-success', 'install-success', '1');
 
                     $this->session->set_flashdata('login', get_alert('success', 'Instalasi e-learning berhasil, silakan login sebagai administrator.'));
-                    redirect('login');
+                    redirect('login?from_page=setup');
                 }
 
                 # cek admin
@@ -156,6 +162,10 @@ class Setup extends CI_Controller
 
             case '3':
                 if (!empty($this->db_error)) {
+                    redirect('setup/index/1');
+                }
+
+                if (!$this->db->table_exists('pengaturan')) {
                     redirect('setup/index/1');
                 }
 
@@ -210,13 +220,18 @@ class Setup extends CI_Controller
                     redirect('setup/index/4');
                 }
 
-                $data['jenjang'] = get_pengaturan('jenjang', 'value');
+                $jenjang = $this->config_model->retrieve('jenjang');
+                $data['jenjang'] = $jenjang['value'];
 
                 $this->twig->display('install-step-3.html', $data);
             break;
 
             case '2':
                 if (!empty($this->db_error)) {
+                    redirect('setup/index/1');
+                }
+
+                if (!$this->db->table_exists('pengaturan')) {
                     redirect('setup/index/1');
                 }
 
