@@ -41,14 +41,22 @@ class Login extends MY_Controller
 
         if ($this->form_validation->run('login') == TRUE) {
             $email    = $this->input->post('email', TRUE);
-            $password = md5($this->input->post('password', TRUE));
+            $password = $this->input->post('password', TRUE);
 
-            $get_login = $this->login_model->retrieve(null, $email, $password);
+            $get_login = $this->login_model->retrieve(null, $email);
 
             if (empty($get_login)) {
                 $this->session->set_flashdata('login', get_alert('warning', __('account_not_found')));
                 redirect('login');
             } else {
+                // verify password
+                if ($get_login['password'] != md5($password)) {
+                    if (!password_verify($password, $get_login['password'])) {
+                        $this->session->set_flashdata('login', get_alert('warning', __('password_not_match')));
+                        redirect('login');
+                    }
+                }
+
                 # cari user yang login
                 if (!empty($get_login['pengajar_id'])) {
                     $user = $this->pengajar_model->retrieve($get_login['pengajar_id']);

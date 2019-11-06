@@ -229,7 +229,8 @@ class MY_Controller extends CI_Controller
         }
         else {
             do {
-                if ($from == "2.0") {
+                // must convert to string
+                if ((string)$from == "2.0") {
                     if (!$this->db->field_exists('tgl_daftar', 'siswa')) {
                         $this->dbforge->add_column('siswa', array(
                             'tgl_daftar' => array(

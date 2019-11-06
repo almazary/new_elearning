@@ -68,9 +68,10 @@ $lang['login_form_btn'] = "Masuk";
 $lang['forgot_pwd_label'] = "Lupa password?";
 
 $lang['account_not_found'] = "Maaf akun tidak ditemukan.";
-$lang['account_inactive'] = "Maaf status anda tidak aktif.";
+$lang['account_inactive'] = "Maaf akun Anda sedang dinonaktifkan.";
 $lang['account_being_used'] = "Akun anda sedang digunakan untuk login dengan IP {ip}.";
 $lang['account_being_used_info'] = "Jika anda hanya ganti browser, mohon tunggu {duration} dari sekarang.";
+$lang['password_not_match'] = "Kata sandi/Password salah.";
 
 $lang['register_link_label'] = "Mendaftar";
 $lang['register_page_title'] = "Mendaftar";
