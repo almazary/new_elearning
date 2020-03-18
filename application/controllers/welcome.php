@@ -39,6 +39,9 @@ class Welcome extends MY_Controller
 
         $data = array();
         if (is_siswa()) {
+            $kelas_aktif = $this->siswa_kelas_aktif;
+            $retrieve_kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
+            
             $retrieve_all_materi = $this->materi_model->retrieve_all(
                 10,
                 1,
@@ -48,7 +51,8 @@ class Welcome extends MY_Controller
                 null,
                 null,
                 null,
-                1
+                1,
+                array($retrieve_kelas['parent_id'])
             );
             $data['materi_terbaru'] = $retrieve_all_materi['results'];
 
@@ -59,7 +63,7 @@ class Welcome extends MY_Controller
                 null,
                 null,
                 null,
-                null,
+                array($kelas_aktif['kelas_id']),
                 null,
                 null
             );
