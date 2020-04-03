@@ -497,6 +497,20 @@ class MY_Controller extends CI_Controller
             }
 
             $decode_value = json_decode($data_field['value'], 1);
+            
+            /**
+             * cek dulu tugasnya masih ada atau tidak
+             */
+            if (!empty($decode_value['tugas'])) {
+                $tugas = $this->tugas_model->retrieve($decode_value['tugas']['id']);
+                if (empty($tugas)) {
+                    /**
+                     * hapus saja
+                     */
+                    $this->db->delete($table, array('id' => $data_field['id']));
+                    return true;
+                }
+            }
 
             if (isset($decode_value['valid_route']) AND isset($decode_value['uri_string'])) {
                 # cek valid route
