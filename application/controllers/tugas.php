@@ -1633,6 +1633,7 @@ class Tugas extends MY_Controller
 
             # cari siswa
             $siswa = $this->siswa_model->retrieve($siswa_id);
+            if (empty($siswa)) continue;
 
             # kelas siswa
             $kelas_siswa = $this->kelas_model->retrieve_siswa(null, array(
