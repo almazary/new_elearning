@@ -47,6 +47,7 @@ class Pengumuman extends MY_Controller
 
     private function get_allow_action($pengumuman)
     {
+        $allow_action = array();
         if (is_siswa()) {
             $allow_action = array('detail');
         } elseif (is_admin()) {
@@ -55,8 +56,6 @@ class Pengumuman extends MY_Controller
             # kalo dia yang buat
             if ($pengumuman['pengajar_id'] == get_sess_data('user', 'id')) {
                 $allow_action = array('detail', 'edit', 'delete');
-            } else {
-                $allow_action = array('detail');
             }
         }
 
@@ -80,9 +79,15 @@ class Pengumuman extends MY_Controller
             );
         }
 
-        # jika admin / pengajar
-        elseif (is_admin() OR is_pengajar()) {
+        # jika admin
+        elseif (is_admin()) {
             $where = array();
+        }
+
+        elseif (is_pengajar()) {
+            $where = array(
+                'pengajar_id'  => get_sess_data('user', 'id'),
+            );
         }
 
         if (!empty($_GET['q'])) {
@@ -233,6 +238,12 @@ class Pengumuman extends MY_Controller
             $this->session->set_flashdata('pengumuman', get_alert('warning', 'Pengumuman tidak ditemukan.'));
             redirect('pengumuman/index/1');
         }
+
+        /**
+         * cek pengumuman untuk siapa
+         */
+        if (is_siswa() && $pengumuman['tampil_siswa'] != 1) return show_404();
+        if (is_pengajar() && $pengumuman['pengajar_id'] != get_sess_data('user', 'id') && $pengumuman['tampil_pengajar'] != 1) return show_404();
 
         # cari pengajar
         $pengajar = $this->pengajar_model->retrieve($pengumuman['pengajar_id']);
