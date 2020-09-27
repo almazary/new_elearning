@@ -1380,6 +1380,15 @@ class Tugas extends MY_Controller
         $check_field = retrieve_field($field_id);
 
         if (!empty($check_field)) {
+
+            /**
+             * kalo ada post cancel
+             */
+            if (!empty($_POST['cancel'])) {
+                delete_field($field_id);
+                return redirect('tugas');
+            }
+
             # bandingkan unix_id nya
             $check_field_value = json_decode($check_field['value'], 1);
             if ($unix_id != $check_field_value['unix_id']) {
