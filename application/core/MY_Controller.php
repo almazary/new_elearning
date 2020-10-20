@@ -503,7 +503,11 @@ class MY_Controller extends CI_Controller
              */
             if (!empty($decode_value['tugas'])) {
                 $tugas = $this->tugas_model->retrieve($decode_value['tugas']['id']);
-                if (empty($tugas)) {
+                
+                /**
+                 * jika tidak ditemukan atau tugas tidak aktif
+                 */
+                if (empty($tugas) OR empty($tugas['aktif'])) {
                     /**
                      * hapus saja
                      */
