@@ -2037,7 +2037,13 @@ class Tugas extends MY_Controller
 
                         # cari siswa
                         $siswa = $this->siswa_model->retrieve($siswa_id);
-
+                        
+                        # cek masih ada siswanya tidak
+                        if (empty($siswa)) {
+                            unset($retrieve_all[$key]);
+                            continue;
+                        }
+                        
                         # kelas siswa
                         $kelas_siswa = $this->kelas_model->retrieve_siswa(null, array(
                             'siswa_id' => $siswa_id,
