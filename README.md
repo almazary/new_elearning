@@ -27,7 +27,7 @@ Lisensi:
 - Gratis untuk digunakan, disalin, dimodifikasi, didistribusikan. Selengkapnya terdapat pada file license.txt
 
 Kebutuhan:
-- PHP >= 5.5
+- PHP Versi >= 5.5 & <= 7.3
 - Mysql
 
 Versi terbaru: 2.0
