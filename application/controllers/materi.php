@@ -44,20 +44,24 @@ class Materi extends MY_Controller
         # cari pembuatnya
         if (!empty($val['pengajar_id'])) {
             $pengajar = $this->pengajar_model->retrieve($val['pengajar_id']);
-            $val['pembuat'] = $pengajar;
-            if (is_admin()) {
-                $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
-            } else {
-                $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['id']);
+            if (!empty($pengajar)) {
+                $val['pembuat'] = $pengajar;
+                if (is_admin()) {
+                    $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['status_id'].'/'.$pengajar['id']);
+                } else {
+                    $val['pembuat']['link_profil'] = site_url('pengajar/detail/'.$pengajar['id']);
+                }
             }
         }
         if (!empty($val['siswa_id'])) {
             $siswa = $this->siswa_model->retrieve($val['siswa_id']);
-            $val['pembuat'] = $siswa;
-            if (is_admin()) {
-                $val['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['status_id'].'/'.$siswa['id']);
-            } else {
-                $val['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['id']);
+            if (!empty($siswa)) {
+                $val['pembuat'] = $siswa;
+                if (is_admin()) {
+                    $val['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['status_id'].'/'.$siswa['id']);
+                } else {
+                    $val['pembuat']['link_profil'] = site_url('siswa/detail/'.$siswa['id']);
+                }
             }
         }
 
