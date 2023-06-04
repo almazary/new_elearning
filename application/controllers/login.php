@@ -379,6 +379,15 @@ class Login extends MY_Controller
 
         $data = array();
         if ($this->form_validation->run('lupa_password') == true) {
+            $email = $this->input->post('email', true);
+            $cache_key = "lupa_password_{$email}";
+
+            # jika sudah ada dalam cache gak perlu dikirim ulang
+            if ($this->cache->get($cache_key)) {
+                $this->session->set_flashdata('lupa_password', get_alert('success', 'Link reset sudah dikirim sebelumnya, silakan cek email Anda.'));
+                return redirect('login/lupa_password');
+            }
+
             # retrieve
             $retrieve = $this->login_model->retrieve(
                 $id          = null,
@@ -402,7 +411,10 @@ class Login extends MY_Controller
                 'link_reset' => site_url('login/reset_password/' . $reset_kode)
             ));
 
-            $this->session->set_flashdata('lupa_password', get_alert('success', 'Link reset password telah dikirimkan keemail anda.'));
+            # save cache
+            $this->cache->save($cache_key, date('Y-m-d H:i:s'), 60 * 3);
+
+            $this->session->set_flashdata('lupa_password', get_alert('success', 'Link reset password telah dikirimkan ke email anda.'));
             redirect('login/lupa_password');
         }
 

@@ -934,40 +934,54 @@ function kirim_email($nama_email, $to, $array_data = array())
 
     $email_subject = str_replace($arr_old, $arr_new, $template['subject']);
     $email_body    = str_replace($arr_old, $arr_new, $template['body']);
+
+    kirim_email_phpmailer($to, $email_subject, $email_body);
+
+    return true;
+}
+
+function kirim_email_phpmailer($to, $subject, $body, $smtp_debug = false)
+{
     $email_server  = get_pengaturan('email-server', 'value');
     $nama_sekolah  = get_pengaturan('nama-sekolah', 'value');
-
-    $CI =& get_instance();
-    $CI->email->clear(true);
-
-    $config['mailtype'] = 'html';
-    # cek pakai smtp tidak
     $smtp_host = get_pengaturan('smtp-host', 'value');
     $smtp_user = get_pengaturan('smtp-username', 'value');
     $smtp_pass = get_pengaturan('smtp-pass', 'value');
     $smtp_port = get_pengaturan('smtp-port', 'value');
-    if (!empty($smtp_host)) {
-        $config['protocol']  = 'smtp';
-        $config['smtp_host'] = $smtp_host;
-        $config['smtp_user'] = $smtp_user;
-        $config['smtp_pass'] = $smtp_pass;
 
-        # cek port
-        if (!empty($smtp_port)) {
-            $config['smtp_port'] = $smtp_port;
-        }
+    /**
+     * setup phpmailer
+     */
+    $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->SMTPDebug = $smtp_debug;
+        $mail->isSMTP();
+        $mail->Host = $smtp_host;
+        $mail->SMTPAuth = true;
+        $mail->Username = $smtp_user;
+        $mail->Password = $smtp_pass;
+        $mail->SMTPSecure = 'TLS';
+        $mail->Port = $smtp_port;
+
+        //Recipients
+        $mail->setFrom($email_server, '[E-learning] - ' . $nama_sekolah);
+        $mail->addAddress($to);
+
+        //Content
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+
+        $mail->send();
+    } catch (\PHPMailer\PHPMailer\Exception $e) {
+        //echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
     }
-    $CI->email->initialize($config);
-
-    $CI->email->to($to);
-    $CI->email->from($email_server, '[E-learning] - ' . $nama_sekolah);
-    $CI->email->subject($email_subject);
-    $CI->email->message($email_body);
-    $CI->email->send();
-    $CI->email->clear(true);
 
     return true;
 }
+
 
 /**
  * Method untuk mengirimkan email approve siswa

@@ -62,6 +62,9 @@ class MY_Controller extends CI_Controller
 
         $this->load->database();
 
+        # set cache driver
+        $this->load->driver('cache', array('adapter' => 'file'));
+
         # load library
         $this->load->library(array('session', 'form_validation', 'pager', 'parser', 'image_lib', 'upload', 'twig', 'user_agent', 'email', 'menu'));
 
@@ -497,13 +500,13 @@ class MY_Controller extends CI_Controller
             }
 
             $decode_value = json_decode($data_field['value'], 1);
-            
+
             /**
              * cek dulu tugasnya masih ada atau tidak
              */
             if (!empty($decode_value['tugas'])) {
                 $tugas = $this->tugas_model->retrieve($decode_value['tugas']['id']);
-                
+
                 /**
                  * jika tidak ditemukan atau tugas tidak aktif
                  */

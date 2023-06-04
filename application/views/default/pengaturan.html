@@ -109,7 +109,7 @@ Pengaturan - {{ parent() }}
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">Email server</label>
+                <label class="control-label">Email pengirim</label>
                 <div class="controls">
                     <input type="text" name="email-server" class="span5" value="{{ set_value('email-server', get_pengaturan('email-server', 'value')) }}">
                     <br>{{ form_error('email-server')|raw }}

@@ -199,6 +199,10 @@ if (defined('ENVIRONMENT'))
  * And away we go...
  *
  */
+if (file_exists(APPPATH.'vendor/autoload.php')) {
+    require_once(APPPATH.'vendor/autoload.php');
+}
+
 require_once BASEPATH.'core/CodeIgniter.php';
 
 /* End of file index.php */

@@ -41,7 +41,7 @@ class Welcome extends MY_Controller
         if (is_siswa()) {
             $kelas_aktif = $this->siswa_kelas_aktif;
             $retrieve_kelas = $this->kelas_model->retrieve($kelas_aktif['kelas_id']);
-            
+
             $retrieve_all_materi = $this->materi_model->retrieve_all(
                 10,
                 1,
@@ -124,6 +124,18 @@ class Welcome extends MY_Controller
         }
 
         if (!is_demo_app()) {
+            # test kirim email
+            if (!empty($_GET['test_kirim_email'])) {
+                if (empty($_GET['to'])) {
+                    show_error('GET to dibutuhkan.');
+                }
+
+                kirim_email_phpmailer($_GET['to'], 'test kirim', 'test kirim', 2);
+
+                echo 'OK';
+                return true;
+            }
+
             # bagian hapus gambar
             if (!empty($_GET['delete-img'])) {
                 $img_id = (int)$_GET['delete-img'];
