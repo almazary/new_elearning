@@ -459,6 +459,10 @@ class Login extends MY_Controller
                 $reset_kode  = null
             );
 
+            # delete cache
+            $cache_key = "lupa_password_{$login['username']}";
+            $this->cache->delete($cache_key);
+
             $this->session->set_flashdata('login', get_alert('success', 'Password berhasil diperbaharui, silahkan login menggunakan password baru anda.'));
             redirect('login');
         }
