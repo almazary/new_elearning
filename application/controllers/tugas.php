@@ -592,6 +592,13 @@ class Tugas extends MY_Controller
             # dapatkan informasi pembuat pertanyaan dan pada tugas apa
             if (!isset($arr_tugas_id[$val['tugas_id']])) {
                 $info_tugas = $this->tugas_model->retrieve($val['tugas_id']);
+
+                # jika tugas sudah tidak ditemukan
+                if (empty($info_tugas)) {
+                    unset($retrieve_all_pertanyaan[$key]);
+                    continue;
+                }
+                
                 $arr_tugas_id[$val['tugas_id']] = $this->tugas_model->retrieve($val['tugas_id']);
             } else {
                 $info_tugas = $arr_tugas_id[$val['tugas_id']];
@@ -600,6 +607,7 @@ class Tugas extends MY_Controller
             //Jika sebagai pengajar, tampilkan yang dia buat saja
             if (is_pengajar() AND $info_tugas['pengajar_id'] != get_sess_data('user', 'id')) {
                 unset($retrieve_all_pertanyaan[$key]);
+                continue;
             }
 
             if (!isset($arr_pengajar_id[$info_tugas['pengajar_id']])) {
