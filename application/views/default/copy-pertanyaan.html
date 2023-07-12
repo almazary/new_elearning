@@ -41,7 +41,7 @@
 
                 <div style="padding: 5px 5px; border:1px dashed #DDD; background-color: white;">
                     <ul class="unstyled inline" style="margin-bottom: 3px;margin-top: 0px;">
-                        <li>Dibuat oleh : <a href="{{ p.info_pembuat.link_profil }}" id="profil-{{ p.info_pembuat.id }}" target="_tab">{{ p.info_pembuat.nama }}</a></li>
+                        <li>Dibuat oleh : {% if p.info_pembuat is not empty %}<a href="{{ p.info_pembuat.link_profil }}" id="profil-{{ p.info_pembuat.id }}" target="_tab">{{ p.info_pembuat.nama }}</a>{% endif %}</li>
                         <li>Pada : {{ p.info_tugas.judul }}</li>
                     </ul>
                 </div>
