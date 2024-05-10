@@ -46,14 +46,14 @@ class MY_Controller extends CI_Controller
 
         date_default_timezone_set($this->default_timezone);
 
-        $this->update_link        = 'http://www.dokumenary.net/category/new-elearning/feed/';
-        $this->portal_update_link = 'http://www.dokumenary.net/category/new-elearning/';
-        $this->bug_tracker_link   = 'http://www.dokumenary.net/category/bug-tracker-new-elearning/';
+        $this->update_link        = 'http://www.dokumenary.my.id/category/new-elearning/feed/';
+        $this->portal_update_link = 'http://www.dokumenary.my.id/category/new-elearning/';
+        $this->bug_tracker_link   = 'http://www.dokumenary.my.id/category/bug-tracker-new-elearning/';
 
         # load helper
         $this->load->helper(array('url', 'form', 'text', 'elearning', 'security', 'file', 'number', 'date', 'download', 'plugins'));
 
-        $error_install = "Install aplikasi e-learning by Almazari (www.dokumenary.net): " . anchor('setup', "&rarr; Halaman Install");
+        $error_install = "Install aplikasi e-learning by Almazari (www.dokumenary.my.id): " . anchor('setup', "&rarr; Halaman Install");
         try {
             check_db_connection();
         } catch (Exception $e) {
