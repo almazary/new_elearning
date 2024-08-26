@@ -406,7 +406,7 @@ class Welcome extends MY_Controller
             redirect('welcome');
         }
 
-        $plugin_url  = 'http://elearningplugin.dokumenary.net/index.php';
+        $plugin_url  = 'https://dokumenary.my.id/elearningplugin/index.php';
         $plugin_data = get_url_data($plugin_url);
         $result_body = json_decode($plugin_data, true);
 
